@@ -237,7 +237,7 @@ export default function TimetableGridShell({
                           className={cn(
                             "flex w-full cursor-pointer flex-col items-center justify-center gap-0.5 rounded-lg border-2 transition-all duration-200",
                             spans ? "absolute inset-0 h-full" : "relative",
-                            compact ? "min-h-[38px] overflow-hidden px-0.5 py-1" : "min-h-[52px] px-1 py-1.5",
+                            compact ? "min-h-[38px] overflow-hidden px-0.5 py-1" : "min-h-16 px-1 py-2",
                             cell.tileClassName,
                           )}
                         >

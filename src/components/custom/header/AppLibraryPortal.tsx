@@ -76,7 +76,6 @@ const GROUP_HINTS: Record<string, string> = {
   Tools: "Tools",
 };
 
-
 function getTabIdFromLabel(label: string): string | null {
   const lower = label.toLowerCase();
   if (lower === "attendance") return "attendance";
@@ -233,14 +232,20 @@ function EditPinnedPanel({
       <section aria-label="Pinned">
         <h3 className="px-1 pb-1.5 text-[12.5px] font-semibold text-muted">Pinned · {pinned.length} of 4</h3>
         {on.length === 0 ? (
-          <p className="rounded-md border border-dashed border-line px-4 py-3 text-[13px] text-muted">Nothing pinned yet.</p>
+          <p className="rounded-md border border-dashed border-line px-4 py-3 text-[13px] text-muted">
+            Nothing pinned yet.
+          </p>
         ) : (
-          <ul className="divide-y divide-line-2 overflow-hidden rounded-md border border-line bg-surface">{on.map((i) => row(i, true))}</ul>
+          <ul className="divide-y divide-line-2 overflow-hidden rounded-md border border-line bg-surface">
+            {on.map((i) => row(i, true))}
+          </ul>
         )}
       </section>
       <section aria-label="All apps">
         <h3 className="px-1 pb-1.5 text-[12.5px] font-semibold text-muted">All apps</h3>
-        <ul className="divide-y divide-line-2 overflow-hidden rounded-md border border-line bg-surface">{off.map((i) => row(i, false))}</ul>
+        <ul className="divide-y divide-line-2 overflow-hidden rounded-md border border-line bg-surface">
+          {off.map((i) => row(i, false))}
+        </ul>
       </section>
     </div>
   );
@@ -767,9 +772,7 @@ const AppLibraryPortal = memo(
       >
         {mobilePanel === "primary" && (
           <div className="flex items-center gap-1.5 px-1 pb-3">
-            <span className="text-[12.5px] text-muted">
-              Semester
-            </span>
+            <span className="text-[12.5px] text-muted">Semester</span>
             <div className="relative flex items-center">
               <SelectField
                 value={settings.currSemesterID || config.semesterIDs[config.semesterIDs.length - 2]}
@@ -799,10 +802,8 @@ const AppLibraryPortal = memo(
             </div>
           ) : (
             <div className="space-y-2">
-              <h3 className="px-1 text-[11px] font-semibold text-zinc-400 dark:text-zinc-500">
-                Search Results
-              </h3>
-              <div className="grid grid-cols-1 gap-2 min-[380px]:grid-cols-2">
+              <h3 className="px-1 text-[11px] font-semibold text-zinc-400 dark:text-zinc-500">Search Results</h3>
+              <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                 {filteredSearchItems.map((item) => {
                   const Icon = item.icon;
                   const tabId = getTabIdFromLabel(item.label);
@@ -813,25 +814,23 @@ const AppLibraryPortal = memo(
                   return (
                     <div
                       key={item.label}
-                      className="group/item relative flex min-h-[60px] w-full items-center justify-between rounded-md border border-zinc-200/50 p-3 shadow-2xs hover:shadow-xs transition-all dark:border-zinc-800/80 dark:bg-zinc-900/60"
+                      className="group/item relative flex min-h-[68px] w-full items-center justify-between rounded-lg border border-line bg-surface p-3.5 transition-colors hover:bg-surface-2"
                     >
                       <button
                         onClick={() => {
                           item.action();
                           onClose();
                         }}
-                        className="flex flex-1 min-w-0 items-center gap-3 text-left cursor-pointer focus:outline-none"
+                        className="flex min-h-11 min-w-0 flex-1 items-center gap-3 text-left focus:outline-none"
                       >
-                        <div className="rounded-md bg-info-surface p-2 text-info shrink-0">
-                          <Icon className="h-4.5 w-4.5 stroke-[2.2]" />
+                        <div className="shrink-0 rounded-lg bg-accent-soft p-2.5 text-accent">
+                          <Icon className="h-[18px] w-[18px]" strokeWidth={1.8} />
                         </div>
                         <div className="flex flex-col min-w-0">
-                          <span className="truncate text-xs font-semibold leading-tight text-zinc-800 dark:text-zinc-200">
+                          <span className="truncate text-[13px] font-semibold leading-tight text-ink">
                             {item.label}
                           </span>
-                          <span className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium">
-                            {item.group} category
-                          </span>
+                          <span className="mt-0.5 text-[11.5px] font-medium text-ink-2">{item.group} category</span>
                         </div>
                       </button>
 
@@ -869,78 +868,78 @@ const AppLibraryPortal = memo(
           />
         ) : mobilePanel === "primary" ? (
           <>
-          <PinnedTiles
-            items={pinnables}
-            pinned={settings?.pinnedNavTabs ?? []}
-            onOpen={(item) => {
-              item.action();
-              if (item.type !== "panel") onClose();
-            }}
-            onEdit={() => setMobilePanel("edit")}
-          />
-          {primaryGroups.map((group) => (
-            <section key={group.name} aria-label={group.name}>
-              <h3 className="px-1 pb-1.5 text-[12.5px] font-semibold text-muted">{group.name}</h3>
-              <ul className="divide-y divide-line-2 overflow-hidden rounded-md border border-line bg-surface">
-                {group.items.map((item) => {
-                  const Icon = item.icon;
-                  const isPanelTrigger = item.type === "panel";
-                  const tabId = getTabIdFromLabel(item.label);
-                  const pinned = settings?.pinnedNavTabs ?? [];
-                  const isPinned = tabId ? pinned.includes(tabId) : false;
-                  const atLimit = !isPinned && pinned.length >= 4;
+            <PinnedTiles
+              items={pinnables}
+              pinned={settings?.pinnedNavTabs ?? []}
+              onOpen={(item) => {
+                item.action();
+                if (item.type !== "panel") onClose();
+              }}
+              onEdit={() => setMobilePanel("edit")}
+            />
+            {primaryGroups.map((group) => (
+              <section key={group.name} aria-label={group.name}>
+                <h3 className="px-1 pb-1.5 text-[12.5px] font-semibold text-muted">{group.name}</h3>
+                <ul className="divide-y divide-line-2 overflow-hidden rounded-md border border-line bg-surface">
+                  {group.items.map((item) => {
+                    const Icon = item.icon;
+                    const isPanelTrigger = item.type === "panel";
+                    const tabId = getTabIdFromLabel(item.label);
+                    const pinned = settings?.pinnedNavTabs ?? [];
+                    const isPinned = tabId ? pinned.includes(tabId) : false;
+                    const atLimit = !isPinned && pinned.length >= 4;
 
-                  return (
-                    <li key={item.label} className="flex items-center">
-                      <button
-                        onClick={() => {
-                          item.action();
-                          if (!isPanelTrigger) onClose();
-                        }}
-                        className="flex min-h-12 min-w-0 flex-1 items-center gap-3 px-3.5 py-2.5 text-left transition-colors duration-[120ms] hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
-                      >
-                        <Icon aria-hidden="true" className="h-5 w-5 shrink-0 text-ink-2" strokeWidth={1.7} />
-                        <span className="flex min-w-0 flex-col">
-                          <span className="truncate text-[14.5px] text-ink">{item.label}</span>
-                          <span className="truncate text-[12.5px] text-muted">
-                            {MODULE_HINTS[item.label] ?? GROUP_HINTS[group.name] ?? ""}
-                          </span>
-                        </span>
-                      </button>
-
-                      {tabId ? (
+                    return (
+                      <li key={item.label} className="flex items-center">
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            togglePin(tabId);
+                          onClick={() => {
+                            item.action();
+                            if (!isPanelTrigger) onClose();
                           }}
-                          disabled={atLimit}
-                          aria-pressed={isPinned}
-                          aria-label={isPinned ? `Unpin ${item.label} from Home` : `Pin ${item.label} to Home`}
-                          title={isPinned ? "Unpin from Home" : "Pin to Home"}
-                          className={`mr-1.5 grid h-10 w-10 shrink-0 place-items-center rounded-sm transition-colors duration-[120ms] ${
-                            isPinned
-                              ? "text-accent hover:bg-accent-soft"
-                              : atLimit
-                                ? "cursor-not-allowed text-muted opacity-40"
-                                : "text-muted hover:bg-surface-2 hover:text-ink"
-                          }`}
+                          className="flex min-h-12 min-w-0 flex-1 items-center gap-3 px-3.5 py-2.5 text-left transition-colors duration-[120ms] hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
                         >
-                          <Pin className={`h-4 w-4 ${isPinned ? "fill-current" : ""}`} strokeWidth={1.8} />
+                          <Icon aria-hidden="true" className="h-5 w-5 shrink-0 text-ink-2" strokeWidth={1.7} />
+                          <span className="flex min-w-0 flex-col">
+                            <span className="truncate text-[14.5px] text-ink">{item.label}</span>
+                            <span className="truncate text-[12.5px] text-muted">
+                              {MODULE_HINTS[item.label] ?? GROUP_HINTS[group.name] ?? ""}
+                            </span>
+                          </span>
                         </button>
-                      ) : isPanelTrigger ? (
-                        <ChevronRight aria-hidden="true" className="mr-3.5 h-4 w-4 shrink-0 text-muted" />
-                      ) : null}
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-          ))}
+
+                        {tabId ? (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              togglePin(tabId);
+                            }}
+                            disabled={atLimit}
+                            aria-pressed={isPinned}
+                            aria-label={isPinned ? `Unpin ${item.label} from Home` : `Pin ${item.label} to Home`}
+                            title={isPinned ? "Unpin from Home" : "Pin to Home"}
+                            className={`mr-1.5 grid h-10 w-10 shrink-0 place-items-center rounded-sm transition-colors duration-[120ms] ${
+                              isPinned
+                                ? "text-accent hover:bg-accent-soft"
+                                : atLimit
+                                  ? "cursor-not-allowed text-muted opacity-40"
+                                  : "text-muted hover:bg-surface-2 hover:text-ink"
+                            }`}
+                          >
+                            <Pin className={`h-4 w-4 ${isPinned ? "fill-current" : ""}`} strokeWidth={1.8} />
+                          </button>
+                        ) : isPanelTrigger ? (
+                          <ChevronRight aria-hidden="true" className="mr-3.5 h-4 w-4 shrink-0 text-muted" />
+                        ) : null}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            ))}
           </>
         ) : mobilePanel === "academics" ? (
           <div className="space-y-2">
-            <div className="grid grid-cols-1 gap-2 min-[380px]:grid-cols-2">
+            <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
               {academicsItemsMobile.map((item) => {
                 const Icon = item.icon;
                 const cleanLabel = item.label.replace("Academics ", "");
@@ -952,25 +951,21 @@ const AppLibraryPortal = memo(
                 return (
                   <div
                     key={item.label}
-                    className="group/item relative flex min-h-[60px] w-full items-center justify-between rounded-md border border-zinc-200/50 p-3 shadow-2xs hover:shadow-xs transition-all dark:border-zinc-800/80 dark:bg-zinc-900/60"
+                    className="group/item relative flex min-h-[68px] w-full items-center justify-between rounded-lg border border-line bg-surface p-3.5 transition-colors hover:bg-surface-2"
                   >
                     <button
                       onClick={() => {
                         item.action();
                         onClose();
                       }}
-                      className="flex flex-1 min-w-0 items-center gap-3 text-left cursor-pointer focus:outline-none"
+                      className="flex min-h-11 min-w-0 flex-1 items-center gap-3 text-left focus:outline-none"
                     >
-                      <div className="rounded-md bg-course-3/10 p-2 text-course-3 shrink-0">
-                        <Icon className="h-4.5 w-4.5 stroke-[2.2]" />
+                      <div className="shrink-0 rounded-lg bg-accent-soft p-2.5 text-accent">
+                        <Icon className="h-[18px] w-[18px]" strokeWidth={1.8} />
                       </div>
                       <div className="flex flex-col min-w-0">
-                        <span className="truncate text-xs font-semibold leading-tight text-zinc-800 dark:text-zinc-200">
-                          {cleanLabel}
-                        </span>
-                        <span className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium font-outfit">
-                          Academics Tracker
-                        </span>
+                        <span className="truncate text-[13px] font-semibold leading-tight text-ink">{cleanLabel}</span>
+                        <span className="mt-0.5 text-[11.5px] font-medium text-ink-2">Academics Tracker</span>
                       </div>
                     </button>
 
@@ -1000,7 +995,7 @@ const AppLibraryPortal = memo(
           </div>
         ) : (
           <div className="space-y-2">
-            <div className="grid grid-cols-1 gap-2 min-[380px]:grid-cols-2">
+            <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
               {hostelItemsMobile.map((item) => {
                 const Icon = item.icon;
                 const cleanLabel = item.label.replace("Hostel ", "");
@@ -1012,25 +1007,21 @@ const AppLibraryPortal = memo(
                 return (
                   <div
                     key={item.label}
-                    className="group/item relative flex min-h-[60px] w-full items-center justify-between rounded-md border border-zinc-200/50 p-3 shadow-2xs hover:shadow-xs transition-all dark:border-zinc-800/80 dark:bg-zinc-900/60"
+                    className="group/item relative flex min-h-[68px] w-full items-center justify-between rounded-lg border border-line bg-surface p-3.5 transition-colors hover:bg-surface-2"
                   >
                     <button
                       onClick={() => {
                         item.action();
                         onClose();
                       }}
-                      className="flex flex-1 min-w-0 items-center gap-3 text-left cursor-pointer focus:outline-none"
+                      className="flex min-h-11 min-w-0 flex-1 items-center gap-3 text-left focus:outline-none"
                     >
-                      <div className="rounded-md bg-warn-soft p-2 text-warn shrink-0">
-                        <Icon className="h-4.5 w-4.5 stroke-[2.2]" />
+                      <div className="shrink-0 rounded-lg bg-warn-soft p-2.5 text-warn">
+                        <Icon className="h-[18px] w-[18px]" strokeWidth={1.8} />
                       </div>
                       <div className="flex flex-col min-w-0">
-                        <span className="truncate text-xs font-semibold leading-tight text-zinc-800 dark:text-zinc-200">
-                          {cleanLabel}
-                        </span>
-                        <span className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium font-outfit">
-                          Hostel Hub
-                        </span>
+                        <span className="truncate text-[13px] font-semibold leading-tight text-ink">{cleanLabel}</span>
+                        <span className="mt-0.5 text-[11.5px] font-medium text-ink-2">Hostel Hub</span>
                       </div>
                     </button>
 
@@ -1059,7 +1050,6 @@ const AppLibraryPortal = memo(
             </div>
           </div>
         )}
-
       </AppLibrary>
     );
   },

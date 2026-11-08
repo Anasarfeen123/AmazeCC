@@ -9,7 +9,6 @@ const timetableCard = (title: string) => {
   return all[all.length - 1];
 };
 
-
 const TODAY = new Date(2026, 8, 29, 10, 0, 0); // Tuesday, 10am local
 
 const course1 = {
@@ -95,66 +94,36 @@ describe("SimplifiedMobileHome Desktop Layout & Course Pane", () => {
     expect(document.querySelector("aside")).toBeNull();
   });
 
-  it("shows the desktop course detail pane when a user clicks on a particular class in desktop mode", () => {
+  it("shows desktop course details without adding a side column or shrinking Home", () => {
     render(<SimplifiedMobileHome {...defaultProps()} />);
 
-    // Click on course1
     const course1Card = timetableCard("Problem Solving and Programming");
     fireEvent.click(course1Card);
 
-    // Desktop pane is now shown
-    const aside = document.querySelector("aside");
-    expect(aside).not.toBeNull();
-    expect(aside?.className).toContain("hidden");
-    expect(aside?.className).toContain("lg:block");
-
-    // Displays course1 details in the side pane
-    expect(within(aside!).getByText("Prof. Ada")).toBeDefined();
-    expect(within(aside!).getByText("SJT 101")).toBeDefined();
-  });
-
-  it("switches course in the desktop pane when clicking another class", () => {
-    render(<SimplifiedMobileHome {...defaultProps()} />);
-
-    // First click course1
-    fireEvent.click(timetableCard("Problem Solving and Programming"));
-    const aside = document.querySelector("aside")!;
-    expect(within(aside).getByText("Prof. Ada")).toBeDefined();
-
-    // Now click course2
-    fireEvent.click(timetableCard("Data Structures and Algorithms"));
-    expect(within(aside).getByText("Prof. Alan")).toBeDefined();
-    expect(within(aside).getByText("SJT 202")).toBeDefined();
-  });
-
-  it("allows closing the desktop side view pane via the close button", () => {
-    render(<SimplifiedMobileHome {...defaultProps()} />);
-
-    // Open pane by clicking course1
-    fireEvent.click(timetableCard("Problem Solving and Programming"));
-    expect(document.querySelector("aside")).not.toBeNull();
-
-    // Click close button
-    const closeBtn = screen.getByRole("button", { name: /close side view/i });
-    fireEvent.click(closeBtn);
-
-    // Pane is closed
+    expect(screen.getByText("Prof. Ada")).toBeDefined();
+    expect(screen.getByText("SJT 101")).toBeDefined();
     expect(document.querySelector("aside")).toBeNull();
   });
 
-  it("navigates to academics/course-dashboard when clicking an already selected course on desktop", () => {
+  it("provides an explicit close action for desktop course details", () => {
+    render(<SimplifiedMobileHome {...defaultProps()} />);
+
+    fireEvent.click(timetableCard("Problem Solving and Programming"));
+    expect(screen.getByText("Prof. Ada")).toBeDefined();
+    expect(screen.getByRole("button", { name: "Close course details" })).toBeDefined();
+  });
+
+  it("navigates to the course dashboard from the desktop detail sheet", () => {
     const setActiveTab = vi.fn();
     const setActiveSubTab = vi.fn();
     render(<SimplifiedMobileHome {...defaultProps({ setActiveTab, setActiveSubTab })} />);
 
     const course1Card = timetableCard("Problem Solving and Programming");
 
-    // First click selects course1 and displays pane
     fireEvent.click(course1Card);
     expect(setActiveTab).not.toHaveBeenCalled();
 
-    // Second click on the same course navigates to full page dashboard
-    fireEvent.click(course1Card);
+    fireEvent.click(screen.getByText("View Full History & Heatmap"));
     expect(setActiveTab).toHaveBeenCalledWith("academics");
     expect(setActiveSubTab).toHaveBeenCalledWith("course-dashboard");
   });
@@ -174,13 +143,72 @@ describe("SimplifiedMobileHome Desktop Layout & Course Pane", () => {
     expect(document.querySelector("aside")).toBeNull();
   });
 
-  it("renders stat cards and dynamic insight carousel", () => {
+  it("renders stat cards in the main desktop content", () => {
     render(<SimplifiedMobileHome {...defaultProps()} />);
 
-    // Attendance leads as a per-course list (the grid no longer repeats it).
-    expect(screen.getByRole("region", { name: "Attendance" })).toBeDefined();
+    expect(screen.getByRole("button", { name: /Your week/ })).toBeDefined();
     expect(screen.getAllByText("92%").length).toBeGreaterThanOrEqual(1);
-    // CGPA slide in carousel
-    expect(screen.getByText("9.15")).toBeDefined();
+
+    const stats = screen.getByRole("region", { name: "Home stats and controls" });
+    expect(within(stats).getByText("9.15")).toBeDefined();
+    expect(screen.getAllByRole("button", { name: "Sync Data from VTOP" }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("button", { name: "2-Line Compact Pill View" }).length).toBeGreaterThan(0);
+  });
+
+  it("keeps the first view focused and reveals week and attendance details on demand", () => {
+    const setActiveTab = vi.fn();
+    const setActiveToolsSubTab = vi.fn();
+    render(<SimplifiedMobileHome {...defaultProps({ setActiveTab, setActiveToolsSubTab })} />);
+
+    expect(screen.getByRole("region", { name: "Next class" })).toBeDefined();
+    expect(screen.getByRole("region", { name: "Due this week" })).toBeDefined();
+    expect(screen.queryByRole("region", { name: "This week" })).toBeNull();
+    expect(screen.queryByRole("region", { name: "Attendance" })).toBeNull();
+    expect(screen.getByText("Nothing due in the next 7 days.")).toBeDefined();
+
+    fireEvent.click(screen.getByRole("button", { name: /Your week/ }));
+    expect(screen.getByRole("button", { name: /Your week/ }).getAttribute("aria-expanded")).toBe("true");
+
+    const week = screen.getByRole("region", { name: "This week" });
+    expect(week).toBeDefined();
+    expect(within(week).getByText("Weekly rhythm")).toBeDefined();
+    expect(within(week).getAllByText("CSE1001").length).toBeGreaterThan(0);
+    expect(screen.getByRole("region", { name: "Attendance" })).toBeDefined();
+
+    fireEvent.click(screen.getByRole("button", { name: "Expand timetable" }));
+    expect(screen.getByText("Full Weekly Timetable")).toBeDefined();
+
+    fireEvent.click(screen.getByRole("button", { name: "Open tasks" }));
+    expect(setActiveTab).toHaveBeenCalledWith("tools");
+    expect(setActiveToolsSubTab).toHaveBeenCalledWith("tasks");
+  });
+
+  it("opens course details when a class block in the week viewer is clicked", () => {
+    render(<SimplifiedMobileHome {...defaultProps()} />);
+    fireEvent.click(screen.getByRole("button", { name: /Your week/ }));
+    const week = screen.getByRole("region", { name: "This week" });
+    const classSlot = within(week).getAllByRole("button", {
+      name: /Data Structures and Algorithms, open course details/i,
+    })[0];
+
+    fireEvent.click(classSlot);
+
+    expect(screen.getAllByText("Prof. Alan").length).toBeGreaterThan(1);
+  });
+
+  it("uses the expanded timetable's vertical grid for mobile week details", () => {
+    Object.defineProperty(window, "innerWidth", { writable: true, configurable: true, value: 375 });
+    render(<SimplifiedMobileHome {...defaultProps()} />);
+    fireEvent.click(screen.getByRole("button", { name: /Your week/ }));
+
+    expect(screen.getByText("Class Schedule")).toBeDefined();
+    expect(screen.getByText(/showing the vertical view on this phone/i)).toBeDefined();
+  });
+
+  it("shows a clear today state when no timed classes are scheduled", () => {
+    render(<SimplifiedMobileHome {...defaultProps({ attendanceData: { attendance: [] } })} />);
+
+    expect(screen.getByRole("region", { name: "Today" })).toBeDefined();
+    expect(screen.getByText("No classes scheduled today")).toBeDefined();
   });
 });

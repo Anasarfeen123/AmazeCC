@@ -129,7 +129,7 @@ export default function TimetableView({
   const activeDensity: CellDensity = cellDensity ?? density;
   // The horizontal grid has its own fixed cell shape; a density choice would be
   // meaningless there, so the control only appears where it does something.
-  const showDensity = !forceView && (view === "vertical" || view === null);
+  const showDensity = !forceView && cellDensity === undefined && (view === "vertical" || view === null);
 
   return (
     <div className={cn("space-y-4", className)}>

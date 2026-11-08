@@ -114,6 +114,21 @@ interface SimplifiedMobileHomeProps {
   setODhoursIsOpen?: (open: boolean) => void;
 }
 
+const PILL_STYLE_OPTIONS = [
+  {
+    value: "compact" as const,
+    label: "Compact",
+    icon: <List className="h-3.5 w-3.5" />,
+    title: "2-Line Compact Pill View",
+  },
+  {
+    value: "detailed" as const,
+    label: "Detailed",
+    icon: <Layers className="h-3.5 w-3.5" />,
+    title: "Spacious Detailed Card View",
+  },
+];
+
 // Helper to extract day order override from academic calendar text
 function extractDayOrderOverride(eventText: string): AttendanceDay | null {
   const norm = String(eventText || "").toLowerCase();
@@ -205,7 +220,9 @@ function LabFatExamSlot({
               </p>
               <p className="text-muted">
                 Reporting{" "}
-                <span className="block font-semibold text-zinc-800 dark:text-zinc-200">{paper.reportingTime || "—"}</span>
+                <span className="block font-semibold text-zinc-800 dark:text-zinc-200">
+                  {paper.reportingTime || "—"}
+                </span>
               </p>
               <p className="text-muted">
                 Seat{" "}
@@ -266,6 +283,7 @@ export default function SimplifiedMobileHome({
    */
   const [weekSlideDir, setWeekSlideDir] = useState<1 | -1>(1);
   const [showTimetableModal, setShowTimetableModal] = useState(false);
+  const [showWeekDetails, setShowWeekDetails] = useState(false);
 
   // Timetable sheet registers itself for system back via BottomSheet.
 
@@ -1219,12 +1237,16 @@ export default function SimplifiedMobileHome({
     <div className="w-full max-w-4xl lg:max-w-none mx-auto lg:mx-0 pt-3 sm:pt-5 md:pb-8 animate-in fade-in duration-300">
       <div className="flex flex-col lg:flex-row items-start gap-6 xl:gap-8 w-full">
         {/* Left Column: Feed, Stats, Timetable, Shortcuts */}
-        <div className="w-full lg:flex-1 lg:min-w-0 space-y-6 text-left">
+        <div className="w-full lg:flex-1 lg:min-w-0 space-y-5 text-left">
           {/* ── TOP APP BAR: AVATAR / ICON ABOVE GREETING & CONTROLS ── */}
           <div className="flex items-start justify-between px-1">
             <div className="flex min-w-0 flex-1 flex-col items-stretch pr-2 text-left">
               <h1 className="truncate text-[22px] font-semibold leading-tight tracking-tight text-ink sm:text-2xl">
-                {getGreeting()}, {(() => { const n = String(profileName || "there").split(" ")[0]; return n.charAt(0).toUpperCase() + n.slice(1).toLowerCase(); })()}
+                {getGreeting()},{" "}
+                {(() => {
+                  const n = String(profileName || "there").split(" ")[0];
+                  return n.charAt(0).toUpperCase() + n.slice(1).toLowerCase();
+                })()}
               </h1>
               <p className="mt-1 text-[13.5px] text-muted">
                 {currentTime.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" })}
@@ -1245,17 +1267,20 @@ export default function SimplifiedMobileHome({
                 {isOffline ? (
                   <>
                     <WifiOff className="w-4 h-4 shrink-0" />
-                    <span>Offline</span>
+                    <span className="hidden sm:inline">Offline</span>
                   </>
                 ) : (
-                  <RefreshCcw className={`h-[18px] w-[18px] ${isSpinning ? "animate-spin text-accent" : ""}`} strokeWidth={1.8} />
+                  <RefreshCcw
+                    className={`h-[18px] w-[18px] ${isSpinning ? "animate-spin text-accent" : ""}`}
+                    strokeWidth={1.8}
+                  />
                 )}
               </button>
 
               {/* Spotlight Search */}
               <button
                 onClick={onOpenCommandPalette}
-                className="hidden h-10 w-10 place-items-center rounded-full text-ink-2 transition-colors duration-[120ms] hover:bg-surface-2 cursor-pointer sm:grid"
+                className="grid h-10 w-10 place-items-center rounded-full text-ink-2 transition-colors duration-[120ms] hover:bg-surface-2 cursor-pointer"
                 title="Search (Cmd+K)"
               >
                 <Search className="h-[18px] w-[18px]" strokeWidth={1.8} />
@@ -1272,65 +1297,137 @@ export default function SimplifiedMobileHome({
             </div>
           </div>
 
-          {/* ── STATS: DYNAMIC MULTI-TILE & CAROUSEL GRID ── */}
-          <HomeNowNext
-            classes={timetableMap[todayDayCode] || []}
-            now={currentTime}
-            onOpenCourse={handleCourseClick}
-          />
-
-          <HomeAttendanceList
-            courses={attendanceData?.attendance}
-            targetPct={targetAttendancePct}
-            onCourseClick={handleCourseClick}
-            onViewAll={() => setActiveTab("attendance")}
-          />
-
-          <HomeDueSoon tasks={tasks} now={currentTime} />
-
-          <div
-            ref={statsContainerRef}
-            className="grid gap-3 sm:gap-4 text-left"
-            style={{
-              gridTemplateColumns: `repeat(${statColumnCount}, minmax(0, 1fr))`,
-            }}
-          >
-            {directTiles.map((tile) => (
-              <div key={tile.id} onClick={tile.onClick} className={cn("min-w-0", tile.onClick && "cursor-pointer")}>
-                <StatTile
-                  label={tile.label}
-                  value={tile.value}
-                  sub={tile.sub}
-                  badge={tile.badge}
-                  tone={tile.tone}
-                  className={cn(
-                    tile.onClick && "transition-all group",
-                    tile.blur,
-                  )}
-                />
-              </div>
-            ))}
-
-            {overflowSlides.length > 0 && (
-              <InsightCarousel
-                slides={overflowSlides}
-                carousel={statCarousel}
-                ariaLabel="Rotating insights"
-                className="min-w-0"
+          <div className="grid grid-cols-1 items-start gap-3 sm:gap-4 lg:grid-cols-12">
+            <div className="min-w-0 lg:col-span-12">
+              <HomeNowNext
+                classes={timetableMap[todayDayCode] || []}
+                now={currentTime}
+                onOpenCourse={handleCourseClick}
               />
-            )}
-          </div>
+            </div>
 
-          <WeekSlotMap
-            map={timetableMap as any}
-            today={todayDayCode}
-            now={currentTime}
-            selectedDay={weekOffset === 0 ? selectedDay : undefined}
-            onSelectDay={(d) => {
-              setWeekOffset(0);
-              setSelectedDay(d as AttendanceDay);
-            }}
-          />
+            <div
+              ref={statsContainerRef}
+              className="grid min-w-0 gap-3 text-left sm:gap-4 lg:hidden"
+              style={{
+                gridTemplateColumns: `repeat(${statColumnCount}, minmax(0, 1fr))`,
+              }}
+            >
+              {directTiles.map((tile) => (
+                <div key={tile.id} onClick={tile.onClick} className={cn("min-w-0", tile.onClick && "cursor-pointer")}>
+                  <StatTile
+                    label={tile.label}
+                    value={tile.value}
+                    sub={tile.sub}
+                    badge={tile.badge}
+                    tone={tile.tone}
+                    height="h-28 sm:h-32"
+                    className={cn(tile.onClick && "transition-all group", tile.blur)}
+                  />
+                </div>
+              ))}
+
+              {overflowSlides.length > 0 && (
+                <InsightCarousel
+                  slides={overflowSlides}
+                  carousel={statCarousel}
+                  ariaLabel="Rotating insights"
+                  height="h-28 sm:h-32"
+                  className="min-w-0"
+                />
+              )}
+            </div>
+
+            <div className="min-w-0 lg:col-span-12">
+              <HomeDueSoon
+                tasks={tasks}
+                now={currentTime}
+                onOpenTasks={() => {
+                  setActiveTab("tools");
+                  setActiveToolsSubTab?.("tasks");
+                }}
+              />
+            </div>
+
+            <div className="min-w-0 lg:col-span-12">
+              <button
+                type="button"
+                aria-expanded={showWeekDetails}
+                aria-controls="home-week-details"
+                onClick={() => setShowWeekDetails((open) => !open)}
+                className="group flex min-h-[76px] w-full items-center gap-3 rounded-xl border border-line bg-surface px-4 py-3 text-left transition-colors hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
+              >
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-accent-soft text-accent">
+                  <CalendarDays aria-hidden="true" className="h-[18px] w-[18px]" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[13px] font-semibold text-ink">Your week</span>
+                  <span className="mt-0.5 block truncate text-[11px] text-muted">
+                    {Object.values(timetableMap).reduce((count, classes) => count + classes.length, 0)} classes
+                    {" · "}
+                    {attendanceData?.attendance?.length || 0} courses
+                    {" · "}
+                    {criticalCount > 0
+                      ? `${criticalCount} need attention`
+                      : attendanceData?.attendance?.length
+                        ? "Attendance on track"
+                        : "Attendance unavailable"}
+                  </span>
+                </span>
+                <span className="shrink-0 text-[11px] font-semibold text-accent">
+                  {showWeekDetails ? "Less" : "Details"}
+                </span>
+                <ChevronDown
+                  aria-hidden="true"
+                  className={`h-4 w-4 shrink-0 text-muted transition-transform duration-200 ${
+                    showWeekDetails ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+            </div>
+
+            <AnimatePresence initial={false}>
+              {showWeekDetails && (
+                <m.div
+                  id="home-week-details"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="min-w-0 overflow-hidden lg:col-span-12"
+                >
+                  <div className="space-y-6">
+                    <div className="hidden min-w-0 lg:block">
+                      <WeekSlotMap
+                        map={timetableMap as any}
+                        today={todayDayCode}
+                        now={currentTime}
+                        selectedDay={weekOffset === 0 ? selectedDay : undefined}
+                        onSelectDay={(d) => {
+                          setWeekOffset(0);
+                          setSelectedDay(d as AttendanceDay);
+                        }}
+                        onOpenCourse={handleCourseClick}
+                        onExpand={() => setShowTimetableModal(true)}
+                        className="min-w-0"
+                      />
+                    </div>
+                    <div className="min-w-0 lg:hidden">
+                      <TimetableGrid attendance={attendanceData?.attendance || []} cellDensity="full" />
+                    </div>
+                    <HomeAttendanceList
+                      courses={attendanceData?.attendance}
+                      targetPct={targetAttendancePct}
+                      limit={3}
+                      onCourseClick={handleCourseClick}
+                      onViewAll={() => setActiveTab("attendance")}
+                      className="min-w-0"
+                    />
+                  </div>
+                </m.div>
+              )}
+            </AnimatePresence>
+          </div>
 
           {/* ── TIMETABLE & INTEGRATED ACADEMIC CALENDAR SECTION ── */}
           <div className="space-y-4 text-left">
@@ -1426,24 +1523,7 @@ export default function SimplifiedMobileHome({
 
                 {/* Pill Style Selector (Compact 2-Line vs Detailed) */}
                 {!isExamDay && !isHolidayOrOff && (
-                  <SegmentedControl
-                    options={[
-                      {
-                        value: "compact" as const,
-                        label: "Compact",
-                        icon: <List className="w-3.5 h-3.5" />,
-                        title: "2-Line Compact Pill View",
-                      },
-                      {
-                        value: "detailed" as const,
-                        label: "Detailed",
-                        icon: <Layers className="w-3.5 h-3.5" />,
-                        title: "Spacious Detailed Card View",
-                      },
-                    ]}
-                    value={pillStyle}
-                    onChange={setPillStyle}
-                  />
+                  <SegmentedControl options={PILL_STYLE_OPTIONS} value={pillStyle} onChange={setPillStyle} />
                 )}
               </div>
             </div>
@@ -1498,9 +1578,6 @@ export default function SimplifiedMobileHome({
                     // Tuesday" for attention, and the emerald ring still marks it.
                     const ink = flavour === "teaching" && item.isToday && !isSelected ? TODAY_INK : tint.ink;
                     const title = weekStripTitle(item, count);
-                    // A weekend with nothing on it recedes so the working week reads first.
-                    const isQuietDay =
-                      flavour === "teaching" && count === 0 && (item.dayCode === "SAT" || item.dayCode === "SUN");
                     const labFatNote = item.isLabFatDay ? " · Lab FAT" : "";
 
                     return (
@@ -1516,21 +1593,25 @@ export default function SimplifiedMobileHome({
                           "relative flex h-[58px] w-full max-w-[52px] flex-col items-center justify-center gap-1 justify-self-center rounded-sm border transition-colors duration-[120ms] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
                           isSelected
                             ? SELECTED_RING
-                            : cn(tint.fill, item.isToday && flavour === "teaching" ? TODAY_RING : tint.edge, "hover:bg-surface-2"),
+                            : cn(
+                                tint.fill,
+                                item.isToday && flavour === "teaching" ? TODAY_RING : tint.edge,
+                                "hover:bg-surface-2",
+                              ),
                         )}
                       >
                         <span
                           className={cn(
-                            "text-[11.5px] leading-none",
-                            isSelected ? "text-background/80" : isQuietDay ? "text-muted/70" : "text-muted",
+                            "text-[11.5px] font-semibold leading-none",
+                            isSelected ? "text-background/80" : "text-ink-2",
                           )}
                         >
                           {item.dayCode.charAt(0) + item.dayCode.slice(1).toLowerCase()}
                         </span>
                         <span
                           className={cn(
-                            "font-mono text-[17px] font-semibold leading-none tabular-nums",
-                            isSelected ? "text-background" : isQuietDay ? "text-muted" : ink,
+                            "font-mono text-[17px] font-bold leading-none tabular-nums",
+                            isSelected ? "text-background" : ink,
                           )}
                         >
                           {item.dayNumber}
@@ -1557,9 +1638,7 @@ export default function SimplifiedMobileHome({
             {/* Selected Day Sub-Header */}
             <div className="flex items-center justify-between px-1 pt-1">
               <div>
-                <h3 className="text-sm font-semibold text-ink font-outfit">
-                  {getSelectedDayFormattedDate()}
-                </h3>
+                <h3 className="text-sm font-semibold text-ink font-outfit">{getSelectedDayFormattedDate()}</h3>
                 <p className="text-xs text-muted font-medium">
                   {isLabFatDay ? (
                     <span className="inline-flex items-center gap-1.5">
@@ -1626,7 +1705,9 @@ export default function SimplifiedMobileHome({
                           </span>
                         )}
                       </div>
-                      <span className="text-xs font-semibold text-zinc-400 dark:text-zinc-500">Slot {ex.slot || "—"}</span>
+                      <span className="text-xs font-semibold text-zinc-400 dark:text-zinc-500">
+                        Slot {ex.slot || "—"}
+                      </span>
                     </div>
 
                     {/* Course Details */}
@@ -1656,17 +1737,13 @@ export default function SimplifiedMobileHome({
                         <div className="flex items-center gap-2 text-xs text-zinc-700 dark:text-zinc-300 font-semibold">
                           <Building className="w-4 h-4 text-danger shrink-0" />
                           <span>
-                            Venue:{" "}
-                            <strong className="text-ink font-semibold">
-                              {ex.venue || "Hall Assigned"}
-                            </strong>
+                            Venue: <strong className="text-ink font-semibold">{ex.venue || "Hall Assigned"}</strong>
                           </span>
                         </div>
                         {(ex.seatNo || ex.seatLocation) && (
                           <p className="text-[11px] text-muted pl-6">
-                            Seat:{" "}
-                            <strong className="text-ink font-semibold">No. {ex.seatNo || "—"}</strong>{" "}
-                            ({ex.seatLocation || "Row"})
+                            Seat: <strong className="text-ink font-semibold">No. {ex.seatNo || "—"}</strong> (
+                            {ex.seatLocation || "Row"})
                           </p>
                         )}
                       </div>
@@ -1674,9 +1751,7 @@ export default function SimplifiedMobileHome({
 
                     {/* Footer Action */}
                     <div className="pt-2 flex items-center justify-between">
-                      <span className="text-[11px] font-semibold text-danger">
-                        No regular lectures on exam day
-                      </span>
+                      <span className="text-[11px] font-semibold text-danger">No regular lectures on exam day</span>
                       <button
                         onClick={() => {
                           setActiveTab("academics");
@@ -1826,7 +1901,11 @@ export default function SimplifiedMobileHome({
                     const gap = prevEnd != null && startMin > prevEnd ? startMin - prevEnd : 0;
                     const nowMin = currentTime.getHours() * 60 + currentTime.getMinutes();
                     const showNowBefore =
-                      isTodayView && !isLive && isUpcoming && (prevEnd == null || nowMin >= prevEnd) && nowMin < startMin;
+                      isTodayView &&
+                      !isLive &&
+                      isUpcoming &&
+                      (prevEnd == null || nowMin >= prevEnd) &&
+                      nowMin < startMin;
                     const pctLow = total > 0 && currentPct < targetAttendancePct;
                     const nowLine = (
                       <div className="grid grid-cols-[52px_minmax(0,1fr)] items-center gap-3" aria-hidden="true">
@@ -1843,7 +1922,10 @@ export default function SimplifiedMobileHome({
                             <span className="pt-2 font-mono text-[12.5px] text-muted">{hm(prevEnd as number)}</span>
                             <div className="flex items-center justify-between gap-2 rounded-sm border border-dashed border-line px-3 py-2 text-[12.5px] text-muted">
                               <span>
-                                Free · {gap >= 60 ? `${Math.floor(gap / 60)} h${gap % 60 ? ` ${gap % 60} min` : ""}` : `${gap} min`}
+                                Free ·{" "}
+                                {gap >= 60
+                                  ? `${Math.floor(gap / 60)} h${gap % 60 ? ` ${gap % 60} min` : ""}`
+                                  : `${gap} min`}
                               </span>
                               <button
                                 type="button"
@@ -1857,7 +1939,12 @@ export default function SimplifiedMobileHome({
                         )}
                         {showNowBefore && nowLine}
                         <div className="grid grid-cols-[52px_minmax(0,1fr)] gap-3">
-                          <span className={cn("pt-2.5 font-mono text-[12.5px]", isLive ? "font-semibold text-ink" : "text-muted")}>
+                          <span
+                            className={cn(
+                              "pt-2.5 font-mono text-[12.5px]",
+                              isLive ? "font-semibold text-ink" : "text-muted",
+                            )}
+                          >
                             {clsTimeRange ? hm(startMin) : cls.time}
                           </span>
                           <div
@@ -1888,7 +1975,7 @@ export default function SimplifiedMobileHome({
                                 <p className="truncate text-[14px] font-semibold text-ink">
                                   {cls.courseTitle || cls.courseCode}
                                 </p>
-                                <p className="truncate font-mono text-[12.5px] text-muted">
+                                <p className="truncate font-mono text-[12.5px] text-ink-2">
                                   {[cls.venue, cls.slotName, clsTimeRange ? `${hm(startMin)}–${hm(endMin)}` : cls.time]
                                     .filter(Boolean)
                                     .map((part: string, i: number) => (
@@ -1911,13 +1998,9 @@ export default function SimplifiedMobileHome({
                                 </span>
                               )}
                             </div>
-                            {isLive && (
-                              <p className="mt-1.5 text-[12px] text-accent">
-                                Now · {minutesLeft} min left
-                              </p>
-                            )}
+                            {isLive && <p className="mt-1.5 text-[12px] text-accent">Now · {minutesLeft} min left</p>}
                             {!isLive && isUpcoming && minutesUntilStart > 0 && minutesUntilStart <= 60 && (
-                              <p className="mt-1.5 text-[12px] text-muted">In {minutesUntilStart} min</p>
+                              <p className="mt-1.5 text-[12px] text-ink-2">In {minutesUntilStart} min</p>
                             )}
                             {showTaskBadgeInline && taskSummary.total > 0 && (
                               <div className="mt-1.5 flex items-center gap-1.5">
@@ -2067,11 +2150,7 @@ export default function SimplifiedMobileHome({
                             >
                               <span
                                 className={`w-1.5 h-1.5 rounded-full ${
-                                  bunkStatus === "safe"
-                                    ? "bg-ok"
-                                    : bunkStatus === "warning"
-                                      ? "bg-warn"
-                                      : "bg-danger"
+                                  bunkStatus === "safe" ? "bg-ok" : bunkStatus === "warning" ? "bg-warn" : "bg-danger"
                                 }`}
                               />
                               {bunkText}
@@ -2169,9 +2248,7 @@ export default function SimplifiedMobileHome({
                                 </span>
                               )}
                             </div>
-                            <h4 className="text-xs font-semibold text-ink truncate font-outfit">
-                              {t.title}
-                            </h4>
+                            <h4 className="text-xs font-semibold text-ink truncate font-outfit">{t.title}</h4>
                           </div>
                           <ChevronRight className="w-4 h-4 text-zinc-400 shrink-0" />
                         </div>
@@ -2182,7 +2259,10 @@ export default function SimplifiedMobileHome({
               })()}
 
             {/* ── TIMETABLE & QUICK TOOLS BUTTONS (PLACED CLEANLY AFTER ALL CLASSES) ── */}
-            <nav aria-label="Shortcuts" className="divide-y divide-line-2 overflow-hidden rounded-md border border-line bg-surface">
+            <nav
+              aria-label="Shortcuts"
+              className="divide-y divide-line-2 overflow-hidden rounded-md border border-line bg-surface"
+            >
               {[
                 { label: "Full weekly timetable", Icon: CalendarIcon, onClick: () => setShowTimetableModal(true) },
                 { label: "Find a free classroom", Icon: DoorOpen, onClick: handleOpenFreeClassrooms },
@@ -2203,43 +2283,126 @@ export default function SimplifiedMobileHome({
           </div>
         </div>
 
-        {/* ── RIGHT COLUMN: DESKTOP COURSE SIDE VIEW PANE (SHOWN ON CLASS CLICK) ── */}
-        {selectedCourseObj && (
-          <aside className="hidden lg:block w-80 xl:w-96 shrink-0 sticky top-6 self-start animate-in fade-in duration-200">
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setSelectedCourseCode(null)}
-                className="absolute top-4 right-4 z-20 p-1.5 rounded-md bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors cursor-pointer"
-                title="Close side view"
-                aria-label="Close side view"
-              >
-                <X className="w-4 h-4" />
-              </button>
-              <DesktopCourseDetail
-                course={selectedCourseObj}
-                isDayscholarWithBus={settings?.isDayscholarWithBus || false}
-                decimalValues={settings?.decimalValues || false}
-                dayCardsMap={timetableMap}
-                results={analyzedCalendarResults}
-                onViewFullPage={() => {
-                  if (!selectedCourseObj?.courseCode) return;
-                  const cleanCode = String(selectedCourseObj.courseCode)
-                    .replace(/\([LPT]\)$/i, "")
-                    .trim();
-                  try {
-                    localStorage.setItem("course_dashboard_target", cleanCode);
-                    localStorage.setItem("course_dashboard_tab", "overview");
-                  } catch {}
-                  setActiveTab("academics");
-                  setActiveSubTab("course-dashboard");
-                }}
-                className="w-full bg-surface border border-zinc-200/80 dark:border-zinc-800/80 rounded-md p-5 shadow-xs text-left"
-              />
+        <div className="sticky top-6 hidden max-h-[calc(100vh-3rem)] w-80 shrink-0 self-start flex-col gap-4 overflow-y-auto rounded-xl border border-line bg-surface p-4 text-left shadow-xs lg:flex xl:w-[360px]">
+          <section aria-label="Home stats and controls" className="flex flex-col gap-4">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted">Overview</p>
+                <h2 className="mt-0.5 text-[16px] font-semibold tracking-tight text-ink">Your snapshot</h2>
+              </div>
+              <div className="flex shrink-0 items-center gap-1">
+                <button
+                  type="button"
+                  onClick={handleSyncClick}
+                  aria-label={isOffline ? "Offline — tap for details" : "Sync data from VTOP"}
+                  title={isOffline ? "You're offline — tap for details" : "Sync data from VTOP"}
+                  className={cn(
+                    "grid h-9 w-9 place-items-center rounded-lg transition-colors hover:bg-surface-2",
+                    isOffline ? "text-warn" : "text-ink-2",
+                    isSpinning && "animate-spin text-accent",
+                  )}
+                >
+                  {isOffline ? <WifiOff className="h-4 w-4" /> : <RefreshCcw className="h-4 w-4" strokeWidth={1.8} />}
+                </button>
+                <button
+                  type="button"
+                  onClick={onOpenCommandPalette}
+                  aria-label="Search"
+                  title="Search (Cmd+K)"
+                  className="grid h-9 w-9 place-items-center rounded-lg text-ink-2 transition-colors hover:bg-surface-2"
+                >
+                  <Search className="h-4 w-4" strokeWidth={1.8} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("profile")}
+                  aria-label="Profile"
+                  title="Profile"
+                  className="grid h-9 w-9 place-items-center rounded-lg bg-surface-2 text-[12px] font-semibold text-ink-2 transition-colors hover:bg-line-2"
+                >
+                  {initials}
+                </button>
+              </div>
             </div>
-          </aside>
-        )}
+
+            {!isExamDay && !isHolidayOrOff && (
+              <div className="border-t border-line pt-3">
+                <p className="mb-2 text-[12px] font-medium text-ink-2">Timetable cards</p>
+                <SegmentedControl
+                  options={PILL_STYLE_OPTIONS}
+                  value={pillStyle}
+                  onChange={setPillStyle}
+                  grow
+                  className="w-full"
+                />
+              </div>
+            )}
+
+            <div className="grid gap-2.5">
+              {allStatTiles.map((tile) => (
+                <button
+                  key={tile.id}
+                  type="button"
+                  onClick={tile.onClick}
+                  disabled={!tile.onClick}
+                  className={cn(
+                    "w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                    tile.onClick && "transition-transform hover:-translate-y-0.5",
+                    !tile.onClick && "cursor-default",
+                  )}
+                >
+                  <StatTile
+                    label={tile.label}
+                    value={tile.value}
+                    sub={tile.sub}
+                    badge={tile.badge}
+                    tone={tile.tone}
+                    height="h-28"
+                    className={tile.blur}
+                  />
+                </button>
+              ))}
+            </div>
+          </section>
+        </div>
       </div>
+
+      <AnimatePresence>
+        {selectedCourseObj && typeof window !== "undefined" && window.innerWidth >= 1024 && (
+          <BottomSheet
+            onClose={() => setSelectedCourseCode(null)}
+            overlayId="home-course-detail"
+            title={selectedCourseObj.courseTitle || selectedCourseObj.courseCode}
+            subtitle={selectedCourseObj.courseCode}
+            icon={<BookOpen className="h-4 w-4" />}
+            closeLabel="Close course details"
+            placement="bottom-center"
+            maxWidth="max-w-2xl"
+          >
+            <DesktopCourseDetail
+              course={selectedCourseObj}
+              isDayscholarWithBus={settings?.isDayscholarWithBus || false}
+              decimalValues={settings?.decimalValues || false}
+              dayCardsMap={timetableMap}
+              results={analyzedCalendarResults}
+              onViewFullPage={() => {
+                if (!selectedCourseObj?.courseCode) return;
+                const cleanCode = String(selectedCourseObj.courseCode)
+                  .replace(/\([LPT]\)$/i, "")
+                  .trim();
+                try {
+                  localStorage.setItem("course_dashboard_target", cleanCode);
+                  localStorage.setItem("course_dashboard_tab", "overview");
+                } catch {}
+                setSelectedCourseCode(null);
+                setActiveTab("academics");
+                setActiveSubTab("course-dashboard");
+              }}
+              className="w-full rounded-md border border-line bg-surface p-4 text-left"
+            />
+          </BottomSheet>
+        )}
+      </AnimatePresence>
 
       {/* Full Timetable Sheet */}
       <AnimatePresence>
@@ -2257,12 +2420,8 @@ export default function SimplifiedMobileHome({
                     <CalendarIcon className="w-5 h-5" />
                   </div>
                   <div className="min-w-0">
-                    <h2 className="text-base font-semibold text-ink font-outfit truncate">
-                      Full Weekly Timetable
-                    </h2>
-                    <p className="text-xs text-muted truncate">
-                      Slot matrix, timeslots & classroom venues
-                    </p>
+                    <h2 className="text-base font-semibold text-ink font-outfit truncate">Full Weekly Timetable</h2>
+                    <p className="text-xs text-muted truncate">Slot matrix, timeslots & classroom venues</p>
                   </div>
                 </div>
                 {/*
@@ -2277,7 +2436,7 @@ export default function SimplifiedMobileHome({
                 </IconButton>
               </div>
               <div className="p-4 sm:p-5">
-                <TimetableGrid attendance={attendanceData?.attendance || []} />
+                <TimetableGrid attendance={attendanceData?.attendance || []} cellDensity="full" />
               </div>
             </div>
           </BottomSheet>

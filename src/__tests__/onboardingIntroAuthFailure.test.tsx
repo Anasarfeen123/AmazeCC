@@ -95,7 +95,7 @@ function renderIntro(onChangePassword = vi.fn()) {
         onChangePassword,
       }}
       onDone={() => {}}
-    />
+    />,
   );
 }
 
@@ -109,6 +109,15 @@ afterEach(() => {
 });
 
 describe("intro sign-in rejection", () => {
+  it("uses the app's theme-aware surface tokens on the sign-in screen", () => {
+    const { container } = renderIntro();
+    const shell = container.firstElementChild as HTMLElement;
+
+    expect(shell.className).toContain("bg-background");
+    expect(shell.className).toContain("text-ink");
+    expect(screen.getByText("Sign in to VTOP").className).toContain("text-ink");
+  });
+
   it("offers the credential editor when VTOP names the password as wrong", () => {
     failWith("Invalid Username / Password");
     const onChangePassword = vi.fn();

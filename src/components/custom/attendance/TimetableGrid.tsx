@@ -31,7 +31,7 @@ import config from "../../../../config.json";
 import { exportableHtml, openTimetablePrintablePage } from "@/lib/exportTimetable";
 import { downloadElementImage } from "@/lib/imageDownload";
 import { useTheme } from "next-themes";
-import { TimetableView, type AttendanceTone } from "../timetable";
+import { TimetableView, type AttendanceTone, type CellDensity } from "../timetable";
 import { buildPeriodSkeleton } from "../timetable/periodSkeleton";
 
 /**
@@ -91,7 +91,7 @@ function convertToAddedCourses(data: any[]): AddedCourse[] {
   });
 }
 
-export default function TimetableVtop({ attendance }: { attendance?: any[] }) {
+export default function TimetableVtop({ attendance, cellDensity }: { attendance?: any[]; cellDensity?: CellDensity }) {
   const captureRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -228,6 +228,7 @@ export default function TimetableVtop({ attendance }: { attendance?: any[] }) {
           labPeriods={labPeriods}
           days={DAYS.map((d) => ({ id: d.toLowerCase(), name: d }))}
           attendanceByCourse={attendanceByCourse}
+          cellDensity={cellDensity}
           className="w-full"
         />
 

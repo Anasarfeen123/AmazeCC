@@ -42,6 +42,17 @@ describe("AmazeOnboardingFlow interface selection", () => {
     expect(screen.getByText("Display & Goals")).toBeDefined();
   });
 
+  it("uses the app's theme-aware surface tokens throughout onboarding", () => {
+    const { container } = render(
+      <AmazeOnboardingFlow initialStep={0} settings={{}} setSettings={vi.fn()} onComplete={vi.fn()} />,
+    );
+    const root = container.firstElementChild as HTMLElement;
+
+    expect(root.className).toContain("bg-background");
+    expect(root.className).toContain("text-ink");
+    expect(screen.getByText("Welcome to AmazeCC").className).toContain("text-ink");
+  });
+
   it("skips the standalone picker and applies the only available interface", async () => {
     const onComplete = vi.fn();
 

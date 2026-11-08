@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { createPortal } from "react-dom";
 import OptionPicker from "../shared/primitives/OptionPicker";
 import AppLibraryPortal from "./AppLibraryPortal";
 
@@ -22,7 +23,6 @@ import {
   Home,
   Library,
   LayoutGrid,
-  Menu,
   RefreshCcw,
   Settings,
   User,
@@ -31,7 +31,6 @@ import {
   Calendar,
   Compass,
   Key,
-  ArrowLeft,
   Bus,
   Search,
   Coffee,
@@ -48,6 +47,8 @@ import {
   Users,
   UserSearch,
   ScanLine,
+  PanelLeftClose,
+  PanelLeftOpen,
   type LucideIcon,
 } from "lucide-react";
 import { AnimatePresence, m } from "framer-motion";
@@ -62,7 +63,6 @@ import {
   SidebarItem,
   SidebarProfile,
   SidebarThemeControl,
-  SidebarExpandButton,
 } from "@amazecontinuityprojects/amazeui";
 import { useSyncTrigger } from "../shared/useSyncTrigger";
 import config from "../../../../config.json";
@@ -74,7 +74,6 @@ type NavItem = {
   icon: LucideIcon;
   isActive: boolean;
   onSelect: () => void;
-  isExpandable?: boolean;
 };
 
 type Group = {
@@ -139,16 +138,12 @@ export default function NavigationTabs({
   void onOpenFeedbackStatus;
 
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const flyoutRef = useRef<HTMLDivElement | null>(null);
+  const collapsedMenuRef = useRef<HTMLDivElement>(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [currentIcon, setCurrentIcon] = useState(getAssetPath("/logo.png"));
   const [profileData, setProfileData] = useState<any>(null);
+  const [collapsedMenu, setCollapsedMenu] = useState<{ groupId: string; top: number; left: number } | null>(null);
 
-  // Progressive disclosure
-  const [showAcademicsPanel, setShowAcademicsPanel] = useState(activeTab === "academics");
-  const [showToolsPanel, setShowToolsPanel] = useState(activeTab === "tools");
-  const [showHostelPanel, setShowHostelPanel] = useState(activeTab === "hostel");
-  const [activeRailGroup, setActiveRailGroup] = useState<string | null>(null);
   const [isAppLibraryOpen, setIsAppLibraryOpen] = useState(false);
 
   // System back (incl. Android predictive back) dismisses the App Library
@@ -157,16 +152,58 @@ export default function NavigationTabs({
 
   // Theme settings (next-themes)
   const { theme, setTheme } = useTheme();
-  const [isThemeExpanded, setIsThemeExpanded] = useState(false);
 
   // Expanded mode depends on settings
   const isExpandedMode = !settings.isSidebarCollapsed;
   const isOpen = isExpandedMode;
 
+  useEffect(() => {
+    if (!collapsedMenu) return;
+
+    const closeOnOutsidePointer = (event: PointerEvent) => {
+      const target = event.target as Node;
+      if (sidebarRef.current?.contains(target) || collapsedMenuRef.current?.contains(target)) return;
+      setCollapsedMenu(null);
+    };
+    const closeOnEscape = (event: WindowEventMap["keydown"]) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      setCollapsedMenu(null);
+    };
+
+    document.addEventListener("pointerdown", closeOnOutsidePointer);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsidePointer);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [collapsedMenu]);
+
+  useEffect(() => {
+    if (isOpen) setCollapsedMenu(null);
+  }, [isOpen]);
+
+  const toggleCollapsedGroup = useCallback(
+    (groupId: string, trigger: HTMLButtonElement) => {
+      if (collapsedMenu?.groupId === groupId) {
+        setCollapsedMenu(null);
+        return;
+      }
+
+      const bounds = trigger.getBoundingClientRect();
+      const menuHeight = Math.min(window.innerHeight * 0.72, 560);
+      setCollapsedMenu({
+        groupId,
+        top: Math.max(12, Math.min(bounds.top, window.innerHeight - menuHeight - 12)),
+        left: Math.max(80, Math.min(bounds.right + 8, window.innerWidth - 248)),
+      });
+    },
+    [collapsedMenu],
+  );
+
   // Command palette logic
   const openCommandPalette = useCallback(() => {
     onOpenCommandPalette?.();
-    setActiveRailGroup(null);
   }, [onOpenCommandPalette]);
 
   useEffect(() => {
@@ -189,48 +226,6 @@ export default function NavigationTabs({
   }, []);
 
   // No swipe-up gesture — App Library is opened only via the Modules button
-
-  // Keep the matching drill-in panel open for section-level destinations.
-  useEffect(() => {
-    if (activeTab === "academics") {
-      setShowAcademicsPanel(true);
-      setShowToolsPanel(false);
-      setShowHostelPanel(false);
-    } else if (activeTab === "tools") {
-      setShowToolsPanel(true);
-      setShowAcademicsPanel(false);
-      setShowHostelPanel(false);
-    } else if (activeTab === "hostel") {
-      setShowHostelPanel(true);
-      setShowToolsPanel(false);
-      setShowAcademicsPanel(false);
-    } else {
-      setShowAcademicsPanel(false);
-      setShowToolsPanel(false);
-      setShowHostelPanel(false);
-    }
-  }, [activeTab]);
-
-  // Handle clicking outside the rail popover in compact mode
-  useEffect(() => {
-    if (!activeRailGroup) return;
-
-    const closeOnOutsidePointer = (event: PointerEvent) => {
-      const target = event.target as Node;
-      if (sidebarRef.current?.contains(target) || flyoutRef.current?.contains(target)) return;
-      setActiveRailGroup(null);
-    };
-
-    document.addEventListener("pointerdown", closeOnOutsidePointer);
-    return () => document.removeEventListener("pointerdown", closeOnOutsidePointer);
-  }, [activeRailGroup]);
-
-  // Close rail popover if expanded state changes
-  useEffect(() => {
-    if (isOpen) {
-      setActiveRailGroup(null);
-    }
-  }, [isOpen]);
 
   const isHosteller = profileData?.isHosteller;
   const residentialStatus = settings?.residentialStatus;
@@ -279,10 +274,6 @@ export default function NavigationTabs({
     },
     [setActiveTab],
   );
-
-  const toggleRailPopover = useCallback((groupId: string) => {
-    setActiveRailGroup((current) => (current === groupId ? null : groupId));
-  }, []);
 
   // Removed old layout items as they are now fully isolated inside AppLibraryPortal
 
@@ -404,8 +395,6 @@ export default function NavigationTabs({
 
   const sidebarActiveStyles = "bg-sidebar-accent border border-sidebar-border text-info font-semibold";
   const sidebarActiveIconStyles = "text-info font-semibold";
-  const railActiveStyles = "bg-sidebar-accent text-info border border-sidebar-border shadow-sm";
-
   const handleThemeChange = (selectedTheme: string, e?: React.MouseEvent<HTMLElement>) => {
     if (theme === selectedTheme) return;
     animateThemeCircularExpansion(e || null, selectedTheme, setTheme);
@@ -416,10 +405,6 @@ export default function NavigationTabs({
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       action();
-      return;
-    }
-    if (event.key === "Escape") {
-      setActiveRailGroup(null);
       return;
     }
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -456,11 +441,9 @@ export default function NavigationTabs({
         label: "Academics",
         icon: GraduationCap,
         isActive: activeTab === "academics",
-        isExpandable: true,
         onSelect: () => {
           selectTab("academics");
           if (!activeSubTab || activeSubTab === "overview") setActiveSubTab("courses-simplified");
-          setShowAcademicsPanel(true);
         },
       },
     ],
@@ -534,11 +517,9 @@ export default function NavigationTabs({
         label: "Hostel Hub",
         icon: Home,
         isActive: activeTab === "hostel",
-        isExpandable: true,
         onSelect: () => {
           selectTab("hostel");
           if (!HostelActiveSubTab) setHostelActiveSubTab("overview");
-          setShowHostelPanel(true);
         },
       });
     }
@@ -578,11 +559,9 @@ export default function NavigationTabs({
         label: "Tools & Utilities Hub",
         icon: Layers,
         isActive: activeTab === "tools" && (!activeToolsSubTab || activeToolsSubTab === "overview"),
-        isExpandable: true,
         onSelect: () => {
           selectTab("tools");
           setActiveToolsSubTab?.("overview");
-          setShowToolsPanel(true);
         },
       },
     ],
@@ -754,179 +733,6 @@ export default function NavigationTabs({
     return pinnedTabs.map((id: string) => ({ id, ...tabData[id] })).filter((item: any) => item.label !== undefined);
   }, [settings?.pinnedNavTabs, activeTab, selectTab]);
 
-  const academicsItems = useMemo(
-    () => [
-      {
-        id: "courses-simplified",
-        label: "My Courses & Marks",
-        icon: Sparkles,
-        isActive:
-          activeTab === "academics" &&
-          (activeSubTab === "courses-simplified" ||
-            activeSubTab === "simplified-academics" ||
-            activeSubTab === "overview" ||
-            activeSubTab === "course-dashboard"),
-        onSelect: () => {
-          selectTab("academics");
-          setActiveSubTab("courses-simplified");
-        },
-      },
-      {
-        id: "schedule",
-        label: "Exam Schedule",
-        icon: Calendar,
-        isActive: activeTab === "academics" && activeSubTab === "schedule",
-        onSelect: () => {
-          selectTab("academics");
-          setActiveSubTab("schedule");
-        },
-      },
-      {
-        id: "grades",
-        label: "Grade History",
-        icon: GraduationCap,
-        isActive: activeTab === "academics" && activeSubTab === "grades",
-        onSelect: () => {
-          selectTab("academics");
-          setActiveSubTab("grades");
-        },
-      },
-      {
-        id: "curriculum",
-        label: "Curriculum",
-        icon: BookOpen,
-        isActive: activeTab === "academics" && activeSubTab === "curriculum",
-        onSelect: () => {
-          selectTab("academics");
-          setActiveSubTab("curriculum");
-        },
-      },
-    ],
-    [activeTab, activeSubTab, selectTab, setActiveSubTab],
-  );
-
-  const toolsSubItems = useMemo(
-    () => [
-      {
-        id: "overview",
-        label: "Overview",
-        icon: Layers,
-        isActive: activeTab === "tools" && (activeToolsSubTab === "overview" || !activeToolsSubTab),
-        onSelect: () => {
-          selectTab("tools");
-          setActiveToolsSubTab?.("overview");
-        },
-      },
-      {
-        id: "qbank",
-        label: "Question Bank",
-        icon: Database,
-        isActive: activeTab === "tools" && activeToolsSubTab === "qbank",
-        onSelect: () => {
-          selectTab("tools");
-          setActiveToolsSubTab?.("qbank");
-        },
-      },
-      {
-        id: "faculty-info",
-        label: "Faculty Explorer",
-        icon: UserCheck,
-        isActive: activeTab === "tools" && activeToolsSubTab === "faculty-info",
-        onSelect: () => {
-          selectTab("tools");
-          setActiveToolsSubTab?.("faculty-info");
-        },
-      },
-      {
-        id: "social",
-        label: "Timetable Sharing",
-        icon: Users,
-        isActive: activeTab === "tools" && activeToolsSubTab === "social",
-        onSelect: () => {
-          selectTab("tools");
-          setActiveToolsSubTab?.("social");
-        },
-      },
-      {
-        id: "cabshare",
-        label: "Cab Share",
-        icon: CarTaxiFront,
-        isActive: activeTab === "cabshare" || (activeTab === "tools" && activeToolsSubTab === "cabshare"),
-        onSelect: () => {
-          selectTab("tools");
-          setActiveToolsSubTab?.("cabshare");
-        },
-      },
-      {
-        id: "tasks",
-        label: "Tasks & Schedule",
-        icon: CheckSquare,
-        isActive: activeTab === "tools" && activeToolsSubTab === "tasks",
-        onSelect: () => {
-          selectTab("tools");
-          setActiveToolsSubTab?.("tasks");
-        },
-      },
-    ],
-    [activeTab, activeToolsSubTab, selectTab, setActiveToolsSubTab],
-  );
-
-  const hostelSubItems = useMemo(
-    () => [
-      {
-        id: "overview",
-        label: "Overview",
-        icon: Building,
-        isActive: activeTab === "hostel" && HostelActiveSubTab === "overview",
-        onSelect: () => {
-          selectTab("hostel");
-          setHostelActiveSubTab("overview");
-        },
-      },
-      {
-        id: "mess",
-        label: "Mess Menu",
-        icon: Coffee,
-        isActive: activeTab === "hostel" && HostelActiveSubTab === "mess",
-        onSelect: () => {
-          selectTab("hostel");
-          setHostelActiveSubTab("mess");
-        },
-      },
-      {
-        id: "laundry",
-        label: "Laundry",
-        icon: Wrench,
-        isActive: activeTab === "hostel" && HostelActiveSubTab === "laundry",
-        onSelect: () => {
-          selectTab("hostel");
-          setHostelActiveSubTab("laundry");
-        },
-      },
-      {
-        id: "leave",
-        label: "Leave Management",
-        icon: Compass,
-        isActive: activeTab === "hostel" && HostelActiveSubTab === "leave",
-        onSelect: () => {
-          selectTab("hostel");
-          setHostelActiveSubTab("leave");
-        },
-      },
-      {
-        id: "counselling",
-        label: "Counselling",
-        icon: User,
-        isActive: activeTab === "hostel" && HostelActiveSubTab === "counselling",
-        onSelect: () => {
-          selectTab("hostel");
-          setHostelActiveSubTab("counselling");
-        },
-      },
-    ],
-    [activeTab, HostelActiveSubTab, selectTab, setHostelActiveSubTab],
-  );
-
   /**
    * Single tap does the tab's normal thing; a second tap on the same icon inside
    * `DOUBLE_TAP_MS` takes that section to its home sub-screen.
@@ -1057,28 +863,31 @@ export default function NavigationTabs({
       >
         {/* Sidebar Header */}
         <SidebarHeader>
-          {/* Logo & Expand Toggle */}
-          <div className={`flex items-center ${isOpen ? "justify-between w-full" : "justify-center w-full"}`}>
-            <div className={`flex items-center min-w-0 ${isOpen ? "gap-2.5" : "justify-center"}`}>
+          {/* Brand and sidebar controls */}
+          <div className={`flex w-full items-center ${isOpen ? "justify-between" : "justify-center"}`}>
+            <div className={`flex min-w-0 items-center ${isOpen ? "gap-2.5" : "justify-center"}`}>
               <img
                 loading="lazy"
                 decoding="async"
                 src={currentIcon}
                 alt="AmazeCC"
-                className="h-7 w-7 rounded-sm object-contain"
+                className="h-8 w-8 rounded-lg object-contain"
               />
               {isOpen && (
-                <h2 className="truncate text-[15px] font-semibold tracking-tight text-ink">AmazeCC</h2>
+                <div className="min-w-0">
+                  <h2 className="truncate text-[15px] font-semibold tracking-tight text-ink">AmazeCC</h2>
+                  <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-muted">
+                    Student space
+                  </p>
+                </div>
               )}
             </div>
-            {isOpen && (
-              <div className="flex items-center gap-0.5">
+            <div className="flex items-center gap-0.5">
+              {isOpen && (
                 <button
                   onClick={handleSyncClick}
-                  className={`relative hit-expand group flex min-h-9 items-center gap-1.5 rounded-sm px-2.5 text-[13px] font-medium transition-colors duration-[120ms] ${navButtonBase} ${
-                    isOffline
-                      ? "bg-warn-soft text-warn"
-                      : "text-ink-2 hover:bg-surface-2 hover:text-ink"
+                  className={`relative hit-expand group flex min-h-9 items-center gap-1.5 rounded-lg px-2.5 text-[13px] font-medium transition-colors duration-[120ms] ${navButtonBase} ${
+                    isOffline ? "bg-warn-soft text-warn" : "text-ink-2 hover:bg-surface-2 hover:text-ink"
                   }`}
                   title={isOffline ? "You're offline — tap for details" : "Sync Data from VTOP"}
                   aria-label={isOffline ? "Offline — tap for details" : "Sync Data from VTOP"}
@@ -1093,16 +902,19 @@ export default function NavigationTabs({
                   )}
                   <span>{isOffline ? "Offline" : "Sync"}</span>
                 </button>
+              )}
+              {isOpen && (
                 <button
-                  onClick={() => persistSidebarState(!settings.isSidebarCollapsed)}
-                  className={`relative group rounded-md p-1.5 text-sidebar-foreground/70 transition-all duration-300 hover:bg-sidebar-accent hover:text-sidebar-foreground ${navButtonBase}`}
+                  type="button"
+                  onClick={() => persistSidebarState(true)}
+                  className={`group grid h-9 w-9 shrink-0 place-items-center rounded-lg text-sidebar-foreground/65 transition-colors duration-150 hover:bg-sidebar-accent hover:text-sidebar-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info ${navButtonBase}`}
                   title="Collapse sidebar"
                   aria-label="Collapse sidebar"
                 >
-                  <Menu className="h-4.5 w-4.5 stroke-[1.9] transition-transform" />
+                  <PanelLeftClose className="h-[18px] w-[18px]" strokeWidth={1.8} aria-hidden="true" />
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* Profile Section, Semester summary, & Search */}
@@ -1117,11 +929,9 @@ export default function NavigationTabs({
                 className="overflow-hidden space-y-3"
               >
                 {/* Left-aligned clean Semester Summary Card */}
-                <div className="mt-3 space-y-2 rounded-md border border-line p-3 text-[13px]">
+                <div className="mt-3 space-y-2 rounded-xl border border-line bg-surface/50 p-3 text-[13px]">
                   <div className="flex items-center justify-between">
-                    <div className="text-[12px] font-medium text-muted">
-                      Current semester
-                    </div>
+                    <div className="text-[12px] font-medium text-muted">Current semester</div>
                     <div role="group" aria-label="Current semester" className="flex max-w-[9rem] shrink-0">
                       <OptionPicker
                         value={settings.currSemesterID || config.semesterIDs[config.semesterIDs.length - 2]}
@@ -1208,16 +1018,12 @@ export default function NavigationTabs({
                   data-sidebar-nav="true"
                   onClick={openCommandPalette}
                   onKeyDown={(event) => handleNavKeyDown(event, openCommandPalette)}
-                  className={`group flex min-h-9 w-full items-center gap-2 rounded-sm border border-line bg-surface px-2.5 text-left text-[13px] text-muted transition-colors duration-[120ms] hover:border-ink-2/40 hover:text-ink-2 ${navButtonBase}`}
+                  className={`group flex min-h-9 w-full items-center gap-2 rounded-lg border border-line bg-surface px-2.5 text-left text-[13px] text-muted transition-colors duration-[120ms] hover:border-ink-2/40 hover:text-ink-2 ${navButtonBase}`}
                   aria-label="Open command palette"
                 >
                   <Command className="h-4 w-4 shrink-0" />
-                  <span className="flex-1 truncate">
-                    Search
-                  </span>
-                  <kbd className="rounded-sm border border-line px-1.5 py-0.5 font-mono text-[11px] text-muted">
-                    ⌘K
-                  </kbd>
+                  <span className="flex-1 truncate">Search</span>
+                  <kbd className="rounded-sm border border-line px-1.5 py-0.5 font-mono text-[11px] text-muted">⌘K</kbd>
                 </button>
               </m.div>
             ) : (
@@ -1226,260 +1032,135 @@ export default function NavigationTabs({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="mt-3.5 flex flex-col items-center gap-3 w-full"
+                className="mt-3 flex w-full flex-col items-center gap-2"
               >
-                {/* Search Icon Only */}
                 <button
+                  type="button"
                   onClick={openCommandPalette}
-                  className={`flex h-8 w-8 items-center justify-center rounded-lg text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors ${navButtonBase}`}
+                  className={`grid h-9 w-9 place-items-center rounded-lg text-sidebar-foreground/65 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info ${navButtonBase}`}
                   title="Search anything... (Ctrl+K)"
+                  aria-label="Open command palette"
                 >
                   <Command className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => persistSidebarState(false)}
+                  className={`grid h-9 w-9 place-items-center rounded-lg text-sidebar-foreground/65 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info ${navButtonBase}`}
+                  title="Expand sidebar"
+                  aria-label="Expand sidebar"
+                >
+                  <PanelLeftOpen className="h-[18px] w-[18px]" strokeWidth={1.8} aria-hidden="true" />
                 </button>
               </m.div>
             )}
           </AnimatePresence>
         </SidebarHeader>
 
-        {/* Navigation Content (Expanded Mode vs Compact Rail) */}
-        {isOpen ? (
-          <SidebarContent>
-            <AnimatePresence mode="wait" initial={false}>
-              <m.div
-                key={
-                  showAcademicsPanel ? "academics" : showToolsPanel ? "tools" : showHostelPanel ? "hostel" : "primary"
-                }
-                initial={{ opacity: 0, x: 6 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -4 }}
-                transition={{ duration: 0.16, ease: "easeOut" }}
-              >
-                {!showAcademicsPanel && !showToolsPanel && !showHostelPanel ? (
-                  <div className="space-y-4">
-                    {pinnedItems.length > 0 && (
-                      <SidebarGroup>
-                        <SidebarGroupLabel>Pinned</SidebarGroupLabel>
-                        <div className="space-y-0.5">
-                          {pinnedItems.map((item) => (
-                            <SidebarItem
-                              key={item.id}
-                              icon={<item.icon className="h-4 w-4 stroke-[1.9]" aria-hidden="true" />}
-                              label={item.label}
-                              isActive={item.isActive}
-                              aria-current={item.isActive ? "page" : undefined}
-                              data-sidebar-nav="true"
-                              className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-info"
-                              onClick={item.onSelect}
-                              onKeyDown={(event) => handleNavKeyDown(event, item.onSelect)}
-                            />
-                          ))}
-                        </div>
-                      </SidebarGroup>
-                    )}
-
-                    {groups.map((group) => (
-                      <SidebarGroup key={group.id}>
-                        <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
-                        <div className="space-y-0.5">
-                          {group.items.map((item) => (
-                            <SidebarItem
-                              key={item.id}
-                              icon={<item.icon className="h-4 w-4 stroke-[1.9]" aria-hidden="true" />}
-                              label={item.label}
-                              isActive={item.isActive}
-                              aria-current={item.isActive ? "page" : undefined}
-                              data-sidebar-nav="true"
-                              className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-info"
-                              rightElement={
-                                item.isExpandable ? <ChevronRight className="h-3.5 w-3.5 shrink-0" /> : undefined
-                              }
-                              onClick={item.onSelect}
-                              onKeyDown={(event) => handleNavKeyDown(event, item.onSelect)}
-                            />
-                          ))}
-                        </div>
-                      </SidebarGroup>
+        <SidebarContent className={!isOpen ? "px-2" : undefined}>
+          <nav aria-label="Navigation" className={isOpen ? "space-y-3" : "flex w-full flex-col items-center gap-2"}>
+            {groups.map((group) =>
+              isOpen ? (
+                <SidebarGroup key={group.id} className="space-y-1">
+                  <SidebarGroupLabel className="my-0 px-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted first:mt-0">
+                    {group.label}
+                  </SidebarGroupLabel>
+                  <div className="space-y-0.5">
+                    {group.items.map((item) => (
+                      <SidebarItem
+                        key={item.id}
+                        icon={<item.icon className="h-[18px] w-[18px] stroke-[1.85]" aria-hidden="true" />}
+                        label={item.label}
+                        isActive={item.isActive}
+                        aria-current={item.isActive ? "page" : undefined}
+                        data-sidebar-nav="true"
+                        className={`rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-info ${
+                          item.isActive
+                            ? "bg-sidebar-accent font-semibold text-sidebar-foreground"
+                            : "text-sidebar-foreground/70 hover:bg-sidebar-accent/70 hover:text-sidebar-foreground"
+                        }`}
+                        onClick={item.onSelect}
+                        onKeyDown={(event) => handleNavKeyDown(event, item.onSelect)}
+                      />
                     ))}
                   </div>
-                ) : showAcademicsPanel ? (
-                  <div className="space-y-4">
-                    <button
-                      onClick={() => setShowAcademicsPanel(false)}
-                      className="flex items-center gap-2 px-2 py-1 text-xs font-semibold text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors"
-                    >
-                      <ArrowLeft className="h-3.5 w-3.5" />
-                      <span>Back</span>
-                    </button>
-
-                    <SidebarGroup>
-                      <SidebarGroupLabel>Academics</SidebarGroupLabel>
-                      <div className="space-y-0.5">
-                        {academicsItems.map((item) => (
-                          <SidebarItem
-                            key={item.id}
-                            icon={<item.icon className="h-4 w-4 stroke-[1.9]" aria-hidden="true" />}
-                            label={item.label}
-                            isActive={item.isActive}
-                            aria-current={item.isActive ? "page" : undefined}
-                            data-sidebar-nav="true"
-                            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-info"
-                            onClick={item.onSelect}
-                            onKeyDown={(event) => handleNavKeyDown(event, item.onSelect)}
-                          />
-                        ))}
-                      </div>
-                    </SidebarGroup>
-                  </div>
-                ) : showToolsPanel ? (
-                  <div className="space-y-4">
-                    <button
-                      onClick={() => setShowToolsPanel(false)}
-                      className="flex items-center gap-2 px-2 py-1 text-xs font-semibold text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors"
-                    >
-                      <ArrowLeft className="h-3.5 w-3.5" />
-                      <span>Back</span>
-                    </button>
-
-                    <SidebarGroup>
-                      <SidebarGroupLabel>Tools & Utilities</SidebarGroupLabel>
-                      <div className="space-y-0.5">
-                        {toolsSubItems.map((item) => (
-                          <SidebarItem
-                            key={item.id}
-                            icon={<item.icon className="h-4 w-4 stroke-[1.9]" aria-hidden="true" />}
-                            label={item.label}
-                            isActive={item.isActive}
-                            aria-current={item.isActive ? "page" : undefined}
-                            data-sidebar-nav="true"
-                            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-info"
-                            onClick={item.onSelect}
-                            onKeyDown={(event) => handleNavKeyDown(event, item.onSelect)}
-                          />
-                        ))}
-                      </div>
-                    </SidebarGroup>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <button
-                      onClick={() => setShowHostelPanel(false)}
-                      className="flex items-center gap-2 px-2 py-1 text-xs font-semibold text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors"
-                    >
-                      <ArrowLeft className="h-3.5 w-3.5" />
-                      <span>Back</span>
-                    </button>
-
-                    <SidebarGroup>
-                      <SidebarGroupLabel>Hostel Hub</SidebarGroupLabel>
-                      <div className="space-y-0.5">
-                        {hostelSubItems.map((item) => (
-                          <SidebarItem
-                            key={item.id}
-                            icon={<item.icon className="h-4 w-4 stroke-[1.9]" aria-hidden="true" />}
-                            label={item.label}
-                            isActive={item.isActive}
-                            aria-current={item.isActive ? "page" : undefined}
-                            data-sidebar-nav="true"
-                            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-info"
-                            onClick={item.onSelect}
-                            onKeyDown={(event) => handleNavKeyDown(event, item.onSelect)}
-                          />
-                        ))}
-                      </div>
-                    </SidebarGroup>
-                  </div>
-                )}
-              </m.div>
-            </AnimatePresence>
-          </SidebarContent>
-        ) : (
-          /* Compact Mode Rail Content */
-          <div className="flex flex-1 min-h-0 flex-col items-center justify-start w-full mt-3">
-            {/* Divider */}
-            <div className="w-8 border-t border-sidebar-border mb-3" />
-
-            {pinnedItems.length > 0 && (
-              <>
-                <nav className="flex flex-col items-center gap-2.5 w-full mb-3" aria-label="Pinned rail shortcuts">
-                  {pinnedItems.map((item) => {
-                    const ItemIcon = item.icon;
-                    return (
-                      <div key={item.id} className="relative flex justify-center group/rail">
-                        <button
-                          onClick={item.onSelect}
-                          className={`flex h-10 w-10 items-center justify-center rounded-md transition-[transform,color,background-color,border-color,box-shadow] duration-200 ${
-                            item.isActive
-                              ? railActiveStyles
-                              : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground border border-transparent"
-                          } ${navButtonBase}`}
-                          title={item.label}
-                          aria-label={`Open ${item.label}`}
-                        >
-                          <ItemIcon
-                            className={`h-5 w-5 transition-transform duration-300 ${item.isActive ? "scale-110 text-info" : ""}`}
-                          />
-                        </button>
-                      </div>
-                    );
-                  })}
-                </nav>
-                {/* Secondary Divider */}
-                <div className="w-8 border-t border-sidebar-border mb-3" />
-              </>
+                </SidebarGroup>
+              ) : (
+                <button
+                  key={group.id}
+                  type="button"
+                  aria-label={group.label}
+                  aria-haspopup="menu"
+                  aria-expanded={collapsedMenu?.groupId === group.id}
+                  title={`${group.label} navigation`}
+                  onClick={(event) => toggleCollapsedGroup(group.id, event.currentTarget)}
+                  className={`relative grid h-10 w-10 shrink-0 place-items-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info ${
+                    collapsedMenu?.groupId === group.id
+                      ? "bg-sidebar-accent text-sidebar-foreground"
+                      : group.items.some((item) => item.isActive)
+                        ? "bg-sidebar-accent/70 text-sidebar-foreground"
+                        : "text-sidebar-foreground/65 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                  }`}
+                >
+                  {group.items.some((item) => item.isActive) && (
+                    <span aria-hidden="true" className="absolute -left-2 h-5 w-0.5 rounded-full bg-accent" />
+                  )}
+                  <group.icon className="h-[19px] w-[19px]" strokeWidth={1.85} aria-hidden="true" />
+                </button>
+              ),
             )}
+          </nav>
+        </SidebarContent>
 
-            {/* Navigation Rail Buttons */}
-            <nav className="flex flex-col items-center gap-2.5 w-full" aria-label="Navigation rail">
-              {groups.map((group) => {
-                const GroupIcon = group.icon;
-                const isActive =
-                  group.id === "study"
-                    ? activeTab === "home" || activeTab === "attendance" || activeTab === "academics"
-                    : group.id === "campus"
-                      ? [
-                          "payments",
-                          "libraries",
-                          "events",
-                          "clubs",
-                          "community",
-                          "free-class",
-                          "faculty-schedule",
-                          "hostel",
-                          "transport",
-                        ].includes(activeTab)
-                      : group.id === "tools"
-                        ? activeTab === "tools" ||
-                          activeTab === "more" ||
-                          activeTab === "cabshare" ||
-                          activeTab === "paper-scanner"
-                        : activeTab === "profile" || activeTab === "about";
-
-                return (
-                  <div key={group.id} className="relative flex justify-center group/rail">
-                    <button
-                      onClick={() => toggleRailPopover(group.id)}
-                      className={`flex h-10 w-10 items-center justify-center rounded-md transition-[transform,color,background-color,border-color,box-shadow] duration-200 ${
-                        isActive
-                          ? railActiveStyles
-                          : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground border border-transparent"
-                      } ${navButtonBase}`}
-                      title={group.label}
-                      aria-label={`Open ${group.label} menu`}
-                      aria-expanded={activeRailGroup === group.id}
-                    >
-                      <GroupIcon
-                        className={`h-5 w-5 transition-transform duration-300 ${isActive ? "scale-110 text-info" : ""}`}
-                      />
-                    </button>
-                  </div>
-                );
-              })}
-            </nav>
-          </div>
-        )}
+        {!isOpen &&
+          collapsedMenu &&
+          typeof document !== "undefined" &&
+          createPortal(
+            <m.div
+              ref={collapsedMenuRef}
+              id="collapsed-sidebar-menu"
+              role="menu"
+              aria-label={`${groups.find((group) => group.id === collapsedMenu.groupId)?.label ?? ""} navigation`}
+              initial={{ opacity: 0, x: -5, scale: 0.98 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: -5, scale: 0.98 }}
+              transition={{ duration: 0.12 }}
+              className="fixed z-[80] w-60 overflow-y-auto rounded-xl border border-line bg-surface p-2.5 text-ink shadow-xl"
+              style={{
+                top: collapsedMenu.top,
+                left: collapsedMenu.left,
+                maxHeight: `min(72vh, calc(100dvh - ${collapsedMenu.top}px - 24px))`,
+              }}
+            >
+              {groups
+                .find((group) => group.id === collapsedMenu.groupId)
+                ?.items.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      item.onSelect();
+                      setCollapsedMenu(null);
+                    }}
+                    aria-current={item.isActive ? "page" : undefined}
+                    className={`flex min-h-10 w-full items-center gap-3 rounded-lg px-2.5 text-left text-[13px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-info ${
+                      item.isActive
+                        ? "bg-sidebar-accent font-semibold text-sidebar-foreground"
+                        : "text-ink-2 hover:bg-surface-2 hover:text-ink"
+                    }`}
+                  >
+                    <item.icon className="h-[17px] w-[17px] shrink-0" strokeWidth={1.85} aria-hidden="true" />
+                    <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                    {item.isActive && <span className="h-1.5 w-1.5 rounded-full bg-accent" />}
+                  </button>
+                ))}
+            </m.div>,
+            document.body,
+          )}
 
         {/* Profile, Theme, and Logout Footer */}
-        <SidebarFooter>
+        <SidebarFooter className="border-t border-sidebar-border">
           <AnimatePresence initial={false}>
             {isOpen ? (
               <m.div
@@ -1513,10 +1194,6 @@ export default function NavigationTabs({
                 exit={{ opacity: 0 }}
                 className="flex flex-col items-center gap-3 w-full shrink-0"
               >
-                {/* Expand Toggle Button */}
-                <SidebarExpandButton onClick={() => persistSidebarState(!settings.isSidebarCollapsed)} />
-
-                {/* Theme Toggler (Compact Icon) */}
                 <SidebarThemeControl theme={theme} onThemeChange={handleThemeChange} />
 
                 {/* Profile Avatar */}
@@ -1529,248 +1206,6 @@ export default function NavigationTabs({
             )}
           </AnimatePresence>
         </SidebarFooter>
-
-        {/* Floating popover beside the compact rail */}
-        <AnimatePresence>
-          {activeRailGroup && (
-            <m.div
-              ref={flyoutRef}
-              initial={{ opacity: 0, scale: 0.95, x: -10 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              exit={{ opacity: 0, scale: 0.95, x: -10 }}
-              transition={{ duration: 0.15, ease: "easeOut" }}
-              className="absolute left-[76px] top-12 z-50 w-56 rounded-md border border-sidebar-border bg-popover p-2 text-popover-foreground shadow-lg"
-            >
-              {activeRailGroup === "account" ? (
-                <div>
-                  <div className="px-2.5 py-1 text-[11px] font-semibold tracking-[0.15em] text-sidebar-foreground/70 border-b border-sidebar-border pb-1.5 mb-1.5">
-                    Account
-                  </div>
-                  <div className="space-y-1">
-                    {/* My Info */}
-                    {groups
-                      .find((g) => g.id === "account")
-                      ?.items.map((item) => (
-                        <button
-                          key={item.id}
-                          onClick={() => {
-                            item.onSelect();
-                            setActiveRailGroup(null);
-                          }}
-                          className={`group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} ${
-                            item.isActive
-                              ? sidebarActiveStyles
-                              : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
-                          }`}
-                        >
-                          <item.icon
-                            className={`h-4 w-4 shrink-0 ${item.isActive ? "text-info" : "text-sidebar-foreground/70"}`}
-                          />
-                          <span className="truncate">{item.label}</span>
-                        </button>
-                      ))}
-
-                    {/* Theme */}
-                    <div className="space-y-0.5">
-                      <button
-                        onClick={() => setIsThemeExpanded(!isThemeExpanded)}
-                        className={`group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground`}
-                      >
-                        <Wrench className="h-4 w-4 shrink-0 text-sidebar-foreground/70 group-hover:text-sidebar-foreground" />
-                        <span className="truncate flex-1 text-left">Theme</span>
-                        <m.div animate={{ rotate: isThemeExpanded ? 90 : 0 }} transition={{ duration: 0.18 }}>
-                          <ChevronRight className="h-3 w-3 text-sidebar-foreground/70" />
-                        </m.div>
-                      </button>
-                      <m.div
-                        initial={false}
-                        animate={{ height: isThemeExpanded ? "auto" : 0, opacity: isThemeExpanded ? 1 : 0 }}
-                        transition={{ duration: 0.18, ease: "easeInOut" }}
-                        className="overflow-hidden"
-                      >
-                        <div className="pl-6 space-y-1 py-1">
-                          <button
-                            onClick={() => handleThemeChange("light")}
-                            className="flex items-center gap-2 w-full text-left text-xs text-sidebar-foreground/70 hover:text-sidebar-foreground py-0.5 transition-colors"
-                          >
-                            <span
-                              className={`flex h-3 w-3 items-center justify-center rounded-full border transition-colors ${theme === "light" ? "border-info text-info bg-info-surface" : "border-sidebar-border"}`}
-                            >
-                              {theme === "light" && <span className="h-1 w-1 rounded-full bg-info" />}
-                            </span>
-                            <span className={theme === "light" ? "text-info font-medium" : ""}>Light</span>
-                          </button>
-                          <button
-                            onClick={() => handleThemeChange("dark")}
-                            className="flex items-center gap-2 w-full text-left text-xs text-sidebar-foreground/70 hover:text-sidebar-foreground py-0.5 transition-colors"
-                          >
-                            <span
-                              className={`flex h-3 w-3 items-center justify-center rounded-full border transition-colors ${theme === "dark" ? "border-info text-info bg-info-surface" : "border-sidebar-border"}`}
-                            >
-                              {theme === "dark" && <span className="h-1 w-1 rounded-full bg-info" />}
-                            </span>
-                            <span className={theme === "dark" ? "text-info font-medium" : ""}>Dark</span>
-                          </button>
-                        </div>
-                      </m.div>
-                    </div>
-
-                    {/* Log out */}
-                    <button
-                      onClick={() => {
-                        handleLogOutRequest();
-                        setActiveRailGroup(null);
-                      }}
-                      className="group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground mt-1.5 border-t border-sidebar-border pt-1.5"
-                    >
-                      <LogOut className="h-4 w-4 shrink-0 text-sidebar-foreground/70" />
-                      <span className="truncate">Log out</span>
-                    </button>
-                  </div>
-                </div>
-              ) : activeRailGroup === "academics" ? (
-                <div>
-                  <button
-                    onClick={() => setActiveRailGroup("study")}
-                    className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-semibold text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors border-b border-sidebar-border pb-1.5 mb-1.5 w-full text-left"
-                  >
-                    <ArrowLeft className="h-3 w-3" />
-                    <span>Back to Study</span>
-                  </button>
-                  <div className="space-y-0.5 overflow-y-auto max-h-[60vh]" style={{ scrollbarWidth: "none" }}>
-                    {academicsItems.map((item, index) => {
-                      const showDivider = index === 6;
-                      return (
-                        <div key={item.id}>
-                          {showDivider && <div className="my-1.5 border-t border-sidebar-border" />}
-                          <button
-                            onClick={() => {
-                              item.onSelect();
-                              setActiveRailGroup(null);
-                            }}
-                            className={`group relative flex w-full items-center rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} ${
-                              item.isActive
-                                ? sidebarActiveStyles
-                                : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
-                            }`}
-                          >
-                            <item.icon
-                              className={`h-4 w-4 shrink-0 ${item.isActive ? "text-info" : "text-sidebar-foreground/70"}`}
-                            />
-                            <span className="truncate">{item.label}</span>
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ) : activeRailGroup === "hostel-sub" ? (
-                <div>
-                  <button
-                    onClick={() => setActiveRailGroup("campus")}
-                    className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-semibold text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors border-b border-sidebar-border pb-1.5 mb-1.5 w-full text-left"
-                  >
-                    <ArrowLeft className="h-3 w-3" />
-                    <span>Back to Campus</span>
-                  </button>
-                  <div className="space-y-0.5 overflow-y-auto max-h-[60vh]" style={{ scrollbarWidth: "none" }}>
-                    {hostelSubItems.map((item) => (
-                      <button
-                        key={item.id}
-                        onClick={() => {
-                          item.onSelect();
-                          setActiveRailGroup(null);
-                        }}
-                        className={`group relative flex w-full items-center rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} ${
-                          item.isActive
-                            ? sidebarActiveStyles
-                            : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
-                        }`}
-                      >
-                        <item.icon
-                          className={`h-4 w-4 shrink-0 ${item.isActive ? "text-info" : "text-sidebar-foreground/70"}`}
-                        />
-                        <span className="truncate">{item.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ) : activeRailGroup === "tools-sub" ? (
-                <div>
-                  <button
-                    onClick={() => setActiveRailGroup("tools")}
-                    className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-semibold text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors border-b border-sidebar-border pb-1.5 mb-1.5 w-full text-left"
-                  >
-                    <ArrowLeft className="h-3 w-3" />
-                    <span>Back to Tools</span>
-                  </button>
-                  <div className="space-y-0.5 overflow-y-auto max-h-[60vh]" style={{ scrollbarWidth: "none" }}>
-                    {toolsSubItems.map((item) => (
-                      <button
-                        key={item.id}
-                        onClick={() => {
-                          item.onSelect();
-                          setActiveRailGroup(null);
-                        }}
-                        className={`group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} ${item.isActive ? sidebarActiveStyles : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"}`}
-                      >
-                        <item.icon
-                          className={`h-4 w-4 shrink-0 ${item.isActive ? "text-info" : "text-sidebar-foreground/70"}`}
-                        />
-                        <span className="truncate">{item.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <div className="px-2.5 py-1 text-[11px] font-semibold tracking-[0.15em] text-sidebar-foreground/70 border-b border-sidebar-border pb-1.5 mb-1.5">
-                    {activeRailGroup === "study" && "Study"}
-                    {activeRailGroup === "campus" && "Campus"}
-                    {activeRailGroup === "tools" && "Tools"}
-                  </div>
-                  <div className="space-y-1">
-                    {groups
-                      .find((g) => g.id === activeRailGroup)
-                      ?.items.map((item) => {
-                        const activeStyles = railActiveStyles;
-                        const inactiveStyles =
-                          "border-transparent text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground hover:translate-x-1";
-                        return (
-                          <button
-                            key={item.id}
-                            onClick={() => {
-                              if (item.id === "academics") {
-                                setActiveRailGroup("academics");
-                              } else if (item.id === "hostel") {
-                                setActiveRailGroup("hostel-sub");
-                              } else if (item.id === "tools") {
-                                setActiveRailGroup("tools-sub");
-                              } else {
-                                item.onSelect();
-                                setActiveRailGroup(null);
-                              }
-                            }}
-                            className={`group relative flex w-full items-center gap-3 rounded-md border px-3 py-2 text-xs font-medium transition-all duration-200 ${navButtonBase} ${
-                              item.isActive ? activeStyles : inactiveStyles
-                            }`}
-                          >
-                            <item.icon
-                              className={`h-4.5 w-4.5 shrink-0 transition-all duration-300 ${item.isActive ? "text-info scale-110" : "text-sidebar-foreground/70 group-hover:text-sidebar-foreground"}`}
-                            />
-                            <span className="truncate transition-transform duration-300">{item.label}</span>
-                            {item.isExpandable && (
-                              <ChevronRight className="h-3.5 w-3.5 ml-auto text-sidebar-foreground/70" />
-                            )}
-                          </button>
-                        );
-                      })}
-                  </div>
-                </div>
-              )}
-            </m.div>
-          )}
-        </AnimatePresence>
       </Sidebar>
     </>
   );

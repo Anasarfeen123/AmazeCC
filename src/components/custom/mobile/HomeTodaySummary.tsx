@@ -63,13 +63,26 @@ export function HomeNowNext({
     return { mins, live, next, total: timed.length };
   }, [classes, now]);
 
-  if (view.total === 0) return null;
+  if (view.total === 0) {
+    return (
+      <section
+        aria-label="Today"
+        className={cn("rounded-md border border-dashed border-line bg-surface px-4 py-3.5 text-left", className)}
+      >
+        <p className="text-[12.5px] text-muted">Today</p>
+        <p className="mt-0.5 text-[15px] font-medium text-ink">No classes scheduled today</p>
+      </section>
+    );
+  }
   const { mins, live, next } = view;
   const hero = live ?? next;
 
   if (!hero) {
     return (
-      <section aria-label="Today" className={cn("rounded-md border border-line bg-surface px-4 py-3.5 text-left", className)}>
+      <section
+        aria-label="Today"
+        className={cn("rounded-md border border-line bg-surface px-4 py-3.5 text-left", className)}
+      >
         <p className="text-[12.5px] text-muted">Today</p>
         <p className="mt-0.5 text-[15px] font-medium text-ink">
           Done for the day · {view.total} class{view.total === 1 ? "" : "es"}
@@ -86,7 +99,11 @@ export function HomeNowNext({
       aria-label={live ? "Class in progress" : "Next class"}
       className={cn("relative overflow-hidden rounded-md border border-line bg-surface text-left", className)}
     >
-      <span aria-hidden="true" className="absolute inset-y-0 left-0 w-[3px]" style={{ background: courseColor(code || "x") }} />
+      <span
+        aria-hidden="true"
+        className="absolute inset-y-0 left-0 w-[3px]"
+        style={{ background: courseColor(code || "x") }}
+      />
       <button
         type="button"
         onClick={() => code && onOpenCourse?.(code)}
@@ -109,7 +126,10 @@ export function HomeNowNext({
         </div>
         {live && (
           <div className="h-1 overflow-hidden rounded-full bg-surface-2" aria-hidden="true">
-            <div className="h-full rounded-full" style={{ width: `${Math.min(100, Math.max(2, progress))}%`, background: courseColor(code || "x") }} />
+            <div
+              className="h-full rounded-full"
+              style={{ width: `${Math.min(100, Math.max(2, progress))}%`, background: courseColor(code || "x") }}
+            />
           </div>
         )}
       </button>
@@ -151,7 +171,6 @@ export function HomeDueSoon({
       .slice(0, 3);
   }, [tasks, now]);
 
-  if (due.length === 0) return null;
   const today = now.toDateString();
 
   return (
@@ -164,29 +183,40 @@ export function HomeDueSoon({
           </button>
         )}
       </div>
-      <ul className="divide-y divide-line-2 overflow-hidden rounded-md border border-line bg-surface">
-        {due.map(({ t, at }) => {
-          const d = new Date(at);
-          const isToday = d.toDateString() === today;
-          const soon = at - now.getTime() < 36 * 3600 * 1000;
-          const day = isToday ? "Today" : d.toLocaleDateString("en-IN", { weekday: "short" });
-          return (
-            <li key={t.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-3.5 py-2.5">
-              <CourseDot course={t.courseCode || t.title} />
-              <span className="min-w-0">
-                <span className="block truncate text-[14px] text-ink">{t.title}</span>
-                <span className="block truncate text-[12px] text-muted">
-                  {t.courseTitleSnapshot || t.courseCode}
+      {due.length > 0 ? (
+        <ul className="divide-y divide-line-2 overflow-hidden rounded-md border border-line bg-surface">
+          {due.map(({ t, at }) => {
+            const d = new Date(at);
+            const isToday = d.toDateString() === today;
+            const soon = at - now.getTime() < 36 * 3600 * 1000;
+            const day = isToday ? "Today" : d.toLocaleDateString("en-IN", { weekday: "short" });
+            return (
+              <li key={t.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-3.5 py-2.5">
+                <CourseDot course={t.courseCode || t.title} />
+                <span className="min-w-0">
+                  <span className="block truncate text-[14px] text-ink">{t.title}</span>
+                  <span className="block truncate text-[12px] text-muted">{t.courseTitleSnapshot || t.courseCode}</span>
                 </span>
-              </span>
-              <span className="text-right">
-                <span className={cn("block text-[14px] font-semibold", soon ? "text-warn" : "text-ink")}>{day}</span>
-                <span className="block font-mono text-[12px] text-muted">{fmt(d.getHours() * 60 + d.getMinutes())}</span>
-              </span>
-            </li>
-          );
-        })}
-      </ul>
+                <span className="text-right">
+                  <span className={cn("block text-[14px] font-semibold", soon ? "text-warn" : "text-ink")}>{day}</span>
+                  <span className="block font-mono text-[12px] text-muted">
+                    {fmt(d.getHours() * 60 + d.getMinutes())}
+                  </span>
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <div className="flex items-center justify-between gap-3 rounded-md border border-dashed border-line bg-surface px-3.5 py-3">
+          <p className="text-[13px] text-muted">Nothing due in the next 7 days.</p>
+          {onOpenTasks && (
+            <button type="button" onClick={onOpenTasks} className="shrink-0 text-[13px] text-accent hover:underline">
+              Open tasks
+            </button>
+          )}
+        </div>
+      )}
     </section>
   );
 }

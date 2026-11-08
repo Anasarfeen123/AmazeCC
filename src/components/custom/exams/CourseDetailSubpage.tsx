@@ -1957,14 +1957,16 @@ export default function CourseDetailSubpage({
             />
           </div>
 
-          {/* ── COURSE SECTIONS (joined grouped list) ── */}
-          <div className="space-y-4">
+          {/* ── COURSE SECTIONS (grouped lists) ── */}
+          <div className="space-y-2.5">
             <SectionHeader
               icon={BookOpen}
               title="Course sections"
               count={isEmbedded && theoryAttItem && labAttItem ? 8 : 6}
             />
-            {/* Joined grouped list: single shell, dividers, curves only on outer top/bottom */}
+            {/* Grouped by what the student is trying to do: attendance, then
+                performance, then learning material, then tasks. */}
+            <h3 className="px-1 text-[12.5px] font-semibold text-muted">Attendance</h3>
             <ListShell>
               {/* Log + Predictor — split per component when embedded */}
               {isEmbedded && theoryAttItem && labAttItem ? (
@@ -1988,6 +1990,9 @@ export default function CourseDetailSubpage({
                   )}
                 </>
               )}
+            </ListShell>
+            <h3 className="px-1 pt-1 text-[12.5px] font-semibold text-muted">Performance</h3>
+            <ListShell>
               {/* Marks */}
               <button onClick={() => ovGo("marks")} className={LIST_ROW}>
                 <span className="flex h-10 w-6 shrink-0 items-center justify-center text-ink-2 [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:stroke-[1.7]">
@@ -2041,6 +2046,9 @@ export default function CourseDetailSubpage({
                   <ChevronRight className="w-4 h-4 text-muted" />
                 </span>
               </button>
+            </ListShell>
+            <h3 className="px-1 pt-1 text-[12.5px] font-semibold text-muted">Learning</h3>
+            <ListShell>
               {/* Course Plan */}
               <button onClick={() => ovGo("plan")} className={LIST_ROW}>
                 <span className="flex h-10 w-6 shrink-0 items-center justify-center text-ink-2 [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:stroke-[1.7]">
@@ -2071,6 +2079,9 @@ export default function CourseDetailSubpage({
                   <ChevronRight className="w-4 h-4 text-muted" />
                 </span>
               </button>
+            </ListShell>
+            <h3 className="px-1 pt-1 text-[12.5px] font-semibold text-muted">Tasks</h3>
+            <ListShell>
               {/* Tasks & Homework */}
               <div className={LIST_ROW}>
                 <span className="flex h-10 w-6 shrink-0 items-center justify-center text-ink-2 [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:stroke-[1.7]">

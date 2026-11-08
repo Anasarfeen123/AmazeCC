@@ -46,10 +46,18 @@ import {
   UserSearch,
   ScanLine,
 } from "lucide-react";
-import { AppLibrary } from "@amazecontinuityprojects/amazeui";
+import { AppLibrary, StatusBadge } from "@amazecontinuityprojects/amazeui";
 import config from "../../../../config.json";
 
 /** One line under each module: what it is for, in the student's words. */
+/**
+ * Services that cannot work without a real VTOP account. In demo mode their
+ * rows say so up front instead of opening a page that can only fail.
+ */
+const UNAVAILABLE_IN_DEMO: Record<string, string> = {
+  "Event Hub": "Live events need your own VTOP sign-in",
+};
+
 const MODULE_HINTS: Record<string, string> = {
   "Timetable Calendar": "Your week, slots and rooms",
   Academics: "Marks, grades and curriculum",
@@ -354,6 +362,14 @@ const AppLibraryPortal = memo(
     togglePin,
   }: any) => {
     const [librarySearchQuery, setLibrarySearchQuery] = useState("");
+    // Re-read when the sheet opens; demo mode only changes at sign-in.
+    const isDemo = useMemo(() => {
+      try {
+        return open && typeof window !== "undefined" && localStorage.getItem("demoMode") === "true";
+      } catch {
+        return false;
+      }
+    }, [open]);
     const [mobilePanel, setMobilePanel] = useState<"primary" | "academics" | "hostel" | "edit">("primary");
 
     // Cleanup state on close
@@ -981,9 +997,15 @@ const AppLibraryPortal = memo(
                           <span className="flex min-w-0 flex-col">
                             <span className="truncate text-[14.5px] text-ink">{item.label}</span>
                             <span className="truncate text-[12.5px] text-muted">
-                              {MODULE_HINTS[item.label] ?? GROUP_HINTS[group.name] ?? ""}
+                              {(isDemo && UNAVAILABLE_IN_DEMO[item.label]) ||
+                                (MODULE_HINTS[item.label] ?? GROUP_HINTS[group.name] ?? "")}
                             </span>
                           </span>
+                          {isDemo && UNAVAILABLE_IN_DEMO[item.label] && (
+                            <StatusBadge status="neutral" size="sm" dot={false} className="ml-auto">
+                              Unavailable
+                            </StatusBadge>
+                          )}
                         </button>
 
                         {tabId ? (

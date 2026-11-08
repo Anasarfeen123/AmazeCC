@@ -3,14 +3,22 @@
 import { useCallback, useEffect, useState } from "react";
 import { runPageSync } from "@/lib/sync-engine/single-sync";
 import { useDashboardNavigator } from "./DashboardNavigator";
+import bundledBuses from "@/data/dayscholar_buses.json";
+
+/**
+ * Routes shipped with the app, so Transport is never empty before the first
+ * live sync (or in demo mode). A synced list from the browser cache or the
+ * bus-route refresh replaces them.
+ */
+const BUNDLED_BUSES: any[] = Array.isArray(bundledBuses) ? (bundledBuses as any[]) : [];
 
 /** Owns browser-cached transport data and the public bus-route refresh. */
 export function useDashboardTransportState() {
   const { activeTab } = useDashboardNavigator();
-  const [dayscholarBuses, setDayscholarBuses] = useState<any[]>([]);
+  const [dayscholarBuses, setDayscholarBuses] = useState<any[]>(BUNDLED_BUSES);
   const [transportData, setTransportData] = useState<any>(null);
   const [transportLoading, setTransportLoading] = useState(true);
-  const [transportBuses, setTransportBuses] = useState<any[]>([]);
+  const [transportBuses, setTransportBuses] = useState<any[]>(BUNDLED_BUSES);
   const [transportBusesLoading, setTransportBusesLoading] = useState(false);
 
   const loadTransportData = useCallback(() => {
@@ -28,7 +36,10 @@ export function useDashboardTransportState() {
   useEffect(() => {
     const cachedBuses = localStorage.getItem("cache_buses");
     if (cachedBuses) {
-      try { setDayscholarBuses(JSON.parse(cachedBuses)); } catch {}
+      try {
+        const parsed = JSON.parse(cachedBuses);
+        if (Array.isArray(parsed) && parsed.length > 0) setDayscholarBuses(parsed);
+      } catch {}
     }
     loadTransportData();
   }, [loadTransportData]);
@@ -36,7 +47,10 @@ export function useDashboardTransportState() {
   useEffect(() => {
     const cachedBuses = localStorage.getItem("cache_buses");
     if (cachedBuses) {
-      try { setTransportBuses(JSON.parse(cachedBuses)); } catch {}
+      try {
+        const parsed = JSON.parse(cachedBuses);
+        if (Array.isArray(parsed) && parsed.length > 0) setTransportBuses(parsed);
+      } catch {}
     }
   }, []);
 

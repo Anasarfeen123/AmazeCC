@@ -1,6 +1,6 @@
 # AmazeCC Design Language
 
-Version: 1.0
+Version: 2.0 (Calm Notebook)
 
 ---
 
@@ -42,10 +42,10 @@ Information must always be easier to understand than it is beautiful.
 
 Students frequently use AmazeCC while:
 
-* Walking between classes
-* Standing in queues
-* Checking attendance quickly
-* Looking up exam information
+- Walking between classes
+- Standing in queues
+- Checking attendance quickly
+- Looking up exam information
 
 Navigation must always be fast and obvious.
 
@@ -59,239 +59,146 @@ Reusing existing patterns is preferred over inventing new ones.
 
 ---
 
-# 3. Visual Identity
+# 3. Visual Identity: Calm Notebook
 
-## Personality
+AmazeCC looks like a well-kept notebook: flat paper surfaces, hairline rules,
+one ink colour for action, and colour reserved for meaning.
 
-AmazeCC should feel:
+- Quiet surfaces, not glass, gradients or glows.
+- Hairline borders separate things; shadows are almost never used.
+- Course colours identify courses. Status colours (green, amber, red) carry
+  attendance and urgency. Everything else is ink on paper.
+- Numbers that matter are large and tabular; codes, slots, times and rooms are
+  set in Geist Mono so they line up and read as data.
+- Dark mode is true black (`--bg: oklch(0 0 0)`), with raised surfaces only a
+  few steps lighter.
 
-* Calm
-* Helpful
-* Friendly
-* Academic
-* Modern
-* Trustworthy
-
-AmazeCC should NOT feel:
-
-* Corporate
-* Enterprise
-* Futuristic
-* Gaming-oriented
-* Social-media-like
-* Overly decorative
+The tagline is the brief: **Your VIT life, on one calm page.**
 
 ---
 
-# 4. Design Style
+# 4. Surfaces
 
-## Core Style
+Four levels, used the same way on every screen.
 
-70% Functional Student OS
+| Level                | Token                                                 | Use                                                            |
+| -------------------- | ----------------------------------------------------- | -------------------------------------------------------------- |
+| Background           | `bg-background` (`--bg`)                              | The app canvas                                                 |
+| Surface              | `bg-surface`                                          | Cards, list shells, sheets                                     |
+| Raised / interactive | `bg-surface-2`                                        | Selected segments, hover and pressed rows, tracks, empty cells |
+| Rules                | `border-line` (outer), `divide-line-2` (between rows) | Hairlines                                                      |
 
-20% Material Design Principles
-
-10% Organic Personality
-
----
-
-## Organic Interpretation
-
-Organic design means:
-
-* Softer corners
-* Softer colors
-* Softer shadows
-* Comfortable spacing
-* Natural visual rhythm
-
-Organic design DOES NOT mean:
-
-* Leaf icons
-* Plant illustrations everywhere
-* Gardening themes
-* Random blob shapes
-* Irregular navigation layouts
-
-Organic should influence atmosphere, not usability.
+A card is `rounded-md border border-line bg-surface`. A list is the same shell
+with `divide-y divide-line-2` rows. Do not stack shadows, tints and borders on
+the same element.
 
 ---
 
-# 5. Radius System
+# 5. Radius
 
-Only these six values may be used.
+| Token               | Value | Use                                              |
+| ------------------- | ----- | ------------------------------------------------ |
+| `rounded-sm`        | 6px   | Buttons, inputs, segmented controls, small tiles |
+| `rounded-md`        | 10px  | Cards, list shells, banners                      |
+| `rounded-lg` and up | 14px  | Sheets and dialogs                               |
+| `rounded-full`      |       | Badges, avatars, dots, switches                  |
 
-| Step | Class | Used for |
-|------|-------|----------|
-| 8px | `rounded-lg` | Segmented-control segments, inner chips |
-| 12px | `rounded-xl` | Icon buttons, tone icon tiles |
-| 16px | `rounded-2xl` | List shells, chips, content cards, row icons |
-| 24px | `rounded-[24px]` | Tile surfaces, insight carousels |
-| 28px | `rounded-[28px]` | Bottom sheets, dashed empty states |
-| 32px | `rounded-[32px]` | Large empty-panel variant |
-
-`rounded-[24px]`, `rounded-[28px]` and `rounded-[32px]` are the named steps written in
-Tailwind's arbitrary-value syntax. They are not arbitrary values, and they are not
-violations of this scale.
-
-**`rounded-3xl` is not permitted.** Tailwind's `rounded-3xl` is 24px, which this scale
-expresses as `rounded-[24px]`. The two are visually identical but a source file using
-both produces two spellings of the same surface, which defeats grepping for a single
-step and hides drift when one is edited and the other is not.
-
-The 8px step is not a rounding artefact: it is what keeps a chip inside a 12px icon
-button from looking like it is touching the edge.
-
-No values outside this scale. In particular no `rounded-[18px]`, `rounded-[22px]` or
-`rounded-[28px]`-as-a-typo — snap to the nearest step above or below and say which in
-review.
+`rounded-xl` and `rounded-2xl` resolve to 14px; prefer `rounded-md` for cards.
 
 ---
 
-# 6. Shadow System
+# 6. Elevation
 
-| Class | Used for |
-|-------|----------|
-| `shadow-2xs` | Resting cards, rows, inputs |
-| `shadow-xs` | Interactive tiles, raised surfaces |
-| `shadow-sm` | Floating controls (switch thumb, popovers) |
-| `shadow-2xl` | Icon buttons, dialogs, bottom sheets, overlays |
-
-No custom `shadow-[…]` values. The one current exception is the bottom sheet's
-upward lift (`shadow-[0_-15px_…]` in `shared/BottomSheet.tsx`), which is a
-directional shadow rather than a step on this scale; if more directional shadows
-appear, promote it to a named step here rather than adding a second arbitrary
-value.
+There is no shadow scale. Depth comes from surface level and hairlines.
+Shadows are allowed only on things that float above the page: bottom sheets,
+dialogs, popovers and menus, and the switch thumb.
 
 ---
 
-# 7. Spacing System
+# 7. Spacing
 
-Only use the following spacing values:
+Tailwind's 4px scale. Common rhythms:
 
-4
-8
-12
-16
-24
-32
-48
-64
-
-No custom spacing values.
+- Page gutters: 16px on phones (`px-4`), 24–32px on larger screens.
+- Between sections on a page: 20–24px (`space-y-5` / `space-y-6`).
+- Section title to its content: 8px (`pb-2`).
+- List rows: `px-3.5 py-2.5`, minimum height 48px (56px for two-line rows).
 
 ---
 
 # 8. Motion
 
-## Fast
+Motion explains a change; it never decorates a static screen.
 
-150ms
-
-Used for:
-
-* Hover states
-* Buttons
-
----
-
-## Standard
-
-250ms
-
-Used for:
-
-* Panels
-* Navigation
-
----
-
-## Slow
-
-350ms
-
-Used for:
-
-* Dialogs
-* Large transitions
-
-Avoid excessive animation.
-
-Motion should assist understanding.
+- Hover and press: colour only, 120ms (`transition-colors duration-[120ms]`).
+- Overlays (sheets, menus, popovers): 150–250ms, ease-out, anchored to their
+  trigger.
+- Content reveals and the landing page's live demo: 300–700ms.
+- Respect `prefers-reduced-motion`: every looping or scroll-triggered effect
+  must stop or appear instantly.
 
 ---
 
 # 9. Icons
 
-Icon Library:
-Lucide
-
-Rules:
-
-* Use standard Lucide icons.
-* Do not create custom icon sets.
-* Do not use decorative botanical icons.
-* Maintain visual consistency.
+Lucide, line style, `strokeWidth` 1.7–1.8, 18px in rows and 20px in the bottom
+bar, coloured `text-ink-2`. Icons sit bare in rows; do not put them in tinted
+tiles.
 
 ---
 
-# 10. Layout Rules
+# 10. Layout
 
-Every page should follow:
-
-Page Title
-
-Description
-
-Primary Action
-
-Content
+- Mobile first. Phones render at 1:1 (`initialScale: 1`).
+- Every scroll container reserves space for the bottom bar and the device's
+  safe-area inset; sheets sit above the bar and size to their content.
+- One primary action per screen region.
+- Text is selectable by default. Only chrome (buttons, tabs, switches, nav)
+  turns selection off.
 
 ---
 
-Pages should prioritize:
+# 11. Status
 
-1. Current student needs
-2. Important information
-3. Supporting information
+One vocabulary, rendered by AmazeUI's `StatusBadge`, decided by AmazeCC.
 
----
+| Status             | Meaning                                    | Colour         |
+| ------------------ | ------------------------------------------ | -------------- |
+| Safe               | Comfortably above the attendance target    | green (`ok`)   |
+| Warning            | Within 5 points of the target, or due soon | amber (`warn`) |
+| Critical           | Below the target, overdue                  | red (`danger`) |
+| Neutral            | No data yet, or unavailable                | grey           |
+| Info / in progress | General information                        | accent         |
 
-# 11. Accessibility
-
-Minimum Requirements:
-
-* WCAG AA compliance
-* Keyboard navigation support
-* Focus states on all interactive elements
-* Adequate color contrast
-* Screen-reader compatibility
-
-Accessibility is mandatory.
+Colour is never the only signal: a badge always carries words ("Below 75%").
+The attendance rule lives in `src/lib/attendanceStatus.ts`.
 
 ---
 
-# 12. Future Expansion Rules
+# 12. Accessibility
 
-As AmazeCC grows:
+- Touch targets at least 44px.
+- Body text at least 14px; metadata never below 12px.
+- Contrast: ink and ink-2 on every surface meet WCAG AA in both themes.
+- Overlays are labelled dialogs, close on Escape and on the system back gesture.
+- Never rely on colour alone (see Status).
 
-* Prefer composition over creation.
-* Extend existing patterns.
-* Maintain consistency across all modules.
-* Avoid feature-specific design languages.
+---
 
-Every new page should feel like part of the same product.
+# 13. Ownership
+
+| AmazeUI owns                                      | AmazeCC owns                                  |
+| ------------------------------------------------- | --------------------------------------------- |
+| Tokens, themes, `ThemeProvider`                   | The user's theme and accent choice            |
+| Button, Card, StatusBadge, Switch, Sheet, Popover | Attendance rules and recovery maths in the UI |
+| AttendanceBar, CourseDot, SlotBadge               | Home, Academics, Calendar, campus modules     |
+| Calendar and table primitives                     | Academic calendar and marks tables            |
+
+Product rules never move into AmazeUI.
 
 ---
 
 # Final Principle
 
-If a design choice improves aesthetics but reduces usability:
-
-Choose usability.
-
-If a design choice improves consistency but reduces creativity:
-
-Choose consistency.
-
-Students use AmazeCC to accomplish tasks, not to admire the interface.
+If a screen needs decoration to look finished, the information is not
+organised yet.

@@ -1,6 +1,6 @@
 "use client";
 
-import { AttendanceBar, attendanceAfter, attendanceBudget } from "@amazecontinuityprojects/amazeui";
+import { AttendanceBar, StatusBadge, attendanceAfter, attendanceBudget } from "@amazecontinuityprojects/amazeui";
 import { cn } from "@/lib/utils";
 
 interface AttItem {
@@ -75,10 +75,10 @@ export default function CourseAttendanceHero({
   const m = describe(main);
   const pill =
     m.status === "short"
-      ? { text: `Below ${targetPct}%`, cls: "bg-danger-soft text-danger" }
+      ? { text: `Below ${targetPct}%`, status: "critical" as const }
       : m.status === "edge"
-        ? { text: "On the line", cls: "bg-warn-soft text-warn" }
-        : { text: "Safe", cls: "bg-ok-soft text-ok" };
+        ? { text: "On the line", status: "warning" as const }
+        : { text: "Safe", status: "safe" as const };
   const per = main.label === "Lab" ? 2 : 1;
   const u = main.label === "Lab" ? "lab" : "class";
   const whatIf = [
@@ -105,9 +105,7 @@ export default function CourseAttendanceHero({
               {m.attended} of {m.total} {main.label === "Lab" ? "periods" : "classes"} attended
             </p>
           </div>
-          <span className={cn("shrink-0 rounded-full px-2.5 py-0.5 text-[12px] font-medium", pill.cls)}>
-            {pill.text}
-          </span>
+          <StatusBadge status={pill.status}>{pill.text}</StatusBadge>
         </div>
         <AttendanceBar className="mt-4" attended={m.attended} held={m.total} threshold={threshold} course={course} />
         <p className="mt-4 border-t border-line-2 pt-3 text-[14px] leading-relaxed text-ink">{m.sentence}</p>

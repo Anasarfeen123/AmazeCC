@@ -179,8 +179,8 @@ importers:
   .:
     dependencies:
       '@amazecontinuityprojects/amazeui':
-        specifier: file:.local/amazeui-2.0.0.tgz
-        version: file:.local/amazeui-2.0.0.tgz(@babel/core@7.29.7(supports-color@8.1.1))(@expo/metro-config@57.0.8(supports-color@8.1.1)(typescript@5.9.3))(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(lightningcss@1.32.0)(react-dom@19.2.7(react@19.2.7))(react-native-svg@15.15.5(react-native@0.86.0(@babel/core@7.29.7(supports-color@8.1.1))(@types/react@19.2.17)(react@19.2.7)(supports-color@8.1.1))(react@19.2.7))(react@19.2.7)(supports-color@8.1.1)(tailwindcss@4.3.2)
+        specifier: file:vendor/amazeui-2.0.0.tgz
+        version: file:vendor/amazeui-2.0.0.tgz(@babel/core@7.29.7(supports-color@8.1.1))(@expo/metro-config@57.0.8(supports-color@8.1.1)(typescript@5.9.3))(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(lightningcss@1.32.0)(react-dom@19.2.7(react@19.2.7))(react-native-svg@15.15.5(react-native@0.86.0(@babel/core@7.29.7(supports-color@8.1.1))(@types/react@19.2.17)(react@19.2.7)(supports-color@8.1.1))(react@19.2.7))(react@19.2.7)(supports-color@8.1.1)(tailwindcss@4.3.2)
       '@next/third-parties':
         specifier: 16.4.3
         version: 16.4.3(next@16.4.3(@babel/core@7.29.7(supports-color@8.1.1))(@opentelemetry/api@1.10.0)(@types/node@24.13.2)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)
@@ -336,8 +336,8 @@ packages:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
 
-  '@amazecontinuityprojects/amazeui@file:.local/amazeui-2.0.0.tgz':
-    resolution: {integrity: sha512-ilWvMsug5kOLREhyhbNvvK0kEkXyEql6IQwvL9Qq0xOHFazv8ut+FasGkoBxdAIjmWk99HvsKRK4+h38GJDp9g==, tarball: file:.local/amazeui-2.0.0.tgz}
+  '@amazecontinuityprojects/amazeui@file:vendor/amazeui-2.0.0.tgz':
+    resolution: {integrity: sha512-ssqzIdDT9zI+2mNPBWufFY2qHYwKSCEAsCknZcCbp1TMQ+CjbklLqE88CJiaZiw+shCK0RUilQ+d/YINYCBeRw==, tarball: file:vendor/amazeui-2.0.0.tgz}
     version: 2.0.0
     peerDependencies:
       react: '>=18.2.0'
@@ -5198,7 +5198,7 @@ snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
 
-  '@amazecontinuityprojects/amazeui@file:.local/amazeui-2.0.0.tgz(@babel/core@7.29.7(supports-color@8.1.1))(@expo/metro-config@57.0.8(supports-color@8.1.1)(typescript@5.9.3))(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(lightningcss@1.32.0)(react-dom@19.2.7(react@19.2.7))(react-native-svg@15.15.5(react-native@0.86.0(@babel/core@7.29.7(supports-color@8.1.1))(@types/react@19.2.17)(react@19.2.7)(supports-color@8.1.1))(react@19.2.7))(react@19.2.7)(supports-color@8.1.1)(tailwindcss@4.3.2)':
+  '@amazecontinuityprojects/amazeui@file:vendor/amazeui-2.0.0.tgz(@babel/core@7.29.7(supports-color@8.1.1))(@expo/metro-config@57.0.8(supports-color@8.1.1)(typescript@5.9.3))(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(lightningcss@1.32.0)(react-dom@19.2.7(react@19.2.7))(react-native-svg@15.15.5(react-native@0.86.0(@babel/core@7.29.7(supports-color@8.1.1))(@types/react@19.2.17)(react@19.2.7)(supports-color@8.1.1))(react@19.2.7))(react@19.2.7)(supports-color@8.1.1)(tailwindcss@4.3.2)':
     dependencies:
       '@radix-ui/react-checkbox': 1.3.7(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@tailwindcss/typography': 0.5.20(tailwindcss@4.3.2)

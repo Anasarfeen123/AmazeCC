@@ -17,7 +17,6 @@ import {
   EmptyPanel,
   GhostButton,
   IconButton,
-  InsightCarousel,
   ListRowText,
   ListShell,
   PageShell,
@@ -26,10 +25,11 @@ import {
   SelectField,
   ToneBadge,
   ToneDot,
-  useCarousel,
-  type InsightSlide,
 } from "../shared/primitives";
 import { TILE_CARD } from "@/lib/uiTokens";
+import { StatusBadge } from "@amazecontinuityprojects/amazeui";
+import { attendanceState } from "@/lib/attendanceStatus";
+import { cn } from "@/lib/utils";
 import {
   buildAttendanceDayCardsMap,
   parseAttendanceTime,
@@ -371,76 +371,6 @@ export default function CalendarSubpage({
       .sort((a, b) => a.pct - b.pct);
   }, [attendanceList, targetAttendance]);
 
-  const courseSlides = useMemo<InsightSlide[]>(
-    () =>
-      courseRows.map((c) => ({
-        id: c.id,
-        label: c.isLab ? `${c.title} · lab` : c.title,
-        // A theory/lab pair share a base code, so the title is the only thing
-        // that tells them apart once the code is in the kicker.
-        value: `${Number(c.pct.toFixed(1))}%`,
-        sub: `${c.attended} of ${c.total} held${c.slot ? ` · ${c.slot}` : ""}`,
-        badge: c.status,
-        dotLabel: `${c.isLab ? "Lab" : "Theory"} ${c.title}`,
-        tone: c.status === "Safe" ? "emerald" : c.status === "Warning" ? "amber" : "red",
-      })),
-    [courseRows],
-  );
-
-  const courseCarousel = useCarousel(courseSlides.length);
-
-  /**
-   * The left card: the semester at a glance, rotating.
-   *
-   * The percentage leads. The two day counts behind it are what the old
-   * full-screen timeline existed to show and what a percentage cannot express:
-   * a single number cannot say that 61 of 62 days were fine but 9 of them cost
-   * you a class. So they get slides rather than a second screen, which is also
-   * why the timeline button and the timeline page are gone — nothing was lost
-   * with them, only relocated.
-   *
-   * "Classes done" counts days that carry a record, and "Days missed" counts
-   * the subset where something was not present. Both come off the same log the
-   * section below renders, so the card and the list can never disagree.
-   */
-  const summarySlides = useMemo<InsightSlide[]>(() => {
-    const statusTone =
-      overall.status === "Safe"
-        ? "emerald"
-        : overall.status === "Warning"
-          ? "amber"
-          : overall.status === "Critical"
-            ? "red"
-            : "neutral";
-
-    return [
-      {
-        id: "attendance",
-        label: "Attendance",
-        value: overall.total > 0 ? `${Number(overall.percentage.toFixed(1))}%` : "—",
-        sub: overall.total > 0 ? `${overall.attended} of ${overall.total} classes` : "No records yet",
-        badge: overall.total > 0 ? overall.status : undefined,
-        tone: statusTone,
-      },
-      {
-        id: "days-done",
-        label: "Classes done",
-        value: logRows.length,
-        sub: logRows.length === 1 ? "day with a record" : "days with a record",
-        tone: "emerald",
-      },
-      {
-        id: "days-missed",
-        label: "Days missed",
-        value: missedCount,
-        sub: missedCount === 1 ? "day with a miss" : "days with a miss",
-        tone: missedCount > 0 ? "red" : "emerald",
-      },
-    ];
-  }, [overall, logRows.length, missedCount]);
-
-  const summaryCarousel = useCarousel(summarySlides.length);
-
   const belowTarget = useMemo(() => courseRows.filter((c) => c.status === "Critical").length, [courseRows]);
 
   const today = useMemo(() => {
@@ -668,50 +598,64 @@ export default function CalendarSubpage({
   return (
     <PageShell {...shellProps}>
       {/*
-       * Two stat cards, side by side, and both are carousels.
-       *
-       * Left: the semester at a glance — the percentage, then the two day
-       * counts the old full-screen timeline existed to show. Right: the same
-       * measure one course at a time, worst first.
-       *
-       * Every card says what its number is *of*. A bare "87%" beside another
-       * "87%" is not information, and this is the page people screenshot.
+       * One compact strip, not two tall cards: the calendar is what this page
+       * is for, so the summary stays to a single row above it. Each number
+       * still names what it is of.
        */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
-        <InsightCarousel
-          slides={summarySlides}
-          carousel={summaryCarousel}
-          interactiveDots
-          ariaLabel="Attendance summary"
-        />
-
-        {/* One slide per enrolled course, each a percentage of that course's own
-            held classes — the "other attendance percentage", and the one that
-            actually differs between courses. An average hides a 40% theory
-            behind a 95% lab, so this is where the number to act on lives. Worst
-            first, because the courses needing attention are the reason to look. */}
-        {courseSlides.length > 0 ? (
-          <InsightCarousel
-            slides={courseSlides}
-            carousel={courseCarousel}
-            interactiveDots
-            ariaLabel="Attendance by course"
-            footerRight={
-              belowTarget > 0 ? (
-                // The footer row is subline + this + the dots, and at half
-                // width on a phone the three together leave the subline
-                // nothing. The slides are sorted worst-first, so the count is
-                // a convenience rather than the information.
-                <span className="hidden sm:inline-flex">
-                  <ToneBadge tone="zinc">
-                    {belowTarget} below {targetAttendance}%
-                  </ToneBadge>
-                </span>
-              ) : null
-            }
-          />
-        ) : null}
-      </div>
+      {overall.total > 0 && (
+        <div className="grid grid-cols-3 divide-x divide-line-2 overflow-hidden rounded-md border border-line bg-surface text-left">
+          <div className="min-w-0 px-3 py-2.5 sm:px-4">
+            <p className="text-[12px] text-muted">Attendance</p>
+            <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+              <span className="font-mono text-[17px] font-semibold tabular-nums text-ink">
+                {Number(overall.percentage.toFixed(1))}%
+              </span>
+              <StatusBadge
+                size="sm"
+                dot={false}
+                status={attendanceState(overall.percentage, targetAttendance, overall.total)}
+                className="hidden min-[400px]:inline-flex"
+              />
+            </p>
+            <p className="truncate text-[11.5px] text-muted">
+              {overall.attended} of {overall.total}
+            </p>
+          </div>
+          <div className="min-w-0 px-3 py-2.5 sm:px-4">
+            <p className="text-[12px] text-muted">Below {targetAttendance}%</p>
+            <p
+              className={cn(
+                "mt-0.5 font-mono text-[17px] font-semibold tabular-nums",
+                belowTarget > 0 ? "text-danger" : "text-ink",
+              )}
+            >
+              {belowTarget}
+            </p>
+            <p className="truncate text-[11.5px] text-muted">{belowTarget === 1 ? "course" : "courses"}</p>
+          </div>
+          <div className="min-w-0 px-3 py-2.5 sm:px-4">
+            <p className="text-[12px] text-muted">Lowest</p>
+            {courseRows[0] ? (
+              <>
+                <p
+                  className={cn(
+                    "mt-0.5 font-mono text-[17px] font-semibold tabular-nums",
+                    courseRows[0].pct < targetAttendance ? "text-danger" : "text-ink",
+                  )}
+                >
+                  {Number(courseRows[0].pct.toFixed(1))}%
+                </p>
+                <p className="truncate text-[11.5px] text-muted" title={courseRows[0].title}>
+                  {courseRows[0].title}
+                  {courseRows[0].isLab ? " · lab" : ""}
+                </p>
+              </>
+            ) : (
+              <p className="mt-0.5 text-[13px] text-muted">–</p>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ── Month grid ──
           "Today" lives in this header as an action, not as a third stat card.
@@ -771,7 +715,20 @@ export default function CalendarSubpage({
       <section className="space-y-2.5">
         <SectionHeader icon={Sparkles} title="Upcoming" count={upcoming.length} />
         {upcoming.length === 0 ? (
-          <EmptyPanel variant="dashed" title="Nothing scheduled ahead." />
+          <EmptyPanel
+            variant="dashed"
+            title={`Nothing left before the end of ${months[months.length - 1]?.label ?? "this calendar"}`}
+            description="Exams, holidays, college events and Moodle deadlines show up here as soon as they are published."
+            action={
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                <GhostButton onClick={() => handleCalendarFetch(type)}>
+                  <RefreshCcw className="h-3.5 w-3.5" />
+                  Reload calendar
+                </GhostButton>
+                <GhostButton onClick={() => setMoodleOpen(true)}>Connect Moodle</GhostButton>
+              </div>
+            }
+          />
         ) : (
           <ListShell>
             {upcoming.map((item) => (

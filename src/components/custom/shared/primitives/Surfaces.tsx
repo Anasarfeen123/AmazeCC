@@ -28,12 +28,8 @@ export function SectionHeader({
     <div className={`flex items-center justify-between gap-2 px-1 ${className}`.trim()}>
       <div className="flex items-center gap-2 min-w-0">
         {leading ?? (Icon ? <Icon className="w-4 h-4 text-indigo-500 shrink-0" /> : null)}
-        <h2 className="text-sm font-semibold text-text-heading font-outfit tracking-tight truncate">
-          {title}
-        </h2>
-        {typeof count === "number" ? (
-          <span className={`${SECTION_CHIP} shrink-0`}>{count}</span>
-        ) : null}
+        <h2 className="text-sm font-semibold text-text-heading font-outfit tracking-tight truncate">{title}</h2>
+        {typeof count === "number" ? <span className={`${SECTION_CHIP} shrink-0`}>{count}</span> : null}
       </div>
       {right ? <div className="flex items-center gap-2 shrink-0">{right}</div> : null}
     </div>
@@ -81,20 +77,15 @@ export function StatTile({
 }) {
   // "neutral"/"default" means "no tint" — plain heading ink rather than a
   // toned-down grey, so an uncoloured tile does not look disabled.
-  const valueTone =
-    !tone || tone === "neutral" || tone === "default"
-      ? "text-ink"
-      : TONE_TEXT[tone] ?? "text-ink";
+  const valueTone = !tone || tone === "neutral" || tone === "default" ? "text-ink" : (TONE_TEXT[tone] ?? "text-ink");
 
   return (
     <div className={`${TILE} ${height} ${className}`.trim()}>
       <div className="flex items-center justify-between gap-1">
-        <span className="truncate text-[12.5px] font-medium text-muted">
-          {label}
-        </span>
+        <span className="truncate text-[12.5px] font-medium text-muted">{label}</span>
         {badge ? (
           <span
-            className={`shrink-0 rounded-full border-transparent px-2 py-0.5 text-[11.5px] font-medium ${
+            className={`hidden shrink-0 rounded-full border-transparent px-2 py-0.5 text-[11.5px] font-medium min-[430px]:inline ${
               TONE_BADGE[tone] ?? TONE_BADGE.zinc
             }`}
           >
@@ -115,9 +106,7 @@ export function StatTile({
 
       {sub ? (
         <div className="flex items-center justify-between gap-2 min-w-0">
-          <div className="truncate text-[12.5px] text-muted">
-            {sub}
-          </div>
+          <div className="truncate text-[12.5px] text-muted">{sub}</div>
         </div>
       ) : null}
     </div>
@@ -125,20 +114,12 @@ export function StatTile({
 }
 
 /** Grouped list container — the workhorse for "N rows that look like one card". */
-export function ListShell({
-  className = "",
-  children,
-}: {
-  className?: string;
-  children: ReactNode;
-}) {
+export function ListShell({ className = "", children }: { className?: string; children: ReactNode }) {
   return <div className={`${LIST_SHELL} ${className}`.trim()}>{children}</div>;
 }
 
-const ROW_TITLE =
-  "font-semibold text-sm text-text-heading truncate font-outfit leading-tight";
-const ROW_SUBTITLE_BASE =
-  "text-[11px] text-text-secondary dark:text-text-muted font-medium mt-0.5";
+const ROW_TITLE = "font-semibold text-sm text-text-heading truncate font-outfit leading-tight";
+const ROW_SUBTITLE_BASE = "text-[11px] text-text-secondary dark:text-text-muted font-medium mt-0.5";
 const ROW_SUBTITLE = `${ROW_SUBTITLE_BASE} truncate`;
 const ROW_SUBTITLE_WRAP = `${ROW_SUBTITLE_BASE} whitespace-normal break-words`;
 
@@ -178,9 +159,7 @@ export function ListRowText({
         </Tag>
         {right ? <div className="flex items-center gap-2 shrink-0">{right}</div> : null}
       </div>
-      {subtitle ? (
-        <p className={wrapSubtitle ? ROW_SUBTITLE_WRAP : ROW_SUBTITLE}>{subtitle}</p>
-      ) : null}
+      {subtitle ? <p className={wrapSubtitle ? ROW_SUBTITLE_WRAP : ROW_SUBTITLE}>{subtitle}</p> : null}
     </div>
   );
 }
@@ -241,12 +220,8 @@ export function KeyValue({
     <div
       className={`p-3 rounded-md bg-surface-secondary dark:bg-background/50 border border-border-muted dark:border-border ${className}`.trim()}
     >
-      <span className="text-[11px] font-semibold text-text-muted block mb-0.5">
-        {label}
-      </span>
-      <span className={`font-semibold text-text-heading ${valueClassName}`.trim()}>
-        {value}
-      </span>
+      <span className="text-[11px] font-semibold text-text-muted block mb-0.5">{label}</span>
+      <span className={`font-semibold text-text-heading ${valueClassName}`.trim()}>{value}</span>
     </div>
   );
 }

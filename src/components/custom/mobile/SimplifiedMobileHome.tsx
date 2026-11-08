@@ -1241,7 +1241,7 @@ export default function SimplifiedMobileHome({
           {/* ── TOP APP BAR: AVATAR / ICON ABOVE GREETING & CONTROLS ── */}
           <div className="flex items-start justify-between px-1">
             <div className="flex min-w-0 flex-1 flex-col items-stretch pr-2 text-left">
-              <h1 className="truncate text-[22px] font-semibold leading-tight tracking-tight text-ink sm:text-2xl">
+              <h1 className="text-balance break-words text-[22px] font-semibold leading-tight tracking-tight text-ink sm:text-2xl">
                 {getGreeting()},{" "}
                 {(() => {
                   const n = String(profileName || "there").split(" ")[0];
@@ -1280,7 +1280,7 @@ export default function SimplifiedMobileHome({
               {/* Spotlight Search */}
               <button
                 onClick={onOpenCommandPalette}
-                className="grid h-10 w-10 place-items-center rounded-full text-ink-2 transition-colors duration-[120ms] hover:bg-surface-2 cursor-pointer"
+                className="hidden h-10 w-10 place-items-center rounded-full text-ink-2 transition-colors duration-[120ms] hover:bg-surface-2 cursor-pointer sm:grid"
                 title="Search (Cmd+K)"
               >
                 <Search className="h-[18px] w-[18px]" strokeWidth={1.8} />

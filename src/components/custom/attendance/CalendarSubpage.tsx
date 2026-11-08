@@ -104,14 +104,6 @@ const CALENDAR_OPTIONS = (Object.keys(CALENDAR_TYPES) as CalendarTypeKey[]).map(
   label: CALENDAR_TYPES[key],
 }));
 
-/**
- * A lab's percentage in the course carousel, kept distinct from its theory
- * half's because the two are separate attendance records with separate
- * requirements — collapsing them into one number is the thing this carousel
- * exists to stop.
- */
-const LAB_VALUE = "text-ok";
-
 /** A row in the Upcoming list — one date, and everything happening on it. */
 type UpcomingItem = {
   /** Unique across the list, and stable enough to key a React list on. */
@@ -383,7 +375,7 @@ export default function CalendarSubpage({
     () =>
       courseRows.map((c) => ({
         id: c.id,
-        label: c.code || c.title,
+        label: c.isLab ? `${c.title} · lab` : c.title,
         // A theory/lab pair share a base code, so the title is the only thing
         // that tells them apart once the code is in the kicker.
         value: `${Number(c.pct.toFixed(1))}%`,
@@ -391,7 +383,6 @@ export default function CalendarSubpage({
         badge: c.status,
         dotLabel: `${c.isLab ? "Lab" : "Theory"} ${c.title}`,
         tone: c.status === "Safe" ? "emerald" : c.status === "Warning" ? "amber" : "red",
-        valueClassName: c.isLab ? LAB_VALUE : undefined,
       })),
     [courseRows],
   );
@@ -634,8 +625,7 @@ export default function CalendarSubpage({
   );
 
   const shellProps = {
-    eyebrow: "Attendance · Calendar",
-    title: "Super Calendar",
+    title: "Calendar",
     subtitle: [CALENDAR_TYPES[type], currSemesterID ? formatSemesterName(currSemesterID) : null]
       .filter(Boolean)
       .join(" · "),
@@ -754,9 +744,7 @@ export default function CalendarSubpage({
             shrink-0, and a native select is ~256px, which on a 360px phone
             leaves the month name about sixty pixels. */}
         <div className="mt-3 flex items-center gap-2">
-          <span className="shrink-0 text-[11px] font-semibold text-zinc-400 dark:text-zinc-500">
-            Programme
-          </span>
+          <span className="shrink-0 text-[11px] font-semibold text-zinc-400 dark:text-zinc-500">Programme</span>
           <div className="min-w-0 flex-1">
             <SelectField value={type} onChange={handleTypeChange} options={CALENDAR_OPTIONS} />
           </div>
@@ -955,9 +943,7 @@ function LogRow({ row, onClick }: { row: AttendanceLogRow; onClick: () => void }
             // Same treatment as the Upcoming rows: the dot carries the status in
             // colour and the word confirms it, so the date — the thing you are
             // scanning for — keeps the width.
-            <span className="text-[11px] font-semibold text-zinc-400 dark:text-zinc-500">
-              {row.label}
-            </span>
+            <span className="text-[11px] font-semibold text-zinc-400 dark:text-zinc-500">{row.label}</span>
           }
         />
       </div>

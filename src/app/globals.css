@@ -676,3 +676,40 @@ html.has-stored-session .guest-experience-root {
 html.has-stored-session .opening-screen-fallback {
   display: flex !important;
 }
+
+/* ── Landing ribbons: seamless marquee (content is duplicated, so -50% loops) ── */
+@keyframes landing-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+.landing-marquee {
+  animation: landing-marquee var(--marquee-duration, 48s) linear infinite;
+}
+.landing-marquee-reverse {
+  animation-direction: reverse;
+}
+.landing-marquee-host:hover .landing-marquee {
+  animation-play-state: paused;
+}
+@keyframes landing-hue-shift {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 200% 50%;
+  }
+}
+.landing-hue-ribbon {
+  background-size: 200% 100%;
+  animation: landing-hue-shift 18s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-marquee,
+  .landing-hue-ribbon {
+    animation: none;
+  }
+}

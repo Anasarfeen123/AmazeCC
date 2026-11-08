@@ -73,7 +73,7 @@ import { AnimatePresence, m } from "framer-motion";
 import { useOverlayBack } from "@/lib/overlayStack";
 import { analyzeAllCalendars } from "@/lib/analyzeCalendar";
 import { countRemainingClasses, UpcomingClassesList } from "@/lib/attendanceRemainingClasses";
-import HeatMap from "@uiw/react-heat-map";
+import AttendanceHeatmap from "../attendance/AttendanceHeatmap";
 import dynamic from "next/dynamic";
 import CourseQBankTab from "./CourseQBankTab";
 import CoursePredictorPage from "./marks-predictor/CoursePredictorPage";
@@ -1588,14 +1588,6 @@ export default function CourseDetailSubpage({
       </div>
     );
   };
-  // Heatmap status colors, shared by the panel and the rectRender override.
-  // (0 = no class, 1 = present, 2 = absent, 3 = on duty)
-  const HEAT_STATUS_COLORS: Record<number, string> = {
-    0: "rgba(156, 163, 175, 0.1)",
-    1: "#10B981",
-    2: "#EF4444",
-    3: "#EAB308",
-  };
   // Shared status tones for attendance heroes, rows and pages. The colour half
   // of these used to be four hand-rolled maps declared inside the component,
   // which is exactly what `TONE_TEXT` / `TONE_BADGE` in `@/lib/uiTokens` exist
@@ -1688,52 +1680,12 @@ export default function CourseDetailSubpage({
         <div className="space-y-3">
           <SectionHeader icon={Grid3x3} title="Heatmap" />
           <div className={TILE_CARD}>
-            <div className="flex justify-start w-full overflow-x-auto hide-scrollbar" style={{ direction: "rtl" }}>
-              <div style={{ direction: "ltr", minWidth: "500px" }} className="flex flex-col items-center">
-                <HeatMap
-                  value={d.heatmapData}
-                  startDate={heatmapStartDate}
-                  endDate={heatmapEndDate}
-                  width={550}
-                  rectSize={15}
-                  space={3}
-                  legendCellSize={0}
-                  rectProps={{ rx: 4, ry: 4 }}
-                  rectRender={(props: any, dayData: any) => {
-                    const data = dayData as any;
-                    const status =
-                      data.count === 1
-                        ? "Present"
-                        : data.count === 2
-                          ? "Absent"
-                          : data.count === 3
-                            ? "On Duty"
-                            : "No Class";
-                    // NB: the library resolves discrete count maps to the NEXT
-                    // bucket's color (off-by-one), so set the fill explicitly.
-                    const fill =
-                      typeof data?.count === "number" && HEAT_STATUS_COLORS[data.count]
-                        ? HEAT_STATUS_COLORS[data.count]
-                        : (props as any).fill;
-                    return (
-                      <rect {...props} fill={fill}>
-                        <title>{`${data.date}: ${status}`}</title>
-                      </rect>
-                    );
-                  }}
-                  panelColors={HEAT_STATUS_COLORS}
-                />
-                <div className="mt-4">
-                  <ToneLegend
-                    items={[
-                      { tone: "emerald", label: "Present" },
-                      { tone: "red", label: "Absent" },
-                      { tone: "amber", label: "On Duty" },
-                    ]}
-                  />
-                </div>
-              </div>
-            </div>
+            <AttendanceHeatmap
+              data={d.heatmapData}
+              start={heatmapStartDate}
+              end={heatmapEndDate}
+              course={String(item?.courseCode || selectedCode || "")}
+            />
           </div>
         </div>
         <LogGap />
@@ -2038,9 +1990,7 @@ export default function CourseDetailSubpage({
               )}
               {/* Marks */}
               <button onClick={() => ovGo("marks")} className={LIST_ROW}>
-                <span
-                  className="flex h-10 w-6 shrink-0 items-center justify-center text-ink-2 [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:stroke-[1.7]"
-                >
+                <span className="flex h-10 w-6 shrink-0 items-center justify-center text-ink-2 [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:stroke-[1.7]">
                   <Target className="w-5 h-5" />
                 </span>
                 <ListRowText
@@ -2062,9 +2012,7 @@ export default function CourseDetailSubpage({
               </button>
               {/* Grade Predictor */}
               <button onClick={() => ovGo("grade-predictor")} className={LIST_ROW}>
-                <span
-                  className="flex h-10 w-6 shrink-0 items-center justify-center text-ink-2 [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:stroke-[1.7]"
-                >
+                <span className="flex h-10 w-6 shrink-0 items-center justify-center text-ink-2 [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:stroke-[1.7]">
                   <Sparkles className="w-5 h-5" />
                 </span>
                 <ListRowText title="Grade Predictor" subtitle="Simulate what-if scores and see what the FAT needs" />
@@ -2079,9 +2027,7 @@ export default function CourseDetailSubpage({
               </button>
               {/* Grade History */}
               <button onClick={() => ovGo("grades")} className={LIST_ROW}>
-                <span
-                  className="flex h-10 w-6 shrink-0 items-center justify-center text-ink-2 [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:stroke-[1.7]"
-                >
+                <span className="flex h-10 w-6 shrink-0 items-center justify-center text-ink-2 [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:stroke-[1.7]">
                   <CheckCircle2 className="w-5 h-5" />
                 </span>
                 <ListRowText
@@ -2097,9 +2043,7 @@ export default function CourseDetailSubpage({
               </button>
               {/* Course Plan */}
               <button onClick={() => ovGo("plan")} className={LIST_ROW}>
-                <span
-                  className="flex h-10 w-6 shrink-0 items-center justify-center text-ink-2 [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:stroke-[1.7]"
-                >
+                <span className="flex h-10 w-6 shrink-0 items-center justify-center text-ink-2 [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:stroke-[1.7]">
                   <FileText className="w-5 h-5" />
                 </span>
                 <ListRowText
@@ -2115,9 +2059,7 @@ export default function CourseDetailSubpage({
               </button>
               {/* QBank */}
               <button onClick={() => ovGo("qbank")} className={LIST_ROW}>
-                <span
-                  className="flex h-10 w-6 shrink-0 items-center justify-center text-ink-2 [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:stroke-[1.7]"
-                >
+                <span className="flex h-10 w-6 shrink-0 items-center justify-center text-ink-2 [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:stroke-[1.7]">
                   <Sparkles className="w-5 h-5" />
                 </span>
                 <ListRowText title="QBank" subtitle="Papers & extracted questions" />
@@ -2131,9 +2073,7 @@ export default function CourseDetailSubpage({
               </button>
               {/* Tasks & Homework */}
               <div className={LIST_ROW}>
-                <span
-                  className="flex h-10 w-6 shrink-0 items-center justify-center text-ink-2 [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:stroke-[1.7]"
-                >
+                <span className="flex h-10 w-6 shrink-0 items-center justify-center text-ink-2 [&>svg]:h-[18px] [&>svg]:w-[18px] [&>svg]:stroke-[1.7]">
                   <CheckSquare className="w-5 h-5" />
                 </span>
                 <ListRowText
@@ -2756,9 +2696,7 @@ export default function CourseDetailSubpage({
 
                                 {hodComments && (
                                   <div className="p-3 rounded-md bg-course-3/10 border border-course-3/20 text-course-3 space-y-1">
-                                    <span className="text-[11px] font-semibold text-course-3 block">
-                                      HOD Remarks
-                                    </span>
+                                    <span className="text-[11px] font-semibold text-course-3 block">HOD Remarks</span>
                                     <p className="text-xs sm:text-sm font-medium leading-relaxed">{hodComments}</p>
                                   </div>
                                 )}

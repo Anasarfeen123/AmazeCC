@@ -549,7 +549,10 @@ export default function SimplifiedAcademicsPage({
 
   const academicSummary = useMemo(() => {
     const c = marksData?.cgpa || allGradesData?.cgpa || {};
-    const semCredits = currentCourses.reduce((acc: number, course: any) => acc + Math.max(0, Number(course.credits) || 0), 0);
+    const semCredits = currentCourses.reduce(
+      (acc: number, course: any) => acc + Math.max(0, Number(course.credits) || 0),
+      0,
+    );
     return {
       cgpa: Number(c?.cgpa) || 0,
       earned: Number(c?.creditsEarned) || 0,
@@ -678,9 +681,7 @@ export default function SimplifiedAcademicsPage({
                   {/* Semester Header Strip */}
                   <div className="flex items-center justify-between px-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs sm:text-sm font-semibold text-ink font-outfit">
-                        {sem.semesterName}
-                      </span>
+                      <span className="text-xs sm:text-sm font-semibold text-ink font-outfit">{sem.semesterName}</span>
                       <span className="text-[11px] font-semibold text-zinc-400 dark:text-zinc-500">
                         ({filteredSemCourses.length} courses)
                       </span>
@@ -693,7 +694,9 @@ export default function SimplifiedAcademicsPage({
                   </div>
 
                   {/* Course Pills */}
-                  <div className="divide-y divide-line-2 overflow-hidden rounded-md border border-line bg-surface">{filteredSemCourses.map(renderCoursePill)}</div>
+                  <div className="divide-y divide-line-2 overflow-hidden rounded-md border border-line bg-surface">
+                    {filteredSemCourses.map(renderCoursePill)}
+                  </div>
                 </div>
               );
             })
@@ -723,8 +726,7 @@ export default function SimplifiedAcademicsPage({
   // ── VIEW 1: CURRENT SEMESTER COURSES + PREVIOUS SEMESTERS PILL AT BOTTOM ──
   return (
     <PageShell
-      eyebrow="Academics"
-      title="My Courses & Marks"
+      title="Academics"
       subtitle={`${filteredCurrentCourses.length} ${filteredCurrentCourses.length === 1 ? "course" : "courses"}`}
     >
       {/* ── SEARCH & FILTER STRIP ── */}
@@ -734,7 +736,11 @@ export default function SimplifiedAcademicsPage({
           and squeezes the search field instead. */}
       <div className="space-y-3">
         {/* ── Canvas "Academics": section switch + CGPA summary ── */}
-        <div role="tablist" aria-label="Academics sections" className="grid grid-cols-3 gap-1 rounded-sm bg-surface-2 p-1">
+        <div
+          role="tablist"
+          aria-label="Academics sections"
+          className="grid grid-cols-3 gap-1 rounded-sm bg-surface-2 p-1"
+        >
           {[
             { id: "marks", label: "Marks" },
             { id: "grades", label: "Grades" },
@@ -767,16 +773,16 @@ export default function SimplifiedAcademicsPage({
                 {
                   label: "Credits",
                   value:
-                    academicSummary.earned > 0
-                      ? `${academicSummary.earned} / ${academicSummary.required || "–"}`
-                      : "–",
+                    academicSummary.earned > 0 ? `${academicSummary.earned}/${academicSummary.required || "–"}` : "–",
                 },
                 { label: "Courses", value: String(currentCourses.length) },
                 { label: "This sem", value: academicSummary.semCredits > 0 ? `${academicSummary.semCredits} cr` : "–" },
               ].map((c) => (
-                <div key={c.label} className="px-4 py-2.5">
+                <div key={c.label} className="min-w-0 px-3 py-2.5 sm:px-4">
                   <p className="text-[11.5px] text-muted">{c.label}</p>
-                  <p className="mt-0.5 font-mono text-[15px] font-semibold tabular-nums text-ink">{c.value}</p>
+                  <p className="mt-0.5 whitespace-nowrap font-mono text-[14px] font-semibold tabular-nums text-ink">
+                    {c.value}
+                  </p>
                 </div>
               ))}
             </div>

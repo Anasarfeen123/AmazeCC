@@ -107,6 +107,85 @@ function getTabIdFromLabel(label: string): string | null {
   return null;
 }
 
+const ACADEMICS_HINTS: Record<string, string> = {
+  "My Courses & Marks": "Marks per course and the CGPA card",
+  "Grade History": "CGPA and grades by semester",
+  Curriculum: "Credits, baskets and distribution",
+  "Marks Predictor": "What-if scores and FAT targets",
+};
+const HOSTEL_HINTS: Record<string, string> = {
+  Overview: "Meal now, laundry, leave and contacts",
+  "Mess Menu": "This week's menu",
+  Laundry: "Your washing slots",
+  "Leave / Gatepass": "Apply, or see request status",
+  Counselling: "Room selection and allocation",
+};
+
+/** A sub-panel of the Apps sheet (Academics, Hostel) as one hairline list with pins. */
+function SubPanelList({
+  items,
+  strip,
+  hints,
+  pinned,
+  togglePin,
+  onPick,
+}: {
+  items: any[];
+  strip: string;
+  hints: Record<string, string>;
+  pinned: string[];
+  togglePin: (id: string) => void;
+  onPick: (item: any) => void;
+}) {
+  return (
+    <ul className="divide-y divide-line-2 overflow-hidden rounded-md border border-line bg-surface">
+      {items.map((item) => {
+        const Icon = item.icon;
+        const label = String(item.label).replace(strip, "");
+        const tabId = getTabIdFromLabel(item.label);
+        const isPinned = tabId ? pinned.includes(tabId) : false;
+        const atLimit = !isPinned && pinned.length >= 4;
+        return (
+          <li key={item.label} className="flex items-center">
+            <button
+              type="button"
+              onClick={() => onPick(item)}
+              className="flex min-h-14 min-w-0 flex-1 items-center gap-3 px-3.5 py-2.5 text-left transition-colors duration-[120ms] hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
+            >
+              <Icon aria-hidden="true" className="h-5 w-5 shrink-0 text-ink-2" strokeWidth={1.7} />
+              <span className="flex min-w-0 flex-col">
+                <span className="truncate text-[14.5px] text-ink">{label}</span>
+                {hints[label] && <span className="truncate text-[12.5px] text-muted">{hints[label]}</span>}
+              </span>
+            </button>
+            {tabId ? (
+              <button
+                type="button"
+                onClick={() => togglePin(tabId)}
+                disabled={atLimit}
+                aria-pressed={isPinned}
+                aria-label={isPinned ? `Unpin ${label} from Home` : `Pin ${label} to Home`}
+                title={isPinned ? "Unpin from Home" : "Pin to Home"}
+                className={`mr-1.5 grid h-10 w-10 shrink-0 place-items-center rounded-sm transition-colors duration-[120ms] ${
+                  isPinned
+                    ? "text-accent hover:bg-accent-soft"
+                    : atLimit
+                      ? "cursor-not-allowed text-muted opacity-40"
+                      : "text-muted hover:bg-surface-2 hover:text-ink"
+                }`}
+              >
+                <Pin className={`h-4 w-4 ${isPinned ? "fill-current" : ""}`} strokeWidth={1.8} />
+              </button>
+            ) : (
+              <ChevronRight aria-hidden="true" className="mr-3.5 h-4 w-4 shrink-0 text-muted" />
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 interface PinnableItem {
   label: string;
   icon: any;
@@ -154,10 +233,10 @@ function PinnedTiles({
                 key={item.tabId}
                 type="button"
                 onClick={() => onOpen(item)}
-                className="flex min-h-[88px] flex-col items-start justify-between gap-3 rounded-md border border-line bg-surface p-3.5 text-left transition-colors duration-[120ms] hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="flex min-h-[88px] min-w-0 flex-col items-start justify-between gap-3 overflow-hidden rounded-md border border-line bg-surface p-3.5 text-left transition-colors duration-[120ms] hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 <Icon aria-hidden="true" className="h-[18px] w-[18px] text-ink-2" strokeWidth={1.7} />
-                <span className="min-w-0">
+                <span className="w-full min-w-0">
                   <span className="block truncate text-[14px] font-medium text-ink">{item.label}</span>
                   {item.hint && <span className="mt-0.5 block truncate text-[12px] text-muted">{item.hint}</span>}
                 </span>
@@ -763,7 +842,7 @@ const AppLibraryPortal = memo(
                 ? "Academics"
                 : "Hostel"
         }
-        subtitle={mobilePanel === "primary" || mobilePanel === "edit" ? undefined : "Choose a page"}
+        subtitle={undefined}
         showBack={mobilePanel !== "primary"}
         onBack={() => setMobilePanel("primary")}
         searchQuery={mobilePanel === "primary" ? librarySearchQuery : undefined}
@@ -937,118 +1016,18 @@ const AppLibraryPortal = memo(
               </section>
             ))}
           </>
-        ) : mobilePanel === "academics" ? (
-          <div className="space-y-2">
-            <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-              {academicsItemsMobile.map((item) => {
-                const Icon = item.icon;
-                const cleanLabel = item.label.replace("Academics ", "");
-                const tabId = getTabIdFromLabel(item.label);
-                const pinned = settings?.pinnedNavTabs ?? [];
-                const isPinned = tabId ? pinned.includes(tabId) : false;
-                const atLimit = !isPinned && pinned.length >= 4;
-
-                return (
-                  <div
-                    key={item.label}
-                    className="group/item relative flex min-h-[68px] w-full items-center justify-between rounded-lg border border-line bg-surface p-3.5 transition-colors hover:bg-surface-2"
-                  >
-                    <button
-                      onClick={() => {
-                        item.action();
-                        onClose();
-                      }}
-                      className="flex min-h-11 min-w-0 flex-1 items-center gap-3 text-left focus:outline-none"
-                    >
-                      <div className="shrink-0 rounded-lg bg-accent-soft p-2.5 text-accent">
-                        <Icon className="h-[18px] w-[18px]" strokeWidth={1.8} />
-                      </div>
-                      <div className="flex flex-col min-w-0">
-                        <span className="truncate text-[13px] font-semibold leading-tight text-ink">{cleanLabel}</span>
-                        <span className="mt-0.5 text-[11.5px] font-medium text-ink-2">Academics Tracker</span>
-                      </div>
-                    </button>
-
-                    {tabId && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          togglePin(tabId);
-                        }}
-                        disabled={atLimit}
-                        className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
-                          isPinned
-                            ? "bg-indigo-50 border-indigo-200 text-indigo-650 dark:bg-indigo-950/30 dark:border-indigo-900/50 dark:text-indigo-400"
-                            : atLimit
-                              ? "opacity-20 cursor-not-allowed"
-                              : "border-transparent text-zinc-300 dark:text-zinc-600 hover:text-zinc-600 dark:hover:text-zinc-400 hover:border-zinc-200 dark:hover:border-zinc-800"
-                        }`}
-                        title={isPinned ? "Unpin from Home" : "Pin to Home"}
-                      >
-                        <Pin className={`h-3.5 w-3.5 ${isPinned ? "fill-current" : ""}`} />
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
         ) : (
-          <div className="space-y-2">
-            <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-              {hostelItemsMobile.map((item) => {
-                const Icon = item.icon;
-                const cleanLabel = item.label.replace("Hostel ", "");
-                const tabId = getTabIdFromLabel(item.label);
-                const pinned = settings?.pinnedNavTabs ?? [];
-                const isPinned = tabId ? pinned.includes(tabId) : false;
-                const atLimit = !isPinned && pinned.length >= 4;
-
-                return (
-                  <div
-                    key={item.label}
-                    className="group/item relative flex min-h-[68px] w-full items-center justify-between rounded-lg border border-line bg-surface p-3.5 transition-colors hover:bg-surface-2"
-                  >
-                    <button
-                      onClick={() => {
-                        item.action();
-                        onClose();
-                      }}
-                      className="flex min-h-11 min-w-0 flex-1 items-center gap-3 text-left focus:outline-none"
-                    >
-                      <div className="shrink-0 rounded-lg bg-warn-soft p-2.5 text-warn">
-                        <Icon className="h-[18px] w-[18px]" strokeWidth={1.8} />
-                      </div>
-                      <div className="flex flex-col min-w-0">
-                        <span className="truncate text-[13px] font-semibold leading-tight text-ink">{cleanLabel}</span>
-                        <span className="mt-0.5 text-[11.5px] font-medium text-ink-2">Hostel Hub</span>
-                      </div>
-                    </button>
-
-                    {tabId && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          togglePin(tabId);
-                        }}
-                        disabled={atLimit}
-                        className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
-                          isPinned
-                            ? "bg-indigo-50 border-indigo-200 text-indigo-650 dark:bg-indigo-950/30 dark:border-indigo-900/50 dark:text-indigo-400"
-                            : atLimit
-                              ? "opacity-20 cursor-not-allowed"
-                              : "border-transparent text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 hover:border-zinc-200 dark:hover:border-zinc-800"
-                        }`}
-                        title={isPinned ? "Unpin from Home" : "Pin to Home"}
-                      >
-                        <Pin className={`h-3.5 w-3.5 ${isPinned ? "fill-current" : ""}`} />
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <SubPanelList
+            items={mobilePanel === "academics" ? academicsItemsMobile : hostelItemsMobile}
+            strip={mobilePanel === "academics" ? "Academics " : "Hostel "}
+            hints={mobilePanel === "academics" ? ACADEMICS_HINTS : HOSTEL_HINTS}
+            pinned={settings?.pinnedNavTabs ?? []}
+            togglePin={togglePin}
+            onPick={(item) => {
+              item.action();
+              onClose();
+            }}
+          />
         )}
       </AppLibrary>
     );

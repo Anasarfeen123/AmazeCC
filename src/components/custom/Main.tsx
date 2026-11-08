@@ -61,6 +61,7 @@ import { useRouter } from "next/navigation";
 import { clearSignInReturn, peekSignInReturn, VTOP_LOGIN_EVENT } from "@/lib/signInReturn";
 import { credentialManager } from "@/lib/sync-engine/credential-manager";
 import { hasStoredVtopCredentials } from "./app/readBootstrapSnapshot";
+import { loadDemoData } from "@/lib/demoRebase";
 
 interface MainProps {
   initialIntent?: "login" | "demo";
@@ -280,7 +281,7 @@ function MainRuntime({ initialIntent, onSignedOut }: MainProps) {
   }, [handleLogin, setIsReloading]);
 
   const handleDemoClick = async () => {
-    const demoData = await (await fetch("/data/demoData.json")).json();
+    const demoData = await loadDemoData();
     setDemoMode(true);
     localStorage.setItem("demoMode", "true");
     setIDs({
@@ -554,9 +555,7 @@ function GlobalShortcutsModal({ onClose }: { onClose: () => void }) {
         <div className="space-y-5">
           {categories.map((cat, idx) => (
             <div key={idx} className="space-y-2">
-              <h4 className="text-xs font-semibold text-gray-400 dark:text-gray-500">
-                {cat.title}
-              </h4>
+              <h4 className="text-xs font-semibold text-gray-400 dark:text-gray-500">{cat.title}</h4>
               <div className="divide-y divide-gray-100 dark:divide-gray-850/40 border border-gray-150 dark:border-gray-800/80 rounded-md overflow-hidden bg-surface">
                 {cat.items.map((item, iIdx) => (
                   <div key={iIdx} className="flex items-center justify-between px-3.5 py-2.5 text-xs">

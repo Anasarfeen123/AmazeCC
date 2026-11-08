@@ -20,6 +20,7 @@ import {
 } from "@/lib/sync-engine/sync-session";
 import type { Ids } from "@/lib/sync-engine/types";
 import { broadcastGlobalSemesterChange, mapToFinalSemesterId } from "@/lib/ffcsReports";
+import { loadDemoData } from "@/lib/demoRebase";
 
 interface AppDataActionOptions {
   IDs: any;
@@ -82,7 +83,7 @@ export function useAppDataActions({
   const handleLogin = useCallback(
     async (currSemesterID = config.semesterIDs[config.semesterIDs.length - 2], loginIds?: Ids) => {
       if (demoMode || IDs.VtopUsername === "demo") {
-        const demoData = await (await fetch("/data/demoData.json")).json();
+        const demoData = await loadDemoData();
         setDemoMode(true);
         storage.demoMode.set(true);
         setIsReloading(true);
@@ -327,7 +328,7 @@ export function useAppDataActions({
         ) ?? BUILT_IN_MODES[1];
 
       if (demoMode) {
-        const demoData = await (await fetch("/data/demoData.json")).json();
+        const demoData = await loadDemoData();
         setIsReloading(true);
         openSyncSession("Demo environment");
 

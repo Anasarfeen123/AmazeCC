@@ -5,6 +5,8 @@
   --font-sans:
     var(--font-geist), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
+  /* Legacy alias: Geist is the only sans face. `font-outfit` classes predate
+     Calm Notebook and resolve to Geist; Outfit itself is not loaded. */
   --font-outfit: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono:
     var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
@@ -232,15 +234,28 @@
   -webkit-tap-highlight-color: transparent; /* Remove blue tap highlight on mobile */
 }
 
-body {
-  overscroll-behavior-y: none; /* Prevent pull-to-refresh and bounce on mobile */
-  user-select: none; /* Make text unselectable to feel like a native app */
+/* Text is selectable by default: students copy course codes, faculty names,
+   marks, timetable rows and payment references. Selection is switched off
+   only on chrome, where a long-press would otherwise highlight a label
+   instead of pressing it. */
+button,
+[role="button"],
+[role="tab"],
+[role="switch"],
+nav,
+.select-none-chrome {
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-input,
-textarea,
-[contenteditable] {
-  user-select: auto; /* Keep text fields selectable */
+/* Pull-to-refresh would reload the installed app mid-task, so the page-level
+   overscroll lock applies only when AmazeCC runs as an installed PWA. In a
+   normal browser tab the browser keeps its usual behaviour; scrollable
+   panels contain their own overscroll where they need to. */
+@media (display-mode: standalone) {
+  body {
+    overscroll-behavior-y: none;
+  }
 }
 
 /*

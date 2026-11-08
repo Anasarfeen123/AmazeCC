@@ -1,4 +1,10 @@
-import { isHolidayEvent, isInstructionalEvent, isNonInstructionalEvent, matchImportantEvent, prettySeriesName } from "./analyzeCalendar";
+import {
+  isHolidayEvent,
+  isInstructionalEvent,
+  isNonInstructionalEvent,
+  matchImportantEvent,
+  prettySeriesName,
+} from "./analyzeCalendar";
 import { canonicalSeriesName, sameSeries } from "./examSeries";
 import { isDueOnDay } from "./taskMatch";
 import type { CalendarInput } from "@/types/data/semTT";
@@ -41,15 +47,7 @@ export const CALENDAR_TYPES = {
 export type CalendarTypeKey = keyof typeof CALENDAR_TYPES;
 
 /** Every kind of thing that can land on a day, in one union. */
-export type EventKind =
-  | "exam"
-  | "milestone"
-  | "assignment"
-  | "od"
-  | "class"
-  | "holiday"
-  | "working"
-  | "event";
+export type EventKind = "exam" | "milestone" | "assignment" | "od" | "class" | "holiday" | "working" | "event";
 
 /**
  * A calendar event as it arrives — from VTOP, or from one of the sources
@@ -152,12 +150,7 @@ export type CalendarDayEvent = {
  * off, and it is what the old page did: "no instructional" was in the holiday
  * keyword list, so every non-teaching working day came back as a holiday.
  */
-export type DayType =
-  | "instructional"
-  | "semiholiday"
-  | "nonInstructional"
-  | "holiday"
-  | "other";
+export type DayType = "instructional" | "semiholiday" | "nonInstructional" | "holiday" | "other";
 
 export type DayClassRecord = {
   courseCode: string;
@@ -269,7 +262,9 @@ export const LEGEND_ITEMS = [
 const SEMI_HOLIDAY_KEYWORDS = ["cat - i", "cat - ii", "technovit", "vibrance", "oneday"];
 
 function stripPrefix(text: string, prefix: string): string {
-  return String(text ?? "").replace(prefix, "").trim();
+  return String(text ?? "")
+    .replace(prefix, "")
+    .trim();
 }
 
 function makeEvent(partial: Omit<CalendarDayEvent, "priority" | "tone"> & { priority?: number }): CalendarDayEvent {
@@ -328,14 +323,17 @@ function isTypeWord(value: string): boolean {
  */
 export type TeachingDay = "MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT" | "SUN";
 
-export const TEACHING_DAYS: readonly TeachingDay[] = [
-  "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN",
-];
+export const TEACHING_DAYS: readonly TeachingDay[] = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
 /** `Mon`, `Thu`, … for display, from a `MON`-first key. */
 export const TEACHING_DAY_LABEL: Record<TeachingDay, string> = {
-  MON: "Monday", TUE: "Tuesday", WED: "Wednesday", THU: "Thursday",
-  FRI: "Friday", SAT: "Saturday", SUN: "Sunday",
+  MON: "Monday",
+  TUE: "Tuesday",
+  WED: "Wednesday",
+  THU: "Thursday",
+  FRI: "Friday",
+  SAT: "Saturday",
+  SUN: "Sunday",
 };
 
 /**
@@ -356,13 +354,24 @@ export const TEACHING_DAY_LABEL: Record<TeachingDay, string> = {
 const WEEKDAY_IN_TEXT = /\b(mon|tue|tues|wed|weds|thu|thur|thurs|fri|sat|sun)[a-z]*/gi;
 
 const WEEKDAY_KEY: Record<string, TeachingDay> = {
-  mon: "MON", monday: "MON",
-  tue: "TUE", tues: "TUE", tuesday: "TUE",
-  wed: "WED", weds: "WED", wednesday: "WED",
-  thu: "THU", thur: "THU", thurs: "THU", thursday: "THU",
-  fri: "FRI", friday: "FRI",
-  sat: "SAT", saturday: "SAT",
-  sun: "SUN", sunday: "SUN",
+  mon: "MON",
+  monday: "MON",
+  tue: "TUE",
+  tues: "TUE",
+  tuesday: "TUE",
+  wed: "WED",
+  weds: "WED",
+  wednesday: "WED",
+  thu: "THU",
+  thur: "THU",
+  thurs: "THU",
+  thursday: "THU",
+  fri: "FRI",
+  friday: "FRI",
+  sat: "SAT",
+  saturday: "SAT",
+  sun: "SUN",
+  sunday: "SUN",
 };
 
 function lastWeekdayIn(text: string): TeachingDay | undefined {
@@ -423,10 +432,7 @@ export function parseDayOrder(events: RawCalendarEvent[]): TeachingDay | undefin
  * feature exists to prevent, so anything that reads a day's classes has to be
  * able to say *why* they are not that weekday's.
  */
-export function dayOrderNote(day: {
-  dayOrder?: TeachingDay;
-  fullDate: Date;
-}): string | undefined {
+export function dayOrderNote(day: { dayOrder?: TeachingDay; fullDate: Date }): string | undefined {
   if (!day.dayOrder) return undefined;
   const actual = TEACHING_DAYS[(day.fullDate.getDay() + 6) % 7];
   if (actual === day.dayOrder) return undefined;
@@ -601,7 +607,7 @@ export function kindLabel(kind: EventKind): string {
  * "does this day have a paper" cannot be fooled by the folding.
  */
 export function examsOn(day: CalendarDayModel): CalendarDayEvent[] {
-  return day.events.flatMap((e) => (e.kind === "exam" ? [e] : e.papers ?? []));
+  return day.events.flatMap((e) => (e.kind === "exam" ? [e] : (e.papers ?? [])));
 }
 
 /** Milestones on a day, with any folded papers still attached. */
@@ -688,9 +694,7 @@ function foldPapersIntoMilestones(events: CalendarDayEvent[]): CalendarDayEvent[
   // assessment with no papers beside a confirmed one is the calendar's noise.
   const confirmed = folded.filter((m) => (m.papers?.length ?? 0) > 0);
   const kept =
-    confirmed.length === 0
-      ? folded
-      : folded.filter((m) => (m.papers?.length ?? 0) > 0 || m.classesRun === true);
+    confirmed.length === 0 ? folded : folded.filter((m) => (m.papers?.length ?? 0) > 0 || m.classesRun === true);
 
   return [
     ...kept,
@@ -798,10 +802,7 @@ export function isCollegeOpen(day: CalendarDayModel): boolean {
 
 /** Kept as the calendar-page's headline case: an exam day has no classes. */
 export function isExamDay(day: CalendarDayModel): boolean {
-  return (
-    examsOn(day).length > 0 ||
-    day.events.some((e) => e.kind === "milestone" && e.classesRun === false)
-  );
+  return examsOn(day).length > 0 || day.events.some((e) => e.kind === "milestone" && e.classesRun === false);
 }
 
 /**
@@ -898,13 +899,33 @@ export function formatDayHeading(d: Date): string {
 // ---------------------------------------------------------------------------
 
 const MONTH_NAME_MAP: Record<string, number> = {
-  jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
-  jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11,
+  jan: 0,
+  feb: 1,
+  mar: 2,
+  apr: 3,
+  may: 4,
+  jun: 5,
+  jul: 6,
+  aug: 7,
+  sep: 8,
+  oct: 9,
+  nov: 10,
+  dec: 11,
 };
 
 const FULL_MONTHS = [
-  "january", "february", "march", "april", "may", "june",
-  "july", "august", "september", "october", "november", "december",
+  "january",
+  "february",
+  "march",
+  "april",
+  "may",
+  "june",
+  "july",
+  "august",
+  "september",
+  "october",
+  "november",
+  "december",
 ];
 
 export type ParsedMonth = { monthIndex: number; year: number };
@@ -1007,11 +1028,7 @@ export function buildAttendanceByDate(attendance: any[] = []): Map<string, DayAt
 }
 
 /** Look up the recorded status of one course on one day. */
-export function statusForClass(
-  byDate: Map<string, DayAttendance>,
-  dayKey: string,
-  courseCode: string
-): string | null {
+export function statusForClass(byDate: Map<string, DayAttendance>, dayKey: string, courseCode: string): string | null {
   const record = byDate.get(dayKey)?.courses.find((c) => c.courseCode === courseCode);
   return record ? record.status : null;
 }
@@ -1021,12 +1038,7 @@ export function statusForClass(
 // ---------------------------------------------------------------------------
 
 export type LogStatus =
-  | "present"
-  | "absent"
-  | "morning half-day"
-  | "evening half-day"
-  | "partially absent"
-  | "partial od";
+  "present" | "absent" | "morning half-day" | "evening half-day" | "partially absent" | "partial od";
 
 export type AttendanceLogRow = {
   /** The raw `viewLink` date, kept so the notes tracker keeps matching. */
@@ -1081,7 +1093,7 @@ const LOG_STATUS_LABEL: Record<LogStatus, string> = {
 export function buildAttendanceLog(
   byDate: Map<string, DayAttendance>,
   startMinutes: (courseCode: string) => number | null,
-  now = new Date()
+  now = new Date(),
 ): AttendanceLogRow[] {
   const todayKey = dateKey(now);
   const isAbsent = (c: DayClassRecord) => c.status.toLowerCase() === "absent";
@@ -1094,23 +1106,14 @@ export function buildAttendanceLog(
     .map(([key, attendance]) => {
       // key is `YYYY-MM-DD`; slice-to-number because the Date ctor has no
       // (string, string, string) overload.
-      const dateObj = new Date(
-        Number(key.slice(0, 4)),
-        Number(key.slice(5, 7)) - 1,
-        Number(key.slice(8, 10))
-      );
+      const dateObj = new Date(Number(key.slice(0, 4)), Number(key.slice(5, 7)) - 1, Number(key.slice(8, 10)));
       const weekday = WEEKDAY_SHORT[(dateObj.getDay() + 6) % 7];
 
       const needsNotes = attendance.courses.filter((c) => c.status.toLowerCase() !== "present");
-      const morning = attendance.courses.filter(
-        (c) => (startMinutes(c.courseCode) ?? 0) < 13 * 60
-      );
-      const evening = attendance.courses.filter(
-        (c) => (startMinutes(c.courseCode) ?? 0) >= 13 * 60
-      );
+      const morning = attendance.courses.filter((c) => (startMinutes(c.courseCode) ?? 0) < 13 * 60);
+      const evening = attendance.courses.filter((c) => (startMinutes(c.courseCode) ?? 0) >= 13 * 60);
 
-      const allMissed = (list: DayClassRecord[]) =>
-        list.length > 0 && list.every(isAbsent);
+      const allMissed = (list: DayClassRecord[]) => list.length > 0 && list.every(isAbsent);
       const noneMissed = (list: DayClassRecord[]) => !list.some(isAbsent);
 
       let status: LogStatus = "present";
@@ -1121,9 +1124,7 @@ export function buildAttendanceLog(
         if (morningClear && eveningClear) status = "absent";
         else if (morningClear && noneMissed(evening)) status = "morning half-day";
         else if (eveningClear && noneMissed(morning)) status = "evening half-day";
-        else status = attendance.courses.every((c) => isAbsent(c) || isOd(c))
-          ? "partial od"
-          : "partially absent";
+        else status = attendance.courses.every((c) => isAbsent(c) || isOd(c)) ? "partial od" : "partially absent";
       } else if (attendance.courses.some(isOd)) {
         status = "partial od";
       }
@@ -1194,14 +1195,18 @@ function resolveTrackedOds(courses: any[], tracked: Record<string, any> | undefi
   if (!tracked) return assigned;
 
   Object.values(tracked).forEach((t: any) => {
-    const known = String(t?.courseTitle ?? "").toLowerCase().trim();
+    const known = String(t?.courseTitle ?? "")
+      .toLowerCase()
+      .trim();
     if (!known) return;
 
     let best = -1;
     let bestScore = 0;
     courses.forEach((c, i) => {
       if (assigned[i]) return;
-      const title = String(c?.title ?? "").toLowerCase().trim();
+      const title = String(c?.title ?? "")
+        .toLowerCase()
+        .trim();
       if (!title) return;
       const score = title === known ? 3 : title.includes(known) || known.includes(title) ? 1 : 0;
       if (score > bestScore) {
@@ -1321,13 +1326,16 @@ function moodleEventsFor(moodle: any[], year: number, monthIndex: number, date: 
     out.push(
       makeEvent({
         kind: "assignment",
-        title: String(m.name ?? "").split("/").pop() || "Assignment",
+        title:
+          String(m.name ?? "")
+            .split("/")
+            .pop() || "Assignment",
         detail: due.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         dueAt: due,
         url: m.url,
         hidden: m.hidden,
         raw: m,
-      })
+      }),
     );
   });
   return out;
@@ -1376,7 +1384,7 @@ function examEventsFor(schedule: any, year: number, monthIndex: number, date: nu
           courseCode: s.courseCode,
           courseTitle: s.courseTitle,
           raw: s,
-        })
+        }),
       );
     });
   });
@@ -1384,13 +1392,7 @@ function examEventsFor(schedule: any, year: number, monthIndex: number, date: nu
   return out;
 }
 
-function odEventsFor(
-  od: any,
-  odTracker: Record<string, any>,
-  year: number,
-  monthIndex: number,
-  date: number
-) {
+function odEventsFor(od: any, odTracker: Record<string, any>, year: number, monthIndex: number, date: number) {
   const out: CalendarDayEvent[] = [];
   if (!Array.isArray(od)) return out;
 
@@ -1412,15 +1414,10 @@ function odEventsFor(
         makeEvent({
           kind: "od",
           title: c.title ?? "On-Duty",
-          detail:
-            status === "wasted"
-              ? "OD · wasted"
-              : status === "recovered"
-                ? "OD · recovered"
-                : "On-Duty",
+          detail: status === "wasted" ? "OD · wasted" : status === "recovered" ? "OD · recovered" : "On-Duty",
           hours: odWeight(c.type),
           raw: { day: dayOD, course: c, status },
-        })
+        }),
       );
     });
   });
@@ -1439,7 +1436,7 @@ function classEventsFor(record: DayAttendance | undefined) {
       courseTitle: c.courseTitle,
       absent: c.status.toLowerCase() === "absent",
       raw: c,
-    })
+    }),
   );
 }
 
@@ -1454,7 +1451,7 @@ function taskEventsFor(tasks: Task[], fullDate: Date) {
         dueAt: t.dueDate ? new Date(t.dueDate) : undefined,
         taskId: t.id,
         raw: t,
-      })
+      }),
     );
 }
 
@@ -1490,7 +1487,7 @@ function eventhubEventsFor(
   profileImageUrl: string | undefined,
   year: number,
   monthIndex: number,
-  date: number
+  date: number,
 ) {
   const out: CalendarDayEvent[] = [];
   (registrations ?? []).forEach((r) => {
@@ -1506,7 +1503,7 @@ function eventhubEventsFor(
         avatarUrl: profileImageUrl,
         eventhubId: r.eid,
         raw: r,
-      })
+      }),
     );
   });
   return out;
@@ -1529,7 +1526,7 @@ function decideDayType(
   vtop: RawCalendarEvent[],
   events: CalendarDayEvent[],
   attendance: DayAttendance,
-  published: boolean
+  published: boolean,
 ): DayType {
   if (vtop.some(isHolidayEvent)) return "holiday";
   if (vtop.some(isNonInstructionalEvent)) return "nonInstructional";
@@ -1587,7 +1584,7 @@ export function buildEnrichedCalendars(sources: CalendarSources): CalendarMonthM
       const totalDays = Math.max(
         realLength,
         Number.isFinite(declared) && declared > realLength ? declared : 0,
-        rawDays.length >= 28 ? rawDays.length : 0
+        rawDays.length >= 28 ? rawDays.length : 0,
       );
 
       const days: CalendarDayModel[] = [];
@@ -1604,13 +1601,11 @@ export function buildEnrichedCalendars(sources: CalendarSources): CalendarMonthM
         // under both `text` and `category` on some months.
         const calendarEvents = Array.from(
           new Map(
-            vtop
-              .filter(Boolean)
-              .map((e) => {
-                const ev = classify(e);
-                return [`${ev.kind}|${ev.title}`, ev];
-              })
-          ).values()
+            vtop.filter(Boolean).map((e) => {
+              const ev = classify(e);
+              return [`${ev.kind}|${ev.title}`, ev];
+            }),
+          ).values(),
         );
 
         const events = [
@@ -1647,15 +1642,15 @@ export function buildEnrichedCalendars(sources: CalendarSources): CalendarMonthM
         });
       }
 
-  // `working` is "has classes" — instructional plus shortened, exam days
-  // excluded. `holiday` counts days the college is shut, so a non-instructional
-  // working day lands in `other`: it is neither of those two things.
-  const summary = { total: days.length, working: 0, holiday: 0, other: 0 };
-  days.forEach((d) => {
-    if (hasClasses(d)) summary.working += 1;
-    else if (d.dayType === "holiday") summary.holiday += 1;
-    else summary.other += 1;
-  });
+      // `working` is "has classes" — instructional plus shortened, exam days
+      // excluded. `holiday` counts days the college is shut, so a non-instructional
+      // working day lands in `other`: it is neither of those two things.
+      const summary = { total: days.length, working: 0, holiday: 0, other: 0 };
+      days.forEach((d) => {
+        if (hasClasses(d)) summary.working += 1;
+        else if (d.dayType === "holiday") summary.holiday += 1;
+        else summary.other += 1;
+      });
 
       return {
         id: `${year}-${monthIndex}-${index}`,
@@ -1667,7 +1662,7 @@ export function buildEnrichedCalendars(sources: CalendarSources): CalendarMonthM
         summary,
       };
     })
-    .sort((a, b) => a.monthIndex - b.monthIndex || a.year - b.year);
+    .sort((a, b) => a.year - b.year || a.monthIndex - b.monthIndex);
 }
 
 /**
@@ -1685,21 +1680,18 @@ export function buildEnrichedCalendars(sources: CalendarSources): CalendarMonthM
  */
 export function activeMonthIndex(months: CalendarMonthModel[]): number {
   const now = new Date();
-  const current = months.findIndex(
-    (m) => m.monthIndex === now.getMonth() && m.year === now.getFullYear()
-  );
+  const current = months.findIndex((m) => m.monthIndex === now.getMonth() && m.year === now.getFullYear());
   if (current !== -1) return current;
 
   const next = months.findIndex(
-    (m) => m.year > now.getFullYear() ||
-      (m.year === now.getFullYear() && m.monthIndex >= now.getMonth())
+    (m) => m.year > now.getFullYear() || (m.year === now.getFullYear() && m.monthIndex >= now.getMonth()),
   );
   return next === -1 ? Math.max(0, months.length - 1) : next;
 }
 
 export function findDay(
   months: CalendarMonthModel[],
-  dayKeyValue: string
+  dayKeyValue: string,
 ): { month: CalendarMonthModel; day: CalendarDayModel } | null {
   for (const month of months) {
     const day = month.days.find((d) => d.dateKey === dayKeyValue);

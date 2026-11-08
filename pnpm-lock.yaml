@@ -337,7 +337,7 @@ packages:
     engines: {node: '>=10'}
 
   '@amazecontinuityprojects/amazeui@file:.local/amazeui-2.0.0.tgz':
-    resolution: {integrity: sha512-HSujd8Y5CG2iFivBg79UHKdxxTfa1KlYHxqlKPp+ufj51wpiS+Sw0fWnsRenqv9rZfR2Pnmnr8oSFOE/J7Co8Q==, tarball: file:.local/amazeui-2.0.0.tgz}
+    resolution: {integrity: sha512-ilWvMsug5kOLREhyhbNvvK0kEkXyEql6IQwvL9Qq0xOHFazv8ut+FasGkoBxdAIjmWk99HvsKRK4+h38GJDp9g==, tarball: file:.local/amazeui-2.0.0.tgz}
     version: 2.0.0
     peerDependencies:
       react: '>=18.2.0'

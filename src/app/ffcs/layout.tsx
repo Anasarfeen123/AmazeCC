@@ -9,10 +9,8 @@ export const viewport: Viewport = {
     { media: "(prefers-color-scheme: dark)", color: "#03060F" },
   ],
   width: "device-width",
-  // This route exports its own viewport (it doesn't inherit the root one), so
-  // the app-wide 85% mobile zoom has to be repeated here — otherwise opening
-  // /ffcs alone would snap the planner back to 100%. See src/app/layout.tsx
-  // for why the scale lives on the viewport instead of CSS `zoom`.
+  // This route exports its own viewport (it does not inherit the root one),
+  // so it repeats the root's 1:1 scale.
   initialScale: 1,
   viewportFit: "cover",
   interactiveWidget: "resizes-content",

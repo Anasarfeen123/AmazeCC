@@ -552,18 +552,8 @@ const RIBBON_A: Chip[] = [
   { kind: "text", text: "Bus 14 · Gate 2 · 16:45" },
   { kind: "course", code: "BEEE102L", name: "Electrical Engineering", slot: "D1+TD1", pct: 91, note: "can skip 8" },
   { kind: "text", text: "Laundry bag ready" },
+  { kind: "text", text: "Credentials stay on your device" },
 ];
-const RIBBON_B: Chip[] = [
-  { kind: "text", text: "CAT-2 marks out" },
-  { kind: "text", text: "FAT target: 66 / 100" },
-  { kind: "text", text: "CGPA 8.42" },
-  { kind: "text", text: "Slot clash caught on C1" },
-  { kind: "text", text: "Faculty cabin AB1-617" },
-  { kind: "text", text: "Library books due 18 Nov" },
-  { kind: "text", text: "Works offline" },
-  { kind: "text", text: "Your credentials stay on your device" },
-];
-
 function ChipView({ c }: { c: Chip }) {
   if (c.kind === "text") {
     return (
@@ -601,12 +591,11 @@ function MarqueeRow({ chips, reverse = false, duration }: { chips: Chip[]; rever
   );
 }
 
-/** Two drifting ribbons of what the app actually shows, in opposite directions. */
+/** One drifting ribbon of what the app actually shows (kept to a single row so it stays a detail, not noise). */
 export function MarqueeRibbons() {
   return (
-    <div className="landing-marquee-host space-y-3 py-6" aria-label="What AmazeCC shows you">
+    <div className="landing-marquee-host py-5" aria-label="What AmazeCC shows you">
       <MarqueeRow chips={RIBBON_A} duration={52} />
-      <MarqueeRow chips={RIBBON_B} reverse duration={44} />
     </div>
   );
 }

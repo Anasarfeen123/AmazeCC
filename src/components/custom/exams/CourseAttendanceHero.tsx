@@ -21,7 +21,7 @@ function counts(item: AttItem) {
 }
 
 function plural(n: number, word: string) {
-  return `${n} ${word}${n === 1 ? "" : "s"}`;
+  return `${n} ${word}${n === 1 ? "" : word.endsWith("s") ? "es" : "s"}`;
 }
 
 /**
@@ -105,15 +105,11 @@ export default function CourseAttendanceHero({
               {m.attended} of {m.total} {main.label === "Lab" ? "periods" : "classes"} attended
             </p>
           </div>
-          <span className={cn("shrink-0 rounded-full px-2.5 py-0.5 text-[12px] font-medium", pill.cls)}>{pill.text}</span>
+          <span className={cn("shrink-0 rounded-full px-2.5 py-0.5 text-[12px] font-medium", pill.cls)}>
+            {pill.text}
+          </span>
         </div>
-        <AttendanceBar
-          className="mt-4"
-          attended={m.attended}
-          held={m.total}
-          threshold={threshold}
-          course={course}
-        />
+        <AttendanceBar className="mt-4" attended={m.attended} held={m.total} threshold={threshold} course={course} />
         <p className="mt-4 border-t border-line-2 pt-3 text-[14px] leading-relaxed text-ink">{m.sentence}</p>
 
         {rest.map((p) => {
@@ -128,8 +124,17 @@ export default function CourseAttendanceHero({
                   {r.pct.toFixed(1)}%
                 </span>
               </div>
-              <AttendanceBar className="mt-2" size="sm" attended={r.attended} held={r.total} threshold={threshold} course={course} />
-              <p className={cn("mt-2 text-[12.5px]", r.status === "short" ? "text-danger" : "text-muted")}>{r.sentence}</p>
+              <AttendanceBar
+                className="mt-2"
+                size="sm"
+                attended={r.attended}
+                held={r.total}
+                threshold={threshold}
+                course={course}
+              />
+              <p className={cn("mt-2 text-[12.5px]", r.status === "short" ? "text-danger" : "text-muted")}>
+                {r.sentence}
+              </p>
             </div>
           );
         })}

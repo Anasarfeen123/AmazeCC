@@ -53,6 +53,7 @@ import { cn } from "@amazecontinuityprojects/amazeui";
 import { TILE } from "@/lib/uiTokens";
 import TimetableGrid from "../attendance/TimetableGrid";
 import WeekSlotMap from "./WeekSlotMap";
+import HomeAttention from "./HomeAttention";
 import DesktopCourseDetail from "../attendance/DesktopCourseDetail";
 import BottomSheet from "../shared/BottomSheet";
 import { useSyncTrigger } from "../shared/useSyncTrigger";
@@ -1303,6 +1304,25 @@ export default function SimplifiedMobileHome({
                 classes={timetableMap[todayDayCode] || []}
                 now={currentTime}
                 onOpenCourse={handleCourseClick}
+              />
+            </div>
+
+            <div className="min-w-0 lg:col-span-12">
+              <HomeAttention
+                courses={attendanceData?.attendance}
+                targetPct={targetAttendancePct}
+                exams={scheduleRows}
+                tasks={tasks}
+                now={currentTime}
+                onOpenCourse={handleCourseClick}
+                onOpenExams={() => {
+                  setActiveTab("academics");
+                  setActiveSubTab("schedule");
+                }}
+                onOpenTasks={() => {
+                  setActiveTab("tools");
+                  setActiveToolsSubTab?.("tasks");
+                }}
               />
             </div>
 

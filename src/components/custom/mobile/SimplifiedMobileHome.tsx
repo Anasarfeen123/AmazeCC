@@ -1386,10 +1386,8 @@ export default function SimplifiedMobileHome({
                   sub={tile.sub}
                   badge={tile.badge}
                   tone={tile.tone}
-                  className={cn(
-                    tile.onClick && "transition-all hover:scale-[1.01] active:scale-[0.98] group",
-                    tile.blur,
-                  )}
+                  variant={tile.id === "attendance" ? "highlight" : "default"}
+                  className={cn(tile.onClick && "brutal-press group", tile.blur)}
                 />
               </div>
             ))}

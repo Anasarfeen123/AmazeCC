@@ -57,9 +57,16 @@ export function StatTile({
   badge,
   icon,
   tone = "emerald",
+  variant = "default",
   height = "h-32 sm:h-36",
   className = "",
 }: {
+  /**
+   * Brand stat-card variants: `default` = surface card; `highlight` = solid
+   * ochre card with ink text (the one loud card in a row); `primary` = teal
+   * card with paper text and an ochre number.
+   */
+  variant?: "default" | "highlight" | "primary";
   label: ReactNode;
   value: ReactNode;
   sub?: ReactNode;
@@ -79,18 +86,36 @@ export function StatTile({
 }) {
   // "neutral"/"default" means "no tint" — plain heading ink rather than a
   // toned-down grey, so an uncoloured tile does not look disabled.
-  const valueTone = !tone || tone === "neutral" || tone === "default" ? "text-hero" : (TONE_TEXT[tone] ?? "text-hero");
+  const loud = variant !== "default";
+  const valueTone =
+    variant === "highlight"
+      ? "text-highlight-foreground"
+      : variant === "primary"
+        ? "text-highlight"
+        : !tone || tone === "neutral" || tone === "default"
+          ? "text-hero"
+          : (TONE_TEXT[tone] ?? "text-hero");
+  const surface =
+    variant === "highlight"
+      ? "!bg-highlight text-highlight-foreground"
+      : variant === "primary"
+        ? "!bg-teal text-cream dark:!bg-surface-tertiary dark:text-text-primary"
+        : "";
+  const labelTone = loud ? "opacity-80" : "text-text-muted";
+  const subTone = loud ? "opacity-80" : "text-text-muted";
 
   return (
-    <div className={`${TILE} ${height} ${className}`.trim()}>
+    <div className={`${TILE} ${surface} ${height} ${className}`.trim()}>
       <div className="flex flex-wrap items-center justify-between gap-1">
-        <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted min-w-0 break-words">
+        <span
+          className={`font-mono text-xs font-semibold uppercase tracking-[0.06em] ${labelTone} min-w-0 break-words`}
+        >
           {label}
         </span>
         {badge ? (
           <span
             className={`font-mono text-xs font-semibold uppercase tracking-[0.06em] px-1.5 py-0.5 rounded-[6px] border-2 shrink-0 ${
-              TONE_BADGE[tone] ?? TONE_BADGE.zinc
+              loud ? "bg-text-primary text-background border-border-ink" : (TONE_BADGE[tone] ?? TONE_BADGE.zinc)
             }`}
           >
             {badge}
@@ -111,7 +136,7 @@ export function StatTile({
 
       {sub ? (
         <div className="flex items-center justify-between gap-2 min-w-0">
-          <div className="font-mono text-xs text-text-muted line-clamp-2">{sub}</div>
+          <div className={`font-mono text-xs ${subTone} line-clamp-2`}>{sub}</div>
         </div>
       ) : null}
     </div>

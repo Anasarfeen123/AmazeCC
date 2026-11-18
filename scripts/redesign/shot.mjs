@@ -60,13 +60,21 @@ const evalJs = async (expr) =>
   (await send("Runtime.evaluate", { expression: expr, awaitPromise: true, returnByValue: true })).result?.result?.value;
 
 await send("Page.enable");
+if (process.env.PRE_W)
+  await send("Emulation.setDeviceMetricsOverride", {
+    width: Number(process.env.PRE_W),
+    height: 844,
+    deviceScaleFactor: 1,
+    mobile: true,
+  });
 await send("Runtime.enable");
 await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: theme }] });
 await send("Page.navigate", { url: BASE + "/" });
 await sleep(9000);
-await evalJs(
-  `["has_selected_interface","introDone","hasSeenPushPrompt","push_prompt_dismissed","busPromptDismissed"].forEach(k=>localStorage.setItem(k,"true"))`,
-);
+if (!process.env.ONBOARD)
+  await evalJs(
+    `["has_selected_interface","introDone","hasSeenPushPrompt","push_prompt_dismissed","busPromptDismissed"].forEach(k=>localStorage.setItem(k,"true"))`,
+  );
 // enter demo
 const clicked = await evalJs(
   `(() => { const b=[...document.querySelectorAll('button,a')].find(e=>/^\s*try the demo\s*$/i.test(e.textContent)); if(b){b.click(); return b.textContent.trim();} return null })()`,
@@ -99,9 +107,10 @@ if (!process.env.NO_RELOAD) {
   await send("Page.navigate", { url: BASE + "/" });
   await sleep(15000);
 }
-await evalJs(
-  `(() => { const b=[...document.querySelectorAll("button,a")].find(e=>/proceed to dashboard/i.test(e.textContent)); b&&b.click(); })()`,
-);
+if (!process.env.ONBOARD)
+  await evalJs(
+    `(() => { const b=[...document.querySelectorAll("button,a")].find(e=>/proceed to dashboard/i.test(e.textContent)); b&&b.click(); })()`,
+  );
 await sleep(6000);
 if (path !== "/") {
   await evalJs(
@@ -114,11 +123,14 @@ console.log(
   (await evalJs("document.body.innerText")).slice(0, Number(process.env.TEXT_LEN || 150)).replace(/\n/g, " | "),
 );
 
-for (const [name, w, h, mobile] of [
-  ["phone", 390, 844, true],
-  ["tablet", 820, 1180, true],
-  ["desktop", 1440, 900, false],
-]) {
+const SIZES = process.env.ONLY_PHONE
+  ? [["phone", 390, 844, true]]
+  : [
+      ["phone", 390, 844, true],
+      ["tablet", 820, 1180, true],
+      ["desktop", 1440, 900, false],
+    ];
+for (const [name, w, h, mobile] of SIZES) {
   await send("Emulation.setDeviceMetricsOverride", { width: w, height: h, deviceScaleFactor: 1, mobile });
   await sleep(2500);
   const full = process.env.FULL && name === "phone";

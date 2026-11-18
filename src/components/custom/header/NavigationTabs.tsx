@@ -15,6 +15,7 @@ import { useOverlayBack } from "@/lib/overlayStack";
 import { animateThemeCircularExpansion } from "../ThemeToggle";
 import {
   BookOpen,
+  PanelLeftClose,
   Building,
   CalendarCheck,
   ChevronRight,
@@ -24,12 +25,9 @@ import {
   Home,
   Library,
   LayoutGrid,
-  Menu,
-  RefreshCcw,
   Settings,
   User,
   Wrench,
-  WifiOff,
   Calendar,
   Key,
   ArrowLeft,
@@ -45,7 +43,6 @@ import {
   UserSearch,
   ScanLine,
   type LucideIcon,
-  AlertTriangle,
 } from "lucide-react";
 import { AnimatePresence, m } from "framer-motion";
 import {
@@ -115,10 +112,7 @@ const MobileBottomNav = memo(function MobileBottomNav({
               : "border-transparent text-text-muted hover:text-text-primary"
           }`}
         >
-          <span className="flex items-center justify-center [&_svg]:h-5 [&_svg]:w-5" aria-hidden>
-            {item.icon}
-          </span>
-          <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] leading-none truncate max-w-full">
+          <span className="font-mono text-[13px] font-semibold uppercase tracking-[0.06em] leading-none truncate max-w-full">
             {item.label}
           </span>
         </button>
@@ -131,7 +125,7 @@ const navButtonBase = "";
 
 /** Brand overrides for AmazeUI's SidebarItem / SidebarGroupLabel (twMerge wins). */
 const SIDEBAR_ITEM_BRAND =
-  "min-h-11 rounded-[10px] text-text-primary data-[active=true]:border-2 data-[active=true]:border-border-ink data-[active=true]:bg-secondary data-[active=true]:text-secondary-foreground data-[active=true]:shadow-brutal-sm [&[data-active=true]_svg]:text-secondary-foreground";
+  "min-h-11 rounded-[10px] text-text-primary [&>div:first-child:empty]:hidden data-[active=true]:border-2 data-[active=true]:border-border-ink data-[active=true]:bg-secondary data-[active=true]:text-secondary-foreground data-[active=true]:shadow-brutal-sm [&[data-active=true]_svg]:text-secondary-foreground";
 const SIDEBAR_GROUP_LABEL_BRAND = "font-mono text-xs font-semibold tracking-[0.06em] text-text-muted";
 
 export default function NavigationTabs({
@@ -991,46 +985,31 @@ export default function NavigationTabs({
           {/* Logo & Expand Toggle */}
           <div className={`flex items-center ${isOpen ? "justify-between w-full" : "justify-center w-full"}`}>
             <div className={`flex items-center min-w-0 ${isOpen ? "gap-2.5" : "justify-center"}`}>
-              <img
-                loading="lazy"
-                decoding="async"
-                src={currentIcon}
-                alt="AmazeCC"
-                className="h-7 w-7 rounded-lg object-contain shadow-xs"
-              />
+              <img loading="lazy" decoding="async" src={currentIcon} alt="AmazeCC" className="h-9 w-9 object-contain" />
               {isOpen && (
-                <h2 className="truncate text-sm font-semibold tracking-tight text-sidebar-foreground">AmazeCC</h2>
+                <h2 className="truncate font-display text-lg font-bold leading-none text-text-heading">AmazeCC</h2>
               )}
             </div>
             {isOpen && (
               <div className="flex items-center gap-0.5">
                 <button
                   onClick={handleSyncClick}
-                  className={`relative hit-expand group rounded-xl px-2.5 py-1.5 transition-all duration-300 hover:scale-105 flex items-center gap-1.5 text-xs font-bold ${navButtonBase} ${
-                    isOffline
-                      ? "bg-amber-500/15 hover:bg-amber-500/25 text-amber-700 dark:text-amber-400 border border-amber-500/30"
-                      : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                  className={`relative inline-flex min-h-9 items-center rounded-[8px] border-2 border-border-ink px-2.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] shadow-brutal-sm brutal-press cursor-pointer ${
+                    isOffline ? "bg-highlight text-highlight-foreground" : "bg-surface text-text-primary"
                   }`}
                   title={isOffline ? "You're offline — tap for details" : "Sync Data from VTOP"}
                   aria-label={isOffline ? "Offline — tap for details" : "Sync Data from VTOP"}
                   aria-live="polite"
                 >
-                  {isOffline ? (
-                    <WifiOff className="h-3.5 w-3.5 shrink-0" />
-                  ) : (
-                    <RefreshCcw
-                      className={`h-3.5 w-3.5 transition-transform ${isSpinning ? "animate-spin text-indigo-500" : "group-hover:rotate-180 duration-500"}`}
-                    />
-                  )}
-                  <span>{isOffline ? "Offline" : "Sync"}</span>
+                  <span>{isOffline ? "Offline" : isSpinning ? "Syncing" : "Sync"}</span>
                 </button>
                 <button
                   onClick={() => persistSidebarState(isOpen)}
-                  className={`relative group rounded-xl p-1.5 text-sidebar-foreground transition-all duration-300 hover:bg-sidebar-accent hover:text-sidebar-foreground hover:scale-105 ${navButtonBase}`}
+                  className="relative inline-flex h-9 w-9 items-center justify-center rounded-[8px] text-text-primary transition-colors hover:bg-surface-secondary"
                   title="Collapse sidebar"
                   aria-label="Collapse sidebar"
                 >
-                  <Menu className="h-4.5 w-4.5 stroke-[1.9] transition-transform group-hover:scale-110" />
+                  <PanelLeftClose className="h-5 w-5" aria-hidden />
                 </button>
               </div>
             )}
@@ -1048,10 +1027,10 @@ export default function NavigationTabs({
                 className="overflow-hidden space-y-3"
               >
                 {/* Left-aligned clean Semester Summary Card */}
-                <div className="mt-3 rounded-[10px] border-2 border-border-ink bg-surface-secondary p-3 text-xs space-y-1.5">
+                <div className="mt-3 rounded-[10px] border-2 border-border-ink bg-surface p-2.5 space-y-2.5">
                   <div className="flex items-center justify-between">
                     <div className="font-mono font-semibold text-text-muted tracking-[0.06em] text-xs uppercase">
-                      Current Semester
+                      Semester
                     </div>
                     <div role="group" aria-label="Current semester" className="flex max-w-[9rem] shrink-0">
                       <OptionPicker
@@ -1064,11 +1043,11 @@ export default function NavigationTabs({
                           label: formatSemesterName(semId),
                         }))}
                         searchable={false}
-                        className="w-full [&>button:first-child]:h-auto [&>button:first-child]:p-0 [&>button:first-child]:rounded-none [&>button:first-child]:border-none [&>button:first-child]:shadow-none [&>button:first-child]:justify-end [&>button:first-child]:text-info [&>button:first-child]:hover:underline [&>button:first-child_span]:text-xs [&>button:first-child_span]:font-semibold [&>button:first-child_span]:text-info [&>button:first-child_svg]:h-3 [&>button:first-child_svg]:w-3"
+                        className="w-full [&>button:first-child]:h-8 [&>button:first-child]:px-2 [&>button:first-child]:gap-1 [&>button:first-child]:rounded-[8px] [&>button:first-child]:bg-surface-secondary [&>button:first-child_span]:font-mono [&>button:first-child_span]:text-xs [&>button:first-child_span]:font-semibold [&>button:first-child_span]:uppercase"
                       />
                     </div>
                   </div>
-                  <div className="space-y-1">
+                  <div className="grid grid-flow-col auto-cols-fr gap-1.5">
                     {shouldDisplayGpa && (
                       <button
                         onClick={() => {
@@ -1077,13 +1056,15 @@ export default function NavigationTabs({
                             return next;
                           });
                         }}
-                        className="flex justify-between items-center w-full text-left hover:bg-sidebar-accent rounded px-1 -mx-1 py-0.5 transition-colors cursor-pointer text-sidebar-foreground hover:text-sidebar-foreground"
+                        className="flex min-w-0 flex-col items-start gap-0.5 rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
                         title="Click to show/hide CGPA"
                       >
-                        <span className="text-sidebar-foreground">CGPA</span>
+                        <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+                          CGPA
+                        </span>
                         <span
                           data-private
-                          className={`font-semibold text-sidebar-foreground transition-all duration-300 ${settings.CGPAHidden ? "blur-[4.5px] select-none" : ""}`}
+                          className={`font-display text-base font-bold leading-none text-text-heading transition-all duration-300 ${settings.CGPAHidden ? "blur-[4.5px] select-none" : ""}`}
                         >
                           {marksData?.cgpa?.cgpa || "-"}
                         </span>
@@ -1101,10 +1082,12 @@ export default function NavigationTabs({
                           return next;
                         });
                       }}
-                      className="flex justify-between items-center w-full text-left hover:bg-sidebar-accent rounded px-1 -mx-1 py-0.5 transition-colors cursor-pointer text-sidebar-foreground hover:text-sidebar-foreground"
+                      className="flex min-w-0 flex-col items-start gap-0.5 rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
                       title="Click to toggle attendance format"
                     >
-                      <span className="text-sidebar-foreground">Attendance</span>
+                      <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+                        Attend
+                      </span>
                       {(() => {
                         // Colour alone does not say "below target" to everyone,
                         // so a warning icon and a spoken label carry it too.
@@ -1113,11 +1096,15 @@ export default function NavigationTabs({
                         return (
                           <span
                             data-private
-                            className={`inline-flex items-center gap-1 font-semibold ${below ? "text-rose-400" : "text-emerald-400"}`}
+                            className={`inline-flex items-baseline gap-1 font-display text-base font-bold leading-none ${below ? "text-danger-foreground" : "text-text-heading"}`}
                             title={below ? `Below your ${target}% target` : `At or above your ${target}% target`}
                           >
-                            {below ? <AlertTriangle className="w-3 h-3" aria-hidden="true" /> : null}
                             {attendanceValue}
+                            {below ? (
+                              <span aria-hidden="true" className="font-mono text-xs font-semibold uppercase">
+                                Low
+                              </span>
+                            ) : null}
                             <span className="sr-only">{below ? `, below your ${target}% target` : `, on track`}</span>
                           </span>
                         );
@@ -1126,11 +1113,13 @@ export default function NavigationTabs({
 
                     <button
                       onClick={() => setGradesDisplayIsOpen(true)}
-                      className="flex justify-between items-center w-full text-left hover:bg-sidebar-accent rounded px-1 -mx-1 py-0.5 transition-colors cursor-pointer text-sidebar-foreground hover:text-sidebar-foreground"
+                      className="flex min-w-0 flex-col items-start gap-0.5 rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
                       title="Click to view credits & grades details"
                     >
-                      <span className="text-sidebar-foreground">Credits</span>
-                      <span data-private className="font-semibold text-sidebar-foreground">
+                      <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+                        Credits
+                      </span>
+                      <span data-private className="font-display text-base font-bold leading-none text-text-heading">
                         {credits}
                       </span>
                     </button>
@@ -1140,11 +1129,16 @@ export default function NavigationTabs({
                         selectTab("attendance");
                         setActiveAttendanceSubTab("od");
                       }}
-                      className="flex justify-between items-center w-full text-left hover:bg-sidebar-accent rounded px-1 -mx-1 py-0.5 transition-colors cursor-pointer text-sidebar-foreground hover:text-sidebar-foreground"
+                      className="flex min-w-0 flex-col items-start gap-0.5 rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
                       title="Click to view OD tracker details"
                     >
-                      <span className="text-sidebar-foreground">OD Hours</span>
-                      <span className="font-semibold text-sidebar-foreground">{totalODHours}/40</span>
+                      <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+                        OD hrs
+                      </span>
+                      <span className="font-display text-base font-bold leading-none text-text-heading">
+                        {totalODHours}
+                        <span className="font-mono text-xs font-semibold text-text-muted">/40</span>
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -1209,7 +1203,6 @@ export default function NavigationTabs({
                           {pinnedItems.map((item) => (
                             <SidebarItem
                               key={item.id}
-                              icon={<item.icon className="h-4 w-4 stroke-[1.9]" aria-hidden="true" />}
                               label={item.label}
                               isActive={item.isActive}
                               aria-current={item.isActive ? "page" : undefined}
@@ -1230,7 +1223,6 @@ export default function NavigationTabs({
                           {group.items.map((item) => (
                             <SidebarItem
                               key={item.id}
-                              icon={<item.icon className="h-4 w-4 stroke-[1.9]" aria-hidden="true" />}
                               label={item.label}
                               isActive={item.isActive}
                               aria-current={item.isActive ? "page" : undefined}
@@ -1263,7 +1255,6 @@ export default function NavigationTabs({
                         {academicsItems.map((item) => (
                           <SidebarItem
                             key={item.id}
-                            icon={<item.icon className="h-4 w-4 stroke-[1.9]" aria-hidden="true" />}
                             label={item.label}
                             isActive={item.isActive}
                             aria-current={item.isActive ? "page" : undefined}
@@ -1292,7 +1283,6 @@ export default function NavigationTabs({
                         {toolsSubItems.map((item) => (
                           <SidebarItem
                             key={item.id}
-                            icon={<item.icon className="h-4 w-4 stroke-[1.9]" aria-hidden="true" />}
                             label={item.label}
                             isActive={item.isActive}
                             aria-current={item.isActive ? "page" : undefined}
@@ -1321,7 +1311,6 @@ export default function NavigationTabs({
                         {hostelSubItems.map((item) => (
                           <SidebarItem
                             key={item.id}
-                            icon={<item.icon className="h-4 w-4 stroke-[1.9]" aria-hidden="true" />}
                             label={item.label}
                             isActive={item.isActive}
                             aria-current={item.isActive ? "page" : undefined}

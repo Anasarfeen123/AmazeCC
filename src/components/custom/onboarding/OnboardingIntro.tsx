@@ -19,7 +19,6 @@ import { useAtomValue } from "jotai";
 import {
   AlertCircle,
   ArrowRight,
-  Check,
   CheckCircle2,
   ExternalLink,
   Eye,
@@ -31,7 +30,6 @@ import {
   Shield,
   ShieldCheck,
   Sparkles,
-  X,
 } from "lucide-react";
 import { getStoredUser, signInInteractive, signOutApp, type StoredUser } from "@/lib/oauth2";
 import { isLoggedInAtom } from "@/store";
@@ -72,8 +70,7 @@ const MIN_SYNC_FACE_MS = 1400;
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-background px-5 text-text-primary select-none animate-in fade-in duration-300 sm:px-8">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden"></div>
+    <div className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-background px-4 text-text-primary select-none animate-in fade-in duration-200 sm:px-8">
       <div className="relative z-10 flex min-h-0 flex-1 flex-col overflow-y-auto pt-[calc(env(safe-area-inset-top,0px)+1.25rem)] pb-[calc(env(safe-area-inset-bottom,0px)+1.25rem)] sm:pt-[calc(env(safe-area-inset-top,0px)+1.75rem)] sm:pb-[calc(env(safe-area-inset-bottom,0px)+1.75rem)]">
         {children}
       </div>
@@ -83,17 +80,19 @@ function Shell({ children }: { children: React.ReactNode }) {
 
 function Brand() {
   return (
-    <div className="flex shrink-0 items-center gap-2.5">
+    <div className="flex shrink-0 items-center gap-3">
       <img
-        loading="lazy"
-        src="/logo.png"
+        src="/brand/icon-primary.svg"
         alt=""
-        width={28}
-        height={28}
+        width={40}
+        height={40}
         decoding="async"
-        className="h-7 w-7 rounded-xl border border-border-ink bg-surface p-0.5 object-contain"
+        className="h-10 w-10 object-contain"
       />
-      <span className="text-xs font-bold uppercase tracking-[0.2em] text-text-muted font-outfit">AmazeCC</span>
+      <div className="leading-none">
+        <span className="block font-display text-lg font-bold text-text-heading">AmazeCC</span>
+        <span className="mt-1 block font-mono text-xs text-text-muted">Your campus companion</span>
+      </div>
     </div>
   );
 }
@@ -514,143 +513,121 @@ function SignInRejection({
 }
 
 /** Big percentage, spinner and the live module log — the first-login sync screen. */
+const STEP_BADGE: Record<SyncLogLine["status"], { word: string; cls: string }> = {
+  success: { word: "Done", cls: "bg-success-surface text-success-foreground" },
+  error: { word: "Failed", cls: "bg-danger-surface text-danger-foreground" },
+  pending: { word: "Next", cls: "bg-surface-secondary text-text-primary" },
+  loading: { word: "Now", cls: "bg-highlight text-highlight-foreground" },
+  info: { word: "Note", cls: "bg-surface-secondary text-text-primary" },
+};
+
+function stepBadge(status: SyncLogLine["status"]) {
+  return STEP_BADGE[status] ?? STEP_BADGE.pending;
+}
+
+/**
+ * First full sync after sign-in. One brand card, no icons: the number is the
+ * hero, the bar is honest, and the last few steps say in words what is done.
+ */
 function SyncFace({ progress, lines, title }: { progress: number; lines: SyncLogLine[]; title: string }) {
   const pct = Math.max(0, Math.min(100, Math.round(progress)));
-  const R = 84;
-  const C = 2 * Math.PI * R;
   const recent = lines.slice(-4);
 
   return (
     <div
-      className="flex animate-in fade-in slide-in-from-bottom-4 duration-300 flex-col items-center justify-center gap-6 text-center"
+      className="mx-auto w-full max-w-lg animate-in fade-in slide-in-from-bottom-2 duration-200"
       role="status"
       aria-live="polite"
-      aria-label={`Full sync ${pct} percent complete`}
+      aria-label={`First sync ${pct} percent complete`}
     >
-      <div className="relative h-44 w-44 shrink-0">
-        <svg viewBox="0 0 200 200" className="h-full w-full -rotate-90">
-          <defs>
-            <linearGradient id="onboarding-sync-grad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#818cf8" />
-              <stop offset="100%" stopColor="#a855f7" />
-            </linearGradient>
-          </defs>
-          <circle cx="100" cy="100" r={R} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="11" />
-          <circle
-            cx="100"
-            cy="100"
-            r={R}
-            fill="none"
-            stroke="url(#onboarding-sync-grad)"
-            strokeWidth="11"
-            strokeLinecap="round"
-            strokeDasharray={C}
-            strokeDashoffset={C - (pct / 100) * C}
-            className="transition-[stroke-dashoffset] duration-500 ease-out"
-          />
-        </svg>
-        {/* Loading icon: a comet that keeps sweeping while the bar itself is honest. */}
-        <svg
-          viewBox="0 0 200 200"
-          className="absolute inset-0 h-full w-full animate-spin -rotate-90 [animation-duration:1.15s]"
-        >
-          <circle
-            cx="100"
-            cy="100"
-            r={R}
-            fill="none"
-            stroke="#a5b4fc"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeDasharray="18 600"
-            opacity="0.85"
-          />
-        </svg>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-4xl font-bold text-text-heading tabular-nums font-outfit">{pct}%</span>
-          <span className="mt-1 text-xs font-bold uppercase tracking-[0.18em] text-text-muted font-outfit">
-            {title || "Full Sync"}
-          </span>
-        </div>
-      </div>
+      <div className="brutal-card brutal-card-hero p-5 sm:p-7 space-y-6 text-left mr-1.5 mb-1.5">
+        <Brand />
 
-      <div className="space-y-1.5">
-        <h2 className="text-xl font-bold tracking-tight text-text-heading font-outfit sm:text-2xl">
-          Preparing your workspace
-        </h2>
-        <p className="text-xs text-text-muted">
-          A one-time full sync — attendance, grades, timetable and campus services.
-        </p>
-      </div>
-
-      <div className="w-full max-w-md space-y-3">
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface">
-          <div className="h-full rounded-full transition-[width] duration-500 ease-out" style={{ width: `${pct}%` }} />
+        <div className="space-y-2">
+          <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+            {title || "First sync"}
+            {" // one time"}
+          </p>
+          <h1 className="font-display text-[28px] sm:text-[36px] font-bold uppercase leading-[1.05] text-text-heading">
+            Getting your records
+          </h1>
+          <p className="text-sm text-text-muted">
+            Attendance, marks, timetable and campus services, straight from VTOP.
+          </p>
         </div>
 
-        <ul className="space-y-1.5 text-left">
-          {recent.map((line, idx) => (
-            <li
-              key={`${line.text}-${idx}`}
-              className="flex items-start gap-2 rounded-lg border border-border-ink bg-surface px-3 py-2 text-xs text-text-muted"
-            >
-              <LineIcon status={line.status} />
-              <span className="min-w-0 break-words">{line.text}</span>
-            </li>
-          ))}
-        </ul>
+        <div className="space-y-2">
+          <div className="flex items-end justify-between gap-3">
+            <span className="font-display text-[56px] font-bold leading-none text-hero tabular-nums">{pct}%</span>
+            <span className="pb-1 font-mono text-xs text-text-muted">{pct < 100 ? "Syncing" : "Finishing up"}</span>
+          </div>
+          <div className="h-4 w-full overflow-hidden rounded-[6px] border-2 border-border-ink bg-surface-secondary">
+            <div className="h-full bg-primary transition-[width] duration-500 ease-out" style={{ width: `${pct}%` }} />
+          </div>
+        </div>
+
+        {recent.length > 0 && (
+          <ul className="divide-y-2 divide-border-muted rounded-[10px] border-2 border-border-ink">
+            {recent.map((line, idx) => {
+              const b = stepBadge(line.status);
+              return (
+                <li key={`${line.text}-${idx}`} className="flex items-start justify-between gap-3 px-3 py-2.5">
+                  <span className="min-w-0 break-words text-sm text-text-primary">{line.text}</span>
+                  <span
+                    className={`shrink-0 rounded-[6px] border-2 border-border-ink px-1.5 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] ${b.cls}`}
+                  >
+                    {b.word}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+
+        <p className="font-mono text-xs text-text-muted">This happens once. Later syncs only fetch what changed.</p>
       </div>
     </div>
   );
 }
 
-function LineIcon({ status }: { status: SyncLogLine["status"] }) {
-  if (status === "success") return <Check size={12} className="mt-0.5 shrink-0 text-success-foreground" />;
-  if (status === "error") return <X size={12} className="mt-0.5 shrink-0 text-danger-foreground" />;
-  return <Loader2 size={12} className="mt-0.5 shrink-0 animate-spin text-primary" />;
-}
-
-/** The celebration beat between "enough data is here" and the onboarding steps. */
+/** Between "enough data is here" and the onboarding steps. */
 function WelcomeFace({ onDone }: { onDone: () => void }) {
   return (
-    <div className="flex animate-in fade-in zoom-in-95 duration-300 flex-col items-center justify-center gap-6 text-center">
-      <div className="relative">
-        <span aria-hidden="true" className="absolute inset-0 animate-ping rounded-full bg-secondary blur-xl" />
-        <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-border-ink bg-secondary">
-          <CheckCircle2 className="h-12 w-12 text-primary" strokeWidth={1.75} />
+    <div className="mx-auto w-full max-w-lg animate-in fade-in slide-in-from-bottom-2 duration-200">
+      <div className="brutal-card brutal-card-hero p-5 sm:p-7 space-y-6 text-left mr-1.5 mb-1.5">
+        <Brand />
+
+        <div className="space-y-2">
+          <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+            Signed in // synced
+          </p>
+          <h1 className="font-display text-[28px] sm:text-[36px] font-bold uppercase leading-[1.05] text-text-heading">
+            You&apos;re all set
+          </h1>
+          <p className="text-sm text-text-muted">
+            Your records are saved on this device. Three quick choices and your home screen is ready.
+          </p>
         </div>
+
+        <ul className="divide-y-2 divide-border-muted rounded-[10px] border-2 border-border-ink">
+          {["Attendance and marks", "Grades and timetable", "Campus services"].map((label) => (
+            <li key={label} className="flex items-center justify-between gap-3 px-3 py-2.5">
+              <span className="text-sm font-semibold text-text-heading">{label}</span>
+              <span className="rounded-[6px] border-2 border-border-ink bg-success-surface px-1.5 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-success-foreground">
+                Ready
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        <button
+          type="button"
+          onClick={onDone}
+          className="flex min-h-12 w-full items-center justify-center rounded-[10px] border-2 border-border-ink bg-primary px-5 font-mono text-[13px] font-semibold uppercase tracking-[0.06em] text-primary-foreground shadow-brutal-md brutal-press cursor-pointer"
+        >
+          Set up my home screen
+        </button>
       </div>
-
-      <div className="space-y-2">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary font-outfit">Sign-in complete</p>
-        <h2 className="text-3xl font-bold tracking-tight text-text-heading font-outfit sm:text-4xl">
-          Welcome to AmazeCC
-        </h2>
-        <p className="mx-auto max-w-md text-sm leading-relaxed text-text-muted">
-          Your records are on this device. Now a few quick choices and your workspace is ready.
-        </p>
-      </div>
-
-      <ul className="flex flex-wrap justify-center gap-2 text-xs font-bold text-text-secondary">
-        {["Attendance & marks", "Grades & timetable", "Campus services"].map((label) => (
-          <li
-            key={label}
-            className="flex items-center gap-1.5 rounded-[10px] border border-border-ink bg-surface px-3 py-1.5 min-h-9"
-          >
-            <Check size={11} className="text-success-foreground" />
-            {label}
-          </li>
-        ))}
-      </ul>
-
-      <button
-        type="button"
-        onClick={onDone}
-        className="flex w-full max-w-xs items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3.5 font-bold text-sm text-primary-foreground shadow-brutal-sm border-2 border-border-ink transition-all hover:brightness-110 cursor-pointer font-outfit tracking-wide"
-      >
-        Let&apos;s set up my workspace
-        <ArrowRight size={15} />
-      </button>
     </div>
   );
 }

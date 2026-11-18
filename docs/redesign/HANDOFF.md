@@ -47,6 +47,27 @@ Note: PR #181 (`anas-work` → `feat/anas`) was **merged** on 2026-11-10 and
 at `e995bfd8`. Main has since gained "modernize UI with Radix primitives"
 (`a3b0f611`), so others are also touching UI; rebase often.
 
+### Later direction from the user (2026-11-19) — these override the spec
+
+- **Dark mode = the user's reference mock** (obsidian teal #001E1D page,
+  mid-teal cards, bright teal edges, ochre hero cards/buttons, sage chips,
+  coral danger, hard black shadows): "vibrant but perfect for dark mode".
+  Neutral-black and warm-charcoal versions were tried and rejected (bland).
+  Light mode gets the same vibrancy (paper, teal ink, ochre + sage fills). Tokens in `src/app/brand.css` `.dark`; check with
+  `python3 scripts/redesign/contrast.py` after any colour change.
+- **Avoid icons everywhere.** Use words. Keep an icon only where there is no
+  room for text and the symbol is universal: close ×, back arrow, search,
+  dropdown chevron, the collapsed tablet rail. No decorative icon wells,
+  no icons before labels or facts.
+- Colours must not go "too light or too dark" for text and icon wells: keep
+  every pair passing contrast.py.
+- Fix list given so far: dropdowns (done: positioning, size, chevron),
+  onboarding (themed; full redesign pending), dark mode, theme switch
+  animation (done), animations (done), badges/buttons too small or too round
+  (done in shared tokens + Home), Modules sheet (done), sync popup (pill
+  done; welcome + first-sync screens pending), fresher hub shown to seniors
+  (fixed; hub page look pending), Home exam card (done).
+
 ## 3. Source material (all on the user's disk)
 
 | What                                | Where                                                                                                                                                                                                                                   | Status                  |
@@ -126,6 +147,11 @@ every screen first is not feasible, so the plan works top-down:
 - [ ] **P4 App shell** (bottom nav phone, sidebar md+, header) restyled + decluttered for phone / tablet / desktop.
 - [ ] **P5 Home / dashboard** on phone, tablet, desktop.
 - [ ] **P6 Attendance** list + detail.
+- [ ] **P6b User's list (2026-11-19)** — "We need to work on the dropdowns,
+  onboarding, dark modes color being so weirdly dark and clashing, animation
+  switch from dark to light and vice versa, animations, badges/buttons being
+  too small or too circular etc." Order taken: dark palette → theme-switch
+  animation → motion → badge/button size + shape → dropdowns → onboarding.
 - [ ] **P7+** remaining screens, one PR-sized group at a time; run the lint gate on each; update `frontend/design/*.md`.
 
 ## 8. How to see the app (verified working)
@@ -159,6 +185,15 @@ Seen in demo mode 2026-11-18 (`docs/redesign/screens/live-before-*.png`):
 - Most cards still use 1px borders and 24px radius (arbitrary `rounded-[24px]`).
 - Fresher accounts (demo is one) see a "Fresher Onboarding Hub" first.
 
+## 8c. Known bugs found during the redesign (also on amazecc.com)
+
+- **Demo data disappears after a reload.** Enter demo, reload the page: Home
+  shows "0 of 0 attended" and Attendance is an empty page. Without a reload
+  the demo shows 9 courses (79%). Likely the restored semester id (Fall
+  2026-27 from config) does not match the demo's `CH20252605`. The screenshot
+  script therefore runs with `NO_RELOAD=1` (it sets the onboarding flags
+  before clicking "Try the demo").
+
 ## 9. Test baseline on `redesign`
 
 `vitest`: **28 failures in 11 files** (oauth2, ffcsClassmates ×2, ffcsTab.render,
@@ -175,3 +210,5 @@ installed. Run `node_modules/.bin/lint-staged` by hand, then commit with
 - **2026-11-18** — Read old HANDOFF, brutalist skill, design docs; measured scope; got the decisions in §2; created branch `redesign` (frontend, from `origin/main` e995bfd8, no commits yet); found the logos + Design Directions; got the dev server + demo screenshots working; baseline screenshots in `.scratch/before/`.
 - **2026-11-18 (cont.)** — User: ignore Design Directions, Brutalist only, base = live app; fork-only rule. Captured amazecc.com (§8b). Commit `ccd0b78f` on `redesign`: P0 assets + P1 tokens. Moved this handoff + screenshot scripts into the repo; pushed `redesign` to `fork`.
   **Next step: P2** — remove the accent palette + card look (files in §6.5), then **P3** `src/lib/uiTokens.ts` (TILE → `border-2 border-[var(--border-ink)] rounded-[14px] shadow-brutal-md`, etc.) and primitives, then **P4** shell (`Dashboard.tsx` bg, sidebar, bottom nav, demo banner).
+- **2026-11-19** — Commits `402bf52f` and the next one: dark palette (several rounds, now the reference mock), theme-switch fix, short motion, OptionPicker rewrite (no top-left fly-in, content-sized, em chevron, phone sheet), BrandSheet for Modules (one column), sync pill, first-sync + welcome screens rebuilt (no icons, word badges), onboarding themed + emojis/icons removed, global "text inside a sage/ochre/primary fill takes the fill's ink" rule (brand.css), fresher hub only for first-years (`src/lib/fresher.ts`), Home exam card, StatTile `variant` (highlight = ochre hero), sidebar header + semester KPIs, text-only expanded sidebar and bottom nav (rail keeps icons).
+  **Next:** fresher hub page look (user screenshot: cluttered, pastel), onboarding steps layout (left column empty on desktop), sidebar footer/avatar ("photos"), search box/command palette, then Attendance (P6) and run `brandify.py` screen by screen (P7). Remember "avoid icons" + contrast.py.

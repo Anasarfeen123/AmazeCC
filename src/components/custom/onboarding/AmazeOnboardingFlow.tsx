@@ -412,10 +412,9 @@ export default function AmazeOnboardingFlow({
                     : "bg-surface-secondary border-border-ink text-text-muted hover:border-border-ink hover:text-text-secondary"
                 }`}
               >
-                <opt.icon className={`w-4 h-4 ${isSelected ? "text-primary" : "text-text-muted"}`} />
                 <div>
                   <p className="font-bold text-xs text-text-heading font-outfit">{opt.label}</p>
-                  <p className="text-[9.5px] text-text-muted">{opt.desc}</p>
+                  <p className="text-xs text-text-muted">{opt.desc}</p>
                 </div>
               </button>
             );
@@ -425,7 +424,6 @@ export default function AmazeOnboardingFlow({
         {/* College Bus Registration Toggle */}
         <div className="p-3 rounded-2xl bg-surface-secondary border border-border-ink flex items-center justify-between mt-1">
           <div className="flex items-center gap-2">
-            <Bus className="w-4 h-4 text-primary shrink-0" />
             <div>
               <p className="text-xs font-bold text-text-heading">College Bus User?</p>
               <p className="text-[9.5px] text-text-muted">Enable bus routes and stops</p>
@@ -440,7 +438,7 @@ export default function AmazeOnboardingFlow({
                 : "bg-surface border border-border-ink text-text-muted hover:text-text-secondary"
             }`}
           >
-            {temp.isDayscholarWithBus ? "Registered ✓" : "No"}
+            {temp.isDayscholarWithBus ? "Yes" : "No"}
           </button>
         </div>
       </div>
@@ -676,15 +674,14 @@ export default function AmazeOnboardingFlow({
   const renderNotificationsCard = () => (
     <div className="p-5 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-3 text-left">
       {[
-        { title: "Timetable Reminders", desc: "15 minutes before your class", icon: "⏰" },
-        { title: "Attendance Safeguard", desc: "Alert if attendance drops below 75%", icon: "🚨" },
-        { title: "Exam Seat & Venue Alerts", desc: "Live seating and room schedules", icon: "📝" },
+        { title: "Timetable Reminders", desc: "15 minutes before your class" },
+        { title: "Attendance Safeguard", desc: "Alert if attendance drops below 75%" },
+        { title: "Exam Seat & Venue Alerts", desc: "Live seating and room schedules" },
       ].map((perk, i) => (
         <div
           key={i}
           className="flex items-center gap-3 p-2.5 rounded-2xl bg-surface-secondary border border-border-ink"
         >
-          <span className="text-base">{perk.icon}</span>
           <div>
             <p className="text-xs font-bold text-text-heading">{perk.title}</p>
             <p className="text-xs text-text-muted">{perk.desc}</p>
@@ -733,15 +730,14 @@ export default function AmazeOnboardingFlow({
     return (
       <div className="p-5 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-3 text-left">
         {[
-          { title: "Full-Screen App", desc: "Opens like a native app, no browser chrome", icon: "📱" },
-          { title: "Works Offline", desc: "Your dashboard loads even on patchy campus wifi", icon: "📶" },
-          { title: "Push Notifications", desc: "Class alerts keep flowing outside the tab", icon: "🔔" },
+          { title: "Full-Screen App", desc: "Opens like a native app, no browser chrome" },
+          { title: "Works Offline", desc: "Your dashboard loads even on patchy campus wifi" },
+          { title: "Push Notifications", desc: "Class alerts keep flowing outside the tab" },
         ].map((perk, i) => (
           <div
             key={i}
             className="flex items-center gap-3 p-2.5 rounded-2xl bg-surface-secondary border border-border-ink"
           >
-            <span className="text-base">{perk.icon}</span>
             <div>
               <p className="text-xs font-bold text-text-heading">{perk.title}</p>
               <p className="text-xs text-text-muted">{perk.desc}</p>

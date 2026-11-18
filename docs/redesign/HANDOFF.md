@@ -55,10 +55,19 @@ at `e995bfd8`. Main has since gained "modernize UI with Radix primitives"
   Neutral-black and warm-charcoal versions were tried and rejected (bland).
   Light mode gets the same vibrancy (paper, teal ink, ochre + sage fills). Tokens in `src/app/brand.css` `.dark`; check with
   `python3 scripts/redesign/contrast.py` after any colour change.
-- **Avoid icons everywhere.** Use words. Keep an icon only where there is no
-  room for text and the symbol is universal: close ×, back arrow, search,
-  dropdown chevron, the collapsed tablet rail. No decorative icon wells,
-  no icons before labels or facts.
+- **Icons: fewer, not none.** No decorative icon wells, emojis, or icons in
+  front of facts in content. BUT navigation keeps icons next to labels
+  (user: "Add icons in sidebars and bottom bar, its all too text"): sidebar
+  items, bottom bar, rail, plus universal controls (close, back, search,
+  chevron, sync, theme).
+- **Reference mocks are the target** (user's images, 2026-11-19, light and
+  dark "ON-DUTY HOURS" screens): Space Mono bold titles/numbers, Space Mono
+  labels, cream cards with thick ink edge + big hard shadow, teal card with
+  ochre number, ochre card with ink text, sage chips. Fonts in layout.tsx /
+  brand.css (`--font-display`, `--font-mono`).
+- **Sidebar is a solid teal panel** (`.brand-sidebar` in brand.css redefines
+  the tokens inside it); active item ochre, group labels ochre, icons sage.
+- Shadows are 3/5/7px (user: make them bigger, they were hidden in dark).
 - Colours must not go "too light or too dark" for text and icon wells: keep
   every pair passing contrast.py.
 - Fix list given so far: dropdowns (done: positioning, size, chevron),
@@ -212,3 +221,4 @@ installed. Run `node_modules/.bin/lint-staged` by hand, then commit with
   **Next step: P2** — remove the accent palette + card look (files in §6.5), then **P3** `src/lib/uiTokens.ts` (TILE → `border-2 border-[var(--border-ink)] rounded-[14px] shadow-brutal-md`, etc.) and primitives, then **P4** shell (`Dashboard.tsx` bg, sidebar, bottom nav, demo banner).
 - **2026-11-19** — Commits `402bf52f` and the next one: dark palette (several rounds, now the reference mock), theme-switch fix, short motion, OptionPicker rewrite (no top-left fly-in, content-sized, em chevron, phone sheet), BrandSheet for Modules (one column), sync pill, first-sync + welcome screens rebuilt (no icons, word badges), onboarding themed + emojis/icons removed, global "text inside a sage/ochre/primary fill takes the fill's ink" rule (brand.css), fresher hub only for first-years (`src/lib/fresher.ts`), Home exam card, StatTile `variant` (highlight = ochre hero), sidebar header + semester KPIs, text-only expanded sidebar and bottom nav (rail keeps icons).
   **Next:** fresher hub page look (user screenshot: cluttered, pastel), onboarding steps layout (left column empty on desktop), sidebar footer/avatar ("photos"), search box/command palette, then Attendance (P6) and run `brandify.py` screen by screen (P7). Remember "avoid icons" + contrast.py.
+- **2026-11-19 (late)** — Fresher hub restyled (brand header, ochre documents card, doc list sorted to-do/submitted/not-needed with word badges, no icons/emoji); Space Mono for display + mono; bigger shadows; teal sidebar; nav icons restored. Next: uppercase display titles on cards like the mock, onboarding step layout, command palette/search, Attendance (P6), then brandify the rest (P7).

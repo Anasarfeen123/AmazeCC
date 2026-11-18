@@ -5,7 +5,7 @@ import IconUpdater from "../components/custom/IconUpdater";
 import ServiceWorkerRegistrar from "../components/custom/ServiceWorkerRegistrar";
 import BackgroundPrefetch from "../components/custom/BackgroundPrefetch";
 import type { Viewport, Metadata } from "next";
-import { Geist, Geist_Mono, DM_Sans, Space_Grotesk } from "next/font/google";
+import { Geist, Geist_Mono, DM_Sans, Space_Grotesk, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { buildContentSecurityPolicy } from "@/lib/csp";
 
@@ -23,6 +23,14 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-space-grotesk",
+});
+// The brand's mono face (titles, hero numbers, labels, metadata), matching the
+// user's reference mocks. Wired to --font-display / --font-mono in brand.css.
+const spaceMono = Space_Mono({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-space-mono",
 });
 const dmSans = DM_Sans({
   weight: "variable",
@@ -89,7 +97,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geist.className} ${geistMono.className} ${dmSans.className} ${spaceGrotesk.variable}`}
+      className={`${geist.className} ${geistMono.className} ${dmSans.className} ${spaceGrotesk.variable} ${spaceMono.variable}`}
     >
       <head>
         {/* Production only: Next.js dev mode needs eval for fast refresh. See lib/csp.ts. */}

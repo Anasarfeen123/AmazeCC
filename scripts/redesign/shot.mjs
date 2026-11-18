@@ -109,7 +109,7 @@ if (!process.env.NO_RELOAD) {
 }
 if (!process.env.ONBOARD)
   await evalJs(
-    `(() => { const b=[...document.querySelectorAll("button,a")].find(e=>/proceed to dashboard/i.test(e.textContent)); b&&b.click(); })()`,
+    `(() => { const b=[...document.querySelectorAll("button,a")].find(e=>/proceed to dashboard|go to home/i.test(e.textContent)); b&&b.click(); })()`,
   );
 await sleep(6000);
 if (path !== "/") {
@@ -123,13 +123,15 @@ console.log(
   (await evalJs("document.body.innerText")).slice(0, Number(process.env.TEXT_LEN || 150)).replace(/\n/g, " | "),
 );
 
-const SIZES = process.env.ONLY_PHONE
-  ? [["phone", 390, 844, true]]
-  : [
-      ["phone", 390, 844, true],
-      ["tablet", 820, 1180, true],
-      ["desktop", 1440, 900, false],
-    ];
+const SIZES = process.env.ONLY_DESKTOP
+  ? [["desktop", 1440, 900, false]]
+  : process.env.ONLY_PHONE
+    ? [["phone", 390, 844, true]]
+    : [
+        ["phone", 390, 844, true],
+        ["tablet", 820, 1180, true],
+        ["desktop", 1440, 900, false],
+      ];
 for (const [name, w, h, mobile] of SIZES) {
   await send("Emulation.setDeviceMetricsOverride", { width: w, height: h, deviceScaleFactor: 1, mobile });
   await sleep(2500);

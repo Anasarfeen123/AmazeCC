@@ -112,7 +112,10 @@ const MobileBottomNav = memo(function MobileBottomNav({
               : "border-transparent text-text-muted hover:text-text-primary"
           }`}
         >
-          <span className="font-mono text-[13px] font-semibold uppercase tracking-[0.06em] leading-none truncate max-w-full">
+          <span className="flex items-center justify-center [&_svg]:h-5 [&_svg]:w-5 [&_svg]:stroke-[2.2]" aria-hidden>
+            {item.icon}
+          </span>
+          <span className="font-mono text-xs font-bold uppercase tracking-[0.04em] leading-none truncate max-w-full">
             {item.label}
           </span>
         </button>
@@ -125,8 +128,8 @@ const navButtonBase = "";
 
 /** Brand overrides for AmazeUI's SidebarItem / SidebarGroupLabel (twMerge wins). */
 const SIDEBAR_ITEM_BRAND =
-  "min-h-11 rounded-[10px] text-text-primary [&>div:first-child:empty]:hidden data-[active=true]:border-2 data-[active=true]:border-border-ink data-[active=true]:bg-secondary data-[active=true]:text-secondary-foreground data-[active=true]:shadow-brutal-sm [&[data-active=true]_svg]:text-secondary-foreground";
-const SIDEBAR_GROUP_LABEL_BRAND = "font-mono text-xs font-semibold tracking-[0.06em] text-text-muted";
+  "min-h-11 rounded-[10px] text-text-primary [&>div:first-child]:text-text-muted [&[data-active=true]>div:first-child]:text-highlight-foreground [&>div:first-child:empty]:hidden data-[active=true]:border-2 data-[active=true]:border-border-ink data-[active=true]:bg-highlight data-[active=true]:text-highlight-foreground data-[active=true]:shadow-brutal-sm [&[data-active=true]_svg]:text-highlight-foreground hover:bg-surface-hover";
+const SIDEBAR_GROUP_LABEL_BRAND = "font-mono text-xs font-bold tracking-[0.06em] text-highlight";
 
 export default function NavigationTabs({
   activeTab,
@@ -485,7 +488,7 @@ export default function NavigationTabs({
 
   const sidebarActiveStyles =
     "bg-secondary text-secondary-foreground border-2 border-border-ink font-semibold shadow-brutal-sm";
-  const railActiveStyles = "bg-secondary text-secondary-foreground border-2 border-border-ink shadow-brutal-sm";
+  const railActiveStyles = "bg-highlight text-highlight-foreground border-2 border-border-ink shadow-brutal-sm";
 
   const handleThemeChange = (selectedTheme: string, e?: React.MouseEvent<HTMLElement>) => {
     if (theme === selectedTheme) return;
@@ -976,7 +979,7 @@ export default function NavigationTabs({
         ref={sidebarRef}
         data-sidebar-root="true"
         aria-label="Primary navigation"
-        className="top-0 left-0 h-[100dvh] rounded-none border-0 border-r-2 border-border-ink shadow-none"
+        className="brand-sidebar top-0 left-0 h-[100dvh] rounded-none border-0 border-r-2 border-border-ink shadow-none"
         isOpen={isOpen}
         onOpenChange={(val) => persistSidebarState(!val)}
       >
@@ -1203,6 +1206,7 @@ export default function NavigationTabs({
                           {pinnedItems.map((item) => (
                             <SidebarItem
                               key={item.id}
+                              icon={<item.icon className="h-[18px] w-[18px] stroke-[2.2]" aria-hidden="true" />}
                               label={item.label}
                               isActive={item.isActive}
                               aria-current={item.isActive ? "page" : undefined}
@@ -1223,6 +1227,7 @@ export default function NavigationTabs({
                           {group.items.map((item) => (
                             <SidebarItem
                               key={item.id}
+                              icon={<item.icon className="h-[18px] w-[18px] stroke-[2.2]" aria-hidden="true" />}
                               label={item.label}
                               isActive={item.isActive}
                               aria-current={item.isActive ? "page" : undefined}
@@ -1255,6 +1260,7 @@ export default function NavigationTabs({
                         {academicsItems.map((item) => (
                           <SidebarItem
                             key={item.id}
+                            icon={<item.icon className="h-[18px] w-[18px] stroke-[2.2]" aria-hidden="true" />}
                             label={item.label}
                             isActive={item.isActive}
                             aria-current={item.isActive ? "page" : undefined}
@@ -1283,6 +1289,7 @@ export default function NavigationTabs({
                         {toolsSubItems.map((item) => (
                           <SidebarItem
                             key={item.id}
+                            icon={<item.icon className="h-[18px] w-[18px] stroke-[2.2]" aria-hidden="true" />}
                             label={item.label}
                             isActive={item.isActive}
                             aria-current={item.isActive ? "page" : undefined}
@@ -1311,6 +1318,7 @@ export default function NavigationTabs({
                         {hostelSubItems.map((item) => (
                           <SidebarItem
                             key={item.id}
+                            icon={<item.icon className="h-[18px] w-[18px] stroke-[2.2]" aria-hidden="true" />}
                             label={item.label}
                             isActive={item.isActive}
                             aria-current={item.isActive ? "page" : undefined}

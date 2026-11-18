@@ -23,22 +23,26 @@
 @theme {
   /* Display face for titles and hero numbers. `font-outfit` was the old
      heading alias (DM Sans) and is used on ~470 headings, so it follows. */
-  --font-display: var(--font-space-grotesk), var(--font-geist), sans-serif;
-  --font-outfit: var(--font-space-grotesk), var(--font-geist), sans-serif;
+  /* Space Mono bold for titles/numbers and Space Mono for labels, as in the
+     user's reference mocks (2026-11-19). Space Grotesk stays loaded as the
+     fallback for glyphs Space Mono lacks. */
+  --font-display: var(--font-space-mono), var(--font-space-grotesk), ui-monospace, monospace;
+  --font-outfit: var(--font-space-mono), var(--font-space-grotesk), ui-monospace, monospace;
+  --font-mono: var(--font-space-mono), var(--font-geist-mono), ui-monospace, monospace;
 
   /* Hard shadows. Bottom-right, no blur, ink coloured. Every existing
      shadow-* class becomes one of the three spec steps. */
-  --shadow-2xs: 2px 2px 0 0 var(--shadow-ink);
-  --shadow-xs: 2px 2px 0 0 var(--shadow-ink);
-  --shadow-sm: 2px 2px 0 0 var(--shadow-ink);
-  --shadow: 2px 2px 0 0 var(--shadow-ink);
-  --shadow-md: 4px 4px 0 0 var(--shadow-ink);
-  --shadow-lg: 4px 4px 0 0 var(--shadow-ink);
-  --shadow-xl: 6px 6px 0 0 var(--shadow-ink);
-  --shadow-2xl: 6px 6px 0 0 var(--shadow-ink);
-  --shadow-brutal-sm: 2px 2px 0 0 var(--shadow-ink);
-  --shadow-brutal-md: 4px 4px 0 0 var(--shadow-ink);
-  --shadow-brutal-lg: 6px 6px 0 0 var(--shadow-ink);
+  --shadow-2xs: 3px 3px 0 0 var(--shadow-ink);
+  --shadow-xs: 3px 3px 0 0 var(--shadow-ink);
+  --shadow-sm: 3px 3px 0 0 var(--shadow-ink);
+  --shadow: 3px 3px 0 0 var(--shadow-ink);
+  --shadow-md: 5px 5px 0 0 var(--shadow-ink);
+  --shadow-lg: 5px 5px 0 0 var(--shadow-ink);
+  --shadow-xl: 7px 7px 0 0 var(--shadow-ink);
+  --shadow-2xl: 7px 7px 0 0 var(--shadow-ink);
+  --shadow-brutal-sm: 3px 3px 0 0 var(--shadow-ink);
+  --shadow-brutal-md: 5px 5px 0 0 var(--shadow-ink);
+  --shadow-brutal-lg: 7px 7px 0 0 var(--shadow-ink);
 
   /* Spec radii: badge 6, control 10, card 14, dialog 20. The big Tailwind
      steps the screens use for cards collapse onto the card radius. */
@@ -224,7 +228,9 @@
   --text-disabled: #5a8279;
 
   --border-ink: #3f8f84;
-  --shadow-ink: #000a0a;
+  /* Near-black, as in the reference mock: on the obsidian-teal page it reads
+     as a clear offset now that the steps are 3/5/7px. */
+  --shadow-ink: #000807;
   --border-muted: color-mix(in oklab, #3f8f84 45%, transparent);
   --border-strong: #3f8f84;
 
@@ -284,6 +290,44 @@
   transition: none !important;
 }
 
+/* Sidebar = a solid brand-teal panel (user: "add something of colours in
+   sidebars, it looks barren"). Tokens are redefined inside it, so every
+   card, field, chip and item in the sidebar follows without per-element
+   classes. Active item = ochre (see NavigationTabs SIDEBAR_ITEM_BRAND). */
+.brand-sidebar {
+  --background: #004643;
+  --sidebar: #004643;
+  --surface: #00534f;
+  --surface-raised: #00534f;
+  --surface-secondary: #003a37;
+  --surface-tertiary: #002f2d;
+  --surface-hover: #005e59;
+  --text-heading: #fffdf8;
+  --text-primary: #f7f1e6;
+  --text-secondary: #e3eee9;
+  --text-muted: #abd1c6;
+  --text-disabled: #7fa79c;
+  --border-ink: #001e1d;
+  --border-muted: color-mix(in oklab, #001e1d 45%, transparent);
+  --border-strong: #001e1d;
+  --shadow-ink: #001e1d;
+  --sidebar-foreground: #f7f1e6;
+  --sidebar-border: #001e1d;
+  --sidebar-accent: #005e59;
+  --sidebar-accent-foreground: #fffdf8;
+  --info: #f9bc60;
+  background-color: #004643;
+  color: #f7f1e6;
+}
+.dark .brand-sidebar {
+  /* Same vibrant teal panel as light (user: dark sidebar looked barren);
+     against the obsidian page it is the colour anchor of the layout. Only
+     the shadow goes darker so it still reads on the deeper page. */
+  --shadow-ink: #000807;
+  --surface-secondary: #00332f;
+  --surface-tertiary: #002a27;
+}
+
 /* Text inside a brand fill takes that fill's ink. Selected tiles and chips
    get a sage/ochre/primary background, but their children were written with
    page text tokens (light in dark mode), which made them unreadable. These
@@ -330,7 +374,7 @@
     color: var(--text-primary);
     border: 2px solid var(--border-ink);
     border-radius: 14px;
-    box-shadow: 4px 4px 0 0 var(--shadow-ink);
+    box-shadow: 5px 5px 0 0 var(--shadow-ink);
   }
 
   /* Hero card / dialog edge. */
@@ -358,12 +402,12 @@
   @media (hover: hover) {
     .brutal-press:hover {
       transform: translate(-1px, -1px);
-      box-shadow: 6px 6px 0 0 var(--shadow-ink);
+      box-shadow: 7px 7px 0 0 var(--shadow-ink);
     }
   }
   .brutal-press:active {
-    transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0 0 var(--shadow-ink);
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 0 var(--shadow-ink);
   }
   @media (prefers-reduced-motion: reduce) {
     .brutal-press:hover,

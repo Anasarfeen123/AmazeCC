@@ -54,14 +54,6 @@ const INTERFACES: Array<{
   },
 ];
 
-const COLOR_PALETTES = [
-  { id: "default", label: "Ocean", color: "#0ea5e9" },
-  { id: "neonPink", label: "Pink", color: "#ff2bd6" },
-  { id: "forest", label: "Forest", color: "#059669" },
-  { id: "rose", label: "Rose", color: "#e11d48" },
-  { id: "amber", label: "Amber", color: "#d97706" },
-];
-
 const AVAILABLE_NAV_TABS: Array<{ id: string; label: string; icon: any; desc: string }> = [
   { id: "attendance", label: "Attendance", icon: CalendarCheck, desc: "Timetable & bunk margin" },
   { id: "academics", label: "Academics", icon: GraduationCap, desc: "Marks, CGPA & curriculum" },
@@ -593,33 +585,6 @@ export default function AmazeOnboardingFlow({
                 }`}
               >
                 {pct}% Goal
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Accent Color Swatches */}
-      <div className="space-y-1.5">
-        <label className="text-[10px] font-black uppercase tracking-wider text-zinc-400 font-outfit">
-          Color Accent
-        </label>
-        <div className="flex items-center gap-2 justify-between">
-          {COLOR_PALETTES.map((p) => {
-            const isSelected = temp.colorPalette === p.id || (!temp.colorPalette && p.id === "default");
-            return (
-              <button
-                key={p.id}
-                type="button"
-                onClick={() => update("colorPalette", p.id)}
-                className={`flex-1 py-2 px-1 rounded-xl border flex flex-col items-center gap-1.5 transition-all cursor-pointer ${
-                  isSelected
-                    ? "border-white bg-zinc-800 shadow-xs"
-                    : "border-zinc-800/80 bg-zinc-950/40 hover:border-zinc-700"
-                }`}
-              >
-                <span className="w-4 h-4 rounded-full shadow-xs" style={{ backgroundColor: p.color }} />
-                <span className="text-[9px] font-bold text-zinc-400">{p.label}</span>
               </button>
             );
           })}

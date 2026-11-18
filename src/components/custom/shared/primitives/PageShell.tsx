@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { BackButton } from "@amazecontinuityprojects/amazeui";
+import BrandBackButton from "./BrandBackButton";
 import TitleBlock from "./TitleBlock";
 import LastSynced from "../LastSynced";
 
@@ -42,6 +42,8 @@ export interface PageShellProps {
    * the cluster flush right.
    */
   onBack?: () => void;
+  /** Where the back button goes, shown on it ("Academics"). Defaults to "Back". */
+  backLabel?: string;
   /** Custom leading element (e.g. AmazeCC Logo) to render instead of BackButton. */
   leading?: ReactNode;
   layout?: PageHeaderLayout;
@@ -73,6 +75,7 @@ export default function PageShell({
   subtitle,
   actions,
   onBack,
+  backLabel,
   leading,
   layout = "actions-above",
   wrap = false,
@@ -95,7 +98,12 @@ export default function PageShell({
 
   // Back is always far left, the action cluster always far right and
   // shrink-0, so a long title can truncate but never squeeze a button.
-  const back = leading !== undefined ? leading : onBack ? <BackButton onClick={onBack} className="self-start" /> : null;
+  const back =
+    leading !== undefined ? (
+      leading
+    ) : onBack ? (
+      <BrandBackButton onClick={onBack} label={backLabel} className="self-start" />
+    ) : null;
   const cluster = actions ? <div className={ACTION_CLUSTER}>{actions}</div> : null;
 
   if (layout === "actions-above") {

@@ -19,8 +19,8 @@ const TRACK = {
 } as const;
 
 const THUMB = {
-  md: "h-5 w-5",
-  lg: "h-7 w-7",
+  md: "h-4 w-4",
+  lg: "h-6 w-6",
 } as const;
 
 const THUMB_ON = {
@@ -28,9 +28,9 @@ const THUMB_ON = {
   lg: "translate-x-6",
 } as const;
 
-/** Off = zinc, on = the app's indigo accent (same as `SEG_ACTIVE`). */
-const TRACK_OFF = "bg-border-muted dark:bg-surface-hover";
-const TRACK_ON = "bg-indigo-500";
+/** Brand: 2px ink track; off = paper, on = primary (teal light / ochre dark). */
+const TRACK_OFF = "bg-surface-secondary";
+const TRACK_ON = "bg-primary";
 
 export interface SwitchProps {
   checked: boolean;
@@ -67,12 +67,12 @@ export function SwitchTrack({
   return (
     <span
       aria-hidden
-      className={`relative block shrink-0 rounded-full transition-colors duration-200 ${
+      className={`relative block shrink-0 rounded-full border-2 border-border-ink transition-colors duration-200 ${
         disabled ? "opacity-50" : ""
       } ${TRACK[size]} ${checked ? TRACK_ON : TRACK_OFF} ${className}`.trim()}
     >
       <span
-        className={`absolute top-0.5 left-0.5 rounded-full bg-white shadow-sm ring-0 transition-transform duration-200 ${
+        className={`absolute top-0.5 left-0.5 rounded-full bg-surface border-2 border-border-ink transition-transform duration-200 ${
           THUMB[size]
         } ${checked ? THUMB_ON[size] : "translate-x-0"}`}
       />
@@ -96,13 +96,13 @@ export default function Switch({
       aria-label={label}
       disabled={disabled}
       onClick={() => onCheckedChange(!checked)}
-      className={`relative shrink-0 rounded-full transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:opacity-50 disabled:cursor-not-allowed ${
+      className={`relative shrink-0 rounded-full transition-colors duration-200 cursor-pointer border-2 border-border-ink disabled:opacity-50 disabled:cursor-not-allowed ${
         TRACK[size]
       } ${checked ? TRACK_ON : TRACK_OFF} ${className}`.trim()}
     >
       <span
         aria-hidden
-        className={`absolute top-0.5 left-0.5 rounded-full bg-white shadow-sm ring-0 transition-transform duration-200 ${
+        className={`absolute top-0.5 left-0.5 rounded-full bg-surface border-2 border-border-ink transition-transform duration-200 ${
           THUMB[size]
         } ${checked ? THUMB_ON[size] : "translate-x-0"}`}
       />

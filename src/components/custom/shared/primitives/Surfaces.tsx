@@ -27,13 +27,11 @@ export function SectionHeader({
   return (
     <div className={`flex items-center justify-between gap-2 px-1 ${className}`.trim()}>
       <div className="flex items-center gap-2 min-w-0">
-        {leading ?? (Icon ? <Icon className="w-4 h-4 text-indigo-500 shrink-0" /> : null)}
-        <h2 className="text-sm font-black text-text-heading font-outfit tracking-tight truncate">
+        {leading ?? (Icon ? <Icon className="w-4 h-4 text-primary shrink-0" aria-hidden /> : null)}
+        <h2 className="font-mono text-[13px] font-semibold uppercase tracking-[0.06em] text-text-heading truncate">
           {title}
         </h2>
-        {typeof count === "number" ? (
-          <span className={`${SECTION_CHIP} shrink-0`}>{count}</span>
-        ) : null}
+        {typeof count === "number" ? <span className={`${SECTION_CHIP} shrink-0`}>{count}</span> : null}
       </div>
       {right ? <div className="flex items-center gap-2 shrink-0">{right}</div> : null}
     </div>
@@ -81,20 +79,17 @@ export function StatTile({
 }) {
   // "neutral"/"default" means "no tint" — plain heading ink rather than a
   // toned-down grey, so an uncoloured tile does not look disabled.
-  const valueTone =
-    !tone || tone === "neutral" || tone === "default"
-      ? "text-zinc-900 dark:text-white"
-      : TONE_TEXT[tone] ?? "text-zinc-900 dark:text-white";
+  const valueTone = !tone || tone === "neutral" || tone === "default" ? "text-hero" : (TONE_TEXT[tone] ?? "text-hero");
 
   return (
     <div className={`${TILE} ${height} ${className}`.trim()}>
       <div className="flex items-center justify-between gap-1">
-        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-outfit truncate">
+        <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted truncate">
           {label}
         </span>
         {badge ? (
           <span
-            className={`text-[9px] sm:text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md border shrink-0 ${
+            className={`font-mono text-xs font-semibold uppercase tracking-[0.06em] px-1.5 py-0.5 rounded-[6px] border-2 shrink-0 ${
               TONE_BADGE[tone] ?? TONE_BADGE.zinc
             }`}
           >
@@ -108,7 +103,7 @@ export function StatTile({
       <div className="my-auto min-w-0">
         <p
           data-private
-          className={`text-2xl sm:text-3xl font-black font-outfit tracking-tight leading-tight truncate block ${valueTone}`}
+          className={`font-display text-[32px] sm:text-[40px] font-bold tracking-tight leading-none truncate block ${valueTone}`}
         >
           {value}
         </p>
@@ -116,9 +111,7 @@ export function StatTile({
 
       {sub ? (
         <div className="flex items-center justify-between gap-2 min-w-0">
-          <div className="text-[10.5px] sm:text-xs text-text-secondary dark:text-text-muted font-medium truncate">
-            {sub}
-          </div>
+          <div className="font-mono text-xs text-text-muted truncate">{sub}</div>
         </div>
       ) : null}
     </div>
@@ -126,20 +119,12 @@ export function StatTile({
 }
 
 /** Grouped list container — the workhorse for "N rows that look like one card". */
-export function ListShell({
-  className = "",
-  children,
-}: {
-  className?: string;
-  children: ReactNode;
-}) {
+export function ListShell({ className = "", children }: { className?: string; children: ReactNode }) {
   return <div className={`${LIST_SHELL} ${className}`.trim()}>{children}</div>;
 }
 
-const ROW_TITLE =
-  "font-bold text-sm text-text-heading truncate font-outfit leading-tight";
-const ROW_SUBTITLE_BASE =
-  "text-[11px] text-text-secondary dark:text-text-muted font-medium mt-0.5";
+const ROW_TITLE = "font-bold text-sm text-text-heading truncate font-outfit leading-tight";
+const ROW_SUBTITLE_BASE = "text-[11px] text-text-secondary dark:text-text-muted font-medium mt-0.5";
 const ROW_SUBTITLE = `${ROW_SUBTITLE_BASE} truncate`;
 const ROW_SUBTITLE_WRAP = `${ROW_SUBTITLE_BASE} whitespace-normal break-words`;
 
@@ -179,9 +164,7 @@ export function ListRowText({
         </Tag>
         {right ? <div className="flex items-center gap-2 shrink-0">{right}</div> : null}
       </div>
-      {subtitle ? (
-        <p className={wrapSubtitle ? ROW_SUBTITLE_WRAP : ROW_SUBTITLE}>{subtitle}</p>
-      ) : null}
+      {subtitle ? <p className={wrapSubtitle ? ROW_SUBTITLE_WRAP : ROW_SUBTITLE}>{subtitle}</p> : null}
     </div>
   );
 }
@@ -210,7 +193,7 @@ export function MiniBar({
 }) {
   return (
     <div
-      className={`w-full h-1.5 rounded-full bg-surface-tertiary dark:bg-surface-secondary overflow-hidden ${className}`.trim()}
+      className={`w-full h-2.5 rounded-full border-2 border-border-ink bg-surface-secondary overflow-hidden ${className}`.trim()}
     >
       <div
         className={`h-full rounded-full transition-all ${tone}`}
@@ -239,15 +222,11 @@ export function KeyValue({
   className?: string;
 }) {
   return (
-    <div
-      className={`p-3 rounded-2xl bg-surface-secondary dark:bg-background/50 border border-border-muted dark:border-border ${className}`.trim()}
-    >
-      <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block mb-0.5">
+    <div className={`p-3 rounded-[10px] bg-surface-secondary border-2 border-border-ink ${className}`.trim()}>
+      <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted block mb-0.5">
         {label}
       </span>
-      <span className={`font-extrabold text-text-heading ${valueClassName}`.trim()}>
-        {value}
-      </span>
+      <span className={`font-bold text-text-heading ${valueClassName}`.trim()}>{value}</span>
     </div>
   );
 }

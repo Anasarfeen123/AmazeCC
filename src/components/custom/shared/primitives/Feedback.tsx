@@ -30,14 +30,10 @@ export function ToneBadge({
   className?: string;
 }) {
   const sizing =
-    size === "sm"
-      ? "text-[9px] px-1.5 py-0.5"
-      : size === "lg"
-        ? "text-xs px-3 py-2 rounded-xl"
-        : "text-[9px] sm:text-[10px] px-2 py-0.5";
+    size === "sm" ? "text-xs px-1.5 py-0.5" : size === "lg" ? "text-[13px] px-3 py-2" : "text-xs px-2 py-0.5";
   return (
     <span
-      className={`${sizing} inline-flex items-center gap-1.5 font-extrabold uppercase rounded-md border shrink-0 ${
+      className={`${sizing} inline-flex items-center gap-1.5 font-mono font-semibold uppercase tracking-[0.06em] rounded-[6px] border-2 shrink-0 ${
         TONE_BADGE[tone] ?? TONE_BADGE.zinc
       } ${className}`.trim()}
     >
@@ -92,10 +88,10 @@ export function DotPill({
   size?: "sm" | "md";
   className?: string;
 }) {
-  const sizing = size === "sm" ? "text-[9px] px-1.5 py-0.5" : "text-[10px] sm:text-[11px] px-2 py-0.5";
+  const sizing = size === "sm" ? "text-xs px-1.5 py-0.5" : "text-[13px] px-2 py-0.5";
   return (
     <span
-      className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border font-bold uppercase tracking-wide whitespace-nowrap ${
+      className={`inline-flex shrink-0 items-center gap-1.5 rounded-[6px] border-2 font-mono font-semibold uppercase tracking-[0.06em] whitespace-nowrap ${
         TONE_BADGE[tone] ?? TONE_BADGE.zinc
       } ${sizing} ${className}`.trim()}
     >
@@ -121,7 +117,7 @@ export function ToneLegend({
   if (!items.length) return null;
   return (
     <div
-      className={`flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[11px] font-bold text-text-secondary dark:text-text-muted ${className}`.trim()}
+      className={`flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted ${className}`.trim()}
     >
       {items.map((item) => (
         <span key={item.label as string} className="inline-flex items-center gap-1.5">
@@ -217,32 +213,30 @@ export function EmptyPanel({
     return (
       <div className={`${EMPTY_STATE} ${className}`.trim()}>
         {icon}
-        <p className="text-xs font-bold text-text-secondary dark:text-text-muted mt-2">{title}</p>
-        {description ? (
-          <p className="text-[11px] text-text-muted dark:text-text-secondary mt-1">{description}</p>
-        ) : null}
+        <p className="text-sm font-bold text-text-heading mt-2">{title}</p>
+        {description ? <p className="text-sm text-text-muted mt-1">{description}</p> : null}
         {action ? <div className="mt-3 flex justify-center">{action}</div> : null}
       </div>
     );
   }
 
   const iconTones: Record<string, string> = {
-    emerald: "bg-emerald-500/10 text-emerald-500",
-    amber: "bg-amber-500/10 text-amber-500",
-    red: "bg-red-500/10 text-red-500",
-    indigo: "bg-indigo-500/10 text-indigo-500",
-    violet: "bg-violet-500/10 text-violet-500",
-    sky: "bg-sky-500/10 text-sky-500",
-    zinc: "bg-surface-secondary text-text-secondary",
+    emerald: "bg-success-surface text-success-foreground",
+    amber: "bg-highlight text-highlight-foreground",
+    red: "bg-danger-surface text-danger-foreground",
+    indigo: "bg-secondary text-secondary-foreground",
+    violet: "bg-secondary text-secondary-foreground",
+    sky: "bg-secondary text-secondary-foreground",
+    zinc: "bg-surface-secondary text-text-primary",
   };
 
   return (
     <div
-      className={`p-10 rounded-[32px] card-surface border border-border-strong dark:border-border text-center space-y-4 shadow-2xs ${className}`.trim()}
+      className={`p-8 sm:p-10 rounded-[14px] card-surface border-2 border-border-ink text-center space-y-4 shadow-brutal-md ${className}`.trim()}
     >
       {icon ? (
         <div
-          className={`w-14 h-14 rounded-2xl flex items-center justify-center mx-auto ${
+          className={`w-14 h-14 rounded-[10px] border-2 border-border-ink flex items-center justify-center mx-auto ${
             iconTones[tone] ?? iconTones.indigo
           }`}
         >
@@ -250,12 +244,8 @@ export function EmptyPanel({
         </div>
       ) : null}
       <div>
-        <h3 className="font-black text-base text-text-heading font-outfit">{title}</h3>
-        {description ? (
-          <p className="text-xs text-text-secondary dark:text-text-muted mt-1 max-w-sm mx-auto font-medium">
-            {description}
-          </p>
-        ) : null}
+        <h3 className="font-display text-lg font-bold text-text-heading">{title}</h3>
+        {description ? <p className="text-sm text-text-muted mt-1 max-w-sm mx-auto">{description}</p> : null}
       </div>
       {action ? <div className="flex justify-center">{action}</div> : null}
     </div>

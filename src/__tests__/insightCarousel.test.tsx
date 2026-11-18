@@ -23,13 +23,7 @@ const slides: InsightSlide[] = [
   { id: "c", label: "Third", value: "33%" },
 ];
 
-function Harness({
-  items = slides,
-  onClick,
-}: {
-  items?: InsightSlide[];
-  onClick?: (id: string) => void;
-}) {
+function Harness({ items = slides, onClick }: { items?: InsightSlide[]; onClick?: (id: string) => void }) {
   const carousel = useCarousel(items.length, 0);
   return (
     <InsightCarousel
@@ -47,12 +41,7 @@ function tile(container: HTMLElement) {
 }
 
 /** A drag: down at (x,y), two moves, up at (x2,y2). */
-function drag(
-  container: HTMLElement,
-  from: [number, number],
-  to: [number, number],
-  pointerType = "touch"
-) {
+function drag(container: HTMLElement, from: [number, number], to: [number, number], pointerType = "touch") {
   const node = tile(container);
   fireEvent.pointerDown(node, { pointerId: 1, pointerType, clientX: from[0], clientY: from[1] });
   // Two moves, so the axis check sees travel before it commits.
@@ -66,7 +55,7 @@ function drag(
   fireEvent.pointerUp(node, { pointerId: 1, pointerType, clientX: to[0], clientY: to[1] });
 }
 
-const shown = () => (screen.getByText(/^\d+%$/)?.textContent ?? "");
+const shown = () => screen.getByText(/^\d+%$/)?.textContent ?? "";
 
 describe("carousel swipe", () => {
   it("advances on a left swipe and goes back on a right swipe", () => {
@@ -217,15 +206,9 @@ describe("carousel swipe", () => {
 
     expect(screen.getByText("Second")).toBeDefined();
     expect(shown()).toBe("22%");
-    expect(
-      screen.getByRole("button", { name: "Show Second" }).className
-    ).toContain("w-3");
-    expect(
-      screen.getByRole("button", { name: "Show Second" }).className
-    ).not.toContain("transition-all");
-    expect(
-      screen.getByRole("button", { name: "Show First" }).className
-    ).toContain("w-1.5");
+    expect(screen.getByRole("button", { name: "Show Second" }).className).toContain("w-4");
+    expect(screen.getByRole("button", { name: "Show Second" }).className).not.toContain("transition-all");
+    expect(screen.getByRole("button", { name: "Show First" }).className).toContain("w-1.5");
   });
 
   it("claims the horizontal axis and leaves vertical panning to the page", () => {

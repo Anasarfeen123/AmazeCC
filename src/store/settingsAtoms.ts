@@ -15,19 +15,19 @@ export type Settings = {
   blurGrades?: boolean;
   /** Blur grades, attendance, marks and fees app-wide (screen sharing, showing your phone). */
   privacyMode?: boolean;
+  /**
+   * @deprecated Removed with the brand redesign (one look, light/dark only).
+   * Kept in the type so settings and backups saved before it still parse;
+   * nothing reads them.
+   */
   colorPalette?: string;
+  /** @deprecated See `colorPalette`. */
   customPalette?: {
     accent: string;
     background: string;
     surface: string;
   };
-  /**
-   * The card interior the surfaces carry: `false` (default) paints every card
-   * with the grade-insights gray (the surface at full strength, via the
-   * `.card-surface` class), `true` restores the classic translucent zinc glass
-   * with its backdrop blur. Purely a "look" pref, so it defaults to the new
-   * gray.
-   */
+  /** @deprecated See `colorPalette`. The glass card look is gone. */
   cardSurfaceZinc?: boolean;
   hideHomeSearchBar?: boolean;
   reloadAllData?: boolean;
@@ -109,13 +109,6 @@ export const defaultSettings: Settings = {
   showProfilePhoto: true,
   blurGrades: false,
   privacyMode: false,
-  colorPalette: "default",
-  cardSurfaceZinc: false,
-  customPalette: {
-    accent: "#0ea5e9",
-    background: "#f8fafc",
-    surface: "#ffffff",
-  },
   hideHomeSearchBar: false,
   reloadAllData: false,
   isSidebarCollapsed: false,

@@ -132,7 +132,7 @@ export const SECTIONS: SectionConfig[] = [
   {
     id: "preferences",
     label: "Appearance & Theme",
-    subtitle: "Theme modes, color palettes, dashboard layouts, and privacy",
+    subtitle: "Light or dark, dashboard layout and privacy",
     icon: Palette,
     iconBg: "bg-purple-500/10 dark:bg-purple-500/20",
     iconColor: "text-purple-600 dark:text-purple-400",
@@ -185,15 +185,6 @@ export const SECTIONS: SectionConfig[] = [
     iconBg: "bg-cyan-500/10 dark:bg-cyan-500/20",
     iconColor: "text-cyan-600 dark:text-cyan-400",
   },
-];
-
-const COLOR_PALETTES = [
-  { id: "default", label: "Default", swatches: ["#0ea5e9", "#ffffff", "#f8fafc"] },
-  { id: "neonPink", label: "Neon Pink", swatches: ["#ff2bd6", "#ffffff", "#fff7fd"] },
-  { id: "forest", label: "Forest", swatches: ["#059669", "#ffffff", "#f7fee7"] },
-  { id: "rose", label: "Rose", swatches: ["#e11d48", "#ffffff", "#fff1f2"] },
-  { id: "amber", label: "Amber", swatches: ["#d97706", "#ffffff", "#fffbeb"] },
-  { id: "custom", label: "Custom", swatches: ["#0ea5e9", "#ffffff", "#f8fafc"] },
 ];
 
 /**
@@ -376,12 +367,6 @@ export default function ProfilePage({
   // at a dark-mode user on every first paint.
   const { theme, resolvedTheme, setTheme } = useTheme();
 
-  const activePalette = settings?.colorPalette === "ocean" ? "neonPink" : settings?.colorPalette || "default";
-  const customPalette = settings?.customPalette || {
-    accent: "#0ea5e9",
-    background: "#f8fafc",
-    surface: "#ffffff",
-  };
   const displayProfileImage = settings?.showProfilePhoto || mode === "info";
 
   const updateSetting = (key: string, value: any) => {
@@ -417,14 +402,6 @@ export default function ProfilePage({
         syncCourseCompletion: enable,
         syncProfileData: enable,
       };
-      return next;
-    });
-  };
-
-  const updateCustomPalette = (key: "accent" | "background" | "surface", value: string) => {
-    const nextPalette = { ...customPalette, [key]: value };
-    setSettings((prev: any) => {
-      const next = { ...prev, colorPalette: "custom", customPalette: nextPalette };
       return next;
     });
   };
@@ -1698,80 +1675,6 @@ export default function ProfilePage({
               onCheckedChange={(val) => updateSetting("soundEnabled", val)}
             />
           </div>
-        </div>
-      </div>
-
-      {/* Color Palette Card */}
-      <div className="bg-white dark:bg-zinc-900/80 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 p-5 space-y-4 shadow-2xs">
-        <h3 className="text-sm font-extrabold text-zinc-900 dark:text-white font-outfit">Color Palette & Accent</h3>
-        <p className="text-xs text-zinc-500 dark:text-zinc-400">
-          Personalize the interface accent colors and gradient accents
-        </p>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
-          {COLOR_PALETTES.map((palette) => (
-            <button
-              key={palette.id}
-              type="button"
-              onClick={() => updateSetting("colorPalette", palette.id)}
-              className={`flex items-center justify-between gap-2 rounded-xl border p-3 text-left transition-all cursor-pointer ${
-                activePalette === palette.id
-                  ? "border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/40 ring-1 ring-indigo-500/20"
-                  : "border-zinc-200/80 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/40"
-              }`}
-            >
-              <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200">{palette.label}</span>
-              <span className="flex -space-x-1">
-                {palette.swatches.map((color) => (
-                  <span
-                    key={color}
-                    className="h-4 w-4 rounded-full border border-white/70 dark:border-zinc-900 shadow-xs"
-                    style={{ backgroundColor: color }}
-                  />
-                ))}
-              </span>
-            </button>
-          ))}
-        </div>
-
-        {activePalette === "custom" && (
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 rounded-xl border border-zinc-200 dark:border-zinc-800 p-3.5 bg-zinc-50/60 dark:bg-zinc-950/40 mt-3">
-            {[
-              ["accent", "Accent Color"],
-              ["background", "Background"],
-              ["surface", "Surface Card"],
-            ].map(([key, label]) => (
-              <label
-                key={key}
-                className="flex items-center justify-between gap-2 text-xs font-bold text-zinc-700 dark:text-zinc-300"
-              >
-                <span>{label}</span>
-                <input
-                  type="color"
-                  value={customPalette[key as "accent" | "background" | "surface"]}
-                  onChange={(e) => updateCustomPalette(key as "accent" | "background" | "surface", e.target.value)}
-                  className="h-8 w-12 cursor-pointer rounded-lg border border-zinc-200 dark:border-zinc-800 bg-transparent p-0.5"
-                />
-              </label>
-            ))}
-          </div>
-        )}
-
-        {/* The card interior toggle: the grade-insights gray everywhere, or the
-            classic translucent zinc glass. Applies app-wide through the
-            `.card-surface` rule the surface tokens ride. */}
-        <div className="flex items-center justify-between border-t border-zinc-100 dark:border-zinc-800/60 pt-4 mt-1">
-          <div>
-            <p className="text-sm font-bold text-zinc-800 dark:text-zinc-200">Classic Zinc Glass Cards</p>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              Off — the solid gray card interior the grade insights card uses. On — the older translucent zinc cards
-              with a backdrop blur.
-            </p>
-          </div>
-          <Switch
-            checked={settings?.cardSurfaceZinc ?? false}
-            onCheckedChange={(val) => updateSetting("cardSurfaceZinc", val)}
-          />
         </div>
       </div>
 

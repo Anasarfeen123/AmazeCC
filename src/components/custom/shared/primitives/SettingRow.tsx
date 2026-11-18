@@ -16,10 +16,8 @@ import { ListRowText } from "./Surfaces";
  * the better read for the rows whose descriptions run long on a phone.
  */
 
-const ROW_BASE =
-  "flex items-center justify-between gap-4 px-4 py-4 min-h-[4.5rem] transition-colors";
-const ROW_TAPPABLE =
-  "w-full text-left cursor-pointer hover:bg-surface-secondary/70 dark:hover:bg-surface-hover/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500";
+const ROW_BASE = "flex items-center justify-between gap-4 px-4 py-4 min-h-[4.5rem] transition-colors";
+const ROW_TAPPABLE = "w-full text-left cursor-pointer hover:bg-surface-secondary focus-visible:outline-offset-[-3px]";
 const ROW_STACKED = "flex-col items-stretch justify-center gap-3";
 
 export interface SettingRowProps {
@@ -61,20 +59,14 @@ export default function SettingRow({
         ? {
             type: "button" as const,
             onClick: onRowClick,
-            ...(switchChecked !== undefined
-              ? ({ role: "switch", "aria-checked": switchChecked } as const)
-              : {}),
+            ...(switchChecked !== undefined ? ({ role: "switch", "aria-checked": switchChecked } as const) : {}),
           }
         : {})}
-      className={`${ROW_BASE} ${stacked ? ROW_STACKED : ""} ${
-        onRowClick ? ROW_TAPPABLE : ""
-      } ${className}`.trim()}
+      className={`${ROW_BASE} ${stacked ? ROW_STACKED : ""} ${onRowClick ? ROW_TAPPABLE : ""} ${className}`.trim()}
     >
       <ListRowText title={title} subtitle={description} wrapSubtitle right={badge} />
       {control ? (
-        <div className={stacked ? "w-full min-w-0" : "flex items-center gap-2 shrink-0"}>
-          {control}
-        </div>
+        <div className={stacked ? "w-full min-w-0" : "flex items-center gap-2 shrink-0"}>{control}</div>
       ) : null}
     </Tag>
   );

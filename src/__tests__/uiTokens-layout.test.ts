@@ -17,54 +17,48 @@ import { TILE, TILE_CARD, TILE_INTERACTIVE, TILE_INTERACTIVE_ROW } from "@/lib/u
  */
 
 describe("surface tokens", () => {
-    it("TILE is a column", () => {
-        expect(TILE).toContain("flex-col");
-        expect(TILE).toContain("justify-between");
-    });
+  it("TILE is a column", () => {
+    expect(TILE).toContain("flex-col");
+    expect(TILE).toContain("justify-between");
+  });
 
-    it("TILE_CARD has no flex at all, so callers own the layout", () => {
-        expect(TILE_CARD).not.toMatch(/\bflex\b/);
-        expect(TILE_CARD).not.toContain("flex-col");
-    });
+  it("TILE_CARD has no flex at all, so callers own the layout", () => {
+    expect(TILE_CARD).not.toMatch(/\bflex\b/);
+    expect(TILE_CARD).not.toContain("flex-col");
+  });
 
-    it("TILE_INTERACTIVE is a column, because it is built on TILE", () => {
-        expect(TILE_INTERACTIVE).toContain("flex-col");
-    });
+  it("TILE_INTERACTIVE is a column, because it is built on TILE", () => {
+    expect(TILE_INTERACTIVE).toContain("flex-col");
+  });
 
-    it("TILE_INTERACTIVE_ROW is a row and never inherits the column", () => {
-        expect(TILE_INTERACTIVE_ROW).toContain("flex-row");
-        expect(TILE_INTERACTIVE_ROW).not.toContain("flex-col");
-    });
+  it("TILE_INTERACTIVE_ROW is a row and never inherits the column", () => {
+    expect(TILE_INTERACTIVE_ROW).toContain("flex-row");
+    expect(TILE_INTERACTIVE_ROW).not.toContain("flex-col");
+  });
 
-    it("TILE_INTERACTIVE_ROW carries the same affordance as TILE_INTERACTIVE", () => {
-        // The point of TILE_INTERACTIVE was that a missed suffix reads as a dead
-        // surface. The row variant must not quietly drop it.
-        for (const part of ["transition-all", "hover:scale-[1.01]", "active:scale-[0.98]", "cursor-pointer"]) {
-            expect(TILE_INTERACTIVE).toContain(part);
-            expect(TILE_INTERACTIVE_ROW).toContain(part);
-        }
-    });
+  it("TILE_INTERACTIVE_ROW carries the same affordance as TILE_INTERACTIVE", () => {
+    // The point of TILE_INTERACTIVE was that a missed suffix reads as a dead
+    // surface. The row variant must not quietly drop it.
+    for (const part of ["brutal-press", "cursor-pointer"]) {
+      expect(TILE_INTERACTIVE).toContain(part);
+      expect(TILE_INTERACTIVE_ROW).toContain(part);
+    }
+  });
 
-    it("TILE_INTERACTIVE_ROW shares the surface with the other tiles", () => {
-        // Same colour and border, so a row tile and a column tile are the same
-        // card rather than two different cards that happen to look similar.
-        //
-        // The border step is `border-border-strong`, not `border-border-muted`:
-        // on a near-white surface the muted step is not readable as an edge, and a
-        // card without a visible edge has no shape. See the border-step override
-        // in `globals.css` for why both steps were darkened.
-        //
-        // The interior rides the `.card-surface` class (globals.css), which the
-        // "Card look" setting flips between the grade-insights gray and the
-        // classic zinc glass — the token string itself must carry no bg
-        // utilities so the preference stays single-sourced.
-        for (const part of ["card-surface", "border-border-strong", "rounded-[24px]"]) {
-            expect(TILE_INTERACTIVE_ROW).toContain(part);
-            expect(TILE).toContain(part);
-        }
-        for (const part of ["bg-surface", "bg-surface/80", "backdrop-blur-xl"]) {
-            expect(TILE_INTERACTIVE_ROW).not.toContain(part);
-            expect(TILE).not.toContain(part);
-        }
-    });
+  it("TILE_INTERACTIVE_ROW shares the surface with the other tiles", () => {
+    // Same colour and border, so a row tile and a column tile are the same
+    // card rather than two different cards that happen to look similar.
+    //
+    // Brand spec: a 2px ink edge, 14px radius and a hard shadow. The
+    // interior rides the `.card-surface` class, so the token string carries
+    // no bg utility and no glass.
+    for (const part of ["card-surface", "border-2", "border-border-ink", "rounded-[14px]", "shadow-brutal-md"]) {
+      expect(TILE_INTERACTIVE_ROW).toContain(part);
+      expect(TILE).toContain(part);
+    }
+    for (const part of ["bg-surface", "bg-surface/80", "backdrop-blur-xl"]) {
+      expect(TILE_INTERACTIVE_ROW).not.toContain(part);
+      expect(TILE).not.toContain(part);
+    }
+  });
 });

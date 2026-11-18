@@ -174,54 +174,6 @@
 
 /* ── Design System Utilities ── */
 
-[data-color-palette]:not([data-color-palette="default"]) [class*="border-sky-"],
-[data-color-palette]:not([data-color-palette="default"]) [class*="border-blue-"],
-[data-color-palette]:not([data-color-palette="default"]) [class*="border-indigo-"] {
-  border-color: color-mix(in oklab, var(--theme-accent) 42%, transparent) !important;
-}
-
-[data-color-palette]:not([data-color-palette="default"]) [class*="ring-sky-"],
-[data-color-palette]:not([data-color-palette="default"]) [class*="ring-blue-"],
-[data-color-palette]:not([data-color-palette="default"]) [class*="ring-indigo-"],
-[data-color-palette]:not([data-color-palette="default"]) [class*="focus:ring-sky-"],
-[data-color-palette]:not([data-color-palette="default"]) [class*="focus:ring-blue-"],
-[data-color-palette]:not([data-color-palette="default"]) [class*="focus-visible:ring-sky-"] {
-  --tw-ring-color: color-mix(in oklab, var(--theme-accent) 42%, transparent) !important;
-}
-
-[data-color-palette]:not([data-color-palette="default"]) [class~="bg-sky-400"],
-[data-color-palette]:not([data-color-palette="default"]) [class~="bg-sky-500"],
-[data-color-palette]:not([data-color-palette="default"]) [class~="bg-sky-600"],
-[data-color-palette]:not([data-color-palette="default"]) [class~="bg-blue-400"],
-[data-color-palette]:not([data-color-palette="default"]) [class~="bg-blue-500"],
-[data-color-palette]:not([data-color-palette="default"]) [class~="bg-blue-600"],
-[data-color-palette]:not([data-color-palette="default"]) [class~="bg-indigo-500"],
-[data-color-palette]:not([data-color-palette="default"]) [class~="bg-indigo-600"],
-[data-color-palette]:not([data-color-palette="default"]) [class~="hover:bg-sky-600"]:hover,
-[data-color-palette]:not([data-color-palette="default"]) [class~="hover:bg-blue-600"]:hover,
-[data-color-palette]:not([data-color-palette="default"]) [class~="hover:bg-indigo-600"]:hover {
-  background-color: var(--theme-accent) !important;
-  color: white !important;
-}
-
-[data-color-palette]:not([data-color-palette="default"]) [class*="from-sky-"],
-[data-color-palette]:not([data-color-palette="default"]) [class*="from-blue-"],
-[data-color-palette]:not([data-color-palette="default"]) [class*="from-indigo-"] {
-  --tw-gradient-from: var(--theme-accent) var(--tw-gradient-from-position) !important;
-  --tw-gradient-stops: var(
-    --tw-gradient-via-stops,
-    var(--tw-gradient-position),
-    var(--tw-gradient-from) var(--tw-gradient-from-position),
-    var(--tw-gradient-to) var(--tw-gradient-to-position)
-  ) !important;
-}
-
-[data-color-palette]:not([data-color-palette="default"]) [class*="to-sky-"],
-[data-color-palette]:not([data-color-palette="default"]) [class*="to-blue-"],
-[data-color-palette]:not([data-color-palette="default"]) [class*="to-indigo-"] {
-  --tw-gradient-to: color-mix(in oklab, var(--theme-accent) 74%, #111827) var(--tw-gradient-to-position) !important;
-}
-
 .solid-card {
   background: var(--surface);
   border: 1px solid var(--border-muted);
@@ -502,52 +454,21 @@ input:-webkit-autofill:focus {
   animation: pillPop 0.3s ease-out;
 }
 
-/* ── Clean Card & Surface Utilities ── */
+/* ── Card surfaces ──
+ * `.surface-card` and `.card-surface` are older names for the brand card
+ * interior. Both are plain `--surface` now (the glass "Card look" option was
+ * removed with the redesign). New code: `.brutal-card` from brand.css, or the
+ * `TILE` token in src/lib/uiTokens.ts.
+ */
 .surface-card {
   background-color: var(--surface);
-  border: 1px solid var(--border-muted);
-  border-radius: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    border-color 0.15s ease;
+  border: 2px solid var(--border-ink);
+  border-radius: 14px;
+  box-shadow: var(--shadow-brutal-sm);
 }
 
-.surface-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-/*
- * The card interior the surface tokens paint — the grade-insights card's gray
- * on the course predictor (the surface at full strength, `--surface-secondary`
- * in dark), or the classic translucent zinc glass the tiles shipped with,
- * chosen by the "Card look" setting in the profile page.
- *
- * `Main.tsx` writes `data-card-surface` (`"gray"` by default, `"zinc"` for the
- * classic look) onto `documentElement`; absence reads as the gray. The class
- * carries only the interior, so a riding call site keeps supplying its own
- * radius, border and shadow, and colour-tinted cards that paint their own
- * background never touch it. The zinc glass follows the cfg values the
- * glassy era used: `--surface` at 80% over the light page, 70% in dark, with
- * Tailwind's `backdrop-blur-xl` depth.
- */
 .card-surface {
   background-color: var(--surface);
-}
-
-.dark .card-surface {
-  background-color: var(--surface-secondary);
-}
-
-[data-card-surface="zinc"] .card-surface {
-  background-color: color-mix(in oklab, var(--surface) 80%, transparent);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-}
-
-.dark[data-card-surface="zinc"] .card-surface {
-  background-color: color-mix(in oklab, var(--surface) 70%, transparent);
 }
 
 /* Optimize AppLibrary sheet overlay performance on mobile by disabling heavy backdrop-blur */

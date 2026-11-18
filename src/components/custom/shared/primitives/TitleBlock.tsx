@@ -15,10 +15,11 @@ import type { ReactNode } from "react";
  * the calmer of the two for a kicker that repeats on every screen.
  */
 
-const EYEBROW = "text-xs font-semibold text-text-muted dark:text-text-secondary leading-none mb-1";
+const EYEBROW =
+  "inline-flex items-center rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 mb-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-secondary-foreground leading-none";
 const TITLE =
-  "text-xl sm:text-2xl font-black text-text-heading tracking-tight leading-tight font-outfit truncate";
-const SUBTITLE = "text-xs text-text-secondary dark:text-text-muted font-medium mt-1";
+  "font-display text-[28px] sm:text-[36px] font-bold uppercase text-text-heading tracking-tight leading-[1.05] line-clamp-2 break-words";
+const SUBTITLE = "font-mono text-xs text-text-muted mt-2";
 const GROUP = "flex flex-col items-start min-w-0 text-left";
 
 export type TitleTag = "h1" | "h2" | "h3";
@@ -47,7 +48,7 @@ export default function TitleBlock({
   return (
     <div className={`${GROUP} ${className}`.trim()}>
       {eyebrow ? <p className={EYEBROW}>{eyebrow}</p> : null}
-      <Tag className={wrap ? TITLE.replace(" truncate", "") : TITLE}>{title}</Tag>
+      <Tag className={wrap ? TITLE.replace(" line-clamp-2", "") : TITLE}>{title}</Tag>
       {subtitle ? <p className={SUBTITLE}>{subtitle}</p> : null}
     </div>
   );

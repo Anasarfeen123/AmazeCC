@@ -86,12 +86,7 @@ export function GhostButton({
   className?: string;
 }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      title={title}
-      className={`${GHOST_BUTTON} ${className}`.trim()}
-    >
+    <button type="button" onClick={onClick} title={title} className={`${GHOST_BUTTON} ${className}`.trim()}>
       {children}
     </button>
   );
@@ -124,14 +119,12 @@ export function SegmentedControl<T extends string>({
   scroll?: boolean;
   className?: string;
 }) {
-  const container = grow
-    ? "flex items-center gap-1"
-    : "flex flex-wrap items-center max-w-full";
+  const container = grow ? "flex items-center gap-1" : "flex flex-wrap items-center max-w-full";
   const overflow = scroll ? " overflow-x-auto hide-scrollbar" : "";
 
   return (
     <div
-      className={`${container} p-0.5 bg-surface-tertiary dark:bg-surface-secondary rounded-xl border border-border-muted dark:border-border text-xs${overflow} ${className}`.trim()}
+      className={`${container} gap-1 p-1 bg-surface rounded-[10px] border-2 border-border-ink font-mono text-xs font-semibold uppercase tracking-[0.06em]${overflow} ${className}`.trim()}
     >
       {options.map((opt) => (
         <button
@@ -144,11 +137,10 @@ export function SegmentedControl<T extends string>({
           // cn/twMerge so the accent colour reliably overrides the segment's
           // idle colour instead of leaving both to the cascade.
           className={cn(
-            "rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap",
-            grow ? "flex-1 px-2.5 py-1.5 text-[11px]" : "px-2.5 py-1 text-xs",
+            "rounded-[8px] transition-colors cursor-pointer whitespace-nowrap min-h-9",
+            grow ? "flex-1 px-2.5 py-1.5" : "px-2.5 py-1",
             opt.icon && "flex items-center justify-center gap-1",
             value === opt.value ? SEG_ACTIVE : SEG_IDLE,
-            value === opt.value && "text-indigo-600 dark:text-indigo-400"
           )}
         >
           {opt.icon ? <span className="shrink-0 flex items-center">{opt.icon}</span> : null}
@@ -184,12 +176,12 @@ export function ChipTabs<T extends string>({
   size?: "sm" | "md";
   className?: string;
 }) {
-  const sizing = size === "sm" ? "text-[10px] px-2.5 py-1" : "text-[11px] px-3 py-1.5";
+  const sizing = size === "sm" ? "text-xs px-2.5 py-1 min-h-9" : "text-[13px] px-3 py-1.5 min-h-11";
 
   return (
     <div
       role="tablist"
-      className={`flex w-full items-center gap-1.5 overflow-x-auto hide-scrollbar ${className}`.trim()}
+      className={`flex w-full items-center gap-2 overflow-x-auto hide-scrollbar pb-1 pr-1 ${className}`.trim()}
     >
       {options.map((opt) => {
         const active = opt.value === value;
@@ -202,11 +194,11 @@ export function ChipTabs<T extends string>({
             title={opt.title}
             onClick={() => onChange(opt.value)}
             className={cn(
-              "shrink-0 whitespace-nowrap rounded-xl font-black transition-all cursor-pointer",
+              "shrink-0 whitespace-nowrap rounded-[10px] border-2 border-border-ink font-mono font-semibold uppercase tracking-[0.06em] transition-colors cursor-pointer",
               sizing,
               active
-                ? "bg-indigo-600 text-white shadow-xs"
-                : "bg-surface-tertiary dark:bg-surface-secondary text-text-secondary dark:text-text-muted hover:text-text-heading dark:hover:text-text-heading"
+                ? "bg-secondary text-secondary-foreground shadow-brutal-sm"
+                : "bg-surface text-text-primary hover:bg-surface-secondary",
             )}
           >
             {opt.label}
@@ -251,10 +243,10 @@ export function RadioGroup<T extends string>({
             key={opt.value}
             title={opt.title}
             className={cn(
-              "flex items-start gap-3 p-3 rounded-2xl border transition-all cursor-pointer select-none text-left",
+              "flex items-start gap-3 p-3 min-h-11 rounded-[10px] border-2 border-border-ink transition-colors cursor-pointer select-none text-left",
               isSelected
-                ? "bg-indigo-50/70 dark:bg-indigo-950/30 border-indigo-500/40 dark:border-indigo-500/30 shadow-2xs"
-                : "bg-surface dark:bg-surface-secondary border-border-muted dark:border-border hover:bg-surface-secondary dark:hover:bg-surface-hover/60"
+                ? "bg-secondary text-secondary-foreground shadow-brutal-sm"
+                : "bg-surface hover:bg-surface-secondary",
             )}
           >
             <input
@@ -267,16 +259,12 @@ export function RadioGroup<T extends string>({
             />
             <span
               className={cn(
-                "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition-all",
-                isSelected
-                  ? "border-indigo-600 dark:border-indigo-400 bg-indigo-600 dark:border-indigo-400"
-                  : "border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900"
+                "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 border-border-ink transition-colors",
+                isSelected ? "bg-text-primary" : "bg-surface",
               )}
               aria-hidden="true"
             >
-              {isSelected ? (
-                <span className="h-1.5 w-1.5 rounded-full bg-white dark:bg-zinc-950" />
-              ) : null}
+              {isSelected ? <span className="h-2 w-2 rounded-full bg-surface" /> : null}
             </span>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5">
@@ -284,9 +272,7 @@ export function RadioGroup<T extends string>({
                 <span
                   className={cn(
                     "text-xs sm:text-sm font-bold tracking-tight block truncate",
-                    isSelected
-                      ? "text-indigo-950 dark:text-indigo-100"
-                      : "text-text-heading"
+                    isSelected ? "text-secondary-foreground" : "text-text-heading",
                   )}
                 >
                   {opt.label}
@@ -295,10 +281,8 @@ export function RadioGroup<T extends string>({
               {opt.description ? (
                 <p
                   className={cn(
-                    "text-[11px] leading-relaxed mt-0.5",
-                    isSelected
-                      ? "text-indigo-700/80 dark:text-indigo-300/80"
-                      : "text-text-secondary dark:text-text-muted"
+                    "text-xs leading-relaxed mt-0.5",
+                    isSelected ? "text-secondary-foreground" : "text-text-muted",
                   )}
                 >
                   {opt.description}

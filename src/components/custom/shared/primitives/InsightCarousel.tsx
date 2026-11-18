@@ -30,7 +30,7 @@ import { useHorizontalSwipe } from "./useHorizontalSwipe";
 
 const LABEL = "font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted min-w-0 break-words";
 const BADGE =
-  "font-mono text-xs font-semibold uppercase tracking-[0.06em] px-1.5 py-0.5 rounded-[6px] border-2 shrink-0";
+  "max-sm:sr-only font-mono text-xs font-semibold uppercase tracking-[0.06em] px-1.5 py-0.5 rounded-[6px] border-2 shrink-0";
 const SUBLINE = "font-mono text-xs text-text-muted truncate";
 const HEADLINE: Record<string, string> = {
   sm: "text-[32px] sm:text-[40px] leading-none",

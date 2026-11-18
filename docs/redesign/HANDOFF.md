@@ -300,6 +300,10 @@ NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next dev --webpack -p 3017   # backg
   it, or copy it anywhere. The Chromium profile is deleted after each run.
   Screenshots from a real account contain personal data: keep them in
   `amaze-workspace/.scratch/`, never commit them.
+- `LOGIN=1` was verified on 2026-11-19 (sign-in + first sync ~2 min). Known
+  limit: the `navLabel` argument clicks the first element whose text matches,
+  so "Attendance" hits the Home stat card label, not the sidebar link; make
+  it prefer `[data-sidebar-nav]` / bottom-nav buttons before relying on it.
 - `fullpage.mjs <url> <out.png>` captures a page viewport by viewport.
 
 ### 6.4 Code map

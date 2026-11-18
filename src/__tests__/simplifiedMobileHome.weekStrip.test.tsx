@@ -52,9 +52,7 @@ function props(over: Record<string, unknown> = {}) {
     },
     ScheduleData: {
       Schedule: {
-        CAT2: [
-          { courseCode: "BAGER101", courseTitle: "German Level I", examDate: "29-09-2026" },
-        ],
+        CAT2: [{ courseCode: "BAGER101", courseTitle: "German Level I", examDate: "29-09-2026" }],
       },
     },
     settings: {},
@@ -104,15 +102,7 @@ describe("week strip", () => {
   it("draws seven circles for the week, Monday first", () => {
     renderHome();
     const labels = circles().map((c) => c.textContent);
-    expect(labels).toEqual([
-      "MON28",
-      "TUE29",
-      "WED30",
-      "THU1",
-      "FRI2",
-      "SAT3",
-      "SUN4",
-    ]);
+    expect(labels).toEqual(["MON28", "TUE29", "WED30", "THU1", "FRI2", "SAT3", "SUN4"]);
   });
 
   it("has no plate behind it — the circles sit on the page", () => {
@@ -126,7 +116,7 @@ describe("week strip", () => {
   it("tints an exam day amber and keeps the word in the title", () => {
     renderHome();
     const exam = within(strip()).getByTitle("Tue 29 Sept · Exam day");
-    expect(exam.className).toContain("bg-amber-500/10");
+    expect(exam.className).toContain("bg-warning-surface");
     // The word is not on the face of the circle, but it is not gone either —
     // and the exam count rides in the accessible name, not the title.
     expect(exam.textContent).toBe("TUE29");
@@ -136,14 +126,14 @@ describe("week strip", () => {
   it("tints a holiday red", () => {
     renderHome();
     for (const title of ["Thu 1 Oct · Academic holiday", "Sat 3 Oct · Academic holiday"]) {
-      expect(within(strip()).getByTitle(title).className).toContain("bg-red-500/10");
+      expect(within(strip()).getByTitle(title).className).toContain("bg-danger-surface");
     }
   });
 
   it("leaves an ordinary day untinted and unbordered by colour", () => {
     renderHome();
     const ordinary = within(strip()).getByTitle("Mon 28 Sept · No classes");
-    expect(ordinary.className).toContain("bg-white");
+    expect(ordinary.className).toContain("bg-surface");
     expect(ordinary.className).not.toMatch(/bg-(amber|red|indigo|emerald|sky)-/);
   });
 
@@ -154,9 +144,7 @@ describe("week strip", () => {
     // the only thing left that can say "today", which is exactly why it is
     // drawn on a tint rather than replacing it.
     expect(today.getAttribute("aria-current")).toBe("date");
-    expect(within(strip()).getByTitle("Wed 30 Sept · No classes").hasAttribute("aria-current")).toBe(
-      false
-    );
+    expect(within(strip()).getByTitle("Wed 30 Sept · No classes").hasAttribute("aria-current")).toBe(false);
   });
 
   it("shows the selection ring on the day that is selected, not on today", () => {
@@ -167,8 +155,8 @@ describe("week strip", () => {
 
     const friday = within(strip()).getByTitle("Fri 2 Oct · No classes");
     const today = within(strip()).getByTitle("Tue 29 Sept · Exam day");
-    expect(friday.className).toContain("ring-indigo-500");
-    expect(today.className).toContain("ring-emerald-500");
+    expect(friday.className).toContain("bg-text-primary");
+    expect(today.className).toContain("ring-primary");
   });
 
   it("pages to the next week on a left swipe and back on a right swipe", async () => {
@@ -176,28 +164,20 @@ describe("week strip", () => {
     expect(within(strip()).getByTitle("Mon 28 Sept · No classes")).toBeTruthy();
 
     swipe([320, 60], [120, 65]);
-    await waitFor(() =>
-      expect(within(strip()).getByTitle("Mon 5 Oct · No classes")).toBeTruthy()
-    );
+    await waitFor(() => expect(within(strip()).getByTitle("Mon 5 Oct · No classes")).toBeTruthy());
 
     swipe([120, 65], [320, 60]);
-    await waitFor(() =>
-      expect(within(strip()).getByTitle("Mon 28 Sept · No classes")).toBeTruthy()
-    );
+    await waitFor(() => expect(within(strip()).getByTitle("Mon 28 Sept · No classes")).toBeTruthy());
   });
 
   it("still pages with the chevrons, and offers a way back", async () => {
     renderHome();
     fireEvent.click(screen.getByRole("button", { name: "Next Week" }));
-    await waitFor(() =>
-      expect(within(strip()).getByTitle("Mon 5 Oct · No classes")).toBeTruthy()
-    );
+    await waitFor(() => expect(within(strip()).getByTitle("Mon 5 Oct · No classes")).toBeTruthy());
 
     // The way back only exists once you have left.
     fireEvent.click(screen.getByTitle("Back to today"));
-    await waitFor(() =>
-      expect(within(strip()).getByTitle("Mon 28 Sept · No classes")).toBeTruthy()
-    );
+    await waitFor(() => expect(within(strip()).getByTitle("Mon 28 Sept · No classes")).toBeTruthy());
   });
 
   it("does not let a swipe select the day it started on", async () => {
@@ -210,9 +190,7 @@ describe("week strip", () => {
 
     // Still Tuesday: selection survived the week change, and no stray click
     // moved it to some other day.
-    expect(within(strip()).getAllByRole("button")[1].className).toContain(
-      "ring-indigo-500"
-    );
+    expect(within(strip()).getAllByRole("button")[1].className).toContain("bg-text-primary");
   });
 
   it("opts the strip out of the dashboard's own swipe", () => {
@@ -235,8 +213,7 @@ describe("week strip", () => {
 
 describe("the header row's layout", () => {
   /** The row that holds the week navigation and the pill-style filter. */
-  const headerRow = () =>
-    screen.getByTitle("Next Week").closest("div.flex.flex-wrap") as HTMLElement;
+  const headerRow = () => screen.getByTitle("Next Week").closest("div.flex.flex-wrap") as HTMLElement;
 
   it("keeps a gap and a wrap between the navigation and the filter", () => {
     // The row grew a `Today` chip every time the selection left today — which
@@ -278,7 +255,7 @@ describe("the Today chip", () => {
   const selected = () =>
     within(strip())
       .getAllByRole("button")
-      .find((c) => c.className.includes("ring-indigo-500"));
+      .find((c) => c.className.includes("bg-text-primary"));
 
   const selectedTitle = () => selected()?.getAttribute("title");
 
@@ -307,8 +284,7 @@ describe("the Today chip", () => {
     const chip = screen.getByTitle("Back to today");
     const row = strip();
 
-    const before = (a: Element, b: Element) =>
-      !!(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+    const before = (a: Element, b: Element) => !!(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
 
     expect(before(name, nextWeek)).toBe(true);
     expect(before(nextWeek, chip)).toBe(true);
@@ -337,16 +313,12 @@ describe("the Today chip", () => {
     // undone: resetting only the day would select a Tuesday that isn't in the
     // week on screen, leaving the highlight on nothing.
     fireEvent.click(screen.getByRole("button", { name: "Next Week" }));
-    await waitFor(() =>
-      expect(within(strip()).getByTitle("Mon 5 Oct · No classes")).toBeTruthy()
-    );
+    await waitFor(() => expect(within(strip()).getByTitle("Mon 5 Oct · No classes")).toBeTruthy());
     fireEvent.click(within(strip()).getByTitle("Wed 7 Oct · No classes"));
     expect(selectedTitle()).toBe("Wed 7 Oct · No classes");
 
     fireEvent.click(screen.getByTitle("Back to today"));
-    await waitFor(() =>
-      expect(within(strip()).getByTitle("Mon 28 Sept · No classes")).toBeTruthy()
-    );
+    await waitFor(() => expect(within(strip()).getByTitle("Mon 28 Sept · No classes")).toBeTruthy());
     expect(selectedTitle()).toBe("Tue 29 Sept · Exam day");
     // Back on today, so the chip retires itself again.
     expect(screen.queryByTitle("Back to today")).toBeNull();

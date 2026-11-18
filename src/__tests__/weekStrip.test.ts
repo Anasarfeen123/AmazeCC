@@ -59,30 +59,23 @@ describe("weekStripFlavour", () => {
   });
 
   it("lets a holiday outrank a reorder", () => {
-    expect(weekStripFlavour(day({ holidayInfo: "Vacation", detectedDayOrder: "FRI" }))).toBe(
-      "holiday"
-    );
+    expect(weekStripFlavour(day({ holidayInfo: "Vacation", detectedDayOrder: "FRI" }))).toBe("holiday");
   });
 });
 
 describe("WEEK_STRIP_TINT", () => {
   it("covers every flavour, so a lookup can never return undefined", () => {
-    expect(Object.keys(WEEK_STRIP_TINT).sort()).toEqual([
-      "exam",
-      "holiday",
-      "reordered",
-      "teaching",
-    ]);
+    expect(Object.keys(WEEK_STRIP_TINT).sort()).toEqual(["exam", "holiday", "reordered", "teaching"]);
   });
 
   it("paints an exam amber and a holiday red", () => {
     // Not a typo. Red means "you lost a teaching day" everywhere else in the
     // app (`MonthGrid`'s holiday tint, the attendance shortfalls), and an exam
     // day is a normal working day that happens to be graded.
-    expect(WEEK_STRIP_TINT.exam.fill).toContain("amber");
-    expect(WEEK_STRIP_TINT.holiday.fill).toContain("red");
-    expect(WEEK_STRIP_TINT.exam.fill).not.toContain("red");
-    expect(WEEK_STRIP_TINT.holiday.fill).not.toContain("amber");
+    expect(WEEK_STRIP_TINT.exam.fill).toContain("warning");
+    expect(WEEK_STRIP_TINT.holiday.fill).toContain("danger");
+    expect(WEEK_STRIP_TINT.exam.fill).not.toContain("danger");
+    expect(WEEK_STRIP_TINT.holiday.fill).not.toContain("warning");
   });
 
   it("gives each kind its own fill, ink and edge", () => {
@@ -98,15 +91,15 @@ describe("WEEK_STRIP_TINT", () => {
     // have is a colour, or every ordinary week fills the strip with hue and the
     // three days that matter stop standing out.
     const teaching = WEEK_STRIP_TINT.teaching;
-    expect(teaching.fill).toContain("bg-white");
-    expect(teaching.ink).not.toMatch(/amber|red|indigo|emerald|sky/);
-    expect(teaching.edge).not.toMatch(/amber|red|indigo|emerald|sky/);
+    expect(teaching.fill).toContain("bg-surface");
+    expect(teaching.ink).not.toMatch(/warning|danger|secondary|primary-|hero/);
+    expect(teaching.edge).not.toMatch(/warning|danger|primary/);
   });
 
   it("tints each edge to match its fill, so a circle reads as one object", () => {
-    expect(WEEK_STRIP_TINT.exam.edge).toContain("amber");
-    expect(WEEK_STRIP_TINT.holiday.edge).toContain("red");
-    expect(WEEK_STRIP_TINT.reordered.edge).toContain("indigo");
+    expect(WEEK_STRIP_TINT.exam.edge).toContain("warning");
+    expect(WEEK_STRIP_TINT.holiday.edge).toContain("danger");
+    expect(WEEK_STRIP_TINT.reordered.edge).toContain("primary");
   });
 });
 
@@ -123,9 +116,7 @@ describe("weekStripTitle", () => {
   });
 
   it("names which day the timetable was reordered onto", () => {
-    expect(weekStripTitle(day({ detectedDayOrder: "FRI" }))).toBe(
-      "Tue 29 Sept · Reordered timetable (FRI)"
-    );
+    expect(weekStripTitle(day({ detectedDayOrder: "FRI" }))).toBe("Tue 29 Sept · Reordered timetable (FRI)");
   });
 });
 
@@ -142,13 +133,15 @@ describe("state rings", () => {
     // Land on the page and today is selected *and* today. If both used the
     // same ring there would be no way to see which half of "selected" is
     // showing, so selection is two rings and an extra ring's worth of weight.
-    expect(SELECTED_RING).toContain("ring-2");
-    expect(TODAY_RING).toContain("ring-1");
-    expect(SELECTED_RING).toContain("indigo");
-    expect(TODAY_RING).toContain("emerald");
+    // Brand: selection is a solid ochre fill with a hard shadow; today is a
+    // ring. A day that is both shows both, so neither hides the other.
+    expect(SELECTED_RING).toContain("bg-text-primary");
+    expect(SELECTED_RING).toContain("shadow-brutal-sm");
+    expect(TODAY_RING).toContain("ring-2");
+    expect(TODAY_RING).not.toContain("bg-");
   });
 
-  it("gives today emerald ink, matching its ring", () => {
-    expect(TODAY_INK).toContain("emerald");
+  it("gives today the hero ink", () => {
+    expect(TODAY_INK).toContain("text-hero");
   });
 });

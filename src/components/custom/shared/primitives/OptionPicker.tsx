@@ -1,8 +1,8 @@
 "use client";
 
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { ChevronDown, Search, X } from "lucide-react";
+import { Check, ChevronDown, Search, X } from "lucide-react";
 import { cn } from "@amazecontinuityprojects/amazeui";
 
 /**
@@ -70,7 +70,16 @@ const OptionPicker = forwardRef<HTMLDivElement, OptionPickerProps>(function Opti
   const [query, setQuery] = useState("");
   const isMobile = useIsMobile();
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const [position, setPosition] = useState({ top: 0, left: 0, width: 0, height: 320 });
+  // null until measured: the panel is never painted at (0, 0). It used to
+  // start there and jump to the trigger a frame later, which read as the
+  // dropdown flying in from the top-left corner.
+  const [position, setPosition] = useState<{
+    top: number;
+    left: number;
+    width: number;
+    maxHeight: number;
+    above: boolean;
+  } | null>(null);
   const [mobilePopupHeight, setMobilePopupHeight] = useState(600);
 
   const selected = options.find((o) => o.value === value);
@@ -81,35 +90,45 @@ const OptionPicker = forwardRef<HTMLDivElement, OptionPickerProps>(function Opti
       )
     : options;
 
-  useEffect(() => {
-    if (!open) return;
-    const updatePosition = () => {
-      if (isMobile) {
-        setMobilePopupHeight(Math.min(640, window.innerHeight * 0.85));
-        return;
-      }
-      const trigger = triggerRef.current;
-      if (!trigger) return;
-      const rect = trigger.getBoundingClientRect();
-      const below = Math.max(80, window.innerHeight - rect.bottom - 12);
-      const above = Math.max(80, rect.top - 12);
-      const openAbove = below < Math.min(240, options.length * 44) && above > below;
-      const height = Math.min(320, openAbove ? above : below);
-      setPosition({
-        top: openAbove ? rect.top - height - 6 : rect.bottom + 6,
-        left: rect.left,
-        width: rect.width,
-        height,
-      });
-    };
-    updatePosition();
-    window.addEventListener("resize", updatePosition);
-    window.addEventListener("scroll", updatePosition);
+  const measure = useCallback(() => {
+    if (isMobile) {
+      setMobilePopupHeight(Math.min(640, window.innerHeight * 0.85));
+      return;
+    }
+    const trigger = triggerRef.current;
+    if (!trigger) return;
+    const rect = trigger.getBoundingClientRect();
+    const gap = 6;
+    const margin = 12;
+    const below = Math.max(80, window.innerHeight - rect.bottom - margin - gap);
+    const above = Math.max(80, rect.top - margin - gap);
+    const wanted = Math.min(320, options.length * 48 + (searchable ? 56 : 0) + 12);
+    const openAbove = below < wanted && above > below;
+    const maxHeight = Math.min(320, openAbove ? above : below);
+    const width = Math.max(rect.width, 240);
+    const left = Math.min(Math.max(margin, rect.left), window.innerWidth - width - margin);
+    setPosition({
+      top: openAbove ? rect.top - gap : rect.bottom + gap,
+      left,
+      width,
+      maxHeight,
+      above: openAbove,
+    });
+  }, [isMobile, options.length, searchable]);
+
+  useLayoutEffect(() => {
+    if (!open) {
+      setPosition(null);
+      return;
+    }
+    measure();
+    window.addEventListener("resize", measure);
+    window.addEventListener("scroll", measure, true);
     return () => {
-      window.removeEventListener("resize", updatePosition);
-      window.removeEventListener("scroll", updatePosition);
+      window.removeEventListener("resize", measure);
+      window.removeEventListener("scroll", measure, true);
     };
-  }, [open, isMobile, options.length]);
+  }, [open, measure]);
 
   useEffect(() => {
     if (!open) setQuery("");
@@ -134,21 +153,26 @@ const OptionPicker = forwardRef<HTMLDivElement, OptionPickerProps>(function Opti
   const listContent = (
     <div className="flex h-full min-h-0 flex-col overflow-hidden">
       {searchable && (
-        <div className="relative shrink-0 border-b border-border">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60 pointer-events-none" />
+        <div className="relative shrink-0 border-b-2 border-border-ink bg-surface-secondary">
+          <Search
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none"
+            aria-hidden
+          />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search..."
+            placeholder="Search options"
+            aria-label="Search options"
             autoFocus
-            className="w-full bg-transparent pl-10 pr-10 py-3.5 text-sm text-foreground outline-none placeholder:text-muted-foreground/40"
+            className="w-full bg-transparent pl-10 pr-11 py-3.5 text-sm text-text-primary outline-none focus-visible:outline-none placeholder:text-text-muted"
           />
           {query && (
             <button
               type="button"
               onClick={() => setQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-foreground"
+              aria-label="Clear filter"
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-[8px] text-text-muted hover:text-text-primary hover:bg-surface"
             >
               <X className="w-4 h-4" />
             </button>
@@ -156,13 +180,13 @@ const OptionPicker = forwardRef<HTMLDivElement, OptionPickerProps>(function Opti
         </div>
       )}
       <div
-        className="min-h-0 flex-1 overflow-y-auto overscroll-contain py-1 touch-pan-y"
+        className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-1.5 space-y-1 touch-pan-y"
         role="listbox"
         style={{ WebkitOverflowScrolling: "touch" }}
       >
         {filtered.length === 0 ? (
           <div className="py-8 text-center">
-            <p className="text-sm text-muted-foreground/50">No options found</p>
+            <p className="text-sm text-text-muted">Nothing matches that.</p>
           </div>
         ) : (
           filtered.map((opt) => {
@@ -175,14 +199,14 @@ const OptionPicker = forwardRef<HTMLDivElement, OptionPickerProps>(function Opti
                 aria-selected={active}
                 onClick={() => handleSelect(opt)}
                 className={cn(
-                  "flex flex-row items-center gap-3 px-4 py-3 min-h-11 transition-colors mx-1 rounded-[8px] w-[calc(100%-8px)] text-left cursor-pointer",
+                  "flex w-full flex-row items-center gap-3 px-3 py-2.5 min-h-11 rounded-[10px] border-2 text-left cursor-pointer transition-colors",
                   active
-                    ? "bg-secondary text-secondary-foreground font-semibold"
-                    : "text-foreground hover:bg-surface-secondary",
+                    ? "bg-secondary text-secondary-foreground border-border-ink font-semibold"
+                    : "border-transparent text-text-primary hover:bg-surface-secondary",
                 )}
               >
                 <span className={cn("text-sm flex-1", active ? "font-semibold" : "font-medium")}>{opt.label}</span>
-                {active && <span className="w-2 h-2 rounded-full bg-info shrink-0" />}
+                {active && <Check className="h-4 w-4 shrink-0" strokeWidth={3} aria-label="Selected" />}
               </button>
             );
           })
@@ -200,19 +224,24 @@ const OptionPicker = forwardRef<HTMLDivElement, OptionPickerProps>(function Opti
         aria-expanded={open}
         onClick={() => !disabled && setOpen(true)}
         className={cn(
-          "flex flex-row items-center justify-between gap-2 h-11 w-full rounded-[10px] border-2 border-border-ink bg-surface px-3 py-1 text-sm",
-          disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-muted/30",
-          !selected && "text-muted-foreground/60",
+          "flex flex-row items-center justify-between gap-2 h-11 w-full rounded-[10px] border-2 border-border-ink bg-surface px-3 py-1 text-sm text-text-primary",
+          disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-surface-secondary",
+          !selected && "text-text-muted",
         )}
       >
         <span className="truncate text-sm">{selected ? selected.label : placeholder}</span>
+        {/* Sized in em so it follows the trigger's text size (xs pickers are
+            24px tall; a fixed 32px box overflowed them). */}
         <ChevronDown
-          className={`w-4 h-4 shrink-0 text-muted-foreground/60 transition-transform ${open ? "rotate-180" : ""}`}
+          aria-hidden
+          strokeWidth={2.5}
+          className={`h-[1.1em] w-[1.1em] shrink-0 text-text-muted transition-transform duration-150 ${open ? "rotate-180" : ""}`}
         />
       </button>
 
       {open &&
         !isMobile &&
+        position &&
         typeof document !== "undefined" &&
         createPortal(
           <>
@@ -224,18 +253,18 @@ const OptionPicker = forwardRef<HTMLDivElement, OptionPickerProps>(function Opti
             />
             <div
               className={cn(
-                `fixed ${OVERLAY_Z} bg-popover border-2 border-border-ink rounded-[14px] shadow-brutal-md overflow-hidden`,
-                "animate-in fade-in slide-in-from-top-2 duration-200",
-                "min-w-[240px] min-h-0",
+                `fixed ${OVERLAY_Z} flex flex-col bg-popover border-2 border-border-ink rounded-[14px] shadow-brutal-md overflow-hidden`,
+                "animate-in fade-in duration-150",
+                position.above ? "slide-in-from-bottom-1" : "slide-in-from-top-1",
               )}
               style={{
-                top: position.top,
                 left: position.left,
-                width: Math.max(position.width, 240),
-                height: position.height,
+                width: position.width,
+                maxHeight: position.maxHeight,
+                ...(position.above ? { bottom: window.innerHeight - position.top } : { top: position.top }),
               }}
             >
-              <div className="h-full min-h-0 flex flex-col">{listContent}</div>
+              {listContent}
             </div>
           </>,
           document.body,
@@ -245,22 +274,36 @@ const OptionPicker = forwardRef<HTMLDivElement, OptionPickerProps>(function Opti
         isMobile &&
         typeof document !== "undefined" &&
         createPortal(
-          <div className={`fixed inset-0 ${OVERLAY_Z} flex items-center justify-center p-4`}>
+          <div className={`fixed inset-0 ${OVERLAY_Z} flex items-end justify-center`}>
             {/* The dim layer dismisses — amazeui's mobile modal had no tap handler
                 here, so outside-tap did nothing on phones. */}
             <button
               type="button"
               aria-label="Dismiss options"
               onClick={() => setOpen(false)}
-              className="absolute inset-0 bg-black/60 border-none p-0 cursor-default"
+              className="absolute inset-0 bg-[color-mix(in_oklab,var(--shadow-ink)_55%,transparent)] border-none p-0 cursor-default"
             />
             <div
               role="dialog"
               aria-modal="true"
-              className="relative w-full max-w-md min-h-0 bg-background rounded-[20px] border-[3px] border-border-ink shadow-brutal-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+              aria-label="Choose an option"
+              className="relative flex w-full max-w-md min-h-0 flex-col bg-background rounded-t-[20px] border-[3px] border-b-0 border-border-ink overflow-hidden animate-in slide-in-from-bottom-4 fade-in duration-200 pb-[env(safe-area-inset-bottom,0px)]"
               style={{ height: mobilePopupHeight, maxHeight: "85dvh" }}
             >
-              {listContent}
+              <div className="flex shrink-0 items-center justify-between gap-2 border-b-2 border-border-ink px-4 py-2">
+                <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+                  Choose one
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  aria-label="Close"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-[10px] text-text-primary hover:bg-surface-secondary"
+                >
+                  <X className="h-5 w-5" aria-hidden />
+                </button>
+              </div>
+              <div className="min-h-0 flex-1">{listContent}</div>
             </div>
           </div>,
           document.body,

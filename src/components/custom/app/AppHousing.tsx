@@ -2,7 +2,7 @@
 
 import { useEffect, type ReactNode } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
-import { LazyMotion } from "framer-motion";
+import { LazyMotion, MotionConfig } from "framer-motion";
 import { credentialsAtom, demoModeAtom, isLoggedInAtom } from "@/store";
 import { storage } from "@/lib/storage";
 import { hasStoredVtopCredentials } from "@/components/custom/app/readBootstrapSnapshot";
@@ -80,8 +80,13 @@ export default function AppHousing({
 
   return (
     <LazyMotion features={loadFeatures}>
-      {mountSyncHost && <SyncSessionHost />}
-      {children}
+      {/* Brand motion defaults: honour the OS reduced-motion setting, and
+          anything that does not choose its own transition gets a short,
+          non-bouncy ease instead of framer's default spring. */}
+      <MotionConfig reducedMotion="user" transition={{ duration: 0.18, ease: [0.2, 0.8, 0.2, 1] }}>
+        {mountSyncHost && <SyncSessionHost />}
+        {children}
+      </MotionConfig>
     </LazyMotion>
   );
 }

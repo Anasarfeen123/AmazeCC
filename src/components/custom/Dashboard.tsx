@@ -139,7 +139,11 @@ function DashboardContent({
     fresherResources,
     showInterfaceOnboarding,
     setShowInterfaceOnboarding,
-  } = useDashboardWelcomeState({ demoMode, interfaceChosen: settings?.interfaceChosen });
+  } = useDashboardWelcomeState({
+    demoMode,
+    interfaceChosen: settings?.interfaceChosen,
+    regNumber: unifiedIdentity.regNumber || IDs?.VtopUsername || "",
+  });
 
   const [isSubpageOpen, setIsSubpageOpen] = useState(false);
   const [showFeedbackStatus, setShowFeedbackStatus] = useState(false);

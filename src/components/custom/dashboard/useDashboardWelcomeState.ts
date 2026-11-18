@@ -3,13 +3,16 @@
 import { useEffect, useState } from "react";
 import { api } from "@/lib/sync-engine";
 import { getTypedStorageItem } from "@/lib/storage";
+import { isFresherRegNo } from "@/lib/fresher";
 
 interface DashboardWelcomeStateOptions {
   demoMode: boolean;
   interfaceChosen?: boolean;
+  /** Registration number; only first-years (see `isFresherRegNo`) get the hub. */
+  regNumber?: string;
 }
 
-export function useDashboardWelcomeState({ demoMode, interfaceChosen }: DashboardWelcomeStateOptions) {
+export function useDashboardWelcomeState({ demoMode, interfaceChosen, regNumber }: DashboardWelcomeStateOptions) {
   const [showFresherWelcome, setShowFresherWelcome] = useState(false);
   const [fresherEptData, setFresherEptData] = useState<any>(null);
   const [fresherAckData, setFresherAckData] = useState<any>(null);
@@ -30,8 +33,9 @@ export function useDashboardWelcomeState({ demoMode, interfaceChosen }: Dashboar
   }, []);
 
   useEffect(() => {
-    if (demoMode) {
-      setShowFresherWelcome(true);
+    // Demo is a 22BCE senior, so it no longer opens on the fresher hub.
+    if (demoMode || !isFresherRegNo(regNumber)) {
+      setShowFresherWelcome(false);
       return;
     }
 
@@ -70,7 +74,7 @@ export function useDashboardWelcomeState({ demoMode, interfaceChosen }: Dashboar
     } catch (error) {
       console.error("Failed to load fresher data from typed storage", error);
     }
-  }, [demoMode]);
+  }, [demoMode, regNumber]);
 
   useEffect(() => {
     api("fresher-resources")

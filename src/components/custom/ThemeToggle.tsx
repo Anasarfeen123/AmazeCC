@@ -5,54 +5,71 @@ import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 import { Sun, Moon } from "lucide-react";
 
+/**
+ * Light <-> dark switch.
+ *
+ * Two things made the old switch look wrong: hundreds of elements carry
+ * `transition-all`/`transition-colors`, so after the reveal every surface
+ * faded again at its own speed (a staggered, muddy second animation); and
+ * reduced-motion users got the full circle anyway. Now CSS transitions are
+ * paused for the swap (`.theme-switching`, brand.css), the root class flips
+ * synchronously inside the view transition, and reduced motion is an instant
+ * swap.
+ */
 export function animateThemeCircularExpansion(
   event: React.MouseEvent<HTMLElement> | MouseEvent | null,
   newTheme: string,
-  setTheme: (val: string) => void
+  setTheme: (val: string) => void,
 ) {
   if (typeof document === "undefined") {
     setTheme(newTheme);
     return;
   }
+  const root = document.documentElement;
+  const applyRootClass = () => {
+    root.classList.toggle("dark", newTheme === "dark");
+    root.style.colorScheme = newTheme === "dark" ? "dark" : "light";
+  };
+  const pauseTransitions = () => root.classList.add("theme-switching");
+  const resumeTransitions = () => {
+    // Two frames: let the new colours paint before transitions come back.
+    requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove("theme-switching")));
+  };
 
-  // Fallback for browsers without View Transitions API
-  if (!(document as any).startViewTransition) {
+  const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  const supportsVT = typeof (document as any).startViewTransition === "function";
+
+  if (reduceMotion || !supportsVT) {
+    pauseTransitions();
+    applyRootClass();
     setTheme(newTheme);
+    resumeTransitions();
     return;
   }
 
-  // Calculate click coordinates or default to screen center
   const x = event && "clientX" in event && event.clientX > 0 ? event.clientX : window.innerWidth / 2;
   const y = event && "clientY" in event && event.clientY > 0 ? event.clientY : window.innerHeight / 2;
+  const endRadius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
 
-  const endRadius = Math.hypot(
-    Math.max(x, window.innerWidth - x),
-    Math.max(y, window.innerHeight - y)
-  );
-
+  pauseTransitions();
   const transition = (document as any).startViewTransition(() => {
-    // Synchronously mutate DOM root class before screenshot capture to prevent 1ms flash
-    if (newTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    applyRootClass();
     setTheme(newTheme);
   });
 
-  transition.ready.then(() => {
-    document.documentElement.animate(
-      [
-        { clipPath: `circle(0px at ${x}px ${y}px)` },
-        { clipPath: `circle(${endRadius}px at ${x}px ${y}px)` },
-      ],
-      {
-        duration: 420,
-        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
-        pseudoElement: "::view-transition-new(root)",
-      }
-    );
-  });
+  transition.ready
+    .then(() => {
+      root.animate(
+        [{ clipPath: `circle(0px at ${x}px ${y}px)` }, { clipPath: `circle(${endRadius}px at ${x}px ${y}px)` }],
+        {
+          duration: 380,
+          easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
+          pseudoElement: "::view-transition-new(root)",
+        },
+      );
+    })
+    .catch(() => {});
+  transition.finished.finally(resumeTransitions);
 }
 
 interface ThemeToggleProps {
@@ -79,34 +96,29 @@ export default function ThemeToggle({ className = "", showLabel = false }: Theme
 
   return (
     <motion.button
-      whileTap={{ scale: 0.9 }}
-      whileHover={{ scale: 1.05 }}
       onClick={handleToggle}
       disabled={!mounted}
-      className={`relative inline-flex items-center justify-center p-2 rounded-2xl border transition-all cursor-pointer select-none group focus:outline-none ${
-        isDark 
-          ? "bg-zinc-900/90 border-zinc-800 text-amber-300 shadow-md hover:bg-zinc-800 hover:border-amber-400/40" 
-          : "bg-white border-zinc-200 text-indigo-600 shadow-sm hover:bg-zinc-50 hover:border-indigo-300"
-      } ${className}`}
+      className={`relative inline-flex min-h-11 min-w-11 items-center justify-center p-2 rounded-[10px] border-2 border-border-ink bg-surface text-text-primary shadow-brutal-sm brutal-press cursor-pointer select-none group ${className}`}
       title={`Switch to ${isDark ? "Light" : "Dark"} mode`}
+      aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
     >
       <div className="relative flex items-center justify-center gap-2 px-0.5">
         <motion.div
           key={theme}
-          initial={{ rotate: -90, scale: 0.6, opacity: 0 }}
-          animate={{ rotate: 0, scale: 1, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          initial={{ rotate: -45, opacity: 0 }}
+          animate={{ rotate: 0, opacity: 1 }}
+          transition={{ duration: 0.18, ease: "easeOut" }}
           className="flex items-center justify-center"
         >
           {isDark ? (
-            <Sun className="h-4.5 w-4.5 stroke-[2.2] text-amber-300 drop-shadow-[0_0_6px_rgba(251,191,36,0.6)]" />
+            <Sun className="h-4.5 w-4.5 stroke-[2.2] text-primary" aria-hidden />
           ) : (
-            <Moon className="h-4.5 w-4.5 stroke-[2.2] text-indigo-600" />
+            <Moon className="h-4.5 w-4.5 stroke-[2.2] text-primary" aria-hidden />
           )}
         </motion.div>
 
         {showLabel && (
-          <span className="text-xs font-bold capitalize tracking-wide pr-1">
+          <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] pr-1">
             {isDark ? "Light Mode" : "Dark Mode"}
           </span>
         )}

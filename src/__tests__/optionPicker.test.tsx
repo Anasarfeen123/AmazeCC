@@ -50,9 +50,7 @@ describe("OptionPicker overlay", () => {
   it("paints the portal above sheet chrome", () => {
     openDesktop();
     // BottomSheet sits at z-55/60; the portal must beat both.
-    const layered = [...document.body.querySelectorAll("*")].filter((el) =>
-      /z-\[70\]/.test(el.className as string)
-    );
+    const layered = [...document.body.querySelectorAll("*")].filter((el) => /z-\[70\]/.test(el.className as string));
     expect(layered.length).toBeGreaterThan(0);
     expect(document.body.textContent).toContain("Alpha");
   });
@@ -115,11 +113,11 @@ describe("OptionPicker overlay", () => {
     const listbox = screen.getByRole("listbox");
     expect(listbox.className).toContain("overflow-y-auto");
     expect(listbox.className).toContain("min-h-0");
-    const popup = [...document.querySelectorAll("div")].find((element) =>
-      element.className.includes("bg-popover")
-    );
-    expect(popup?.style.height).toBe("320px");
-    expect(popup?.style.top).toBe("214px");
+    const popup = [...document.querySelectorAll("div")].find((element) => element.className.includes("bg-popover"));
+    expect(popup?.style.maxHeight).toBe("320px");
+    // Opens above: anchored by its bottom edge 6px over the trigger (600 - 534),
+    // so a short list sits right on the trigger instead of floating higher.
+    expect(popup?.style.bottom).toBe("66px");
   });
 
   it("selecting an option reports the value and closes", () => {
@@ -127,9 +125,7 @@ describe("OptionPicker overlay", () => {
     // Fresh width: the mobile flag is read on mount, and earlier tests in this
     // file leave it at 390.
     setViewportWidth(1280);
-    render(
-      <OptionPicker value="b" options={OPTIONS} onChange={(v) => (seen = v)} />
-    );
+    render(<OptionPicker value="b" options={OPTIONS} onChange={(v) => (seen = v)} />);
     fireEvent.click(screen.getByRole("button", { name: /bravo/i }));
     fireEvent.click(screen.getByText("Alpha"));
     expect(seen).toBe("a");

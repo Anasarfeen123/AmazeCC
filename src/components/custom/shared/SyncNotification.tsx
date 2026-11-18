@@ -110,18 +110,16 @@ const parseLogLine = (line: string, isLast: boolean) => {
 const getStatusIcon = (status: "success" | "error" | "pending" | "info" | "loading") => {
   switch (status) {
     case "success":
-      return <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400 shrink-0 mt-0.5" />;
+      return <CheckCircle2 className="w-3.5 h-3.5 text-success-foreground shrink-0 mt-0.5" />;
     case "error":
-      return <AlertCircle className="w-3.5 h-3.5 text-rose-500 dark:text-rose-400 shrink-0 mt-0.5" />;
+      return <AlertCircle className="w-3.5 h-3.5 text-danger-foreground shrink-0 mt-0.5" />;
     case "pending":
-      return (
-        <div className="w-3.5 h-3.5 rounded-full border-2 border-slate-300 dark:border-zinc-700 shrink-0 mt-0.5" />
-      );
+      return <div className="w-3.5 h-3.5 rounded-full border-2 border-border-ink shrink-0 mt-0.5" />;
     case "loading":
-      return <Loader2 className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400 animate-spin shrink-0 mt-0.5" />;
+      return <Loader2 className="w-3.5 h-3.5 text-primary animate-spin shrink-0 mt-0.5" />;
     case "info":
     default:
-      return <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0 mt-1.5 mx-1" />;
+      return <div className="w-1.5 h-1.5 rounded-full bg-primary shrink-0 mt-1.5 mx-1" />;
   }
 };
 
@@ -605,82 +603,68 @@ export default function SyncNotification({
   return (
     <AnimatePresence>
       {isMinimized ? (
-        /* Minimized background pill — the capsule itself fills like an energy bar */
+        /* Minimized pill: a brand card with a plain progress bar along its
+           bottom edge (was glass with a glowing gradient fill behind the text,
+           which made the words hard to read and the % invisible). */
         <motion.div
           key="sync-minimized"
-          layout
-          initial={{ opacity: 0, scale: 0.94, y: 12 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.94, y: 12 }}
-          transition={{ type: "spring", stiffness: 450, damping: 32 }}
-          className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+5.5rem)] left-3 right-3 sm:left-auto sm:right-6 sm:w-auto sm:min-w-[320px] sm:max-w-[350px] mx-auto z-50 bg-white/92 dark:bg-zinc-950/92 backdrop-blur-2xl border border-black/[0.08] dark:border-white/[0.12] shadow-[0_12px_36px_-4px_rgba(0,0,0,0.18),0_0_1px_rgba(0,0,0,0.2)] dark:shadow-[0_16px_40px_-4px_rgba(0,0,0,0.7),0_0_1px_rgba(255,255,255,0.15)] rounded-2xl py-2.5 px-3.5 cursor-pointer select-none font-sans active:scale-[0.99] transition-transform overflow-hidden"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 8 }}
+          transition={{ duration: 0.18, ease: [0.2, 0.8, 0.2, 1] }}
+          className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+6rem)] md:bottom-6 left-4 right-4 sm:left-auto sm:right-6 sm:w-[360px] mx-auto z-50 overflow-hidden rounded-[14px] border-2 border-border-ink bg-surface shadow-brutal-md cursor-pointer"
           onClick={() => setIsMinimized(false)}
           role="status"
           aria-live="polite"
           aria-label={`Syncing — ${Math.min(100, Math.round(progress))}% complete`}
         >
-          {/* Energy bar fill — the capsule itself is the progress track */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-500/20 via-blue-500/30 to-cyan-400/35 dark:from-blue-500/30 dark:via-blue-600/35 dark:to-cyan-400/35 transition-[width] duration-500 ease-out"
-            style={{ width: `${Math.min(100, Math.max(3, progress))}%` }}
-          />
-          {/* Leading-edge glow */}
-          {progress < 100 && (
-            <div
-              aria-hidden="true"
-              className="absolute inset-y-0 transition-[left] duration-500 ease-out"
-              style={{ left: `calc(${Math.min(100, Math.max(3, progress))}% - 2px)` }}
-            >
-              <div className="h-full w-0.5 bg-blue-400/90 dark:bg-blue-400 shadow-[0_0_10px_2px_rgba(59,130,246,0.55)]" />
-            </div>
-          )}
-
-          <div className="relative flex items-center gap-3 w-full">
-            {/* Mode glyph tile */}
+          <div className="flex items-center gap-3 w-full px-3 pt-3 pb-3.5">
             <span
               aria-hidden="true"
-              className="w-9 h-9 rounded-xl bg-blue-500/15 border border-blue-500/25 text-blue-700 dark:text-blue-300 flex items-center justify-center shrink-0"
+              className="w-10 h-10 rounded-[10px] border-2 border-border-ink bg-secondary text-secondary-foreground flex items-center justify-center shrink-0"
             >
-              <ModeIcon size={16} strokeWidth={2.25} />
+              {progress >= 100 ? <Check size={18} strokeWidth={3} /> : <ModeIcon size={18} strokeWidth={2.25} />}
             </span>
 
-            {/* Pinned Labels */}
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-1.5">
-                <h4 className="text-xs font-black text-slate-800 dark:text-white leading-none font-outfit truncate">
+              <div className="flex items-baseline justify-between gap-2">
+                <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-heading leading-none truncate">
                   {activeModeTitle}
                 </h4>
-                {progress >= 100 ? (
-                  <Check className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400 shrink-0" strokeWidth={3} />
-                ) : (
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shrink-0" />
-                )}
+                <span className="font-mono text-xs font-semibold text-text-muted tabular-nums shrink-0">
+                  {progress >= 100 ? "Done" : `${Math.min(100, Math.round(progress))}%`}
+                </span>
               </div>
-              <p className="text-[10.5px] text-slate-500 dark:text-zinc-400 font-medium truncate mt-1 leading-tight">
-                {cleanedHeadline}
-              </p>
+              <p className="text-sm text-text-primary truncate mt-1 leading-tight">{cleanedHeadline}</p>
             </div>
 
-            {/* Actions */}
             <div className="flex items-center gap-1 shrink-0" onClick={(e) => e.stopPropagation()}>
               <button
                 type="button"
                 onClick={() => setIsMinimized(false)}
-                className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
-                title="Open expanded sync notification"
-                aria-label="Open expanded sync notification"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-[10px] text-text-muted hover:text-text-primary hover:bg-surface-secondary transition-colors cursor-pointer"
+                title="Show sync details"
+                aria-label="Show sync details"
               >
-                <Maximize2 size={15} />
+                <Maximize2 size={16} aria-hidden />
               </button>
               <button
+                type="button"
                 onClick={handleCancelSync}
-                className="p-2 rounded-xl text-rose-500 hover:text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer shadow-[0_0_8px_rgba(244,63,94,0.15)]"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-[10px] text-danger-foreground hover:bg-danger-surface transition-colors cursor-pointer"
                 title="Cancel sync"
+                aria-label="Cancel sync"
               >
-                <X size={15} strokeWidth={2.5} />
+                <X size={16} strokeWidth={2.5} aria-hidden />
               </button>
             </div>
+          </div>
+          {/* Progress along the bottom edge */}
+          <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1.5 bg-surface-secondary">
+            <div
+              className="h-full bg-primary transition-[width] duration-500 ease-out"
+              style={{ width: `${Math.min(100, Math.max(3, progress))}%` }}
+            />
           </div>
         </motion.div>
       ) : (
@@ -704,13 +688,11 @@ export default function SyncNotification({
                 transition={{ type: "spring", damping: 20, stiffness: 240 }}
                 className="flex flex-col items-center text-center py-6 px-4"
               >
-                <div className="w-14 h-14 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center border border-amber-500/20 shadow-lg shadow-amber-500/10">
+                <div className="w-14 h-14 rounded-full bg-warning-surface text-warning-foreground flex items-center justify-center border border-border-ink shadow-brutal-sm">
                   <WifiOff className="w-7 h-7" strokeWidth={2.4} />
                 </div>
-                <h4 className="mt-3.5 text-base font-black text-slate-900 dark:text-white font-outfit">
-                  You&apos;re Offline
-                </h4>
-                <p className="mt-1 text-xs font-medium text-slate-500 dark:text-zinc-400 max-w-[260px] leading-relaxed">
+                <h4 className="mt-3.5 text-base font-bold text-text-heading font-outfit">You&apos;re Offline</h4>
+                <p className="mt-1 text-xs font-medium text-text-muted max-w-[260px] leading-relaxed">
                   No network detected. Reconnect to sync the latest records from VTOP.
                 </p>
 
@@ -720,7 +702,7 @@ export default function SyncNotification({
                       e.stopPropagation();
                       onDismiss();
                     }}
-                    className="flex-1 py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200/80 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-200 font-bold text-xs uppercase tracking-wider transition-all duration-150 active:scale-[0.985] cursor-pointer"
+                    className="flex-1 py-2.5 px-4 rounded-xl bg-surface-secondary hover:bg-surface-tertiary text-text-primary font-bold text-xs uppercase tracking-wider transition-all duration-150 active:scale-[0.985] cursor-pointer"
                   >
                     Dismiss
                   </button>
@@ -730,7 +712,7 @@ export default function SyncNotification({
                       onDismiss();
                       onRetry?.();
                     }}
-                    className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs uppercase tracking-wider transition-all duration-150 active:scale-[0.985] cursor-pointer shadow-md shadow-amber-500/20"
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs uppercase tracking-wider transition-all duration-150 active:scale-[0.985] cursor-pointer shadow-brutal-sm"
                   >
                     <RefreshCw size={12} />
                     <span>Try Again</span>
@@ -746,32 +728,30 @@ export default function SyncNotification({
                 className="flex flex-col py-2 px-1 w-full"
               >
                 <div className="flex flex-col items-center text-center mb-4">
-                  <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-500 dark:text-indigo-400 flex items-center justify-center border border-indigo-500/20 shadow-lg shadow-indigo-500/10 mb-3">
+                  <div className="w-14 h-14 rounded-2xl bg-secondary text-secondary-foreground flex items-center justify-center border border-border-ink shadow-brutal-sm mb-3">
                     <KeyRound className="w-7 h-7" strokeWidth={2.4} />
                   </div>
-                  <h3 className="text-xl font-black text-slate-900 dark:text-white font-outfit tracking-tight">
-                    Sign in with VTOP
-                  </h3>
-                  <p className="mt-1 text-xs font-medium text-slate-500 dark:text-zinc-400 max-w-[320px] leading-relaxed">
+                  <h3 className="text-xl font-bold text-text-heading font-outfit tracking-tight">Sign in with VTOP</h3>
+                  <p className="mt-1 text-xs font-medium text-text-muted max-w-[320px] leading-relaxed">
                     Authenticate through the AmazeCC Unified Sync Engine to retrieve your profile and courses.
                   </p>
-                  <div className="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-700 dark:text-indigo-300 text-[11px] font-bold">
-                    <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+                  <div className="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] bg-secondary border border-border-ink text-secondary-foreground text-xs font-bold min-h-9">
+                    <Sparkles className="w-3.5 h-3.5 text-primary" />
                     <span>{isNewStudent ? "New Student — Full Initial Sync" : "Returning Student — Quick Sync"}</span>
                   </div>
                 </div>
 
                 <form onSubmit={handleLoginSubmit} className="flex flex-col gap-3 w-full">
                   {loginError && (
-                    <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/25 flex items-start gap-2 text-rose-600 dark:text-rose-400 text-xs font-medium">
+                    <div className="p-3 rounded-xl bg-danger-surface border border-border-ink flex items-start gap-2 text-danger-foreground text-xs font-medium">
                       <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                       <span>{loginError}</span>
                     </div>
                   )}
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-zinc-400 flex items-center gap-1.5">
-                      <User className="w-3.5 h-3.5 text-indigo-500" />
+                    <label className="text-xs font-bold uppercase tracking-wider text-text-muted flex items-center gap-1.5">
+                      <User className="w-3.5 h-3.5 text-primary" />
                       <span>VTOP Username / Reg No</span>
                     </label>
                     <input
@@ -783,13 +763,13 @@ export default function SyncNotification({
                       value={loginUsername}
                       onChange={(e) => setLoginUsername(e.target.value.toUpperCase())}
                       disabled={isLoggingIn}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-zinc-600 text-sm font-semibold tracking-wide focus:outline-hidden focus:ring-2 focus:ring-indigo-500/50 transition-all uppercase"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-surface-secondary border border-border-ink text-text-heading placeholder:text-text-muted dark:placeholder:text-text-muted text-sm font-semibold tracking-wide focus:outline-hidden focus:ring-2 focus:ring-border-ink transition-all uppercase"
                     />
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-zinc-400 flex items-center gap-1.5">
-                      <Lock className="w-3.5 h-3.5 text-indigo-500" />
+                    <label className="text-xs font-bold uppercase tracking-wider text-text-muted flex items-center gap-1.5">
+                      <Lock className="w-3.5 h-3.5 text-primary" />
                       <span>VTOP Password</span>
                     </label>
                     <div className="relative">
@@ -799,12 +779,12 @@ export default function SyncNotification({
                         value={loginPassword}
                         onChange={(e) => setLoginPassword(e.target.value)}
                         disabled={isLoggingIn}
-                        className="w-full pl-3.5 pr-11 py-2.5 rounded-xl bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-zinc-600 text-sm font-semibold tracking-wide focus:outline-hidden focus:ring-2 focus:ring-indigo-500/50 transition-all"
+                        className="w-full pl-3.5 pr-11 py-2.5 rounded-xl bg-surface-secondary border border-border-ink text-text-heading placeholder:text-text-muted dark:placeholder:text-text-muted text-sm font-semibold tracking-wide focus:outline-hidden focus:ring-2 focus:ring-border-ink transition-all"
                       />
                       <button
                         type="button"
                         onClick={() => setShowLoginPassword((v) => !v)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 dark:text-zinc-500 dark:hover:text-zinc-300 transition-colors"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-text-muted hover:text-text-muted transition-colors"
                         aria-label={showLoginPassword ? "Hide password" : "Show password"}
                       >
                         {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -812,10 +792,10 @@ export default function SyncNotification({
                     </div>
                   </div>
 
-                  <div className="rounded-xl p-3 bg-slate-50 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/[0.06] text-[11px] text-slate-500 dark:text-zinc-400 leading-relaxed mt-1">
+                  <div className="rounded-xl p-3 bg-surface-secondary border border-border-ink text-xs text-text-muted leading-relaxed mt-1">
                     <p className="font-medium">
-                      🔒 <strong className="text-slate-700 dark:text-zinc-200">Unified Sign-In:</strong> Logging in here
-                      synchronizes your timetable and profile, and signs you into all of AmazeCC.
+                      🔒 <strong className="text-text-primary">Unified Sign-In:</strong> Logging in here synchronizes
+                      your timetable and profile, and signs you into all of AmazeCC.
                     </p>
                   </div>
 
@@ -827,14 +807,14 @@ export default function SyncNotification({
                         onDismiss();
                       }}
                       disabled={isLoggingIn}
-                      className="flex-1 py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200/80 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-200 font-bold text-xs uppercase tracking-wider transition-all active:scale-[0.985] cursor-pointer"
+                      className="flex-1 py-2.5 px-4 rounded-xl bg-surface-secondary hover:bg-surface-tertiary text-text-primary font-bold text-xs uppercase tracking-wider transition-all active:scale-[0.985] cursor-pointer"
                     >
                       Dismiss
                     </button>
                     <button
                       type="submit"
                       disabled={isLoggingIn}
-                      className="flex-2 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition-all active:scale-[0.985] cursor-pointer shadow-md shadow-indigo-500/20 disabled:opacity-50"
+                      className="flex-2 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs uppercase tracking-wider transition-all active:scale-[0.985] cursor-pointer shadow-brutal-sm border-2 border-border-ink disabled:opacity-50"
                     >
                       {isLoggingIn ? (
                         <>
@@ -859,13 +839,11 @@ export default function SyncNotification({
                 transition={{ type: "spring", damping: 18, stiffness: 240 }}
                 className="flex flex-col items-center text-center py-6 px-4"
               >
-                <div className="w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/25">
+                <div className="w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-brutal-sm">
                   <Check className="w-7 h-7" strokeWidth={3} />
                 </div>
-                <h4 className="mt-3.5 text-base font-black text-slate-900 dark:text-white font-outfit">
-                  Sync Successful
-                </h4>
-                <p className="mt-1 text-xs font-medium text-slate-500 dark:text-zinc-400">
+                <h4 className="mt-3.5 text-base font-bold text-text-heading font-outfit">Sync Successful</h4>
+                <p className="mt-1 text-xs font-medium text-text-muted">
                   All academic records are completely up to date.
                 </p>
                 <button
@@ -891,20 +869,20 @@ export default function SyncNotification({
                   {/* Glowing Rose Halo + ServerOff Icon */}
                   <div className="relative flex items-center justify-center">
                     <div className="absolute inset-0 rounded-2xl bg-rose-500/25 blur-xl animate-pulse" />
-                    <div className="relative w-16 h-16 rounded-2xl bg-rose-500/15 border border-rose-500/40 text-rose-500 dark:text-rose-400 flex items-center justify-center shadow-[0_0_24px_rgba(244,63,94,0.4)] ring-2 ring-rose-500/30">
-                      <ServerOff className="w-8 h-8 drop-shadow-[0_0_8px_rgba(244,63,94,0.8)]" strokeWidth={2.4} />
+                    <div className="relative w-16 h-16 rounded-2xl bg-danger-surface border border-border-ink text-danger-foreground flex items-center justify-center ring-2 ring-rose-500/30">
+                      <ServerOff className="w-8 h-8" strokeWidth={2.4} />
                     </div>
                   </div>
 
                   {/* BOLD HEADLINE */}
-                  <h3 className="mt-4 text-2xl font-black text-rose-600 dark:text-rose-400 font-outfit uppercase tracking-tight drop-shadow-[0_0_12px_rgba(244,63,94,0.25)]">
+                  <h3 className="mt-4 text-2xl font-bold text-danger-foreground font-outfit uppercase tracking-tight">
                     VTOP is Down
                   </h3>
 
                   {/* EXPLANATORY DESCRIPTION */}
-                  <p className="mt-2 text-xs font-semibold text-slate-600 dark:text-zinc-300 max-w-[320px] leading-relaxed">
+                  <p className="mt-2 text-xs font-semibold text-text-muted max-w-[320px] leading-relaxed">
                     Direct connection to{" "}
-                    <span className="font-black text-rose-600 dark:text-rose-400 underline decoration-rose-500/40 underline-offset-2">
+                    <span className="font-bold text-danger-foreground underline decoration-rose-500/40 underline-offset-2">
                       vtopcc.vit.ac.in
                     </span>{" "}
                     did not respond. The university portal appears to be offline or undergoing maintenance. Background
@@ -921,7 +899,7 @@ export default function SyncNotification({
                         cancelAllRequests("User dismissed VTOP down notice");
                         onDismiss();
                       }}
-                      className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 active:bg-black dark:bg-white dark:hover:bg-zinc-100 dark:active:bg-zinc-200 text-white dark:text-zinc-950 font-black text-xs uppercase tracking-wider transition-all duration-150 active:scale-[0.985] cursor-pointer shadow-lg shadow-black/10 dark:shadow-white/10"
+                      className="w-full py-3 px-4 rounded-xl bg-text-primary hover:opacity-90 text-background font-bold text-xs uppercase tracking-wider transition-all duration-150 active:scale-[0.985] cursor-pointer shadow-lg shadow-black/10 dark:shadow-white/10"
                     >
                       Dismiss
                     </button>
@@ -932,7 +910,7 @@ export default function SyncNotification({
                         href={VTOP_PORTAL_URL}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200/80 dark:bg-zinc-800/80 dark:hover:bg-zinc-700/80 text-slate-700 dark:text-zinc-200 font-bold text-xs uppercase tracking-wider transition-all cursor-pointer border border-slate-200/60 dark:border-zinc-700/60"
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-surface-secondary hover:bg-surface-tertiary text-text-primary font-bold text-xs uppercase tracking-wider transition-all cursor-pointer border-2 border-border-ink"
                       >
                         <ExternalLink size={12} />
                         <span>Check VTOP</span>
@@ -945,7 +923,7 @@ export default function SyncNotification({
                           onDismiss();
                           onRetry?.();
                         }}
-                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 active:bg-rose-500/25 text-rose-600 dark:text-rose-400 border border-rose-500/30 font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-sm shadow-rose-500/10"
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-danger-surface hover:bg-danger-surface active:bg-rose-500/25 text-danger-foreground border border-border-ink font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-brutal-sm"
                       >
                         <RefreshCw size={12} />
                         <span>Retry Sync</span>
@@ -960,16 +938,14 @@ export default function SyncNotification({
                   animate={{ opacity: 1, scale: 1 }}
                   className="flex flex-col items-center text-center py-8 px-4 w-full"
                 >
-                  <div className="relative w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-500 flex items-center justify-center shadow-lg shadow-amber-500/10">
+                  <div className="relative w-14 h-14 rounded-2xl bg-warning-surface border border-border-ink text-warning-foreground flex items-center justify-center shadow-brutal-sm">
                     <Loader2 className="w-7 h-7 animate-spin" />
                   </div>
-                  <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-600 dark:text-amber-400 text-[10px] font-black uppercase tracking-widest">
+                  <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] bg-warning-surface border border-border-ink text-warning-foreground text-xs font-bold uppercase tracking-widest min-h-9">
                     <span>Checking Reachability</span>
                   </div>
-                  <h4 className="mt-2.5 text-base font-black text-slate-900 dark:text-white font-outfit">
-                    Connecting to VTOP…
-                  </h4>
-                  <p className="mt-1 text-xs font-medium text-slate-500 dark:text-zinc-400 max-w-[280px] leading-relaxed">
+                  <h4 className="mt-2.5 text-base font-bold text-text-heading font-outfit">Connecting to VTOP…</h4>
+                  <p className="mt-1 text-xs font-medium text-text-muted max-w-[280px] leading-relaxed">
                     Checking if vtopcc.vit.ac.in is online to determine server status.
                   </p>
                 </motion.div>
@@ -983,17 +959,17 @@ export default function SyncNotification({
                 >
                   {/* ICON BADGE */}
                   {authFailure ? (
-                    <div className="w-14 h-14 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center border border-amber-500/25 shadow-lg shadow-amber-500/20 ring-1 ring-amber-500/30">
+                    <div className="w-14 h-14 rounded-full bg-warning-surface text-warning-foreground flex items-center justify-center border border-border-ink shadow-brutal-sm ring-1 ring-amber-500/30">
                       <KeyRound className="w-7 h-7" strokeWidth={2.2} />
                     </div>
                   ) : (
-                    <div className="w-14 h-14 rounded-full bg-rose-500/10 text-rose-500 flex items-center justify-center border border-rose-500/25 shadow-lg shadow-rose-500/20 ring-1 ring-rose-500/30">
+                    <div className="w-14 h-14 rounded-full bg-danger-surface text-danger-foreground flex items-center justify-center border border-border-ink shadow-brutal-sm ring-1 ring-rose-500/30">
                       <AlertCircle className="w-7 h-7" strokeWidth={2.2} />
                     </div>
                   )}
 
                   {/* HEADLINE */}
-                  <h4 className="mt-3.5 text-base font-black text-slate-900 dark:text-white font-outfit">
+                  <h4 className="mt-3.5 text-base font-bold text-text-heading font-outfit">
                     {authFailure === "bad-credentials"
                       ? "Check Your Password"
                       : authFailure
@@ -1002,14 +978,14 @@ export default function SyncNotification({
                   </h4>
 
                   {/* EXPLANATORY DESCRIPTION */}
-                  <p className="mt-1 text-xs font-medium text-slate-500 dark:text-zinc-400 max-w-[280px] leading-relaxed">
+                  <p className="mt-1 text-xs font-medium text-text-muted max-w-[280px] leading-relaxed">
                     {authFailure === "bad-credentials" ? (
                       "VTOP rejected your saved credentials. Update your password or reset it directly on the university portal."
                     ) : authFailure ? (
                       <>
                         Your VTOP session was rejected. Please log in directly to{" "}
-                        <span className="font-bold text-amber-600 dark:text-amber-400">vtopcc.vit.ac.in</span> to verify
-                        or change your password.
+                        <span className="font-bold text-warning-foreground">vtopcc.vit.ac.in</span> to verify or change
+                        your password.
                       </>
                     ) : vtopState === "up" ? (
                       "VTOP portal is online, but our sync API gateways could not connect. Try switching to the Backup API or retry."
@@ -1028,7 +1004,7 @@ export default function SyncNotification({
                               e.stopPropagation();
                               onChangePassword();
                             }}
-                            className="w-full flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md shadow-indigo-600/20"
+                            className="w-full flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-brutal-sm border-2 border-border-ink"
                           >
                             <KeyRound size={12} />
                             <span>Change Password</span>
@@ -1040,7 +1016,7 @@ export default function SyncNotification({
                               e.stopPropagation();
                               onDismiss();
                             }}
-                            className="flex-1 py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-200 font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
+                            className="flex-1 py-2.5 px-4 rounded-xl bg-surface-secondary hover:bg-surface-tertiary text-text-primary font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
                           >
                             Dismiss
                           </button>
@@ -1048,7 +1024,7 @@ export default function SyncNotification({
                             href={VTOP_PORTAL_URL}
                             target="_blank"
                             rel="noreferrer"
-                            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md shadow-amber-500/20"
+                            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-brutal-sm"
                           >
                             <ExternalLink size={12} />
                             <span>Reset on VTOP</span>
@@ -1062,7 +1038,7 @@ export default function SyncNotification({
                             e.stopPropagation();
                             onDismiss();
                           }}
-                          className="flex-1 py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-200 font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
+                          className="flex-1 py-2.5 px-4 rounded-xl bg-surface-secondary hover:bg-surface-tertiary text-text-primary font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
                         >
                           Dismiss
                         </button>
@@ -1070,7 +1046,7 @@ export default function SyncNotification({
                           href={VTOP_PORTAL_URL}
                           target="_blank"
                           rel="noreferrer"
-                          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md shadow-amber-500/20"
+                          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-brutal-sm"
                         >
                           <ExternalLink size={12} />
                           <span>Open VTOP</span>
@@ -1084,7 +1060,7 @@ export default function SyncNotification({
                               e.stopPropagation();
                               handleSwitchToBackup();
                             }}
-                            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-500/10 hover:bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/20 font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
+                            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-warning-surface hover:bg-warning-surface text-warning-foreground border border-border-ink font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
                           >
                             <RefreshCw size={12} />
                             <span>Switch to Backup API</span>
@@ -1096,7 +1072,7 @@ export default function SyncNotification({
                               e.stopPropagation();
                               onDismiss();
                             }}
-                            className="flex-1 py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-200 font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
+                            className="flex-1 py-2.5 px-4 rounded-xl bg-surface-secondary hover:bg-surface-tertiary text-text-primary font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
                           >
                             Dismiss
                           </button>
@@ -1106,7 +1082,7 @@ export default function SyncNotification({
                               onDismiss();
                               onRetry?.();
                             }}
-                            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md shadow-rose-600/20"
+                            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-brutal-sm"
                           >
                             <RefreshCw size={12} />
                             <span>Retry Sync</span>
@@ -1121,18 +1097,18 @@ export default function SyncNotification({
                         <button
                           type="button"
                           onClick={() => setShowConsole(!showConsole)}
-                          className="w-full flex items-center justify-between py-1.5 px-3 rounded-xl bg-slate-100/70 hover:bg-slate-200/70 dark:bg-zinc-900/80 dark:hover:bg-zinc-800 border border-slate-200/50 dark:border-zinc-800/60 transition-colors cursor-pointer"
+                          className="w-full flex items-center justify-between py-1.5 px-3 rounded-xl bg-surface-secondary hover:bg-surface-tertiary border-2 border-border-ink transition-colors cursor-pointer"
                         >
                           <div className="flex items-center gap-2 min-w-0">
-                            <Terminal size={12} className="text-slate-400 dark:text-zinc-500 shrink-0" />
-                            <span className="text-[10.5px] font-semibold text-slate-600 dark:text-zinc-400">
+                            <Terminal size={12} className="text-text-muted shrink-0" />
+                            <span className="text-xs font-semibold text-text-muted">
                               Error Log & Diagnostics ({logLines.length} events)
                             </span>
                           </div>
                           {showConsole ? (
-                            <ChevronUp size={12} className="text-slate-400" />
+                            <ChevronUp size={12} className="text-text-muted" />
                           ) : (
-                            <ChevronDown size={12} className="text-slate-400" />
+                            <ChevronDown size={12} className="text-text-muted" />
                           )}
                         </button>
 
@@ -1145,7 +1121,7 @@ export default function SyncNotification({
                               transition={{ duration: 0.2 }}
                               className="overflow-hidden mt-1.5"
                             >
-                              <div className="bg-slate-900 dark:bg-black/90 text-slate-200 rounded-xl p-3 max-h-[140px] overflow-y-auto text-[10px] font-mono space-y-1.5 scrollbar-none border border-slate-800">
+                              <div className="bg-surface-secondary text-text-muted border-2 border-border-ink rounded-[10px] p-3 max-h-[140px] overflow-y-auto text-xs font-mono space-y-1.5 scrollbar-none border border-border-ink">
                                 {logLines.map((line, idx) => {
                                   const isLast = idx === logLines.length - 1;
                                   const { text, status } = parseLogLine(line, isLast);
@@ -1155,10 +1131,10 @@ export default function SyncNotification({
                                       <span
                                         className={
                                           status === "error"
-                                            ? "text-rose-400 font-bold"
+                                            ? "text-danger-foreground font-bold"
                                             : isLast
                                               ? "text-white font-bold"
-                                              : "text-slate-400"
+                                              : "text-text-muted"
                                         }
                                       >
                                         {text}
@@ -1183,21 +1159,19 @@ export default function SyncNotification({
                 transition={{ duration: 0.2 }}
                 className="flex flex-col items-center text-center py-5 px-3 gap-3.5"
               >
-                <div className="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-100 dark:border-emerald-900/30">
+                <div className="w-12 h-12 rounded-full bg-success-surface text-success-foreground flex items-center justify-center border border-border-ink">
                   <CheckCircle2 size={24} />
                 </div>
                 <div className="space-y-1">
-                  <h3 className="font-extrabold text-slate-900 dark:text-white text-sm font-outfit">
-                    Backup Server Active
-                  </h3>
-                  <p className="text-[11px] text-slate-500 dark:text-zinc-400 leading-relaxed font-medium">
+                  <h3 className="font-bold text-text-heading text-sm font-outfit">Backup Server Active</h3>
+                  <p className="text-xs text-text-muted leading-relaxed font-medium">
                     Connection updated to bypass local firewall filters.
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2 w-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl p-2.5 pr-1.5 select-none">
-                  <Globe size={13} className="text-slate-400 dark:text-zinc-500 shrink-0" />
-                  <span className="text-[10px] text-slate-600 dark:text-zinc-400 font-mono truncate text-left flex-1 font-semibold">
+                <div className="flex items-center gap-2 w-full bg-surface-secondary border-2 border-border-ink rounded-xl p-2.5 pr-1.5 select-none">
+                  <Globe size={13} className="text-text-muted shrink-0" />
+                  <span className="text-xs text-text-muted font-mono truncate text-left flex-1 font-semibold">
                     {BACKUP_API_URL}
                   </span>
                   <button
@@ -1205,9 +1179,9 @@ export default function SyncNotification({
                       e.stopPropagation();
                       handleCopy();
                     }}
-                    className="p-1 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-zinc-200 hover:bg-slate-200 dark:hover:bg-zinc-800 transition-colors"
+                    className="p-1 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors"
                   >
-                    {copied ? <Check size={11} className="text-emerald-500" /> : <Copy size={11} />}
+                    {copied ? <Check size={11} className="text-success-foreground" /> : <Copy size={11} />}
                   </button>
                 </div>
 
@@ -1216,7 +1190,7 @@ export default function SyncNotification({
                     e.stopPropagation();
                     onDismiss();
                   }}
-                  className="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider transition-all active:scale-[0.985] cursor-pointer shadow-md shadow-blue-500/15"
+                  className="w-full py-2.5 px-4 rounded-xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs uppercase tracking-wider transition-all active:scale-[0.985] cursor-pointer shadow-brutal-sm border-2 border-border-ink"
                 >
                   Dismiss & Try Again
                 </button>
@@ -1234,23 +1208,23 @@ export default function SyncNotification({
                           setShowModeMenu(!showModeMenu);
                           setShowServerMenu(false);
                         }}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-900/40 hover:bg-blue-100/60 dark:hover:bg-blue-900/50 transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[10px] text-xs font-bold bg-secondary text-secondary-foreground border-2 border-border-ink hover:bg-blue-100/60 dark:hover:bg-blue-900/50 transition-colors cursor-pointer min-h-9"
                         title="Change sync mode"
                       >
-                        <Sparkles size={11} className="text-blue-500 dark:text-blue-400 shrink-0" />
+                        <Sparkles size={11} className="text-primary shrink-0" />
                         <span className="truncate max-w-[130px]">{activeModeTitle}</span>
                         <ChevronDown size={11} className="opacity-70 shrink-0" />
                       </button>
                     ) : (
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-zinc-800/70 text-slate-700 dark:text-zinc-300">
-                        <Layers size={11} className="text-slate-500 shrink-0" />
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[10px] text-xs font-bold bg-surface-secondary text-text-primary min-h-9">
+                        <Layers size={11} className="text-text-muted shrink-0" />
                         <span>{activeModeTitle}</span>
                       </div>
                     )}
 
                     {/* Mode Dropdown Menu */}
                     {showModeMenu && (
-                      <div className="absolute left-0 top-full mt-1.5 z-30 w-60 rounded-2xl bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 shadow-xl p-1.5 space-y-0.5 animate-in fade-in zoom-in-95 duration-100">
+                      <div className="absolute left-0 top-full mt-1.5 z-30 w-60 rounded-2xl bg-surface border-2 border-border-ink shadow-xl p-1.5 space-y-0.5 animate-in fade-in zoom-in-95 duration-100">
                         {modes?.map((m) => {
                           const isSelected = m.id === modeId;
                           const isDefault = defaultModeId === m.id;
@@ -1263,36 +1237,34 @@ export default function SyncNotification({
                               }}
                               className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-left text-xs transition-colors ${
                                 isSelected
-                                  ? "bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 font-bold"
-                                  : "text-slate-700 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-zinc-800/60 font-medium"
+                                  ? "bg-secondary text-secondary-foreground font-bold"
+                                  : "text-text-primary hover:bg-surface-hover font-medium"
                               }`}
                             >
                               <div className="min-w-0 pr-2">
                                 <div className="flex items-center gap-1.5">
                                   {isDefault && (
-                                    <span className="text-[10px] text-amber-500 font-bold" title="Default Mode">
+                                    <span className="text-xs text-warning-foreground font-bold" title="Default Mode">
                                       ★
                                     </span>
                                   )}
                                   <span className="truncate">{m.label}</span>
                                 </div>
-                                <span className="text-[10px] text-slate-400 dark:text-zinc-500 truncate block">
-                                  {m.description}
-                                </span>
+                                <span className="text-xs text-text-muted truncate block">{m.description}</span>
                               </div>
-                              {isSelected && <Check size={13} className="shrink-0 text-blue-500" />}
+                              {isSelected && <Check size={13} className="shrink-0 text-primary" />}
                             </button>
                           );
                         })}
 
                         {onOpenEditor && (
-                          <div className="pt-1 mt-1 border-t border-slate-100 dark:border-zinc-800">
+                          <div className="pt-1 mt-1 border-t border-border-ink">
                             <button
                               onClick={() => {
                                 setShowModeMenu(false);
                                 onOpenEditor();
                               }}
-                              className="w-full flex items-center gap-2 px-3 py-1.5 rounded-xl text-left text-xs font-semibold text-slate-500 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800/60 transition-colors"
+                              className="w-full flex items-center gap-2 px-3 py-1.5 rounded-xl text-left text-xs font-semibold text-text-muted hover:bg-surface-hover transition-colors"
                             >
                               <Settings size={12} />
                               <span>Manage Custom Modes</span>
@@ -1312,7 +1284,7 @@ export default function SyncNotification({
                           setShowServerMenu(!showServerMenu);
                           setShowModeMenu(false);
                         }}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[11px] font-bold bg-slate-100 hover:bg-slate-200/70 dark:bg-zinc-800/80 dark:hover:bg-zinc-800 border border-slate-200/60 dark:border-zinc-700/60 text-slate-700 dark:text-zinc-300 transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-[10px] text-xs font-bold bg-surface-secondary hover:bg-surface-tertiary border-2 border-border-ink text-text-primary transition-colors cursor-pointer min-h-9"
                         title="Target Server Status"
                       >
                         <span
@@ -1320,31 +1292,31 @@ export default function SyncNotification({
                             uniccTarget === "unicc"
                               ? "bg-amber-500 animate-pulse"
                               : targetValue === BACKUP_API_URL
-                                ? "bg-indigo-500"
+                                ? "bg-primary"
                                 : "bg-emerald-500"
                           }`}
                         />
                         <span>{activeServerLabel}</span>
-                        <ChevronDown size={10} className="text-slate-400 dark:text-zinc-500" />
+                        <ChevronDown size={10} className="text-text-muted" />
                       </button>
 
                       {/* Server Selection Dropdown */}
                       {showServerMenu && (
-                        <div className="absolute right-0 top-full mt-1.5 z-30 w-56 rounded-2xl bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 shadow-xl p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-100">
-                          <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-zinc-500">
+                        <div className="absolute right-0 top-full mt-1.5 z-30 w-56 rounded-2xl bg-surface border-2 border-border-ink shadow-xl p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-100">
+                          <div className="px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-text-muted">
                             Switch Gateway
                           </div>
                           <button
                             onClick={() => handleTargetChange(PRIMARY_API_URL)}
                             className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-left text-xs font-semibold transition-colors ${
                               targetValue === PRIMARY_API_URL && uniccTarget !== "unicc"
-                                ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400"
-                                : "text-slate-700 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-zinc-800"
+                                ? "bg-success-surface text-success-foreground"
+                                : "text-text-primary hover:bg-surface-hover"
                             }`}
                           >
                             <span>AmazeCC (Primary)</span>
                             {targetValue === PRIMARY_API_URL && uniccTarget !== "unicc" && (
-                              <Check size={13} className="text-emerald-500" />
+                              <Check size={13} className="text-success-foreground" />
                             )}
                           </button>
 
@@ -1353,13 +1325,13 @@ export default function SyncNotification({
                               onClick={() => handleTargetChange(BACKUP_API_URL)}
                               className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-left text-xs font-semibold transition-colors ${
                                 targetValue === BACKUP_API_URL && uniccTarget !== "unicc"
-                                  ? "bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-400"
-                                  : "text-slate-700 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-zinc-800"
+                                  ? "bg-secondary text-secondary-foreground"
+                                  : "text-text-primary hover:bg-surface-hover"
                               }`}
                             >
                               <span>AmazeCC (Backup)</span>
                               {targetValue === BACKUP_API_URL && uniccTarget !== "unicc" && (
-                                <Check size={13} className="text-indigo-500" />
+                                <Check size={13} className="text-primary" />
                               )}
                             </button>
                           )}
@@ -1369,17 +1341,17 @@ export default function SyncNotification({
                               onClick={() => handleTargetChange(UNICC_API_URL)}
                               className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-left text-xs font-semibold transition-colors ${
                                 uniccTarget === "unicc"
-                                  ? "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400"
-                                  : "text-slate-700 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-zinc-800"
+                                  ? "bg-warning-surface text-warning-foreground"
+                                  : "text-text-primary hover:bg-surface-hover"
                               }`}
                             >
                               <span>UniCC Proxy</span>
-                              {uniccTarget === "unicc" && <Check size={13} className="text-amber-500" />}
+                              {uniccTarget === "unicc" && <Check size={13} className="text-warning-foreground" />}
                             </button>
                           )}
 
                           {servingText && (
-                            <div className="mt-1 pt-1 border-t border-slate-100 dark:border-zinc-800 px-2 py-1 text-[9.5px] font-medium text-slate-500 dark:text-zinc-400 leading-tight">
+                            <div className="mt-1 pt-1 border-t border-border-ink px-2 py-1 text-[9.5px] font-medium text-text-muted leading-tight">
                               {servingText}
                             </div>
                           )}
@@ -1393,7 +1365,7 @@ export default function SyncNotification({
                         e.stopPropagation();
                         setIsMinimized(true);
                       }}
-                      className="p-2 sm:p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 dark:bg-zinc-800/80 dark:hover:bg-zinc-700/80 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white border border-slate-200/60 dark:border-zinc-700/60 transition-all active:scale-95 cursor-pointer shadow-xs"
+                      className="p-2 sm:p-2.5 rounded-xl bg-surface-secondary hover:bg-surface-tertiary text-text-muted hover:text-text-heading border-2 border-border-ink transition-all cursor-pointer shadow-xs"
                       title="Minimize / Run in background"
                     >
                       <Minimize2 size={17} />
@@ -1404,18 +1376,16 @@ export default function SyncNotification({
                 {/* 2. HERO STAGE (PROGRESS & ACTIVE HEADLINE) */}
                 <div className="w-full space-y-2 pt-0.5">
                   <div className="flex justify-between items-baseline gap-2">
-                    <h3 className="font-extrabold text-slate-900 dark:text-white text-sm font-outfit truncate">
-                      {cleanedHeadline}
-                    </h3>
-                    <span className="text-xs font-mono font-black text-blue-600 dark:text-blue-400 shrink-0">
+                    <h3 className="font-bold text-text-heading text-sm font-outfit truncate">{cleanedHeadline}</h3>
+                    <span className="text-xs font-mono font-bold text-primary shrink-0">
                       {Math.min(100, Math.round(progress))}%
                     </span>
                   </div>
 
                   {/* High performance spring progress bar */}
-                  <div className="w-full bg-slate-100 dark:bg-zinc-800 h-2 rounded-full overflow-hidden relative">
+                  <div className="w-full bg-surface-secondary h-2 rounded-full overflow-hidden relative">
                     <motion.div
-                      className="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-600 rounded-full"
+                      className="h-full rounded-full"
                       animate={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
                       transition={{ type: "spring", damping: 24, stiffness: 140 }}
                     />
@@ -1428,39 +1398,39 @@ export default function SyncNotification({
                     return (
                       <div
                         key={mItem.id}
-                        className="flex items-center justify-between py-1.5 px-3 rounded-xl bg-slate-50/70 dark:bg-zinc-900/50 border border-slate-200/50 dark:border-zinc-800/50 text-xs"
+                        className="flex items-center justify-between py-1.5 px-3 rounded-xl bg-surface-secondary border-2 border-border-ink text-xs"
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
                           {mItem.status === "completed" ? (
-                            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                            <CheckCircle2 className="w-4 h-4 text-success-foreground shrink-0" />
                           ) : mItem.status === "error" ? (
-                            <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
+                            <AlertCircle className="w-4 h-4 text-danger-foreground shrink-0" />
                           ) : mItem.status === "active" ? (
-                            <Loader2 className="w-4 h-4 text-blue-500 animate-spin shrink-0" />
+                            <Loader2 className="w-4 h-4 text-primary animate-spin shrink-0" />
                           ) : (
-                            <div className="w-4 h-4 rounded-full border-2 border-slate-300 dark:border-zinc-700 shrink-0" />
+                            <div className="w-4 h-4 rounded-full border-2 border-border-ink shrink-0" />
                           )}
                           <span
                             className={`font-semibold truncate ${
                               mItem.status === "active"
-                                ? "text-slate-900 dark:text-white font-bold"
+                                ? "text-text-heading font-bold"
                                 : mItem.status === "completed"
-                                  ? "text-slate-700 dark:text-zinc-300"
-                                  : "text-slate-400 dark:text-zinc-500"
+                                  ? "text-text-primary"
+                                  : "text-text-muted"
                             }`}
                           >
                             {mItem.label}
                           </span>
                         </div>
                         <span
-                          className={`text-[10px] font-medium shrink-0 ${
+                          className={`text-xs font-medium shrink-0 ${
                             mItem.status === "completed"
-                              ? "text-emerald-600 dark:text-emerald-400 font-bold"
+                              ? "text-success-foreground font-bold"
                               : mItem.status === "error"
-                                ? "text-rose-500 font-bold"
+                                ? "text-danger-foreground font-bold"
                                 : mItem.status === "active"
-                                  ? "text-blue-500 animate-pulse font-semibold"
-                                  : "text-slate-400 dark:text-zinc-600"
+                                  ? "text-primary animate-pulse font-semibold"
+                                  : "text-text-muted"
                           }`}
                         >
                           {mItem.detail}
@@ -1475,17 +1445,17 @@ export default function SyncNotification({
                   <motion.div
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="rounded-xl border border-rose-500/40 bg-rose-500/10 p-3 flex items-start gap-2.5 shadow-[0_0_16px_rgba(244,63,94,0.18)]"
+                    className="rounded-xl border border-border-ink bg-danger-surface p-3 flex items-start gap-2.5"
                   >
-                    <ServerOff className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                    <ServerOff className="w-4 h-4 text-danger-foreground shrink-0 mt-0.5" />
                     <div className="space-y-0.5 min-w-0 flex-1">
                       <div className="flex items-center justify-between">
-                        <p className="text-[11px] font-black uppercase tracking-wider text-rose-600 dark:text-rose-400">
+                        <p className="text-xs font-bold uppercase tracking-wider text-danger-foreground">
                           VTOP is Down
                         </p>
-                        <span className="text-[9px] font-bold text-rose-500/80">Offline</span>
+                        <span className="text-xs font-bold text-danger-foreground">Offline</span>
                       </div>
-                      <p className="text-[10.5px] font-medium text-slate-700 dark:text-zinc-300 leading-relaxed">
+                      <p className="text-xs font-medium text-text-primary leading-relaxed">
                         Direct connection to vtopcc.vit.ac.in timed out. The university portal appears to be offline.
                       </p>
                     </div>
@@ -1494,14 +1464,14 @@ export default function SyncNotification({
 
                 {/* 4. PROGRESSIVE DISCLOSURE: LIVE CONSOLE LOG DRAWER */}
                 <div className="w-full space-y-1.5">
-                  <div className="w-full flex items-center justify-between py-1.5 px-3 rounded-xl bg-slate-100/80 dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/80 transition-colors">
+                  <div className="w-full flex items-center justify-between py-1.5 px-3 rounded-xl bg-surface-secondary border-2 border-border-ink transition-colors">
                     <button
                       type="button"
                       onClick={() => setShowConsole(!showConsole)}
                       className="flex items-center gap-2 min-w-0 flex-1 text-left cursor-pointer select-none py-0.5"
                     >
-                      <Terminal size={12} className="text-slate-500 dark:text-zinc-400 shrink-0" />
-                      <span className="text-[11px] font-semibold text-slate-700 dark:text-zinc-300">
+                      <Terminal size={12} className="text-text-muted shrink-0" />
+                      <span className="text-xs font-semibold text-text-primary">
                         Diagnostics ({logLines.length} events)
                       </span>
                     </button>
@@ -1514,16 +1484,16 @@ export default function SyncNotification({
                             setCopied(true);
                             setTimeout(() => setCopied(false), 1500);
                           }}
-                          className="p-1 rounded text-slate-400 hover:text-slate-600 dark:hover:text-zinc-200 transition-colors cursor-pointer"
+                          className="p-1 rounded text-text-muted hover:text-text-muted transition-colors cursor-pointer"
                           title="Copy full logs"
                         >
-                          {copied ? <Check size={11} className="text-emerald-500" /> : <Copy size={11} />}
+                          {copied ? <Check size={11} className="text-success-foreground" /> : <Copy size={11} />}
                         </button>
                       )}
                       <button
                         type="button"
                         onClick={() => setShowConsole(!showConsole)}
-                        className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-zinc-300 transition-colors cursor-pointer"
+                        className="p-1 text-text-muted hover:text-text-muted transition-colors cursor-pointer"
                       >
                         {showConsole ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                       </button>
@@ -1539,14 +1509,14 @@ export default function SyncNotification({
                         transition={{ duration: 0.2 }}
                         className="overflow-hidden"
                       >
-                        <div className="bg-slate-900 dark:bg-black/80 text-slate-200 rounded-xl p-3 max-h-[130px] overflow-y-auto text-[10px] font-mono space-y-1.5 scrollbar-none border border-slate-800">
+                        <div className="bg-surface-secondary text-text-muted border-2 border-border-ink rounded-[10px] p-3 max-h-[130px] overflow-y-auto text-xs font-mono space-y-1.5 scrollbar-none border border-border-ink">
                           {logLines.map((line, idx) => {
                             const isLast = idx === logLines.length - 1;
                             const { text, status } = parseLogLine(line, isLast);
                             return (
                               <div key={idx} className="flex items-start gap-2">
                                 {getStatusIcon(status)}
-                                <span className={isLast ? "text-white font-bold" : "text-slate-400"}>{text}</span>
+                                <span className={isLast ? "text-white font-bold" : "text-text-muted"}>{text}</span>
                               </div>
                             );
                           })}
@@ -1570,11 +1540,11 @@ export default function SyncNotification({
                           e.stopPropagation();
                           handleSwitchToBackup();
                         }}
-                        className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/20 font-bold text-[10px] uppercase tracking-wider transition-all active:scale-[0.985] cursor-pointer"
+                        className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-warning-surface hover:bg-warning-surface text-warning-foreground border border-border-ink font-bold text-xs uppercase tracking-wider transition-all active:scale-[0.985] cursor-pointer"
                       >
                         <RefreshCw
                           size={11}
-                          className="animate-spin text-amber-500"
+                          className="animate-spin text-warning-foreground"
                           style={{ animationDuration: "3s" }}
                         />
                         <span>Slow network? Switch to Backup API</span>
@@ -1587,13 +1557,10 @@ export default function SyncNotification({
                 <div className="pt-1.5 w-full">
                   <button
                     onClick={handleCancelSync}
-                    className="group relative w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-rose-500/80 dark:border-rose-500 bg-rose-500/[0.08] hover:bg-rose-500/[0.18] active:bg-rose-500/[0.28] dark:bg-rose-950/40 dark:hover:bg-rose-950/70 text-rose-600 dark:text-rose-400 font-black text-xs uppercase tracking-wider transition-all duration-200 active:scale-[0.985] cursor-pointer shadow-[0_0_15px_rgba(244,63,94,0.35),inset_0_0_8px_rgba(244,63,94,0.12)] hover:shadow-[0_0_24px_rgba(244,63,94,0.6),inset_0_0_12px_rgba(244,63,94,0.22)] ring-1 ring-rose-500/40 dark:ring-rose-400/50"
+                    className="group relative w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-border-ink bg-danger-surface hover:brightness-95 hover:brightness-95 dark:hover:bg-rose-950/70 text-danger-foreground font-bold text-xs uppercase tracking-wider transition-all duration-200 active:scale-[0.985] cursor-pointer ring-1 ring-rose-500/40 dark:ring-rose-400/50"
                   >
-                    <X
-                      size={15}
-                      className="stroke-[2.7] text-rose-500 dark:text-rose-400 drop-shadow-[0_0_4px_rgba(244,63,94,0.8)]"
-                    />
-                    <span className="drop-shadow-[0_0_6px_rgba(244,63,94,0.4)]">Cancel Sync</span>
+                    <X size={15} className="stroke-[2.7] text-danger-foreground" />
+                    <span className="">Cancel Sync</span>
                   </button>
                 </div>
               </>

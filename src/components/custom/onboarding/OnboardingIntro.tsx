@@ -5,8 +5,8 @@
  *
  *   login  →  full-sync progress  →  welcome  →  (hand-off to the steps)
  *
- * They share the onboarding hero's design language (fixed zinc-950 canvas,
- * ambient indigo/violet wash, `font-outfit` display type, zinc-900 cards) so
+ * They share the onboarding hero's design language (brand canvas that follows
+ * light/dark, display type, ink-edged cards) so
  * sign-in reads as page one of onboarding rather than a modal bolted on top.
  *
  * The sync screen replaces the sync-engine bottom sheet for the first login:
@@ -72,11 +72,8 @@ const MIN_SYNC_FACE_MS = 1400;
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-zinc-950 px-5 text-zinc-100 select-none animate-in fade-in duration-300 sm:px-8">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 left-1/2 h-[550px] w-[550px] -translate-x-1/2 rounded-full bg-indigo-600/10 blur-[150px]" />
-        <div className="absolute -bottom-40 left-1/2 h-[550px] w-[550px] -translate-x-1/2 rounded-full bg-violet-600/10 blur-[150px]" />
-      </div>
+    <div className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-background px-5 text-text-primary select-none animate-in fade-in duration-300 sm:px-8">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden"></div>
       <div className="relative z-10 flex min-h-0 flex-1 flex-col overflow-y-auto pt-[calc(env(safe-area-inset-top,0px)+1.25rem)] pb-[calc(env(safe-area-inset-bottom,0px)+1.25rem)] sm:pt-[calc(env(safe-area-inset-top,0px)+1.75rem)] sm:pb-[calc(env(safe-area-inset-bottom,0px)+1.75rem)]">
         {children}
       </div>
@@ -94,24 +91,22 @@ function Brand() {
         width={28}
         height={28}
         decoding="async"
-        className="h-7 w-7 rounded-xl border border-zinc-800 bg-zinc-900 p-0.5 object-contain"
+        className="h-7 w-7 rounded-xl border border-border-ink bg-surface p-0.5 object-contain"
       />
-      <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500 font-outfit">AmazeCC</span>
+      <span className="text-xs font-bold uppercase tracking-[0.2em] text-text-muted font-outfit">AmazeCC</span>
     </div>
   );
 }
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <label className="text-[10px] font-black uppercase tracking-wider text-zinc-400 font-outfit">{children}</label>
-  );
+  return <label className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">{children}</label>;
 }
 
 const inputClass =
-  "w-full rounded-xl border border-zinc-800 bg-zinc-950/60 px-4 py-2.5 text-sm font-bold text-white transition-all placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-indigo-500";
+  "w-full rounded-xl border border-border-ink bg-background px-4 py-2.5 text-sm font-bold text-text-heading transition-all placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-border-ink";
 
 const ctaClass =
-  "flex w-full items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3.5 font-black text-sm text-white shadow-xl shadow-indigo-600/20 transition-all hover:bg-indigo-500 active:scale-[0.98] cursor-pointer font-outfit tracking-wide";
+  "flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3.5 font-bold text-sm text-primary-foreground shadow-brutal-sm border-2 border-border-ink transition-all hover:brightness-110 cursor-pointer font-outfit tracking-wide";
 
 export default function OnboardingIntro({ initialPhase, login, onDone }: OnboardingIntroProps) {
   const [phase, setPhase] = useState<IntroPhase>(initialPhase);
@@ -232,38 +227,36 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
         {phase === "login" && (
           <div className="grid w-full animate-in fade-in slide-in-from-bottom-4 duration-300 gap-6 lg:grid-cols-2 lg:items-center lg:gap-10">
             {/* Amaze ID — one account for every AmazeCC app */}
-            <div className="rounded-3xl border border-indigo-500/25 bg-indigo-500/[0.07] p-4 sm:p-5 backdrop-blur-xl lg:col-span-2">
+            <div className="rounded-[14px] border border-border-ink bg-secondary p-4 sm:p-5 lg:col-span-2">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex min-w-0 items-center gap-3">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-indigo-600/20 text-indigo-300">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-secondary text-secondary-foreground">
                     <ShieldCheck size={22} />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-indigo-400 font-outfit">
-                      Amaze ID
-                    </p>
-                    <p className="text-sm font-bold text-zinc-100">One account for every AmazeCC app</p>
-                    <p className="text-[10px] text-zinc-500">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary font-outfit">Amaze ID</p>
+                    <p className="text-sm font-bold text-text-primary">One account for every AmazeCC app</p>
+                    <p className="text-xs text-text-muted">
                       Club Hub, Admin Portal, GoRoBo and more - with VTOP as an optional link.
                     </p>
                   </div>
                 </div>
 
                 {amazeIdUser ? (
-                  <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-emerald-500/25 bg-emerald-500/10 px-3 py-2">
-                    <CheckCircle2 size={17} className="shrink-0 text-emerald-400" />
+                  <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-border-ink bg-success-surface px-3 py-2">
+                    <CheckCircle2 size={17} className="shrink-0 text-success-foreground" />
                     <div className="min-w-0">
-                      <p className="max-w-[190px] truncate text-[11px] font-bold text-emerald-300">
+                      <p className="max-w-[190px] truncate text-xs font-bold text-success-foreground">
                         {amazeIdUser.name}
                       </p>
-                      <p className="max-w-[190px] truncate text-[9px] text-emerald-500">{amazeIdUser.email}</p>
+                      <p className="max-w-[190px] truncate text-xs text-success-foreground">{amazeIdUser.email}</p>
                     </div>
                     <button
                       type="button"
                       onClick={() => {
                         void signOutApp().then(() => setAmazeIdUser(null));
                       }}
-                      className="shrink-0 text-[10px] font-bold text-zinc-500 underline underline-offset-2 transition-colors hover:text-zinc-300"
+                      className="shrink-0 text-xs font-bold text-text-muted underline underline-offset-2 transition-colors hover:text-text-secondary"
                     >
                       Sign out
                     </button>
@@ -273,7 +266,7 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
                     <button
                       type="button"
                       onClick={signInInteractive}
-                      className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-indigo-600 px-4 py-2.5 text-[11px] font-black uppercase tracking-wider text-white shadow-lg shadow-indigo-600/25 transition-all hover:bg-indigo-500 active:scale-[0.98] font-outfit"
+                      className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-primary px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-brutal-sm border-2 border-border-ink transition-all hover:brightness-110 font-outfit"
                     >
                       Sign in with Amaze ID
                       <ArrowRight size={12} strokeWidth={3} />
@@ -281,7 +274,7 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
                     <button
                       type="button"
                       onClick={signInInteractive}
-                      className="text-center text-[10px] font-bold text-amber-400/90 transition-colors hover:text-amber-300 hover:underline"
+                      className="text-center text-xs font-bold text-warning-foreground transition-colors hover:text-warning-foreground hover:underline"
                     >
                       New here? Create an Amaze ID →
                     </button>
@@ -293,20 +286,18 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
             {/* Pitch (design language of the hero pages) */}
             <div className="space-y-4 text-left">
               <Brand />
-              <p className="inline-flex w-fit items-center gap-1.5 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-indigo-400 font-outfit">
+              <p className="inline-flex w-fit items-center gap-1.5 rounded-[10px] border border-border-ink bg-secondary px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-secondary-foreground font-outfit min-h-9">
                 <Sparkles size={11} /> Step one of onboarding
               </p>
-              <h1 className="text-3xl font-black leading-[1.05] tracking-tight text-white font-outfit sm:text-4xl">
+              <h1 className="text-3xl font-bold leading-[1.05] tracking-tight text-text-heading font-outfit sm:text-4xl">
                 Bring your VIT life
-                <span className="block bg-gradient-to-r from-indigo-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
-                  into one place.
-                </span>
+                <span className="block bg-clip-text text-transparent">into one place.</span>
               </h1>
-              <p className="max-w-md text-sm leading-relaxed text-zinc-400">
+              <p className="max-w-md text-sm leading-relaxed text-text-muted">
                 Sign in with your VTOP credentials and we will pull attendance, grades, your timetable and campus
                 services straight from the source.
               </p>
-              <ul className="flex flex-wrap gap-2 text-[10px] font-bold text-zinc-400">
+              <ul className="flex flex-wrap gap-2 text-xs font-bold text-text-muted">
                 {[
                   { icon: Lock, text: "Stays in this browser" },
                   { icon: Shield, text: "Verified with VTOP" },
@@ -314,9 +305,9 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
                 ].map((item) => (
                   <li
                     key={item.text}
-                    className="flex items-center gap-1.5 rounded-full border border-zinc-800 bg-zinc-900/60 px-3 py-1.5"
+                    className="flex items-center gap-1.5 rounded-[10px] border border-border-ink bg-surface px-3 py-1.5 min-h-9"
                   >
-                    <item.icon size={11} className="text-indigo-400" />
+                    <item.icon size={11} className="text-primary" />
                     {item.text}
                   </li>
                 ))}
@@ -324,18 +315,18 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
             </div>
 
             {/* Sign-in card */}
-            <div className="rounded-[28px] border border-zinc-800/80 bg-zinc-900/80 p-5 shadow-2xl backdrop-blur-xl sm:p-6">
+            <div className="rounded-[14px] border border-border-ink bg-surface p-5 shadow-2xl sm:p-6">
               <form onSubmit={submit} className="space-y-4 text-left">
-                <div className="space-y-1 border-b border-zinc-800 pb-3">
-                  <h2 className="text-sm font-black uppercase tracking-wider text-white font-outfit">
+                <div className="space-y-1 border-b border-border-ink pb-3">
+                  <h2 className="text-sm font-bold uppercase tracking-wider text-text-heading font-outfit">
                     Sign in to VTOP
                   </h2>
-                  <p className="text-[11px] text-zinc-500">Just your user ID and password.</p>
+                  <p className="text-xs text-text-muted">Just your user ID and password.</p>
                 </div>
 
-                <div className="flex items-center justify-between gap-3 rounded-xl border border-zinc-800 bg-zinc-950/60 px-3 py-2.5">
-                  <div className="flex items-center gap-2 text-[11px] font-bold text-zinc-400">
-                    <Server size={13} className="text-zinc-500" />
+                <div className="flex items-center justify-between gap-3 rounded-xl border border-border-ink bg-background px-3 py-2.5">
+                  <div className="flex items-center gap-2 text-xs font-bold text-text-muted">
+                    <Server size={13} className="text-text-muted" />
                     Target server
                   </div>
                   <SelectField
@@ -346,12 +337,12 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
                     size="sm"
                     role="group"
                     aria-label="Target server"
-                    className="w-auto shrink-0 [&>button:first-child]:border-none [&>button:first-child]:bg-transparent [&>button:first-child]:px-0 [&>button:first-child]:text-indigo-400"
+                    className="w-auto shrink-0 [&>button:first-child]:border-none [&>button:first-child]:bg-transparent [&>button:first-child]:px-0 [&>button:first-child]:text-primary"
                   />
                 </div>
 
                 {uniccTarget === "unicc" && (
-                  <p className="rounded-lg border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-[10px] leading-relaxed text-amber-400">
+                  <p className="rounded-lg border border-border-ink bg-warning-surface px-3 py-2 text-xs leading-relaxed text-warning-foreground">
                     Your VTOP password is sent to <span className="font-bold">api.uni-cc.site</span>, a third-party
                     service, to sign you in. Everything else still comes from AmazeCC.
                   </p>
@@ -389,7 +380,7 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
                       type="button"
                       aria-label={showPassword ? "Hide password" : "Show password"}
                       onClick={() => setShowPassword((prev) => !prev)}
-                      className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg p-2 text-zinc-500 transition-colors hover:text-white"
+                      className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg p-2 text-text-muted transition-colors hover:text-text-heading"
                     >
                       {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                     </button>
@@ -410,9 +401,9 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
                   {!submitting && <ArrowRight size={15} />}
                 </button>
 
-                <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-[10px] text-zinc-500">
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs text-text-muted">
                   <span>Credentials never leave this browser.</span>
-                  <a href="/ffcs/" className="font-bold text-indigo-400 transition-colors hover:text-indigo-300">
+                  <a href="/ffcs/" className="font-bold text-primary transition-colors hover:text-primary">
                     Skip — open FFCS Planner
                   </a>
                 </div>
@@ -458,7 +449,7 @@ function SignInRejection({
     return (
       <div
         role="alert"
-        className="flex items-start gap-2 rounded-xl border border-rose-500/25 bg-rose-500/10 px-3 py-2.5 text-[11px] font-semibold text-rose-400"
+        className="flex items-start gap-2 rounded-xl border border-border-ink bg-danger-surface px-3 py-2.5 text-xs font-semibold text-danger-foreground"
       >
         <AlertCircle size={14} className="mt-0.5 shrink-0" />
         <span className="min-w-0 break-words">{message}</span>
@@ -469,14 +460,14 @@ function SignInRejection({
   const badCredentials = authFailure === "bad-credentials";
 
   return (
-    <div role="alert" className="space-y-3 rounded-xl border border-amber-500/25 bg-amber-500/10 p-3.5 text-left">
+    <div role="alert" className="space-y-3 rounded-xl border border-border-ink bg-warning-surface p-3.5 text-left">
       <div className="flex items-start gap-2">
-        <KeyRound size={14} className="mt-0.5 shrink-0 text-amber-400" />
+        <KeyRound size={14} className="mt-0.5 shrink-0 text-warning-foreground" />
         <div className="min-w-0 space-y-1">
-          <p className="text-[10px] font-black uppercase tracking-wider text-amber-400">
+          <p className="text-xs font-bold uppercase tracking-wider text-warning-foreground">
             {badCredentials ? "Check your password" : "Sign-in rejected"}
           </p>
-          <p className="text-[11px] font-semibold leading-relaxed text-zinc-300">
+          <p className="text-xs font-semibold leading-relaxed text-text-secondary">
             {badCredentials ? (
               <>
                 VTOP says that user ID and password don&apos;t match. If you changed your password recently, update it
@@ -485,12 +476,12 @@ function SignInRejection({
             ) : (
               <>
                 VTOP refused the sign-in (a captcha, a rate limit or a lock-out). A new password here won&apos;t clear
-                it — please log in to <span className="font-black text-amber-400">vtopcc.vit.ac.in</span> and change
-                your password there.
+                it — please log in to <span className="font-bold text-warning-foreground">vtopcc.vit.ac.in</span> and
+                change your password there.
               </>
             )}
           </p>
-          <p className="break-words text-[10px] font-semibold text-zinc-500">{message}</p>
+          <p className="break-words text-xs font-semibold text-text-muted">{message}</p>
         </div>
       </div>
 
@@ -498,7 +489,7 @@ function SignInRejection({
         <button
           type="button"
           onClick={onChangePassword}
-          className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-[10px] font-black uppercase tracking-wider text-white shadow-md shadow-indigo-500/20 transition-colors hover:bg-indigo-500 active:scale-[0.985]"
+          className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-brutal-sm border-2 border-border-ink transition-colors hover:brightness-110 active:scale-[0.985]"
         >
           <KeyRound size={11} />
           <span>Change Password</span>
@@ -509,10 +500,10 @@ function SignInRejection({
         href="https://vtopcc.vit.ac.in"
         target="_blank"
         rel="noreferrer"
-        className={`flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-amber-500/25 px-4 py-3 text-[10px] font-black uppercase tracking-wider transition-colors active:scale-[0.985] ${
+        className={`flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-border-ink px-4 py-3 text-xs font-bold uppercase tracking-wider transition-colors active:scale-[0.985] ${
           badCredentials
-            ? "bg-amber-500/10 text-amber-300 hover:bg-amber-500/20"
-            : "bg-amber-500 text-white shadow-md shadow-amber-500/25 hover:bg-amber-600"
+            ? "bg-warning-surface text-warning-foreground hover:bg-warning-surface"
+            : "bg-highlight text-highlight-foreground border-2 border-border-ink shadow-brutal-sm hover:brightness-105"
         }`}
       >
         <ExternalLink size={11} />
@@ -576,35 +567,32 @@ function SyncFace({ progress, lines, title }: { progress: number; lines: SyncLog
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-4xl font-black text-white tabular-nums font-outfit">{pct}%</span>
-          <span className="mt-1 text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500 font-outfit">
+          <span className="text-4xl font-bold text-text-heading tabular-nums font-outfit">{pct}%</span>
+          <span className="mt-1 text-xs font-bold uppercase tracking-[0.18em] text-text-muted font-outfit">
             {title || "Full Sync"}
           </span>
         </div>
       </div>
 
       <div className="space-y-1.5">
-        <h2 className="text-xl font-black tracking-tight text-white font-outfit sm:text-2xl">
+        <h2 className="text-xl font-bold tracking-tight text-text-heading font-outfit sm:text-2xl">
           Preparing your workspace
         </h2>
-        <p className="text-xs text-zinc-400">
+        <p className="text-xs text-text-muted">
           A one-time full sync — attendance, grades, timetable and campus services.
         </p>
       </div>
 
       <div className="w-full max-w-md space-y-3">
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-zinc-900">
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 transition-[width] duration-500 ease-out"
-            style={{ width: `${pct}%` }}
-          />
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface">
+          <div className="h-full rounded-full transition-[width] duration-500 ease-out" style={{ width: `${pct}%` }} />
         </div>
 
         <ul className="space-y-1.5 text-left">
           {recent.map((line, idx) => (
             <li
               key={`${line.text}-${idx}`}
-              className="flex items-start gap-2 rounded-lg border border-zinc-900 bg-zinc-900/50 px-3 py-2 text-[11px] text-zinc-400"
+              className="flex items-start gap-2 rounded-lg border border-border-ink bg-surface px-3 py-2 text-xs text-text-muted"
             >
               <LineIcon status={line.status} />
               <span className="min-w-0 break-words">{line.text}</span>
@@ -617,9 +605,9 @@ function SyncFace({ progress, lines, title }: { progress: number; lines: SyncLog
 }
 
 function LineIcon({ status }: { status: SyncLogLine["status"] }) {
-  if (status === "success") return <Check size={12} className="mt-0.5 shrink-0 text-emerald-400" />;
-  if (status === "error") return <X size={12} className="mt-0.5 shrink-0 text-rose-400" />;
-  return <Loader2 size={12} className="mt-0.5 shrink-0 animate-spin text-indigo-400" />;
+  if (status === "success") return <Check size={12} className="mt-0.5 shrink-0 text-success-foreground" />;
+  if (status === "error") return <X size={12} className="mt-0.5 shrink-0 text-danger-foreground" />;
+  return <Loader2 size={12} className="mt-0.5 shrink-0 animate-spin text-primary" />;
 }
 
 /** The celebration beat between "enough data is here" and the onboarding steps. */
@@ -627,29 +615,29 @@ function WelcomeFace({ onDone }: { onDone: () => void }) {
   return (
     <div className="flex animate-in fade-in zoom-in-95 duration-300 flex-col items-center justify-center gap-6 text-center">
       <div className="relative">
-        <span aria-hidden="true" className="absolute inset-0 animate-ping rounded-full bg-indigo-500/20 blur-xl" />
-        <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-indigo-500/30 bg-indigo-500/10">
-          <CheckCircle2 className="h-12 w-12 text-indigo-400" strokeWidth={1.75} />
+        <span aria-hidden="true" className="absolute inset-0 animate-ping rounded-full bg-secondary blur-xl" />
+        <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-border-ink bg-secondary">
+          <CheckCircle2 className="h-12 w-12 text-primary" strokeWidth={1.75} />
         </div>
       </div>
 
       <div className="space-y-2">
-        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400 font-outfit">
-          Sign-in complete
-        </p>
-        <h2 className="text-3xl font-black tracking-tight text-white font-outfit sm:text-4xl">Welcome to AmazeCC</h2>
-        <p className="mx-auto max-w-md text-sm leading-relaxed text-zinc-400">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary font-outfit">Sign-in complete</p>
+        <h2 className="text-3xl font-bold tracking-tight text-text-heading font-outfit sm:text-4xl">
+          Welcome to AmazeCC
+        </h2>
+        <p className="mx-auto max-w-md text-sm leading-relaxed text-text-muted">
           Your records are on this device. Now a few quick choices and your workspace is ready.
         </p>
       </div>
 
-      <ul className="flex flex-wrap justify-center gap-2 text-[10px] font-bold text-zinc-300">
+      <ul className="flex flex-wrap justify-center gap-2 text-xs font-bold text-text-secondary">
         {["Attendance & marks", "Grades & timetable", "Campus services"].map((label) => (
           <li
             key={label}
-            className="flex items-center gap-1.5 rounded-full border border-zinc-800 bg-zinc-900/70 px-3 py-1.5"
+            className="flex items-center gap-1.5 rounded-[10px] border border-border-ink bg-surface px-3 py-1.5 min-h-9"
           >
-            <Check size={11} className="text-emerald-400" />
+            <Check size={11} className="text-success-foreground" />
             {label}
           </li>
         ))}
@@ -658,7 +646,7 @@ function WelcomeFace({ onDone }: { onDone: () => void }) {
       <button
         type="button"
         onClick={onDone}
-        className="flex w-full max-w-xs items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3.5 font-black text-sm text-white shadow-xl shadow-indigo-600/20 transition-all hover:bg-indigo-500 active:scale-[0.98] cursor-pointer font-outfit tracking-wide"
+        className="flex w-full max-w-xs items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3.5 font-bold text-sm text-primary-foreground shadow-brutal-sm border-2 border-border-ink transition-all hover:brightness-110 cursor-pointer font-outfit tracking-wide"
       >
         Let&apos;s set up my workspace
         <ArrowRight size={15} />

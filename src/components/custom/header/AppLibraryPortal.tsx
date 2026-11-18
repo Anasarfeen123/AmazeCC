@@ -9,8 +9,8 @@
 import { memo, useEffect, useMemo, useState } from "react";
 import SelectField from "../shared/primitives/SelectField";
 import { formatSemesterName } from "@/lib/formatSemesterName";
-import { ChevronRight, Home, Lightbulb, Pin, Sun } from "lucide-react";
-import { AppLibrary } from "@amazecontinuityprojects/amazeui";
+import { ChevronRight, Home, Moon, Pin, Sun } from "lucide-react";
+import { BrandSheet as AppLibrary } from "../shared/primitives/BrandSheet";
 import config from "../../../../config.json";
 import {
   activateEntry,
@@ -147,20 +147,18 @@ const AppLibraryPortal = memo(
       return (
         <div
           key={item.id}
-          className="group/item relative flex min-h-[60px] w-full items-center justify-between rounded-2xl border border-zinc-200/50 bg-gradient-to-br from-white to-zinc-50/20 p-3 shadow-2xs hover:shadow-xs transition-all active:scale-[0.99] dark:border-zinc-800/80 dark:bg-gradient-to-br dark:from-zinc-900/60 dark:to-zinc-950/40"
+          className="group/item relative flex min-h-16 w-full items-center justify-between gap-2 rounded-[10px] border-2 border-border-ink bg-surface p-2.5 transition-colors hover:bg-surface-secondary"
         >
           <button
             onClick={() => runEntry(item)}
-            className="flex flex-1 min-w-0 items-center gap-3 text-left cursor-pointer focus:outline-none"
+            className="flex flex-1 min-w-0 min-h-11 items-center gap-3 text-left cursor-pointer rounded-[8px]"
           >
-            <div className={`rounded-xl p-2 shrink-0 ${opts?.tint ?? "bg-info-surface text-info"}`}>
-              <Icon className="h-4.5 w-4.5 stroke-[2.2]" />
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] border-2 border-border-ink bg-secondary text-secondary-foreground">
+              <Icon className="h-5 w-5 stroke-[2.2]" aria-hidden />
             </div>
             <div className="flex flex-col min-w-0">
-              <span className="truncate text-xs font-bold leading-tight text-zinc-800 dark:text-zinc-200">{label}</span>
-              <span className="text-[9px] text-zinc-400 dark:text-zinc-500 font-medium">
-                {opts?.subtitle ?? `${item.searchGroup ?? item.group} category`}
-              </span>
+              <span className="truncate text-sm font-semibold leading-tight text-text-heading">{label}</span>
+              {opts?.subtitle ? <span className="truncate text-xs text-text-muted">{opts.subtitle}</span> : null}
             </div>
           </button>
 
@@ -171,20 +169,22 @@ const AppLibraryPortal = memo(
                 togglePin(pinId);
               }}
               disabled={atLimit}
-              className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
+              className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] border-2 transition-colors cursor-pointer ${
                 isPinned
-                  ? "bg-indigo-50 border-indigo-200 text-indigo-650 dark:bg-indigo-950/30 dark:border-indigo-900/50 dark:text-indigo-400"
+                  ? "bg-highlight border-border-ink text-highlight-foreground"
                   : atLimit
-                    ? "opacity-20 cursor-not-allowed"
-                    : "border-transparent text-zinc-300 dark:text-zinc-600 hover:text-zinc-600 dark:hover:text-zinc-400 hover:border-zinc-200 dark:hover:border-zinc-800"
+                    ? "border-transparent text-text-disabled cursor-not-allowed"
+                    : "border-transparent text-text-muted hover:text-text-primary hover:border-border-ink"
               }`}
               title={isPinned ? "Unpin from bottom bar" : "Pin to bottom bar"}
+              aria-label={isPinned ? `Unpin ${label}` : `Pin ${label}`}
+              aria-pressed={isPinned}
             >
-              <Pin className={`h-3.5 w-3.5 ${isPinned ? "fill-current" : ""}`} />
+              <Pin className={`h-4 w-4 ${isPinned ? "fill-current" : ""}`} aria-hidden />
             </button>
           )}
 
-          {isPanelTrigger && !pinId && <ChevronRight className="h-4 w-4 shrink-0 text-zinc-400" />}
+          {isPanelTrigger && !pinId && <ChevronRight className="h-4 w-4 shrink-0 text-text-muted" aria-hidden />}
         </div>
       );
     };
@@ -193,18 +193,15 @@ const AppLibraryPortal = memo(
       <AppLibrary
         open={open}
         onClose={onClose}
-        title="App Library"
-        subtitle="Select a module to open"
+        title="Modules"
+        subtitle="Open any part of AmazeCC"
         showBack={false}
         searchQuery={librarySearchQuery}
         onSearchChange={setLibrarySearchQuery}
-        className="!backdrop-blur-none"
       >
         {!librarySearchQuery && (
           <div className="flex items-center gap-1.5 px-1 pb-3">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-550">
-              Active Sem:
-            </span>
+            <span className="text-xs font-bold uppercase tracking-wider text-text-muted">Active Sem:</span>
             <div className="relative flex items-center">
               <SelectField
                 value={settings.currSemesterID || config.semesterIDs[config.semesterIDs.length - 2]}
@@ -228,16 +225,12 @@ const AppLibraryPortal = memo(
         {librarySearchQuery ? (
           filteredSearchItems.length === 0 ? (
             <div className="py-12 text-center">
-              <p className="text-sm font-semibold text-zinc-400 dark:text-zinc-500">
-                No modules found matching "{librarySearchQuery}"
-              </p>
+              <p className="text-sm font-semibold text-text-muted">No modules found matching "{librarySearchQuery}"</p>
             </div>
           ) : (
             <div className="space-y-2">
-              <h3 className="px-1 text-[11px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
-                Search Results
-              </h3>
-              <div className="grid grid-cols-1 gap-2 min-[380px]:grid-cols-2">
+              <h3 className="px-1 text-xs font-bold uppercase tracking-widest text-text-muted">Search Results</h3>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {filteredSearchItems.map((item) => renderItemCard(item))}
               </div>
             </div>
@@ -269,21 +262,17 @@ const AppLibraryPortal = memo(
 
             return (
               <div key={group.name} className="space-y-3">
-                <h3 className="px-1 text-[11px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
-                  {group.name}
-                </h3>
+                <h3 className="px-1 text-xs font-bold uppercase tracking-widest text-text-muted">{group.name}</h3>
                 <div className="space-y-3">
                   {segments.map((seg, idx) => {
                     if (seg.type === "academics") {
                       return (
                         <div key={`${group.name}-academics-${idx}`} className="space-y-2">
-                          <h4 className="px-1 text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                            Academics
-                          </h4>
-                          <div className="grid grid-cols-1 gap-2 min-[380px]:grid-cols-2">
+                          <h4 className="px-1 text-xs font-bold uppercase tracking-wider text-text-muted">Academics</h4>
+                          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                             {academicsItems.map((sub) =>
                               renderItemCard(sub, {
-                                tint: "bg-purple-50 text-purple-650 dark:bg-purple-950/30 dark:text-purple-400",
+                                tint: "bg-purple-50 text-purple-650 dark:bg-purple-950/30 text-primary",
                                 subtitle: "Academics Tracker",
                               }),
                             )}
@@ -294,14 +283,14 @@ const AppLibraryPortal = memo(
                     if (seg.type === "hostel") {
                       return (
                         <div key={`${group.name}-hostel-${idx}`} className="space-y-2">
-                          <h4 className="px-1 text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                          <h4 className="px-1 text-xs font-bold uppercase tracking-wider text-text-muted">
                             Hostel Hub
                           </h4>
-                          <div className="grid grid-cols-1 gap-2 min-[380px]:grid-cols-2">
+                          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                             {hostelItems.map((sub) =>
                               renderItemCard(sub, {
                                 cleanPrefix: "Hostel ",
-                                tint: "bg-amber-50 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400",
+                                tint: "bg-warning-surface text-warning-foreground dark:text-warning-foreground",
                                 subtitle: "Hostel Hub",
                               }),
                             )}
@@ -310,19 +299,16 @@ const AppLibraryPortal = memo(
                       );
                     }
                     return (
-                      <div
-                        key={`${group.name}-items-${idx}`}
-                        className="grid grid-cols-1 gap-2 min-[380px]:grid-cols-2"
-                      >
+                      <div key={`${group.name}-items-${idx}`} className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                         {seg.items.map((item) =>
                           renderItemCard(item, {
                             tint:
                               group.name === "Study"
-                                ? "bg-purple-50 text-purple-650 dark:bg-purple-950/30 dark:text-purple-400"
+                                ? "bg-purple-50 text-purple-650 dark:bg-purple-950/30 text-primary"
                                 : group.name === "Campus"
-                                  ? "bg-amber-50 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400"
+                                  ? "bg-warning-surface text-warning-foreground dark:text-warning-foreground"
                                   : group.name === "Tools"
-                                    ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400"
+                                    ? "bg-success-surface text-success-foreground dark:text-success-foreground"
                                     : "bg-info-surface text-info",
                             subtitle:
                               group.name === "Study"
@@ -341,12 +327,12 @@ const AppLibraryPortal = memo(
           })
         )}
 
-        <div className="shrink-0 space-y-3 border-t border-zinc-200/50 bg-zinc-50/80 px-5 py-4 dark:border-zinc-800/50 dark:bg-black/60 rounded-t-[20px] mt-4">
+        <div className="shrink-0 space-y-3 border-t-2 border-border-ink bg-surface-secondary px-5 py-4 mt-4">
           <div className="flex items-center justify-between">
-            <h4 className="px-0.5 text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 font-outfit">
+            <h4 className="px-0.5 text-xs font-bold uppercase tracking-widest text-text-muted font-outfit">
               Quick Pin tabs (Max 4)
             </h4>
-            <span className="text-[9px] font-black text-indigo-600 dark:text-indigo-400 uppercase">
+            <span className="text-xs font-bold text-primary uppercase">
               {(settings?.pinnedNavTabs ?? []).length}/4 selected
             </span>
           </div>
@@ -360,12 +346,13 @@ const AppLibraryPortal = memo(
                   key={tab.id}
                   disabled={atLimit}
                   onClick={() => togglePin(tab.id)}
-                  className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-[10.5px] font-black border transition-all cursor-pointer select-none ${
+                  aria-pressed={isPinned}
+                  className={`inline-flex min-h-9 items-center gap-1 px-3 py-1.5 rounded-[10px] border-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] transition-colors cursor-pointer select-none ${
                     isPinned
-                      ? "bg-indigo-600 border-indigo-600 text-white shadow-xs"
+                      ? "bg-secondary border-border-ink text-secondary-foreground shadow-brutal-sm"
                       : atLimit
-                        ? "bg-gray-100 dark:bg-gray-900 border-gray-150 dark:border-gray-800 text-gray-400 dark:text-gray-650 cursor-not-allowed opacity-40"
-                        : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 hover:border-indigo-400"
+                        ? "bg-surface-secondary border-border-muted text-text-disabled cursor-not-allowed"
+                        : "bg-surface border-border-ink text-text-primary hover:bg-surface-secondary"
                   }`}
                 >
                   {isPinned ? "✓ " : "+ "}
@@ -377,27 +364,26 @@ const AppLibraryPortal = memo(
         </div>
 
         <div
-          className="shrink-0 space-y-2 border-t border-gray-200/50 bg-gray-50/80 px-5 py-4 dark:border-gray-800/50 dark:bg-black/60"
+          className="shrink-0 space-y-2 border-t-2 border-border-ink bg-surface-secondary px-5 py-4"
           style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)" }}
         >
-          <h4 className="px-0.5 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-550 font-outfit">
+          <h4 className="px-0.5 text-xs font-bold uppercase tracking-widest text-text-muted font-outfit">
             Interface Theme
           </h4>
-          <div className="flex w-full gap-1.5 rounded-xl border border-gray-200/20 bg-gray-200/50 p-1 dark:border-gray-800/50 dark:bg-gray-900/50">
+          <div className="flex w-full gap-1 rounded-[10px] border-2 border-border-ink bg-surface p-1">
             {["light", "dark"].map((t) => (
               <button
                 key={t}
                 onClick={(e) => handleThemeChange(t, e)}
-                className={`flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-black capitalize transition-all cursor-pointer ${
+                aria-pressed={theme === t}
+                className={`flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-[8px] border-2 py-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] transition-colors cursor-pointer ${
                   theme === t
-                    ? "bg-white text-info shadow-xs dark:bg-black dark:text-amber-300"
-                    : "text-gray-550 hover:text-gray-955 dark:text-gray-400 dark:hover:text-white"
+                    ? "bg-secondary border-border-ink text-secondary-foreground shadow-brutal-sm"
+                    : "border-transparent text-text-muted hover:text-text-primary"
                 }`}
               >
-                {t === "light" && <Sun className="h-3.5 w-3.5 text-indigo-600" />}
-                {t === "dark" && (
-                  <Lightbulb className="h-3.5 w-3.5 text-amber-300 fill-amber-300/20 drop-shadow-[0_0_6px_rgba(251,191,36,0.6)]" />
-                )}
+                {t === "light" && <Sun className="h-4 w-4" aria-hidden />}
+                {t === "dark" && <Moon className="h-4 w-4" aria-hidden />}
                 <span>{t}</span>
               </button>
             ))}

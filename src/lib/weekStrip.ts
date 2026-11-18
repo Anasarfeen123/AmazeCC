@@ -82,7 +82,7 @@ export interface WeekStripTint {
    * The hairline around the circle.
    *
    * This exists because the strip has no plate behind it any more. The circles
-   * used to sit on a `bg-zinc-100` card, which gave every one of them an edge
+   * used to sit on a `bg-surface-secondary` card, which gave every one of them an edge
    * for free; on the bare page an untinted circle is a white disc on a near
    * white background and simply is not there. Tinting the edge as well as the
    * fill keeps a circle reading as one object rather than a coloured blob with
@@ -100,28 +100,30 @@ export interface WeekStripTint {
  * for the same reason.
  */
 export const WEEK_STRIP_TINT: Record<WeekStripFlavour, WeekStripTint> = {
+  // Brand: status fills, ink text, and a status-coloured edge so the kind is
+  // readable before the title is (the title still carries the word).
   exam: {
-    fill: "bg-amber-500/10 dark:bg-amber-500/10",
-    ink: "text-amber-600 dark:text-amber-400",
-    edge: "border-amber-200 dark:border-amber-900/60",
+    fill: "bg-warning-surface",
+    ink: "text-warning-foreground",
+    edge: "border-warning",
   },
   holiday: {
-    fill: "bg-red-500/10 dark:bg-red-500/10",
-    ink: "text-red-600 dark:text-red-400",
-    edge: "border-red-200 dark:border-red-900/60",
+    fill: "bg-danger-surface",
+    ink: "text-danger-foreground",
+    edge: "border-danger",
   },
   reordered: {
-    fill: "bg-indigo-500/10 dark:bg-indigo-500/10",
-    ink: "text-indigo-600 dark:text-indigo-300",
-    edge: "border-indigo-200 dark:border-indigo-900/60",
+    fill: "bg-secondary",
+    ink: "text-secondary-foreground",
+    edge: "border-primary",
   },
   // No hue. A teaching day is the default state and must recede — it is a
   // white disc with a hairline, and it is the one circle in a normal week that
   // you can look straight past.
   teaching: {
-    fill: "bg-white dark:bg-zinc-900",
-    ink: "text-zinc-800 dark:text-zinc-200",
-    edge: "border-zinc-200 dark:border-zinc-800",
+    fill: "bg-surface",
+    ink: "text-text-primary",
+    edge: "border-border-ink",
   },
 };
 
@@ -138,10 +140,15 @@ export const WEEK_STRIP_LABEL: Record<Exclude<WeekStripFlavour, "teaching">, str
  * and the two are frequently on the same circle — land on the page and today is
  * both.
  */
-export const TODAY_RING = "ring-1 ring-inset ring-emerald-500 dark:ring-emerald-400";
-export const TODAY_INK = "text-emerald-600 dark:text-emerald-400";
-/** Selection outranks today: indigo two rings deep, and the circle grows. */
-export const SELECTED_RING = "ring-2 ring-inset ring-indigo-500 dark:ring-indigo-400";
+export const TODAY_RING = "ring-2 ring-inset ring-primary";
+export const TODAY_INK = "text-hero";
+/**
+ * Selection outranks every tint: a solid ink tile with paper text and a hard
+ * shadow. (Ochre was tried and clashed with the exam-day tint: an exam Monday
+ * and a selected Friday read as the same state.)
+ */
+export const SELECTED_RING =
+  "!bg-text-primary !text-background !border-border-ink shadow-brutal-sm [&_span]:!text-background";
 
 /** `en-GB` because the month grid's tooltips already say "Sept", not "Sep". */
 function formatWhen(date: Date): string {

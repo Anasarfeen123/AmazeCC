@@ -35,7 +35,7 @@ const dmSans = DM_Sans({
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#F7F1E6" },
-    { media: "(prefers-color-scheme: dark)", color: "#001E1D" },
+    { media: "(prefers-color-scheme: dark)", color: "#0E0F10" },
   ],
   width: "device-width",
   // 1.0 since the brand redesign (was 0.85). At 85% every size in the type

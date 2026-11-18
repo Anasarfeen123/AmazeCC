@@ -202,64 +202,87 @@
 }
 
 .dark {
-  --background: #001e1d;
-  --foreground: #f7f1e6;
-  --surface: #002b29;
-  --surface-raised: #002b29;
-  --surface-secondary: #003532;
-  --surface-tertiary: #00403c;
-  --surface-hover: #00332f;
+  /* Dark = neutral near-black, not teal and not brown (user feedback
+     2026-11-19: teal disliked, then "more blackish instead of brownish").
+     Neutral greys carry the structure; colour comes from the logo's accents: ochre is the
+     primary/hero colour, sage marks selection, coral marks danger. Borders
+     are a mid grey so the brutalist edges still read on dark. Contrast is
+     checked by scripts/redesign/contrast.py. */
+  --background: #0e0f10;
+  --foreground: #f4efe6;
+  --surface: #17191a;
+  --surface-raised: #1c1e20;
+  --surface-secondary: #202325;
+  --surface-tertiary: #292c2f;
+  --surface-hover: #23262a;
 
-  --text-heading: #f7f1e6;
-  --text-primary: #f7f1e6;
-  --text-secondary: #cfe3dc;
-  --text-muted: #8fb5aa;
-  --text-disabled: #5f8279;
+  --text-heading: #f7f5f0;
+  --text-primary: #ecebe6;
+  --text-secondary: #cfd1cf;
+  --text-muted: #a3a8a8;
+  --text-disabled: #6a6f71;
 
-  --border-ink: #4f8f86;
-  --shadow-ink: #000a0a;
-  --border-muted: color-mix(in oklab, #4f8f86 45%, transparent);
-  --border-strong: #4f8f86;
+  --border-ink: #686f73;
+  --shadow-ink: #000000;
+  --border-muted: color-mix(in oklab, #686f73 55%, transparent);
+  --border-strong: #686f73;
 
   --primary: #f9bc60;
-  --primary-foreground: #001e1d;
-  --secondary: #abd1c6;
-  --secondary-foreground: #001e1d;
+  --primary-foreground: #0e0f10;
+  --secondary: #95c2b5;
+  --secondary-foreground: #0b1412;
   --highlight: #f9bc60;
-  --highlight-foreground: #001e1d;
+  --highlight-foreground: #0e0f10;
   --hero-number: #f9bc60;
   --ring: #f9bc60;
 
-  --success: #7fd1a8;
-  --success-foreground: #a6e3c4;
-  --success-surface: color-mix(in oklab, #7fd1a8 16%, #002b29);
+  --success: #8fd3ac;
+  --success-foreground: #9fdcb9;
+  --success-surface: color-mix(in oklab, #8fd3ac 16%, #17191a);
   --warning: #f9bc60;
-  --warning-foreground: #f9bc60;
-  --warning-surface: color-mix(in oklab, #f9bc60 16%, #002b29);
-  --danger: #ffb4a8;
-  --danger-foreground: #ffb4a8;
-  --danger-surface: color-mix(in oklab, #ffb4a8 16%, #002b29);
+  --warning-foreground: #f9c97f;
+  --warning-surface: color-mix(in oklab, #f9bc60 16%, #17191a);
+  --danger: #ff8f7e;
+  --danger-foreground: #ffab9e;
+  --danger-surface: color-mix(in oklab, #ff8f7e 16%, #17191a);
   --info: #abd1c6;
-  --info-foreground: #abd1c6;
-  --info-surface: color-mix(in oklab, #abd1c6 14%, #002b29);
+  --info-foreground: #bfe0d6;
+  --info-surface: color-mix(in oklab, #abd1c6 14%, #17191a);
 
-  --sidebar: #002b29;
-  --sidebar-foreground: #f7f1e6;
-  --sidebar-border: #4f8f86;
-  --sidebar-accent: #003532;
-  --sidebar-accent-foreground: #f7f1e6;
+  --sidebar: #131516;
+  --sidebar-foreground: #ecebe6;
+  --sidebar-border: #686f73;
+  --sidebar-accent: #95c2b5;
+  --sidebar-accent-foreground: #0b1412;
   --sidebar-primary: #f9bc60;
-  --sidebar-primary-foreground: #001e1d;
+  --sidebar-primary-foreground: #0e0f10;
   --sidebar-ring: #f9bc60;
 
   --chart-1: #f9bc60;
   --chart-2: #abd1c6;
-  --chart-3: #e16162;
-  --chart-4: #4f8f86;
+  --chart-3: #ff8f7e;
+  --chart-4: #e66a2c;
   --chart-5: #f7f1e6;
+
+  /* The indigo bridge's dark steps (dark:bg-indigo-950/40 tints) were teal;
+     on charcoal they read as stains, so in dark they become sage-tinted greys. */
+  --color-brand-700: #3a4744;
+  --color-brand-800: #2b3533;
+  --color-brand-900: #222a29;
+  --color-brand-950: #1b2121;
 
   --theme-accent: #f9bc60;
   color-scheme: dark;
+}
+
+/* Theme switch: no CSS transitions while light/dark swaps (ThemeToggle.tsx),
+   so surfaces change in one step under the reveal instead of each fading at
+   its own speed afterwards. */
+.theme-switching,
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
 }
 
 /* ── 3. Brand utilities ─────────────────────────────────────────────── */

@@ -1893,15 +1893,10 @@ export default function SimplifiedMobileHome({
                                       const erp = getFacultyErp(cls);
                                       handleOpenFacultySchedule(erp || cls.faculty);
                                     }}
-                                    className="inline-flex items-center gap-1 font-semibold text-text-muted hover:text-primary transition-colors cursor-pointer truncate max-w-[140px]"
+                                    className="inline-flex items-center gap-1 font-semibold text-text-muted hover:text-primary transition-colors cursor-pointer truncate max-w-[180px]"
                                     title="View faculty timetable schedule"
                                   >
                                     <span className="truncate">{cls.faculty}</span>
-                                    {getFacultyErp(cls) && (
-                                      <span className="text-xs font-mono px-1 rounded bg-surface-secondary text-text-muted">
-                                        #{getFacultyErp(cls)}
-                                      </span>
-                                    )}
                                   </button>
                                 </>
                               )}
@@ -2039,11 +2034,6 @@ export default function SimplifiedMobileHome({
                               <span className="truncate group-hover/fac:underline underline-offset-2">
                                 {cls.faculty || "Faculty Assigned"}
                               </span>
-                              {getFacultyErp(cls) && (
-                                <span className="text-xs font-mono px-1 py-0.2 rounded bg-surface-secondary text-text-muted border-2 border-border-ink">
-                                  #{getFacultyErp(cls)}
-                                </span>
-                              )}
                             </button>
                           </p>
                         </div>

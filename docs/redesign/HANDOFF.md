@@ -131,7 +131,7 @@ screens should use semantic names directly.
 | `31056458` | Stat-card badges hidden on phones.                                                                                                                                                                                                                                                    |
 | `3582347c` | Faculty employee IDs removed from Home class cards.                                                                                                                                                                                                                                   |
 
-Screens fully restyled by hand: **Home, app shell (sidebar, bottom nav, rail,
+Screens fully restyled by hand: **Home, course side card, app shell (sidebar, bottom nav, rail,
 demo banner), Modules sheet, sync pill, first-sync + welcome screens, Fresher
 hub, shared primitives, dropdowns.** Partly (codemod only): sync sheet,
 onboarding steps. Everything else rides the bridges.

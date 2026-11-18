@@ -42,6 +42,7 @@ import { dateKey } from "@/lib/calendarDay";
 import { isLabFatMarked, labFatPapersByDate, labSlotTokens, type LabFatPaper } from "@/lib/labFatWeek";
 import { cn } from "@amazecontinuityprojects/amazeui";
 import { ICON_BUTTON, TILE_INTERACTIVE, TONE_BADGE } from "@/lib/uiTokens";
+import { facultyDisplayName, greetingName } from "@/lib/displayNames";
 import TimetableGrid from "../attendance/TimetableGrid";
 import DesktopCourseDetail from "../attendance/DesktopCourseDetail";
 import BottomSheet from "../shared/BottomSheet";
@@ -565,9 +566,11 @@ export default function SimplifiedMobileHome({
 
   const { isOffline, triggerSync: handleSyncClick } = useSyncTrigger(handleRefresh);
 
+  // A nickname the student chose wins as typed; otherwise greet by first name
+  // (VTOP's full-caps legal name truncated on phones).
   const profileName =
     settings?.friendlyName ||
-    cachedProfile?.name ||
+    greetingName(cachedProfile?.name) ||
     unifiedIdentity?.name ||
     unifiedIdentity?.friendlyName ||
     IDs?.VtopUsername ||
@@ -1243,11 +1246,11 @@ export default function SimplifiedMobileHome({
       const canMissValue = isLab ? Math.floor(canMiss / 2) : canMiss;
       if (canMissValue <= 0) {
         bunkStatus = "warning";
-        bunkText = "0 bunkable";
+        bunkText = "No skips left";
         bunkSubtext = "On safety margin";
       } else {
         bunkStatus = "safe";
-        bunkText = `${canMissValue} bunkable`;
+        bunkText = `Can skip ${canMissValue}`;
         bunkSubtext = `Safe margin above ${targetAttendancePct}%`;
       }
     }
@@ -1896,7 +1899,7 @@ export default function SimplifiedMobileHome({
                                     className="inline-flex items-center gap-1 font-semibold text-text-muted hover:text-primary transition-colors cursor-pointer truncate max-w-[180px]"
                                     title="View faculty timetable schedule"
                                   >
-                                    <span className="truncate">{cls.faculty}</span>
+                                    <span className="truncate">{facultyDisplayName(cls.faculty)}</span>
                                   </button>
                                 </>
                               )}
@@ -2032,7 +2035,7 @@ export default function SimplifiedMobileHome({
                               title="View faculty timetable schedule"
                             >
                               <span className="truncate group-hover/fac:underline underline-offset-2">
-                                {cls.faculty || "Faculty Assigned"}
+                                {facultyDisplayName(cls.faculty) || "Faculty assigned"}
                               </span>
                             </button>
                           </p>

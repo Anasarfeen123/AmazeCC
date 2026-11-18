@@ -1,6 +1,7 @@
 "use client";
 
 import { TONE_BADGE } from "@/lib/uiTokens";
+import { facultyDisplayName } from "@/lib/displayNames";
 
 import { useState, useEffect } from "react";
 import { Minus, Plus } from "lucide-react";
@@ -186,7 +187,7 @@ export default function DesktopCourseDetail({
             {[
               ["Slot", `${slotDisplay}${timeDisplay}`],
               ["Venue", venueDisplay],
-              ...(facultyDisplay ? [["Faculty", String(facultyDisplay).replace(/^\d{4,}\s+/, "")]] : []),
+              ...(facultyDisplay ? [["Faculty", facultyDisplayName(String(facultyDisplay))]] : []),
             ].map(([label, value], i) => (
               <div
                 key={label}

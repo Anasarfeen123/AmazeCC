@@ -1,7 +1,9 @@
 "use client";
 
+import { TONE_BADGE } from "@/lib/uiTokens";
+
 import { useState, useEffect } from "react";
-import { Building2, Clock, User, FileText, CheckCircle2, Minus, Plus } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import EmptyState from "../shared/EmptyState";
 import { findOfficialOdWhy } from "@/lib/officialOd";
 import { getTargetAttendancePct } from "@/store/settingsAtoms";
@@ -98,15 +100,13 @@ export default function DesktopCourseDetail({
   };
 
   const containerClasses =
-    className !== undefined
-      ? className
-      : "hidden md:block bg-white  dark:bg-[#080808] border border-gray-200  dark:border-gray-800/80 rounded-2xl p-6 shadow-sm sticky top-4";
+    className !== undefined ? className : "hidden md:block brutal-card p-5 sticky top-4 mr-1.5 mb-1.5";
 
   if (!item) {
     return (
       <div className={containerClasses}>
         {emptyPlaceholder || (
-          <div className="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400 py-20">
+          <div className="flex flex-col items-center justify-center h-full text-text-muted py-20">
             <p>Select a class on the timeline to view details.</p>
           </div>
         )}
@@ -171,110 +171,86 @@ export default function DesktopCourseDetail({
   return (
     <div className={containerClasses}>
       <div className="space-y-6">
-        {/* Header info */}
-        <div className="flex flex-col gap-3.5 border-b border-gray-150 dark:border-gray-800/80 pb-4">
-          <div className="space-y-1">
-            <h2 className="text-lg font-black font-[family-name:var(--font-outfit)] text-gray-900 dark:text-gray-100 leading-tight">
+        {/* Header: title, metadata line, facts in words (no icon tiles). */}
+        <div className="space-y-3">
+          <div className="space-y-1 pr-12">
+            <h2 className="font-display text-xl font-bold uppercase leading-tight text-text-heading">
               {norm.title || item.courseTitle || item.title}
             </h2>
-            <p className="text-[11px] font-bold text-gray-500 dark:text-gray-400">
-              {displayCode} • {displayType} • {credits} Credits
+            <p className="font-mono text-xs text-text-muted">
+              {[displayCode, displayType, `${credits} credits`].filter(Boolean).join(" // ")}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 text-[11px] font-semibold text-gray-600 dark:text-gray-400">
-            <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-950 p-2 rounded-xl border border-gray-150/40 dark:border-gray-800/60">
-              <Clock className="w-3.5 h-3.5 text-blue-550 dark:text-blue-400 shrink-0" />
-              <div className="min-w-0">
-                <p className="text-[9px] uppercase tracking-wider text-gray-400 dark:text-gray-555 font-bold leading-none mb-0.5">
-                  Slot & Time
-                </p>
-                <p className="font-extrabold text-gray-800 dark:text-gray-200 truncate">
-                  {slotDisplay}
-                  {timeDisplay}
-                </p>
+          <dl className="grid grid-cols-2 gap-2">
+            {[
+              ["Slot", `${slotDisplay}${timeDisplay}`],
+              ["Venue", venueDisplay],
+              ...(facultyDisplay ? [["Faculty", String(facultyDisplay).replace(/^\d{4,}\s+/, "")]] : []),
+            ].map(([label, value], i) => (
+              <div
+                key={label}
+                className={`min-w-0 rounded-[10px] border-2 border-border-ink bg-surface-secondary px-2.5 py-2 ${i === 2 ? "col-span-2" : ""}`}
+              >
+                <dt className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">{label}</dt>
+                <dd className="mt-0.5 truncate text-sm font-bold text-text-heading">{value}</dd>
               </div>
-            </div>
-            <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-950 p-2 rounded-xl border border-gray-150/40 dark:border-gray-800/60">
-              <Building2 className="w-3.5 h-3.5 text-purple-500 dark:text-purple-400 shrink-0" />
-              <div className="min-w-0">
-                <p className="text-[9px] uppercase tracking-wider text-gray-400 dark:text-gray-555 font-bold leading-none mb-0.5">
-                  Venue
-                </p>
-                <p className="font-extrabold text-gray-800 dark:text-gray-200 truncate">{venueDisplay}</p>
-              </div>
-            </div>
-            {facultyDisplay && (
-              <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-950 p-2 rounded-xl border border-gray-150/40 dark:border-gray-800/60 col-span-2">
-                <User className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-450 shrink-0" />
-                <div className="min-w-0">
-                  <p className="text-[9px] uppercase tracking-wider text-gray-400 dark:text-gray-555 font-bold leading-none mb-0.5">
-                    Faculty
-                  </p>
-                  <p className="font-extrabold text-gray-800 dark:text-gray-200 truncate">{facultyDisplay}</p>
-                </div>
-              </div>
-            )}
-          </div>
+            ))}
+          </dl>
         </div>
 
         {/* Premium Stat Boxes */}
         <div className="flex flex-col gap-4">
           {/* Attendance Status Card */}
-          <div className="bg-gray-50/50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800/80 rounded-2xl p-5 flex flex-col justify-between shadow-xs gap-3">
+          <div className="rounded-[14px] border-2 border-border-ink bg-surface-secondary p-4 flex flex-col gap-3">
             <div className="flex-1 min-w-0">
-              <h4 className="text-[10px] font-black uppercase tracking-wider text-gray-455 dark:text-gray-500 mb-1">
+              <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted mb-1">
                 Attendance
               </h4>
               <div className="flex items-baseline gap-2">
-                <p className="text-2xl font-black text-gray-900 dark:text-gray-100">{simulatedPercentage}%</p>
+                <p className="font-display text-[40px] font-bold leading-none text-hero">{simulatedPercentage}%</p>
                 {simulatedSkips > 0 && (
-                  <span className="text-xs text-gray-400 dark:text-gray-555 line-through font-bold">
-                    {originalPercentage}%
-                  </span>
+                  <span className="text-xs text-text-muted line-through font-bold">{originalPercentage}%</span>
                 )}
-                <span className="text-xs text-gray-555 dark:text-gray-400 font-semibold">
-                  ({attended} / {total})
+                <span className="font-mono text-xs text-text-muted">
+                  {attended} of {total}
                 </span>
               </div>
 
               {/* Horizontal Progress Bar */}
-              <div className="w-full mt-3 bg-gray-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+              {/* Bar with the target line drawn on it ("draw the line"). */}
+              <div className="relative mt-3 h-4 w-full rounded-[6px] border-2 border-border-ink bg-surface overflow-hidden">
                 <div
-                  className={`h-full transition-all duration-300 ${
-                    simulatedPercentage < thresholdPct
-                      ? "bg-red-500"
-                      : simulatedPercentage < thresholdPct + 10
-                        ? "bg-amber-500"
-                        : "bg-emerald-500"
+                  className={`h-full transition-[width] duration-300 ${
+                    simulatedPercentage < thresholdPct ? "bg-danger" : "bg-primary"
                   }`}
                   style={{ width: `${Math.min(100, simulatedPercentage)}%` }}
                 />
+                <div
+                  aria-hidden
+                  className="absolute inset-y-0 w-0.5 bg-text-primary"
+                  style={{ left: `${thresholdPct}%` }}
+                />
               </div>
+              <p className="mt-1 font-mono text-xs text-text-muted">Line = {thresholdPct}% target</p>
 
               {/* Status & Buffer metrics */}
-              <div className="mt-4 pt-3.5 border-t border-gray-200/60 dark:border-gray-800/60 flex flex-col gap-2 text-xs">
+              <div className="mt-3 pt-3 border-t-2 border-border-muted flex flex-col gap-2 text-sm">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-450 dark:text-gray-500 font-bold uppercase tracking-wider text-[9px]">
-                    Status
-                  </span>
+                  <span className="text-text-muted font-bold uppercase tracking-wider text-xs">Status</span>
                   <span
-                    className={`font-black uppercase tracking-wider text-[9px] px-1.5 py-0.5 rounded ${
-                      isSafe
-                        ? "bg-emerald-550/10 text-emerald-600 dark:bg-emerald-500/5 dark:text-emerald-400"
-                        : "bg-red-550/10 text-red-500 dark:bg-red-500/5 dark:text-red-400"
+                    className={`rounded-[6px] border-2 px-1.5 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] ${
+                      isSafe ? TONE_BADGE.emerald : TONE_BADGE.red
                     }`}
                   >
                     {isSafe ? "Safe" : "Critical"}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-450 dark:text-gray-500 font-bold uppercase tracking-wider text-[9px]">
+                  <span className="text-text-muted font-bold uppercase tracking-wider text-xs">
                     {isSafe ? "Safe Buffer" : "Shortage"}
                   </span>
-                  <span
-                    className={`font-extrabold ${isSafe ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}
-                  >
+                  <span className={`font-bold ${isSafe ? "text-success-foreground" : "text-danger-foreground"}`}>
                     {isSafe
                       ? canMissClasses === 0
                         ? "No buffer"
@@ -286,17 +262,18 @@ export default function DesktopCourseDetail({
             </div>
 
             {/* Inline Skip Predictor Widget for Desktop */}
-            <div className="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-black border border-gray-200/60 dark:border-gray-800/80 mt-1">
-              <span className="text-[10px] font-black text-gray-450 dark:text-gray-555 uppercase tracking-wider pl-1">
-                Simulate Skips
+            <div className="flex items-center justify-between gap-2 rounded-[10px] border-2 border-border-ink bg-surface p-1.5 pl-3">
+              <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+                What if I skip
               </span>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => handleSimulateSkipsChange(simulatedSkips - 1)}
-                  className="p-1 rounded bg-gray-50 border border-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700/80 dark:bg-gray-900 dark:border-gray-800 cursor-pointer"
-                  title="Decrease simulated skips"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-[8px] border-2 border-border-ink bg-surface-secondary hover:bg-surface-hover cursor-pointer"
+                  title="One fewer skip"
+                  aria-label="One fewer skip"
                 >
-                  <Minus className="w-3 h-3 text-gray-655 dark:text-gray-300" />
+                  <Minus className="w-4 h-4" strokeWidth={2.5} aria-hidden />
                 </button>
                 <span
                   {...clickable(() => {
@@ -304,10 +281,10 @@ export default function DesktopCourseDetail({
                       handleSimulateSkipsChange(0);
                     }
                   })}
-                  className={`text-xs font-bold w-4 text-center select-none ${
+                  className={`font-display text-lg font-bold min-w-6 text-center select-none ${
                     simulatedSkips !== 0
-                      ? "cursor-pointer hover:text-red-500 hover:scale-110 active:scale-95 transition-all text-blue-605 dark:text-blue-400 font-extrabold"
-                      : "text-gray-700 dark:text-gray-300"
+                      ? "cursor-pointer hover:text-danger-foreground hover:scale-110 transition-all text-primary text-primary font-bold"
+                      : "text-text-primary"
                   }`}
                   title={simulatedSkips !== 0 ? "Click to reset to 0" : ""}
                 >
@@ -315,58 +292,59 @@ export default function DesktopCourseDetail({
                 </span>
                 <button
                   onClick={() => handleSimulateSkipsChange(simulatedSkips + 1)}
-                  className="p-1 rounded bg-gray-50 border border-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700/80 dark:bg-gray-900 dark:border-gray-800 cursor-pointer"
-                  title="Increase simulated skips"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-[8px] border-2 border-border-ink bg-surface-secondary hover:bg-surface-hover cursor-pointer"
+                  title="One more skip"
+                  aria-label="One more skip"
                 >
-                  <Plus className="w-3 h-3 text-gray-655 dark:text-gray-300" />
+                  <Plus className="w-4 h-4" strokeWidth={2.5} aria-hidden />
                 </button>
               </div>
             </div>
           </div>
 
           {/* Info Card */}
-          <div className="bg-gray-50/50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800/80 rounded-2xl p-5 flex flex-col justify-between shadow-xs">
-            <h4 className="text-[10px] font-black uppercase tracking-wider text-gray-455 dark:text-gray-550 mb-3">
+          <div className="rounded-[14px] border-2 border-border-ink bg-surface-secondary p-4 flex flex-col justify-between">
+            <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted mb-3">
               Next Class Impact
             </h4>
             <div className="flex flex-col h-full justify-between gap-4">
-              <p className="text-xs text-gray-500 dark:text-gray-450 leading-relaxed">
+              <p className="text-sm text-text-muted">
                 Simulate the outcome of your next scheduled class. Attending will improve your average, while skipping
                 will reduce it.
               </p>
-              <div className="grid grid-cols-2 gap-4 w-full">
+              <div className="grid grid-cols-2 gap-3 w-full">
                 {/* Attend Card */}
-                <div className="bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/15 dark:border-emerald-500/25 rounded-xl p-4 flex flex-col justify-between transition-all hover:bg-emerald-500/10 dark:hover:bg-emerald-500/15">
+                <div className="rounded-[10px] border-2 border-border-ink bg-success-surface p-3 flex flex-col justify-between">
                   <div className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+                    <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-success-foreground">
                       If Attend
                     </span>
                   </div>
                   <div className="flex flex-col gap-1 mt-2">
-                    <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400">{nextAttendPct}%</span>
-                    <span className="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 dark:bg-emerald-500/20 px-1.5 py-0.5 rounded w-fit">
+                    <span className="font-display text-[28px] font-bold leading-none text-success-foreground">
+                      {nextAttendPct}%
+                    </span>
+                    <span className="font-mono text-xs font-semibold text-success-foreground w-fit">
                       {attendDiffStr}
                     </span>
                   </div>
-                  <p className="text-[10px] text-gray-400 dark:text-gray-555 mt-1.5">Increases buffer.</p>
+                  <p className="text-xs text-text-muted mt-1.5">Increases buffer.</p>
                 </div>
 
                 {/* Skip Card */}
-                <div className="bg-red-500/5 dark:bg-red-500/10 border border-red-500/15 dark:border-red-500/25 rounded-xl p-4 flex flex-col justify-between transition-all hover:bg-red-500/10 dark:hover:bg-red-500/15">
+                <div className="rounded-[10px] border-2 border-border-ink bg-danger-surface p-3 flex flex-col justify-between">
                   <div className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                    <span className="text-[10px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider">
+                    <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-danger-foreground">
                       If Skip
                     </span>
                   </div>
                   <div className="flex flex-col gap-1 mt-2">
-                    <span className="text-2xl font-black text-red-600 dark:text-red-400">{nextSkipPct}%</span>
-                    <span className="text-[10px] font-extrabold text-red-600 dark:text-red-400 bg-red-500/10 dark:bg-red-500/20 px-1.5 py-0.5 rounded w-fit">
-                      {skipDiffStr}
+                    <span className="font-display text-[28px] font-bold leading-none text-danger-foreground">
+                      {nextSkipPct}%
                     </span>
+                    <span className="font-mono text-xs font-semibold text-danger-foreground w-fit">{skipDiffStr}</span>
                   </div>
-                  <p className="text-[10px] text-gray-400 dark:text-gray-555 mt-1.5">Reduces buffer.</p>
+                  <p className="text-xs text-text-muted mt-1.5">Reduces buffer.</p>
                 </div>
               </div>
             </div>
@@ -374,19 +352,15 @@ export default function DesktopCourseDetail({
         </div>
 
         {/* Quick History Log */}
-        <div className="bg-transparent border border-gray-200 dark:border-gray-800/80 rounded-2xl overflow-hidden">
-          <div className="p-4 bg-gray-50/50 dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center">
-            <h3 className="text-xs font-black uppercase tracking-wider text-gray-455 dark:text-gray-550">
-              Recent Attendance History
-            </h3>
-            <span className="text-[10px] text-gray-400 dark:text-gray-500 font-medium">
-              {historyList.length} total records
-            </span>
+        <div className="rounded-[14px] border-2 border-border-ink overflow-hidden">
+          <div className="px-4 py-3 bg-surface-secondary border-b-2 border-border-ink flex justify-between items-center">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-text-muted">Recent Attendance History</h3>
+            <span className="text-xs text-text-muted font-medium">{historyList.length} total records</span>
           </div>
           {recentHistory.length === 0 ? (
             <EmptyState title="No attendance history records found" className="p-6" />
           ) : (
-            <div className="divide-y divide-gray-100 dark:divide-gray-800/60">
+            <div className="divide-y-2 divide-border-muted">
               {recentHistory.map((d: any, idx: number) => {
                 const status = (d.status || "").toLowerCase();
                 const isPresent = status === "present";
@@ -397,31 +371,21 @@ export default function DesktopCourseDetail({
                 const officialWhy = isOD ? findOfficialOdWhy(d.date) : [];
 
                 return (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between p-3.5 hover:bg-gray-50/50 dark:hover:bg-gray-950/30 transition-colors"
-                  >
+                  <div key={idx} className="flex items-center justify-between gap-3 px-4 py-3">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div
-                        className={`w-1.5 h-7 rounded-full shrink-0 ${
-                          isPresent ? "bg-emerald-500" : isAbsent ? "bg-red-500" : "bg-yellow-500"
-                        }`}
-                      />
                       <div className="min-w-0 flex-1">
-                        <p className="font-bold text-xs text-gray-900 dark:text-gray-100">{d.date}</p>
-                        <p
-                          className={`text-[9px] font-extrabold uppercase tracking-wider mt-0.5 ${
-                            isPresent
-                              ? "text-emerald-600 dark:text-emerald-400"
-                              : isAbsent
-                                ? "text-red-600 dark:text-red-400"
-                                : "text-yellow-600 dark:text-yellow-400"
-                          }`}
-                        >
-                          {d.status}
-                        </p>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <p className="font-mono text-sm font-bold text-text-heading">{d.date}</p>
+                          <span
+                            className={`rounded-[6px] border-2 px-1.5 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] ${
+                              isPresent ? TONE_BADGE.emerald : isAbsent ? TONE_BADGE.red : TONE_BADGE.amber
+                            }`}
+                          >
+                            {d.status}
+                          </span>
+                        </div>
                         {officialWhy.length > 0 && (
-                          <p className="text-[10px] text-blue-700 dark:text-blue-300 leading-snug mt-1 break-words">
+                          <p className="text-xs text-text-muted leading-snug mt-1 break-words">
                             <span className="font-bold">{officialWhy[0].reason}</span>
                             {officialWhy[0].remarks ? ` — ${officialWhy[0].remarks}` : ""}
                           </p>
@@ -432,14 +396,13 @@ export default function DesktopCourseDetail({
                     {!isPresent && (
                       <button
                         onClick={() => toggleNotes(d.date)}
-                        className={`flex items-center justify-center gap-1 px-2.5 py-1 rounded-md border text-[10px] font-bold transition-all ${
+                        className={`inline-flex min-h-9 shrink-0 items-center rounded-[8px] border-2 border-border-ink px-2.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] transition-colors ${
                           hasNotes
-                            ? "bg-emerald-55/15 border-emerald-200 text-emerald-700 dark:bg-emerald-950/30 dark:border-emerald-900/40 dark:text-emerald-400"
-                            : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50 dark:bg-black dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-900 cursor-pointer"
+                            ? "bg-success-surface text-success-foreground"
+                            : "bg-surface text-text-primary hover:bg-surface-secondary cursor-pointer"
                         }`}
                       >
-                        {hasNotes ? <CheckCircle2 size={11} /> : <FileText size={11} />}
-                        <span>{hasNotes ? "Secured" : "Get Notes"}</span>
+                        {hasNotes ? "Notes saved" : "Get notes"}
                       </button>
                     )}
                   </div>
@@ -452,9 +415,9 @@ export default function DesktopCourseDetail({
         {/* View Full History Button */}
         <button
           onClick={handleViewFullPage}
-          className="w-full flex items-center justify-center gap-2 py-3 mt-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs uppercase tracking-wider transition-all duration-150 cursor-pointer shadow-xs active:scale-[0.985]"
+          className="w-full min-h-12 inline-flex items-center justify-center rounded-[10px] border-2 border-border-ink bg-primary px-4 font-mono text-[13px] font-semibold uppercase tracking-[0.06em] text-primary-foreground shadow-brutal-sm brutal-press cursor-pointer"
         >
-          View Full History & Heatmap
+          Full history and heatmap
         </button>
       </div>
     </div>

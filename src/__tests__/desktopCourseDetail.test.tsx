@@ -27,10 +27,9 @@ describe("DesktopCourseDetail / DesktopCourseDetailPane", () => {
     const { container } = render(<DesktopCourseDetail />);
     const className = (container.firstChild as HTMLElement)?.className || "";
     expect(className).toContain("hidden md:block");
-    expect(className).toContain("bg-white");
-    expect(className).toContain("dark:bg-[#080808]");
-    expect(className).toContain("border border-gray-200");
-    expect(className).toContain("rounded-2xl p-6 shadow-sm sticky top-4");
+    // Brand card (2px ink edge, 14px radius, hard shadow via .brutal-card).
+    expect(className).toContain("brutal-card");
+    expect(className).toContain("sticky top-4");
     expect(screen.getByText("Select a class on the timeline to view details.")).toBeDefined();
   });
 
@@ -40,15 +39,15 @@ describe("DesktopCourseDetail / DesktopCourseDetailPane", () => {
 
     // Checks header
     expect(screen.getByText("Mathematical Foundations for Computation")).toBeDefined();
-    expect(screen.getByText("BAMAT209 • Theory • 4.0 Credits")).toBeDefined();
+    expect(screen.getByText("BAMAT209 // Theory // 4.0 credits")).toBeDefined();
     expect(screen.getByText("D1 (8:00-8:50)")).toBeDefined();
     expect(screen.getByText("AB1-610")).toBeDefined();
-    expect(screen.getByText("50772 NATHIYA N SAS")).toBeDefined();
+    expect(screen.getByText("NATHIYA N SAS")).toBeDefined();
 
     // Checks attendance stat card
     expect(screen.getByText("82.1%")).toBeDefined();
-    expect(screen.getByText("(46 / 56)")).toBeDefined();
-    expect(screen.getByText("Simulate Skips")).toBeDefined();
+    expect(screen.getByText("46 of 56")).toBeDefined();
+    expect(screen.getByText("What if I skip")).toBeDefined();
 
     // Checks next class impact
     expect(screen.getByText("Next Class Impact")).toBeDefined();
@@ -59,10 +58,10 @@ describe("DesktopCourseDetail / DesktopCourseDetailPane", () => {
     expect(screen.getByText("Recent Attendance History")).toBeDefined();
     expect(screen.getByText("5 total records")).toBeDefined();
     expect(screen.getByText("02-Nov-2026")).toBeDefined();
-    expect(screen.getByText("Get Notes")).toBeDefined();
+    expect(screen.getByText("Get notes")).toBeDefined();
 
     // Checks view full history button
-    const button = screen.getByRole("button", { name: /view full history & heatmap/i });
+    const button = screen.getByRole("button", { name: /full history and heatmap/i });
     expect(button).toBeDefined();
     fireEvent.click(button);
     expect(onViewFullPage).toHaveBeenCalledTimes(1);
@@ -74,14 +73,14 @@ describe("DesktopCourseDetail / DesktopCourseDetailPane", () => {
     // Initially 0 skips
     expect(screen.getByText("82.1%")).toBeDefined();
 
-    const increaseBtn = screen.getByTitle("Increase simulated skips");
+    const increaseBtn = screen.getByTitle("One more skip");
     fireEvent.click(increaseBtn);
 
     // After 1 skip: 46 / 57 = 80.7%
     expect(screen.getByText("80.7%")).toBeDefined();
-    expect(screen.getByText("(46 / 57)")).toBeDefined();
+    expect(screen.getByText("46 of 57")).toBeDefined();
 
-    const decreaseBtn = screen.getByTitle("Decrease simulated skips");
+    const decreaseBtn = screen.getByTitle("One fewer skip");
     fireEvent.click(decreaseBtn);
     expect(screen.getByText("82.1%")).toBeDefined();
   });

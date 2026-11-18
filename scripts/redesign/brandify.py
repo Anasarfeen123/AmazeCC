@@ -64,6 +64,13 @@ RULES = [
     (rf"\bdark:border-(?:indigo|blue|sky|violet|purple)-\d{{3}}{OP}(?![\w-])", ""),
     (rf"\b(lg:)?ring-(?:indigo|blue|sky|violet|purple)-\d{{3}}{OP}(?![\w-])", r"\1ring-border-ink"),
     (rf"\btext-(?:zinc|gray|slate)-(?:200|300){OP}(?![\w-])", "text-text-muted"),
+    # odd grey steps (gray-150, zinc-455, slate-655…) by range
+    (r"\b(?:hover:)?text-(?:zinc|gray|slate)-(?:[34]\d\d|5\d\d|6\d\d)(?:/\d{1,3})?(?![\w-])", "text-text-muted"),
+    (r"\b(?:hover:)?text-(?:zinc|gray|slate)-(?:[789]\d\d)(?:/\d{1,3})?(?![\w-])", "text-text-primary"),
+    (r"\bborder-(?:zinc|gray|slate)-\d{2,3}(?:/\d{1,3})?(?![\w-])", "border-border-muted"),
+    (r"\bdivide-(?:zinc|gray|slate)-\d{2,3}(?:/\d{1,3})?(?![\w-])", "divide-border-muted"),
+    (r"\bbg-white(?![\w/-])", "bg-surface"),
+    (r"\btext-(?:blue|indigo|sky)-\d{3}(?![\w/-])", "text-primary"),
     # ── banned surfaces ───────────────────────────────────────────────
     (r"\b(?:dark:)?bg-gradient-to-[a-z]{1,2}\b", ""),
     (r"\b(?:dark:)?(?:from|via|to)-[a-z]+-\d{2,3}(?:/\d{1,3})?(?![\w-])", ""),

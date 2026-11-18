@@ -487,7 +487,7 @@ export default function NavigationTabs({
   ]);
 
   const sidebarActiveStyles =
-    "bg-secondary text-secondary-foreground border-2 border-border-ink font-semibold shadow-brutal-sm";
+    "bg-highlight text-highlight-foreground border-2 border-border-ink font-semibold shadow-brutal-sm";
   const railActiveStyles = "bg-highlight text-highlight-foreground border-2 border-border-ink shadow-brutal-sm";
 
   const handleThemeChange = (selectedTheme: string, e?: React.MouseEvent<HTMLElement>) => {
@@ -1350,17 +1350,15 @@ export default function NavigationTabs({
                       <div key={item.id} className="relative flex justify-center group/rail">
                         <button
                           onClick={item.onSelect}
-                          className={`flex h-10 w-10 items-center justify-center rounded-xl transition-[transform,color,background-color,border-color,box-shadow] duration-200 hover:scale-105 ${
+                          className={`flex h-11 w-11 items-center justify-center rounded-[10px] transition-colors duration-150 ${
                             item.isActive
                               ? railActiveStyles
-                              : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground border border-transparent"
+                              : "text-cream hover:bg-sidebar-accent border-2 border-transparent"
                           } ${navButtonBase}`}
                           title={item.label}
                           aria-label={`Open ${item.label}`}
                         >
-                          <ItemIcon
-                            className={`h-5 w-5 transition-transform duration-300 ${item.isActive ? "scale-110 text-info" : ""}`}
-                          />
+                          <ItemIcon className="h-5 w-5 stroke-[2.2]" />
                         </button>
                       </div>
                     );
@@ -1402,18 +1400,14 @@ export default function NavigationTabs({
                   <div key={group.id} className="relative flex justify-center group/rail">
                     <button
                       onClick={() => toggleRailPopover(group.id)}
-                      className={`flex h-10 w-10 items-center justify-center rounded-xl transition-[transform,color,background-color,border-color,box-shadow] duration-200 hover:scale-105 ${
-                        isActive
-                          ? railActiveStyles
-                          : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground border border-transparent"
+                      className={`flex h-11 w-11 items-center justify-center rounded-[10px] transition-colors duration-150 ${
+                        isActive ? railActiveStyles : "text-cream hover:bg-sidebar-accent border-2 border-transparent"
                       } ${navButtonBase}`}
                       title={group.label}
                       aria-label={`Open ${group.label} menu`}
                       aria-expanded={activeRailGroup === group.id}
                     >
-                      <GroupIcon
-                        className={`h-5 w-5 transition-transform duration-300 ${isActive ? "scale-110 text-info" : ""}`}
-                      />
+                      <GroupIcon className="h-5 w-5 stroke-[2.2]" />
                     </button>
                   </div>
                 );

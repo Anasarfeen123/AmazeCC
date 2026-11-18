@@ -98,35 +98,41 @@ const MobileBottomNav = memo(function MobileBottomNav({
   onItemTap: (item: MobileNavItem) => void;
 }) {
   return (
-    <div className="md:hidden fixed bottom-[calc(env(safe-area-inset-bottom,0px)+12px)] left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-[380px] z-40 bg-white/95 dark:bg-zinc-950/95 border border-zinc-200/60 dark:border-zinc-800/80 rounded-[24px] p-1.5 shadow-[0_12px_35px_-8px_rgba(0,0,0,0.12)] dark:shadow-[0_12px_35px_-8px_rgba(0,0,0,0.55)] flex items-center justify-around mobile-bottom-nav-bar">
+    <nav
+      aria-label="Main"
+      className="md:hidden fixed bottom-[calc(env(safe-area-inset-bottom,0px)+12px)] left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-[420px] z-40 bg-surface border-2 border-border-ink rounded-[14px] p-1.5 shadow-brutal-md flex items-stretch justify-around gap-1 mobile-bottom-nav-bar"
+    >
       {items.map((item) => (
         <button
           key={item.id}
           type="button"
           onClick={() => onItemTap(item)}
           aria-label={hasSectionHome(item.id) ? `${item.label} — double tap for home` : item.label}
-          title={item.label}
-          className="flex items-center justify-center flex-1 py-2 relative select-none cursor-pointer group focus:outline-none transition-transform active:scale-95 motion-reduce:transition-none"
+          aria-current={item.isActive ? "page" : undefined}
+          className={`flex flex-1 min-h-12 flex-col items-center justify-center gap-0.5 rounded-[10px] border-2 px-1 py-1 select-none cursor-pointer transition-colors motion-reduce:transition-none ${
+            item.isActive
+              ? "bg-secondary text-secondary-foreground border-border-ink"
+              : "border-transparent text-text-muted hover:text-text-primary"
+          }`}
         >
-          {item.isActive && <div className="absolute inset-1 rounded-2xl bg-info-surface/90 dark:bg-info/10 z-0" />}
-          <div className="relative z-10 flex items-center justify-center">
-            <div
-              className={`p-1.5 transition-[color,transform] duration-200 ${
-                item.isActive
-                  ? "scale-[1.15] text-info"
-                  : "text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-600 dark:group-hover:text-zinc-300"
-              }`}
-            >
-              {item.icon}
-            </div>
-          </div>
+          <span className="flex items-center justify-center [&_svg]:h-5 [&_svg]:w-5" aria-hidden>
+            {item.icon}
+          </span>
+          <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] leading-none truncate max-w-full">
+            {item.label}
+          </span>
         </button>
       ))}
-    </div>
+    </nav>
   );
 });
 
-const navButtonBase = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40";
+const navButtonBase = "";
+
+/** Brand overrides for AmazeUI's SidebarItem / SidebarGroupLabel (twMerge wins). */
+const SIDEBAR_ITEM_BRAND =
+  "min-h-11 rounded-[10px] text-text-primary data-[active=true]:border-2 data-[active=true]:border-border-ink data-[active=true]:bg-secondary data-[active=true]:text-secondary-foreground data-[active=true]:shadow-brutal-sm [&[data-active=true]_svg]:text-secondary-foreground";
+const SIDEBAR_GROUP_LABEL_BRAND = "font-mono text-xs font-semibold tracking-[0.06em] text-text-muted";
 
 export default function NavigationTabs({
   activeTab,
@@ -204,8 +210,23 @@ export default function NavigationTabs({
   const { theme, setTheme } = useTheme();
   const [isThemeExpanded, setIsThemeExpanded] = useState(false);
 
-  // Expanded mode depends on settings
-  const isExpandedMode = !settings.isSidebarCollapsed;
+  // Tablets (md up to lg, 768-1023px) get the icon rail by default so the
+  // content keeps its width; opening it there is temporary and overlays the
+  // content instead of being saved. From lg up the saved preference rules.
+  const [isTabletViewport, setIsTabletViewport] = useState(false);
+  const [tabletExpanded, setTabletExpanded] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(min-width: 768px) and (max-width: 1023.98px)");
+    const sync = () => {
+      setIsTabletViewport(mq.matches);
+      if (!mq.matches) setTabletExpanded(false);
+    };
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+  const isExpandedMode = isTabletViewport ? tabletExpanded : !settings.isSidebarCollapsed;
   const isOpen = isExpandedMode;
 
   // Command palette logic
@@ -317,9 +338,13 @@ export default function NavigationTabs({
 
   const persistSidebarState = useCallback(
     (nextCollapsed: boolean) => {
+      if (isTabletViewport) {
+        setTabletExpanded(!nextCollapsed);
+        return;
+      }
       setSettings((prev) => ({ ...prev, isSidebarCollapsed: nextCollapsed }));
     },
-    [setSettings],
+    [setSettings, isTabletViewport],
   );
 
   const handleReloadClick = useCallback(async () => {
@@ -464,8 +489,9 @@ export default function NavigationTabs({
     setActiveProfileSubTab,
   ]);
 
-  const sidebarActiveStyles = "bg-sidebar-accent border border-sidebar-border text-info font-semibold";
-  const railActiveStyles = "bg-sidebar-accent text-info border border-sidebar-border shadow-sm";
+  const sidebarActiveStyles =
+    "bg-secondary text-secondary-foreground border-2 border-border-ink font-semibold shadow-brutal-sm";
+  const railActiveStyles = "bg-secondary text-secondary-foreground border-2 border-border-ink shadow-brutal-sm";
 
   const handleThemeChange = (selectedTheme: string, e?: React.MouseEvent<HTMLElement>) => {
     if (theme === selectedTheme) return;
@@ -956,11 +982,12 @@ export default function NavigationTabs({
         ref={sidebarRef}
         data-sidebar-root="true"
         aria-label="Primary navigation"
+        className="top-0 left-0 h-[100dvh] rounded-none border-0 border-r-2 border-border-ink shadow-none"
         isOpen={isOpen}
         onOpenChange={(val) => persistSidebarState(!val)}
       >
         {/* Sidebar Header */}
-        <SidebarHeader>
+        <SidebarHeader className="border-b-2 border-border-ink">
           {/* Logo & Expand Toggle */}
           <div className={`flex items-center ${isOpen ? "justify-between w-full" : "justify-center w-full"}`}>
             <div className={`flex items-center min-w-0 ${isOpen ? "gap-2.5" : "justify-center"}`}>
@@ -998,8 +1025,8 @@ export default function NavigationTabs({
                   <span>{isOffline ? "Offline" : "Sync"}</span>
                 </button>
                 <button
-                  onClick={() => persistSidebarState(!settings.isSidebarCollapsed)}
-                  className={`relative group rounded-xl p-1.5 text-sidebar-foreground/ transition-all duration-300 hover:bg-sidebar-accent hover:text-sidebar-foreground hover:scale-105 ${navButtonBase}`}
+                  onClick={() => persistSidebarState(isOpen)}
+                  className={`relative group rounded-xl p-1.5 text-sidebar-foreground transition-all duration-300 hover:bg-sidebar-accent hover:text-sidebar-foreground hover:scale-105 ${navButtonBase}`}
                   title="Collapse sidebar"
                   aria-label="Collapse sidebar"
                 >
@@ -1021,9 +1048,9 @@ export default function NavigationTabs({
                 className="overflow-hidden space-y-3"
               >
                 {/* Left-aligned clean Semester Summary Card */}
-                <div className="mt-3 rounded-lg border border-sidebar-border bg-sidebar-accent/50 p-2.5 text-[11px] space-y-1.5 shadow-2xs">
+                <div className="mt-3 rounded-[10px] border-2 border-border-ink bg-surface-secondary p-3 text-xs space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <div className="font-semibold text-sidebar-foreground/75 tracking-wide text-[10px] uppercase">
+                    <div className="font-mono font-semibold text-text-muted tracking-[0.06em] text-xs uppercase">
                       Current Semester
                     </div>
                     <div role="group" aria-label="Current semester" className="flex max-w-[9rem] shrink-0">
@@ -1037,7 +1064,7 @@ export default function NavigationTabs({
                           label: formatSemesterName(semId),
                         }))}
                         searchable={false}
-                        className="w-full [&>button:first-child]:h-auto [&>button:first-child]:p-0 [&>button:first-child]:rounded-none [&>button:first-child]:border-none [&>button:first-child]:shadow-none [&>button:first-child]:justify-end [&>button:first-child]:text-info [&>button:first-child]:hover:underline [&>button:first-child_span]:text-[10px] [&>button:first-child_span]:font-semibold [&>button:first-child_span]:text-info [&>button:first-child_svg]:h-3 [&>button:first-child_svg]:w-3"
+                        className="w-full [&>button:first-child]:h-auto [&>button:first-child]:p-0 [&>button:first-child]:rounded-none [&>button:first-child]:border-none [&>button:first-child]:shadow-none [&>button:first-child]:justify-end [&>button:first-child]:text-info [&>button:first-child]:hover:underline [&>button:first-child_span]:text-xs [&>button:first-child_span]:font-semibold [&>button:first-child_span]:text-info [&>button:first-child_svg]:h-3 [&>button:first-child_svg]:w-3"
                       />
                     </div>
                   </div>
@@ -1050,10 +1077,10 @@ export default function NavigationTabs({
                             return next;
                           });
                         }}
-                        className="flex justify-between items-center w-full text-left hover:bg-sidebar-accent rounded px-1 -mx-1 py-0.5 transition-colors cursor-pointer text-sidebar-foreground/ hover:text-sidebar-foreground"
+                        className="flex justify-between items-center w-full text-left hover:bg-sidebar-accent rounded px-1 -mx-1 py-0.5 transition-colors cursor-pointer text-sidebar-foreground hover:text-sidebar-foreground"
                         title="Click to show/hide CGPA"
                       >
-                        <span className="text-sidebar-foreground/">CGPA</span>
+                        <span className="text-sidebar-foreground">CGPA</span>
                         <span
                           data-private
                           className={`font-semibold text-sidebar-foreground transition-all duration-300 ${settings.CGPAHidden ? "blur-[4.5px] select-none" : ""}`}
@@ -1074,10 +1101,10 @@ export default function NavigationTabs({
                           return next;
                         });
                       }}
-                      className="flex justify-between items-center w-full text-left hover:bg-sidebar-accent rounded px-1 -mx-1 py-0.5 transition-colors cursor-pointer text-sidebar-foreground/ hover:text-sidebar-foreground"
+                      className="flex justify-between items-center w-full text-left hover:bg-sidebar-accent rounded px-1 -mx-1 py-0.5 transition-colors cursor-pointer text-sidebar-foreground hover:text-sidebar-foreground"
                       title="Click to toggle attendance format"
                     >
-                      <span className="text-sidebar-foreground/">Attendance</span>
+                      <span className="text-sidebar-foreground">Attendance</span>
                       {(() => {
                         // Colour alone does not say "below target" to everyone,
                         // so a warning icon and a spoken label carry it too.
@@ -1099,10 +1126,10 @@ export default function NavigationTabs({
 
                     <button
                       onClick={() => setGradesDisplayIsOpen(true)}
-                      className="flex justify-between items-center w-full text-left hover:bg-sidebar-accent rounded px-1 -mx-1 py-0.5 transition-colors cursor-pointer text-sidebar-foreground/ hover:text-sidebar-foreground"
+                      className="flex justify-between items-center w-full text-left hover:bg-sidebar-accent rounded px-1 -mx-1 py-0.5 transition-colors cursor-pointer text-sidebar-foreground hover:text-sidebar-foreground"
                       title="Click to view credits & grades details"
                     >
-                      <span className="text-sidebar-foreground/">Credits</span>
+                      <span className="text-sidebar-foreground">Credits</span>
                       <span data-private className="font-semibold text-sidebar-foreground">
                         {credits}
                       </span>
@@ -1113,10 +1140,10 @@ export default function NavigationTabs({
                         selectTab("attendance");
                         setActiveAttendanceSubTab("od");
                       }}
-                      className="flex justify-between items-center w-full text-left hover:bg-sidebar-accent rounded px-1 -mx-1 py-0.5 transition-colors cursor-pointer text-sidebar-foreground/ hover:text-sidebar-foreground"
+                      className="flex justify-between items-center w-full text-left hover:bg-sidebar-accent rounded px-1 -mx-1 py-0.5 transition-colors cursor-pointer text-sidebar-foreground hover:text-sidebar-foreground"
                       title="Click to view OD tracker details"
                     >
-                      <span className="text-sidebar-foreground/">OD Hours</span>
+                      <span className="text-sidebar-foreground">OD Hours</span>
                       <span className="font-semibold text-sidebar-foreground">{totalODHours}/40</span>
                     </button>
                   </div>
@@ -1127,14 +1154,14 @@ export default function NavigationTabs({
                   data-sidebar-nav="true"
                   onClick={openCommandPalette}
                   onKeyDown={(event) => handleNavKeyDown(event, openCommandPalette)}
-                  className={`group flex w-full items-center gap-2 rounded-xl border border-sidebar-border bg-sidebar-accent/50 px-3 py-2 text-left text-xs text-sidebar-foreground/ transition-all duration-300 hover:bg-sidebar-accent hover:border-sidebar-border hover:shadow-sm dark:hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:scale-[1.02] ${navButtonBase}`}
+                  className={`group flex w-full min-h-11 items-center gap-2 rounded-[10px] border-2 border-border-ink bg-surface px-3 py-2 text-left text-sm text-text-muted transition-colors hover:bg-surface-secondary ${navButtonBase}`}
                   aria-label="Open command palette"
                 >
-                  <Command className="h-4 w-4 shrink-0 text-sidebar-foreground/ transition-colors group-hover:text-sidebar-foreground/" />
-                  <span className="flex-1 truncate transition-colors group-hover:text-sidebar-foreground/">
+                  <Command className="h-4 w-4 shrink-0 text-sidebar-foreground transition-colors group-hover:text-sidebar-foreground" />
+                  <span className="flex-1 truncate transition-colors group-hover:text-sidebar-foreground">
                     Search anything...
                   </span>
-                  <kbd className="rounded-md bg-sidebar-accent border border-sidebar-border px-1.5 py-0.5 text-[9px] font-bold text-sidebar-foreground/ shadow-sm transition-colors group-hover:bg-sidebar-accent group-hover:text-sidebar-foreground">
+                  <kbd className="rounded-[6px] border-2 border-border-ink bg-surface-secondary px-1.5 py-0.5 font-mono text-xs font-semibold text-text-primary">
                     ⌘K
                   </kbd>
                 </button>
@@ -1150,7 +1177,7 @@ export default function NavigationTabs({
                 {/* Search Icon Only */}
                 <button
                   onClick={openCommandPalette}
-                  className={`flex h-8 w-8 items-center justify-center rounded-lg text-sidebar-foreground/ hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors ${navButtonBase}`}
+                  className={`flex h-8 w-8 items-center justify-center rounded-lg text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors ${navButtonBase}`}
                   title="Search anything... (Ctrl+K)"
                 >
                   <Command className="h-4 w-4" />
@@ -1177,7 +1204,7 @@ export default function NavigationTabs({
                   <div className="space-y-4">
                     {pinnedItems.length > 0 && (
                       <SidebarGroup>
-                        <SidebarGroupLabel>Pinned</SidebarGroupLabel>
+                        <SidebarGroupLabel className={SIDEBAR_GROUP_LABEL_BRAND}>Pinned</SidebarGroupLabel>
                         <div className="space-y-0.5">
                           {pinnedItems.map((item) => (
                             <SidebarItem
@@ -1187,7 +1214,7 @@ export default function NavigationTabs({
                               isActive={item.isActive}
                               aria-current={item.isActive ? "page" : undefined}
                               data-sidebar-nav="true"
-                              className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-info"
+                              className={SIDEBAR_ITEM_BRAND}
                               onClick={item.onSelect}
                               onKeyDown={(event) => handleNavKeyDown(event, item.onSelect)}
                             />
@@ -1198,7 +1225,7 @@ export default function NavigationTabs({
 
                     {groups.map((group) => (
                       <SidebarGroup key={group.id}>
-                        <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+                        <SidebarGroupLabel className={SIDEBAR_GROUP_LABEL_BRAND}>{group.label}</SidebarGroupLabel>
                         <div className="space-y-0.5">
                           {group.items.map((item) => (
                             <SidebarItem
@@ -1208,7 +1235,7 @@ export default function NavigationTabs({
                               isActive={item.isActive}
                               aria-current={item.isActive ? "page" : undefined}
                               data-sidebar-nav="true"
-                              className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-info"
+                              className={SIDEBAR_ITEM_BRAND}
                               rightElement={
                                 item.isExpandable ? <ChevronRight className="h-3.5 w-3.5 shrink-0" /> : undefined
                               }
@@ -1231,7 +1258,7 @@ export default function NavigationTabs({
                     </button>
 
                     <SidebarGroup>
-                      <SidebarGroupLabel>Academics</SidebarGroupLabel>
+                      <SidebarGroupLabel className={SIDEBAR_GROUP_LABEL_BRAND}>Academics</SidebarGroupLabel>
                       <div className="space-y-0.5">
                         {academicsItems.map((item) => (
                           <SidebarItem
@@ -1241,7 +1268,7 @@ export default function NavigationTabs({
                             isActive={item.isActive}
                             aria-current={item.isActive ? "page" : undefined}
                             data-sidebar-nav="true"
-                            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-info"
+                            className={SIDEBAR_ITEM_BRAND}
                             onClick={item.onSelect}
                             onKeyDown={(event) => handleNavKeyDown(event, item.onSelect)}
                           />
@@ -1260,7 +1287,7 @@ export default function NavigationTabs({
                     </button>
 
                     <SidebarGroup>
-                      <SidebarGroupLabel>Tools & Utilities</SidebarGroupLabel>
+                      <SidebarGroupLabel className={SIDEBAR_GROUP_LABEL_BRAND}>Tools & Utilities</SidebarGroupLabel>
                       <div className="space-y-0.5">
                         {toolsSubItems.map((item) => (
                           <SidebarItem
@@ -1270,7 +1297,7 @@ export default function NavigationTabs({
                             isActive={item.isActive}
                             aria-current={item.isActive ? "page" : undefined}
                             data-sidebar-nav="true"
-                            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-info"
+                            className={SIDEBAR_ITEM_BRAND}
                             onClick={item.onSelect}
                             onKeyDown={(event) => handleNavKeyDown(event, item.onSelect)}
                           />
@@ -1282,14 +1309,14 @@ export default function NavigationTabs({
                   <div className="space-y-4">
                     <button
                       onClick={() => setShowHostelPanel(false)}
-                      className="flex items-center gap-2 px-2 py-1 text-xs font-bold text-sidebar-foreground/ hover:text-sidebar-foreground transition-colors"
+                      className="flex items-center gap-2 px-2 py-1 text-xs font-bold text-sidebar-foreground hover:text-sidebar-foreground transition-colors"
                     >
                       <ArrowLeft className="h-3.5 w-3.5" />
                       <span>Back</span>
                     </button>
 
                     <SidebarGroup>
-                      <SidebarGroupLabel>Hostel Hub</SidebarGroupLabel>
+                      <SidebarGroupLabel className={SIDEBAR_GROUP_LABEL_BRAND}>Hostel Hub</SidebarGroupLabel>
                       <div className="space-y-0.5">
                         {hostelSubItems.map((item) => (
                           <SidebarItem
@@ -1299,7 +1326,7 @@ export default function NavigationTabs({
                             isActive={item.isActive}
                             aria-current={item.isActive ? "page" : undefined}
                             data-sidebar-nav="true"
-                            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-info"
+                            className={SIDEBAR_ITEM_BRAND}
                             onClick={item.onSelect}
                             onKeyDown={(event) => handleNavKeyDown(event, item.onSelect)}
                           />
@@ -1329,7 +1356,7 @@ export default function NavigationTabs({
                           className={`flex h-10 w-10 items-center justify-center rounded-xl transition-[transform,color,background-color,border-color,box-shadow] duration-200 hover:scale-105 ${
                             item.isActive
                               ? railActiveStyles
-                              : "text-sidebar-foreground/ hover:bg-sidebar-accent hover:text-sidebar-foreground border border-transparent"
+                              : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground border border-transparent"
                           } ${navButtonBase}`}
                           title={item.label}
                           aria-label={`Open ${item.label}`}
@@ -1381,7 +1408,7 @@ export default function NavigationTabs({
                       className={`flex h-10 w-10 items-center justify-center rounded-xl transition-[transform,color,background-color,border-color,box-shadow] duration-200 hover:scale-105 ${
                         isActive
                           ? railActiveStyles
-                          : "text-sidebar-foreground/ hover:bg-sidebar-accent hover:text-sidebar-foreground border border-transparent"
+                          : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground border border-transparent"
                       } ${navButtonBase}`}
                       title={group.label}
                       aria-label={`Open ${group.label} menu`}
@@ -1399,7 +1426,7 @@ export default function NavigationTabs({
         )}
 
         {/* Profile, Theme, and Logout Footer */}
-        <SidebarFooter>
+        <SidebarFooter className="bg-sidebar backdrop-blur-none border-t-2 border-border-ink">
           <AnimatePresence initial={false}>
             {isOpen ? (
               <m.div
@@ -1437,7 +1464,7 @@ export default function NavigationTabs({
                 className="flex flex-col items-center gap-3 w-full shrink-0"
               >
                 {/* Expand Toggle Button */}
-                <SidebarExpandButton onClick={() => persistSidebarState(!settings.isSidebarCollapsed)} />
+                <SidebarExpandButton onClick={() => persistSidebarState(isOpen)} />
 
                 {/* Theme Toggler (Compact Icon) */}
                 <SidebarThemeControl theme={theme} onThemeChange={handleThemeChange} />
@@ -1466,7 +1493,7 @@ export default function NavigationTabs({
             >
               {activeRailGroup === "account" ? (
                 <div>
-                  <div className="px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.15em] text-sidebar-foreground/ border-b border-sidebar-border pb-1.5 mb-1.5">
+                  <div className="px-2.5 py-1 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-sidebar-foreground border-b border-sidebar-border pb-1.5 mb-1.5">
                     Account
                   </div>
                   <div className="space-y-1">
@@ -1483,11 +1510,11 @@ export default function NavigationTabs({
                           className={`group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} ${
                             item.isActive
                               ? sidebarActiveStyles
-                              : "text-sidebar-foreground/ hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                              : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
                           }`}
                         >
                           <item.icon
-                            className={`h-4 w-4 shrink-0 ${item.isActive ? "text-info" : "text-sidebar-foreground/"}`}
+                            className={`h-4 w-4 shrink-0 ${item.isActive ? "text-info" : "text-sidebar-foreground"}`}
                           />
                           <span className="truncate">{item.label}</span>
                         </button>
@@ -1497,12 +1524,12 @@ export default function NavigationTabs({
                     <div className="space-y-0.5">
                       <button
                         onClick={() => setIsThemeExpanded(!isThemeExpanded)}
-                        className={`group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} text-sidebar-foreground/ hover:bg-sidebar-accent hover:text-sidebar-foreground`}
+                        className={`group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground`}
                       >
-                        <Wrench className="h-4 w-4 shrink-0 text-sidebar-foreground/ group-hover:text-sidebar-foreground" />
+                        <Wrench className="h-4 w-4 shrink-0 text-sidebar-foreground group-hover:text-sidebar-foreground" />
                         <span className="truncate flex-1 text-left">Theme</span>
                         <m.div animate={{ rotate: isThemeExpanded ? 90 : 0 }} transition={{ duration: 0.18 }}>
-                          <ChevronRight className="h-3 w-3 text-sidebar-foreground/" />
+                          <ChevronRight className="h-3 w-3 text-sidebar-foreground" />
                         </m.div>
                       </button>
                       <m.div
@@ -1514,7 +1541,7 @@ export default function NavigationTabs({
                         <div className="pl-6 space-y-1 py-1">
                           <button
                             onClick={() => handleThemeChange("light")}
-                            className="flex items-center gap-2 w-full text-left text-xs text-sidebar-foreground/ hover:text-sidebar-foreground py-0.5 transition-colors"
+                            className="flex items-center gap-2 w-full text-left text-xs text-sidebar-foreground hover:text-sidebar-foreground py-0.5 transition-colors"
                           >
                             <span
                               className={`flex h-3 w-3 items-center justify-center rounded-full border transition-colors ${theme === "light" ? "border-info text-info bg-info-surface" : "border-sidebar-border"}`}
@@ -1525,7 +1552,7 @@ export default function NavigationTabs({
                           </button>
                           <button
                             onClick={() => handleThemeChange("dark")}
-                            className="flex items-center gap-2 w-full text-left text-xs text-sidebar-foreground/ hover:text-sidebar-foreground py-0.5 transition-colors"
+                            className="flex items-center gap-2 w-full text-left text-xs text-sidebar-foreground hover:text-sidebar-foreground py-0.5 transition-colors"
                           >
                             <span
                               className={`flex h-3 w-3 items-center justify-center rounded-full border transition-colors ${theme === "dark" ? "border-info text-info bg-info-surface" : "border-sidebar-border"}`}
@@ -1544,9 +1571,9 @@ export default function NavigationTabs({
                         handleLogOutRequest();
                         setActiveRailGroup(null);
                       }}
-                      className="group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 text-sidebar-foreground/ hover:bg-sidebar-accent hover:text-sidebar-foreground mt-1.5 border-t border-sidebar-border pt-1.5"
+                      className="group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground mt-1.5 border-t border-sidebar-border pt-1.5"
                     >
-                      <LogOut className="h-4 w-4 shrink-0 text-sidebar-foreground/" />
+                      <LogOut className="h-4 w-4 shrink-0 text-sidebar-foreground" />
                       <span className="truncate">Log out</span>
                     </button>
                   </div>
@@ -1555,7 +1582,7 @@ export default function NavigationTabs({
                 <div>
                   <button
                     onClick={() => setActiveRailGroup("study")}
-                    className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold text-sidebar-foreground/ hover:text-sidebar-foreground transition-colors border-b border-sidebar-border pb-1.5 mb-1.5 w-full text-left"
+                    className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold text-sidebar-foreground hover:text-sidebar-foreground transition-colors border-b border-sidebar-border pb-1.5 mb-1.5 w-full text-left"
                   >
                     <ArrowLeft className="h-3 w-3" />
                     <span>Back to Study</span>
@@ -1574,7 +1601,7 @@ export default function NavigationTabs({
                             className={`group relative flex w-full items-center rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} ${
                               item.isActive
                                 ? sidebarActiveStyles
-                                : "text-sidebar-foreground/ hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                                : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
                             }`}
                           >
                             <item.icon
@@ -1591,7 +1618,7 @@ export default function NavigationTabs({
                 <div>
                   <button
                     onClick={() => setActiveRailGroup("campus")}
-                    className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold text-sidebar-foreground/ hover:text-sidebar-foreground transition-colors border-b border-sidebar-border pb-1.5 mb-1.5 w-full text-left"
+                    className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold text-sidebar-foreground hover:text-sidebar-foreground transition-colors border-b border-sidebar-border pb-1.5 mb-1.5 w-full text-left"
                   >
                     <ArrowLeft className="h-3 w-3" />
                     <span>Back to Campus</span>
@@ -1607,7 +1634,7 @@ export default function NavigationTabs({
                         className={`group relative flex w-full items-center rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} ${
                           item.isActive
                             ? sidebarActiveStyles
-                            : "text-sidebar-foreground/ hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                            : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
                         }`}
                       >
                         <item.icon
@@ -1622,7 +1649,7 @@ export default function NavigationTabs({
                 <div>
                   <button
                     onClick={() => setActiveRailGroup("tools")}
-                    className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold text-sidebar-foreground/ hover:text-sidebar-foreground transition-colors border-b border-sidebar-border pb-1.5 mb-1.5 w-full text-left"
+                    className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold text-sidebar-foreground hover:text-sidebar-foreground transition-colors border-b border-sidebar-border pb-1.5 mb-1.5 w-full text-left"
                   >
                     <ArrowLeft className="h-3 w-3" />
                     <span>Back to Tools</span>
@@ -1635,7 +1662,7 @@ export default function NavigationTabs({
                           item.onSelect();
                           setActiveRailGroup(null);
                         }}
-                        className={`group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} ${item.isActive ? sidebarActiveStyles : "text-sidebar-foreground/ hover:bg-sidebar-accent hover:text-sidebar-foreground"}`}
+                        className={`group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} ${item.isActive ? sidebarActiveStyles : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"}`}
                       >
                         <item.icon
                           className={`h-4 w-4 shrink-0 ${item.isActive ? "text-info" : "text-sidebar-foreground/70"}`}
@@ -1647,7 +1674,7 @@ export default function NavigationTabs({
                 </div>
               ) : (
                 <div>
-                  <div className="px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.15em] text-sidebar-foreground/ border-b border-sidebar-border pb-1.5 mb-1.5">
+                  <div className="px-2.5 py-1 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-sidebar-foreground border-b border-sidebar-border pb-1.5 mb-1.5">
                     {activeRailGroup === "study" && "Study"}
                     {activeRailGroup === "campus" && "Campus"}
                     {activeRailGroup === "tools" && "Tools"}
@@ -1658,7 +1685,7 @@ export default function NavigationTabs({
                       ?.items.map((item) => {
                         const activeStyles = railActiveStyles;
                         const inactiveStyles =
-                          "border-transparent text-sidebar-foreground/ hover:bg-sidebar-accent hover:text-sidebar-foreground hover:translate-x-1";
+                          "border-transparent text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground hover:translate-x-1";
                         return (
                           <button
                             key={item.id}
@@ -1679,11 +1706,11 @@ export default function NavigationTabs({
                             }`}
                           >
                             <item.icon
-                              className={`h-4.5 w-4.5 shrink-0 transition-all duration-300 ${item.isActive ? "text-info scale-110" : "text-sidebar-foreground/ group-hover:text-sidebar-foreground"}`}
+                              className={`h-4.5 w-4.5 shrink-0 transition-all duration-300 ${item.isActive ? "text-info scale-110" : "text-sidebar-foreground group-hover:text-sidebar-foreground"}`}
                             />
                             <span className="truncate transition-transform duration-300">{item.label}</span>
                             {item.isExpandable && (
-                              <ChevronRight className="h-3.5 w-3.5 ml-auto text-sidebar-foreground/" />
+                              <ChevronRight className="h-3.5 w-3.5 ml-auto text-sidebar-foreground" />
                             )}
                           </button>
                         );

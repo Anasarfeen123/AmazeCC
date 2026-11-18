@@ -102,9 +102,12 @@ if (path !== "/") {
   await evalJs(
     `(() => { const b=[...document.querySelectorAll("button,a,[role=button]")].find(e=>e.textContent.trim().toLowerCase()===${JSON.stringify(path.toLowerCase())} && e.offsetParent); b&&b.click(); return !!b })()`,
   );
-  await sleep(6000);
+  await sleep(Number(process.env.NAV_WAIT || 20000));
 }
-console.log("after reload:", (await evalJs("document.body.innerText")).slice(0, 150).replace(/\n/g, " | "));
+console.log(
+  "after reload:",
+  (await evalJs("document.body.innerText")).slice(0, Number(process.env.TEXT_LEN || 150)).replace(/\n/g, " | "),
+);
 
 for (const [name, w, h, mobile] of [
   ["phone", 390, 844, true],

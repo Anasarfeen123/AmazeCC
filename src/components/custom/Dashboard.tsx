@@ -262,14 +262,9 @@ function DashboardContent({
       />
 
       <div
-        className={`dashboard-content relative bg-gray-50/50  dark:bg-black min-h-[100dvh] text-gray-900  dark:text-gray-100 transition-all duration-300 pb-[calc(6rem+env(safe-area-inset-bottom,0px))] md:pb-0 ${settings.isSidebarCollapsed ? "md:pl-24" : "md:pl-80"} w-full overflow-x-clip`}
+        className={`dashboard-content relative bg-background min-h-[100dvh] text-text-primary transition-[padding] duration-300 pb-[calc(6rem+env(safe-area-inset-bottom,0px))] md:pb-0 ${settings.isSidebarCollapsed ? "md:pl-[72px]" : "md:pl-[72px] lg:pl-[280px]"} w-full overflow-x-clip`}
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
-        {/* Ambient Background Glows */}
-        <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-info-surface blur-[120px]" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-400/10  dark:bg-emerald-500/5 blur-[120px]" />
-        </div>
         <AnimatePresence>
           {GradesDisplayIsOpen && (
             <GradesModal
@@ -291,7 +286,7 @@ function DashboardContent({
           onClose={() => setShowFeedbackStatus(false)}
           loginToVTOP={loginToVTOP}
         />
-        <div className="px-6 py-4 md:p-6 lg:p-10 max-w-7xl mx-auto w-full">
+        <div className="px-4 py-4 sm:px-6 md:p-6 lg:p-10 max-w-7xl mx-auto w-full">
           <DashboardRoute route="home">
             <DashboardHomeFeature
               attendanceData={attendanceData}

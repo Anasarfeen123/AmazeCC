@@ -1,0 +1,328 @@
+/*
+ * AmazeCC brand layer — Friendly Brutalist.
+ *
+ * Source of truth: the amazecc-brutalist-ui spec (see REDESIGN_HANDOFF.md in
+ * the workspace) and the logo set in /public/brand. Imported by globals.css
+ * right after the AmazeUI stylesheet, so these values replace AmazeUI 1.6's
+ * grey/indigo defaults everywhere.
+ *
+ * This lives in the app for now because AmazeUI must not be published while
+ * the redesign is fork-only. When it is approved, move the :root/.dark blocks
+ * and the @theme block into ui/src/tailwind.css and delete them here.
+ *
+ * Three layers:
+ *   1. Semantic tokens (paper / ink / teal / ochre / sage), light and dark.
+ *   2. Bridges: the stock Tailwind accent scales the screens were written in
+ *      (indigo, blue, sky, violet, purple) resolve to the brand teal scale, and
+ *      every shadow step is a hard, zero-blur offset. Screens shift to the brand
+ *      before anyone edits them; screens are then cleaned up one by one to use
+ *      the semantic names directly.
+ *   3. Brand utilities: .brutal-press, .brutal-card, focus ring, display type.
+ */
+
+@theme {
+  /* Display face for titles and hero numbers. `font-outfit` was the old
+     heading alias (DM Sans) and is used on ~470 headings, so it follows. */
+  --font-display: var(--font-space-grotesk), var(--font-geist), sans-serif;
+  --font-outfit: var(--font-space-grotesk), var(--font-geist), sans-serif;
+
+  /* Hard shadows. Bottom-right, no blur, ink coloured. Every existing
+     shadow-* class becomes one of the three spec steps. */
+  --shadow-2xs: 2px 2px 0 0 var(--shadow-ink);
+  --shadow-xs: 2px 2px 0 0 var(--shadow-ink);
+  --shadow-sm: 2px 2px 0 0 var(--shadow-ink);
+  --shadow: 2px 2px 0 0 var(--shadow-ink);
+  --shadow-md: 4px 4px 0 0 var(--shadow-ink);
+  --shadow-lg: 4px 4px 0 0 var(--shadow-ink);
+  --shadow-xl: 6px 6px 0 0 var(--shadow-ink);
+  --shadow-2xl: 6px 6px 0 0 var(--shadow-ink);
+  --shadow-brutal-sm: 2px 2px 0 0 var(--shadow-ink);
+  --shadow-brutal-md: 4px 4px 0 0 var(--shadow-ink);
+  --shadow-brutal-lg: 6px 6px 0 0 var(--shadow-ink);
+
+  /* Spec radii: badge 6, control 10, card 14, dialog 20. The big Tailwind
+     steps the screens use for cards collapse onto the card radius. */
+  --radius-2xl: 14px;
+  --radius-3xl: 20px;
+
+  /* Brand colour names for new code. */
+  --color-ink: var(--text-primary);
+  --color-paper: var(--background);
+  --color-teal: #004643;
+  --color-ochre: #f9bc60;
+  --color-sage: #abd1c6;
+  --color-highlight: var(--highlight);
+  --color-hero: var(--hero-number);
+  --color-border-ink: var(--border-ink);
+
+  /* Brand teal scale. Static (not mode-dependent) on purpose: screens pair
+     `bg-indigo-600 text-white` and `text-indigo-600 dark:text-indigo-300`, so a
+     fixed scale keeps both halves of every pair legible. */
+  --color-brand-50: #e8f1ee;
+  --color-brand-100: #d5e8e2;
+  --color-brand-200: #abd1c6;
+  --color-brand-300: #8fc1b3;
+  --color-brand-400: #6aa99a;
+  --color-brand-500: #1f6f68;
+  --color-brand-600: #004643;
+  --color-brand-700: #003a3a;
+  --color-brand-800: #002b29;
+  --color-brand-900: #001e1d;
+  --color-brand-950: #00141a;
+}
+
+@theme inline {
+  --color-indigo-50: var(--color-brand-50);
+  --color-indigo-100: var(--color-brand-100);
+  --color-indigo-200: var(--color-brand-200);
+  --color-indigo-300: var(--color-brand-300);
+  --color-indigo-400: var(--color-brand-400);
+  --color-indigo-500: var(--color-brand-500);
+  --color-indigo-600: var(--color-brand-600);
+  --color-indigo-700: var(--color-brand-700);
+  --color-indigo-800: var(--color-brand-800);
+  --color-indigo-900: var(--color-brand-900);
+  --color-indigo-950: var(--color-brand-950);
+  --color-blue-50: var(--color-brand-50);
+  --color-blue-100: var(--color-brand-100);
+  --color-blue-200: var(--color-brand-200);
+  --color-blue-300: var(--color-brand-300);
+  --color-blue-400: var(--color-brand-400);
+  --color-blue-500: var(--color-brand-500);
+  --color-blue-600: var(--color-brand-600);
+  --color-blue-700: var(--color-brand-700);
+  --color-blue-800: var(--color-brand-800);
+  --color-blue-900: var(--color-brand-900);
+  --color-blue-950: var(--color-brand-950);
+  --color-sky-50: var(--color-brand-50);
+  --color-sky-100: var(--color-brand-100);
+  --color-sky-200: var(--color-brand-200);
+  --color-sky-300: var(--color-brand-300);
+  --color-sky-400: var(--color-brand-400);
+  --color-sky-500: var(--color-brand-500);
+  --color-sky-600: var(--color-brand-600);
+  --color-sky-700: var(--color-brand-700);
+  --color-sky-800: var(--color-brand-800);
+  --color-sky-900: var(--color-brand-900);
+  --color-sky-950: var(--color-brand-950);
+  --color-violet-50: var(--color-brand-50);
+  --color-violet-100: var(--color-brand-100);
+  --color-violet-200: var(--color-brand-200);
+  --color-violet-300: var(--color-brand-300);
+  --color-violet-400: var(--color-brand-400);
+  --color-violet-500: var(--color-brand-500);
+  --color-violet-600: var(--color-brand-600);
+  --color-violet-700: var(--color-brand-700);
+  --color-violet-800: var(--color-brand-800);
+  --color-violet-900: var(--color-brand-900);
+  --color-violet-950: var(--color-brand-950);
+  --color-purple-50: var(--color-brand-50);
+  --color-purple-100: var(--color-brand-100);
+  --color-purple-200: var(--color-brand-200);
+  --color-purple-300: var(--color-brand-300);
+  --color-purple-400: var(--color-brand-400);
+  --color-purple-500: var(--color-brand-500);
+  --color-purple-600: var(--color-brand-600);
+  --color-purple-700: var(--color-brand-700);
+  --color-purple-800: var(--color-brand-800);
+  --color-purple-900: var(--color-brand-900);
+  --color-purple-950: var(--color-brand-950);
+}
+
+/* ── 1. Semantic tokens ─────────────────────────────────────────────── */
+
+:root {
+  --background: #f7f1e6;
+  --foreground: #001e1d;
+  --surface: #fffdf8;
+  --surface-raised: #fffdf8;
+  --surface-secondary: #efe7d8;
+  --surface-tertiary: #e6dccb;
+  --surface-hover: #f3ecdf;
+
+  --text-heading: #001e1d;
+  --text-primary: #001e1d;
+  --text-secondary: #2e4744;
+  --text-muted: #4a5f5c;
+  --text-disabled: #7d8c89;
+
+  --border-ink: #001e1d;
+  --shadow-ink: #001e1d;
+  /* Lines inside a card (dividers, nested rows) are softer than the outer
+     ink edge, so a card reads as one object, not a grid of boxes. */
+  --border-muted: color-mix(in oklab, #001e1d 22%, transparent);
+  --border-strong: #001e1d;
+
+  --primary: #004643;
+  --primary-foreground: #f7f1e6;
+  --secondary: #abd1c6;
+  --secondary-foreground: #001e1d;
+  --highlight: #f9bc60;
+  --highlight-foreground: #001e1d;
+  --hero-number: #004643;
+  --ring: #f9bc60;
+
+  --success: #1b6b4a;
+  --success-foreground: #14533a;
+  --success-surface: #dcefe4;
+  --warning: #f9bc60;
+  --warning-foreground: #7a4f00;
+  --warning-surface: #fdf0d6;
+  --danger: #b3261e;
+  --danger-foreground: #8c1d17;
+  --danger-surface: #fbe3e0;
+  --info: #004643;
+  --info-foreground: #004643;
+  --info-surface: #e8f1ee;
+
+  --sidebar: #fffdf8;
+  --sidebar-foreground: #001e1d;
+  --sidebar-border: #001e1d;
+  --sidebar-accent: #abd1c6;
+  --sidebar-accent-foreground: #001e1d;
+  --sidebar-primary: #004643;
+  --sidebar-primary-foreground: #f7f1e6;
+  --sidebar-ring: #f9bc60;
+
+  --chart-1: #004643;
+  --chart-2: #f9bc60;
+  --chart-3: #e16162;
+  --chart-4: #abd1c6;
+  --chart-5: #4f8f86;
+
+  /* Fills and text written as zinc-300 / zinc-200 must not turn ink: they are
+     disabled text, progress tracks and placeholder blocks. */
+  --neutral-200: #d9cfbe;
+  --neutral-300: #c4b9a6;
+
+  --theme-accent: #004643;
+  --radius: 10px;
+  color-scheme: light;
+}
+
+.dark {
+  --background: #001e1d;
+  --foreground: #f7f1e6;
+  --surface: #002b29;
+  --surface-raised: #002b29;
+  --surface-secondary: #003532;
+  --surface-tertiary: #00403c;
+  --surface-hover: #00332f;
+
+  --text-heading: #f7f1e6;
+  --text-primary: #f7f1e6;
+  --text-secondary: #cfe3dc;
+  --text-muted: #8fb5aa;
+  --text-disabled: #5f8279;
+
+  --border-ink: #4f8f86;
+  --shadow-ink: #000a0a;
+  --border-muted: color-mix(in oklab, #4f8f86 45%, transparent);
+  --border-strong: #4f8f86;
+
+  --primary: #f9bc60;
+  --primary-foreground: #001e1d;
+  --secondary: #abd1c6;
+  --secondary-foreground: #001e1d;
+  --highlight: #f9bc60;
+  --highlight-foreground: #001e1d;
+  --hero-number: #f9bc60;
+  --ring: #f9bc60;
+
+  --success: #7fd1a8;
+  --success-foreground: #a6e3c4;
+  --success-surface: color-mix(in oklab, #7fd1a8 16%, #002b29);
+  --warning: #f9bc60;
+  --warning-foreground: #f9bc60;
+  --warning-surface: color-mix(in oklab, #f9bc60 16%, #002b29);
+  --danger: #ffb4a8;
+  --danger-foreground: #ffb4a8;
+  --danger-surface: color-mix(in oklab, #ffb4a8 16%, #002b29);
+  --info: #abd1c6;
+  --info-foreground: #abd1c6;
+  --info-surface: color-mix(in oklab, #abd1c6 14%, #002b29);
+
+  --sidebar: #002b29;
+  --sidebar-foreground: #f7f1e6;
+  --sidebar-border: #4f8f86;
+  --sidebar-accent: #003532;
+  --sidebar-accent-foreground: #f7f1e6;
+  --sidebar-primary: #f9bc60;
+  --sidebar-primary-foreground: #001e1d;
+  --sidebar-ring: #f9bc60;
+
+  --chart-1: #f9bc60;
+  --chart-2: #abd1c6;
+  --chart-3: #e16162;
+  --chart-4: #4f8f86;
+  --chart-5: #f7f1e6;
+
+  --theme-accent: #f9bc60;
+  color-scheme: dark;
+}
+
+/* ── 3. Brand utilities ─────────────────────────────────────────────── */
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+  }
+
+  /* 3px ochre focus ring, 2px offset, everywhere. Never removed. */
+  :focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* The base card: 2px ink edge, 14px radius, md hard shadow. */
+  .brutal-card {
+    background: var(--surface);
+    color: var(--text-primary);
+    border: 2px solid var(--border-ink);
+    border-radius: 14px;
+    box-shadow: 4px 4px 0 0 var(--shadow-ink);
+  }
+
+  /* Hero card / dialog edge. */
+  .brutal-card-hero {
+    border-width: 3px;
+  }
+
+  /* Mono label: chips, buttons, section labels. */
+  .brutal-label {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+}
+
+@layer utilities {
+  /* Pressable: lift on hover, sink on press. Pair with a shadow-brutal-* step. */
+  .brutal-press {
+    transition:
+      transform 80ms ease-out,
+      box-shadow 80ms ease-out;
+  }
+  @media (hover: hover) {
+    .brutal-press:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 6px 6px 0 0 var(--shadow-ink);
+    }
+  }
+  .brutal-press:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 0 var(--shadow-ink);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .brutal-press:hover,
+    .brutal-press:active {
+      transform: none;
+    }
+  }
+}

@@ -239,23 +239,23 @@ export default function ScannerEditor({
   return createPortal(
     <div className="fixed inset-0 z-[100] flex flex-col bg-zinc-950 text-white select-none overflow-hidden touch-none h-[100dvh] w-screen">
       {/* ── Top Bar ── */}
-      <div className="shrink-0 flex items-center justify-between px-4 py-2.5 bg-zinc-900/95 backdrop-blur-md border-b border-white/10 z-20">
+      <div className="shrink-0 flex items-center justify-between px-4 py-2.5 bg-zinc-900/95 border-b border-white/10 z-20">
         <button
           type="button"
           onClick={onRetake}
           title="Discard this capture and reopen the camera"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white text-xs font-bold transition-all cursor-pointer"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all cursor-pointer"
         >
           <RotateCcw className="h-3.5 w-3.5" />
           <span>Retake</span>
         </button>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs font-black uppercase tracking-wider text-white/90">
+          <span className="text-xs font-bold uppercase tracking-wider text-white/90">
             {pageCount > 1 ? `Crop · Page ${pageCount}` : "Crop & Align"}
           </span>
           {detecting && (
-            <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-indigo-400 bg-indigo-500/15 border border-indigo-500/30 px-2 py-0.5 rounded-full">
+            <span className="inline-flex items-center gap-1 text-xs font-bold text-secondary-foreground bg-secondary border border-border-ink px-2 py-0.5 rounded-[6px]">
               <Sparkles className="h-3 w-3 animate-spin" />
               Auto
             </span>
@@ -267,26 +267,26 @@ export default function ScannerEditor({
             type="button"
             onClick={handleRotate}
             title="Rotate 90 degrees clockwise"
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white text-xs font-bold transition-all cursor-pointer"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all cursor-pointer"
           >
             <RotateCw className="h-3.5 w-3.5" />
-            <span className="text-[11px]">90°</span>
+            <span className="text-xs">90°</span>
           </button>
           <button
             type="button"
             onClick={redetect}
             title="Auto-detect page edges"
-            className="flex items-center justify-center p-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white transition-all cursor-pointer"
+            className="flex items-center justify-center p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer"
           >
-            <Sparkles className="h-4 w-4 text-indigo-400" />
+            <Sparkles className="h-4 w-4 text-primary" />
           </button>
           <button
             type="button"
             onClick={resetFullFrame}
             title="Reset to full frame"
-            className="flex items-center justify-center p-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white transition-all cursor-pointer"
+            className="flex items-center justify-center p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer"
           >
-            <Maximize2 className="h-4 w-4 text-zinc-300" />
+            <Maximize2 className="h-4 w-4 text-text-muted" />
           </button>
         </div>
       </div>
@@ -363,7 +363,7 @@ export default function ScannerEditor({
                 <span
                   className={`rounded-full border-2 border-white shadow-2xl transition-all ${
                     isDragging
-                      ? "h-6 w-6 bg-indigo-500 ring-4 ring-indigo-400/50 scale-125"
+                      ? "h-6 w-6 bg-primary ring-4 ring-border-ink scale-125"
                       : "h-4.5 w-4.5 bg-indigo-600 hover:scale-115 ring-2 ring-black/40"
                   }`}
                 />
@@ -374,7 +374,7 @@ export default function ScannerEditor({
           {/* Precision Magnifying Loupe while dragging */}
           {activeCorner && wrapRef.current && (
             <div
-              className={`pointer-events-none absolute z-30 flex h-26 w-26 -translate-x-1/2 items-center justify-center overflow-hidden rounded-full border-2 border-white shadow-[0_12px_36px_rgba(0,0,0,0.85)] ring-4 ring-indigo-500/40 bg-zinc-950 ${
+              className={`pointer-events-none absolute z-30 flex h-26 w-26 -translate-x-1/2 items-center justify-center overflow-hidden rounded-full border-2 border-white shadow-[0_12px_36px_rgba(0,0,0,0.85)] ring-4 ring-border-ink bg-zinc-950 ${
                 flipLoupeBelow ? "translate-y-6" : "-translate-y-28"
               }`}
               style={{
@@ -400,7 +400,7 @@ export default function ScannerEditor({
               <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                 <span className="h-full w-px bg-indigo-400/70" />
                 <span className="absolute w-full h-px bg-indigo-400/70" />
-                <span className="h-2 w-2 rounded-full border border-white bg-indigo-500 shadow-md" />
+                <span className="h-2 w-2 rounded-full border border-white bg-primary shadow-md" />
               </div>
             </div>
           )}
@@ -408,7 +408,7 @@ export default function ScannerEditor({
       </div>
 
       {/* ── Bottom Controls ── */}
-      <div className="shrink-0 bg-zinc-900/95 backdrop-blur-md border-t border-white/10 px-4 pt-3 pb-6 sm:pb-4 space-y-3 z-20">
+      <div className="shrink-0 bg-zinc-900/95 border-t border-white/10 px-4 pt-3 pb-6 sm:pb-4 space-y-3 z-20">
         {/* Row 1: Cleanup Enhancement Modes */}
         <div className="flex items-center justify-center gap-1.5 sm:gap-2">
           {CLEANUP_OPTIONS.map((opt) => {
@@ -421,8 +421,8 @@ export default function ScannerEditor({
                 title={opt.desc}
                 className={`flex-1 py-2 px-2.5 rounded-xl text-center text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 border ${
                   isSelected
-                    ? "bg-indigo-600 text-white border-indigo-500 shadow-md ring-2 ring-indigo-400/30"
-                    : "bg-white/5 text-zinc-300 border-white/10 hover:bg-white/10 hover:text-white"
+                    ? "bg-primary text-primary-foreground border-border-ink shadow-brutal-sm border-2 border-border-ink ring-2 ring-border-ink"
+                    : "bg-white/5 text-text-muted border-white/10 hover:bg-white/10 hover:text-white"
                 }`}
               >
                 {isSelected && <Check className="h-3.5 w-3.5 shrink-0" />}
@@ -438,14 +438,14 @@ export default function ScannerEditor({
             type="button"
             onClick={() => onAddPage(quad, raster)}
             disabled={busy}
-            className="flex items-center gap-2 px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white text-xs font-bold transition-all cursor-pointer border border-white/10 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all cursor-pointer border border-white/10 disabled:opacity-50"
           >
-            <Plus className="h-4 w-4 text-emerald-400" />
+            <Plus className="h-4 w-4 text-success-foreground" />
             <span>Add page</span>
           </button>
 
           {pageCount > 1 && (
-            <span className="text-[11px] font-black uppercase tracking-wider text-zinc-400 px-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-text-muted px-2">
               {pageCount} pages ready
             </span>
           )}
@@ -454,7 +454,7 @@ export default function ScannerEditor({
             type="button"
             onClick={() => onConfirm(quad, raster)}
             disabled={busy}
-            className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-black shadow-lg transition-all cursor-pointer disabled:opacity-50 min-w-[130px]"
+            className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary hover:brightness-110 text-primary-foreground text-xs font-bold shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer disabled:opacity-50 min-w-[130px]"
           >
             <ScanLine className="h-4 w-4" />
             <span>{busy ? "Processing…" : `Scan ${pageCount} ${pageCount === 1 ? "page" : "pages"}`}</span>

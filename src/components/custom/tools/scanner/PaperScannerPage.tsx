@@ -1,17 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  AlertTriangle,
-  Camera,
-  ChevronRight,
-  FileText,
-  ImageUp,
-  ScanLine,
-  Settings,
-  Smartphone,
-  X,
-} from "lucide-react";
+import { AlertTriangle, Camera, ChevronRight, FileText, ImageUp, Settings, Smartphone, X } from "lucide-react";
 import Button from "@/components/custom/shared/Button";
 import BottomSheet from "@/components/custom/shared/BottomSheet";
 import {
@@ -385,9 +375,9 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
           <Button
             variant="secondary"
             onClick={() => systemInputRef.current?.click()}
-            icon={<Smartphone className="h-4 w-4 text-emerald-500" />}
+            icon={<Smartphone className="h-4 w-4" aria-hidden />}
           >
-            System Camera
+            Phone camera
           </Button>
           <Button
             variant="secondary"
@@ -424,14 +414,14 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
 
       {/* ── Flow-level errors and post-run warnings ── */}
       {flowError && mode.name !== "processing" && (
-        <div className="flex items-start gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3">
-          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" aria-hidden />
-          <p className="min-w-0 flex-1 text-left text-[11px] font-bold text-red-700 dark:text-red-300">{flowError}</p>
+        <div className="flex items-start gap-3 rounded-2xl border border-border-ink bg-danger-surface px-4 py-3">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-danger-foreground" aria-hidden />
+          <p className="min-w-0 flex-1 text-left text-xs font-bold text-danger-foreground">{flowError}</p>
           <button
             type="button"
             onClick={() => setFlowError(null)}
             aria-label="Dismiss error"
-            className="shrink-0 rounded-lg p-1 text-red-500 transition-colors duration-150 hover:bg-red-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+            className="shrink-0 rounded-lg p-1 text-danger-foreground transition-colors duration-150 hover:bg-danger-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -439,11 +429,11 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
       )}
 
       {warnings.length > 0 && mode.name === "library" && (
-        <div className="flex items-start gap-3 rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3">
-          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden />
+        <div className="flex items-start gap-3 rounded-2xl border border-border-ink bg-warning-surface px-4 py-3">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-warning-foreground" aria-hidden />
           <div className="min-w-0 flex-1 space-y-1 text-left">
             {warnings.map((w, i) => (
-              <p key={i} className="text-[11px] font-bold text-amber-700 dark:text-amber-300">
+              <p key={i} className="text-xs font-bold text-warning-foreground">
                 {WARNING_TEXT[w.kind]}
               </p>
             ))}
@@ -452,7 +442,7 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
             type="button"
             onClick={() => setWarnings([])}
             aria-label="Dismiss warnings"
-            className="shrink-0 rounded-lg p-1 text-amber-600 transition-colors duration-150 hover:bg-amber-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+            className="shrink-0 rounded-lg p-1 text-warning-foreground transition-colors duration-150 hover:bg-warning-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -501,14 +491,14 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
 
       {/* ── Processing ── */}
       {mode.name === "processing" && (
-        <div className="flex flex-col items-center gap-4 rounded-[24px] border border-border-strong dark:border-border card-surface px-6 py-8 text-center shadow-xs">
+        <div className="flex flex-col items-center gap-4 rounded-[14px] border border-border-strong dark:border-border card-surface px-6 py-8 text-center shadow-xs">
           <span
-            className="h-10 w-10 animate-spin rounded-full border-[3px] border-indigo-500 border-t-transparent"
+            className="h-10 w-10 animate-spin rounded-full border-[3px] border-border-ink border-t-transparent"
             aria-hidden
           />
           <div className="space-y-1">
-            <p className="text-sm font-black text-text-heading font-outfit">{STAGE_LABEL[stage]}</p>
-            <p className="text-[11px] font-medium text-text-secondary dark:text-text-muted">
+            <p className="text-sm font-bold text-text-heading font-outfit">{STAGE_LABEL[stage]}</p>
+            <p className="text-xs font-medium text-text-secondary dark:text-text-muted">
               {progress && progress.total > progress.done
                 ? `${progress.done} of ${progress.total} — ${STAGE_SUB[stage]}`
                 : STAGE_SUB[stage] || "Working…"}
@@ -516,7 +506,7 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
           </div>
           <div className="h-1.5 w-full max-w-56 overflow-hidden rounded-full bg-surface-tertiary dark:bg-surface-secondary">
             <div
-              className="h-full rounded-full bg-indigo-500 transition-all duration-250"
+              className="h-full rounded-full bg-primary transition-all duration-250"
               style={{ width: `${stagePct}%` }}
             />
           </div>
@@ -530,7 +520,6 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
       {mode.name === "library" && (
         <div className="space-y-4">
           <SectionHeader
-            icon={ScanLine}
             title="Your scans"
             count={metas?.length ?? undefined}
             right={memoryOnly ? <DotPill tone="amber">Session storage</DotPill> : null}
@@ -553,11 +542,11 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
                     key={tab.id}
                     type="button"
                     onClick={() => setSelectedFilter(tab.id)}
-                    className={`shrink-0 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                    className={`shrink-0 px-3 py-1 rounded-[10px] text-xs font-bold transition-all cursor-pointer ${
                       active
-                        ? "bg-indigo-600 text-white shadow-xs"
+                        ? "bg-primary text-primary-foreground shadow-xs"
                         : "bg-surface-secondary dark:bg-surface-secondary/60 text-text-secondary dark:text-text-muted hover:text-text-primary hover:bg-surface-tertiary"
-                    }`}
+                    } min-h-9`}
                   >
                     {tab.label}
                   </button>
@@ -569,17 +558,12 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
           {loading ? (
             <ListSkeleton rows={3} leading="dot" trailing titleWidth="w-1/3" subtitleWidth="w-1/4" />
           ) : listError ? (
-            <div className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-left text-[11px] font-bold text-red-700 dark:text-red-300">
+            <div className="rounded-2xl border border-border-ink bg-danger-surface px-4 py-3 text-left text-xs font-bold text-danger-foreground">
               {listError}
             </div>
           ) : metas && metas.length === 0 ? (
             <EmptyPanel
               variant="dashed"
-              icon={
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-500">
-                  <ScanLine className="h-6 w-6" aria-hidden />
-                </span>
-              }
               title="No scans yet"
               description="Point the camera at a page — edges are detected automatically, then it becomes a PDF with extractable text."
               action={
@@ -626,7 +610,7 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
                         {examTag || meta.kind}
                       </ToneBadge>
                       <ChevronRight
-                        className="h-4 w-4 text-zinc-400 transition-colors group-hover:text-indigo-500 dark:text-zinc-600 dark:group-hover:text-indigo-400"
+                        className="h-4 w-4 text-text-muted transition-colors group-text-primary dark:group-text-primary"
                         aria-hidden
                       />
                     </div>
@@ -643,7 +627,7 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
         <BottomSheet overlayId="scanner-add-page-sheet" onClose={() => setShowAddSheet(false)}>
           <div className="space-y-4 p-2 text-left">
             <div>
-              <h3 className="text-base font-black text-text-heading font-outfit">Add Document Page</h3>
+              <h3 className="text-base font-bold text-text-heading font-outfit">Add Document Page</h3>
               <p className="text-xs text-text-secondary dark:text-text-muted mt-0.5">
                 Choose how you would like to capture or import the next page
               </p>
@@ -658,7 +642,7 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
                 }}
                 className="flex items-center gap-3.5 p-3.5 rounded-2xl border border-border-muted dark:border-border hover:bg-surface-secondary dark:hover:bg-surface-secondary/60 transition-all cursor-pointer text-left group active:scale-[0.99]"
               >
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 group-hover:scale-105 transition-transform">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-secondary-foreground group- transition-transform">
                   <Camera className="h-5 w-5" />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -670,7 +654,7 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
               </button>
 
               <label className="flex items-center gap-3.5 p-3.5 rounded-2xl border border-border-muted dark:border-border hover:bg-surface-secondary dark:hover:bg-surface-secondary/60 transition-all cursor-pointer text-left group active:scale-[0.99]">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-success-surface text-success-foreground group- transition-transform">
                   <Smartphone className="h-5 w-5" />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -689,7 +673,7 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
               </label>
 
               <label className="flex items-center gap-3.5 p-3.5 rounded-2xl border border-border-muted dark:border-border hover:bg-surface-secondary dark:hover:bg-surface-secondary/60 transition-all cursor-pointer text-left group active:scale-[0.99]">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-500/15 text-sky-600 dark:text-sky-400 group-hover:scale-105 transition-transform">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-secondary-foreground group- transition-transform">
                   <ImageUp className="h-5 w-5" />
                 </div>
                 <div className="min-w-0 flex-1">

@@ -2,78 +2,154 @@
 
 import React, { useState, useEffect, useRef, useMemo, useDeferredValue, useCallback } from "react";
 import { AnimatePresence, m } from "framer-motion";
-import { 
-  Search, X, Sparkles, User, Calendar, BookOpen, CreditCard, Car, Home, Bus, 
-  Plus, BarChart3, FileText, GraduationCap, TrendingUp, 
-  Volume2, Users, School, RotateCcw, ClipboardList, Settings, 
-  Code, Star, Utensils, Shirt, Plane, Handshake, HelpCircle, 
-  PartyPopper, Landmark, Clock, MessageSquare, 
-  CheckCircle2, Sun, Moon, AlertTriangle
+import {
+  Search,
+  X,
+  Sparkles,
+  User,
+  Calendar,
+  BookOpen,
+  CreditCard,
+  Car,
+  Home,
+  Bus,
+  Plus,
+  BarChart3,
+  FileText,
+  GraduationCap,
+  TrendingUp,
+  Volume2,
+  Users,
+  School,
+  RotateCcw,
+  ClipboardList,
+  Settings,
+  Code,
+  Star,
+  Utensils,
+  Shirt,
+  Plane,
+  Handshake,
+  HelpCircle,
+  PartyPopper,
+  Landmark,
+  Clock,
+  MessageSquare,
+  CheckCircle2,
+  Sun,
+  Moon,
+  AlertTriangle,
 } from "lucide-react";
 import { api } from "@/lib/sync-engine";
 import { clickable } from "@/lib/a11y";
 
 function renderCommandIcon(icon: React.ReactNode | string) {
   if (React.isValidElement(icon)) return icon;
-  if (typeof icon !== "string") return <Sparkles size={15} className="text-indigo-500" />;
+  if (typeof icon !== "string") return <Sparkles size={15} />;
 
   switch (icon.trim()) {
-    case "👤": return <User size={15} className="text-indigo-500" />;
-    case "📋": return <ClipboardList size={15} className="text-blue-500" />;
-    case "📚": return <BookOpen size={15} className="text-emerald-500" />;
-    case "💳": return <CreditCard size={15} className="text-amber-500" />;
-    case "🚕": return <Car size={15} className="text-amber-500" />;
-    case "📖": return <BookOpen size={15} className="text-indigo-500" />;
-    case "🏠": return <Home size={15} className="text-violet-500" />;
+    case "👤":
+      return <User size={15} />;
+    case "📋":
+      return <ClipboardList size={15} />;
+    case "📚":
+      return <BookOpen size={15} />;
+    case "💳":
+      return <CreditCard size={15} />;
+    case "🚕":
+      return <Car size={15} />;
+    case "📖":
+      return <BookOpen size={15} />;
+    case "🏠":
+      return <Home size={15} />;
     case "🚏":
     case "🚍":
-    case "🚌": return <Bus size={15} className="text-sky-500" />;
-    case "➕": return <Plus size={15} className="text-zinc-400" />;
-    case "📊": return <BarChart3 size={15} className="text-emerald-500" />;
+    case "🚌":
+      return <Bus size={15} />;
+    case "➕":
+      return <Plus size={15} />;
+    case "📊":
+      return <BarChart3 size={15} />;
     case "📅":
-    case "🗓️": return <Calendar size={15} className="text-blue-500" />;
-    case "📜": return <FileText size={15} className="text-amber-500" />;
-    case "🎓": return <GraduationCap size={15} className="text-purple-500" />;
-    case "📈": return <TrendingUp size={15} className="text-emerald-500" />;
-    case "📘": return <BookOpen size={15} className="text-blue-500" />;
-    case "📢": return <Volume2 size={15} className="text-rose-500" />;
-    case "👨‍🏫": return <Users size={15} className="text-teal-500" />;
-    case "🏫": return <School size={15} className="text-indigo-500" />;
-    case "🔄": return <RotateCcw size={15} className="text-blue-500" />;
-    case "⚙️": return <Settings size={15} className="text-zinc-500" />;
-    case "💻": return <Code size={15} className="text-violet-500" />;
-    case "⭐": return <Star size={15} className="text-amber-400 fill-amber-400" />;
-    case "🍽️": return <Utensils size={15} className="text-orange-500" />;
-    case "👕": return <Shirt size={15} className="text-sky-500" />;
-    case "✈️": return <Plane size={15} className="text-indigo-500" />;
-    case "🤝": return <Handshake size={15} className="text-emerald-500" />;
-    case "📄": return <FileText size={15} className="text-zinc-400" />;
-    case "❓": return <HelpCircle size={15} className="text-amber-500" />;
-    case "👥": return <Users size={15} className="text-blue-500" />;
-    case "🎉": return <PartyPopper size={15} className="text-pink-500" />;
-    case "🏛️": return <Landmark size={15} className="text-amber-600" />;
-    case "⏰": return <Clock size={15} className="text-amber-500" />;
-    case "🔮": return <Sparkles size={15} className="text-purple-500" />;
-    case "💬": return <MessageSquare size={15} className="text-indigo-500" />;
-    case "📝": return <FileText size={15} className="text-blue-500" />;
-    case "🔢": return <BarChart3 size={15} className="text-emerald-500" />;
+    case "🗓️":
+      return <Calendar size={15} />;
+    case "📜":
+      return <FileText size={15} />;
+    case "🎓":
+      return <GraduationCap size={15} />;
+    case "📈":
+      return <TrendingUp size={15} />;
+    case "📘":
+      return <BookOpen size={15} />;
+    case "📢":
+      return <Volume2 size={15} />;
+    case "👨‍🏫":
+      return <Users size={15} />;
+    case "🏫":
+      return <School size={15} />;
+    case "🔄":
+      return <RotateCcw size={15} />;
+    case "⚙️":
+      return <Settings size={15} />;
+    case "💻":
+      return <Code size={15} />;
+    case "⭐":
+      return <Star size={15} />;
+    case "🍽️":
+      return <Utensils size={15} />;
+    case "👕":
+      return <Shirt size={15} />;
+    case "✈️":
+      return <Plane size={15} />;
+    case "🤝":
+      return <Handshake size={15} />;
+    case "📄":
+      return <FileText size={15} />;
+    case "❓":
+      return <HelpCircle size={15} />;
+    case "👥":
+      return <Users size={15} />;
+    case "🎉":
+      return <PartyPopper size={15} />;
+    case "🏛️":
+      return <Landmark size={15} />;
+    case "⏰":
+      return <Clock size={15} />;
+    case "🔮":
+      return <Sparkles size={15} />;
+    case "💬":
+      return <MessageSquare size={15} />;
+    case "📝":
+      return <FileText size={15} />;
+    case "🔢":
+      return <BarChart3 size={15} />;
     case "🙈":
-    case "🕵️": return <User size={15} className="text-zinc-400" />;
-    case "☀️": return <Sun size={15} className="text-amber-500" />;
-    case "🌙": return <Moon size={15} className="text-indigo-400" />;
-    case "📏": return <BarChart3 size={15} className="text-blue-500" />;
-    case "🚶": return <Users size={15} className="text-zinc-500" />;
-    case "🟡": return <AlertTriangle size={15} className="text-amber-500" />;
+    case "🕵️":
+      return <User size={15} />;
+    case "☀️":
+      return <Sun size={15} />;
+    case "🌙":
+      return <Moon size={15} />;
+    case "📏":
+      return <BarChart3 size={15} />;
+    case "🚶":
+      return <Users size={15} />;
+    case "🟡":
+      return <AlertTriangle size={15} />;
     case "🔴":
-    case "⚠️": return <AlertTriangle size={15} className="text-red-500" />;
-    case "🎪": return <PartyPopper size={15} className="text-pink-500" />;
-    case "✅": return <CheckCircle2 size={15} className="text-emerald-500" />;
-    case "☐": return <CheckCircle2 size={15} className="text-zinc-400" />;
+    case "⚠️":
+      return <AlertTriangle size={15} />;
+    case "🎪":
+      return <PartyPopper size={15} />;
+    case "✅":
+      return <CheckCircle2 size={15} />;
+    case "☐":
+      return <CheckCircle2 size={15} />;
     default:
       if (/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u.test(icon)) {
-        return <Sparkles size={15} className="text-indigo-500" />;
+        return <Sparkles size={15} />;
       }
-      return <span className="text-xs font-bold text-zinc-500">{icon}</span>;
+      return <span className="font-mono text-xs font-bold">{icon}</span>;
   }
 }
 
@@ -134,7 +210,10 @@ export function CommandPalette({ isOpen, onClose, commands, demoMode = false }: 
       return;
     }
 
-    const searchTerm = deferredQuery.slice(kohaIdx + 4).trim().replace(/^[:;,\-\s]+/, "");
+    const searchTerm = deferredQuery
+      .slice(kohaIdx + 4)
+      .trim()
+      .replace(/^[:;,\-\s]+/, "");
     if (!searchTerm) {
       setKohaBooks([]);
       setKohaLoading(true);
@@ -145,10 +224,26 @@ export function CommandPalette({ isOpen, onClose, commands, demoMode = false }: 
     if (demoMode) {
       const timer = setTimeout(() => {
         const mockResults = [
-          { title: "Introduction to Algorithms", author: "Cormen, Leiserson, Rivest, Stein", availability: "Available (4 copies)" },
-          { title: "Computer Networking: A Top-Down Approach", author: "Kurose, Ross", availability: "Reference Only (1 copy)" },
-          { title: "Design Patterns: Elements of Reusable Object-Oriented Software", author: "Gamma, Helm, Johnson, Vlissides", availability: "Checked Out (Due 2026-07-10)" }
-        ].filter(b => b.title.toLowerCase().includes(searchTerm.toLowerCase()) || b.author.toLowerCase().includes(searchTerm.toLowerCase()));
+          {
+            title: "Introduction to Algorithms",
+            author: "Cormen, Leiserson, Rivest, Stein",
+            availability: "Available (4 copies)",
+          },
+          {
+            title: "Computer Networking: A Top-Down Approach",
+            author: "Kurose, Ross",
+            availability: "Reference Only (1 copy)",
+          },
+          {
+            title: "Design Patterns: Elements of Reusable Object-Oriented Software",
+            author: "Gamma, Helm, Johnson, Vlissides",
+            availability: "Checked Out (Due 2026-07-10)",
+          },
+        ].filter(
+          (b) =>
+            b.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            b.author.toLowerCase().includes(searchTerm.toLowerCase()),
+        );
         setKohaBooks(mockResults);
         setKohaLoading(false);
       }, 100);
@@ -259,7 +354,7 @@ export function CommandPalette({ isOpen, onClose, commands, demoMode = false }: 
         }
       }
     },
-    [filteredCommands, selectedIndex, activeSubpage, onClose]
+    [filteredCommands, selectedIndex, activeSubpage, onClose],
   );
 
   if (!isOpen) return null;
@@ -268,17 +363,20 @@ export function CommandPalette({ isOpen, onClose, commands, demoMode = false }: 
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-start justify-center pt-14 sm:pt-20 px-4 bg-black/60 backdrop-blur-md transition-opacity">
+      <div className="fixed inset-0 z-50 flex items-start justify-center pt-14 sm:pt-20 px-4 bg-[color-mix(in_oklab,var(--shadow-ink)_55%,transparent)]">
         {/* Backdrop Click */}
         <div className="fixed inset-0" onClick={onClose} />
 
         {/* Modal Container */}
         <m.div
-          initial={{ opacity: 0, scale: 0.96, y: -10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: -10 }}
-          transition={{ duration: 0.12, ease: "easeOut" }}
-          className="relative w-full max-w-2xl bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-zinc-200/80 dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden z-10 flex flex-col max-h-[80vh]"
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.14, ease: [0.2, 0.8, 0.2, 1] }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Search AmazeCC"
+          className="relative w-full max-w-2xl bg-surface border-[3px] border-border-ink rounded-[20px] shadow-brutal-lg overflow-hidden z-10 flex flex-col max-h-[80vh]"
           onKeyDown={handleKeyDown}
         >
           {/* Subpage View */}
@@ -286,49 +384,47 @@ export function CommandPalette({ isOpen, onClose, commands, demoMode = false }: 
             <div className="p-4 relative">
               <button
                 onClick={() => setActiveSubpage(null)}
-                className="mb-3 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 cursor-pointer"
+                className="mb-3 inline-flex min-h-10 items-center rounded-[10px] border-2 border-border-ink bg-highlight px-3 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-highlight-foreground shadow-brutal-sm cursor-pointer"
               >
-                ← Back to Spotlight Search
+                ← Search
               </button>
               {activeSubpage}
             </div>
           ) : (
             <>
               {/* Top Search Input Bar */}
-              <div className="flex items-center gap-3 px-4 py-3.5 border-b border-zinc-200/80 dark:border-zinc-800 shrink-0">
-                <Search size={18} className="text-zinc-400 dark:text-zinc-500 shrink-0" />
+              <div className="flex items-center gap-3 px-4 py-3 border-b-2 border-border-ink shrink-0">
+                <Search size={18} className="text-text-muted shrink-0" aria-hidden />
                 <input
                   ref={inputRef}
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Type a command or search (e.g. 'Attendance', 'Grades', 'Mess', 'Koha')..."
-                  className="w-full bg-transparent text-sm font-medium text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none"
+                  placeholder="Search pages, actions, books…"
+                  aria-label="Search pages, actions and books"
+                  className="w-full min-h-10 bg-transparent text-base font-medium text-text-primary placeholder:text-text-muted outline-none focus-visible:outline-none"
                 />
                 {kohaLoading && (
-                  <span className="text-[10px] font-bold text-amber-500 animate-pulse shrink-0">
+                  <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-warning-foreground shrink-0">
                     Searching Koha...
                   </span>
                 )}
                 <button
                   onClick={onClose}
                   aria-label="Close command palette"
-                  className="relative hit-expand p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all cursor-pointer"
+                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface-secondary text-text-primary hover:bg-surface-hover cursor-pointer"
                 >
                   <X size={16} />
                 </button>
               </div>
 
               {/* Body: Left Command List + Right Detail Preview */}
-              <div className="flex-1 flex flex-col md:flex-row overflow-hidden divide-y md:divide-y-0 md:divide-x divide-zinc-100 dark:divide-zinc-800/60">
+              <div className="flex-1 flex flex-col md:flex-row overflow-hidden divide-y-2 md:divide-y-0 md:divide-x-2 divide-border-muted">
                 {/* Command List */}
-                <div
-                  ref={listRef}
-                  className="flex-1 overflow-y-auto p-2 space-y-1 max-h-[50vh] scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700"
-                >
+                <div ref={listRef} className="flex-1 overflow-y-auto p-2 pr-3 space-y-1 max-h-[55vh]">
                   {filteredCommands.length === 0 ? (
-                    <div className="p-8 text-center text-zinc-400 dark:text-zinc-500 text-xs">
-                      No matching commands found.
+                    <div className="p-8 text-center text-sm text-text-muted">
+                      Nothing matches that. Try a page name like “Attendance”.
                     </div>
                   ) : (
                     filteredCommands.map((cmd, idx) => {
@@ -345,28 +441,32 @@ export function CommandPalette({ isOpen, onClose, commands, demoMode = false }: 
                             }
                           })}
                           onMouseEnter={() => setSelectedIndex(idx)}
-                          className={`flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer transition-all ${
+                          aria-selected={isSelected}
+                          className={`flex min-h-12 items-center justify-between gap-2 px-2.5 py-2 rounded-[10px] border-2 cursor-pointer transition-colors ${
                             isSelected
-                              ? "bg-indigo-600 text-white shadow-sm"
-                              : "hover:bg-zinc-100 dark:hover:bg-zinc-800/70 text-zinc-700 dark:text-zinc-200"
+                              ? "bg-highlight text-highlight-foreground border-border-ink shadow-brutal-sm"
+                              : "border-transparent text-text-primary hover:bg-surface-secondary"
                           }`}
                         >
                           <div className="flex items-center gap-3 min-w-0">
                             {cmd.icon && (
-                              <span className={`shrink-0 flex items-center justify-center w-7 h-7 rounded-lg border transition-all ${
-                                isSelected
-                                  ? "bg-white/20 border-white/30 text-white"
-                                  : "bg-zinc-100/80 dark:bg-zinc-800/80 border-zinc-200/60 dark:border-zinc-700/60"
-                              }`}>
+                              <span
+                                aria-hidden
+                                className={`shrink-0 flex items-center justify-center w-9 h-9 rounded-[8px] border-2 border-border-ink ${
+                                  isSelected
+                                    ? "bg-highlight-foreground text-highlight"
+                                    : "bg-secondary text-secondary-foreground"
+                                }`}
+                              >
                                 {renderCommandIcon(cmd.icon)}
                               </span>
                             )}
                             <div className="min-w-0">
-                              <p className={`text-xs font-bold truncate ${isSelected ? "text-white" : "text-zinc-900 dark:text-white"}`}>
-                                {cmd.label}
-                              </p>
+                              <p className="text-sm font-bold truncate">{cmd.label}</p>
                               {cmd.description && (
-                                <p className={`text-[11px] truncate mt-0.5 ${isSelected ? "text-indigo-100" : "text-zinc-500 dark:text-zinc-400"}`}>
+                                <p
+                                  className={`text-xs truncate mt-0.5 ${isSelected ? "opacity-80" : "text-text-muted"}`}
+                                >
                                   {cmd.description}
                                 </p>
                               )}
@@ -376,10 +476,10 @@ export function CommandPalette({ isOpen, onClose, commands, demoMode = false }: 
                           <div className="flex items-center gap-2 shrink-0 ml-2">
                             {cmd.category && (
                               <span
-                                className={`text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded-md ${
+                                className={`hidden sm:inline-flex rounded-[6px] border-2 border-border-ink px-1.5 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] ${
                                   isSelected
-                                    ? "bg-white/20 text-white"
-                                    : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400"
+                                    ? "bg-text-primary text-background"
+                                    : "bg-surface-secondary text-text-muted"
                                 }`}
                               >
                                 {cmd.category}
@@ -395,9 +495,9 @@ export function CommandPalette({ isOpen, onClose, commands, demoMode = false }: 
 
                 {/* Right Detail Preview Pane */}
                 {selectedCommand?.detail && (
-                  <div className="hidden md:block w-72 p-4 bg-zinc-50/50 dark:bg-zinc-950/40 overflow-y-auto shrink-0 border-l border-zinc-100 dark:border-zinc-800/60">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3">
-                      Command Details
+                  <div className="hidden md:block w-72 p-4 bg-surface-secondary overflow-y-auto shrink-0">
+                    <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted mb-3">
+                      Details
                     </p>
                     {selectedCommand.detail}
                   </div>
@@ -405,21 +505,28 @@ export function CommandPalette({ isOpen, onClose, commands, demoMode = false }: 
               </div>
 
               {/* Bottom Footer Shortcuts Bar */}
-              <div className="flex items-center justify-between px-4 py-2 bg-zinc-50/80 dark:bg-zinc-900/80 border-t border-zinc-200/60 dark:border-zinc-800 text-[10px] font-medium text-zinc-500 dark:text-zinc-400 shrink-0">
+              <div className="hidden sm:flex items-center justify-between px-4 py-2 bg-surface-secondary border-t-2 border-border-ink font-mono text-xs text-text-muted shrink-0">
                 <div className="flex items-center gap-3">
                   <span className="flex items-center gap-1">
-                    <kbd className="px-1.5 py-0.5 rounded bg-zinc-200/80 dark:bg-zinc-800 font-mono text-[9px]">↑↓</kbd> Navigate
+                    <kbd className="rounded-[6px] border-2 border-border-ink bg-surface px-1.5 py-0.5 font-mono text-xs font-semibold text-text-primary">
+                      ↑↓
+                    </kbd>{" "}
+                    Navigate
                   </span>
                   <span className="flex items-center gap-1">
-                    <kbd className="px-1.5 py-0.5 rounded bg-zinc-200/80 dark:bg-zinc-800 font-mono text-[9px]">↵</kbd> Select
+                    <kbd className="rounded-[6px] border-2 border-border-ink bg-surface px-1.5 py-0.5 font-mono text-xs font-semibold text-text-primary">
+                      ↵
+                    </kbd>{" "}
+                    Select
                   </span>
                   <span className="flex items-center gap-1">
-                    <kbd className="px-1.5 py-0.5 rounded bg-zinc-200/80 dark:bg-zinc-800 font-mono text-[9px]">ESC</kbd> Close
+                    <kbd className="rounded-[6px] border-2 border-border-ink bg-surface px-1.5 py-0.5 font-mono text-xs font-semibold text-text-primary">
+                      ESC
+                    </kbd>{" "}
+                    Close
                   </span>
                 </div>
-                <span className="flex items-center gap-1 font-bold text-indigo-600 dark:text-indigo-400">
-                  <Sparkles size={11} /> Spotlight Search
-                </span>
+                <span className="font-semibold uppercase tracking-[0.06em] text-text-heading">Spotlight</span>
               </div>
             </>
           )}

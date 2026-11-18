@@ -92,7 +92,7 @@ describe("PaperScannerPage", () => {
 
     expect(screen.getByRole("heading", { name: "Paper Scanner" })).toBeTruthy();
     expect(screen.getByRole("button", { name: "Scan paper" })).toBeTruthy();
-    expect(screen.getByRole("button", { name: "System Camera" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Phone camera" })).toBeTruthy();
     expect(screen.getByRole("button", { name: "Import image" })).toBeTruthy();
 
     expect(await screen.findByText("No scans yet")).toBeTruthy();

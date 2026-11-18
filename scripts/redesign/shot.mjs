@@ -214,6 +214,12 @@ console.log(
   (await evalJs("document.body.innerText")).slice(0, Number(process.env.TEXT_LEN || 150)).replace(/\n/g, " | "),
 );
 
+if (process.env.CLICK_SEL) {
+  await evalJs(
+    `(() => { const el=[...document.querySelectorAll(${JSON.stringify(process.env.CLICK_SEL)})].find(e=>e.offsetParent); el&&el.click(); return !!el })()`,
+  );
+  await sleep(2500);
+}
 const SIZES = process.env.ONLY_TABLET
   ? [["tablet", 820, 1180, true]]
   : process.env.ONLY_DESKTOP

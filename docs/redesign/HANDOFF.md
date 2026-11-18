@@ -201,6 +201,32 @@ style: course list with %, a bar that marks 75%, "attend next N / can skip N"
 in words; detail page with big %, a plain sentence, what-if tiles, recent
 classes with Present/Absent badges. Fix bug 4.2 first so it can be checked.
 
+### 5.4b FFCS planner — "bugging so much" (user, 2026-11-19), demo and real
+
+Not a styling task first: the planner misbehaves in both demo and signed-in
+use. Treat it as a debugging project with its own branch commits.
+
+- Size: `exams/FFCSTimetableTab.tsx` and
+  `exams/FFCS/components/FFCSGuidedSelector.tsx` (~5k lines, 887 off-spec
+  classes) plus `exams/FFCS/*` (subpages, modals, tour, dossier, friends).
+- Start from the failing tests that already exist on `main`:
+  `ffcsTab.render.test.tsx`, `ffcsClassmates.render.test.tsx`,
+  `ffcsClassmates.test.ts` — they are part of the 28-failure baseline and
+  probably point at real breakage. Make them pass before restyling.
+- Reproduce with the screenshot script in demo and with `LOGIN=1`
+  (Academics → FFCS planner, and the standalone `/ffcs` route); capture
+  console errors (`shot.mjs` logs `EXC`/`CERR` lines).
+- Known interaction risks: FFCS has fixed bottom action bars
+  (`.ffcs-bottom-bar`, z-240) that collide with the phone bottom nav; see
+  the `.dashboard-shell:has(.ffcs-bottom-bar)` rules in `globals.css`.
+  The new brand bottom bar and `BrandSheet` may need z-index/offset checks.
+- `FFCSGuidedSelector` reads 13–38 pieces of state per card (old HANDOFF
+  #6): group state into a reducer/context before changing behaviour.
+- Ask the user for concrete repro steps (what action, what goes wrong) at
+  the start of that session; "bugging" covers several symptoms.
+- Restyle only after it works: run `brandify.py --status`, then hand-polish
+  the planner grid, slot chips and course cards to the reference mock.
+
 ### 5.5 Remaining screens (codemod + hand polish), biggest first
 
 Off-spec class count on 2026-11-19 (9,805 in 216 files):

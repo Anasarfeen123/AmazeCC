@@ -1059,7 +1059,7 @@ export default function NavigationTabs({
                             return next;
                           });
                         }}
-                        className="flex min-w-0 flex-col items-start gap-0.5 rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
+                        className="flex min-w-0 flex-col items-start gap-0.5 overflow-hidden rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
                         title="Click to show/hide CGPA"
                       >
                         <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
@@ -1085,7 +1085,7 @@ export default function NavigationTabs({
                           return next;
                         });
                       }}
-                      className="flex min-w-0 flex-col items-start gap-0.5 rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
+                      className="flex min-w-0 flex-col items-start gap-0.5 overflow-hidden rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
                       title="Click to toggle attendance format"
                     >
                       <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
@@ -1099,7 +1099,7 @@ export default function NavigationTabs({
                         return (
                           <span
                             data-private
-                            className={`inline-flex items-baseline gap-1 font-display text-base font-bold leading-none ${below ? "text-danger-foreground" : "text-text-heading"}`}
+                            className={`inline-flex max-w-full items-baseline gap-1 font-display font-bold leading-none tabular-nums ${String(attendanceValue).length > 6 ? "text-[13px]" : "text-base"} ${below ? "text-danger-foreground" : "text-text-heading"}`}
                             title={below ? `Below your ${target}% target` : `At or above your ${target}% target`}
                           >
                             {attendanceValue}
@@ -1116,7 +1116,7 @@ export default function NavigationTabs({
 
                     <button
                       onClick={() => setGradesDisplayIsOpen(true)}
-                      className="flex min-w-0 flex-col items-start gap-0.5 rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
+                      className="flex min-w-0 flex-col items-start gap-0.5 overflow-hidden rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
                       title="Click to view credits & grades details"
                     >
                       <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
@@ -1132,7 +1132,7 @@ export default function NavigationTabs({
                         selectTab("attendance");
                         setActiveAttendanceSubTab("od");
                       }}
-                      className="flex min-w-0 flex-col items-start gap-0.5 rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
+                      className="flex min-w-0 flex-col items-start gap-0.5 overflow-hidden rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
                       title="Click to view OD tracker details"
                     >
                       <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">

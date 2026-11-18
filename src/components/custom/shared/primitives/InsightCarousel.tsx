@@ -28,7 +28,7 @@ import { useHorizontalSwipe } from "./useHorizontalSwipe";
  * tile is the one surface here with autoplay. Hence `onActiveChange`.
  */
 
-const LABEL = "font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted truncate";
+const LABEL = "font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted min-w-0 break-words";
 const BADGE =
   "font-mono text-xs font-semibold uppercase tracking-[0.06em] px-1.5 py-0.5 rounded-[6px] border-2 shrink-0";
 const SUBLINE = "font-mono text-xs text-text-muted truncate";
@@ -154,7 +154,7 @@ export function InsightCarousel({
         />
       ) : null}
 
-      <div className="flex items-center justify-between gap-1 relative z-10 pointer-events-none">
+      <div className="flex flex-wrap items-center justify-between gap-1 relative z-10 pointer-events-none">
         <span className={LABEL}>{slide.label}</span>
         {slide.badge ? (
           <span className={cn(BADGE, slide.badgeClassName ?? TONE_BADGE[tone] ?? TONE_BADGE.zinc)}>{slide.badge}</span>

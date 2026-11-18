@@ -83,8 +83,8 @@ export function StatTile({
 
   return (
     <div className={`${TILE} ${height} ${className}`.trim()}>
-      <div className="flex items-center justify-between gap-1">
-        <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted truncate">
+      <div className="flex flex-wrap items-center justify-between gap-1">
+        <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted min-w-0 break-words">
           {label}
         </span>
         {badge ? (
@@ -111,7 +111,7 @@ export function StatTile({
 
       {sub ? (
         <div className="flex items-center justify-between gap-2 min-w-0">
-          <div className="font-mono text-xs text-text-muted truncate">{sub}</div>
+          <div className="font-mono text-xs text-text-muted line-clamp-2">{sub}</div>
         </div>
       ) : null}
     </div>

@@ -52,6 +52,7 @@
   --color-ochre: #f9bc60;
   --color-sage: #abd1c6;
   --color-highlight: var(--highlight);
+  --color-highlight-foreground: var(--highlight-foreground);
   --color-hero: var(--hero-number);
   --color-border-ink: var(--border-ink);
 

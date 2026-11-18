@@ -64,6 +64,9 @@ await send("Runtime.enable");
 await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: theme }] });
 await send("Page.navigate", { url: BASE + "/" });
 await sleep(9000);
+await evalJs(
+  `["has_selected_interface","introDone","hasSeenPushPrompt","push_prompt_dismissed","busPromptDismissed"].forEach(k=>localStorage.setItem(k,"true"))`,
+);
 // enter demo
 const clicked = await evalJs(
   `(() => { const b=[...document.querySelectorAll('button,a')].find(e=>/^\s*try the demo\s*$/i.test(e.textContent)); if(b){b.click(); return b.textContent.trim();} return null })()`,
@@ -92,8 +95,10 @@ await evalJs(
 await evalJs(
   `localStorage.setItem('theme', ${JSON.stringify(theme)}); document.documentElement.classList.toggle('dark', ${theme === "dark"})`,
 );
-await send("Page.navigate", { url: BASE + "/" });
-await sleep(15000);
+if (!process.env.NO_RELOAD) {
+  await send("Page.navigate", { url: BASE + "/" });
+  await sleep(15000);
+}
 await evalJs(
   `(() => { const b=[...document.querySelectorAll("button,a")].find(e=>/proceed to dashboard/i.test(e.textContent)); b&&b.click(); })()`,
 );
@@ -116,7 +121,18 @@ for (const [name, w, h, mobile] of [
 ]) {
   await send("Emulation.setDeviceMetricsOverride", { width: w, height: h, deviceScaleFactor: 1, mobile });
   await sleep(2500);
-  const { result } = await send("Page.captureScreenshot", { format: "png" });
+  const full = process.env.FULL && name === "phone";
+  const dims = full ? (await send("Page.getLayoutMetrics")).result.cssContentSize : null;
+  const { result } = await send(
+    "Page.captureScreenshot",
+    full
+      ? {
+          format: "png",
+          captureBeyondViewport: true,
+          clip: { x: 0, y: 0, width: w, height: Math.min(dims.height, 6000), scale: 1 },
+        }
+      : { format: "png" },
+  );
   writeFileSync(`${out}-${name}.png`, Buffer.from(result.data, "base64"));
 }
 const errs = await evalJs(`document.title`);

@@ -29,8 +29,8 @@ import { useFocusTrap } from "@/lib/useFocusTrap";
  * Deliberately *not* changed from the original, so the ~25 call sites behave
  * identically: the trigger keeps its hard-coded chrome (callers restyle through the
  * wrapper, see `OPTION_PICKER_TRIGGER`), options stay `<button>`s, the search filter
- * still matches label and value case-insensitively, and `disabled` still only gates
- * the whole field without setting the attribute. Visual classes are untouched too —
+ * still matches label and value case-insensitively, and `disabled` gates the whole
+ * field. Visual classes are untouched too —
  * this migration is about the overlay mechanics, not a retint.
  */
 
@@ -47,6 +47,7 @@ interface OptionPickerProps {
   placeholder?: string;
   searchable?: boolean;
   disabled?: boolean;
+  "aria-label"?: string;
 }
 
 function useIsMobile(): boolean {
@@ -64,7 +65,16 @@ function useIsMobile(): boolean {
 const OVERLAY_Z = "z-[70]";
 
 const OptionPicker = forwardRef<HTMLDivElement, OptionPickerProps>(function OptionPicker(
-  { className, value, onChange, options, placeholder = "Select...", searchable = true, disabled = false },
+  {
+    className,
+    value,
+    onChange,
+    options,
+    placeholder = "Select...",
+    searchable = true,
+    disabled = false,
+    "aria-label": ariaLabel,
+  },
   ref,
 ) {
   const [open, setOpen] = useState(false);
@@ -227,6 +237,8 @@ const OptionPicker = forwardRef<HTMLDivElement, OptionPickerProps>(function Opti
       <button
         ref={triggerRef}
         type="button"
+        aria-label={ariaLabel}
+        disabled={disabled}
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => !disabled && setOpen(true)}

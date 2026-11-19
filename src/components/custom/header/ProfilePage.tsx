@@ -1650,6 +1650,7 @@ export default function ProfilePage({
               <p className="mt-0.5 text-xs text-text-muted">Comic is text; Marker is an opaque scribble.</p>
             </div>
             <SelectField
+              aria-label="Cover style"
               value={settings?.privacyCoverStyle ?? "comic"}
               onChange={(style) => updateSetting("privacyCoverStyle", style as "comic" | "marker")}
               options={[

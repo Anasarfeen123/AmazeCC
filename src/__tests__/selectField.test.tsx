@@ -47,9 +47,10 @@ describe("SelectField", () => {
     expect(screen.getByTestId("value").textContent).toBe("a");
   });
 
-  it("passes an aria-label through to the wrapper, since OptionPicker cannot", () => {
+  it("names both the group and the interactive trigger", () => {
     render(<SelectField value="a" options={OPTIONS} onChange={() => {}} role="group" aria-label="Pick one" />);
-    expect(screen.getByLabelText("Pick one")).toBeTruthy();
+    expect(screen.getByRole("group", { name: "Pick one" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Pick one" })).toBeTruthy();
   });
 
   it("keeps the trigger focusable", () => {

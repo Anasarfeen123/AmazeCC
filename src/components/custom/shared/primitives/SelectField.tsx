@@ -19,9 +19,8 @@ import { OPTION_PICKER_TRIGGER, optionPickerSize } from "@/lib/uiTokens";
  * keyboard — carrying `aria-haspopup="listbox"` and `aria-expanded`, so a screen
  * reader announces that it opens a listbox. (It is still announced as "button"
  * rather than "combobox": the picker sets no `role="combobox"`, a deliberate
- * carry-over from the component this was re-homed from.) `role` and `aria-label`
- * are accepted here and land on this component's wrapper, which is what keeps an
- * otherwise unlabelled field nameable in the tree.
+ * carry-over from the component this was re-homed from.) An `aria-label` or
+ * string title names the trigger directly.
  *
  * The other loss is `disabled` on *individual* options: the picker only takes
  * `disabled` for the whole field.
@@ -90,6 +89,7 @@ export default function SelectField<T extends string>({
       {...(ariaLabel ? { "aria-label": ariaLabel } : {})}
     >
       <OptionPicker
+        aria-label={ariaLabel ?? (typeof title === "string" ? title : undefined)}
         value={String(value)}
         onChange={(next) => onChange(next as T)}
         options={pickerOptions}
@@ -103,12 +103,6 @@ export default function SelectField<T extends string>({
   if (!title) return picker;
 
   return (
-    <SettingRow
-      title={title}
-      description={description}
-      stacked={stacked}
-      className={className}
-      control={picker}
-    />
+    <SettingRow title={title} description={description} stacked={stacked} className={className} control={picker} />
   );
 }

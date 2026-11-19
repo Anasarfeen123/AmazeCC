@@ -63,7 +63,7 @@ if (process.env.CLICK_SEL) {
   await send("Runtime.evaluate", {
     expression: `document.querySelector(${JSON.stringify(process.env.CLICK_SEL)})?.click()`,
   });
-  await sleep(800);
+  await sleep(Number(process.env.CLICK_WAIT || 800));
 }
 const m = await send("Page.getLayoutMetrics");
 const cs = m.result.cssContentSize;

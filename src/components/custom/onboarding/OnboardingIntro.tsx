@@ -26,11 +26,7 @@ import {
   EyeOff,
   KeyRound,
   Loader2,
-  Lock,
   Server,
-  Shield,
-  ShieldCheck,
-  Sparkles,
 } from "lucide-react";
 import { getStoredUser, signInInteractive, signOutApp, type StoredUser } from "@/lib/oauth2";
 import { isLoggedInAtom } from "@/store";
@@ -212,17 +208,14 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
         {phase === "login" && (
           <div className="grid w-full animate-in fade-in slide-in-from-bottom-4 duration-300 gap-6 lg:grid-cols-2 lg:items-center lg:gap-10">
             {/* Amaze ID — one account for every AmazeCC app */}
-            <div className="rounded-[14px] border border-border-ink bg-secondary p-4 sm:p-5 lg:col-span-2">
+            <div className="brand-sidebar rounded-[14px] border-[3px] border-border-ink p-4 shadow-brutal-md sm:p-5 lg:col-span-2">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex min-w-0 items-center gap-3">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-secondary text-secondary-foreground">
-                    <ShieldCheck size={22} />
-                  </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary font-outfit">Amaze ID</p>
-                    <p className="text-sm font-bold text-text-primary">One account for every AmazeCC app</p>
-                    <p className="text-xs text-text-muted">
-                      Club Hub, Admin Portal, GoRoBo and more - with VTOP as an optional link.
+                    <p className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-ochre">Amaze ID</p>
+                    <p className="font-display text-base font-bold text-cream">One account for every AmazeCC app</p>
+                    <p className="text-sm text-text-muted">
+                      Club Hub, Admin Portal, GoRoBo and more, with VTOP as an optional link.
                     </p>
                   </div>
                 </div>
@@ -251,7 +244,7 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
                     <button
                       type="button"
                       onClick={signInInteractive}
-                      className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-primary px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-brutal-sm border-2 border-border-ink transition-all hover:brightness-110 font-outfit"
+                      className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-1.5 rounded-[10px] border-2 border-obsidian bg-ochre px-4 font-mono text-xs font-bold uppercase tracking-[0.06em] text-obsidian shadow-brutal-sm brutal-press"
                     >
                       Sign in with Amaze ID
                       <ArrowRight size={12} strokeWidth={3} />
@@ -259,9 +252,9 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
                     <button
                       type="button"
                       onClick={signInInteractive}
-                      className="text-center text-xs font-bold text-warning-foreground transition-colors hover:text-warning-foreground hover:underline"
+                      className="min-h-11 text-center font-mono text-xs font-bold uppercase tracking-[0.06em] text-cream underline underline-offset-4 hover:text-ochre"
                     >
-                      New here? Create an Amaze ID →
+                      New here? Create one
                     </button>
                   </div>
                 )}
@@ -271,28 +264,27 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
             {/* Pitch (design language of the hero pages) */}
             <div className="space-y-4 text-left">
               <Brand />
-              <p className="inline-flex w-fit items-center gap-1.5 rounded-[10px] border border-border-ink bg-secondary px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-secondary-foreground font-outfit min-h-9">
-                <Sparkles size={11} /> Step one of onboarding
+              <p className="w-fit rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
+                {"Step 1 of 4 // Sign in"}
               </p>
-              <h1 className="text-3xl font-bold leading-[1.05] tracking-tight text-text-heading font-outfit sm:text-4xl">
+              <h1 className="font-display text-[32px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[40px]">
                 Bring your VIT life
-                <span className="block bg-clip-text text-transparent">into one place.</span>
+                <span className="block text-hero">into one place.</span>
               </h1>
-              <p className="max-w-md text-sm leading-relaxed text-text-muted">
+              <p className="max-w-md text-base leading-relaxed text-text-muted">
                 Sign in with your VTOP credentials and we will pull attendance, grades, your timetable and campus
                 services straight from the source.
               </p>
-              <ul className="flex flex-wrap gap-2 text-xs font-bold text-text-muted">
+              <ul className="flex flex-wrap gap-2">
                 {[
-                  { icon: Lock, text: "Stays in this browser" },
-                  { icon: Shield, text: "Verified with VTOP" },
-                  { icon: Server, text: "Free forever" },
-                ].map((item) => (
+                  { text: "Saved encrypted on this device", cls: "bg-mint" },
+                  { text: "Straight from VTOP", cls: "bg-ochre" },
+                  { text: "Free, no ads", cls: "bg-coral" },
+                ].map((item, i) => (
                   <li
                     key={item.text}
-                    className="flex items-center gap-1.5 rounded-[10px] border border-border-ink bg-surface px-3 py-1.5 min-h-9"
+                    className={`rounded-[8px] border-2 border-obsidian ${item.cls} px-2.5 py-1 font-mono text-xs font-bold uppercase tracking-[0.06em] text-obsidian shadow-brutal-sm ${i % 2 ? "rotate-1" : "-rotate-1"}`}
                   >
-                    <item.icon size={11} className="text-primary" />
                     {item.text}
                   </li>
                 ))}

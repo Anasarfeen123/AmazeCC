@@ -1,297 +1,82 @@
-# AmazeCC Design Language
-
-Version: 1.0
-
----
-
-# 1. Introduction
-
-AmazeCC is a Student Operating System.
-
-It brings together academics, attendance, timetable, campus life, student tools, and productivity features into a unified experience.
-
-The goal of AmazeCC is not to look futuristic or corporate.
-
-The goal is to help students navigate university life quickly, confidently, and with minimal cognitive load.
-
----
-
-# 2. Product Principles
-
-Every design decision must follow these principles.
-
-## 2.1 Student First
-
-Every screen should answer:
-
-"What does the student need right now?"
-
-before showing analytics, charts, or secondary information.
-
----
-
-## 2.2 Clarity Over Decoration
-
-Visual beauty should never reduce usability.
-
-Information must always be easier to understand than it is beautiful.
-
----
-
-## 2.3 Fast Navigation
-
-Students frequently use AmazeCC while:
-
-* Walking between classes
-* Standing in queues
-* Checking attendance quickly
-* Looking up exam information
-
-Navigation must always be fast and obvious.
-
----
-
-## 2.4 Consistency Over Creativity
-
-A consistent interface is more valuable than a creative interface.
-
-Reusing existing patterns is preferred over inventing new ones.
-
----
-
-# 3. Visual Identity
-
-## Personality
-
-AmazeCC should feel:
-
-* Calm
-* Helpful
-* Friendly
-* Academic
-* Modern
-* Trustworthy
-
-AmazeCC should NOT feel:
-
-* Corporate
-* Enterprise
-* Futuristic
-* Gaming-oriented
-* Social-media-like
-* Overly decorative
-
----
-
-# 4. Design Style
-
-## Core Style
-
-70% Functional Student OS
-
-20% Material Design Principles
-
-10% Organic Personality
-
----
-
-## Organic Interpretation
-
-Organic design means:
-
-* Softer corners
-* Softer colors
-* Softer shadows
-* Comfortable spacing
-* Natural visual rhythm
-
-Organic design DOES NOT mean:
-
-* Leaf icons
-* Plant illustrations everywhere
-* Gardening themes
-* Random blob shapes
-* Irregular navigation layouts
-
-Organic should influence atmosphere, not usability.
-
----
-
-# 5. Radius System
-
-Only these six values may be used.
-
-| Step | Class | Used for |
-|------|-------|----------|
-| 8px | `rounded-lg` | Segmented-control segments, inner chips |
-| 12px | `rounded-xl` | Icon buttons, tone icon tiles |
-| 16px | `rounded-2xl` | List shells, chips, content cards, row icons |
-| 24px | `rounded-[24px]` | Tile surfaces, insight carousels |
-| 28px | `rounded-[28px]` | Bottom sheets, dashed empty states |
-| 32px | `rounded-[32px]` | Large empty-panel variant |
-
-`rounded-[24px]`, `rounded-[28px]` and `rounded-[32px]` are the named steps written in
-Tailwind's arbitrary-value syntax. They are not arbitrary values, and they are not
-violations of this scale.
-
-**`rounded-3xl` is not permitted.** Tailwind's `rounded-3xl` is 24px, which this scale
-expresses as `rounded-[24px]`. The two are visually identical but a source file using
-both produces two spellings of the same surface, which defeats grepping for a single
-step and hides drift when one is edited and the other is not.
-
-The 8px step is not a rounding artefact: it is what keeps a chip inside a 12px icon
-button from looking like it is touching the edge.
-
-No values outside this scale. In particular no `rounded-[18px]`, `rounded-[22px]` or
-`rounded-[28px]`-as-a-typo — snap to the nearest step above or below and say which in
-review.
-
----
-
-# 6. Shadow System
-
-| Class | Used for |
-|-------|----------|
-| `shadow-2xs` | Resting cards, rows, inputs |
-| `shadow-xs` | Interactive tiles, raised surfaces |
-| `shadow-sm` | Floating controls (switch thumb, popovers) |
-| `shadow-2xl` | Icon buttons, dialogs, bottom sheets, overlays |
-
-No custom `shadow-[…]` values. The one current exception is the bottom sheet's
-upward lift (`shadow-[0_-15px_…]` in `shared/BottomSheet.tsx`), which is a
-directional shadow rather than a step on this scale; if more directional shadows
-appear, promote it to a named step here rather than adding a second arbitrary
-value.
-
----
-
-# 7. Spacing System
-
-Only use the following spacing values:
-
-4
-8
-12
-16
-24
-32
-48
-64
-
-No custom spacing values.
-
----
-
-# 8. Motion
-
-## Fast
-
-150ms
-
-Used for:
-
-* Hover states
-* Buttons
-
----
-
-## Standard
-
-250ms
-
-Used for:
-
-* Panels
-* Navigation
-
----
-
-## Slow
-
-350ms
-
-Used for:
-
-* Dialogs
-* Large transitions
-
-Avoid excessive animation.
-
-Motion should assist understanding.
-
----
-
-# 9. Icons
-
-Icon Library:
-Lucide
-
-Rules:
-
-* Use standard Lucide icons.
-* Do not create custom icon sets.
-* Do not use decorative botanical icons.
-* Maintain visual consistency.
-
----
-
-# 10. Layout Rules
-
-Every page should follow:
-
-Page Title
-
-Description
-
-Primary Action
-
-Content
-
----
-
-Pages should prioritize:
-
-1. Current student needs
-2. Important information
-3. Supporting information
-
----
-
-# 11. Accessibility
-
-Minimum Requirements:
-
-* WCAG AA compliance
-* Keyboard navigation support
-* Focus states on all interactive elements
-* Adequate color contrast
-* Screen-reader compatibility
-
-Accessibility is mandatory.
-
----
-
-# 12. Future Expansion Rules
-
-As AmazeCC grows:
-
-* Prefer composition over creation.
-* Extend existing patterns.
-* Maintain consistency across all modules.
-* Avoid feature-specific design languages.
-
-Every new page should feel like part of the same product.
-
----
-
-# Final Principle
-
-If a design choice improves aesthetics but reduces usability:
-
-Choose usability.
-
-If a design choice improves consistency but reduces creativity:
-
-Choose consistency.
-
-Students use AmazeCC to accomplish tasks, not to admire the interface.
+# AmazeCC design language
+
+Version 2.0 (Friendly Brutalist, November 2026). Replaces 1.0 "Organic".
+
+## 1. What AmazeCC is
+
+A student app for VIT Chennai that replaces daily VTOP use: attendance,
+marks, timetable, exams, campus services, FFCS planning. Students open it
+between classes, in queues, on bad wifi. Every screen should answer "what do
+I need right now?" first.
+
+## 2. Principles
+
+1. **Readable beats pretty.** When the look and readability conflict,
+   readability wins.
+2. **One loud thing per card.** A card has at most one hero value or title.
+3. **Numbers say what to do.** A percentage comes with its consequence
+   ("Can skip 2", "Attend next 1"), and every attendance bar draws the 75% line.
+4. **Words, not colour alone.** Status always carries a word (badge or text).
+5. **Less is more.** Remove noise (employee IDs, repeated category labels,
+   decorative icons) before adding anything.
+6. **Same everywhere.** Reuse the shared tokens and primitives; do not invent
+   a new card, button or shadow.
+
+## 3. The look
+
+- **Light:** paper page, cream cards, 2px ink (near-black teal) edges, hard
+  ink shadows offset to the bottom right.
+- **Dark:** obsidian-teal page, mid-teal cards, bright teal edges, near-black
+  shadows. Not neutral black, not brown.
+- **Colour comes from solid fills:** an ochre hero card, a teal card with an
+  ochre number, sage chips and selection. The page itself stays calm.
+- **Sidebar and phone bottom bar** are a solid teal panel in both themes, with
+  an ochre active item.
+- **Type:** Space Mono bold for titles and numbers, Space Mono for labels and
+  metadata, Geist for running text.
+
+Reference: the user's "ON-DUTY HOURS" light and dark mocks (described in
+`docs/redesign/HANDOFF.md` §2).
+
+## 4. Shape and depth
+
+| Thing                    | Edge    | Radius      | Shadow               |
+| ------------------------ | ------- | ----------- | -------------------- |
+| Card                     | 2px ink | 14px        | md (5px)             |
+| Hero card, dialog        | 3px ink | 14px / 20px | md / lg (7px)        |
+| Button, chip, input, row | 2px ink | 10px        | sm (3px) when raised |
+| Badge                    | 2px ink | 6px         | none                 |
+
+- Shadows are hard: zero blur, bottom-right, `--shadow-ink`. Only the
+  outermost layer casts one; nested rows get an edge only.
+- Leave room (≈6px right/bottom) so `overflow-hidden` parents do not clip shadows.
+- Never radius 0, never pill-round text buttons/badges (circles are fine for
+  avatars, dots, switch thumbs).
+
+## 5. Motion
+
+- 80–200ms, ease-out, no springs, no bounce, no scale pops, no blur.
+- Pressable things use `.brutal-press` (lift on hover, sink on press).
+- Light/dark switch: circular reveal with CSS transitions paused
+  (`.theme-switching`); instant for reduced motion.
+- `prefers-reduced-motion`: no movement; colour/shadow changes only.
+
+## 6. Icons
+
+- Lucide only, stroke ≈2.2, sized 16–20px.
+- **Navigation keeps icons with labels** (sidebar, rail, bottom bar).
+- **Content avoids icons:** no decorative icon wells, no icon before every
+  fact, no emoji. Use words ("Venue AB1-301", not a building icon).
+- Universal controls keep theirs: close, back, search, chevron, sync, theme.
+
+## 7. Banned
+
+Blur shadows, glows, gradients, glass / `backdrop-blur`, raw hex or
+`zinc/gray/slate/indigo-*` classes in components, text under 12px, pill-round
+text buttons, emoji in UI, accent-colour pickers, colour-only status.
+
+## 8. Accessibility
+
+WCAG AA: text ≥ 4.5:1, edges and large numbers ≥ 3:1 (checked by
+`scripts/redesign/contrast.py`). 44px touch targets. 3px ochre focus ring,
+never removed. Every icon-only button has an accessible name.

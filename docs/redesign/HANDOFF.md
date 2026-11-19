@@ -8,7 +8,8 @@ agent (Claude, Codex, Gemini, Cursor…) can continue without the chat history.
   is a symlink to it.
 - Older, unrelated backlog (the 60 code-review items, environment notes):
   `amaze-workspace/HANDOFF.md`. Read its §3 (environment) and §4 (conventions).
-- Last updated: **2026-11-19**, after commit `3582347c`.
+- Last updated: **2026-11-19**, after commit `dca47d84`.
+- Start here: [README.md](README.md) (index) → this file → [ROADMAP.md](ROADMAP.md).
 
 ---
 
@@ -79,42 +80,12 @@ designs"), centred empty hero screens, emoji.
 | Dropdowns      | Must open at the field (no fly-in), size to content, small chevron.                                                                                                                                                               |
 | Motion         | Short and flat (≈150–200ms, no springs/bounce/blur); respect reduced motion.                                                                                                                                                      |
 
-### 2.3 Tokens and type (source of truth: `src/app/brand.css`)
+### 2.3 Tokens, type, components
 
-| Role                        | Light                                                          | Dark                 |
-| --------------------------- | -------------------------------------------------------------- | -------------------- |
-| page `--background`         | `#F7F1E6`                                                      | `#001E1D`            |
-| card `--surface`            | `#FFFDF8`                                                      | `#002B29`            |
-| inset `--surface-secondary` | `#EFE7D8`                                                      | `#003A37`            |
-| text `--text-primary`       | `#001E1D`                                                      | `#F2ECE0`            |
-| muted `--text-muted`        | `#4A5F5C`                                                      | `#8FB5AA`            |
-| edge `--border-ink`         | `#001E1D`                                                      | `#3F8F84`            |
-| shadow `--shadow-ink`       | `#001E1D`                                                      | `#000807`            |
-| `--primary` (+fg)           | `#004643` / paper                                              | `#F9BC60` / obsidian |
-| `--secondary` sage (+fg)    | `#ABD1C6` / ink                                                | `#ABD1C6` / obsidian |
-| `--highlight` ochre (+fg)   | `#F9BC60` / ink                                                | same                 |
-| `--hero-number`             | `#004643`                                                      | `#F9BC60`            |
-| danger / warning / success  | `--danger*`, `--warning*`, `--success*` (surface + foreground) |                      |
-
-Tailwind names: `bg-surface`, `text-text-muted`, `border-border-ink`,
-`bg-secondary text-secondary-foreground`, `bg-highlight text-highlight-foreground`,
-`text-hero`, `shadow-brutal-md`, `font-display`, `font-mono`; fixed brand
-colours `bg-teal`, `text-cream`, `bg-ochre`, `bg-sage`.
-
-Fonts (`src/app/layout.tsx`): **Space Mono** 400/700 = `--font-display` and
-`--font-mono` (titles, numbers, labels); Space Grotesk = fallback; Geist = body.
-
-Utilities in `brand.css`: `.brutal-card` (+ `.brutal-card-hero` 3px edge),
-`.brutal-press` (lift on hover, sink on press), `.brutal-label`,
-`.theme-switching` (pauses transitions during light/dark swap), and a rule that
-**text inside a sage/ochre/primary fill takes that fill's ink** (fixes
-unreadable selected tiles everywhere).
-
-Bridges (so unconverted screens already look on-brand): `zinc/gray/slate-*`
-map to the semantic tokens (AmazeUI + `globals.css`), `indigo/blue/sky/
-violet/purple-*` map to a teal `brand-*` scale, every `shadow-*` step is a
-hard offset, `rounded-2xl/3xl` are 14/20px. These are a crutch: converted
-screens should use semantic names directly.
+Documented in **`frontend/design/`** (README, DESIGN_LANGUAGE, COLORS,
+TYPOGRAPHY, COMPONENTS, NAVIGATION, AI_CONTRIBUTOR_GUIDE). Source of truth
+for values: `src/app/brand.css`. Shared classes: `src/lib/uiTokens.ts`.
+Primitives: `src/components/custom/shared/primitives/`.
 
 ## 3. What is done (branch `redesign`, from `origin/main` `e995bfd8`)
 
@@ -131,7 +102,7 @@ screens should use semantic names directly.
 | `31056458` | Stat-card badges hidden on phones.                                                                                                                                                                                                                                                    |
 | `3582347c` | Faculty employee IDs removed from Home class cards.                                                                                                                                                                                                                                   |
 
-Screens fully restyled by hand: **Home, course side card, app shell (sidebar, bottom nav, rail,
+Screens fully restyled by hand: **Home, course side card, spotlight search, Paper Scanner (partly), app shell (sidebar, bottom nav, rail,
 demo banner), Modules sheet, sync pill, first-sync + welcome screens, Fresher
 hub, shared primitives, dropdowns.** Partly (codemod only): sync sheet,
 onboarding steps. Everything else rides the bridges.
@@ -152,128 +123,19 @@ on 2026-11-18; `p9-*` = latest).
    or `group-text-primary` (left by an earlier bulk edit). They do nothing;
    remove when touching those files.
 
-## 5. What to do next (in order)
+## 5. What to do next
 
-Each item: restyle by hand where noted, run `brandify.py` on the files, check
-phone/tablet/desktop in light and dark, keep tests at 28, commit, push.
+The backlog lives in **[ROADMAP.md](ROADMAP.md)**: items in priority order
+(landing page, FFCS bugs, Attendance, onboarding, demo reload bug, remaining
+screens, super-dark theme, …), each with files and a "Done when" checklist.
+Update its status table when you finish something.
 
-### 5.1 Landing page (user asked, high priority)
-
-Files: `components/custom/app/GuestExperience.tsx` (hero + top nav, 225 lines),
-`components/custom/landing/LandingSections.tsx` (831 lines: `sec-problem`,
-`sec-features` with `Tilt3DCard`, `sec-timeline`, `sec-roadmap`, `sec-faq`).
-Live today (`docs/redesign/screens/live-before-*`): purple gradient headline,
-indigo buttons, a hero that fills only the top third, empty space below,
-generic stats row (30+ / 10+ / 100%).
-
-- Hero: logo lockup ("AmazeCC — Your campus companion"), a display headline in
-  Space Mono uppercase, one sentence, **primary "Try the demo"** + secondary
-  "Sign in with VTOP", trust line ("Your password never leaves this device").
-- Show the product: a real phone + desktop screenshot of Home (brand
-  version) framed in ink-edged cards with hard shadows, not abstract art.
-- Features: replace 3D-tilt cards with a grid of brutal cards, each a real
-  mini UI (attendance card with the 75% line, timetable day, OD hours,
-  FFCS planner), one line of copy, no icon wells.
-- Proof: real numbers if available (students, syncs), otherwise drop the row.
-- Problem/timeline/roadmap/FAQ: keep content, restyle (mono labels, `//`
-  metadata, accordion FAQ with 44px rows), cut length.
-- Top nav: logo, 3–4 anchors, theme toggle, Try demo, Get started; becomes a
-  menu sheet on phones. Footer with links, privacy, terms.
-- Must look right at 360px, 768px, 1440px; no horizontal scroll.
-
-### 5.2 Onboarding steps
-
-`components/custom/onboarding/AmazeOnboardingFlow.tsx` (themed, but layout
-is weak): on desktop the left column is empty under the title; step dots are
-tiny; selected tiles need the brand "selected" look (sage fill + ink edge +
-shadow); toggles use the shared `Switch`; one primary button per step.
-
-### 5.3 Search / command palette
-
-`components/custom/palette/*` (~130 off-spec classes) and the sidebar search
-button: brand input, results as list rows with mono group labels, keyboard
-hints as 6px badges, phone version as a full-height sheet.
-
-### 5.4 Attendance (user priority screen)
-
-`components/custom/attendance/*` (~530 off-spec). Follow the reference mock
-style: course list with %, a bar that marks 75%, "attend next N / can skip N"
-in words; detail page with big %, a plain sentence, what-if tiles, recent
-classes with Present/Absent badges. Fix bug 4.2 first so it can be checked.
-
-### 5.4b FFCS planner — "bugging so much" (user, 2026-11-19), demo and real
-
-Not a styling task first: the planner misbehaves in both demo and signed-in
-use. Treat it as a debugging project with its own branch commits.
-
-- Size: `exams/FFCSTimetableTab.tsx` and
-  `exams/FFCS/components/FFCSGuidedSelector.tsx` (~5k lines, 887 off-spec
-  classes) plus `exams/FFCS/*` (subpages, modals, tour, dossier, friends).
-- Start from the failing tests that already exist on `main`:
-  `ffcsTab.render.test.tsx`, `ffcsClassmates.render.test.tsx`,
-  `ffcsClassmates.test.ts` — they are part of the 28-failure baseline and
-  probably point at real breakage. Make them pass before restyling.
-- Reproduce with the screenshot script in demo and with `LOGIN=1`
-  (Academics → FFCS planner, and the standalone `/ffcs` route); capture
-  console errors (`shot.mjs` logs `EXC`/`CERR` lines).
-- Known interaction risks: FFCS has fixed bottom action bars
-  (`.ffcs-bottom-bar`, z-240) that collide with the phone bottom nav; see
-  the `.dashboard-shell:has(.ffcs-bottom-bar)` rules in `globals.css`.
-  The new brand bottom bar and `BrandSheet` may need z-index/offset checks.
-- `FFCSGuidedSelector` reads 13–38 pieces of state per card (old HANDOFF
-  #6): group state into a reducer/context before changing behaviour.
-- Ask the user for concrete repro steps (what action, what goes wrong) at
-  the start of that session; "bugging" covers several symptoms.
-- Restyle only after it works: run `brandify.py --status`, then hand-polish
-  the planner grid, slot chips and course cards to the reference mock.
-
-### 5.5 Remaining screens (codemod + hand polish), biggest first
-
-Off-spec class count on 2026-11-19 (9,805 in 216 files):
-
-| Area                                                                                         | Count  | Notes                              |
-| -------------------------------------------------------------------------------------------- | ------ | ---------------------------------- |
-| `exams/` (FFCS planner, curriculum, course detail, marks)                                    | 3,463  | `FFCSGuidedSelector.tsx` alone 887 |
-| `header/` (ProfilePage 572, settings)                                                        | 750    |                                    |
-| `hostel/`                                                                                    | 628    | Leave, laundry, mess               |
-| `attendance/`                                                                                | 531    | §5.4                               |
-| `social/`                                                                                    | 490    |                                    |
-| `tasks/`                                                                                     | 479    | `TaskEditSheet`                    |
-| `app/` (`useAppCommands` 344)                                                                | 427    | palette commands                   |
-| `shared/` (sync sheet, SyncModeEditor)                                                       | 417    |                                    |
-| `app/friend-finder`, `friendfinder/`                                                         | ~490   |                                    |
-| `feedback/` (FeedbackReportPage 244)                                                         | 286    |                                    |
-| `timetable/`, `libraries/`, `tools/`, `clubs/`, `profile/`, `events/`, `qbank/`, legal pages | ~1,300 |                                    |
-
-Recount with:
+Recount the old-style classes left in screens:
 
 ```bash
 P='\b(zinc|gray|slate|neutral|indigo|violet|purple|blue|sky)-[0-9]{2,3}\b|text-\[(9|10|10\.5|11)px\]|bg-gradient|backdrop-blur'
 grep -rEo "$P" src --include=*.tsx | cut -d: -f1 | sort | uniq -c | sort -rn | head -30
 ```
-
-### 5.6 Later / nice to have
-
-- **"Super dark" (blackish / AMOLED) theme** — user request 2026-11-19, as an
-  _extra_ option next to Light and Dark, not a replacement for the obsidian
-  teal dark. Near-black page (`#000` or `#050606`), cards `#0D1010`, edges a
-  bright teal or ochre so the brutalist borders still read, same ochre/sage
-  fills, shadows in a visible colour (black shadows vanish on black — use
-  the edge colour or a deep teal block). Implement as a third class
-  (`.black` on `<html>` next to `.dark`, sharing `dark:` variants) plus a
-  third option in the theme switch (sidebar footer, Modules sheet, settings).
-  Run `contrast.py` with a `.black` block added.
-
-- Uppercase display titles on cards like the mock (Home class titles,
-  section titles); check line length on phones first.
-- Move the brand layer into AmazeUI (`ui/src/tailwind.css`, BackButton,
-  AppLibrary→BrandSheet, Sidebar classes) once the user allows publishing.
-- Rewrite `frontend/design/*.md` (still the old "organic" language) from §2.
-- Remove the bridges in `brand.css`/`globals.css` once screens use tokens.
-- Fix the demo reload bug (4.1) and make the demo data current-term.
-- Decide whether faculty IDs should also go from Faculty Schedule / FFCS.
-- Accessibility pass: keyboard focus order in the sidebar and sheets,
-  `aria-current` everywhere, reduced-motion check on every screen.
 
 ## 6. How to work
 
@@ -366,6 +228,11 @@ NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next dev --webpack -p 3017   # backg
 - **2026-11-19** — Primitives, shell, Home, dark palette rounds, dropdowns,
   Modules, sync UI, onboarding/welcome, fresher fix, reference-mock match,
   teal sidebar, Space Mono, nav icons back, phone stat badges hidden,
-  faculty IDs removed. Handoff rewritten; landing page added to §5.1;
+  faculty IDs removed. Handoff rewritten; landing page added to the backlog (now ROADMAP R1);
   safe real-account screenshots added (§6.3).
-  **Next: §5.1 landing page.**
+  **Next: ROADMAP R1 (landing page), then R2 (FFCS).**
+- **2026-11-19 (later)** — Real-account review (`LOGIN=1`), name helpers,
+  spotlight rebuild, brand Button, Paper Scanner, KPI overflow, FFCS task
+  written up; docs split into README / HANDOFF / ROADMAP and
+  `frontend/design/*` rewritten for the brand (the old files described the
+  pre-redesign "organic" look and would have misled agents).

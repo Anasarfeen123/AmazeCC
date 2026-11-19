@@ -6,6 +6,11 @@ the screenshots. Rules and how-to: `HANDOFF.md`. Design rules: `design/`.
 
 Status: ✅ done · 🟡 partly · ⬜ not started. Last updated 2026-11-19 (late).
 
+**Current priority:** [audit findings and page-by-page review](AUDIT_2026-11-19.md).
+Per-category privacy has confirmed functional defects and is not complete.
+Older status rows and unchecked criteria below need reconciliation; they are
+historical context, not proof of current completion.
+
 | #   | Item                                 | Status                                                      | Size |
 | --- | ------------------------------------ | ----------------------------------------------------------- | ---- |
 | R1  | Landing page                         | ✅                                                          | M    |

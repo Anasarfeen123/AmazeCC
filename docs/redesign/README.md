@@ -9,6 +9,9 @@ For any agent or person picking up the redesign. Read in this order:
    item with files and a "Done when" checklist.
 3. **[`frontend/design/`](../../design/README.md)** — the design system rules:
    language, colours, typography, components, navigation, contributor checklist.
+4. **[AUDIT_2026-11-19.md](AUDIT_2026-11-19.md)** — current confirmed issues,
+   visual review checklist, and remaining release checks. Takes precedence over
+   older completion claims in the handoff.
 
 Also here:
 

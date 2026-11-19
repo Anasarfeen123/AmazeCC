@@ -15,6 +15,11 @@ agent (Claude, Codex, Gemini, Cursor…) can continue without the chat history.
 
 ## 0. Hard rules (do not break these)
 
+**Audit correction:** the later claim that per-category privacy is complete is
+incorrect. See [AUDIT_2026-11-19.md](AUDIT_2026-11-19.md) for confirmed
+privacy defects, the page review checklist and current priorities. Fix privacy
+and functional bugs before visual polish.
+
 1. **Fork only.** Work only on `Anasarfeen123/AmazeCC` (and
    `Anasarfeen123/AmazeUI` if ever needed) until the user says the redesign is
    done. No push, PR, issue or comment on `AmazeContinuityProjects/*`, and **no

@@ -552,6 +552,7 @@ export default function OverallAttendancePredictor({
       {/* ── SUMMARY: one stat card and one auto carousel, side by side ── */}
       <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
         <StatTile
+          variant="highlight"
           height="h-32 sm:h-36"
           label="Projected Avg"
           icon={<Sparkles className="w-4 h-4 text-primary" />}
@@ -707,7 +708,7 @@ export default function OverallAttendancePredictor({
                   aria-pressed={state === 1}
                   className={`group relative flex flex-col items-center justify-between p-2.5 rounded-2xl border text-center transition-all duration-200 cursor-pointer select-none ${
                     state === 1
-                      ? "bg-rose-500 text-primary-foreground border-rose-600 shadow-sm scale-[1.02]"
+                      ? "bg-danger-surface text-danger-foreground border-border-ink shadow-brutal-sm"
                       : state === 2
                         ? "bg-surface-tertiary text-text-muted border-dashed border-border-ink opacity-60"
                         : isToday
@@ -721,7 +722,7 @@ export default function OverallAttendancePredictor({
                     <span
                       className={`text-xs font-bold px-1.5 py-0.2 rounded ${
                         state === 1
-                          ? "bg-rose-600 text-primary-foreground"
+                          ? "bg-danger-surface text-danger-foreground"
                           : state === 2
                             ? "bg-surface-tertiary text-text-muted"
                             : isToday
@@ -745,7 +746,7 @@ export default function OverallAttendancePredictor({
             <span>Present / Attending</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-rose-500" />
+            <div className="w-3 h-3 rounded-[3px] border-2 border-border-ink bg-danger-surface" />
             <span>Absent / Bunked</span>
           </div>
           <div className="flex items-center gap-1.5">

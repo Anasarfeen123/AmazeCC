@@ -115,6 +115,7 @@ export default function DayDetailSheet({
   isMoodleConnected,
   onConnectMoodle,
   onOpenCourse,
+  hideAttendance = false,
 }: {
   day: CalendarDayModel | null;
   onClose: () => void;
@@ -132,6 +133,7 @@ export default function DayDetailSheet({
    * is worse than a row that does not.
    */
   onOpenCourse?: (courseCode: string) => void;
+  hideAttendance?: boolean;
 }) {
   const isToday = day ? day.dateKey === todayKey() : false;
 
@@ -244,7 +246,7 @@ export default function DayDetailSheet({
         : day.dayType === "nonInstructional"
           ? "No classes · college open"
           : "No classes"
-    : attendance.held > 0
+    : !hideAttendance && attendance.held > 0
       ? `${attendance.held} class${attendance.held === 1 ? "" : "es"} · ${attendance.present} present${
           attendance.absent ? ` · ${attendance.absent} absent` : ""
         }${attendance.onDuty ? ` · ${attendance.onDuty} on duty` : ""}`
@@ -342,13 +344,13 @@ export default function DayDetailSheet({
                           titleTag="h4"
                         />
                       </div>
-                      {status ? (
+                      {status && !hideAttendance ? (
                         <ToneBadge tone={STATUS_TONE[status.toLowerCase()] ?? "zinc"}>
                           {STATUS_LABEL[status.toLowerCase()] ?? status}
                         </ToneBadge>
-                      ) : (
+                      ) : !status ? (
                         <ToneBadge tone="zinc">Scheduled</ToneBadge>
-                      )}
+                      ) : null}
                       {/* The same affordance the Upcoming rows use, so a
                           tappable row looks the same wherever it appears. */}
                       {canOpen ? <ChevronRight className="w-4 h-4 shrink-0 text-text-muted" /> : null}
@@ -493,7 +495,7 @@ export default function DayDetailSheet({
         ) : null}
 
         {/* ── Notes ── */}
-        {missed.length > 0 ? (
+        {!hideAttendance && missed.length > 0 ? (
           <section className="space-y-2.5">
             <SectionHeader
               icon={StickyNote}

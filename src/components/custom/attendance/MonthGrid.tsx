@@ -72,6 +72,7 @@ export default function MonthGrid({
   onMonthChange,
   onSelectDay,
   selectedDateKey = null,
+  hideAttendance = false,
   className = "",
 }: {
   months: CalendarMonthModel[];
@@ -80,6 +81,7 @@ export default function MonthGrid({
   onSelectDay: (day: CalendarDayModel, month: CalendarMonthModel) => void;
   /** Ring on the day the sheet is open for. */
   selectedDateKey?: string | null;
+  hideAttendance?: boolean;
   className?: string;
 }) {
   const today = todayKey();
@@ -124,7 +126,7 @@ export default function MonthGrid({
           {month.days.map((day) => {
             const isToday = day.dateKey === today;
             const isSelected = day.dateKey === selectedDateKey;
-            const markers = dayMarkers(day);
+            const markers = dayMarkers(day, hideAttendance);
             const eventCount = day.events.filter((e) => e.kind !== "class" && e.kind !== "working").length;
 
             return (

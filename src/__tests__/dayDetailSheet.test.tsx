@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import DayDetailSheet from "@/components/custom/attendance/DayDetailSheet";
 import type { AttendanceDayCardsMap } from "@/lib/attendanceTimetable";
-import { buildEnrichedCalendars, type CalendarDayModel } from "@/lib/calendarDay";
+import { buildEnrichedCalendars, synthesiseDay, type CalendarDayModel } from "@/lib/calendarDay";
 
 /**
  * The day sheet's section headings.
@@ -57,6 +57,25 @@ function renderSheet(day: CalendarDayModel) {
     />
   );
 }
+
+it("hides recorded attendance details in the day sheet when attendance privacy is on", () => {
+  const day = synthesiseDay({
+    held: 1, present: 0, absent: 1, onDuty: 0,
+    courses: [{ courseCode: "BIO101", courseTitle: "Biology", status: "Absent", date: "2026-08-12", rawDate: "2026-08-12" }],
+  });
+  const props = {
+    day, onClose: () => {}, dayCardsMap: {} as AttendanceDayCardsMap,
+    attendanceByDate: new Map(), onCycleTask: () => {}, onAddTask: () => {},
+    notes: { hasNotes: () => false, onToggleNotes: () => {} },
+    isMoodleConnected: false, onConnectMoodle: () => {},
+  };
+  const { rerender } = render(<DayDetailSheet {...props} />);
+  expect(screen.getByText("1 missed")).toBeTruthy();
+  rerender(<DayDetailSheet {...props} hideAttendance />);
+  expect(screen.queryByText("1 missed")).toBeNull();
+  expect(screen.queryByText(/1 absent/)).toBeNull();
+  expect(screen.queryByRole("heading", { name: "Get notes" })).toBeNull();
+});
 
 describe("day sheet section headings", () => {
   it("does not repeat the exam's name in the heading and the row", () => {

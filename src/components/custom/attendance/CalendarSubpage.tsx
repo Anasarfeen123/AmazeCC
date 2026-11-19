@@ -67,6 +67,7 @@ import { unifiedAcademicsAtom } from "@/store";
 import type { NormalizedCourse } from "@/types/course";
 import { normalizeCourse } from "@/lib/courseNormalizer";
 import { shouldShowProfilePhoto } from "@/lib/settingsVisibility";
+import { privacyCategories } from "@/lib/privacyMode";
 import { storage } from "@/lib/storage";
 import type { EventHubRegistration } from "@/types/data/eventhub";
 import { formatSemesterName } from "@/lib/formatSemesterName";
@@ -225,6 +226,7 @@ export default function CalendarSubpage({
   const [reloading, setReloading] = useState(false);
   const registeredEvents = useAtomValue(registeredEventsAtom);
   const settings = useAtomValue(settingsAtom);
+  const hideAttendance = privacyCategories(settings).includes("attendance");
   const unifiedAcademics = useAtomValue(unifiedAcademicsAtom);
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -387,8 +389,8 @@ export default function CalendarSubpage({
         };
       })
       .filter((c): c is NonNullable<typeof c> => c !== null)
-      .sort((a, b) => a.pct - b.pct);
-  }, [attendanceList, targetAttendance]);
+      .sort((a, b) => (hideAttendance ? a.title.localeCompare(b.title) : a.pct - b.pct));
+  }, [attendanceList, targetAttendance, hideAttendance]);
 
   const courseSlides = useMemo<InsightSlide[]>(
     () =>
@@ -404,10 +406,10 @@ export default function CalendarSubpage({
         subPrivacyCategory: "attendance",
         badgePrivacyCategory: "attendance",
         dotLabel: `${c.isLab ? "Lab" : "Theory"} ${c.title}`,
-        tone: c.status === "Safe" ? "emerald" : c.status === "Warning" ? "amber" : "red",
+        tone: hideAttendance ? "neutral" : c.status === "Safe" ? "emerald" : c.status === "Warning" ? "amber" : "red",
         valueClassName: c.isLab ? LAB_VALUE : undefined,
       })),
-    [courseRows],
+    [courseRows, hideAttendance],
   );
 
   const courseCarousel = useCarousel(courseSlides.length);
@@ -446,7 +448,8 @@ export default function CalendarSubpage({
         privacyCategory: "attendance",
         subPrivacyCategory: "attendance",
         badgePrivacyCategory: "attendance",
-        tone: statusTone,
+        tone: hideAttendance ? "neutral" : statusTone,
+        valueClassName: "text-obsidian",
       },
       {
         id: "days-done",
@@ -455,6 +458,7 @@ export default function CalendarSubpage({
         privacyCategory: "attendance",
         sub: logRows.length === 1 ? "day with a record" : "days with a record",
         tone: "emerald",
+        valueClassName: "text-obsidian",
       },
       {
         id: "days-missed",
@@ -462,10 +466,11 @@ export default function CalendarSubpage({
         value: missedCount,
         privacyCategory: "attendance",
         sub: missedCount === 1 ? "day with a miss" : "days with a miss",
-        tone: missedCount > 0 ? "red" : "emerald",
+        tone: hideAttendance ? "neutral" : missedCount > 0 ? "red" : "emerald",
+        valueClassName: "text-obsidian",
       },
     ];
-  }, [overall, logRows.length, missedCount]);
+  }, [overall, logRows.length, missedCount, hideAttendance]);
 
   const summaryCarousel = useCarousel(summarySlides.length);
 
@@ -727,7 +732,7 @@ export default function CalendarSubpage({
             interactiveDots
             ariaLabel="Attendance by course"
             footerRight={
-              belowTarget > 0 ? (
+              !hideAttendance && belowTarget > 0 ? (
                 // The footer row is subline + this + the dots, and at half
                 // width on a phone the three together leave the subline
                 // nothing. The slides are sorted worst-first, so the count is
@@ -789,6 +794,7 @@ export default function CalendarSubpage({
             onMonthChange={handleMonthChange}
             onSelectDay={openDay}
             selectedDateKey={selected?.dateKey ?? null}
+            hideAttendance={hideAttendance}
           />
         </div>
       </div>
@@ -875,20 +881,32 @@ export default function CalendarSubpage({
         <SectionHeader
           icon={Clock}
           title="Attendance log"
-          count={visibleRows.length}
-          right={missedCount > 0 ? <ToneBadge tone="red">{missedCount} with a miss</ToneBadge> : null}
+          count={hideAttendance ? undefined : visibleRows.length}
+          right={
+            !hideAttendance && missedCount > 0 ? <ToneBadge tone="red">{missedCount} with a miss</ToneBadge> : null
+          }
         />
 
-        <SegmentedControl options={LOG_FILTERS} value={filter} onChange={setFilter} grow scroll />
-
-        {visibleRows.length === 0 ? (
-          <EmptyPanel variant="dashed" title="No records under this filter." />
+        {hideAttendance ? (
+          <EmptyPanel
+            variant="dashed"
+            title="Attendance log is hidden"
+            description="Turn off attendance privacy to view the log."
+          />
+        ) : visibleRows.length === 0 ? (
+          <>
+            <SegmentedControl options={LOG_FILTERS} value={filter} onChange={setFilter} grow scroll />
+            <EmptyPanel variant="dashed" title="No records under this filter." />
+          </>
         ) : (
-          <ListShell>
-            {visibleRows.map((row) => (
-              <LogRow key={row.dateKey} row={row} onClick={() => openLogRow(row)} />
-            ))}
-          </ListShell>
+          <>
+            <SegmentedControl options={LOG_FILTERS} value={filter} onChange={setFilter} grow scroll />
+            <ListShell>
+              {visibleRows.map((row) => (
+                <LogRow key={row.dateKey} row={row} onClick={() => openLogRow(row)} />
+              ))}
+            </ListShell>
+          </>
         )}
       </section>
 
@@ -899,6 +917,7 @@ export default function CalendarSubpage({
           onClose={() => setSelected(null)}
           dayCardsMap={dayCardsMap}
           attendanceByDate={attendanceByDate}
+          hideAttendance={hideAttendance}
           onCycleTask={(id) => setTasks(cycleTaskStatus(id))}
           onAddTask={() => setTaskSheetOpen(true)}
           notes={{

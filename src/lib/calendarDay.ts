@@ -813,14 +813,14 @@ export function isExamDay(day: CalendarDayModel): boolean {
  * Lives here rather than in the grid so the rule stays next to `LEGEND_ITEMS`,
  * which has to agree with it.
  */
-export function dayMarkers(day: CalendarDayModel): string[] {
+export function dayMarkers(day: CalendarDayModel, hideAttendance = false): string[] {
   const tones: string[] = [];
-  if (day.attendance.absent > 0) tones.push("red");
+  if (!hideAttendance && day.attendance.absent > 0) tones.push("red");
   day.events.forEach((e) => {
     if (e.kind === "class" || e.kind === "working") return;
     if (!tones.includes(e.tone)) tones.push(e.tone);
   });
-  if (tones.length === 0 && day.attendance.present > 0) tones.push("emerald");
+  if (!hideAttendance && tones.length === 0 && day.attendance.present > 0) tones.push("emerald");
   return tones.slice(0, 3);
 }
 

@@ -1633,7 +1633,7 @@ export default function ProfilePage({
             <div>
               <p className="text-sm font-bold text-text-primary">Privacy mode</p>
               <p className="text-xs text-text-muted">
-                Turn it off to reveal everything. Turn it on to cover every category; choose a smaller set below.
+                Covers supported values in the selected categories. Some details may still be visible on other screens.
                 Shortcut: Alt/Option + P
               </p>
             </div>

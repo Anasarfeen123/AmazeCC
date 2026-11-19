@@ -74,6 +74,20 @@ const viewLink = (courseCode: string, courseTitle: string, entries: [string, str
   viewLink: entries.map(([date, status]) => ({ date, status })),
 });
 
+describe("attendance privacy on calendar markers", () => {
+  it("removes attendance markers while keeping unrelated events", () => {
+    const [august] = buildEnrichedCalendars({
+      calendars: monthCalendar("August 2026"),
+      attendance: [viewLink("BIO101", "Biology", [["2026-08-12", "Absent"]])],
+      tasks: [{ id: "task", title: "Essay", dueDate: "2026-08-12", status: "pending" } as Task],
+    });
+    const day = august.days.find((d) => d.date === 12)!;
+    expect(dayMarkers(day)).toContain("red");
+    expect(dayMarkers(day, true)).not.toContain("red");
+    expect(dayMarkers(day, true).length).toBeGreaterThan(0);
+  });
+});
+
 /**
  * A calendar where one date carries a published day order.
  *

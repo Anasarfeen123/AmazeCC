@@ -922,3 +922,45 @@ html.privacy-hide-identity [data-private~="identity"]:focus-within::after {
   content: "@$%&" !important;
   --crayon-ink: var(--warning-foreground);
 }
+
+/* A hidden value inside another hidden value draws one cover, not two
+   (the CGPA tile is both .crayon-hide and [data-private]: symbols stacked). */
+:is(.crayon-hide, .privacy-mode [data-private]) :is(.crayon-hide, [data-private])::after {
+  display: none !important;
+}
+:is(.crayon-hide, .privacy-mode [data-private]) :is(.crayon-hide, [data-private]) {
+  position: static;
+}
+/* On the teal sidebar panel the variant colours (teal, red) vanish; use the
+   panel's readable cream / ochre / sage instead. */
+.brand-sidebar [data-g]::after {
+  --crayon-ink: #f7f1e6;
+}
+.brand-sidebar [data-g="1"]::after,
+.brand-sidebar [data-g="3"]::after {
+  --crayon-ink: #f9bc60;
+}
+.brand-sidebar [data-g="2"]::after {
+  --crayon-ink: #abd1c6;
+}
+/* Inside coloured cards (ochre/sage/mint, the summary-row hero) every
+   variant uses ink: a coloured cover on a coloured card can vanish. */
+:is(
+    [class~="bg-highlight"],
+    [class~="!bg-highlight"],
+    [class~="bg-secondary"],
+    [class~="bg-ochre"],
+    [class~="bg-mint"],
+    [class~="bg-sage"],
+    [class~="bg-coral"],
+    .summary-row > :first-child
+  )
+  [data-g]::after {
+  --crayon-ink: #001e1d;
+}
+/* Sidebar panel: readable cover colour, set directly (the variant custom
+   property did not win inside the panel). */
+.brand-sidebar :is(.crayon-hide, [data-private])::after {
+  color: #f9bc60 !important;
+  -webkit-text-fill-color: #f9bc60 !important;
+}

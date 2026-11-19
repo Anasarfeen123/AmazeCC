@@ -4,6 +4,9 @@ export const PRIVACY_CATEGORIES = ["cgpa", "attendance", "marks", "fees", "credi
 
 export type PrivacyCategory = (typeof PRIVACY_CATEGORIES)[number];
 
+/** What Privacy Mode hides until the user picks more. */
+export const DEFAULT_PRIVACY_CATEGORIES: readonly PrivacyCategory[] = ["cgpa"];
+
 export const PRIVACY_CATEGORY_DETAILS: Record<PrivacyCategory, { label: string; description: string }> = {
   cgpa: { label: "CGPA & GPA", description: "Cumulative and semester grade-point averages" },
   attendance: { label: "Attendance %", description: "Attendance totals, percentages and predictions" },
@@ -26,11 +29,13 @@ export function privacyCategories(settings?: Partial<Settings> | null): PrivacyC
     // One-time read migration for installs that predate the master switch.
     return settings?.privacyMode === undefined && (settings.CGPAHidden || settings.blurGrades) ? ["cgpa"] : [];
   }
+  // Default is CGPA only (user: "main thing to censor is CGPA, that's it").
+  // Other categories are opt-in from Settings.
   const saved = settings?.privacyCategories;
   const categories = Array.isArray(saved)
     ? saved.filter((category): category is PrivacyCategory => PRIVACY_CATEGORIES.includes(category as PrivacyCategory))
-    : [...PRIVACY_CATEGORIES];
-  return categories.length ? categories : [...PRIVACY_CATEGORIES];
+    : [...DEFAULT_PRIVACY_CATEGORIES];
+  return categories.length ? categories : [...DEFAULT_PRIVACY_CATEGORIES];
 }
 
 export function hasAllPrivacyCategories(settings?: Partial<Settings> | null) {
@@ -44,7 +49,7 @@ export function togglePrivacyCategory(settings: Settings, category: PrivacyCateg
       ? settings.privacyCategories.filter((item): item is PrivacyCategory =>
           PRIVACY_CATEGORIES.includes(item as PrivacyCategory),
         )
-      : [...PRIVACY_CATEGORIES],
+      : [...DEFAULT_PRIVACY_CATEGORIES],
   );
   if (on) selected.add(category);
   else selected.delete(category);

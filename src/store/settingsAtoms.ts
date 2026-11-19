@@ -180,7 +180,7 @@ const settingsStorage = {
       const merged = { ...initialValue, ...saved } as Settings;
       if (!("privacyCategories" in saved)) {
         if (saved.privacyMode) {
-          merged.privacyCategories = ["cgpa", "attendance", "marks", "fees", "credits", "id", "identity"];
+          merged.privacyCategories = ["cgpa"]; // user: CGPA is the thing to hide by default
         } else if (saved.CGPAHidden || saved.blurGrades) {
           merged.privacyMode = true;
           merged.privacyCategories = ["cgpa"];

@@ -8,7 +8,16 @@ import { defaultSettings } from "../store/settingsAtoms";
 describe("privacy mode", () => {
   it("adds and removes the privacy-mode class on <html>", () => {
     const { rerender } = renderHook(
-      ({ on }) => useAppAppearance({ privacyMode: on, colorPalette: "default" }, "dark"),
+      // "Hide all" = every category chosen; plain privacyMode now means CGPA only.
+      ({ on }) =>
+        useAppAppearance(
+          {
+            privacyMode: on,
+            privacyCategories: ["cgpa", "attendance", "marks", "fees", "credits", "id", "identity"],
+            colorPalette: "default",
+          },
+          "dark",
+        ),
       {
         initialProps: { on: true },
       },
@@ -32,7 +41,8 @@ describe("privacy mode", () => {
   });
 
   it("migrates legacy privacy choices without exposing their values", () => {
-    expect(privacyCategories({ privacyMode: true })).toEqual(expect.arrayContaining(["cgpa", "fees", "identity"]));
+    // User decision (2026-11-19): Privacy Mode hides CGPA unless more is chosen.
+    expect(privacyCategories({ privacyMode: true })).toEqual(["cgpa"]);
     expect(privacyCategories({ CGPAHidden: true })).toEqual(["cgpa"]);
   });
 

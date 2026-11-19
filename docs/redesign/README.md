@@ -28,3 +28,5 @@ Branch: `redesign` on the fork `Anasarfeen123/AmazeCC`. Nothing goes to
 
 When you stop working: update the status table in ROADMAP.md, add a line to
 the progress log in HANDOFF.md §7, commit, `git push fork redesign`.
+
+- [NEXT_STEPS.md](NEXT_STEPS.md) — prioritised to-do list for the next contributor

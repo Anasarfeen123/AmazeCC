@@ -33,6 +33,8 @@ switch, motion.
 
 ---
 
+See **[NEXT_STEPS.md](NEXT_STEPS.md)** for the prioritised to-do list (2026-11-19).
+
 ## R1 · Landing page (user priority)
 
 Files: `components/custom/app/GuestExperience.tsx` (hero + top nav),

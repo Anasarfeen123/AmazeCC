@@ -128,6 +128,8 @@ on 2026-11-18; `p9-*` = latest).
 
 ## 5. What to do next
 
+Start with **[NEXT_STEPS.md](NEXT_STEPS.md)** (prioritised, 2026-11-19).
+
 The backlog lives in **[ROADMAP.md](ROADMAP.md)**: items in priority order
 (landing page, FFCS bugs, Attendance, onboarding, demo reload bug, remaining
 screens, super-dark theme, …), each with files and a "Done when" checklist.

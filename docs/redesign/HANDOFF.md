@@ -268,3 +268,12 @@ NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next dev --webpack -p 3017   # backg
   overlays without `--forced-dark`.
   **Next: hand pass on the screens not yet looked at (Tasks, Social,
   Friend finder, Cab share, Event/Club hub with live data), R2 leftovers.**
+- **2026-11-19 (night)** — R7 Night theme (was "Black"; renamed at the
+  user's request), R2 FFCS done (top bar/logo fixes, stale classmates
+  tests: baseline 20 -> 15), R6 hand pass (bare badges, emoji), R11
+  (focus trap, named controls, reduced motion, A11Y probe), error pages
+  (ErrorScreen), sidebar collapsed/expanded share one layout, Settings
+  reworked (one place per setting: Sync Modes is a drill-down of Sync;
+  Grades Anonymizer folded into Privacy Mode; honest names). R8 decided
+  no. **Next: R3 attendance polish (predictor, OD tracker), R11 manual
+  keyboard/zoom walk, R10 bridges, R9 only with the user's OK.**

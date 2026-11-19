@@ -7,7 +7,7 @@
 // never printed or written anywhere by this script, and the throwaway Chromium
 // profile (which would hold the session) is deleted on exit.
 import { spawn } from "node:child_process";
-import { writeFileSync, mkdtempSync, readFileSync, rmSync, statSync } from "node:fs";
+import { appendFileSync, writeFileSync, mkdtempSync, readFileSync, rmSync, statSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -87,12 +87,21 @@ for (let i = 0; i < 50; i++) {
 await new Promise((r) => (ws.onopen = r));
 let id = 0;
 const pending = new Map();
+// CONSOLE_OUT=file.log: also append every page exception / console.error
+// (full text, one per line) to that file, for a record of a run.
+const logLine = (line) => {
+  if (process.env.CONSOLE_OUT) appendFileSync(process.env.CONSOLE_OUT, line + "\n");
+};
 ws.onmessage = (m) => {
   const d = JSON.parse(m.data);
-  if (d.method === "Runtime.exceptionThrown")
+  if (d.method === "Runtime.exceptionThrown") {
     console.log("EXC", JSON.stringify(d.params.exceptionDetails).slice(0, 400));
-  if (d.method === "Runtime.consoleAPICalled" && d.params.type === "error")
+    logLine("EXC " + JSON.stringify(d.params.exceptionDetails));
+  }
+  if (d.method === "Runtime.consoleAPICalled" && d.params.type === "error") {
     console.log("CERR", JSON.stringify(d.params.args).slice(0, 300));
+    logLine("CERR " + JSON.stringify(d.params.args));
+  }
   if (d.id && pending.has(d.id)) {
     pending.get(d.id)(d);
     pending.delete(d.id);
@@ -203,6 +212,12 @@ if (!process.env.ONBOARD)
     `(() => { const b=[...document.querySelectorAll("button,a")].find(e=>/proceed to dashboard|go to home/i.test(e.textContent)); b&&b.click(); })()`,
   );
 await sleep(6000);
+// ROUTE=/ffcs/ opens a URL path directly (after demo sign-in), instead of
+// clicking a nav label.
+if (process.env.ROUTE) {
+  await send("Page.navigate", { url: BASE + process.env.ROUTE });
+  await sleep(Number(process.env.NAV_WAIT || 12000));
+}
 if (path !== "/") {
   await evalJs(
     `(() => { const b=(() => { const want=${JSON.stringify(path.toLowerCase())}; const match=(e)=>e.offsetParent && (e.textContent.trim().toLowerCase()===want || (e.getAttribute("aria-label")||"").toLowerCase().startsWith(want)); return [...document.querySelectorAll("[data-sidebar-nav], .mobile-bottom-nav-bar button")].find(match) || [...document.querySelectorAll("button,a,[role=button]")].find(match); })(); b&&b.click(); return !!b })()`,

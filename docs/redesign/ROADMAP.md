@@ -4,22 +4,22 @@ What is left, in the order to do it. Each item has a **Done when** list: do
 not call an item finished until every box is true and you have looked at
 the screenshots. Rules and how-to: `HANDOFF.md`. Design rules: `design/`.
 
-Status: ✅ done · 🟡 partly · ⬜ not started. Last updated 2026-11-19 (`dca47d84`).
+Status: ✅ done · 🟡 partly · ⬜ not started. Last updated 2026-11-19 (late).
 
-| #   | Item                                 | Status                   | Size |
-| --- | ------------------------------------ | ------------------------ | ---- |
-| R1  | Landing page                         | ⬜                       | M    |
-| R2  | FFCS planner bugs                    | ⬜                       | L    |
-| R3  | Attendance screens                   | 🟡 (side card done)      | M    |
-| R4  | Onboarding steps                     | 🟡 (themed, layout weak) | S    |
-| R5  | Demo data lost on reload             | ⬜                       | S    |
-| R6  | Remaining screens (codemod + polish) | 🟡                       | XL   |
-| R7  | "Super dark" black theme             | ⬜                       | S    |
-| R8  | Uppercase display titles on cards    | ⬜                       | S    |
-| R9  | Move brand layer into AmazeUI        | ⬜ (needs user OK)       | M    |
-| R10 | Remove bridges, final lint           | ⬜                       | M    |
-| R11 | Accessibility pass                   | ⬜                       | S    |
-| R12 | Screenshot script polish             | 🟡                       | S    |
+| #   | Item                                 | Status                    | Size |
+| --- | ------------------------------------ | ------------------------- | ---- |
+| R1  | Landing page                         | ✅                        | M    |
+| R2  | FFCS planner bugs                    | ✅ (planner polish 🟡)    | L    |
+| R3  | Attendance screens                   | 🟡 (calendar, side card)  | M    |
+| R4  | Onboarding steps                     | ✅                        | S    |
+| R5  | Demo data lost on reload             | ✅                        | S    |
+| R6  | Remaining screens (codemod + polish) | 🟡 (all files codemodded) | XL   |
+| R7  | "Night" pitch-black theme            | ✅                        | S    |
+| R8  | Uppercase display titles on cards    | ✅ decided: no            | S    |
+| R9  | Move brand layer into AmazeUI        | ⬜ (needs user OK)        | M    |
+| R10 | Remove bridges, final lint           | ⬜                        | M    |
+| R11 | Accessibility pass                   | 🟡 (probe clean, traps)   | S    |
+| R12 | Screenshot script polish             | ✅                        | S    |
 
 Done so far (see `HANDOFF.md` §3 for commits): tokens, logos, primitives,
 app shell, Home, course side card, Modules sheet, spotlight search, sync
@@ -201,6 +201,10 @@ button on the rail), Modules sheet, Profile > Appearance, command palette.
 
 ## R8 · Uppercase display titles
 
+**Decided 2026-11-19: no.** Card titles are course names; on a 390px phone
+they already truncate in mixed case ("Database Syste…") and caps are wider
+still. Uppercase stays for page titles, section headings and short labels.
+
 The reference mock uppercases card titles (course names, section titles).
 Try it on Home class cards and section headers; check phone line lengths
 (long course names) before rolling out.
@@ -235,6 +239,11 @@ Keyboard order in sidebar, sheets and spotlight; focus trapped in dialogs;
 zoom without overlap; screen-reader labels for all icon buttons.
 
 ## R12 · Screenshot script polish
+
+**Done 2026-11-19:** `ROUTE=/path/` opens a URL after demo sign-in;
+`CONSOLE_OUT=file.log` appends every exception/console.error; `A11Y=1`
+probe; `CLICK_TEXTS="A|B"` click sequence (`DEBUG_CLICK=1`); theme
+argument accepts `night`. `fullpage.mjs FIND_OVERFLOW=1`.
 
 Done: `navLabel` now prefers `[data-sidebar-nav]` and bottom-nav buttons
 (use `PRE_W=1440` so the sidebar shows labels when clicking). Left: a

@@ -63,6 +63,20 @@ Variants: `primary` (teal light / ochre dark), `secondary` (sage), `outline`
 `FIELD_INPUT` / `SEARCH_FIELD` tokens: 44px, 10px, 2px ink edge, surface
 fill; focus shows the ochre ring plus a small shadow.
 
+## Page patterns
+
+- **Summary row hero** — add `summary-row` to a page's two-card summary
+  grid; the first card becomes the page's one loud card (ochre, ink text).
+- **Error pages** — `shared/ErrorScreen` (logo, stamped code, title,
+  sentence, actions); `ERROR_PRIMARY/SECONDARY/LINK` button classes. Used
+  by `app/not-found.tsx` and the crash card (`ErrorDiagnosticCard`).
+- **Grades** — `lib/gradeTone.ts`: one fill per grade letter.
+- **Dialogs** — `lib/useFocusTrap(ref, open)`: focus in, Tab wraps, focus
+  back on close. BottomSheet and BrandSheet use it.
+- **Theme switch** — `theme/SidebarThemeSwitch` (Light/Dark/Night; `compact`
+  cycles on the rail). Theme choices also in Modules sheet, Settings >
+  Appearance, command palette.
+
 ## App-level pieces
 
 | Piece                                  | File                                                                                   |

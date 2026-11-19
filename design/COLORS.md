@@ -48,6 +48,16 @@ Fixed brand colours (same in both themes, use sparingly):
   week strip, the selected day is an ink tile; in the sidebar/bottom bar and
   spotlight, ochre.
 
+## Night theme (pitch black)
+
+A third theme next to Light and Dark (ROADMAP R7). `<html>` carries both
+`dark` (so every `dark:` style applies) and `night`; `.dark.night` in
+`brand.css` swaps only page/card/edge/shadow tokens: page `#000`, cards
+`#0D1010`, edges `#4FB3A5`, shadow `#0F4A44` (black shadows vanish on
+black). Fills and the teal sidebar are unchanged. Stored by next-themes
+as `night` (mapped to the dark class); `theme/NightThemeSync` +
+an inline head script add the `night` class.
+
 ## Contrast check
 
 ```bash
@@ -57,8 +67,3 @@ python3 scripts/redesign/contrast.py
 Reads the hex values from `brand.css` and checks text pairs (≥ 4.5:1) and
 edges (≥ 3:1) in light and dark. Exit code 1 means something fails. Run it
 after any colour change.
-
-## Planned
-
-A third "super dark" (near-black, AMOLED) theme option — see
-`docs/redesign/ROADMAP.md`.

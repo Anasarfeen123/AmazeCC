@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ThemeProvider } from "@amazecontinuityprojects/amazeui";
+import BlackThemeSync from "@/components/custom/theme/BlackThemeSync";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import IconUpdater from "../components/custom/IconUpdater";
 import ServiceWorkerRegistrar from "../components/custom/ServiceWorkerRegistrar";
@@ -105,6 +106,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <meta httpEquiv="Content-Security-Policy" content={buildContentSecurityPolicy()} />
         )}
         <script
+          id="amaze-black-theme-early"
+          // Before first paint, so the black theme does not flash obsidian.
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{if(localStorage.getItem("theme")==="black")document.documentElement.classList.add("black");}catch(e){}})();`,
+          }}
+        />
+        <script
           id="amaze-session-early-detect"
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var d=localStorage.getItem("IDs"),u=localStorage.getItem("username"),m=localStorage.getItem("demoMode");var s=false;if(d){try{var p=JSON.parse(d);if(p&&p.VtopUsername&&p.VtopPassword)s=true;}catch(e){}}if(!s&&u&&localStorage.getItem("password"))s=true;if(!s&&localStorage.getItem("cred_vault_session")==="1")s=true;if(!s&&m==="true")s=true;if(s){document.documentElement.classList.add("has-stored-session");}}catch(e){}})();`,
@@ -120,8 +128,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           defaultTheme="dark"
           enableSystem={false}
           disableTransitionOnChange
-          value={{ light: "light", dark: "dark" }}
+          themes={["light", "dark", "black"]}
+          // "black" (super dark) rides on the dark class; BlackThemeSync adds
+          // the extra `black` class that swaps the page tokens.
+          value={{ light: "light", dark: "dark", black: "dark" }}
         >
+          <BlackThemeSync />
           {children}
         </ThemeProvider>
       </body>

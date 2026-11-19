@@ -814,7 +814,13 @@ export default function ProfilePage({
         // A pinned "System" is worth showing as such rather than as the theme
         // the OS happens to be in right now.
         value:
-          (theme ?? resolvedTheme) === "system" ? "System" : (resolvedTheme ?? theme) === "dark" ? "Dark" : "Light",
+          (theme ?? resolvedTheme) === "system"
+            ? "System"
+            : (resolvedTheme ?? theme) === "black"
+              ? "Black"
+              : (resolvedTheme ?? theme) === "dark"
+                ? "Dark"
+                : "Light",
       },
       academic: { value: semesterLabel(currSemesterID) },
       sync: {
@@ -1483,26 +1489,19 @@ export default function ProfilePage({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>
             <p className="text-sm font-bold text-text-primary">Theme Mode</p>
-            <p className="text-xs text-text-muted">Seamlessly switch between Light and Dark aesthetics</p>
+            <p className="text-xs text-text-muted">Light, Dark, or Black (darkest, for OLED screens at night)</p>
           </div>
-          <div className="flex rounded-xl bg-surface-tertiary p-1 w-full sm:w-56 shrink-0">
-            <button
-              onClick={() => handleThemeChange("light")}
-              className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                theme === "light" ? "bg-surface text-primary shadow-xs" : "text-text-muted hover:text-text-primary "
-              }`}
-            >
-              Light
-            </button>
-            <button
-              onClick={() => handleThemeChange("dark")}
-              className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                theme === "dark" ? "bg-zinc-900 text-primary shadow-xs" : "text-text-muted hover:text-text-primary "
-              }`}
-            >
-              Dark
-            </button>
-          </div>
+          <SegmentedControl
+            grow
+            className="w-full shrink-0 sm:w-72"
+            value={theme === "black" ? "black" : theme === "dark" ? "dark" : "light"}
+            onChange={(v) => handleThemeChange(v as string)}
+            options={[
+              { value: "light", label: "Light" },
+              { value: "dark", label: "Dark" },
+              { value: "black", label: "Black" },
+            ]}
+          />
         </div>
 
         {/* Timetable Pill Style */}

@@ -285,6 +285,39 @@
   color-scheme: dark;
 }
 
+/* "Black" (super dark) theme — ROADMAP R7, user request. A third option next
+   to Light and Dark: the html element carries BOTH `dark` (so every dark:
+   variant and .dark rule applies) and `black`, which only swaps the page and
+   card tokens. Near-black page, graphite cards, brighter teal edges, and a
+   teal shadow (black shadows vanish on black). Fills (ochre, sage, coral,
+   mint) and the teal sidebar panel stay as in dark. */
+.dark.black {
+  --background: #000000;
+  --foreground: #f7f1e6;
+  --surface: #0d1010;
+  --surface-raised: #121616;
+  --surface-secondary: #161c1c;
+  --surface-tertiary: #1c2323;
+  --surface-hover: #141a1a;
+
+  --text-muted: #9cbdb4;
+  --border-ink: #4fb3a5;
+  --border-strong: #4fb3a5;
+  --border-muted: color-mix(in oklab, #4fb3a5 40%, transparent);
+  --shadow-ink: #0f4a44;
+
+  --success-surface: color-mix(in oklab, #7fd6a5 16%, #0d1010);
+  --warning-surface: color-mix(in oklab, #f9bc60 18%, #0d1010);
+  --danger-surface: color-mix(in oklab, #ff9b8a 18%, #0d1010);
+  --info-surface: color-mix(in oklab, #abd1c6 14%, #0d1010);
+
+  --sidebar-border: #4fb3a5;
+  --color-brand-700: #1c2323;
+  --color-brand-800: #161c1c;
+  --color-brand-900: #0d1010;
+  --color-brand-950: #070909;
+}
+
 /* Theme switch: no CSS transitions while light/dark swaps (ThemeToggle.tsx),
    so surfaces change in one step under the reveal instead of each fading at
    its own speed afterwards. */

@@ -55,8 +55,9 @@ def main():
     src = CSS.read_text()
     light = block(src, ":root")
     dark = {**light, **block(src, ".dark")}
+    black = {**dark, **block(src, ".dark.black")}  # R7 super-dark theme
     bad = 0
-    for name, toks in (("light", light), ("dark", dark)):
+    for name, toks in (("light", light), ("dark", dark), ("black", black)):
         print(f"\n{name}")
         for fg, bg, need, what in PAIRS:
             if fg not in toks or bg not in toks:

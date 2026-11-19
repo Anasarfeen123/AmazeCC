@@ -2,6 +2,7 @@
 
 import { memo, useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import BrandLogo from "../shared/BrandLogo";
+import SidebarThemeSwitch from "../theme/SidebarThemeSwitch";
 import { useAtomValue } from "jotai";
 import { unifiedIdentityAtom, unifiedAcademicsAtom } from "@/store";
 import type { UnifiedUserIdentity } from "@/types";
@@ -57,7 +58,6 @@ import {
   SidebarGroupLabel,
   SidebarItem,
   SidebarProfile,
-  SidebarThemeControl,
   SidebarExpandButton,
 } from "@amazecontinuityprojects/amazeui";
 import { useSyncTrigger } from "../shared/useSyncTrigger";
@@ -1466,7 +1466,7 @@ export default function NavigationTabs({
 
                 <div className="h-px bg-sidebar-accent" />
 
-                <SidebarThemeControl theme={theme} onThemeChange={handleThemeChange} />
+                <SidebarThemeSwitch theme={theme} onThemeChange={handleThemeChange} />
               </m.div>
             ) : (
               <m.div
@@ -1479,8 +1479,8 @@ export default function NavigationTabs({
                 {/* Expand Toggle Button */}
                 <SidebarExpandButton onClick={() => persistSidebarState(isOpen)} />
 
-                {/* Theme Toggler (Compact Icon) */}
-                <SidebarThemeControl theme={theme} onThemeChange={handleThemeChange} />
+                {/* Theme: one button cycling Light -> Dark -> Black */}
+                <SidebarThemeSwitch compact theme={theme} onThemeChange={handleThemeChange} />
 
                 {/* Profile Avatar */}
                 <SidebarProfile
@@ -1552,28 +1552,27 @@ export default function NavigationTabs({
                         className="overflow-hidden"
                       >
                         <div className="pl-6 space-y-1 py-1">
-                          <button
-                            onClick={() => handleThemeChange("light")}
-                            className="flex items-center gap-2 w-full text-left text-xs text-sidebar-foreground hover:text-sidebar-foreground py-0.5 transition-colors"
-                          >
-                            <span
-                              className={`flex h-3 w-3 items-center justify-center rounded-full border transition-colors ${theme === "light" ? "border-info text-info bg-info-surface" : "border-sidebar-border"}`}
+                          {(
+                            [
+                              ["light", "Light"],
+                              ["dark", "Dark"],
+                              ["black", "Black"],
+                            ] as const
+                          ).map(([value, label]) => (
+                            <button
+                              key={value}
+                              onClick={(e) => handleThemeChange(value, e)}
+                              aria-pressed={theme === value}
+                              className="flex items-center gap-2 w-full text-left text-xs text-sidebar-foreground hover:text-sidebar-foreground py-0.5 transition-colors"
                             >
-                              {theme === "light" && <span className="h-1 w-1 rounded-full bg-info" />}
-                            </span>
-                            <span className={theme === "light" ? "text-info font-medium" : ""}>Light</span>
-                          </button>
-                          <button
-                            onClick={() => handleThemeChange("dark")}
-                            className="flex items-center gap-2 w-full text-left text-xs text-sidebar-foreground hover:text-sidebar-foreground py-0.5 transition-colors"
-                          >
-                            <span
-                              className={`flex h-3 w-3 items-center justify-center rounded-full border transition-colors ${theme === "dark" ? "border-info text-info bg-info-surface" : "border-sidebar-border"}`}
-                            >
-                              {theme === "dark" && <span className="h-1 w-1 rounded-full bg-info" />}
-                            </span>
-                            <span className={theme === "dark" ? "text-info font-medium" : ""}>Dark</span>
-                          </button>
+                              <span
+                                className={`flex h-3 w-3 items-center justify-center rounded-full border transition-colors ${theme === value ? "border-info text-info bg-info-surface" : "border-sidebar-border"}`}
+                              >
+                                {theme === value && <span className="h-1 w-1 rounded-full bg-info" />}
+                              </span>
+                              <span className={theme === value ? "text-info font-medium" : ""}>{label}</span>
+                            </button>
+                          ))}
                         </div>
                       </m.div>
                     </div>

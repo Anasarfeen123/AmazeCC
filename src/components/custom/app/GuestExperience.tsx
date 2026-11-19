@@ -36,7 +36,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
   // the server rendered so hydration matches.
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  const isDark = mounted && resolvedTheme ? resolvedTheme === "dark" : true;
+  const isDark = mounted && resolvedTheme ? resolvedTheme !== "light" : true;
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 

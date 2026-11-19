@@ -9,7 +9,7 @@
 import { memo, useEffect, useMemo, useState } from "react";
 import SelectField from "../shared/primitives/SelectField";
 import { formatSemesterName } from "@/lib/formatSemesterName";
-import { ChevronRight, ExternalLink, Home, Moon, Pin, Sun } from "lucide-react";
+import { ChevronRight, ExternalLink, Home, Moon, MoonStar, Pin, Sun } from "lucide-react";
 import { BrandSheet as AppLibrary } from "../shared/primitives/BrandSheet";
 import config from "../../../../config.json";
 import {
@@ -377,7 +377,7 @@ const AppLibraryPortal = memo(
             Interface Theme
           </h4>
           <div className="flex w-full gap-1 rounded-[10px] border-2 border-border-ink bg-surface p-1">
-            {["light", "dark"].map((t) => (
+            {["light", "dark", "black"].map((t) => (
               <button
                 key={t}
                 onClick={(e) => handleThemeChange(t, e)}
@@ -390,6 +390,7 @@ const AppLibraryPortal = memo(
               >
                 {t === "light" && <Sun className="h-4 w-4" aria-hidden />}
                 {t === "dark" && <Moon className="h-4 w-4" aria-hidden />}
+                {t === "black" && <MoonStar className="h-4 w-4" aria-hidden />}
                 <span>{t}</span>
               </button>
             ))}

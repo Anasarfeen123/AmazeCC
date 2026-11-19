@@ -192,7 +192,7 @@ await evalJs(
   `['has_selected_interface','introDone','hasSeenPushPrompt','push_prompt_dismissed','busPromptDismissed'].forEach(k=>localStorage.setItem(k,'true'))`,
 );
 await evalJs(
-  `localStorage.setItem('theme', ${JSON.stringify(theme)}); document.documentElement.classList.toggle('dark', ${theme === "dark"})`,
+  `localStorage.setItem('theme', ${JSON.stringify(theme)}); document.documentElement.classList.toggle('dark', ${theme !== "light"}); document.documentElement.classList.toggle('black', ${theme === "black"})`,
 );
 if (!process.env.NO_RELOAD) {
   await send("Page.navigate", { url: BASE + "/" });

@@ -528,6 +528,7 @@ export function useAppCommands(input: AppCommandInputs) {
     [
       { id: "light", label: "Light", icon: "☀️" },
       { id: "dark", label: "Dark", icon: "🌙" },
+      { id: "black", label: "Black", icon: "⬛" },
     ].forEach((option) => {
       result.push({
         id: `theme-${option.id}`,

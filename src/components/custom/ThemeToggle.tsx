@@ -28,8 +28,12 @@ export function animateThemeCircularExpansion(
   }
   const root = document.documentElement;
   const applyRootClass = () => {
-    root.classList.toggle("dark", newTheme === "dark");
-    root.style.colorScheme = newTheme === "dark" ? "dark" : "light";
+    // "black" is the super-dark theme: it keeps the dark class (all dark:
+    // styles) and adds `black` for its own tokens (brand.css).
+    const dark = newTheme === "dark" || newTheme === "black";
+    root.classList.toggle("dark", dark);
+    root.classList.toggle("black", newTheme === "black");
+    root.style.colorScheme = dark ? "dark" : "light";
   };
   const pauseTransitions = () => root.classList.add("theme-switching");
   const resumeTransitions = () => {
@@ -72,7 +76,7 @@ export default function ThemeToggle({ className = "", showLabel = false }: Theme
 
   // next-themes only knows the saved theme in the browser. Keep the first
   // client render identical to the server render, then show the actual theme.
-  const isDark = mounted && theme === "dark";
+  const isDark = mounted && (theme === "dark" || theme === "black");
 
   const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     const targetTheme = isDark ? "light" : "dark";

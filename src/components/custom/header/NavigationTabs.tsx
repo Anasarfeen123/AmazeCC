@@ -1100,17 +1100,11 @@ export default function NavigationTabs({
 
                     <button
                       onClick={() => {
-                        setSettings((prev: any) => {
-                          const next = {
-                            ...prev,
-                            attendancePercentageOrString:
-                              prev.attendancePercentageOrString === "percentage" ? "str" : "percentage",
-                          };
-                          return next;
-                        });
+                        selectTab("attendance");
+                        setActiveAttendanceSubTab("predictor");
                       }}
                       className="flex min-w-0 flex-col items-start gap-0.5 overflow-hidden rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
-                      title="Click to toggle attendance format"
+                      title="Open attendance predictor"
                     >
                       <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
                         Attend

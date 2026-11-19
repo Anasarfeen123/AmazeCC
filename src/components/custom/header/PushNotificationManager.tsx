@@ -148,13 +148,13 @@ export default function PushNotificationManager() {
       if ("serviceWorker" in navigator) {
         const reg = await navigator.serviceWorker.ready;
         await reg.showNotification("AmazeCC notifications are on", {
-          body: "Push alerts & VAPID keys are configured. Click to open AmazeCC.",
+          body: "Notifications are ready. Tap to open AmazeCC.",
           icon: "/favicon.ico",
           data: notificationData,
         });
       } else {
         new Notification("AmazeCC notifications are on", {
-          body: "Push alerts & VAPID keys are configured. Click to open AmazeCC.",
+          body: "Notifications are ready. Tap to open AmazeCC.",
           icon: "/favicon.ico",
           data: notificationData,
         });
@@ -217,7 +217,7 @@ export default function PushNotificationManager() {
       }
 
       const options = {
-        body: "Test Alert: VAPID Key & Service Worker push notifications are functioning! Click to focus AmazeCC.",
+        body: "Your test notification works. Tap to open AmazeCC.",
         icon: "/favicon.ico",
         badge: "/favicon.ico",
         vibrate: settings?.pushVibrationEnabled !== false ? [100, 50, 100] : undefined,
@@ -287,9 +287,7 @@ export default function PushNotificationManager() {
               <p className="text-xs font-bold text-text-heading flex items-center gap-1.5">
                 <Sparkles size={13} className="text-primary" /> Test Notification System
               </p>
-              <p className="text-xs text-text-muted mt-0.5">
-                Send an instant VAPID push notification to verify permissions
-              </p>
+              <p className="text-xs text-text-muted mt-0.5">Send a test notification to check your settings</p>
             </div>
             <button
               onClick={sendTestNotification}
@@ -485,7 +483,7 @@ export default function PushNotificationManager() {
           <div className="p-4 rounded-2xl bg-surface border-2 border-border-ink space-y-2">
             <div className="flex items-center justify-between">
               <h5 className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit flex items-center gap-1.5">
-                <Key size={13} className="text-warning-foreground" /> VAPID Server Public Key
+                <Key size={13} className="text-warning-foreground" /> Custom notification key
               </h5>
               {settings?.customVapidKey && (
                 <button
@@ -498,7 +496,7 @@ export default function PushNotificationManager() {
             </div>
             <input
               type="text"
-              placeholder="System Default Key active (Paste custom VAPID public key if self-hosting)"
+              placeholder="Default key active; enter a custom key for self-hosting"
               value={settings?.customVapidKey || ""}
               onChange={(e) => updateSettingField("customVapidKey", e.target.value)}
               className="w-full px-3 py-2 rounded-xl bg-surface-secondary border-2 border-border-ink text-xs font-mono text-text-heading placeholder:text-text-muted focus:outline-none"

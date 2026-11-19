@@ -449,7 +449,7 @@ export default function FeedbackModal() {
                 <button
                   type="button"
                   onClick={handleStartReplicating}
-                  className="w-full py-2.5 px-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs"
+                  className="w-full min-h-11 py-2.5 px-3 rounded-xl bg-primary hover:brightness-110 text-primary-foreground text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs"
                 >
                   <span className="w-2.5 h-2.5 rounded-full bg-surface animate-pulse" />
                   <span>Start Recording &amp; Replicate Glitch</span>

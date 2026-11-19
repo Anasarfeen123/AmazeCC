@@ -640,7 +640,7 @@ export default function FeedbackReportPage({
             <StatTile
               label="Telemetry & Replay"
               value={isRecordingLive ? "Recording" : "Ready"}
-              sub={isIdentityVerified ? "HMAC Verified distinct ID" : userReg ? `Reg ${userReg}` : "Guest distinct ID"}
+              sub={isIdentityVerified ? "Verified account" : userReg ? `Reg ${userReg}` : "Guest account"}
               tone="emerald"
               icon={<CheckCircle2 className="w-4 h-4 text-success-foreground" />}
             />
@@ -1111,7 +1111,7 @@ export default function FeedbackReportPage({
                           <span className="font-bold text-white">{distinctId}</span>
                         </div>
                         <ToneBadge tone={isIdentityVerified ? "emerald" : "indigo"}>
-                          {isIdentityVerified ? "Verified HMAC" : userReg ? "Reg Number" : "Guest"}
+                          {isIdentityVerified ? "Verified account" : userReg ? "Registration number" : "Guest"}
                         </ToneBadge>
                       </div>
                     </div>
@@ -1635,7 +1635,7 @@ export default function FeedbackReportPage({
                     <div className="px-4 py-2.5 rounded-2xl bg-surface-secondary/50 border border-border-muted text-xs font-mono text-text-muted flex items-center justify-between">
                       <span className="font-bold text-text-primary">{distinctId}</span>
                       <ToneBadge tone={isIdentityVerified ? "emerald" : "indigo"}>
-                        {isIdentityVerified ? "Verified HMAC" : userReg ? "Reg Number" : "Guest"}
+                        {isIdentityVerified ? "Verified account" : userReg ? "Registration number" : "Guest"}
                       </ToneBadge>
                     </div>
                   </div>
@@ -2016,16 +2016,14 @@ export default function FeedbackReportPage({
         </button>
       }
       title="Diagnostics"
-      subtitle="Inspect device session identifiers, HMAC cryptographic verification, and PostHog ingestion health."
+      subtitle="Check this device's session and feedback connection."
       onBack={() => setActiveSubpage("overview")}
       actions={<ToneBadge tone="emerald">Connected</ToneBadge>}
     >
       <div className="space-y-5">
         <div>
           <h3 className="text-sm font-bold text-text-primary font-outfit">Diagnostics</h3>
-          <p className="text-xs text-text-muted">
-            Inspect device session identifiers, HMAC cryptographic verification, and PostHog ingestion health
-          </p>
+          <p className="text-xs text-text-muted">Check this device's session and feedback connection</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
@@ -2041,7 +2039,7 @@ export default function FeedbackReportPage({
             <span className="text-xs font-bold uppercase text-text-muted font-outfit">Identity Verification</span>
             <div className="font-semibold text-xs text-text-primary flex items-center gap-1.5">
               <span className={`w-2 h-2 rounded-full ${isIdentityVerified ? "bg-emerald-500" : "bg-primary"}`} />
-              <span>{isIdentityVerified ? "HMAC Signed" : "Device Canonical"}</span>
+              <span>{isIdentityVerified ? "Verified account" : "Device session"}</span>
             </div>
           </div>
           <div className="p-4 rounded-2xl border border-border-muted bg-surface dark:bg-surface-secondary space-y-1">
@@ -2069,7 +2067,7 @@ export default function FeedbackReportPage({
             <div className="flex items-center justify-between py-1 border-b border-border-muted/50">
               <span>Signed Token Identity Verification</span>
               <span className="font-mono text-xs text-text-primary">
-                {isIdentityVerified ? "Active (HMAC-SHA256)" : "Client Mode"}
+                {isIdentityVerified ? "Verified" : "Device only"}
               </span>
             </div>
             <div className="flex items-center justify-between py-1 border-b border-border-muted/50">

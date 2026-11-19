@@ -42,8 +42,8 @@ function ResourceRow({
   href,
   onClick,
 }: {
-  icon: ReactNode;
-  iconClass: string;
+  icon?: ReactNode;
+  iconClass?: string;
   title: string;
   desc: string;
   href?: string;
@@ -51,9 +51,11 @@ function ResourceRow({
 }) {
   const inner = (
     <>
-      <span className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border ${iconClass}`}>
-        {icon}
-      </span>
+      {icon ? (
+        <span className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border ${iconClass}`}>
+          {icon}
+        </span>
+      ) : null}
       <ListRowText title={title} subtitle={desc} />
       {href ? (
         <ExternalLink className="w-4 h-4 text-text-muted shrink-0" />
@@ -91,14 +93,7 @@ export default function ResourcesSection({ setActiveSubpage }: { setActiveSubpag
         <SectionHeader icon={Link2} title="Important links" count={quickLinks.importantLinks.length} />
         <ListShell>
           {quickLinks.importantLinks.map((link) => (
-            <ResourceRow
-              key={link.id}
-              href={link.link}
-              icon={<Link2 className="w-4.5 h-4.5" />}
-              iconClass={TONE_ICON_TILE.sky}
-              title={link.title}
-              desc={link.desc}
-            />
+            <ResourceRow key={link.id} href={link.link} title={link.title} desc={link.desc} />
           ))}
         </ListShell>
       </div>

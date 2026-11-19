@@ -236,3 +236,12 @@ NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next dev --webpack -p 3017   # backg
   written up; docs split into README / HANDOFF / ROADMAP and
   `frontend/design/*` rewritten for the brand (the old files described the
   pre-redesign "organic" look and would have misled agents).
+- **2026-11-19 (evening)** — FFCS: debounced search, simpler header, course
+  palette, new-tab opening, standalone brand top bar and margins. Sign-in
+  screen rebuilt (invisible second headline line fixed, teal Amaze ID panel,
+  colour chips). Dark mode livelier: success/danger badges are solid
+  mint/coral in dark (`uiTokens` TONE_BADGE / TONE_ICON_TILE). Payments
+  (mint/coral fee card, SegmentedControl) and the grades sheet (one colour per
+  grade) restyled. R4 mostly done (step list, progress bar, headers).
+  **Next: R4 toggles/tiles, then more dark-mode colour on remaining screens
+  (R6), R2 leftovers.**

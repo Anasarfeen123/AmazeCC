@@ -86,6 +86,22 @@ standalone route `app/ffcs/`.
    (reducer or context); cards read 13–38 pieces of state each.
 6. Then restyle with `brandify.py --status` and hand polish.
 
+Progress (2026-11-19):
+
+- Typing lag fixed: search fields use `shared/DebouncedSearchInput`
+  (typing "BCSE" ~460ms -> ~32ms; results capped at 40 with a count note).
+- Header simplified: Share, theme, and one "More" menu (`Planner options`).
+- Course colours: `lib/courseColors.ts` maps the stored legacy keys to a
+  brand palette (keys unchanged, so saved plans keep their colours).
+- Opens in a new tab from the app (`navigateToFFCSPlanner`, same tab when
+  pop-ups are blocked or in an installed PWA); sidebar and Modules entries
+  carry a "New tab" marker.
+- Standalone `/ffcs` page: sticky teal brand top bar ("FFCS planner" tag,
+  Open AmazeCC / Sign in, theme), content max 1440px with 16/32px margins,
+  brand footer. Works signed out.
+- Still to do: ~139 off-spec classes inside the planner; the guided
+  selector; the baseline FFCS tests below.
+
 Done when:
 
 - [ ] Every repro the user gave is fixed and has a test
@@ -114,10 +130,11 @@ File: `components/custom/onboarding/AmazeOnboardingFlow.tsx`.
 
 Done when:
 
-- [ ] Desktop left column is not empty (step title, progress, short help)
-- [ ] Step progress is a clear bar or "STEP 2 OF 5", not tiny dots
+- [x] Desktop left column is not empty (step list 01–05 with Now/Done)
+- [x] Step progress is a clear bar and "STEP 2 OF 5", not tiny dots
 - [ ] Selected tiles use sage fill + ink edge + small shadow; toggles use `Switch`
-- [ ] One primary button per step; no emoji/icon wells
+      (the "College bus user?" No/Yes pill and the profile tiles still need it)
+- [x] One primary button per step; no icon wells in step headers
 - [ ] Walked through end to end in light and dark
 
 ## R5 · Demo data lost after reload

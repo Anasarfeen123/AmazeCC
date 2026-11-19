@@ -377,7 +377,7 @@ const AppLibraryPortal = memo(
             Interface Theme
           </h4>
           <div className="flex w-full gap-1 rounded-[10px] border-2 border-border-ink bg-surface p-1">
-            {["light", "dark", "black"].map((t) => (
+            {["light", "dark", "night"].map((t) => (
               <button
                 key={t}
                 onClick={(e) => handleThemeChange(t, e)}
@@ -390,7 +390,7 @@ const AppLibraryPortal = memo(
               >
                 {t === "light" && <Sun className="h-4 w-4" aria-hidden />}
                 {t === "dark" && <Moon className="h-4 w-4" aria-hidden />}
-                {t === "black" && <MoonStar className="h-4 w-4" aria-hidden />}
+                {t === "night" && <MoonStar className="h-4 w-4" aria-hidden />}
                 <span>{t}</span>
               </button>
             ))}

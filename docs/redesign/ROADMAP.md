@@ -192,12 +192,12 @@ Done when:
 - [x] Theme choice persists; system "dark" still maps to the obsidian dark
 - [x] Sidebar/bottom bar still read as the brand teal panel
 
-Done 2026-11-19: next-themes `black` maps to the `dark` class (all dark:
-styles apply) and `BlackThemeSync` + an inline head script add `black`,
-which swaps page/card/edge/shadow tokens (`.dark.black` in brand.css).
+Done 2026-11-19: next-themes `night` maps to the `dark` class (all dark:
+styles apply) and `NightThemeSync` + an inline head script add `night`,
+which swaps page/card/edge/shadow tokens (`.dark.night` in brand.css).
 Choices in the sidebar footer (`theme/SidebarThemeSwitch`, compact cycle
 button on the rail), Modules sheet, Profile > Appearance, command palette.
-`shot.mjs` accepts `black` as the theme argument.
+`shot.mjs` accepts `night` as the theme argument.
 
 ## R8 · Uppercase display titles
 

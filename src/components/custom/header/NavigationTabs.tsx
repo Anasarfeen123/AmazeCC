@@ -1556,7 +1556,7 @@ export default function NavigationTabs({
                             [
                               ["light", "Light"],
                               ["dark", "Dark"],
-                              ["black", "Black"],
+                              ["night", "Night"],
                             ] as const
                           ).map(([value, label]) => (
                             <button

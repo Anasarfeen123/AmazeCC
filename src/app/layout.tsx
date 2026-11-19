@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ThemeProvider } from "@amazecontinuityprojects/amazeui";
-import BlackThemeSync from "@/components/custom/theme/BlackThemeSync";
+import NightThemeSync from "@/components/custom/theme/NightThemeSync";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import IconUpdater from "../components/custom/IconUpdater";
 import ServiceWorkerRegistrar from "../components/custom/ServiceWorkerRegistrar";
@@ -106,10 +106,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <meta httpEquiv="Content-Security-Policy" content={buildContentSecurityPolicy()} />
         )}
         <script
-          id="amaze-black-theme-early"
-          // Before first paint, so the black theme does not flash obsidian.
+          id="amaze-night-theme-early"
+          // Before first paint, so the Night theme does not flash obsidian.
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{if(localStorage.getItem("theme")==="black")document.documentElement.classList.add("black");}catch(e){}})();`,
+            __html: `(function(){try{if(localStorage.getItem("theme")==="night")document.documentElement.classList.add("night");}catch(e){}})();`,
           }}
         />
         <script
@@ -128,12 +128,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           defaultTheme="dark"
           enableSystem={false}
           disableTransitionOnChange
-          themes={["light", "dark", "black"]}
-          // "black" (super dark) rides on the dark class; BlackThemeSync adds
-          // the extra `black` class that swaps the page tokens.
-          value={{ light: "light", dark: "dark", black: "dark" }}
+          themes={["light", "dark", "night"]}
+          // "night" (super dark) rides on the dark class; NightThemeSync adds
+          // the extra `night` class that swaps the page tokens.
+          value={{ light: "light", dark: "dark", night: "dark" }}
         >
-          <BlackThemeSync />
+          <NightThemeSync />
           {children}
         </ThemeProvider>
       </body>

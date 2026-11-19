@@ -816,8 +816,8 @@ export default function ProfilePage({
         value:
           (theme ?? resolvedTheme) === "system"
             ? "System"
-            : (resolvedTheme ?? theme) === "black"
-              ? "Black"
+            : (resolvedTheme ?? theme) === "night"
+              ? "Night"
               : (resolvedTheme ?? theme) === "dark"
                 ? "Dark"
                 : "Light",
@@ -1489,17 +1489,17 @@ export default function ProfilePage({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>
             <p className="text-sm font-bold text-text-primary">Theme Mode</p>
-            <p className="text-xs text-text-muted">Light, Dark, or Black (darkest, for OLED screens at night)</p>
+            <p className="text-xs text-text-muted">Light, Dark, or Night (pitch black, easiest on the eyes at night)</p>
           </div>
           <SegmentedControl
             grow
             className="w-full shrink-0 sm:w-72"
-            value={theme === "black" ? "black" : theme === "dark" ? "dark" : "light"}
+            value={theme === "night" ? "night" : theme === "dark" ? "dark" : "light"}
             onChange={(v) => handleThemeChange(v as string)}
             options={[
               { value: "light", label: "Light" },
               { value: "dark", label: "Dark" },
-              { value: "black", label: "Black" },
+              { value: "night", label: "Night" },
             ]}
           />
         </div>

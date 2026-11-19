@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Sidebar footer theme switch: Light / Dark / Black (R7). Replaces AmazeUI's
+ * Sidebar footer theme switch: Light / Dark / Night (R7). Replaces AmazeUI's
  * two-option SidebarThemeControl until the brand layer moves into AmazeUI
  * (ROADMAP R9). Lives inside `.brand-sidebar`, so it uses that panel's
  * tokens; the current choice is an ochre chip.
@@ -11,7 +11,7 @@ import { Moon, MoonStar, Sun } from "lucide-react";
 const OPTIONS = [
   ["light", "Light"],
   ["dark", "Dark"],
-  ["black", "Black"],
+  ["night", "Night"],
 ] as const;
 
 export default function SidebarThemeSwitch({
@@ -22,7 +22,7 @@ export default function SidebarThemeSwitch({
 }: {
   theme?: string;
   onThemeChange: (theme: string, e?: React.MouseEvent<HTMLElement>) => void;
-  /** Collapsed rail: one button that cycles Light -> Dark -> Black. */
+  /** Collapsed rail: one button that cycles Light -> Dark -> Night. */
   compact?: boolean;
   className?: string;
 }) {

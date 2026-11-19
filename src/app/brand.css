@@ -285,13 +285,13 @@
   color-scheme: dark;
 }
 
-/* "Black" (super dark) theme — ROADMAP R7, user request. A third option next
+/* "Night" (pitch-black) theme — ROADMAP R7, user request. A third option next
    to Light and Dark: the html element carries BOTH `dark` (so every dark:
-   variant and .dark rule applies) and `black`, which only swaps the page and
+   variant and .dark rule applies) and `night`, which only swaps the page and
    card tokens. Near-black page, graphite cards, brighter teal edges, and a
    teal shadow (black shadows vanish on black). Fills (ochre, sage, coral,
    mint) and the teal sidebar panel stay as in dark. */
-.dark.black {
+.dark.night {
   --background: #000000;
   --foreground: #f7f1e6;
   --surface: #0d1010;

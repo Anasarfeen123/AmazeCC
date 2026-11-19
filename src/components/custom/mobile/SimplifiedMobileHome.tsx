@@ -42,7 +42,7 @@ import { isLabFatMarked, labFatPapersByDate, labSlotTokens, type LabFatPaper } f
 import { cn } from "@amazecontinuityprojects/amazeui";
 import { ICON_BUTTON, TILE_INTERACTIVE, TONE_BADGE } from "@/lib/uiTokens";
 import { facultyDisplayName, greetingName } from "@/lib/displayNames";
-import type { PrivacyCategory } from "@/lib/privacyMode";
+import { privacyCategories, type PrivacyCategory } from "@/lib/privacyMode";
 import BrandLogo from "../shared/BrandLogo";
 import TimetableGrid from "../attendance/TimetableGrid";
 import DesktopCourseDetail from "../attendance/DesktopCourseDetail";
@@ -853,36 +853,56 @@ export default function SimplifiedMobileHome({
 
   const secondaryTiles = useMemo(
     () =>
-      insightSlides.map((s) => ({
-        id: s.id,
-        label: s.title,
-        value: s.headline,
-        sub: s.subline,
-        badge: s.badge,
-        badgeColor: s.badgeColor,
-        tone:
-          s.id === "alerts"
-            ? "red"
-            : s.id === "cgpa"
-              ? "indigo"
-              : s.id === "credits"
-                ? "blue"
-                : s.id === "exam"
-                  ? "emerald"
-                  : s.id === "od"
+      insightSlides
+        // Privacy Mode hiding CGPA removes the CGPA card from Home entirely
+        // (Settings > Appearance & Privacy, on by default) instead of
+        // covering it.
+        .filter(
+          (s) =>
+            !(
+              s.id === "cgpa" &&
+              privacyCategories(settings).includes("cgpa") &&
+              settings?.privacyRemoveCgpaCard !== false
+            ),
+        )
+        .map((s) => ({
+          id: s.id,
+          label: s.title,
+          value: s.headline,
+          sub: s.subline,
+          badge: s.badge,
+          badgeColor: s.badgeColor,
+          tone:
+            s.id === "alerts"
+              ? "red"
+              : s.id === "cgpa"
+                ? "indigo"
+                : s.id === "credits"
+                  ? "blue"
+                  : s.id === "exam"
                     ? "emerald"
-                    : "amber",
-        blur: s.id === "cgpa" && (settings?.CGPAHidden || settings?.blurGrades) ? "crayon-hide" : undefined,
-        privacyCategory: (s.id === "cgpa"
-          ? "cgpa"
-          : s.id === "credits"
-            ? "credits"
-            : s.id === "attendance"
-              ? "attendance"
-              : undefined) as PrivacyCategory | undefined,
-        onClick: s.onClick,
-      })),
-    [insightSlides, settings?.CGPAHidden, settings?.blurGrades],
+                    : s.id === "od"
+                      ? "emerald"
+                      : "amber",
+          blur: s.id === "cgpa" && (settings?.CGPAHidden || settings?.blurGrades) ? "crayon-hide" : undefined,
+          privacyCategory: (s.id === "cgpa"
+            ? "cgpa"
+            : s.id === "credits"
+              ? "credits"
+              : s.id === "attendance"
+                ? "attendance"
+                : undefined) as PrivacyCategory | undefined,
+          onClick: s.onClick,
+        })),
+    [
+      insightSlides,
+      settings,
+      settings?.CGPAHidden,
+      settings?.blurGrades,
+      settings?.privacyMode,
+      settings?.privacyCategories,
+      settings?.privacyRemoveCgpaCard,
+    ],
   );
 
   const allStatTiles = useMemo(() => [attendanceTile, ...secondaryTiles], [attendanceTile, secondaryTiles]);

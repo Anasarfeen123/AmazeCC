@@ -1696,6 +1696,20 @@ export default function ProfilePage({
 
           <div className="flex items-center justify-between py-3">
             <div>
+              <p className="text-sm font-bold text-text-primary">Remove the CGPA card from Home</p>
+              <p className="text-xs text-text-muted">
+                When CGPA is hidden in Privacy Mode, Home leaves the card out instead of covering it
+              </p>
+            </div>
+            <Switch
+              label="Remove the CGPA card from Home"
+              checked={settings?.privacyRemoveCgpaCard !== false}
+              onCheckedChange={(val) => updateSetting("privacyRemoveCgpaCard", val)}
+            />
+          </div>
+
+          <div className="flex items-center justify-between py-3">
+            <div>
               <p className="text-sm font-bold text-text-primary">Show GPA on Home</p>
               <p className="text-xs text-text-muted">
                 Display cumulative CGPA score cards on the home page and sidebar

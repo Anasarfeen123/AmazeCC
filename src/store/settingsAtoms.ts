@@ -17,6 +17,8 @@ export type Settings = {
   privacyMode?: boolean;
   /** Individually chosen values to cover in Privacy mode. */
   privacyCategories?: string[];
+  /** With CGPA hidden in Privacy Mode, drop the CGPA card from Home (default on). */
+  privacyRemoveCgpaCard?: boolean;
   /** Comic is text grawlix; marker is the optional blackout cover. */
   privacyCoverStyle?: "comic" | "marker";
   /**

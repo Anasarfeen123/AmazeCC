@@ -58,7 +58,7 @@ export default function PwaInstallCard() {
   };
 
   return (
-    <div className="relative bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-3 shadow-2xs">
+    <div className="relative bg-surface rounded-[14px] border-2 border-border-ink p-5 space-y-3 shadow-brutal-sm">
       <button
         onClick={dismiss}
         aria-label="Dismiss install offer"
@@ -67,10 +67,10 @@ export default function PwaInstallCard() {
         <X className="h-4 w-4" />
       </button>
 
-      <h3 className="text-sm font-bold text-text-heading font-outfit pr-8">Install AmazeCC</h3>
+      <h3 className="font-display text-base font-bold uppercase text-text-heading pr-8">Install AmazeCC</h3>
       <p className="text-xs text-text-muted">
-        Add AmazeCC to your home screen for the full-screen app: offline support, push notifications, and no browser
-        chrome around it.
+        Put AmazeCC on your home screen: it opens full screen, works offline, can send class reminders, and shows
+        low-attendance courses on its icon.
       </p>
 
       {canInstall ? (

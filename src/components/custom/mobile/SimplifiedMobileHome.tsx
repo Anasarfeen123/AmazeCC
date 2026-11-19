@@ -61,6 +61,7 @@ import {
   type InsightSlide,
 } from "../shared/primitives";
 import { useAtom, useSetAtom, useAtomValue } from "jotai";
+import PwaInstallCard from "@/components/custom/shared/PwaInstallCard";
 import {
   demoModeAtom,
   isFeedbackModalOpenAtom,
@@ -2206,6 +2207,14 @@ export default function SimplifiedMobileHome({
                     </div>
                   ))}
                 </ListShell>
+              </div>
+            )}
+
+            {/* Install offer, phones only (it lived only in Settings, where
+                few found it). Hides itself once installed or dismissed. */}
+            {!isDemoMode && (
+              <div className="md:hidden">
+                <PwaInstallCard />
               </div>
             )}
 

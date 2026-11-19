@@ -61,18 +61,7 @@ function applyFinanceAll(res: any) {
     wallet: wallet as PaymentWalletData | null,
   };
 }
-import {
-  Wallet,
-  Receipt,
-  RefreshCcw,
-  XCircle,
-  Ban,
-  ShieldCheck,
-  Building,
-  ExternalLink,
-  FileText,
-  ChevronRight,
-} from "lucide-react";
+import { Wallet, Receipt, RefreshCcw, XCircle, Building, ExternalLink, FileText, ChevronRight } from "lucide-react";
 import { Skeleton } from "@amazecontinuityprojects/amazeui";
 import BottomSheet from "./shared/BottomSheet";
 import {
@@ -83,19 +72,13 @@ import {
   ListRowText,
   ListSkeleton,
   PageShell,
+  SectionHeader,
+  SegmentedControl,
   useCarousel,
   type InsightSlide,
 } from "./shared/primitives";
-import { LIST_SHELL, SECTION_CHIP, TILE } from "@/lib/uiTokens";
-import {
-  safeNum,
-  fmtAmt,
-  latestBalance,
-  isDebitEntry,
-  latestTransaction,
-  receiptDetailKey,
-  duesTone,
-} from "@/lib/payments";
+import { LIST_SHELL, TILE } from "@/lib/uiTokens";
+import { safeNum, fmtAmt, latestBalance, isDebitEntry, latestTransaction, receiptDetailKey } from "@/lib/payments";
 import type {
   PaymentLedgerEntry,
   PaymentReceipt,
@@ -110,23 +93,13 @@ type SubTab = (typeof SUB_TABS)[number];
 
 /* demo fixtures are provided via unified DEMO_FINANCE_ALL above */
 
-const TONE_TEXT: Record<string, string> = {
-  red: "text-red-600 dark:text-red-400",
-  amber: "text-amber-600 dark:text-amber-400",
-  emerald: "text-emerald-600 dark:text-emerald-400",
-  indigo: "text-indigo-600 dark:text-indigo-400",
-  blue: "text-blue-600 dark:text-blue-400",
-  zinc: "text-zinc-400 dark:text-zinc-500",
-};
-
 const TONE_BADGE: Record<string, string> = {
-  red: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20",
-  amber: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
-  emerald: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
-  indigo:
-    "bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border-indigo-200/50 dark:border-indigo-800/40",
-  blue: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
-  zinc: "bg-zinc-500/10 text-zinc-500 dark:text-zinc-400 border-zinc-500/20",
+  red: "bg-danger-surface text-danger-foreground border-border-ink",
+  amber: "bg-warning-surface text-warning-foreground border-border-ink",
+  emerald: "bg-success-surface text-success-foreground border-border-ink",
+  indigo: "bg-secondary text-secondary-foreground border-border-ink",
+  blue: "bg-secondary text-secondary-foreground border-border-ink",
+  zinc: "bg-surface-secondary0/10 text-text-muted border-border-muted",
 };
 
 // Hero cards use the OD-hours sizing (a touch shorter than the course page)
@@ -249,7 +222,6 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
 
   // ── Derived data ────────────────────────────────────────────────────────
   const hasPendingDues = duesData?.hasDues === true;
-  const duesToneKey = duesTone(duesData?.hasDues);
 
   const receiptList = receiptsData?.receipts || [];
   const ledgerINR = walletData?.ledgerINR;
@@ -361,7 +333,7 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
 
   // ── Small render helpers ────────────────────────────────────────────────
   const renderError = (message: string) => (
-    <div className="p-5 rounded-[24px] bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/40 text-red-600 dark:text-red-400 flex items-center gap-3">
+    <div className="p-5 rounded-[14px] bg-danger-surface border border-border-ink text-danger-foreground flex items-center gap-3">
       <XCircle className="w-5 h-5 shrink-0" />
       <p className="text-xs font-bold">{message}</p>
     </div>
@@ -383,8 +355,9 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
     return rows;
   }, [walletData]);
 
-  const renderEmpty = (icon: React.ReactNode, title: string, description: string) => (
-    <EmptyPanel icon={icon} title={title} description={description} />
+  // Words, not an icon well (brand rule); the icon argument is kept for callers.
+  const renderEmpty = (_icon: React.ReactNode, title: string, description: string) => (
+    <EmptyPanel title={title} description={description} />
   );
 
   /* ───────────────────────────────────────────────────────────────────────
@@ -399,28 +372,34 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
       onBack={onBack}
       actions={
         <IconButton onClick={refreshAll} title="Refresh payments from VTOP" disabled={anyLoading}>
-          <RefreshCcw className={`w-4 h-4 ${anyLoading ? "animate-spin text-indigo-500" : ""}`} />
+          <RefreshCcw className={`w-4 h-4 ${anyLoading ? "animate-spin text-primary" : ""}`} />
         </IconButton>
       }
     >
       <div className="grid grid-cols-2 gap-3 sm:gap-4">
         {/* CARD 1: DUES */}
-        <div className={CARD_BASE}>
+        <div
+          className={`${CARD_BASE} ${
+            !duesData ? "" : hasPendingDues ? "!bg-coral text-obsidian" : "!bg-mint text-obsidian"
+          }`}
+        >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-outfit truncate">
+            <span
+              className={`font-mono text-xs font-semibold uppercase tracking-[0.06em] truncate ${duesData ? "opacity-80" : "text-text-muted"}`}
+            >
               Fee clearance
             </span>
             {/* Badge only when there is something to act on — the headline
                 already states the status, so no second "all clear" chip. */}
             {loading.dues && !duesData ? (
               <span
-                className={`text-[9px] sm:text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md shrink-0 border ${TONE_BADGE.zinc}`}
+                className={`text-xs sm:text-xs font-bold uppercase px-2 py-0.5 rounded-md shrink-0 border ${TONE_BADGE.zinc}`}
               >
                 Syncing
               </span>
             ) : hasPendingDues ? (
               <span
-                className={`text-[9px] sm:text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md shrink-0 border ${TONE_BADGE.red}`}
+                className={`text-xs sm:text-xs font-bold uppercase px-2 py-0.5 rounded-md shrink-0 border ${TONE_BADGE.red}`}
               >
                 Action needed
               </span>
@@ -432,26 +411,17 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
               <Skeleton className="h-8 w-24 rounded-xl" />
             </div>
           ) : error.dues && !duesData ? (
-            <p className="my-auto py-1 text-xs font-bold text-red-600 dark:text-red-400 line-clamp-3">{error.dues}</p>
+            <p className="my-auto py-1 text-xs font-bold text-danger-foreground line-clamp-3">{error.dues}</p>
           ) : (
-            <div className="my-auto py-1 flex items-center gap-2.5 min-w-0">
-              <div
-                className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-white ${
-                  hasPendingDues ? "bg-red-500" : "bg-emerald-500"
-                }`}
-              >
-                {hasPendingDues ? <Ban className="w-4.5 h-4.5" /> : <ShieldCheck className="w-4.5 h-4.5" />}
-              </div>
-              <span
-                className={`text-2xl sm:text-3xl font-black font-outfit tracking-tight leading-tight truncate ${TONE_TEXT[duesToneKey]}`}
-              >
-                {hasPendingDues ? "Pending" : "All clear"}
+            <div className="my-auto py-1 min-w-0">
+              <span className="block truncate font-display text-[32px] font-bold uppercase leading-none sm:text-[40px]">
+                {hasPendingDues ? "Dues pending" : "All clear"}
               </span>
             </div>
           )}
 
           <div className="flex items-center justify-between gap-2">
-            <p className="text-[10.5px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-medium truncate">
+            <p className={`font-mono text-xs line-clamp-2 ${duesData ? "opacity-80" : "text-text-muted"}`}>
               {hasPendingDues ? "Outstanding payments pending on VTOP" : duesData?.message || "No outstanding fee dues"}
             </p>
             {hasPendingDues && (
@@ -460,7 +430,7 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-red-600 hover:bg-red-700 text-white text-[10px] font-black shrink-0 transition-colors active:scale-[0.98]"
+                className="inline-flex min-h-9 items-center gap-1 rounded-[8px] border-2 border-obsidian bg-obsidian px-2.5 font-mono text-xs font-bold uppercase text-cream shrink-0"
               >
                 Pay
                 <ExternalLink className="w-3 h-3" />
@@ -475,40 +445,20 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
 
       {/* ── LEDGER: one list, two sources (attendance-log composition) ── */}
       <div className="space-y-4">
-        <div className="px-1">
-          <div className="flex items-center gap-2">
-            {listMode === "wallet" ? (
-              <Wallet className="w-4 h-4 text-indigo-500" />
-            ) : (
-              <Receipt className="w-4 h-4 text-indigo-500" />
-            )}
-            <h2 className="text-sm font-black text-zinc-900 dark:text-white font-outfit tracking-tight">
-              {listMode === "wallet" ? "Wallet" : "Receipts"}
-            </h2>
-            <span className={SECTION_CHIP}>{listMode === "wallet" ? walletRows.length : receiptList.length}</span>
-          </div>
-
-          <div className="flex items-center gap-1 mt-2.5 p-0.5 bg-zinc-100 dark:bg-zinc-800/80 rounded-xl border border-zinc-200/60 dark:border-zinc-700/60 text-xs">
-            {(
-              [
-                { id: "wallet", label: "Wallet" },
-                { id: "receipts", label: "Receipts" },
-              ] as const
-            ).map((tab) => (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setListMode(tab.id)}
-                className={`flex-1 px-2.5 py-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
-                  listMode === tab.id
-                    ? "bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-2xs font-extrabold"
-                    : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
+        <div className="space-y-3 px-1">
+          <SectionHeader
+            title={listMode === "wallet" ? "Wallet" : "Receipts"}
+            count={listMode === "wallet" ? walletRows.length : receiptList.length}
+          />
+          <SegmentedControl
+            grow
+            value={listMode}
+            onChange={(v) => setListMode(v as typeof listMode)}
+            options={[
+              { value: "wallet", label: "Wallet" },
+              { value: "receipts", label: "Receipts" },
+            ]}
+          />
         </div>
 
         {listMode === "wallet" ? (
@@ -537,16 +487,16 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
                     />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 min-w-0">
-                        <p className="font-bold text-sm text-zinc-900 dark:text-white truncate font-outfit leading-tight">
+                        <p className="font-bold text-sm text-text-heading truncate font-outfit leading-tight">
                           {entry.particulars || (isDebit ? "Debit transaction" : "Credit deposit")}
                         </p>
                         {isRefunded && (
-                          <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded-md border shrink-0 bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20">
+                          <span className="text-xs font-bold uppercase px-1.5 py-0.5 rounded-md border shrink-0 bg-warning-surface text-warning-foreground border-border-ink">
                             Refund
                           </span>
                         )}
                       </div>
-                      <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium mt-0.5 truncate">
+                      <p className="text-xs text-text-muted font-medium mt-0.5 truncate">
                         {[entry.transactionDate, entry.receiptNumber, ledger === "USD" ? "USD" : null]
                           .filter(Boolean)
                           .join(" · ")}
@@ -555,15 +505,15 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
                     <div className="text-right shrink-0">
                       <p
                         data-private
-                        className={`font-black text-sm font-outfit leading-tight ${
-                          isDebit ? "text-rose-600 dark:text-rose-400" : "text-emerald-600 dark:text-emerald-400"
+                        className={`font-bold text-sm font-outfit leading-tight ${
+                          isDebit ? "text-danger-foreground" : "text-success-foreground"
                         }`}
                       >
                         {isDebit ? "−" : "+"}
                         {fmtAmt(String(Math.abs(amt)), symbol)}
                       </p>
                       {entry.bookBalanceAmount && (
-                        <p data-private className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-0.5">
+                        <p data-private className="text-xs text-text-muted mt-0.5">
                           Bal {fmtAmt(entry.bookBalanceAmount, symbol)}
                         </p>
                       )}
@@ -590,24 +540,19 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
                 key={r.receiptNumber || i}
                 type="button"
                 onClick={() => openReceiptDetail(r)}
-                className={`${LIST_ROW} hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors cursor-pointer group`}
+                className={`${LIST_ROW} hover:bg-surface-hover transition-colors cursor-pointer group`}
               >
                 <span className="w-1.5 h-1.5 rounded-full shrink-0 bg-emerald-500" />
                 <ListRowText title={r.receiptNumber} subtitle={[r.date, r.campusCode].filter(Boolean).join(" · ")} />
 
                 <div className="flex items-center gap-2 shrink-0">
                   <div className="text-right">
-                    <p
-                      data-private
-                      className="font-black text-sm font-outfit text-zinc-900 dark:text-white leading-tight"
-                    >
+                    <p data-private className="font-bold text-sm font-outfit text-text-heading leading-tight">
                       {fmtAmt(r.amount)}
                     </p>
-                    <p className="text-[9px] font-extrabold uppercase text-emerald-600 dark:text-emerald-400 mt-0.5">
-                      Settled
-                    </p>
+                    <p className="text-xs font-bold uppercase text-success-foreground mt-0.5">Settled</p>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-all" />
+                  <ChevronRight className="w-4 h-4 text-text-muted group-text-primary dark:group-text-primary transition-all" />
                 </div>
               </button>
             ))}
@@ -625,7 +570,7 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
             title={openReceipt.receiptNumber}
             subtitle="Official fee receipt"
             icon={<Receipt className="w-5 h-5" />}
-            accent="bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border-indigo-100 dark:border-indigo-900/30"
+            accent="bg-secondary text-secondary-foreground border-border-ink"
             closeLabel="Close receipt"
           >
             <div className="space-y-4">
@@ -637,12 +582,12 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
                   valueClassName="flex items-center gap-1.5"
                   value={
                     <>
-                      <Building className="w-3.5 h-3.5 text-zinc-400" />
+                      <Building className="w-3.5 h-3.5 text-text-muted" />
                       {openReceipt.campusCode || "—"}
                     </>
                   }
                 />
-                <KeyValue label="Status" valueClassName="text-emerald-600 dark:text-emerald-400" value="Settled" />
+                <KeyValue label="Status" valueClassName="text-success-foreground" value="Settled" />
               </div>
 
               {openDetailLoading && (
@@ -657,35 +602,26 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
                   {openTables.map((table, idx) => (
                     <div key={idx} className="space-y-2.5">
                       {table.caption && (
-                        <h4 className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-                          {table.caption}
-                        </h4>
+                        <h4 className="text-xs font-bold text-text-muted uppercase tracking-wider">{table.caption}</h4>
                       )}
                       {table.rows?.map((row, ri) => (
                         <div
                           key={ri}
-                          className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800 space-y-3"
+                          className="p-4 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-3"
                         >
                           <div className="flex items-center gap-2">
-                            <div className="p-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400">
+                            <div className="p-1.5 rounded-xl bg-secondary text-secondary-foreground">
                               <FileText className="w-4 h-4" />
                             </div>
-                            <span className="text-xs font-extrabold text-zinc-900 dark:text-white font-outfit">
-                              Invoice particulars
-                            </span>
+                            <span className="text-xs font-bold text-text-heading font-outfit">Invoice particulars</span>
                           </div>
                           <div className="grid grid-cols-2 gap-2.5 text-xs">
                             {table.headers?.map((header) => (
-                              <div
-                                key={header}
-                                className="p-2.5 rounded-xl bg-white dark:bg-zinc-900/60 border border-zinc-200/50 dark:border-zinc-800"
-                              >
-                                <span className="text-[10px] font-bold text-zinc-400 uppercase block mb-0.5">
+                              <div key={header} className="p-2.5 rounded-xl bg-surface border-2 border-border-ink">
+                                <span className="text-xs font-bold text-text-muted uppercase block mb-0.5">
                                   {header}
                                 </span>
-                                <span className="font-bold text-zinc-800 dark:text-zinc-200 break-words">
-                                  {row?.[header] || "—"}
-                                </span>
+                                <span className="font-bold text-text-primary break-words">{row?.[header] || "—"}</span>
                               </div>
                             ))}
                           </div>
@@ -696,7 +632,7 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
                 </div>
               ) : (
                 !openDetailLoading && (
-                  <p className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium text-center py-2">
+                  <p className="text-xs text-text-muted font-medium text-center py-2">
                     No invoice breakdown available for this receipt.
                   </p>
                 )

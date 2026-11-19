@@ -45,8 +45,14 @@ export default function FFCSPageView() {
       >
         <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-3 px-4 sm:px-8">
           <Link href="/" className="flex min-w-0 items-center gap-3" title="AmazeCC home" aria-label="AmazeCC home">
-            <BrandLogo size="md" variant="mark" className="sm:hidden" />
-            <BrandLogo size="md" wordClassName="text-cream" className="hidden sm:inline-flex" />
+            {/* Wrapped: BrandLogo's own inline-flex beat a `hidden` passed in,
+                so both logos showed on phones and the bar overflowed. */}
+            <span className="sm:hidden">
+              <BrandLogo size="md" variant="mark" />
+            </span>
+            <span className="hidden sm:inline-flex">
+              <BrandLogo size="md" wordClassName="text-cream" />
+            </span>
             <span className="rounded-[6px] border-2 border-obsidian bg-ochre px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-obsidian">
               FFCS planner
             </span>

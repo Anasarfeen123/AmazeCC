@@ -105,9 +105,12 @@ Progress (2026-11-19):
 Done when:
 
 - [ ] Every repro the user gave is fixed and has a test
-- [ ] The three FFCS baseline tests pass (baseline drops to 25 — update HANDOFF §6.2)
+- [x] The FFCS baseline tests pass (2026-11-19: ffcsClassmates expected the
+      old `auth: "vtop"` contract; 3a078cc0 moved it to Amaze ID. Baseline now 15:
+      oauth2, social-* x6 files, syncNotificationRedesign — a teammate's Social /
+      Amaze ID work, not redesign)
 - [ ] No console errors through a full plan → generate → save flow, demo and real
-- [ ] Bottom bars do not overlap on phones
+- [x] Bottom bars do not overlap on phones (no app bottom bar on /ffcs; checked 390)
 - [ ] Planner restyled; screenshots at three widths, both themes
 
 ## R3 · Attendance

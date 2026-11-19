@@ -573,7 +573,8 @@ describe("FFCSTimetableTab", () => {
     const plannerMenu = within(screen.getByRole("navigation", { name: "Planner menu" }));
     expect(plannerMenu.getByRole("button", { name: /How does this work\?/ })).toBeDefined();
     expect(screen.queryByRole("button", { name: "How does this work?" })).toBeNull();
-    expect(screen.getByTitle(/Switch to (Light|Dark) mode/)).toBeDefined();
+    // The theme switch lives in the site top bar / app sidebar, not here.
+    expect(screen.queryByTitle(/Switch to (Light|Dark) mode/)).toBeNull();
   }, 30_000);
 
   it("lets the desktop Add Courses menu entry toggle its widget", () => {
@@ -1085,7 +1086,7 @@ describe("FFCSTimetableTab", () => {
     render(<FFCSTimetableTab />);
 
     // Let the report load finish so the sheet has had every chance to show.
-    await screen.findByText(/loaded \(\d+ slots\)/, {}, { timeout: 10000 });
+    await screen.findByText(/[\d,]+ slots loaded/, {}, { timeout: 10000 });
     expect(screen.queryByText(/Final Registration/)).toBeNull();
     expect(storage.getItem("ffcs_final_list_notice_seen")).toBeNull();
   }, 30_000);
@@ -1148,7 +1149,7 @@ describe("FFCSTimetableTab", () => {
     render(<FFCSTimetableTab />);
 
     // Both courses exist in the final list, so nothing is unselected yet.
-    await screen.findByText(/Winter 2026-27 loaded/, {}, { timeout: 10000 });
+    await screen.findByText(/Winter 2026-27 \/\/ [\d,]+ slots loaded/, {}, { timeout: 10000 });
     expect(JSON.parse(storage.getItem("ffcs_courseLocks")!)).toHaveLength(2);
 
     // Switch to the mock list, which drops BCSE102...

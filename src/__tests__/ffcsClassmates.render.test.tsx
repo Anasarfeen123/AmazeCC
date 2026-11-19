@@ -144,7 +144,7 @@ describe("FriendFinderTab", () => {
     await renderTab();
     expect(apiMock).toHaveBeenLastCalledWith(
       "social/ffcs-match",
-      expect.objectContaining({ body: { op: "get", semesterId: "CH20262705" } }),
+      expect.objectContaining({ body: expect.objectContaining({ op: "get", semesterId: "CH20262705" }) }),
     );
     expect(screen.getByText(/12 students have joined/)).toBeTruthy();
     expect(screen.getByText(/Only people in at least one of your sections/)).toBeTruthy();
@@ -157,7 +157,7 @@ describe("FriendFinderTab", () => {
     expect(apiMock).toHaveBeenLastCalledWith(
       "social/ffcs-match",
       expect.objectContaining({
-        body: { op: "publish", source: "registered", semesterId: "CH20262705" },
+        body: expect.objectContaining({ op: "publish", source: "registered", semesterId: "CH20262705" }),
       }),
     );
     expect(screen.getByText("BAMAT101")).toBeTruthy();
@@ -182,7 +182,7 @@ describe("FriendFinderTab", () => {
     });
     expect(apiMock).toHaveBeenLastCalledWith(
       "social/ffcs-match",
-      expect.objectContaining({ body: { op: "leave", semesterId: "CH20262705" } }),
+      expect.objectContaining({ body: expect.objectContaining({ op: "leave", semesterId: "CH20262705" }) }),
     );
   });
 
@@ -233,7 +233,9 @@ describe("FriendFinderTab", () => {
     });
     expect(apiMock).toHaveBeenLastCalledWith(
       "social/ffcs-match",
-      expect.objectContaining({ body: { op: "visibility", discoverable: true, semesterId: "CH20262705" } }),
+      expect.objectContaining({
+        body: expect.objectContaining({ op: "visibility", discoverable: true, semesterId: "CH20262705" }),
+      }),
     );
   });
 
@@ -297,7 +299,9 @@ describe("FriendFinderTab", () => {
     expect(apiMock).toHaveBeenCalledTimes(2);
     expect(apiMock).toHaveBeenLastCalledWith(
       "social/ffcs-match",
-      expect.objectContaining({ body: { op: "publish", source: "registered", semesterId: "CH20262705" } }),
+      expect.objectContaining({
+        body: expect.objectContaining({ op: "publish", source: "registered", semesterId: "CH20262705" }),
+      }),
     );
   });
 

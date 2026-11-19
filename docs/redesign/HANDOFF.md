@@ -24,7 +24,7 @@ agent (Claude, Codex, Gemini, Cursor…) can continue without the chat history.
    screenshot you share, or a chat message. See §6.3 for the safe way.
 3. **Colours only through tokens** (`src/app/brand.css`). No raw hex in
    components. Run `python3 scripts/redesign/contrast.py` after any colour change.
-4. **Tests:** `tsc` 0 errors; `vitest` must stay at **20 failures** (the
+4. **Tests:** `tsc` 0 errors; `vitest` must stay at **15 failures** (the
    pre-existing baseline, §6.2); `eslint` 0 errors on touched files.
 5. **One commit per logical change** with a body: why, what, how it was
    verified. Commit messages end with the session line if your tool adds one.
@@ -159,7 +159,7 @@ python3 scripts/redesign/brandify.py <files> [--status] [--forced-dark] [--dry]
 
 ### 6.2 Test baseline
 
-20 failures in 11 files, all pre-existing on `main`: `oauth2`,
+15 failures in 11 files, all pre-existing on `main`: `oauth2`,
 `ffcsClassmates` ×2, `social-*` ×6,
 `syncNotificationRedesign`. When a redesign change breaks a test that pins an
 old class name, update the test to the new class and keep its intent (see

@@ -26,7 +26,7 @@ Read `design/README.md`, then `docs/redesign/HANDOFF.md` before changing UI.
 ```bash
 cd frontend
 node_modules/.bin/tsc --noEmit -p tsconfig.json          # 0 errors
-node_modules/.bin/vitest run                              # 20 failures = baseline
+node_modules/.bin/vitest run                              # 15 failures = baseline
 node_modules/.bin/eslint <changed files>                  # 0 errors
 python3 scripts/redesign/contrast.py                      # if you touched colours
 git diff --name-only | grep -E '\.(tsx|ts|css)$' | xargs grep -nE \

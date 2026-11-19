@@ -5,8 +5,8 @@ import PreloadReportCsv from "./PreloadReportCsv";
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#03060F" },
+    { media: "(prefers-color-scheme: light)", color: "#F7F1E6" },
+    { media: "(prefers-color-scheme: dark)", color: "#001E1D" },
   ],
   width: "device-width",
   // This route exports its own viewport (it doesn't inherit the root one), so

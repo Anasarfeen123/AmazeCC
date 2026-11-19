@@ -93,8 +93,9 @@ describe("callClassmates", () => {
     expect(state.participants).toBe(3);
     expect(apiMock).toHaveBeenCalledWith("social/ffcs-match", {
       method: "POST",
-      auth: "vtop",
-      body: { op: "publish", source: "registered", semesterId: "CH20262705" },
+      // Amaze ID auth since 3a078cc0; VTOP session fields ride in the body.
+      auth: "amazeId",
+      body: expect.objectContaining({ op: "publish", source: "registered", semesterId: "CH20262705" }),
     });
   });
 

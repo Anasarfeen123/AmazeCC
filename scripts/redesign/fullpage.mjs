@@ -65,6 +65,15 @@ if (process.env.CLICK_SEL) {
   });
   await sleep(Number(process.env.CLICK_WAIT || 800));
 }
+if (process.env.FIND_OVERFLOW) {
+  // Elements wider than 390px none of whose children are as wide: the ones
+  // whose own min-content forces the mobile layout viewport wider.
+  const r = await send("Runtime.evaluate", {
+    returnByValue: true,
+    expression: `(() => { const out=[]; for (const el of document.querySelectorAll("body *")) { const w=el.getBoundingClientRect().width; if (w<=392) continue; const wide=[...el.children].some(c=>c.getBoundingClientRect().width>=w-1); if (!wide) out.push(Math.round(w)+" "+el.tagName+"."+String(el.className).slice(0,110)+" :: "+(el.textContent||"").trim().slice(0,40)); } return out.slice(0,15); })()`,
+  });
+  console.log(JSON.stringify(r.result.value ?? r.result, null, 1).slice(0, 4000));
+}
 const m = await send("Page.getLayoutMetrics");
 const cs = m.result.cssContentSize;
 console.log("size", cs.width, cs.height);

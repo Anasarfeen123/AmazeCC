@@ -50,10 +50,8 @@ import {
 
 import SearchInput from "../shared/SearchInput";
 import DebouncedSearchInput from "../shared/DebouncedSearchInput";
-import BrandLogo from "../shared/BrandLogo";
 import EmptyState from "../shared/EmptyState";
 import { useTheme } from "next-themes";
-import ThemeToggle from "@/components/custom/ThemeToggle";
 import { AnimatePresence } from "framer-motion";
 import BottomSheet from "../shared/BottomSheet";
 import FFCSDashboardHeader from "./FFCS/components/FFCSDashboardHeader";
@@ -2133,18 +2131,13 @@ export default function FFCSTimetableTab({
             className={`space-y-3 ${layoutMode === "modern" ? "px-2 pt-4 sm:px-1 sm:pt-0" : "px-1"}`}
             data-tour-id="ffcs-banner"
           >
-            <div className="flex items-start justify-between gap-3">
+            <div className="flex flex-wrap items-start justify-between gap-3">
               <div className={`flex items-start min-w-0 text-left ${layoutMode === "modern" ? "flex-col" : ""}`}>
-                {layoutMode === "modern" && (
-                  <Link href="/" aria-label="AmazeCC home" className="mb-3 shrink-0">
-                    <BrandLogo size="md" />
-                  </Link>
-                )}
                 <div className="flex flex-col items-start min-w-0">
                   <p className="text-xs font-semibold text-text-muted leading-none mb-1">
                     {layoutMode === "modern" ? null : "Academics · Registration"}
                   </p>
-                  <h1 className="text-xl sm:text-2xl font-bold text-text-heading tracking-tight leading-tight font-outfit truncate flex items-center gap-2">
+                  <h1 className="flex items-center gap-2 truncate font-display text-[26px] font-bold uppercase leading-tight text-text-heading sm:text-[32px]">
                     {layoutMode !== "modern" && <MapIcon className="text-primary w-5 h-5 sm:w-6 sm:h-6 shrink-0" />}
                     <span>FFCS Planner</span>
                   </h1>
@@ -2155,9 +2148,8 @@ export default function FFCSTimetableTab({
                         Loading {activeSemester.shortLabel}...
                       </span>
                     ) : masterCourses.length > 0 ? (
-                      <span className="mt-1 text-success-foreground text-xs sm:text-xs font-semibold flex items-center gap-1.5 px-2 py-1 rounded-lg bg-success-surface border border-border-ink">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                        {activeSemester.shortLabel} loaded ({masterCourses.length} slots)
+                      <span className="mt-1.5 inline-flex items-center gap-x-1.5 whitespace-nowrap rounded-[6px] border-2 border-border-ink bg-mint px-2 py-0.5 font-mono text-xs font-bold uppercase text-obsidian">
+                        {`${activeSemester.shortLabel} // ${masterCourses.length.toLocaleString("en-IN")} slots loaded`}
                       </span>
                     ) : (
                       <span className="mt-1 text-danger-foreground text-xs sm:text-xs font-semibold flex items-center gap-1.5 px-2 py-1 rounded-lg bg-danger-surface border border-border-ink">
@@ -2184,7 +2176,8 @@ export default function FFCSTimetableTab({
                   <Share2 className="h-4 w-4" aria-hidden />
                   Share
                 </button>
-                <ThemeToggle />
+                {/* No theme button here: the FFCS site's top bar and the app
+                    sidebar both have one. */}
                 <button
                   type="button"
                   aria-haspopup="menu"

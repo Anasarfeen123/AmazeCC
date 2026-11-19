@@ -253,16 +253,16 @@
 
   --success: #7fd6a5;
   --success-foreground: #8fe0b3;
-  --success-surface: color-mix(in oklab, #7fd6a5 16%, #002b29);
+  --success-surface: color-mix(in oklab, #7fd6a5 16%, #003431);
   --warning: #f9bc60;
   --warning-foreground: #f9c97f;
-  --warning-surface: color-mix(in oklab, #f9bc60 18%, #002b29);
+  --warning-surface: color-mix(in oklab, #f9bc60 18%, #003431);
   --danger: #ff9b8a;
   --danger-foreground: #ffb4a8;
-  --danger-surface: color-mix(in oklab, #ff9b8a 18%, #002b29);
+  --danger-surface: color-mix(in oklab, #ff9b8a 18%, #003431);
   --info: #abd1c6;
   --info-foreground: #bfe0d6;
-  --info-surface: color-mix(in oklab, #abd1c6 14%, #002b29);
+  --info-surface: color-mix(in oklab, #abd1c6 14%, #003431);
 
   --sidebar: #00211f;
   --sidebar-foreground: #f2ece0;
@@ -309,10 +309,10 @@
   --border-muted: color-mix(in oklab, #4fb3a5 40%, transparent);
   --shadow-ink: #4fb3a5; /* = border, see dark */
 
-  --success-surface: color-mix(in oklab, #7fd6a5 16%, #0d1010);
-  --warning-surface: color-mix(in oklab, #f9bc60 18%, #0d1010);
-  --danger-surface: color-mix(in oklab, #ff9b8a 18%, #0d1010);
-  --info-surface: color-mix(in oklab, #abd1c6 14%, #0d1010);
+  --success-surface: color-mix(in oklab, #7fd6a5 16%, #0f1615);
+  --warning-surface: color-mix(in oklab, #f9bc60 18%, #0f1615);
+  --danger-surface: color-mix(in oklab, #ff9b8a 18%, #0f1615);
+  --info-surface: color-mix(in oklab, #abd1c6 14%, #0f1615);
 
   --sidebar-border: #4fb3a5;
   --color-brand-700: #1c2323;

@@ -74,6 +74,23 @@ const getCourseCredits = (course: any) => {
   return credits > 0 ? credits : -1;
 };
 
+/** Pill colours for a score out of 100: green 80+, yellow 65+, red below. */
+const scorePillTone = (pct: number | null): string => {
+  if (pct === null || !Number.isFinite(pct)) return "border-border-muted bg-surface-secondary text-text-primary";
+  if (pct >= 80) return "border-success-foreground/40 bg-success-surface text-success-foreground";
+  if (pct >= 65) return "border-warning-foreground/40 bg-warning-surface text-warning-foreground";
+  return "border-danger-foreground/40 bg-danger-surface text-danger-foreground";
+};
+
+/** Same tones for a letter grade (S/A good, B/C middle, D/E/F low). */
+const gradePillTone = (grade: string): string => {
+  const g = grade.trim().toUpperCase();
+  if (g === "S" || g === "A") return scorePillTone(90);
+  if (g === "B" || g === "C") return scorePillTone(70);
+  if (g === "D" || g === "E" || g === "F") return scorePillTone(0);
+  return scorePillTone(null);
+};
+
 const formatUpToTwoDecimals = (num: number, padDecimals = false): string => {
   if (!Number.isFinite(num)) return "0";
   const rounded = Math.round(num * 100) / 100;
@@ -628,14 +645,18 @@ export default function SimplifiedAcademicsPage({
         <div className="flex items-center gap-1 sm:gap-2.5 shrink-0 text-right">
           <div>
             {course.grade ? (
-              <div className="flex flex-col items-end rounded-[10px] border-2 border-border-muted bg-surface-secondary px-2 py-1.5 text-text-primary sm:px-3">
+              <div
+                className={`flex flex-col items-end rounded-[10px] border-2 px-2 py-1.5 sm:px-3 ${gradePillTone(String(course.grade))}`}
+              >
                 <span data-private="marks" className="font-display text-base sm:text-xl font-bold leading-none">
                   {course.grade}
                 </span>
                 <span className="mt-1 font-mono text-xs font-bold uppercase opacity-80">Final grade</span>
               </div>
             ) : grandWeightage.hasAssessments ? (
-              <div className="flex flex-col items-end rounded-[10px] border-2 border-border-muted bg-surface-secondary px-2 py-1.5 text-text-primary sm:px-3">
+              <div
+                className={`flex flex-col items-end rounded-[10px] border-2 px-2 py-1.5 sm:px-3 ${scorePillTone(grandWeightage.percentage)}`}
+              >
                 <span
                   data-private="marks"
                   className="font-display text-base sm:text-xl font-bold leading-none tabular-nums whitespace-nowrap"

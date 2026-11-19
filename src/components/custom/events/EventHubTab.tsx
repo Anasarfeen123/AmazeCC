@@ -614,8 +614,14 @@ export default function EventHubTab({
         <EmptyPanel
           tone="red"
           icon={<CalendarOff className="w-7 h-7" />}
-          title="Couldn't reach Event Hub"
-          description={error}
+          title={/\b404\b|not found/i.test(error) ? "Event Hub isn't available yet" : "Couldn't reach Event Hub"}
+          // The live API has no events routes yet (404); say so plainly
+          // instead of "HTTP 404". See docs/redesign/BACKEND_GAPS.md.
+          description={
+            /\b404\b|not found/i.test(error)
+              ? "It needs a server update first. Nothing is wrong on your side. Events are on the official Event Hub portal meanwhile."
+              : error
+          }
           action={
             <GhostButton onClick={fetchEvents}>
               <RefreshCcw className="w-3.5 h-3.5" />

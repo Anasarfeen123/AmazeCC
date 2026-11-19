@@ -116,7 +116,7 @@ export function FacultyAvatar({
     blue: "bg-secondary border-border-ink text-secondary-foreground",
     amber: "bg-warning-surface border-border-ink text-warning-foreground",
     indigo: "bg-secondary border-border-ink text-secondary-foreground",
-    zinc: "bg-zinc-800/40 border-border-ink text-text-muted",
+    zinc: "bg-surface-secondary border-border-ink text-text-muted",
   }[tone];
 
   const initials = getFacultyInitials(name, review?.avatar);

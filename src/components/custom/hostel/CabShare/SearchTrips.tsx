@@ -370,7 +370,7 @@ export default function SearchTrips({ cabShareUser }: { cabShareUser: CabShareUs
               <button
                 type="button"
                 onClick={() => setShowPendingModal(false)}
-                className="mt-6 w-full rounded-2xl bg-zinc-900 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-zinc-800 dark:bg-surface cursor-pointer"
+                className="mt-6 w-full rounded-2xl bg-surface px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-surface-hover dark:bg-surface cursor-pointer"
               >
                 Got it
               </button>

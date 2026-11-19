@@ -1608,7 +1608,7 @@ export default function FFCSGuidedSelector({
                   key={c.code}
                   className={`p-3 sm:p-3.5 rounded-2xl border transition-all ${
                     isSelected
-                      ? "bg-purple-950/25 border-border-ink text-white shadow-sm"
+                      ? "bg-secondary border-border-ink text-white shadow-sm"
                       : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink hover:bg-surface-secondary"
                   }`}
                 >
@@ -2670,7 +2670,7 @@ export default function FFCSGuidedSelector({
                 type="checkbox"
                 checked={autoSeparateLabDays}
                 onChange={(event) => setAutoSeparateLabDays(event.target.checked)}
-                className="mt-0.5 accent-indigo-500"
+                className="mt-0.5 accent-[var(--primary)]"
               />
               <span>
                 <span className="block font-bold">At most one lab class per day</span>
@@ -2684,7 +2684,7 @@ export default function FFCSGuidedSelector({
                 type="checkbox"
                 checked={autoAvoidConsecutiveLabs}
                 onChange={(event) => setAutoAvoidConsecutiveLabs(event.target.checked)}
-                className="mt-0.5 accent-indigo-500"
+                className="mt-0.5 accent-[var(--primary)]"
               />
               <span>
                 <span className="block font-bold">Avoid consecutive lab slots</span>
@@ -2699,7 +2699,7 @@ export default function FFCSGuidedSelector({
                   type="checkbox"
                   checked={autoLunchBreakSeparatesLabs}
                   onChange={(event) => setAutoLunchBreakSeparatesLabs(event.target.checked)}
-                  className="mt-0.5 accent-indigo-500"
+                  className="mt-0.5 accent-[var(--primary)]"
                 />
                 <span>
                   <span className="block font-bold">Treat lunch as a break</span>
@@ -2745,7 +2745,7 @@ export default function FFCSGuidedSelector({
                   type="checkbox"
                   checked={autoStrictTheoryPreference}
                   onChange={(event) => setAutoStrictTheoryPreference(event.target.checked)}
-                  className="mt-0.5 accent-indigo-500"
+                  className="mt-0.5 accent-[var(--primary)]"
                 />
                 <span>
                   <span className="block font-bold">Strictly {autoPreference} theory only</span>
@@ -2794,7 +2794,7 @@ export default function FFCSGuidedSelector({
                 {generation.progress?.nodes?.toLocaleString() ?? 0}
               </span>
             </div>
-            <div className="p-3 rounded-2xl bg-background border border-border-ink bg-indigo-950/20">
+            <div className="p-3 rounded-2xl bg-background border border-border-ink bg-secondary">
               <span className="text-xs font-bold text-primary uppercase tracking-wider block">Found</span>
               <span className="text-base sm:text-lg font-bold text-primary font-mono">
                 {generation.progress?.found?.toLocaleString() ?? 0}
@@ -4587,7 +4587,7 @@ export default function FFCSGuidedSelector({
                   currentPill === p
                     ? "w-7 bg-primary shadow-xs "
                     : currentIdx > idx
-                      ? "w-2.5 bg-indigo-400/50 hover:bg-indigo-400"
+                      ? "w-2.5 bg-secondary hover:bg-indigo-400"
                       : "w-2 bg-surface-secondary"
                 }`}
                 title={`Step ${stepNum}`}
@@ -4632,8 +4632,8 @@ export default function FFCSGuidedSelector({
       }
     >
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-secondary blur-[150px]" />
-        <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-secondary blur-[150px]" />
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-secondary " />
+        <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-secondary " />
       </div>
 
       {addedJustNow && (
@@ -4707,7 +4707,7 @@ export default function FFCSGuidedSelector({
                         currentPill === p
                           ? "w-7 bg-primary shadow-xs "
                           : currentIdx > idx
-                            ? "w-2.5 bg-indigo-400/50 hover:bg-indigo-400"
+                            ? "w-2.5 bg-secondary hover:bg-indigo-400"
                             : "w-2 bg-surface-secondary"
                       }`}
                       title={`Step ${stepNum}`}

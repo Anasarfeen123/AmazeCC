@@ -16,8 +16,8 @@ export default function TermsOfServicePage() {
     <div className="flex flex-col items-center justify-center min-h-screen w-full px-4 py-24 bg-surface-secondary dark:bg-[#03060F] transition-colors duration-300 relative overflow-hidden text-text-primary font-sans">
       {/* Ambient Background Glows */}
       <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-secondary dark:bg-secondary blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-secondary dark:bg-secondary blur-[120px]" />
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-secondary dark:bg-secondary " />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-secondary dark:bg-secondary " />
       </div>
 
       {/* Sticky Header Navigation */}
@@ -29,7 +29,7 @@ export default function TermsOfServicePage() {
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-xs font-bold text-text-muted hover:text-primary transition-colors py-1.5 px-3 rounded-xl bg-surface-secondary dark:bg-neutral-900/60 border border-border-ink"
+              className="inline-flex items-center gap-2 text-xs font-bold text-text-muted hover:text-primary transition-colors py-1.5 px-3 rounded-xl bg-surface-secondary border border-border-ink"
             >
               <ArrowLeft size={14} />
               <span>Back to Login</span>
@@ -37,7 +37,7 @@ export default function TermsOfServicePage() {
           </div>
 
           {/* Switcher Tab between Privacy, Terms & Friend Finder Disclaimer */}
-          <div className="flex items-center gap-1 p-1 bg-surface-tertiary dark:bg-neutral-900/80 rounded-2xl border border-border-ink">
+          <div className="flex items-center gap-1 p-1 bg-surface-tertiary rounded-2xl border border-border-ink">
             <Link
               href="/privacy"
               className="px-3 py-1 rounded-xl text-xs font-semibold text-text-muted hover:text-text-heading flex items-center gap-1.5 transition-all"
@@ -48,7 +48,7 @@ export default function TermsOfServicePage() {
             </Link>
             <Link
               href="/terms"
-              className="px-3 py-1 rounded-xl text-xs font-bold bg-surface dark:bg-neutral-800 text-primary shadow-xs flex items-center gap-1.5 transition-all"
+              className="px-3 py-1 rounded-xl text-xs font-bold bg-surface text-primary shadow-xs flex items-center gap-1.5 transition-all"
             >
               <FileText size={13} />
               <span className="hidden sm:inline">Terms of Service</span>

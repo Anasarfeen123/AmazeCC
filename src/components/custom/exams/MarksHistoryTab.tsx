@@ -86,7 +86,7 @@ const GRADE_BAR: Record<string, string> = {
   D: "bg-primary",
   E: "bg-red-500",
   F: "bg-red-600",
-  N: "bg-zinc-400",
+  N: "bg-border-muted",
   P: "bg-primary",
 };
 
@@ -477,7 +477,7 @@ export default function MarksHistoryTab({
                   <ToneBadge tone={d.tone}>{d.grade}</ToneBadge>
                 </span>
                 <span className="min-w-0 flex-1">
-                  <MiniBar pct={d.share} tone={GRADE_BAR[d.grade] ?? "bg-zinc-400"} />
+                  <MiniBar pct={d.share} tone={GRADE_BAR[d.grade] ?? "bg-border-muted"} />
                 </span>
                 <span className="shrink-0 text-sm font-bold font-outfit text-text-primary w-10 text-right">
                   {d.count}

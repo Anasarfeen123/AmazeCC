@@ -1587,7 +1587,7 @@ export default function ProfilePage({
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-4 shadow-2xs">
         <h3 className="font-display text-base font-bold uppercase text-text-heading">Home, privacy & sound</h3>
 
-        <div className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
+        <div className="divide-y divide-border-ink ">
           <div className="flex items-center justify-between py-3">
             <div>
               <p className="text-sm font-bold text-text-primary">Privacy Mode</p>
@@ -1992,7 +1992,7 @@ export default function ProfilePage({
         </button>
 
         {/* Sync Toggles List */}
-        <div className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
+        <div className="divide-y divide-border-ink ">
           <div className="flex items-center justify-between py-3">
             <div>
               <p className="text-sm font-bold text-text-primary">Sync Profile & Hosteller Data</p>
@@ -2509,7 +2509,7 @@ export default function ProfilePage({
                                 ))}
                               </tr>
                             </thead>
-                            <tbody className="divide-y divide-zinc-200/60 dark:divide-zinc-800/60">
+                            <tbody className="divide-y divide-border-ink ">
                               {(t.rows || []).map((row: any, ri: number) => (
                                 <tr key={ri}>
                                   {headers.map((h: string, ci: number) => (
@@ -2663,7 +2663,7 @@ export default function ProfilePage({
                                 key={sec.id}
                                 type="button"
                                 onClick={() => screens.go(sec.id)}
-                                className={`${LIST_ROW} cursor-pointer active:bg-surface-secondary dark:active:bg-zinc-800/60`}
+                                className={`${LIST_ROW} cursor-pointer active:bg-surface-secondary `}
                               >
                                 <div
                                   className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border ${sec.iconBg} ${sec.iconColor}`}

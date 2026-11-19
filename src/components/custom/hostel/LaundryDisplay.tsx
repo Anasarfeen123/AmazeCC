@@ -363,7 +363,7 @@ export default function LaundrySchedule({ hostelData, handleHostelDetailsFetch }
                   }
 
                   if (isClicked) {
-                    cellStyle += " ring-2 ring-sky-400 ring-offset-2 ring-offset-slate-900/40 scale-105";
+                    cellStyle += " ring-2 focus-visible:ring-ring ring-offset-2 ring-offset-slate-900/40 scale-105";
                   }
 
                   return (
@@ -375,7 +375,7 @@ export default function LaundrySchedule({ hostelData, handleHostelDetailsFetch }
                       <span>{dayNum}</span>
                       {/* Optional slot indicator dot */}
                       {slot && !isToday && !isUserSlot && (
-                        <span className="absolute bottom-1 h-1 w-1 rounded-full bg-gray-400" />
+                        <span className="absolute bottom-1 h-1 w-1 rounded-full bg-border-muted" />
                       )}
                     </button>
                   );

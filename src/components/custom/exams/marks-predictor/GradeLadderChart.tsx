@@ -21,7 +21,7 @@ const GRADE_BAR: Record<string, string> = {
   D: "bg-primary",
   E: "bg-red-500",
   F: "bg-red-600",
-  N: "bg-zinc-400",
+  N: "bg-border-muted",
   P: "bg-primary",
 };
 
@@ -79,7 +79,7 @@ export default function GradeLadderChart({
       <div className="mt-2.5 flex flex-wrap gap-x-3.5 gap-y-1">
         {bands.map((b) => (
           <span key={b.grade} className="inline-flex items-center gap-1.5 text-xs font-bold text-text-muted">
-            <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${GRADE_BAR[b.grade] ?? "bg-zinc-400"}`} />
+            <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${GRADE_BAR[b.grade] ?? "bg-border-muted"}`} />
             {b.grade} {b.range}
           </span>
         ))}

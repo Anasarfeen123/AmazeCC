@@ -1323,7 +1323,7 @@ export function FFCSGeneratorSubpage({
         icon: <Target className="h-4 w-4 text-primary" />,
         onClick: () => selectGeneratorSection("courses"),
         ariaLabel: `Target courses: ${generatorTargets.length}. Edit target courses.`,
-        focusRingClass: "focus-visible:ring-indigo-500",
+        focusRingClass: "focus-visible:ring-ring",
       },
       {
         id: "blocked-slots",

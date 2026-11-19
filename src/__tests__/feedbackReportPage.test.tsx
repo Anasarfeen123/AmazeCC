@@ -86,7 +86,7 @@ describe("FeedbackReportPage", () => {
     expect(screen.getByText("Support Sections")).toBeDefined();
     expect(screen.getByText("New Report")).toBeDefined();
     expect(screen.getByText("My Tickets & Support")).toBeDefined();
-    expect(screen.getByText("PostHog Diagnostics")).toBeDefined();
+    expect(screen.getByText("Diagnostics", { selector: "h3, p, span, div" })).toBeDefined();
     expect(screen.getByText("Support Channel")).toBeDefined();
     expect(screen.getByText("Telemetry & Replay")).toBeDefined();
   });
@@ -176,7 +176,7 @@ describe("FeedbackReportPage", () => {
       );
     });
 
-    expect(screen.getByText("Report Dispatched to PostHog")).toBeDefined();
+    expect(screen.getByText("Report sent")).toBeDefined();
     expect(screen.getByText("Ticket ID: #ticket_999")).toBeDefined();
   });
 
@@ -202,7 +202,7 @@ describe("FeedbackReportPage", () => {
       );
     });
 
-    expect(screen.getByText("Report Dispatched to PostHog")).toBeDefined();
+    expect(screen.getByText("Report sent")).toBeDefined();
   });
 
   it("switches to My Tickets & Support subpage and renders tickets", async () => {
@@ -220,7 +220,7 @@ describe("FeedbackReportPage", () => {
   it("switches to PostHog Diagnostics subpage and shows Distinct ID and Session Replay status", () => {
     renderFeedbackPage();
 
-    const diagRow = screen.getByText("PostHog Diagnostics");
+    const diagRow = screen.getByText("Diagnostics", { selector: "h3, p, span, div" });
     fireEvent.click(diagRow);
 
     expect(screen.getByText("PostHog Telemetry & Integration Engine")).toBeDefined();
@@ -253,7 +253,7 @@ describe("FeedbackReportPage", () => {
     expect(screen.getByText("My Tickets & Support")).toBeDefined();
 
     // 2. Navigate to PostHog Diagnostics subpage
-    fireEvent.click(screen.getByText("PostHog Diagnostics"));
+    fireEvent.click(screen.getByText("Diagnostics", { selector: "h3, p, span, div" }));
     expect(screen.getByText("PostHog Telemetry & Integration Engine")).toBeDefined();
 
     // Click back button to return to overview

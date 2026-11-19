@@ -105,7 +105,9 @@ const DAY_ORDER_MAP: Record<string, string> = {
 
 /** `"Thursday"` -> `"THU"`. Anything already three letters is upper-cased. */
 export function normalizeDay(raw: string | undefined | null): string {
-  return String(raw ?? "").slice(0, 3).toUpperCase();
+  return String(raw ?? "")
+    .slice(0, 3)
+    .toUpperCase();
 }
 
 /**
@@ -148,7 +150,7 @@ export function dayDate(d: DayLike | null | undefined): Date | null {
  */
 export function effectiveWeekday(
   weekday: string | undefined,
-  events: ReadonlyArray<PredictorDayEvent> | null | undefined
+  events: ReadonlyArray<PredictorDayEvent> | null | undefined,
 ): string {
   const own = normalizeDay(weekday);
   if (own !== "SAT" || !Array.isArray(events) || events.length === 0) return own;
@@ -170,9 +172,7 @@ export function effectiveWeekday(
  * and not on which course is being counted. The screen used to rebuild this same
  * map inside both of its counting helpers.
  */
-export function buildEffectiveDayMap(
-  days: ReadonlyArray<DayLike> | null | undefined
-): Map<string, string> {
+export function buildEffectiveDayMap(days: ReadonlyArray<DayLike> | null | undefined): Map<string, string> {
   const map = new Map<string, string>();
   for (const d of days ?? []) {
     const date = dayDate(d);
@@ -245,10 +245,7 @@ export type CourseDateSkips = Record<string, Record<number, true>>;
 
 export const GLOBAL_SKIP = "__all__";
 
-export function skipSetFor(
-  skips: CourseDateSkips | null | undefined,
-  courseCode: string
-): Set<number> {
+export function skipSetFor(skips: CourseDateSkips | null | undefined, courseCode: string): Set<number> {
   const raw = skips?.[courseCode];
   const out = new Set<number>();
   if (!raw) return out;
@@ -260,11 +257,7 @@ export function skipSetFor(
 }
 
 /** Toggle one date for one subject. Returns a new object; never mutates. */
-export function toggleCourseSkip(
-  skips: CourseDateSkips,
-  courseCode: string,
-  timestamp: number
-): CourseDateSkips {
+export function toggleCourseSkip(skips: CourseDateSkips, courseCode: string, timestamp: number): CourseDateSkips {
   const forCourse = { ...(skips[courseCode] ?? {}) };
   if (forCourse[timestamp]) delete forCourse[timestamp];
   else forCourse[timestamp] = true;
@@ -296,11 +289,7 @@ export function skipCountFor(skips: CourseDateSkips | null | undefined, courseCo
  * ceiling but is still bounded by the two LIDs - after the last instructional
  * day there is genuinely nothing left to attend.
  */
-export function courseCeiling(
-  mode: SimulationMode,
-  isLab: boolean,
-  dates: MilestoneDates
-): Date | null {
+export function courseCeiling(mode: SimulationMode, isLab: boolean, dates: MilestoneDates): Date | null {
   if (mode === "CAT1") return lockDateFor(milestoneDate(dates, "cat1"), CAT_LOCK_OFFSET_DAYS);
   if (mode === "CAT2") return lockDateFor(milestoneDate(dates, "cat2"), CAT_LOCK_OFFSET_DAYS);
   if (mode === "LID") return milestoneDate(dates, isLab ? "lidLab" : "lidTheory");
@@ -335,11 +324,7 @@ export function gridCeiling(mode: SimulationMode, dates: MilestoneDates): Date |
  * day - the screen used to build a `Set` of Thursday-and-Friday candidates and
  * frequently produce an empty one.
  */
-export function courseLockDate(
-  mode: SimulationMode,
-  isLab: boolean,
-  dates: MilestoneDates
-): Date | null {
+export function courseLockDate(mode: SimulationMode, isLab: boolean, dates: MilestoneDates): Date | null {
   return courseCeiling(mode, isLab, dates);
 }
 
@@ -385,10 +370,7 @@ export type ScheduleResult = {
 };
 
 /** The weekdays a course is timetabled on. */
-export function courseMeetingDays(
-  courseCode: string,
-  dayCardsMap: Record<string, any[]> | null | undefined
-): string[] {
+export function courseMeetingDays(courseCode: string, dayCardsMap: Record<string, any[]> | null | undefined): string[] {
   if (!courseCode || !dayCardsMap) return [];
   return Object.keys(dayCardsMap)
     .filter((day) => (dayCardsMap[day] ?? []).some((c) => c?.courseCode === courseCode))
@@ -400,7 +382,7 @@ export function courseMeetsOn(
   date: Date,
   courseCode: string,
   dayCardsMap: Record<string, any[]> | null | undefined,
-  effectiveMap: ReadonlyMap<string, string>
+  effectiveMap: ReadonlyMap<string, string>,
 ): boolean {
   const meeting = courseMeetingDays(courseCode, dayCardsMap);
   if (meeting.length === 0) return false;
@@ -424,7 +406,7 @@ export function courseMeetingDates(
   workingDays: ReadonlyArray<DayLike> | null | undefined,
   effectiveMap: ReadonlyMap<string, string>,
   ceiling: Date | null = null,
-  lockDate: Date | null = null
+  lockDate: Date | null = null,
 ): Date[] {
   const meeting = courseMeetingDays(courseCode, dayCardsMap);
   if (meeting.length === 0) return [];
@@ -457,17 +439,7 @@ export function courseMeetingDates(
  * number that is a ratio.
  */
 export function projectCourse(input: ScheduleInput): ScheduleResult {
-  const {
-    course,
-    dayCardsMap,
-    workingDays,
-    effectiveMap,
-    dateStates,
-    skips,
-    ceiling,
-    lockDate,
-    threshold,
-  } = input;
+  const { course, dayCardsMap, workingDays, effectiveMap, dateStates, skips, ceiling, lockDate, threshold } = input;
 
   const attended = toInt(course.attendedClasses);
   const total = toInt(course.totalClasses);
@@ -582,10 +554,7 @@ export type OverallSummary = {
   remainingDays: number;
 };
 
-export function summarise(
-  courses: readonly ScheduleResult[],
-  threshold: number
-): OverallSummary {
+export function summarise(courses: readonly ScheduleResult[], threshold: number): OverallSummary {
   let attended = 0;
   let total = 0;
   let predictedAttended = 0;
@@ -624,4 +593,33 @@ export function summarise(
 /** Two decimal places, or one when the app-wide setting says so. */
 export function formatPct(value: number, decimals = true): string {
   return decimals ? value.toFixed(2) : value.toFixed(1);
+}
+
+/**
+ * `summarise` for the predictor screen's rows, which carry the projector's
+ * numbers under UI names (currentAttended / currentTotal / futureClasses).
+ * Passing those rows straight to `summarise` summed undefined fields, so the
+ * header read "Now 0.0%" whatever the real attendance was.
+ */
+export function summarisePredictionRows(
+  rows: readonly {
+    currentAttended: number;
+    currentTotal: number;
+    futureClasses: number;
+    predictedAttended: number;
+    predictedTotal: number;
+    predictedPct: number;
+    safeBunks: number;
+  }[],
+  threshold: number,
+): OverallSummary {
+  return summarise(
+    rows.map((r) => ({
+      ...r,
+      attended: r.currentAttended,
+      total: r.currentTotal,
+      futureDays: r.futureClasses,
+    })) as unknown as ScheduleResult[],
+    threshold,
+  );
 }

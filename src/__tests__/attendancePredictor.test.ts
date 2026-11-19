@@ -159,9 +159,7 @@ describe("courseCeiling", () => {
   it("uses the same day for the lock as for the ceiling", () => {
     for (const mode of ["CAT1", "CAT2", "LID", "ALL"] as const) {
       for (const isLab of [true, false]) {
-        expect(courseLockDate(mode, isLab, DATES_2026)).toEqual(
-          courseCeiling(mode, isLab, DATES_2026)
-        );
+        expect(courseLockDate(mode, isLab, DATES_2026)).toEqual(courseCeiling(mode, isLab, DATES_2026));
       }
     }
   });
@@ -193,26 +191,20 @@ describe("effectiveWeekday", () => {
   it("follows a published day order on a Saturday", () => {
     // The real payload: 22 Aug 2026 carries
     // "(Instructional Day - Thursday Day Order)".
-    expect(
-      effectiveWeekday("Sat", [{ text: "(Instructional Day - Thursday Day Order)" }])
-    ).toBe("THU");
+    expect(effectiveWeekday("Sat", [{ text: "(Instructional Day - Thursday Day Order)" }])).toBe("THU");
   });
 
   it("reads the day order out of category when text does not carry it", () => {
     expect(
-      effectiveWeekday("SAT", [
-        { text: "Instructional Day", category: "Instructional Day - Friday Day Order" },
-      ])
+      effectiveWeekday("SAT", [{ text: "Instructional Day", category: "Instructional Day - Friday Day Order" }]),
     ).toBe("FRI");
   });
 
   it("reads the enriched calendarDay shape", () => {
-    expect(
-      effectiveWeekday("Sat", [{ title: "(Instructional Day Order - Wednesday Day Order)" }])
-    ).toBe("WED");
-    expect(
-      effectiveWeekday("Sat", [{ title: "Instructional Day", detail: "Working Day / Monday Day Order" }])
-    ).toBe("MON");
+    expect(effectiveWeekday("Sat", [{ title: "(Instructional Day Order - Wednesday Day Order)" }])).toBe("WED");
+    expect(effectiveWeekday("Sat", [{ title: "Instructional Day", detail: "Working Day / Monday Day Order" }])).toBe(
+      "MON",
+    );
   });
 
   it("prefers the longest day named, so 'Day Order - Friday' is not read as Thursday", () => {
@@ -535,14 +527,7 @@ describe("courseMeetingDates", () => {
   });
 
   it("omits a locked date, so the skipper never offers an impossible skip", () => {
-    const dates = courseMeetingDates(
-      "BACSE105",
-      dayCardsMap,
-      futureDays,
-      map,
-      null,
-      ymd(2026, 8, 2)
-    );
+    const dates = courseMeetingDates("BACSE105", dayCardsMap, futureDays, map, null, ymd(2026, 8, 2));
     expect(dates.map((d) => d.getDate())).toEqual([24, 26, 28, 31]);
   });
 
@@ -555,9 +540,7 @@ describe("courseMeetingDates", () => {
     // 29 Aug 2026 is a Saturday that follows the Thursday day order, so the
     // TUE/THU lab meets it while it does not meet a normal Saturday.
     const plainSaturday = day(ymd(2026, 7, 29));
-    const thursdayOrder = day(ymd(2026, 7, 29), [
-      { text: "(Instructional Day - Thursday Day Order)" },
-    ]);
+    const thursdayOrder = day(ymd(2026, 7, 29), [{ text: "(Instructional Day - Thursday Day Order)" }]);
     const ordered = buildEffectiveDayMap([thursdayOrder]);
 
     expect(courseMeetingDates("BACSE102", dayCardsMap, [thursdayOrder], ordered).length).toBe(1);
@@ -580,10 +563,8 @@ describe("summarise", () => {
     expect(s.totalCourses).toBe(2);
     expect(s.atRiskCount + s.safeCount).toBe(2);
     expect(s.predictedPct).toBeCloseTo(
-      ((a.predictedAttended + b.predictedAttended) /
-        (a.predictedTotal + b.predictedTotal)) *
-        100,
-      5
+      ((a.predictedAttended + b.predictedAttended) / (a.predictedTotal + b.predictedTotal)) * 100,
+      5,
     );
   });
 
@@ -614,5 +595,23 @@ describe("formatPct", () => {
 describe("the CAT lock offset is the number the college states", () => {
   it("is three days", () => {
     expect(CAT_LOCK_OFFSET_DAYS).toBe(3);
+  });
+});
+import { summarisePredictionRows } from "../lib/attendancePredictor";
+
+describe("summarisePredictionRows", () => {
+  it("reads the UI field names, so 'Now' is the real current percentage", () => {
+    const row = (a: number, t: number) => ({
+      currentAttended: a,
+      currentTotal: t,
+      futureClasses: 4,
+      predictedAttended: a,
+      predictedTotal: t,
+      predictedPct: (a / t) * 100,
+      safeBunks: 0,
+    });
+    const s = summarisePredictionRows([row(8, 8), row(7, 10)], 75);
+    expect(s.currentPct).toBeCloseTo((15 / 18) * 100, 5);
+    expect(s.remainingDays).toBe(4);
   });
 });

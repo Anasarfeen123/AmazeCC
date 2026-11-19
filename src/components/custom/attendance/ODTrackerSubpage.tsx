@@ -298,7 +298,7 @@ export default function ODTrackerSubpage({
       subline: "OD credited while you were present",
       badge: "Wasted",
       badgeColor: "bg-danger-surface text-danger-foreground border-border-ink",
-      headlineColor: "text-danger-foreground",
+      headlineColor: wastedODsCount > 0 ? "text-danger-foreground" : "text-text-heading",
     });
 
     slides.push({
@@ -322,8 +322,9 @@ export default function ODTrackerSubpage({
         label: s.title,
         value: s.headline,
         sub: s.subline,
-        badge: s.badge,
-        badgeClassName: s.badgeColor,
+        // No badge: on these slides it only repeated the title
+        // ("WASTED" / Wasted). Colour carries the meaning, and only when
+        // there is something to flag.
         valueClassName: s.headlineColor,
       })),
     [insightSlides],
@@ -394,7 +395,6 @@ export default function ODTrackerSubpage({
 
         {visibleHistory.length === 0 ? (
           <EmptyPanel
-            icon={<Award className="w-7 h-7" />}
             title={masterODHistory.length === 0 ? "No OD hours yet" : "Nothing under this filter"}
             description={
               masterODHistory.length === 0

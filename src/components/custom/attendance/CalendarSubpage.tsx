@@ -951,7 +951,7 @@ function LogRow({ row, onClick }: { row: AttendanceLogRow; onClick: () => void }
     <button
       type="button"
       onClick={onClick}
-      className="w-full flex items-start gap-3 py-3 px-4 text-left transition-colors hover:bg-surface-hover active:bg-surface-secondary dark:active:bg-zinc-800/60 cursor-pointer"
+      className="w-full flex items-start gap-3 py-3 px-4 text-left transition-colors hover:bg-surface-hover active:bg-surface-secondary cursor-pointer"
     >
       <ToneDot tone={row.tone} size="md" className="mt-[7px]" />
       <div className="min-w-0 flex-1">

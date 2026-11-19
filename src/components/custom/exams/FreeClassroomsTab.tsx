@@ -1001,7 +1001,7 @@ export default function FreeClassroomsTab({
           {/* ── FOOTNOTE / ATTRIBUTION ── */}
           <div className="flex items-center justify-between text-xs text-text-muted pt-1 px-1">
             <span className="inline-flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
+              <span className="w-1.5 h-1.5 rounded-full bg-border-muted" />
               Rooms based on official campus FFCS course catalog
             </span>
           </div>

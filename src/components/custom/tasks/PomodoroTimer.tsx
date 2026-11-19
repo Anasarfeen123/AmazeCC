@@ -252,7 +252,7 @@ export default function PomodoroTimer({
           type="button"
           onClick={toggleRun}
           className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold text-primary-foreground shadow-xs transition-all cursor-pointer ${
-            isRunning ? "bg-zinc-800 hover:bg-zinc-900 " : "bg-primary hover:brightness-110"
+            isRunning ? "bg-surface-secondary hover:bg-surface-hover " : "bg-primary hover:brightness-110"
           }`}
         >
           {isRunning ? (

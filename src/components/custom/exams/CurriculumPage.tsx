@@ -1145,7 +1145,7 @@ export default function CurriculumPage({
                           <span
                             className={`text-xs font-bold uppercase px-2 py-0.5 rounded-md border shrink-0 ${gradeBadge(
                               c.grade,
-                            )} ${isCgpaBlurred ? "blur-[5px] select-none" : ""}`}
+                            )} ${isCgpaBlurred ? " select-none" : ""}`}
                           >
                             {isCgpaBlurred ? "—" : c.grade}
                           </span>
@@ -1290,7 +1290,7 @@ export default function CurriculumPage({
             value={targetCgpa}
             onChange={(e) => setTargetCgpa(parseFloat(e.target.value))}
             aria-label="Target graduation CGPA"
-            className="w-full accent-indigo-500 cursor-pointer"
+            className="w-full accent-[var(--primary)] cursor-pointer"
           />
           <div className="flex justify-between text-xs font-bold text-text-muted">
             <span>5.00</span>

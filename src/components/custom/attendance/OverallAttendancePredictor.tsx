@@ -34,7 +34,7 @@ import {
   projectCourse,
   skipCountFor,
   skipSetFor,
-  summarise,
+  summarisePredictionRows,
   toggleCourseSkip,
   CAT_LOCK_OFFSET_DAYS,
   type CourseDateSkips,
@@ -51,7 +51,6 @@ import {
   Flame,
   Search,
   BookOpen,
-  FlaskConical,
   Snowflake,
   Zap,
 } from "lucide-react";
@@ -387,7 +386,10 @@ export default function OverallAttendancePredictor({
     today,
   ]);
 
-  const overallStats = useMemo(() => summarise(predictions, targetThreshold), [predictions, targetThreshold]);
+  const overallStats = useMemo(
+    () => summarisePredictionRows(predictions, targetThreshold),
+    [predictions, targetThreshold],
+  );
 
   // Working days still ahead inside the selected window.
   const totalRemainingWorkingDays = useMemo(
@@ -522,19 +524,6 @@ export default function OverallAttendancePredictor({
       onBack={onBack}
       actions={
         <>
-          {/* Target Threshold Picker */}
-          <SegmentedControl
-            options={THRESHOLD_OPTIONS.map((th) => ({
-              value: String(th) as TargetThresholdOption,
-              label: `${th}%`,
-            }))}
-            value={String(targetThreshold) as TargetThresholdOption}
-            onChange={(next) => {
-              const th = Number(next);
-              setTargetThreshold(th);
-              setSettings((prev) => ({ ...prev, targetAttendance: th }));
-            }}
-          />
           <GhostButton onClick={handleResetAll} title="Reset all simulated leaves and skips">
             <RotateCcw className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Reset</span>
@@ -542,6 +531,24 @@ export default function OverallAttendancePredictor({
         </>
       }
     >
+      {/* Target: in the page, not the header row (with Back and Reset it
+          overflowed a 390px phone and pushed Reset off-screen). */}
+      <div className="flex flex-wrap items-center gap-3 px-1">
+        <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">Target</span>
+        <SegmentedControl
+          options={THRESHOLD_OPTIONS.map((th) => ({
+            value: String(th) as TargetThresholdOption,
+            label: `${th}%`,
+          }))}
+          value={String(targetThreshold) as TargetThresholdOption}
+          onChange={(next) => {
+            const th = Number(next);
+            setTargetThreshold(th);
+            setSettings((prev) => ({ ...prev, targetAttendance: th }));
+          }}
+        />
+      </div>
+
       {/* ── SUMMARY: one stat card and one auto carousel, side by side ── */}
       <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
         <StatTile
@@ -637,7 +644,7 @@ export default function OverallAttendancePredictor({
           <div>
             <h3 className="text-sm font-bold text-text-heading uppercase tracking-wider flex items-center gap-2">
               <Calendar className="w-4 h-4 text-primary" />
-              <span>Interactive Day Simulator ({currentMonth})</span>
+              <span>Interactive day simulator{currentMonth ? ` (${currentMonth})` : ""}</span>
             </h3>
             <p className="text-xs text-text-muted font-medium mt-0.5">
               Whole day, every subject: <strong>Present</strong> → <strong>Absent (Bunk)</strong> →{" "}
@@ -812,55 +819,54 @@ export default function OverallAttendancePredictor({
                     onClick={() => setOpenSubject(expanded ? null : course)}
                     aria-expanded={expanded}
                     aria-label={`${expanded ? "Hide" : "Choose dates to skip for"} ${course.courseCode}`}
-                    className="w-full py-3 px-4 flex items-center gap-3 text-left cursor-pointer transition-colors hover:bg-surface-hover active:bg-surface-secondary dark:active:bg-zinc-800/60"
+                    className="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-hover"
                   >
-                    <div
-                      className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border ${
-                        course.locked
-                          ? "bg-surface-secondary text-text-muted border-border-ink"
-                          : isSafe
-                            ? "bg-success-surface border-border-ink text-success-foreground"
-                            : isClose
-                              ? "bg-warning-surface border-border-ink text-warning-foreground"
-                              : "bg-danger-surface border-border-ink text-danger-foreground"
-                      }`}
-                    >
-                      {course.isLab ? <FlaskConical className="w-5 h-5" /> : <BookOpen className="w-5 h-5" />}
-                    </div>
-
                     <div className="min-w-0 flex-1">
-                      <h3 className="font-bold text-sm text-text-heading truncate font-outfit leading-tight flex items-center gap-1.5">
-                        <span className="font-mono text-xs uppercase text-text-muted">{course.courseCode}</span>
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <span className="rounded-[6px] border-2 border-border-ink bg-surface-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-text-primary">
+                          {course.courseCode}
+                        </span>
+                        <span
+                          className={`rounded-[6px] border-2 border-border-ink px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-obsidian ${
+                            course.isLab ? "bg-mint" : "bg-sage"
+                          }`}
+                        >
+                          {course.isLab ? "Lab" : "Theory"}
+                        </span>
                         {course.skippedCount > 0 && (
-                          <span className="shrink-0 rounded-full bg-warning-surface px-1.5 py-px text-xs font-bold uppercase tracking-wider text-warning-foreground">
+                          <span className="rounded-[6px] border-2 border-border-ink bg-ochre px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-obsidian">
                             {course.skippedCount} skip{course.skippedCount === 1 ? "" : "s"}
                           </span>
                         )}
-                        {course.locked && (
-                          <Snowflake className="h-3 w-3 shrink-0 text-text-muted" aria-label="Attendance locked" />
-                        )}
+                      </div>
+                      <h3 className="mt-1.5 truncate font-display text-sm font-bold text-text-heading sm:text-base">
+                        {course.courseTitle || course.courseCode}
                       </h3>
-                      <p className="text-xs text-text-muted font-medium mt-0.5 truncate">
-                        {course.slotName ? `${course.slotName} · ` : ""}
-                        {course.meetingDays?.join(", ") || "No timetable"} · now{" "}
-                        {formatPct(course.currentPct, decimalValues)}%
+                      <p className="mt-0.5 truncate font-mono text-xs text-text-muted">
+                        {[
+                          course.locked ? "Locked" : "",
+                          course.slotName,
+                          course.meetingDays?.join(", ") || "No timetable",
+                          `now ${formatPct(course.currentPct, decimalValues)}%`,
+                        ]
+                          .filter(Boolean)
+                          .join(" // ")}
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-2 shrink-0">
+                    <div className="flex shrink-0 items-center gap-2">
+                      {/* Projected % as a coloured block, like the Academics list:
+                          mint = at/above target, ochre = within 5 points, coral = below. */}
                       <span
-                        className={`text-base font-bold font-outfit tracking-tight leading-none ${
-                          course.locked
-                            ? "text-text-muted"
-                            : isSafe
-                              ? "text-success-foreground"
-                              : "text-danger-foreground"
+                        className={`min-w-[76px] rounded-[10px] border-2 border-border-ink px-2.5 py-1.5 text-right font-display text-lg font-bold leading-none text-obsidian shadow-brutal-sm ${
+                          isSafe ? "bg-mint" : isClose ? "bg-ochre" : "bg-coral"
                         }`}
                       >
                         {formatPct(course.predictedPct, decimalValues)}%
                       </span>
                       <ChevronRight
-                        className={`w-4 h-4 text-text-muted transition-transform duration-200 ${expanded ? "rotate-90" : ""}`}
+                        className={`h-4 w-4 text-text-muted transition-transform duration-200 ${expanded ? "rotate-90" : ""}`}
+                        aria-hidden
                       />
                     </div>
                   </button>
@@ -900,7 +906,7 @@ export default function OverallAttendancePredictor({
                                   type="button"
                                   onClick={() => toggleSubjectSkip(course.courseCode, date)}
                                   aria-pressed={skipped}
-                                  className="w-full py-2 px-3 flex items-center gap-3 text-left cursor-pointer transition-colors hover:bg-surface-hover active:bg-surface-tertiary dark:active:bg-zinc-800"
+                                  className="w-full py-2 px-3 flex items-center gap-3 text-left cursor-pointer transition-colors hover:bg-surface-hover active:bg-surface-tertiary "
                                 >
                                   <span
                                     className={`flex h-9 w-9 shrink-0 flex-col items-center justify-center rounded-xl border ${

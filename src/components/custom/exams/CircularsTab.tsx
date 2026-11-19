@@ -328,7 +328,7 @@ export default function CircularsTab({ loginToVTOP, onBack, setActiveTab }: Circ
           <p className="text-sm font-medium">No circulars found</p>
         </div>
       )}
-      <div className="solid-card divide-y divide-gray-100/50  dark:divide-gray-800/50">
+      <div className="solid-card divide-y divide-border-ink ">
         {circulars.map((item, i) => (
           <TreeNode key={i} item={item} creds={creds} />
         ))}

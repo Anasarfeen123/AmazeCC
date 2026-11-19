@@ -813,7 +813,7 @@ export default function StudentReportPage() {
                 icon: Code2,
                 action: downloadHtml,
                 disabled: !snapshot,
-                tint: "bg-indigo-50 text-primary border-indigo-200 dark:bg-indigo-950/30 dark:text-primary",
+                tint: "bg-indigo-50 text-primary border-border-ink dark:bg-indigo-950/30 dark:text-primary",
               },
             ].map(({ key, title, description, icon: Icon, action, disabled, tint }) => (
               <button

@@ -273,7 +273,7 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
       <ul className="space-y-2">
         {cleanedLines.map((line, idx) => (
           <li key={idx} className="flex items-start gap-2 text-xs font-medium text-text-primary leading-relaxed">
-            <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-indigo-500/60 mt-1.5" />
+            <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-secondary mt-1.5" />
             <span className="flex-1">{line}</span>
           </li>
         ))}

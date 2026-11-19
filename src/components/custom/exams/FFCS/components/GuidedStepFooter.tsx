@@ -15,7 +15,7 @@ export function GuidedStepFooter({ onPrevious, previousDisabled = false, childre
         disabled={previousDisabled}
         onClick={onPrevious}
         aria-label="Previous Step"
-        className={`w-12 h-12 rounded-2xl bg-zinc-900/90 hover:bg-zinc-800 border border-border-ink text-white flex items-center justify-center shadow-lg transition-all active:scale-90 cursor-pointer shrink-0 ${
+        className={`w-12 h-12 rounded-2xl bg-surface hover:bg-surface-hover border border-border-ink text-white flex items-center justify-center shadow-lg transition-all active:scale-90 cursor-pointer shrink-0 ${
           previousDisabled ? "disabled:opacity-40" : ""
         }`}
       >

@@ -2082,7 +2082,7 @@ export default function FFCSTimetableTab({
     return (
       <div
         data-prevent-swipe="true"
-        className={`w-full space-y-6 transition-all duration-300 ${isFullscreen ? "fixed inset-0 z-[100] bg-slate-950 p-4 md:p-8 overflow-y-auto" : ""}`}
+        className={`w-full space-y-6 transition-all duration-300 ${isFullscreen ? "fixed inset-0 z-[100] bg-background p-4 md:p-8 overflow-y-auto" : ""}`}
       >
         <FFCSGeneratorSubpage
           onClose={closeGenerator}
@@ -2123,7 +2123,7 @@ export default function FFCSTimetableTab({
     <TourProvider offerTour={settings.showTour} onStepChange={handleTourStepChange}>
       <div
         data-prevent-swipe="true"
-        className={`w-full ${layoutMode === "modern" ? "space-y-4" : "space-y-6"} transition-all duration-300 ${isFullscreen ? "fixed inset-0 z-[100] bg-slate-950 p-4 md:p-8 overflow-y-auto" : ""}`}
+        className={`w-full ${layoutMode === "modern" ? "space-y-4" : "space-y-6"} transition-all duration-300 ${isFullscreen ? "fixed inset-0 z-[100] bg-background p-4 md:p-8 overflow-y-auto" : ""}`}
       >
         {/* ── TOP HEADER BLOCK: EYEBROW, TITLE, ACTIONS & CONTROLS (AmazeCC pattern) ── */}
         {!(layoutMode === "guided" && isGuidedFullScreen) && (

@@ -94,8 +94,8 @@ export default function MoodleDisplay({ moodleData, handleFetchMoodle, setMoodle
           return (
             <div
               key={idx}
-              className="p-4 rounded-lg shadow bg-white  dark:bg-black
-                                       dark:outline dark:outline-1 dark:outline-gray-800
+              className="p-4 rounded-lg shadow bg-white dark:bg-black
+                                       dark:outline dark:outline-1 
                                        hover:shadow-md transition cursor-pointer"
             >
               <a href={item.url} target="_blank" rel="noopener noreferrer">
@@ -201,9 +201,9 @@ export function MoodleUserPassForm({ handleFetchMoodle, IDs }) {
         <div className="flex flex-col text-left">
           <label className="text-sm font-medium text-text-primary mb-1">Username (Registration No.)</label>
           <input
-            className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 
-                        dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100
-                        focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            className="px-4 py-2 rounded-lg border border-border-ink bg-white text-text-heading 
+                          
+                        focus:outline-none focus:ring-2 focus-visible:ring-ring transition"
             placeholder="Enter Moodle username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -214,9 +214,9 @@ export function MoodleUserPassForm({ handleFetchMoodle, IDs }) {
           <label className="text-sm font-medium text-text-primary mb-1">Password</label>
           <input
             type="password"
-            className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 
-                        dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100
-                        focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            className="px-4 py-2 rounded-lg border border-border-ink bg-white text-text-heading 
+                          
+                        focus:outline-none focus:ring-2 focus-visible:ring-ring transition"
             placeholder="Enter Moodle password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

@@ -246,7 +246,7 @@ export default function CommonFreeTimetableGrid({
             type="checkbox"
             checked={everyoneFreeOnly}
             onChange={(e) => setEveryoneFreeOnly(e.target.checked)}
-            className="accent-indigo-600 w-3.5 h-3.5 cursor-pointer"
+            className="accent-[var(--primary)] w-3.5 h-3.5 cursor-pointer"
           />
           Highlight slots everyone is free
         </label>

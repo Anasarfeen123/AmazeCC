@@ -34,7 +34,7 @@ export function FacultyScoreBadge({
 
   if (loading) {
     return (
-      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-zinc-900 border border-border-ink text-xs text-text-muted animate-pulse">
+      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-surface border border-border-ink text-xs text-text-muted animate-pulse">
         <span>★</span>
         <span>Score...</span>
       </span>
@@ -47,7 +47,7 @@ export function FacultyScoreBadge({
         type="button"
         onClick={onOpenReview}
         title={`Faculty: ${name || "Unknown"}\nNo community reviews logged yet on Vitfac`}
-        className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-zinc-900/80 border border-border-ink text-xs font-bold text-text-muted hover:text-text-muted hover:border-border-ink transition-colors cursor-pointer shrink-0 ${className}`.trim()}
+        className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-surface border border-border-ink text-xs font-bold text-text-muted hover:text-text-muted hover:border-border-ink transition-colors cursor-pointer shrink-0 ${className}`.trim()}
       >
         <span className="text-xs opacity-70">★</span>
         <span>Unrated</span>
@@ -155,21 +155,21 @@ export function FacultySingleReviewStat({
 
   if (loading) {
     return (
-      <div className="p-3 sm:p-4 rounded-2xl bg-zinc-950/60 border border-border-ink animate-pulse flex items-center justify-between">
+      <div className="p-3 sm:p-4 rounded-2xl bg-background border border-border-ink animate-pulse flex items-center justify-between">
         <div className="space-y-2">
-          <div className="h-4 w-32 bg-zinc-800 rounded" />
-          <div className="h-3 w-20 bg-zinc-800/60 rounded" />
+          <div className="h-4 w-32 bg-surface-secondary rounded" />
+          <div className="h-3 w-20 bg-surface-secondary rounded" />
         </div>
-        <div className="h-8 w-16 bg-zinc-800 rounded-xl" />
+        <div className="h-8 w-16 bg-surface-secondary rounded-xl" />
       </div>
     );
   }
 
   if (!review || review.reviews === 0) {
     return (
-      <div className="p-3 sm:p-4 rounded-2xl bg-zinc-950/60 border border-border-ink flex flex-wrap items-center justify-between gap-3 shadow-xs">
+      <div className="p-3 sm:p-4 rounded-2xl bg-background border border-border-ink flex flex-wrap items-center justify-between gap-3 shadow-xs">
         <div className="flex items-center gap-2.5 text-xs text-text-muted min-w-0">
-          <div className="w-8 h-8 rounded-xl bg-zinc-900 border border-border-ink flex items-center justify-center text-xs shrink-0 font-bold text-text-muted">
+          <div className="w-8 h-8 rounded-xl bg-surface border border-border-ink flex items-center justify-center text-xs shrink-0 font-bold text-text-muted">
             ★
           </div>
           <div className="min-w-0">
@@ -196,7 +196,7 @@ export function FacultySingleReviewStat({
   const isMidRating = winPct >= 60 && winPct < 80;
 
   return (
-    <div className="p-3.5 sm:p-4 rounded-2xl bg-zinc-950/70 border border-border-ink shadow-sm space-y-3">
+    <div className="p-3.5 sm:p-4 rounded-2xl bg-background border border-border-ink shadow-sm space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
           <FacultyAvatar employeeId={employeeId} name={name} size="md" tone={isHighRating ? "indigo" : "zinc"} />
@@ -235,7 +235,7 @@ export function FacultySingleReviewStat({
 
       {review.metrics && (
         <div className="grid grid-cols-3 gap-2 text-center pt-1 border-t border-border-ink">
-          <div className="p-2 sm:p-2.5 rounded-xl bg-zinc-900/80 border border-border-ink">
+          <div className="p-2 sm:p-2.5 rounded-xl bg-surface border border-border-ink">
             <div className="flex items-center justify-center gap-1 text-xs font-bold text-text-muted mb-0.5">
               <Flame className="w-3 h-3 text-danger-foreground" />
               <span>Teaching</span>
@@ -246,7 +246,7 @@ export function FacultySingleReviewStat({
             </div>
           </div>
 
-          <div className="p-2 sm:p-2.5 rounded-xl bg-zinc-900/80 border border-border-ink">
+          <div className="p-2 sm:p-2.5 rounded-xl bg-surface border border-border-ink">
             <div className="flex items-center justify-center gap-1 text-xs font-bold text-text-muted mb-0.5">
               <Award className="w-3 h-3 text-primary" />
               <span>DA / Assign</span>
@@ -257,7 +257,7 @@ export function FacultySingleReviewStat({
             </div>
           </div>
 
-          <div className="p-2 sm:p-2.5 rounded-xl bg-zinc-900/80 border border-border-ink">
+          <div className="p-2 sm:p-2.5 rounded-xl bg-surface border border-border-ink">
             <div className="flex items-center justify-center gap-1 text-xs font-bold text-text-muted mb-0.5">
               <Sparkles className="w-3 h-3 text-warning-foreground" />
               <span>Class Vibe</span>

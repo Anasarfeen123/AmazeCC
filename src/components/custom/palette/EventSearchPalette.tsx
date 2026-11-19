@@ -29,11 +29,11 @@ interface EventItem {
 }
 
 const badge = {
-  violet: "bg-violet-100 text-violet-800 border-violet-300 dark:bg-violet-900/80 dark:text-violet-300",
+  violet: "bg-violet-100 text-primary border-border-ink dark:bg-violet-900/80 ",
   rose: "bg-rose-100 text-rose-800 border-border-ink dark:text-danger-foreground dark:border-rose-800/50",
   amber: "bg-amber-100 text-amber-800 border-border-ink dark:text-warning-foreground dark:border-amber-800/50",
   emerald: "bg-emerald-100 text-emerald-800 border-border-ink dark:text-success-foreground dark:border-emerald-800/50",
-  indigo: "bg-indigo-100 text-primary border-indigo-300 dark:bg-indigo-900/80 dark:text-primary",
+  indigo: "bg-indigo-100 text-primary border-border-ink dark:bg-indigo-900/80 dark:text-primary",
   gray: "bg-surface-secondary text-text-primary border-border-ink",
 };
 

@@ -287,15 +287,15 @@ export default function ModernHorizontalTimetableGrid({
                           </div>
 
                           {/* Hover tooltip */}
-                          <div className="absolute opacity-0 group-hover/tile:opacity-100 transition-opacity duration-200 bottom-full left-1/2 -translate-x-1/2 mb-1.5 w-max max-w-[220px] bg-slate-900 text-white text-xs rounded-xl p-2.5 shadow-2xl z-50 pointer-events-none border border-border-ink text-center">
-                            <p className="font-bold text-slate-100">{course.title}</p>
+                          <div className="absolute opacity-0 group-hover/tile:opacity-100 transition-opacity duration-200 bottom-full left-1/2 -translate-x-1/2 mb-1.5 w-max max-w-[220px] bg-surface text-white text-xs rounded-xl p-2.5 shadow-2xl z-50 pointer-events-none border border-border-ink text-center">
+                            <p className="font-bold text-text-primary">{course.title}</p>
                             {facultyStr && <p className="text-text-muted text-xs mt-0.5">{facultyStr}</p>}
                             <div className="flex items-center justify-center gap-1.5 mt-1 text-xs text-primary font-semibold">
                               <span>Slot: {slotName}</span>
                               <span>•</span>
                               <span>Venue: {course.venue || "TBA"}</span>
                             </div>
-                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-900 rotate-45 border-r border-b border-border-ink" />
+                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-surface rotate-45 border-r border-b border-border-ink" />
                           </div>
                         </div>
                       );

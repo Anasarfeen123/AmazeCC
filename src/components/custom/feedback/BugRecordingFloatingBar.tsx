@@ -89,7 +89,7 @@ export default function BugRecordingFloatingBar() {
       aria-live="polite"
       className="fixed top-3 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-top-4 duration-300 pointer-events-auto select-none"
     >
-      <div className="flex items-center gap-2.5 sm:gap-3 px-3.5 py-1.5 sm:py-2 rounded-[10px] bg-zinc-950/95 text-white border border-border-ink shadow-brutal-sm min-h-9">
+      <div className="flex items-center gap-2.5 sm:gap-3 px-3.5 py-1.5 sm:py-2 rounded-[10px] bg-background text-white border border-border-ink shadow-brutal-sm min-h-9">
         <span className="flex items-center gap-1.5 font-mono text-xs font-bold text-danger-foreground shrink-0">
           <span className="relative flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
@@ -115,7 +115,7 @@ export default function BugRecordingFloatingBar() {
             type="button"
             onClick={handleCancel}
             title="Cancel recording"
-            className="p-1 rounded-full hover:bg-zinc-800 text-text-muted hover:text-white transition-colors cursor-pointer"
+            className="p-1 rounded-full hover:bg-surface-hover text-text-muted hover:text-text-heading transition-colors cursor-pointer"
           >
             <X className="w-3.5 h-3.5" />
           </button>

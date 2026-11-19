@@ -569,10 +569,10 @@ export default function FeedbackReportPage({
         setSubmitSuccess(true);
         setSubmittedTicketId(result.ticketId || null);
       } else {
-        setSubmitError("Failed to dispatch feedback. Check your network connection and PostHog settings.");
+        setSubmitError("Could not send your report. Check your connection and try again.");
       }
     } catch (err: any) {
-      setSubmitError(err?.message || "An unexpected error occurred while communicating with PostHog.");
+      setSubmitError(err?.message || "Could not send your report. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -602,7 +602,7 @@ export default function FeedbackReportPage({
           <span className="inline-flex items-center gap-2">
             <span>AmazeCC Support</span>
             <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-            <span className="text-primary font-bold">PostHog Analytics</span>
+            <span className="text-primary font-bold">Feedback</span>
           </span>
         }
         title="Feedback and Support"
@@ -616,7 +616,7 @@ export default function FeedbackReportPage({
                 DOM Recording Active
               </span>
             )}
-            <ToneBadge tone="indigo">PostHog Support</ToneBadge>
+            <ToneBadge tone="indigo">Replies in app</ToneBadge>
           </div>
         }
       >
@@ -625,8 +625,8 @@ export default function FeedbackReportPage({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <StatTile
               label="Support Channel"
-              value="PostHog"
-              sub="Direct developer desk (#712727)"
+              value="Developers"
+              sub="Your reports go straight to them"
               tone="indigo"
               icon={<ShieldCheck className="w-4 h-4 text-primary" />}
             />
@@ -715,7 +715,7 @@ export default function FeedbackReportPage({
                   <ShieldCheck className="w-5 h-5" />
                 </span>
                 <ListRowText
-                  title="PostHog Diagnostics"
+                  title="Diagnostics"
                   subtitle="Telemetry health, distinct ID verification, and DOM session replay"
                 />
                 <span className="flex items-center gap-2 shrink-0">
@@ -735,12 +735,12 @@ export default function FeedbackReportPage({
     const heroContent = (
       <div
         data-testid="guided-hero-container"
-        className="fixed inset-0 z-50 h-[100dvh] w-full bg-zinc-950 text-zinc-100 flex flex-col justify-between overflow-hidden select-none px-4 sm:px-8 pt-[calc(env(safe-area-inset-top,0px)+1rem)] pb-[calc(env(safe-area-inset-bottom,0px)+1rem)] sm:pt-[calc(env(safe-area-inset-top,0px)+1.5rem)] sm:pb-[calc(env(safe-area-inset-bottom,0px)+1.5rem)] animate-in fade-in duration-300"
+        className="fixed inset-0 z-50 h-[100dvh] w-full bg-background text-text-primary flex flex-col justify-between overflow-hidden select-none px-4 sm:px-8 pt-[calc(env(safe-area-inset-top,0px)+1rem)] pb-[calc(env(safe-area-inset-bottom,0px)+1rem)] sm:pt-[calc(env(safe-area-inset-top,0px)+1.5rem)] sm:pb-[calc(env(safe-area-inset-bottom,0px)+1.5rem)] animate-in fade-in duration-300"
       >
         {/* Background ambient lighting */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-indigo-600/10 blur-[150px]" />
-          <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-violet-600/10 blur-[150px]" />
+          <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-secondary " />
+          <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-secondary " />
         </div>
 
         {/* ── TOP BAR: BACK BUTTON, PROGRESS PILLS & ACTIONS ── */}
@@ -752,7 +752,7 @@ export default function FeedbackReportPage({
                 exitNativeFullscreen().catch(() => {});
                 setActiveSubpage("overview");
               }}
-              className="flex items-center gap-1.5 text-xs font-bold text-text-muted hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-xl bg-zinc-900/60 border border-border-ink"
+              className="flex items-center gap-1.5 text-xs font-bold text-text-muted hover:text-text-heading transition-colors cursor-pointer py-1.5 px-3 rounded-xl bg-surface border border-border-ink"
             >
               <ChevronLeft className="w-4 h-4" />
               <span>Support Sections</span>
@@ -770,8 +770,8 @@ export default function FeedbackReportPage({
                     i === guidedStep - 1
                       ? "w-7 bg-primary shadow-xs "
                       : i < guidedStep - 1
-                        ? "w-2.5 bg-indigo-400/50"
-                        : "w-2 bg-zinc-800"
+                        ? "w-2.5 bg-secondary"
+                        : "w-2 bg-surface-secondary"
                   }`}
                 />
               ))}
@@ -783,7 +783,7 @@ export default function FeedbackReportPage({
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1 bg-zinc-900/60 p-1 rounded-2xl border border-border-ink">
+            <div className="flex items-center gap-1 bg-surface p-1 rounded-2xl border border-border-ink">
               <button
                 type="button"
                 onClick={() => setFlowMode("guided")}
@@ -798,7 +798,7 @@ export default function FeedbackReportPage({
                   exitNativeFullscreen().catch(() => {});
                   setFlowMode("classic");
                 }}
-                className="px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 text-text-muted hover:text-white"
+                className="px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 text-text-muted hover:text-text-heading"
               >
                 <Layers className="w-3.5 h-3.5" />
                 <span>Classic Form</span>
@@ -809,7 +809,7 @@ export default function FeedbackReportPage({
               type="button"
               onClick={handleToggleFullScreen}
               title={isNativeFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
-              className="p-2 rounded-xl bg-zinc-900/60 border border-border-ink text-text-muted hover:text-white transition-colors cursor-pointer"
+              className="p-2 rounded-xl bg-surface border border-border-ink text-text-muted hover:text-text-heading transition-colors cursor-pointer"
             >
               {isNativeFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
             </button>
@@ -821,7 +821,7 @@ export default function FeedbackReportPage({
                 setActiveSubpage("overview");
               }}
               title="Close"
-              className="p-2 rounded-xl bg-zinc-900/60 border border-border-ink text-text-muted hover:text-white transition-colors cursor-pointer"
+              className="p-2 rounded-xl bg-surface border border-border-ink text-text-muted hover:text-text-heading transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -836,9 +836,9 @@ export default function FeedbackReportPage({
                 <CheckCircle2 className="w-10 h-10 animate-in zoom-in-75 duration-200" />
               </div>
               <div className="space-y-1.5 max-w-md mx-auto">
-                <h3 className="text-xl sm:text-2xl font-bold text-white font-outfit">Report Dispatched to PostHog</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-white font-outfit">Report sent</h3>
                 <p className="text-xs text-text-muted leading-relaxed">
-                  Your feedback and session metrics were securely delivered to our PostHog Support channel.
+                  Thanks. The AmazeCC team has it, and replies show up under My tickets.
                   {submittedTicketId && (
                     <span className="block mt-2 font-mono font-semibold text-secondary-foreground text-xs bg-secondary py-1.5 px-3 rounded-xl border border-border-ink">
                       Ticket ID: #{submittedTicketId}
@@ -850,7 +850,7 @@ export default function FeedbackReportPage({
                 <button
                   type="button"
                   onClick={handleResetForm}
-                  className="px-5 py-2.5 rounded-xl border border-border-ink hover:bg-zinc-800 text-xs font-bold text-text-muted transition-colors cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl border border-border-ink hover:bg-surface-hover text-xs font-bold text-text-muted transition-colors cursor-pointer"
                 >
                   Submit Another Note
                 </button>
@@ -871,7 +871,7 @@ export default function FeedbackReportPage({
                     handleResetForm();
                     setActiveSubpage("overview");
                   }}
-                  className="px-5 py-2.5 rounded-xl border border-border-ink hover:bg-zinc-800 text-xs font-bold text-text-muted transition-colors cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl border border-border-ink hover:bg-surface-hover text-xs font-bold text-text-muted transition-colors cursor-pointer"
                 >
                   Back to Support Sections
                 </button>
@@ -917,14 +917,14 @@ export default function FeedbackReportPage({
                           className={`group p-4 sm:p-5 rounded-2xl border text-left transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between min-h-[120px] ${
                             isSelected
                               ? "border-border-ink bg-secondary ring-2 ring-border-ink shadow-lg"
-                              : "border-border-ink bg-zinc-900/60 hover:border-border-ink hover:bg-zinc-900/90 shadow-xs hover:shadow-lg active:scale-[0.99]"
+                              : "border-border-ink bg-surface hover:border-border-ink hover:bg-surface-hover shadow-xs hover:shadow-lg active:scale-[0.99]"
                           }`}
                         >
                           <div className="flex items-center justify-between w-full mb-2.5">
                             <div className={`p-2.5 rounded-xl ${cat.badgeClass}`}>
                               <Icon className="w-4.5 h-4.5" />
                             </div>
-                            <span className="text-xs font-bold uppercase px-2 py-0.5 rounded-[6px] bg-zinc-800 text-text-muted border border-border-ink font-outfit">
+                            <span className="text-xs font-bold uppercase px-2 py-0.5 rounded-[6px] bg-surface-secondary text-text-muted border border-border-ink font-outfit">
                               {cat.tag}
                             </span>
                           </div>
@@ -973,7 +973,7 @@ export default function FeedbackReportPage({
                         value={subject}
                         onChange={(e) => setSubject(e.target.value)}
                         placeholder={activeCatMeta.headlinePlaceholder}
-                        className="w-full px-4 py-3 rounded-2xl bg-zinc-900/90 border border-border-ink text-white placeholder:text-text-muted focus:outline-none focus:border-border-ink focus:ring-1 focus:ring-border-ink transition-all text-sm font-medium"
+                        className="w-full px-4 py-3 rounded-2xl bg-surface border border-border-ink text-white placeholder:text-text-muted focus:outline-none focus:border-border-ink focus:ring-1 focus:ring-border-ink transition-all text-sm font-medium"
                       />
                     </div>
 
@@ -987,7 +987,7 @@ export default function FeedbackReportPage({
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder={activeCatMeta.concernPlaceholder}
-                        className="w-full px-4 py-3.5 rounded-2xl bg-zinc-900/90 border border-border-ink text-sm font-medium text-white placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-border-ink focus:border-border-ink transition-all leading-relaxed"
+                        className="w-full px-4 py-3.5 rounded-2xl bg-surface border border-border-ink text-sm font-medium text-white placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-border-ink focus:border-border-ink transition-all leading-relaxed"
                       />
                     </div>
 
@@ -1004,7 +1004,7 @@ export default function FeedbackReportPage({
                                 className={`py-2 px-3 rounded-xl border text-center transition-all cursor-pointer ${
                                   severity === s.value
                                     ? "border-border-ink bg-danger-surface text-danger-foreground font-bold shadow-xs"
-                                    : "border-border-ink bg-zinc-900/60 text-text-muted hover:bg-zinc-800 hover:text-text-muted text-xs"
+                                    : "border-border-ink bg-surface text-text-muted hover:bg-surface-hover hover:text-text-muted text-xs"
                                 }`}
                               >
                                 <div className="text-xs font-bold">{s.label}</div>
@@ -1026,7 +1026,7 @@ export default function FeedbackReportPage({
                               </div>
                               <div className="space-y-1">
                                 <div className="flex items-center gap-2">
-                                  <span className="text-xs font-bold text-zinc-100">
+                                  <span className="text-xs font-bold text-text-primary">
                                     Attach Reactive DOM Session Recording
                                   </span>
                                   {isRecordingLive && (
@@ -1095,7 +1095,7 @@ export default function FeedbackReportPage({
                           value={contactEmail}
                           onChange={(e) => handleEmailChange(e.target.value)}
                           placeholder="your.personal.email@gmail.com"
-                          className="w-full pl-10 pr-4 py-3 rounded-2xl bg-zinc-900/90 border border-border-ink text-sm font-medium text-white placeholder:text-text-muted focus:outline-none focus:border-border-ink focus:ring-1 focus:ring-border-ink transition-all"
+                          className="w-full pl-10 pr-4 py-3 rounded-2xl bg-surface border border-border-ink text-sm font-medium text-white placeholder:text-text-muted focus:outline-none focus:border-border-ink focus:ring-1 focus:ring-border-ink transition-all"
                         />
                       </div>
                       <p className="text-xs text-text-muted mt-1 leading-relaxed">
@@ -1105,7 +1105,7 @@ export default function FeedbackReportPage({
 
                     <div>
                       <label className="block text-xs font-bold text-text-muted mb-1.5">Author Identifier</label>
-                      <div className="px-4 py-3 rounded-2xl bg-zinc-900/90 border border-border-ink text-xs font-mono text-text-muted flex items-center justify-between">
+                      <div className="px-4 py-3 rounded-2xl bg-surface border border-border-ink text-xs font-mono text-text-muted flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <ShieldCheck className="w-4 h-4 text-primary" />
                           <span className="font-bold text-white">{distinctId}</span>
@@ -1116,7 +1116,7 @@ export default function FeedbackReportPage({
                       </div>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl bg-zinc-900/60 border border-border-ink flex items-start gap-2.5 text-xs text-text-muted">
+                    <div className="p-3.5 rounded-2xl bg-surface border border-border-ink flex items-start gap-2.5 text-xs text-text-muted">
                       <Info className="w-4 h-4 shrink-0 text-primary mt-0.5" />
                       <p className="leading-relaxed">
                         On the next screen, you can review your complete submission summary and reproduction details
@@ -1142,7 +1142,7 @@ export default function FeedbackReportPage({
                       <button
                         type="button"
                         onClick={() => setGuidedStep(3)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border-ink text-xs font-bold text-text-muted hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border-ink text-xs font-bold text-text-muted hover:text-text-heading hover:bg-surface-hover transition-colors cursor-pointer"
                       >
                         <ChevronLeft className="w-4 h-4" />
                         <span>Back to Contact</span>
@@ -1165,11 +1165,11 @@ export default function FeedbackReportPage({
 
                   {/* Stat Strip */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full">
-                    <div className="p-3 rounded-2xl bg-zinc-900/90 border border-border-ink text-center shadow-xs">
+                    <div className="p-3 rounded-2xl bg-surface border border-border-ink text-center shadow-xs">
                       <div className="text-xs font-bold uppercase text-text-muted font-outfit">Category</div>
                       <div className="text-xs font-bold text-white mt-0.5 truncate">{activeCatMeta.label}</div>
                     </div>
-                    <div className="p-3 rounded-2xl bg-zinc-900/90 border border-border-ink text-center shadow-xs">
+                    <div className="p-3 rounded-2xl bg-surface border border-border-ink text-center shadow-xs">
                       <div className="text-xs font-bold uppercase text-text-muted font-outfit">Severity</div>
                       <div
                         className={`text-xs font-bold mt-0.5 ${category === "bug" ? "text-danger-foreground" : "text-white"}`}
@@ -1177,7 +1177,7 @@ export default function FeedbackReportPage({
                         {category === "bug" ? severity.toUpperCase() : "STANDARD"}
                       </div>
                     </div>
-                    <div className="p-3 rounded-2xl bg-zinc-900/90 border border-border-ink text-center shadow-xs">
+                    <div className="p-3 rounded-2xl bg-surface border border-border-ink text-center shadow-xs">
                       <div className="text-xs font-bold uppercase text-text-muted font-outfit">DOM Replay</div>
                       <div
                         className={`text-xs font-bold mt-0.5 ${enableSessionRecording ? "text-danger-foreground" : "text-text-muted"}`}
@@ -1185,7 +1185,7 @@ export default function FeedbackReportPage({
                         {enableSessionRecording ? "ATTACHED" : "NONE"}
                       </div>
                     </div>
-                    <div className="p-3 rounded-2xl bg-zinc-900/90 border border-border-ink text-center shadow-xs">
+                    <div className="p-3 rounded-2xl bg-surface border border-border-ink text-center shadow-xs">
                       <div className="text-xs font-bold uppercase text-text-muted font-outfit">Identity</div>
                       <div className="text-xs font-bold text-primary mt-0.5 truncate">
                         {isIdentityVerified ? "VERIFIED" : userReg || "ANONYMOUS"}
@@ -1194,7 +1194,7 @@ export default function FeedbackReportPage({
                   </div>
 
                   {/* Detailed Summary */}
-                  <div className="w-full bg-zinc-900/90 border border-border-ink shadow-xl rounded-2xl p-4 sm:p-5 divide-y divide-border-muted space-y-3.5">
+                  <div className="w-full bg-surface border border-border-ink shadow-xl rounded-2xl p-4 sm:p-5 divide-y divide-border-muted space-y-3.5">
                     {/* Section 1: Category & Severity */}
                     <div className="flex items-start justify-between gap-4 pb-3">
                       <div className="flex items-center gap-3">
@@ -1204,7 +1204,7 @@ export default function FeedbackReportPage({
                         <div>
                           <div className="flex items-center gap-2">
                             <span className="text-sm font-bold text-white font-outfit">{activeCatMeta.label}</span>
-                            <span className="text-xs font-bold uppercase px-2 py-0.5 rounded-[6px] bg-zinc-800 text-text-muted border border-border-ink font-outfit">
+                            <span className="text-xs font-bold uppercase px-2 py-0.5 rounded-[6px] bg-surface-secondary text-text-muted border border-border-ink font-outfit">
                               {activeCatMeta.tag}
                             </span>
                             {category === "bug" && (
@@ -1242,7 +1242,7 @@ export default function FeedbackReportPage({
                         </button>
                       </div>
                       {subject.trim() && <div className="text-sm font-bold text-white">{subject.trim()}</div>}
-                      <div className="p-3.5 rounded-xl bg-zinc-950/70 border border-border-ink text-xs sm:text-sm text-zinc-100 font-medium leading-relaxed whitespace-pre-wrap">
+                      <div className="p-3.5 rounded-xl bg-background border border-border-ink text-xs sm:text-sm text-text-primary font-medium leading-relaxed whitespace-pre-wrap">
                         {description}
                       </div>
                     </div>
@@ -1280,7 +1280,7 @@ export default function FeedbackReportPage({
                           </span>
                         </div>
                       ) : (
-                        <div className="p-3 rounded-xl border border-border-ink bg-zinc-950/50 flex items-center justify-between">
+                        <div className="p-3 rounded-xl border border-border-ink bg-background flex items-center justify-between">
                           <div className="flex items-center gap-2 text-xs text-text-muted">
                             <VideoOff className="w-4 h-4" />
                             <span>No session recording attached</span>
@@ -1312,13 +1312,13 @@ export default function FeedbackReportPage({
                         </button>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                        <div className="p-2.5 rounded-xl bg-zinc-950/50 border border-border-ink">
+                        <div className="p-2.5 rounded-xl bg-background border border-border-ink">
                           <span className="text-text-muted block text-xs uppercase font-bold">Email</span>
                           <span className="font-bold text-white truncate block mt-0.5">
                             {contactEmail.trim() || "In-app ticket updates only"}
                           </span>
                         </div>
-                        <div className="p-2.5 rounded-xl bg-zinc-950/50 border border-border-ink">
+                        <div className="p-2.5 rounded-xl bg-background border border-border-ink">
                           <span className="text-text-muted block text-xs uppercase font-bold">Destination</span>
                           <span className="font-bold text-primary truncate block mt-0.5">
                             PostHog Support Channel (#712727)
@@ -1346,7 +1346,7 @@ export default function FeedbackReportPage({
               <button
                 type="button"
                 onClick={() => setGuidedStep((prev) => (prev > 1 ? ((prev - 1) as any) : 1))}
-                className="flex items-center gap-1.5 text-xs font-bold text-text-muted hover:text-white transition-colors cursor-pointer py-3 px-4 rounded-2xl bg-zinc-900/80 border border-border-ink hover:bg-zinc-800"
+                className="flex items-center gap-1.5 text-xs font-bold text-text-muted hover:text-text-heading transition-colors cursor-pointer py-3 px-4 rounded-2xl bg-surface border border-border-ink hover:bg-surface-hover"
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>Back</span>
@@ -1387,7 +1387,7 @@ export default function FeedbackReportPage({
                 {isSubmitting ? (
                   <>
                     <RefreshCw className="w-4 h-4 animate-spin" />
-                    <span>Sending to PostHog…</span>
+                    <span>Sending…</span>
                   </>
                 ) : (
                   <>
@@ -1460,9 +1460,9 @@ export default function FeedbackReportPage({
                 <CheckCircle2 className="w-10 h-10 animate-in zoom-in-75 duration-200" />
               </div>
               <div className="space-y-1.5 max-w-md mx-auto">
-                <h3 className="text-xl font-bold text-text-primary font-outfit">Report Dispatched to PostHog</h3>
+                <h3 className="text-xl font-bold text-text-primary font-outfit">Report sent</h3>
                 <p className="text-xs text-text-muted leading-relaxed">
-                  Your feedback and session metrics were securely delivered to our PostHog Support channel.
+                  Thanks. The AmazeCC team has it, and replies show up under My tickets.
                   {submittedTicketId && (
                     <span className="block mt-2 font-mono font-semibold text-secondary-foreground text-xs bg-secondary py-1.5 px-3 rounded-xl border border-border-ink">
                       Ticket ID: #{submittedTicketId}
@@ -1775,7 +1775,7 @@ export default function FeedbackReportPage({
               <div className="flex items-center justify-between gap-4 pt-2">
                 <div className="flex items-center gap-2 text-xs text-text-muted">
                   <ShieldCheck className="w-4 h-4 text-success-foreground" />
-                  <span>Dispatched to PostHog EU/US Secure Ingestion</span>
+                  <span>Sent to the AmazeCC team</span>
                 </div>
                 <button
                   type="submit"
@@ -1785,7 +1785,7 @@ export default function FeedbackReportPage({
                   {isSubmitting ? (
                     <>
                       <RefreshCw className="w-4 h-4 animate-spin" />
-                      <span>Sending to PostHog...</span>
+                      <span>Sending…</span>
                     </>
                   ) : (
                     <>
@@ -1950,7 +1950,7 @@ export default function FeedbackReportPage({
               </div>
 
               {isLoadingTickets ? (
-                <div className="py-12 text-center text-xs text-text-muted">Loading your tickets from PostHog...</div>
+                <div className="py-12 text-center text-xs text-text-muted">Loading your tickets…</div>
               ) : tickets.length === 0 ? (
                 <div className="py-12 text-center space-y-3 bg-surface-secondary/40 rounded-[14px] border border-border-muted">
                   <MessageSquare className="w-8 h-8 text-text-muted mx-auto opacity-50" />
@@ -2015,14 +2015,14 @@ export default function FeedbackReportPage({
           <span>Support Sections</span>
         </button>
       }
-      title="PostHog Diagnostics"
+      title="Diagnostics"
       subtitle="Inspect device session identifiers, HMAC cryptographic verification, and PostHog ingestion health."
       onBack={() => setActiveSubpage("overview")}
       actions={<ToneBadge tone="emerald">Connected</ToneBadge>}
     >
       <div className="space-y-5">
         <div>
-          <h3 className="text-sm font-bold text-text-primary font-outfit">PostHog Diagnostics</h3>
+          <h3 className="text-sm font-bold text-text-primary font-outfit">Diagnostics</h3>
           <p className="text-xs text-text-muted">
             Inspect device session identifiers, HMAC cryptographic verification, and PostHog ingestion health
           </p>
@@ -2048,7 +2048,7 @@ export default function FeedbackReportPage({
             <span className="text-xs font-bold uppercase text-text-muted font-outfit">Session Recorder</span>
             <div className="font-semibold text-xs text-text-primary flex items-center gap-1.5">
               <span
-                className={`w-2 h-2 rounded-full ${isRecordingLive ? "bg-rose-500 animate-pulse" : "bg-zinc-400"}`}
+                className={`w-2 h-2 rounded-full ${isRecordingLive ? "bg-rose-500 animate-pulse" : "bg-border-muted"}`}
               />
               <span>{isRecordingLive ? "Recording Active" : "On-Demand Standby"}</span>
             </div>

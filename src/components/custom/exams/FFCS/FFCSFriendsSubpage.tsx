@@ -94,7 +94,7 @@ const HUB_ROWS = [
 ] as const;
 
 const ROW_TAPPABLE =
-  "cursor-pointer active:bg-surface-secondary dark:active:bg-zinc-800/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-ink";
+  "cursor-pointer active:bg-surface-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-ink";
 
 export interface FFCSFriendsSubpageProps {
   onClose: () => void;

@@ -210,8 +210,8 @@ export default function VerticalTimetableGrid({
                     isSlotBlocked
                       ? "text-danger-foreground line-through bg-danger-surface border border-border-ink"
                       : isTheory
-                        ? "text-text-muted hover:bg-zinc-800/60"
-                        : "text-text-muted hover:bg-zinc-800/60",
+                        ? "text-text-muted hover:bg-surface-hover"
+                        : "text-text-muted hover:bg-surface-hover",
                   )}
                   title={`${slot} (${isTheory ? "Theory" : "Lab"})${isSlotBlocked ? " - Blocked" : " - Available"}${onToggleBlockSlot ? " (Tap to toggle)" : ""}`}
                 >

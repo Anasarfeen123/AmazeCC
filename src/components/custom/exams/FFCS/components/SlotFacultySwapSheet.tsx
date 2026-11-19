@@ -830,7 +830,7 @@ export default function SlotFacultySwapSheet({
                               <span
                                 className={`text-xs font-bold px-1.5 py-0.2 rounded border shrink-0 ${
                                   clashes
-                                    ? "bg-zinc-800/40 text-text-muted border-border-ink"
+                                    ? "bg-surface-secondary text-text-muted border-border-ink"
                                     : "bg-secondary text-secondary-foreground border-border-ink"
                                 }`}
                               >

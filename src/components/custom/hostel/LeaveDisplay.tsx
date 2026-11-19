@@ -180,7 +180,7 @@ export default function LeaveDisplay({ leaveData, handleHostelDetailsFetch }: Le
             </h3>
 
             {pendingLeaves.length > 0 ? (
-              <div className="divide-y divide-gray-150 dark:divide-gray-850">
+              <div className="divide-y divide-border-ink ">
                 {pendingLeaves.map((leave, idx) => (
                   <div key={idx} className="py-3 first:pt-0 last:pb-0 flex items-center justify-between text-xs gap-3">
                     <div>
@@ -267,7 +267,7 @@ export default function LeaveDisplay({ leaveData, handleHostelDetailsFetch }: Le
               return (
                 <div key={idx} className="relative">
                   {/* Timeline bullet indicator */}
-                  <span className="absolute -left-[31px] top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-slate-900 border-2 border-border-ink" />
+                  <span className="absolute -left-[31px] top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-surface border-2 border-border-ink" />
 
                   <div className="bg-surface-secondary border border-border-muted p-4 rounded-xl space-y-3">
                     <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
@@ -348,7 +348,7 @@ export default function LeaveDisplay({ leaveData, handleHostelDetailsFetch }: Le
                     type="datetime-local"
                     value={applyForm.from}
                     onChange={(e) => setApplyForm((prev) => ({ ...prev, from: e.target.value }))}
-                    className="w-full border border-border-ink bg-slate-950 rounded-lg p-2 text-white"
+                    className="w-full border border-border-ink bg-background rounded-lg p-2 text-white"
                     required
                   />
                 </div>
@@ -361,7 +361,7 @@ export default function LeaveDisplay({ leaveData, handleHostelDetailsFetch }: Le
                     type="datetime-local"
                     value={applyForm.to}
                     onChange={(e) => setApplyForm((prev) => ({ ...prev, to: e.target.value }))}
-                    className="w-full border border-border-ink bg-slate-950 rounded-lg p-2 text-white"
+                    className="w-full border border-border-ink bg-background rounded-lg p-2 text-white"
                     required
                   />
                 </div>
@@ -374,7 +374,7 @@ export default function LeaveDisplay({ leaveData, handleHostelDetailsFetch }: Le
                   placeholder="Chennai, etc."
                   value={applyForm.place}
                   onChange={(e) => setApplyForm((prev) => ({ ...prev, place: e.target.value }))}
-                  className="w-full border border-border-ink bg-slate-950 rounded-lg p-2 text-white"
+                  className="w-full border border-border-ink bg-background rounded-lg p-2 text-white"
                   required
                 />
               </div>
@@ -386,7 +386,7 @@ export default function LeaveDisplay({ leaveData, handleHostelDetailsFetch }: Le
                   placeholder="State your reason clearly..."
                   value={applyForm.reason}
                   onChange={(e) => setApplyForm((prev) => ({ ...prev, reason: e.target.value }))}
-                  className="w-full border border-border-ink bg-slate-950 rounded-lg p-2 text-white"
+                  className="w-full border border-border-ink bg-background rounded-lg p-2 text-white"
                   required
                 />
               </div>

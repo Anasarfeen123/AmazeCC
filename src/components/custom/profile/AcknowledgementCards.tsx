@@ -81,7 +81,7 @@ export default function AcknowledgementCards({ creds, refreshKey }: { creds: any
           </div>
         )}
       </div>
-      <div className="divide-y divide-gray-100/50  dark:divide-gray-800/50">
+      <div className="divide-y divide-border-ink ">
         {docs.map((doc: any, idx: number) => {
           const docName = doc?.documentName || doc?.serialNo || "Document";
           const status = doc?.status || "";

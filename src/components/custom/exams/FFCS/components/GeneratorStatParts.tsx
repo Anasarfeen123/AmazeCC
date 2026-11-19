@@ -322,7 +322,7 @@ export const StagedCard = memo(function StagedCard({
           <div className="bg-surface-secondary/30 rounded-xl p-3 flex flex-col items-center justify-center text-center group relative">
             <span className="text-2xl font-bold text-text-heading">{formatHours(tt.metrics?.gaps ?? 0)}h</span>
             <span className="text-xs uppercase font-bold text-muted-foreground tracking-wider">Total Gaps</span>
-            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-max max-w-[200px] bg-slate-900 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 active:opacity-100 pointer-events-none transition-opacity z-50 shadow-xl grid grid-cols-2 gap-x-3 gap-y-1">
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-max max-w-[200px] bg-surface text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 active:opacity-100 pointer-events-none transition-opacity z-50 shadow-xl grid grid-cols-2 gap-x-3 gap-y-1">
               {Object.entries(tt.metrics?.gapsPerDay || {}).map(([day, gap]) => (
                 <div key={day} className="flex justify-between gap-3">
                   <span className="font-bold text-text-muted uppercase">{day}</span>

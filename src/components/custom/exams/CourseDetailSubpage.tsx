@@ -2933,7 +2933,7 @@ export default function CourseDetailSubpage({
                                 )}
 
                                 {hodComments && (
-                                  <div className="p-3 rounded-xl bg-secondary border border-border-ink text-violet-950 dark:text-violet-200 space-y-1">
+                                  <div className="p-3 rounded-xl bg-secondary border border-border-ink text-primary space-y-1">
                                     <span className="text-xs font-bold uppercase tracking-wider text-primary block">
                                       HOD Remarks
                                     </span>
@@ -3160,7 +3160,7 @@ export default function CourseDetailSubpage({
                         <span
                           className={cn(
                             "shrink-0 text-sm font-black font-outfit tracking-tight leading-none w-16 text-right",
-                            isActive ? "text-indigo-600 dark:text-indigo-400" : "text-zinc-800 dark:text-zinc-100",
+                            isActive ? "text-primary " : "text-text-heading ",
                           )}
                         >
                           {score != null ? `${score.toFixed(1)}%` : "—"}
@@ -3260,7 +3260,7 @@ export default function CourseDetailSubpage({
             maxWidth="max-w-md"
             placement="bottom-center"
             icon={<Paperclip className="w-5 h-5" />}
-            accent="bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400"
+            accent="bg-secondary border border-border-ink text-primary "
             title="Reference materials"
             subtitle={`${materialSheet.row?.date ?? ""}${materialSheet.row?.slot ? ` · ${materialSheet.row.slot}` : ""}${
               materialSheet.row?.topic ? ` · ${materialSheet.row.topic}` : ""

@@ -3,9 +3,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAtom } from "jotai";
 import { officialOdDataAtom } from "@/store";
-import { Badge } from "../shared";
 import { Skeleton } from "@amazecontinuityprojects/amazeui";
-import { CalendarClock, FileText, Inbox, RefreshCw, ScrollText, XCircle } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { syncEngine } from "@/lib/sync-engine";
 import { storage } from "@/lib/storage";
 import { DEMO_OFFICIAL_OD, getOfficialOd } from "@/lib/officialOd";
@@ -97,29 +96,27 @@ export default function OfficialOdSection({ currSemesterID, allGradesData }: Pro
   };
 
   return (
-    <div className="bg-surface border border-border-ink rounded-2xl overflow-hidden shadow-sm">
-      <div className="p-5 border-b border-border-ink flex flex-col gap-4">
+    <section className="brutal-card overflow-hidden">
+      <div className="flex flex-col gap-4 border-b-2 border-border-ink p-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-w-0">
           <div className="min-w-0">
-            <h2 className="text-lg font-bold text-text-heading flex items-center gap-2">
-              <ScrollText size={18} className="text-primary" />
-              Official OD Records
-            </h2>
-            <p className="text-xs text-text-muted mt-1">Straight from VTOP — why each On-Duty was granted.</p>
+            <h2 className="font-display text-lg font-bold uppercase text-text-heading">Official OD records</h2>
+            <p className="mt-1 text-sm text-text-muted">Straight from VTOP: why each on-duty was granted.</p>
           </div>
           <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
             {data && (
-              <Badge variant="success" size="sm">
-                Total Count: {data.totalCount}
-              </Badge>
+              <span className="rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-secondary-foreground">
+                {data.totalCount} {data.totalCount === 1 ? "record" : "records"}
+              </span>
             )}
             <button
               onClick={refresh}
               disabled={loading}
               title="Refresh from VTOP"
-              className="p-2 rounded-full bg-surface-secondary text-text-muted hover:bg-surface-hover transition-colors disabled:opacity-50"
+              aria-label="Refresh official OD records from VTOP"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-primary shadow-brutal-sm brutal-press disabled:opacity-50"
             >
-              <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+              <RefreshCw size={16} className={loading ? "animate-spin" : ""} aria-hidden />
             </button>
           </div>
         </div>
@@ -147,47 +144,38 @@ export default function OfficialOdSection({ currSemesterID, allGradesData }: Pro
           </div>
         )}
         {error && (
-          <div className="flex items-center gap-3 p-4 text-danger-foreground">
-            <XCircle className="w-5 h-5 shrink-0" />
-            <p className="text-sm font-medium">{error}</p>
-          </div>
+          <p
+            role="alert"
+            className="rounded-[10px] border-2 border-border-ink bg-coral p-3 text-sm font-semibold text-obsidian"
+          >
+            {error}
+          </p>
         )}
         {!loading && !error && data && data.records.length === 0 && (
-          <div className="flex flex-col items-center py-8 text-text-muted">
-            <Inbox className="w-10 h-10 mb-3" />
-            <p className="text-sm font-medium">No official OD records for this semester</p>
-          </div>
+          <p className="py-6 text-center text-sm text-text-muted">No official OD records for this semester.</p>
         )}
         {!loading && !error && data && data.records.length > 0 && (
           <div className="space-y-3">
             {data.records.map((r) => (
-              <div key={r.slNo} className="p-3 sm:p-4 rounded-xl bg-surface-secondary border border-border-ink">
+              <div key={r.slNo} className="rounded-[12px] border-2 border-border-ink bg-surface-secondary p-3 sm:p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-bold text-text-heading">{r.reason}</p>
-                    <p className="text-xs text-text-muted mt-1 flex items-start gap-1.5">
-                      <FileText size={12} className="mt-0.5 shrink-0 text-text-muted" />
-                      <span className="break-words">{r.remarks || "—"}</span>
-                    </p>
+                    <p className="mt-1 break-words text-sm text-text-muted">{r.remarks || "No remarks"}</p>
                   </div>
                   <span className="shrink-0 rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-secondary-foreground">
                     #{r.slNo}
                   </span>
                 </div>
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2.5 text-xs text-text-muted">
-                  <span className="inline-flex items-center gap-1 font-medium">
-                    <CalendarClock size={12} />
-                    {r.date}
-                  </span>
-                  <span className="font-medium">{r.time}</span>
-                  <span className="uppercase tracking-wider font-semibold">{r.basis}</span>
-                </div>
+                <p className="mt-2.5 font-mono text-xs uppercase text-text-muted">
+                  {[r.date, r.time, r.basis].filter(Boolean).join(" // ")}
+                </p>
               </div>
             ))}
             {data.note && <p className="text-xs text-text-muted leading-relaxed pt-1">{data.note}</p>}
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 }

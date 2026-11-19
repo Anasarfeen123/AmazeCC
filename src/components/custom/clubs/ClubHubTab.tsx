@@ -432,10 +432,7 @@ export default function ClubHubTab({
                   key={`${club.id}-${club.name}`}
                   type="button"
                   onClick={() => setSelectedClub({ ...club, club_name: club.name, ...club.detail })}
-                  className={cn(
-                    LIST_ROW,
-                    "gap-3 cursor-pointer active:bg-surface-secondary dark:active:bg-zinc-800/60",
-                  )}
+                  className={cn(LIST_ROW, "gap-3 cursor-pointer active:bg-surface-secondary ")}
                 >
                   {club.detail?.logo_url ? (
                     <img

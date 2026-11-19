@@ -188,7 +188,7 @@ export default function ScanHandleSheet({
         */}
         <div
           id={REGION_ID}
-          className="w-full min-h-[240px] overflow-hidden rounded-2xl border-2 border-border-ink bg-zinc-950"
+          className="w-full min-h-[240px] overflow-hidden rounded-2xl border-2 border-border-ink bg-background"
         />
 
         {busy && (

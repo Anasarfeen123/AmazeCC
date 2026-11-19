@@ -254,7 +254,7 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
                       onClick={signInInteractive}
                       className="min-h-11 text-center font-mono text-xs font-bold uppercase tracking-[0.06em] text-cream underline underline-offset-4 hover:text-ochre"
                     >
-                      New here? Create one
+                      New here? Create an Amaze ID
                     </button>
                   </div>
                 )}

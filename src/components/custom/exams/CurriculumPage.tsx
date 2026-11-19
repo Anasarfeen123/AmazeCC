@@ -1553,7 +1553,7 @@ export default function CurriculumPage({
   const landing = (
     <>
       {/* Two cards: credits + rotating insight carousel */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 px-1">
+      <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4 px-1">
         <button
           type="button"
           onClick={() => setScreen("overview")}

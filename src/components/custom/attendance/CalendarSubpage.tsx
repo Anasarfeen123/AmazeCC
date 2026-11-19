@@ -699,14 +699,12 @@ export default function CalendarSubpage({
        * Every card says what its number is *of*. A bare "87%" beside another
        * "87%" is not information, and this is the page people screenshot.
        */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
+      <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
         <InsightCarousel
           slides={summarySlides}
           carousel={summaryCarousel}
           interactiveDots
           ariaLabel="Attendance summary"
-          // The page's one loud card (ochre, like Home's hero).
-          className="!bg-highlight"
         />
 
         {/* One slide per enrolled course, each a percentage of that course's own

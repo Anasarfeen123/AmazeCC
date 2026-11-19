@@ -992,17 +992,19 @@ export default function NavigationTabs({
         <SidebarHeader className="border-b-2 border-border-ink">
           {/* Logo & Expand Toggle */}
           <div className={`flex items-center ${isOpen ? "justify-between w-full" : "justify-center w-full"}`}>
-            <div className={`flex items-center min-w-0 ${isOpen ? "gap-2.5" : "justify-center"}`}>
-              {/* Lockup when open, mark on the rail; honours the alternate app icon. */}
+            <div className={`flex items-center min-w-0 overflow-hidden ${isOpen ? "gap-2.5" : "justify-center"}`}>
+              {/* Lockup when open, mark on the rail; honours the alternate app icon.
+                  sm when open: at md the lockup + "Offline"/"Syncing" + collapse
+                  did not fit in 280px and the status pill covered the CC. */}
               <BrandLogo
                 variant={isOpen ? "lockup" : "mark"}
-                size="md"
+                size={isOpen ? "sm" : "md"}
                 markSrc={currentIcon.includes("fire") ? currentIcon : undefined}
                 wordClassName="text-cream"
               />
             </div>
             {isOpen && (
-              <div className="flex items-center gap-0.5">
+              <div className="flex shrink-0 items-center gap-0.5">
                 <button
                   onClick={handleSyncClick}
                   className={`relative inline-flex min-h-9 items-center rounded-[8px] border-2 border-border-ink px-2.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] shadow-brutal-sm brutal-press cursor-pointer ${

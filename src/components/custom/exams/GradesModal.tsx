@@ -1,7 +1,6 @@
 "use client";
 
 import { RefreshCcw } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardContent } from "@amazecontinuityprojects/amazeui";
 import NoContentFound from "../NoContentFound";
 import BottomSheet from "../shared/BottomSheet";
 import FetchButton from "../shared/FetchButton";
@@ -185,14 +184,14 @@ function GradesDisplay({ allGradesData, data, handleFetchGrades, marksData, atte
 
   return (
     <div>
-      <Card className="bg-surface border-0">
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between gap-3">
+      <section className="px-1 pb-6">
+        <div className="mb-4">
+          <div className="flex items-center justify-between gap-3">
             <span className="font-display text-xl font-bold uppercase text-text-heading">Grade distribution</span>
             <FetchButton onClick={handleFetchGrades} icon={<RefreshCcw className="w-4 h-4" />} />
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-4 gap-2 pb-1 pr-1 text-center md:grid-cols-8">
+          </div>
+        </div>
+        <div className="grid grid-cols-4 gap-2 text-center md:grid-cols-8">
           {(() => {
             let rawGradeCounts = (data?.cgpa?.grades || marksData?.cgpa?.grades || {}) as Record<string, number>;
             if (Object.keys(rawGradeCounts).length === 0) {
@@ -213,8 +212,10 @@ function GradesDisplay({ allGradesData, data, handleFetchGrades, marksData, atte
             return Object.entries(rawGradeCounts).map(([grade, count]) => (
               <div
                 key={grade}
-                className={`rounded-[10px] border-2 border-border-ink px-2 py-2 shadow-brutal-sm ${gradeTone(grade)} ${
-                  count ? "" : "opacity-45 shadow-none"
+                className={`rounded-[10px] border-2 px-2 py-2 ${
+                  count
+                    ? `border-border-ink shadow-brutal-sm ${gradeTone(grade)}`
+                    : "border-dashed border-border bg-transparent text-text-muted"
                 }`}
               >
                 <p className="font-display text-2xl font-bold leading-none">{grade}</p>
@@ -222,117 +223,82 @@ function GradesDisplay({ allGradesData, data, handleFetchGrades, marksData, atte
               </div>
             ));
           })()}
-        </CardContent>
-      </Card>
+        </div>
+      </section>
 
-      <Card className="bg-surface border-0">
-        <CardContent className="space-y-6">
-          {totalCredits &&
-            (() => {
-              let earned = parseFloat(totalCredits.creditsEarned);
-              let baseRequired = parseFloat(totalCredits.creditsRequired);
+      <section className="space-y-6 px-1">
+        {totalCredits &&
+          (() => {
+            let earned = parseFloat(totalCredits.creditsEarned);
+            let baseRequired = parseFloat(totalCredits.creditsRequired);
 
-              if (earned === 0 && marksData?.cgpa?.creditsEarned) {
-                earned =
-                  parseFloat(marksData.cgpa.creditsEarned) + parseFloat(marksData.cgpa.nonGradedRequirement || "0");
-                baseRequired = parseFloat(marksData.cgpa.creditsRequired) || 160;
-              } else if (earned === 0 && effectiveGrades.length > 0) {
-                earned = effectiveGrades.reduce((acc, curr) => acc + (parseFloat(curr.creditsEarned) || 0), 0);
-              }
+            if (earned === 0 && marksData?.cgpa?.creditsEarned) {
+              earned =
+                parseFloat(marksData.cgpa.creditsEarned) + parseFloat(marksData.cgpa.nonGradedRequirement || "0");
+              baseRequired = parseFloat(marksData.cgpa.creditsRequired) || 160;
+            } else if (earned === 0 && effectiveGrades.length > 0) {
+              earned = effectiveGrades.reduce((acc, curr) => acc + (parseFloat(curr.creditsEarned) || 0), 0);
+            }
 
-              const required =
-                baseRequired +
-                Curriculum.filter((c) => c.basketTitle.toLowerCase().includes("non-graded core requirement")).reduce(
-                  (acc, c) => acc + parseFloat(c.creditsRequired),
-                  0,
-                );
-
-              const isComplete = earned >= required;
-              const effectiveTotal = isComplete ? earned : earned + totalInProgress;
-
-              const progressEarned = Math.min((earned / required) * 100, 100);
-              const progressWithOngoing = Math.min((effectiveTotal / required) * 100, 100);
-
-              return (
-                <div className="space-y-4 border-b-2 pb-6">
-                  <p className="text-lg font-bold">Total Credits</p>
-                  <div className="relative h-3 rounded-full overflow-hidden bg-surface-tertiary">
-                    {!isComplete && (
-                      <div
-                        className="absolute left-0 top-0 h-full bg-yellow-400/60"
-                        style={{ width: `${progressWithOngoing}%` }}
-                      />
-                    )}
-                    <div
-                      className={`absolute left-0 top-0 h-full ${
-                        isComplete ? "bg-green-500" : "bg-primary dark:bg-blue-600"
-                      }`}
-                      style={{ width: `${progressEarned}%` }}
-                    />
-                  </div>
-                  <p className="text-sm font-medium mt-1">
-                    {earned.toFixed(1)}
-                    {!isComplete && totalInProgress > 0
-                      ? ` + ${totalInProgress.toFixed(1)} → ${effectiveTotal.toFixed(1)}`
-                      : ""}{" "}
-                    / {required.toFixed(1)} total credits
-                  </p>
-                </div>
+            const required =
+              baseRequired +
+              Curriculum.filter((c) => c.basketTitle.toLowerCase().includes("non-graded core requirement")).reduce(
+                (acc, c) => acc + parseFloat(c.creditsRequired),
+                0,
               );
-            })()}
 
-          <div className="space-y-4 border-b-2 pb-6">
-            <div className="relative">
-              <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-surface-tertiary transform -translate-x-1/2" />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10">
-                {normalCurriculum.map((c, idx) => {
-                  const earned = parseFloat(c.creditsEarned);
-                  const required = parseFloat(c.creditsRequired);
-                  const inProgress = ongoingCreditsByCategory[c.basketTitle] || 0;
+            const isComplete = earned >= required;
+            const effectiveTotal = isComplete ? earned : earned + totalInProgress;
 
-                  const isComplete = earned >= required;
-                  const effectiveTotal = isComplete ? earned : earned + inProgress;
+            const progressEarned = Math.min((earned / required) * 100, 100);
+            const progressWithOngoing = Math.min((effectiveTotal / required) * 100, 100);
 
-                  const progressEarned = Math.min((earned / required) * 100, 100);
-                  const progressWithOngoing = Math.min((effectiveTotal / required) * 100, 100);
-
-                  return (
-                    <div key={idx} className="p-2 space-y-1">
-                      <p className="font-medium text-text-heading">{c.basketTitle}</p>
-
-                      <div className="relative h-2 rounded-full overflow-hidden bg-surface-tertiary">
-                        {!isComplete && (
-                          <div
-                            className="absolute left-0 top-0 h-full bg-yellow-400/60"
-                            style={{ width: `${progressWithOngoing}%` }}
-                          />
-                        )}
-                        <div
-                          className={`absolute left-0 top-0 h-full ${
-                            isComplete ? "bg-green-500" : "bg-primary dark:bg-blue-600"
-                          }`}
-                          style={{ width: `${progressEarned}%` }}
-                        />
-                      </div>
-
-                      <p className="text-xs font-medium">
-                        {earned.toFixed(1)}
-                        {!isComplete && inProgress > 0
-                          ? ` + ${inProgress.toFixed(1)} → ${effectiveTotal.toFixed(1)}`
-                          : ""}{" "}
-                        / {required.toFixed(1)}
-                      </p>
-                    </div>
-                  );
-                })}
+            return (
+              <div className="space-y-4 border-b-2 border-border-ink pb-6">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="font-display text-xl font-bold uppercase text-text-heading">Total credits</p>
+                  <span className="flex flex-wrap gap-3 font-mono text-xs font-semibold uppercase text-text-muted">
+                    <span className="inline-flex items-center gap-1.5">
+                      <i className="h-3 w-3 rounded-[3px] border-2 border-border-ink bg-primary" />
+                      Earned
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <i className="h-3 w-3 rounded-[3px] border-2 border-border-ink bg-sage" />
+                      This semester
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <i className="h-3 w-3 rounded-[3px] border-2 border-border-ink bg-mint" />
+                      Complete
+                    </span>
+                  </span>
+                </div>
+                <div className="relative h-4 overflow-hidden rounded-[5px] border-2 border-border-ink bg-surface-secondary">
+                  {!isComplete && (
+                    <div
+                      className="absolute left-0 top-0 h-full bg-sage"
+                      style={{ width: `${progressWithOngoing}%` }}
+                    />
+                  )}
+                  <div
+                    className={`absolute left-0 top-0 h-full ${isComplete ? "bg-mint" : "bg-primary"}`}
+                    style={{ width: `${progressEarned}%` }}
+                  />
+                </div>
+                <p className="mt-1 font-mono text-sm font-semibold text-text-primary">
+                  {earned.toFixed(1)}
+                  {!isComplete && totalInProgress > 0
+                    ? ` + ${totalInProgress.toFixed(1)} → ${effectiveTotal.toFixed(1)}`
+                    : ""}{" "}
+                  / {required.toFixed(1)} total credits
+                </p>
               </div>
-            </div>
-          </div>
+            );
+          })()}
 
-          {specialCurriculum.length > 0 && (
-            <div className="space-y-4 border-b-2 pb-6">
-              <h3 className="font-semibold text-text-heading">Basket</h3>
-              {specialCurriculum.map((c, idx) => {
+        <div className="space-y-4 border-b-2 border-border-ink pb-6">
+          <div className="relative">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10">
+              {normalCurriculum.map((c, idx) => {
                 const earned = parseFloat(c.creditsEarned);
                 const required = parseFloat(c.creditsRequired);
                 const inProgress = ongoingCreditsByCategory[c.basketTitle] || 0;
@@ -344,24 +310,23 @@ function GradesDisplay({ allGradesData, data, handleFetchGrades, marksData, atte
                 const progressWithOngoing = Math.min((effectiveTotal / required) * 100, 100);
 
                 return (
-                  <div key={idx}>
-                    <p className="font-medium text-text-heading">{c.basketTitle}</p>
-                    <div className="relative h-2 rounded-full overflow-hidden bg-surface-tertiary">
+                  <div key={idx} className="p-2 space-y-1">
+                    <p className="text-sm font-semibold text-text-heading">{c.basketTitle}</p>
+
+                    <div className="relative h-3 overflow-hidden rounded-[4px] border-2 border-border-ink bg-surface-secondary">
                       {!isComplete && (
                         <div
-                          className="absolute left-0 top-0 h-full bg-yellow-400/60"
+                          className="absolute left-0 top-0 h-full bg-sage"
                           style={{ width: `${progressWithOngoing}%` }}
                         />
                       )}
                       <div
-                        className={`absolute left-0 top-0 h-full ${
-                          isComplete ? "bg-green-500" : "bg-primary dark:bg-blue-600"
-                        }`}
+                        className={`absolute left-0 top-0 h-full ${isComplete ? "bg-mint" : "bg-primary"}`}
                         style={{ width: `${progressEarned}%` }}
                       />
                     </div>
 
-                    <p className="text-xs font-medium">
+                    <p className="font-mono text-xs text-text-muted">
                       {earned.toFixed(1)}
                       {!isComplete && inProgress > 0
                         ? ` + ${inProgress.toFixed(1)} → ${effectiveTotal.toFixed(1)}`
@@ -372,58 +337,99 @@ function GradesDisplay({ allGradesData, data, handleFetchGrades, marksData, atte
                 );
               })}
             </div>
-          )}
+          </div>
+        </div>
 
-          {effectiveGrades.length > 0 && (
-            <div className="mt-4">
-              <h4 className="mb-3 font-display text-xl font-bold uppercase text-text-heading">Grades</h4>
+        {specialCurriculum.length > 0 && (
+          <div className="space-y-4 border-b-2 border-border-ink pb-6">
+            <h3 className="font-semibold text-text-heading">Basket</h3>
+            {specialCurriculum.map((c, idx) => {
+              const earned = parseFloat(c.creditsEarned);
+              const required = parseFloat(c.creditsRequired);
+              const inProgress = ongoingCreditsByCategory[c.basketTitle] || 0;
 
-              <div className="space-y-4">
-                {sortedGradeCategories.map((category) => {
-                  const courses = [...groupedEffectiveGrades[category]].sort((a, b) =>
-                    (a?.basketTitle || "").localeCompare(b?.basketTitle || ""),
-                  );
+              const isComplete = earned >= required;
+              const effectiveTotal = isComplete ? earned : earned + inProgress;
 
-                  return (
-                    <div key={category}>
-                      <h5 className="mb-2 inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
-                        {category}
-                      </h5>
-                      <div className="grid grid-cols-1 gap-x-3 gap-y-2 md:grid-cols-2">
-                        {courses.map(({ basketTitle, creditsEarned, distributionType, grade }, idx) => (
-                          <div
-                            key={`${category}-${basketTitle || "Unknown"}-${idx}`}
-                            className="flex min-h-14 items-center justify-between gap-3 rounded-[10px] border-2 border-border-ink bg-surface px-3 py-2 text-text-primary"
-                          >
-                            <div className="flex min-w-0 flex-col text-left">
-                              <span className="truncate text-sm font-semibold">{basketTitle || "Unknown"}</span>
-                              <span className="font-mono text-xs uppercase text-text-muted">
-                                {distributionType || "—"}
-                              </span>
-                            </div>
-                            <div className="flex shrink-0 items-center gap-2">
-                              <span className="font-mono text-xs text-text-muted">
-                                {Number.isFinite(Number(creditsEarned))
-                                  ? `${Number(creditsEarned).toFixed(1)} cr`
-                                  : "—"}
-                              </span>
-                              <span
-                                className={`inline-flex h-9 w-9 items-center justify-center rounded-[8px] border-2 border-border-ink font-display text-lg font-bold ${gradeTone(grade)}`}
-                              >
-                                {grade || "—"}
-                              </span>
-                            </div>
+              const progressEarned = Math.min((earned / required) * 100, 100);
+              const progressWithOngoing = Math.min((effectiveTotal / required) * 100, 100);
+
+              return (
+                <div key={idx}>
+                  <p className="text-sm font-semibold text-text-heading">{c.basketTitle}</p>
+                  <div className="relative h-3 overflow-hidden rounded-[4px] border-2 border-border-ink bg-surface-secondary">
+                    {!isComplete && (
+                      <div
+                        className="absolute left-0 top-0 h-full bg-sage"
+                        style={{ width: `${progressWithOngoing}%` }}
+                      />
+                    )}
+                    <div
+                      className={`absolute left-0 top-0 h-full ${isComplete ? "bg-mint" : "bg-primary"}`}
+                      style={{ width: `${progressEarned}%` }}
+                    />
+                  </div>
+
+                  <p className="text-xs font-medium">
+                    {earned.toFixed(1)}
+                    {!isComplete && inProgress > 0
+                      ? ` + ${inProgress.toFixed(1)} → ${effectiveTotal.toFixed(1)}`
+                      : ""}{" "}
+                    / {required.toFixed(1)}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {effectiveGrades.length > 0 && (
+          <div className="mt-4">
+            <h4 className="mb-3 font-display text-xl font-bold uppercase text-text-heading">Grades</h4>
+
+            <div className="space-y-4">
+              {sortedGradeCategories.map((category) => {
+                const courses = [...groupedEffectiveGrades[category]].sort((a, b) =>
+                  (a?.basketTitle || "").localeCompare(b?.basketTitle || ""),
+                );
+
+                return (
+                  <div key={category}>
+                    <h5 className="mb-2 inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
+                      {category}
+                    </h5>
+                    <div className="grid grid-cols-1 gap-x-3 gap-y-2 md:grid-cols-2">
+                      {courses.map(({ basketTitle, creditsEarned, distributionType, grade }, idx) => (
+                        <div
+                          key={`${category}-${basketTitle || "Unknown"}-${idx}`}
+                          className="flex min-h-14 items-center justify-between gap-3 rounded-[10px] border-2 border-border-ink bg-surface px-3 py-2 text-text-primary"
+                        >
+                          <div className="flex min-w-0 flex-col text-left">
+                            <span className="truncate text-sm font-semibold">{basketTitle || "Unknown"}</span>
+                            <span className="font-mono text-xs uppercase text-text-muted">
+                              {distributionType || "—"}
+                            </span>
                           </div>
-                        ))}
-                      </div>
+                          <div className="flex shrink-0 items-center gap-2">
+                            <span className="font-mono text-xs text-text-muted">
+                              {Number.isFinite(Number(creditsEarned)) ? `${Number(creditsEarned).toFixed(1)} cr` : "—"}
+                            </span>
+                            <span
+                              className={`inline-flex h-9 w-9 items-center justify-center rounded-[8px] border-2 border-border-ink font-display text-lg font-bold ${gradeTone(grade)}`}
+                            >
+                              {grade || "—"}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
-          )}
-        </CardContent>
-      </Card>
+          </div>
+        )}
+      </section>
     </div>
   );
 }

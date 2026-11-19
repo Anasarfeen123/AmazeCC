@@ -220,6 +220,21 @@ if (process.env.CLICK_SEL) {
   );
   await sleep(2500);
 }
+// CLICK_TEXTS="Modules|Payments": click each visible button/link whose text
+// or aria-label starts with the word, in order (to reach screens not in nav).
+for (const word of (process.env.CLICK_TEXTS || "").split("|").filter(Boolean)) {
+  const ok = await evalJs(
+    `(() => { const w=${JSON.stringify(word.toLowerCase())}; const el=[...document.querySelectorAll("button,a,[role=button],[role=menuitem]")].find(e=>e.offsetParent && ((e.textContent||"").trim().toLowerCase().startsWith(w) || (e.getAttribute("aria-label")||"").toLowerCase().startsWith(w))); el&&el.click(); return !!el })()`,
+  );
+  console.log("click", word, ok);
+  if (!ok && process.env.DEBUG_CLICK)
+    console.log(
+      await evalJs(
+        `[...document.querySelectorAll("button,a,[role=button]")].filter(e=>e.offsetParent).map(e=>((e.getAttribute("aria-label")||e.textContent||"").trim().slice(0,30))).filter(Boolean).join(" ; ")`,
+      ),
+    );
+  await sleep(Number(process.env.CLICK_WAIT || 4000));
+}
 const SIZES = process.env.ONLY_TABLET
   ? [["tablet", 820, 1180, true]]
   : process.env.ONLY_DESKTOP

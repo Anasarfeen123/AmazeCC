@@ -1140,7 +1140,7 @@ export default function ProfilePage({
   const renderCredentialsContent = () => (
     <div className="space-y-6">
       {/* HERO — who is signed in, and how many portals follow */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
+      <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
         <StatTile
           label="Signed in as"
           value={username || "—"}

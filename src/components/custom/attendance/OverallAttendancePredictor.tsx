@@ -543,7 +543,7 @@ export default function OverallAttendancePredictor({
       }
     >
       {/* ── SUMMARY: one stat card and one auto carousel, side by side ── */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
+      <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
         <StatTile
           height="h-32 sm:h-36"
           label="Projected Avg"

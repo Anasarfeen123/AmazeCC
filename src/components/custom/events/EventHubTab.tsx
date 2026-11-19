@@ -581,7 +581,7 @@ export default function EventHubTab({
         </div>
       ) : error ? null : (
         <>
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
             <button
               type="button"
               onClick={() => setViewMode("registered")}

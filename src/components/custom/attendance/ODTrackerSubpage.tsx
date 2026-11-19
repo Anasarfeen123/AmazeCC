@@ -345,7 +345,7 @@ export default function ODTrackerSubpage({
       onBack={onBack}
     >
       {/* ── HERO STATS ── */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
+      <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
         <div className={cn(TILE, "min-h-32 sm:min-h-36")}>
           <span className="text-xs sm:text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
             Total OD

@@ -324,7 +324,7 @@ export default function ClubHubTab({
         </div>
       ) : error ? null : (
         <>
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
             <StatTile
               label={vtopUnavailable ? "Public directory" : "Clubs"}
               value={summary.total}

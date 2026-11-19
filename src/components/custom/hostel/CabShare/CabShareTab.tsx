@@ -103,7 +103,7 @@ export default function CabShareTab({ onBack }: { onBack?: () => void }) {
 
       {cabShareUser && (
         <div className="space-y-6">
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
             <StatTile
               label="Pending requests"
               value={pendingCount}

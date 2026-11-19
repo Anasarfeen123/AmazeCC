@@ -300,7 +300,7 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
       </div>
 
       {/* ── STAT CARDS (static hero + rotating carousel) ── */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
+      <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
         {/* CARD 1: OPEN TASKS */}
         <div className={CARD_BASE}>
           <div className="flex items-center justify-between gap-1">

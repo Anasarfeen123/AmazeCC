@@ -268,7 +268,7 @@ export default function SocialTab({ attendanceData, isDemo }: { attendanceData: 
 
   const landing = (
     <>
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 px-1">
+      <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4 px-1">
         {/* People — pinned */}
         <button type="button" onClick={() => setScreen("people")} className={`${TILE} h-32 sm:h-36`}>
           <div className="flex items-center justify-between gap-1">

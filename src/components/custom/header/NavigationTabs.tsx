@@ -19,6 +19,8 @@ import {
   BookOpen,
   ExternalLink,
   PanelLeftClose,
+  PanelLeftOpen,
+  RefreshCcw,
   Building,
   CalendarCheck,
   ChevronRight,
@@ -58,7 +60,6 @@ import {
   SidebarGroupLabel,
   SidebarItem,
   SidebarProfile,
-  SidebarExpandButton,
 } from "@amazecontinuityprojects/amazeui";
 import { useSyncTrigger } from "../shared/useSyncTrigger";
 import config from "../../../../config.json";
@@ -492,6 +493,9 @@ export default function NavigationTabs({
 
   const sidebarActiveStyles =
     "bg-highlight text-highlight-foreground border-2 border-border-ink font-semibold shadow-brutal-sm";
+  // Rail header buttons (collapsed sidebar): one size and look.
+  const RAIL_BTN =
+    "inline-flex h-10 w-10 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-primary shadow-brutal-sm brutal-press cursor-pointer";
   const railActiveStyles = "bg-highlight text-highlight-foreground border-2 border-border-ink shadow-brutal-sm";
 
   const handleThemeChange = (selectedTheme: string, e?: React.MouseEvent<HTMLElement>) => {
@@ -1185,13 +1189,35 @@ export default function NavigationTabs({
                 exit={{ opacity: 0 }}
                 className="mt-3.5 flex flex-col items-center gap-3 w-full"
               >
-                {/* Search Icon Only */}
+                {/* Same order as the open sidebar: toggle at the top (it used to
+                    jump to the very bottom on the rail), then sync, then search.
+                    One button style for all three. */}
                 <button
-                  onClick={openCommandPalette}
-                  className={`flex h-8 w-8 items-center justify-center rounded-lg text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors ${navButtonBase}`}
-                  title="Search anything... (Ctrl+K)"
+                  type="button"
+                  onClick={() => persistSidebarState(isOpen)}
+                  className={RAIL_BTN}
+                  title="Expand sidebar"
+                  aria-label="Expand sidebar"
                 >
-                  <Command className="h-4 w-4" />
+                  <PanelLeftOpen className="h-5 w-5" aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSyncClick}
+                  className={`${RAIL_BTN} ${isOffline ? "!bg-highlight !text-highlight-foreground" : ""}`}
+                  title={isOffline ? "You're offline — tap for details" : "Sync data from VTOP"}
+                  aria-label={isOffline ? "Offline — tap for details" : "Sync data from VTOP"}
+                >
+                  <RefreshCcw className={`h-4.5 w-4.5 ${isSpinning ? "animate-spin" : ""}`} aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  onClick={openCommandPalette}
+                  className={RAIL_BTN}
+                  title="Search anything (Ctrl+K)"
+                  aria-label="Search anything"
+                >
+                  <Command className="h-4.5 w-4.5" aria-hidden />
                 </button>
               </m.div>
             )}
@@ -1476,18 +1502,13 @@ export default function NavigationTabs({
                 exit={{ opacity: 0 }}
                 className="flex flex-col items-center gap-3 w-full shrink-0"
               >
-                {/* Expand Toggle Button */}
-                <SidebarExpandButton onClick={() => persistSidebarState(isOpen)} />
-
-                {/* Theme: one button cycling Light -> Dark -> Black */}
-                <SidebarThemeSwitch compact theme={theme} onThemeChange={handleThemeChange} />
-
-                {/* Profile Avatar */}
+                {/* Same order as the open footer: profile, then theme. */}
                 <SidebarProfile
                   avatarUrl={shouldDisplayProfilePhoto ? unifiedIdentity.photo || profileData?.image : undefined}
                   initials={initials || "ST"}
                   onProfileClick={() => selectTab("profile")}
                 />
+                <SidebarThemeSwitch compact theme={theme} onThemeChange={handleThemeChange} />
               </m.div>
             )}
           </AnimatePresence>

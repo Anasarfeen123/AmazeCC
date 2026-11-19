@@ -201,9 +201,6 @@ export default function NavigationTabs({
 
   // Progressive disclosure
   const [showAcademicsPanel, setShowAcademicsPanel] = useState(activeTab === "academics");
-  // Desktop "All modules": every module as a drill-in panel inside the sidebar
-  // (the Modules sheet is phone-only).
-  const [showModulesPanel, setShowModulesPanel] = useState(false);
   const [showToolsPanel, setShowToolsPanel] = useState(activeTab === "tools");
   const [showHostelPanel, setShowHostelPanel] = useState(activeTab === "hostel");
   const [activeRailGroup, setActiveRailGroup] = useState<string | null>(null);
@@ -673,7 +670,7 @@ export default function NavigationTabs({
   // timetable, grades and attendance ~99% of the time, so the sidebar keeps
   // Home, Pinned, Study and Account; Campus and Tools live in the Modules
   // sheet ("All modules"). Set to false to bring the full sidebar back.
-  const SIDEBAR_CORE_ONLY = true;
+  const SIDEBAR_CORE_ONLY = false; // user (2026-11-20): reverted, "redundant and weird"
   const visibleGroups = SIDEBAR_CORE_ONLY
     ? groups
         .filter((g) => g.id === "study" || g.id === "account")
@@ -1278,22 +1275,14 @@ export default function NavigationTabs({
             <AnimatePresence mode="wait" initial={false}>
               <m.div
                 key={
-                  showModulesPanel
-                    ? "modules"
-                    : showAcademicsPanel
-                      ? "academics"
-                      : showToolsPanel
-                        ? "tools"
-                        : showHostelPanel
-                          ? "hostel"
-                          : "primary"
+                  showAcademicsPanel ? "academics" : showToolsPanel ? "tools" : showHostelPanel ? "hostel" : "primary"
                 }
                 initial={{ opacity: 0, x: 6 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -4 }}
                 transition={{ duration: 0.16, ease: "easeOut" }}
               >
-                {!showModulesPanel && !showAcademicsPanel && !showToolsPanel && !showHostelPanel ? (
+                {!showAcademicsPanel && !showToolsPanel && !showHostelPanel ? (
                   <div className="space-y-4">
                     {homeItem && (
                       <SidebarItem
@@ -1363,55 +1352,13 @@ export default function NavigationTabs({
                       <SidebarItem
                         icon={<LayoutGrid className="h-[18px] w-[18px] stroke-[2.2]" aria-hidden="true" />}
                         label="All modules"
-                        isActive={showModulesPanel}
+                        isActive={isAppLibraryOpen}
                         data-sidebar-nav="true"
                         className={SIDEBAR_ITEM_BRAND}
-                        rightElement={<ChevronRight className="h-3.5 w-3.5 shrink-0" />}
-                        onClick={() => setShowModulesPanel(true)}
-                        onKeyDown={(event) => handleNavKeyDown(event, () => setShowModulesPanel(true))}
+                        onClick={() => setIsAppLibraryOpen(true)}
+                        onKeyDown={(event) => handleNavKeyDown(event, () => setIsAppLibraryOpen(true))}
                       />
                     )}
-                  </div>
-                ) : showModulesPanel ? (
-                  <div className="space-y-4">
-                    <button
-                      onClick={() => setShowModulesPanel(false)}
-                      className="flex items-center gap-2 px-2 py-1 text-xs font-bold text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors"
-                    >
-                      <ArrowLeft className="h-3.5 w-3.5" />
-                      <span>Back</span>
-                    </button>
-                    {groups.map((group) => (
-                      <SidebarGroup key={group.id}>
-                        <SidebarGroupLabel className={SIDEBAR_GROUP_LABEL_BRAND}>{group.label}</SidebarGroupLabel>
-                        <div className="space-y-0.5">
-                          {group.items.map((item) => (
-                            <SidebarItem
-                              key={item.id}
-                              icon={<item.icon className="h-[18px] w-[18px] stroke-[2.2]" aria-hidden="true" />}
-                              label={item.label}
-                              isActive={item.isActive}
-                              aria-current={item.isActive ? "page" : undefined}
-                              data-sidebar-nav="true"
-                              className={SIDEBAR_ITEM_BRAND}
-                              rightElement={
-                                item.isExpandable ? (
-                                  <ChevronRight className="h-3.5 w-3.5 shrink-0" />
-                                ) : item.isExternal ? (
-                                  <span className="inline-flex items-center gap-1 rounded-[6px] border-2 border-current px-1 font-mono text-[12px] font-semibold uppercase leading-4 opacity-80">
-                                    New tab
-                                    <ExternalLink className="h-3 w-3" aria-hidden />
-                                  </span>
-                                ) : undefined
-                              }
-                              aria-label={item.isExternal ? `${item.label} (opens in a new tab)` : undefined}
-                              onClick={item.onSelect}
-                              onKeyDown={(event) => handleNavKeyDown(event, item.onSelect)}
-                            />
-                          ))}
-                        </div>
-                      </SidebarGroup>
-                    ))}
                   </div>
                 ) : showAcademicsPanel ? (
                   <div className="space-y-4">

@@ -54,6 +54,11 @@ dossier). For each: icon wells in content -> remove; one ochre hero per page
   for the landing art); hero art at 390.
 - **Night theme**: check every page once; borders `#4FB3A5` can be loud on
   long lists — consider `--border-muted` for inner dividers in `.dark.night`.
+- **Sidebar, tried and rejected (2026-11-20)**: a core-only sidebar with an
+  "All modules" item (and a desktop drill-in panel listing every module).
+  User: "redundant and weird". Reverted (`SIDEBAR_CORE_ONLY = false` in
+  `NavigationTabs.tsx`, commit 8ea8bad6). Try a different idea to lower the
+  weight of non-core modules; do not bring "All modules" back.
 - **Sidebar**: collapsed and open now share one order; check the tablet
   (820) rail and the popovers beside it.
 - **Settings**: Profile status tiles still use icon wells; the Navigation

@@ -1984,8 +1984,12 @@ export default function FeedbackReportPage({
                           <p className="text-xs text-text-muted truncate max-w-md">{t.last_message}</p>
                         )}
                         <p className="text-xs text-text-muted opacity-80">
-                          {new Date(t.created_at).toLocaleDateString()} at{" "}
-                          {new Date(t.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                          {new Date(t.created_at).toLocaleDateString("en-GB", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })}{" "}
+                          at {new Date(t.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                         </p>
                       </div>
                       <div className="shrink-0 flex items-center gap-2">

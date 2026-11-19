@@ -95,7 +95,7 @@ const EXAM_CATEGORY_TONE: Record<string, string> = {
 };
 
 const fmtDate = (ts: number): string =>
-  new Date(ts).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+  new Date(ts).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
 interface PaperScannerPageProps {
   onBack?: () => void;

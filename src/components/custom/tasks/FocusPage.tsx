@@ -152,7 +152,7 @@ export default function FocusPage({ tasks, onCycleStatus, onEditTask }: FocusPag
                       {s.roundsDone} rounds ({s.roundsDone * s.focusMin}m focus)
                     </span>
                     <p className="text-xs text-text-muted">
-                      {new Date(s.startedAt).toLocaleDateString(undefined, {
+                      {new Date(s.startedAt).toLocaleDateString("en-GB", {
                         month: "short",
                         day: "numeric",
                         hour: "2-digit",

@@ -113,7 +113,9 @@ function dateLabel(value: unknown): string {
   const dmy = String(value).match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/);
   if (dmy) return `${dmy[1].padStart(2, "0")}/${dmy[2].padStart(2, "0")}/${dmy[3]}`;
   const parsed = new Date(String(value));
-  return Number.isNaN(parsed.getTime()) ? String(value) : parsed.toLocaleDateString("en-IN");
+  return Number.isNaN(parsed.getTime())
+    ? String(value)
+    : parsed.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 }
 
 function normalizedPhoto(value: unknown): string {
@@ -161,7 +163,7 @@ function academicCalendar(calendar: any): Array<{ key: string; label: string; ev
         key: `${year}-${monthIndex}-${day.date}`,
         label: Number.isNaN(date.getTime())
           ? `${day.date} ${month.month}`
-          : date.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }),
+          : date.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
         events: Array.isArray(day.events) ? day.events : [],
       };
     });
@@ -199,7 +201,7 @@ function attendanceByMonth(courses: any[]) {
       bucket.rows.push({
         date,
         dateText: date
-          ? date.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })
+          ? date.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
           : text(entry.date),
         course,
         status: String(entry.status || "Unknown"),

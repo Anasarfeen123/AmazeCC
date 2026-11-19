@@ -333,7 +333,7 @@ export default function ODTrackerSubpage({
   const prettyDate = (dateStr: string) => {
     const d = new Date(dateStr);
     if (isNaN(d.getTime())) return dateStr;
-    return d.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" });
+    return d.toLocaleDateString("en-GB", { weekday: "long", month: "short", day: "numeric" });
   };
 
   return (

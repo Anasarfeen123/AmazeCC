@@ -190,7 +190,7 @@ export default function FFCSDossierSubpage({
   }, [courses, masterCourses, vitfacEnabled]);
 
   const dateStr = useMemo(() => {
-    return new Date().toLocaleDateString(undefined, {
+    return new Date().toLocaleDateString("en-GB", {
       weekday: "short",
       year: "numeric",
       month: "short",

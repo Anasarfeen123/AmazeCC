@@ -60,7 +60,7 @@ export default function TaskCard({ task, onEdit, onStatusCycle, onDelete, compac
   const formatDueDate = (iso: string) => {
     try {
       const d = new Date(iso);
-      return d.toLocaleDateString(undefined, {
+      return d.toLocaleDateString("en-GB", {
         month: "short",
         day: "numeric",
         hour: "2-digit",

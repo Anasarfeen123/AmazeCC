@@ -266,7 +266,7 @@ export default function CommunityFeed({
                         Club {post.club_id}
                       </h3>
                       <p className="text-xs text-text-muted font-medium mt-0.5">
-                        {new Date(post.created_at).toLocaleDateString("en-US", {
+                        {new Date(post.created_at).toLocaleDateString("en-GB", {
                           weekday: "short",
                           month: "short",
                           day: "numeric",

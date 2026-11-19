@@ -49,7 +49,7 @@ const fmtSize = (bytes: number): string =>
   bytes >= 1024 * 1024 ? `${(bytes / (1024 * 1024)).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
 
 const fmtDate = (ts: number): string =>
-  new Date(ts).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+  new Date(ts).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
 interface PaperDetailSheetProps {
   record: ScanRecord;

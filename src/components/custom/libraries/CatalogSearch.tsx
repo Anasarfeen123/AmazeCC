@@ -473,7 +473,14 @@ export default function CatalogSearch({ variant, isDemo, onSearched, autoFocus, 
                         <span className="font-mono font-bold text-text-muted">{h.barcode || "—"}</span>
                         <span className={unavailable ? "text-danger-foreground" : ""}>{h.status || "Unknown"}</span>
                         {h.dateDue && (
-                          <span className="text-text-muted">due {new Date(h.dateDue).toLocaleDateString()}</span>
+                          <span className="text-text-muted">
+                            due{" "}
+                            {new Date(h.dateDue).toLocaleDateString("en-GB", {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            })}
+                          </span>
                         )}
                         {h.currentLibrary && <span className="text-text-muted truncate">{h.currentLibrary}</span>}
                       </p>

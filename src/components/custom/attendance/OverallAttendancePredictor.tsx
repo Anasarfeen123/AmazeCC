@@ -618,7 +618,7 @@ export default function OverallAttendancePredictor({
                 {opt.label}
                 {opt.date ? (
                   <span className="ml-1.5 opacity-80 text-xs font-normal">
-                    ({opt.date.toLocaleDateString("en-US", { month: "short", day: "numeric" })})
+                    ({opt.date.toLocaleDateString("en-GB", { month: "short", day: "numeric" })})
                   </span>
                 ) : null}
               </>

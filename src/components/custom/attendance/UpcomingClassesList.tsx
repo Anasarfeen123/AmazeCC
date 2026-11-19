@@ -104,7 +104,7 @@ export default function UpcomingClassesList({
           const time = normalize(day.fullDate);
           const state = getEffectiveState(time, dayStates, lockDates);
           const d = new Date(day.fullDate);
-          const dateStr = d.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+          const dateStr = d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
           const weekday = d.toLocaleDateString("en-IN", { weekday: "short" });
 
           const isSkipped = state === 1;

@@ -134,7 +134,7 @@ export default function MyTrips({
   const renderTripMeta = (trip: CabShareTrip | CabShareJoinedTrip) => (
     <div className="mt-2 flex flex-wrap gap-2">
       <ToneBadge tone="zinc" icon={<Calendar className="h-3 w-3" />}>
-        {new Date(trip.travel_date).toLocaleDateString()}
+        {new Date(trip.travel_date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
       </ToneBadge>
       <ToneBadge tone="zinc" icon={<Clock className="h-3 w-3" />}>
         {trip.preferred_time}

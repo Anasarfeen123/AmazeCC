@@ -1332,7 +1332,7 @@ export default function SimplifiedMobileHome({
   // Formatted date string for selected day based on active calendar week
   const getSelectedDayFormattedDate = () => {
     if (selectedDayMeta) {
-      return selectedDayMeta.fullDate.toLocaleDateString("en-US", {
+      return selectedDayMeta.fullDate.toLocaleDateString("en-GB", {
         weekday: "long",
         month: "short",
         day: "numeric",

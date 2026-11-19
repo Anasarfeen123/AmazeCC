@@ -231,7 +231,7 @@ export default function LandingSections() {
         />
         <img
           src="/landing/campus-night.webp"
-          alt="The same campus at night, towers lit orange under an ochre moon"
+          alt="The same campus at night: lit windows, street lamps and a starry sky"
           width={1672}
           height={941}
           loading="lazy"

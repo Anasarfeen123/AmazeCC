@@ -55,6 +55,18 @@ Done when:
 - [ ] Lighthouse accessibility ≥ 95; all images have alt text
 - [ ] Before/after screenshots added to `screens/`
 
+**v2 ("masterpiece" pass, 2026-11-19).** Colour-flooded sections (coral,
+ochre, sage, mint, teal, orange), ticker bands, a cycling colour word in the
+hero, floating stickers + mouse parallax, scroll reveals, count-ups, a bento of
+live mini UIs, a closing ochre CTA. Motion is CSS in `brand.css` ("Landing page
+motion") + `landing/LandingMotion.tsx`, off under reduced motion. Extra fixed
+colours: `coral`, `orange`, `mint`, `obsidian` (ink text ≥ 5:1 on all).
+
+**Campus art.** The user's illustrations: `public/landing/campus-day.webp`
+(light) and `public/landing/campus-night.webp` (dark, lit windows and stars),
+shown as a full-bleed panorama after the first ticker, picked by CSS. Replace
+them in place to update; keep ~1670×940, WebP quality ~80.
+
 ## R2 · FFCS planner bugs ("bugging so much", demo and real)
 
 A debugging project first, styling second. Files:

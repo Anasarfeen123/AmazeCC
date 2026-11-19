@@ -216,6 +216,14 @@ function DashboardContent({
 
   return (
     <div className="dashboard-shell w-full max-w-md md:max-w-full mx-auto overflow-visible">
+      {/* Keyboard users: jump past the sidebar's ~10 controls to the page.
+          Hidden until focused (R11). */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[200] focus:rounded-[10px] focus:border-2 focus:border-border-ink focus:bg-ochre focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:font-bold focus:uppercase focus:text-obsidian focus:shadow-brutal-sm"
+      >
+        Skip to content
+      </a>
       <NavigationTabs
         activeTab={activeTab}
         onCollapseScreenChange={onCollapseScreenChange}
@@ -266,6 +274,8 @@ function DashboardContent({
       />
 
       <div
+        id="main-content"
+        tabIndex={-1}
         className={`dashboard-content relative bg-background min-h-[100dvh] text-text-primary transition-[padding] duration-300 pb-[calc(6rem+env(safe-area-inset-bottom,0px))] md:pb-0 ${settings.isSidebarCollapsed ? "md:pl-[72px]" : "md:pl-[72px] lg:pl-[280px]"} w-full overflow-x-clip`}
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >

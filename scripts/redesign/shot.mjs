@@ -270,6 +270,26 @@ if (process.env.A11Y) {
   console.log("A11Y\n" + (res || "clean"));
 }
 // ONLY_W=720: a single custom width (720 = a 1440 window at 200% zoom).
+// KEYS="Tab*6,Enter": real key presses (Input.dispatchKeyEvent) before the
+// capture, e.g. to check keyboard focus order. Also prints what has focus.
+for (const tok of (process.env.KEYS || "").split(",").filter(Boolean)) {
+  const [key, times] = tok.split("*");
+  for (let i = 0; i < Number(times || 1); i++) {
+    const code = key === "Tab" ? "Tab" : key === "Enter" ? "Enter" : key === "Escape" ? "Escape" : key;
+    const vk = { Tab: 9, Enter: 13, Escape: 27 }[key] || 0;
+    await send("Input.dispatchKeyEvent", { type: "keyDown", key, code, windowsVirtualKeyCode: vk });
+    await send("Input.dispatchKeyEvent", { type: "keyUp", key, code, windowsVirtualKeyCode: vk });
+    await sleep(150);
+  }
+  await sleep(400);
+}
+if (process.env.KEYS)
+  console.log(
+    "FOCUS",
+    await evalJs(
+      `(() => { const e=document.activeElement; return e ? (e.tagName+" | "+(e.getAttribute("aria-label")||e.textContent||"").trim().slice(0,50)) : "none" })()`,
+    ),
+  );
 const SIZES = process.env.ONLY_W
   ? [[`w${process.env.ONLY_W}`, Number(process.env.ONLY_W), 900, Number(process.env.ONLY_W) < 800]]
   : process.env.ONLY_TABLET

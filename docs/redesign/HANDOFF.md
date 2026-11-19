@@ -258,3 +258,13 @@ NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next dev --webpack -p 3017   # backg
   Calendar sidebar items both light up on the calendar page.
   **Next: icon wells in hub lists (Libraries, Curriculum, Grade history),
   Curriculum progress bar (raw green/orange), R2 leftovers, R6.**
+- **2026-11-19 (late)** — R6 mechanical pass finished (all files). Before
+  running `brandify.py` again, note: if it reports 0 rewrites on a file
+  with old classes, use `brandify_classnames.py` (nested template
+  literals). Three codemod bugs were fixed (`\b` matching after "-",
+  bare `group-` from scale removal, unguarded `bg-zinc-50` matching
+  `bg-zinc-500/10`); grep for `group-text-`, `bare group-` and
+  `secondary0` if you see odd classes. Don't run it on always-dark
+  overlays without `--forced-dark`.
+  **Next: hand pass on the screens not yet looked at (Tasks, Social,
+  Friend finder, Cab share, Event/Club hub with live data), R2 leftovers.**

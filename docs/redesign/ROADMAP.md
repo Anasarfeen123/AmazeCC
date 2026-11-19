@@ -150,6 +150,15 @@ Done when:
 
 ## R6 · Remaining screens
 
+**Status 2026-11-19 (late):** mechanical pass done on every file
+(287 old classes left, from 9,805). Left: always-dark overlays (scanner
+camera, tooltips, image viewers) and classes built in JS; hand layout
+work (icon wells, one hero per card) per screen is still open. The
+`summary-row` hero is on ~16 pages. Hand-checked so far: Home,
+Attendance calendar, Academics list, Exam schedule, Grade history,
+Curriculum, Payments, Libraries, Bus routes, Free classrooms, Mess menu,
+Student report, grades sheet, onboarding, sign-in.
+
 9,805 old-style classes in 216 files on 2026-11-19 (recount command in
 `HANDOFF.md` §5). Biggest: `exams/` 3,463 · `header/` 750 (ProfilePage 572) · `hostel/` 628 · `attendance/` 531 · `social/` 490 · `tasks/` 479 ·
 `app/` 427 (`useAppCommands` 344) · `shared/` 417 · friend finder ~490 ·

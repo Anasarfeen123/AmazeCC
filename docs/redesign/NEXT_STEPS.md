@@ -86,3 +86,66 @@ node_modules/.bin/vitest run            # 15 failures = baseline
 node_modules/.bin/eslint <changed files>
 python3 scripts/redesign/contrast.py    # if you touched colours (light/dark/night)
 ```
+
+## More (added on request)
+
+### Bugs / risks seen this session, worth a check
+
+- `brandify.py` had three bugs (fixed): `\b` after "-", bare `group-`, and
+  `bg-zinc-50` matching `bg-zinc-500/10`. Grep the tree for leftovers:
+  `group-text-`, `" group- "`, `secondary0`, `text-primary text-primary`
+  (duplicated classes from codemods), `hover:brightness-110 hover:brightness-110`.
+- Fill-ink rules (`brand.css`) recolour text inside sage/ochre/primary fills.
+  Any new status colour inside a fill must be added there or it goes
+  unreadable (this happened with mint-on-ochre).
+- `summary-row` forces ink text with `!important`; it now skips
+  `.crayon-hide` and `[data-private]`. Anything else that must keep its own
+  colour inside the first card needs a `bg-*` class or an exclusion.
+- Sidebar "Attend" stat toggles % vs fraction on click (not a link to the
+  predictor); confirm with the user this is wanted.
+- The OD tracker "Recovered" slide and the official records only show real
+  data with the user's account (`LOGIN=1`); demo has none.
+- `ProfilePage.tsx` is ~2,750 lines; split sections into files
+  (`settings/sections/*.tsx`) before more edits.
+
+### Mobile
+
+- Check every screen at 360px too (smallest common Android), not only 390.
+- Bottom bar overlaps page bottoms in a few screens (calendar day simulator
+  card on the predictor was partly under it): add bottom padding equal to the
+  bar height + safe area on pages that end with a card.
+- Long course names truncate in Home class cards; consider two lines.
+- Test the installed PWA (standalone): FFCS planner opens in the same tab
+  there by design; check the back path.
+
+### Performance
+
+- `perf.mjs` exists: measure Home first paint, the FFCS planner and the
+  predictor on a mid phone profile (CPU 4x throttle).
+- Large client components (FFCSTimetableTab ~4.7k lines, FFCSGuidedSelector
+  ~5.4k, ProfilePage ~2.7k) re-render a lot; memoise lists and split.
+- Landing art: serve AVIF/WebP at 1x/2x with `srcset`; the blurred hero image
+  can be much smaller since it is blurred.
+
+### Copy and content
+
+- Run a plain-words pass on all toasts and error messages (many still say
+  "Failed to fetch", "dispatch", "sweep"). Words for status everywhere.
+- Remove developer jargon in student-facing text (VAPID, DPoP, HMAC, digest,
+  API mirror) or move it into Advanced.
+- Dates: one format app-wide (e.g. "Thu 19 Nov"); several screens differ.
+
+### Tests to add
+
+- Visual smoke: a script that captures ~15 key screens x 3 themes into
+  `.scratch/visual/` and diffs against the previous run (pixelmatch), so
+  colour regressions from bridge removal are caught.
+- Unit tests for `gradeTone`, `courseColors`, `summary-row` behaviour (DOM
+  class presence), theme switching (`night` adds both `dark` and `night`).
+
+### Ask the user before doing
+
+- Which bottom-bar shortcuts to offer; whether to keep the Tools/More hubs.
+- Whether the Night theme should be the default for dark-mode OS users.
+- Release plan: when the redesign may go to `AmazeContinuityProjects/*`
+  (until then fork only) and when AmazeUI may be published (R9).

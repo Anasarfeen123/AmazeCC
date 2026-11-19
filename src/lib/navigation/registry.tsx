@@ -268,6 +268,7 @@ export const moduleRegistry: ModuleEntry[] = [
     },
     pinnable: true,
     pinLabel: "Transport",
+    keywords: ["bus", "bus finder", "bus routes", "transport registration", "vehicle placements"],
   },
   {
     id: "events",
@@ -320,11 +321,11 @@ export const moduleRegistry: ModuleEntry[] = [
     paletteIcon: "📣",
     target: { kind: "tab", tab: "community" },
     surfaces: {
-      sidebar: true,
+      sidebar: false,
       sidebarGroup: "campus",
-      appLibraryPrimary: true,
-      appLibrarySearch: true,
-      commandPalette: true,
+      appLibraryPrimary: false,
+      appLibrarySearch: false,
+      commandPalette: false,
     },
     pinnable: true,
     pinLabel: "Announcements",
@@ -541,7 +542,7 @@ export const moduleRegistry: ModuleEntry[] = [
   },
   {
     id: "tools",
-    label: "Tools & Utilities Hub",
+    label: "Tools",
     description: "Question bank, faculty, social & more",
     icon: Layers,
     group: "Tools",
@@ -560,6 +561,7 @@ export const moduleRegistry: ModuleEntry[] = [
     pinnable: true,
     pinId: "tools",
     pinLabel: "Tools",
+    keywords: ["tools hub", "utilities"],
   },
   {
     id: "tools-overview",
@@ -571,7 +573,7 @@ export const moduleRegistry: ModuleEntry[] = [
     paletteCategory: "Tools",
     paletteIcon: "🧰",
     target: { kind: "tabSub", tab: "tools", subtabKey: "tools", subtab: "overview" },
-    surfaces: { sidebar: "drill-in", appLibraryPrimary: true, appLibrarySearch: true, commandPalette: true },
+    surfaces: { sidebar: "drill-in", appLibraryPrimary: false, appLibrarySearch: false, commandPalette: false },
   },
   {
     id: "tools-qbank",
@@ -635,7 +637,7 @@ export const moduleRegistry: ModuleEntry[] = [
     paletteCategory: "Navigation",
     paletteIcon: "🚕",
     target: { kind: "tab", tab: "cabshare" },
-    surfaces: { commandPalette: true },
+    surfaces: { commandPalette: false },
     pinnable: true,
     pinId: "cabshare",
     pinLabel: "Cab Share",
@@ -676,7 +678,7 @@ export const moduleRegistry: ModuleEntry[] = [
   },
   {
     id: "attendance-circulars",
-    label: "Attendance Circulars",
+    label: "Circulars",
     description: "Circulars related to attendance",
     icon: Calendar,
     group: "Attendance",
@@ -684,6 +686,7 @@ export const moduleRegistry: ModuleEntry[] = [
     paletteIcon: "📢",
     target: { kind: "tabSub", tab: "attendance", subtabKey: "attendance", subtab: "circulars" },
     surfaces: { commandPalette: true },
+    keywords: ["academic circulars", "attendance circulars"],
   },
   {
     id: "acad-circulars",
@@ -694,7 +697,7 @@ export const moduleRegistry: ModuleEntry[] = [
     paletteCategory: "Academics",
     paletteIcon: "📢",
     target: { kind: "tabSub", tab: "attendance", subtabKey: "attendance", subtab: "circulars" },
-    surfaces: { commandPalette: true },
+    surfaces: { commandPalette: false },
   },
   {
     id: "acad-timetable",
@@ -705,7 +708,7 @@ export const moduleRegistry: ModuleEntry[] = [
     paletteCategory: "Academics",
     paletteIcon: "🗓️",
     target: { kind: "tabSub", tab: "academics", subtabKey: "academics", subtab: "course-dashboard" },
-    surfaces: { commandPalette: true },
+    surfaces: { commandPalette: false },
   },
   {
     id: "ds-bus-finder",
@@ -716,7 +719,7 @@ export const moduleRegistry: ModuleEntry[] = [
     paletteCategory: "Transport",
     paletteIcon: "🚍",
     target: { kind: "tab", tab: "transport" },
-    surfaces: { commandPalette: true },
+    surfaces: { commandPalette: false },
   },
   {
     id: "ds-transport-reg",
@@ -727,7 +730,7 @@ export const moduleRegistry: ModuleEntry[] = [
     paletteCategory: "Transport",
     paletteIcon: "🚏",
     target: { kind: "tab", tab: "transport" },
-    surfaces: { commandPalette: true },
+    surfaces: { commandPalette: false },
   },
   {
     id: "tr-bus-routes",
@@ -738,7 +741,7 @@ export const moduleRegistry: ModuleEntry[] = [
     paletteCategory: "Transport",
     paletteIcon: "🚌",
     target: { kind: "tab", tab: "transport" },
-    surfaces: { commandPalette: true },
+    surfaces: { commandPalette: false },
   },
   {
     id: "tr-placements",
@@ -749,7 +752,7 @@ export const moduleRegistry: ModuleEntry[] = [
     paletteCategory: "Transport",
     paletteIcon: "🚍",
     target: { kind: "tab", tab: "transport" },
-    surfaces: { commandPalette: true },
+    surfaces: { commandPalette: false },
   },
   {
     id: "help-feedback",
@@ -760,7 +763,7 @@ export const moduleRegistry: ModuleEntry[] = [
     paletteCategory: "Help & Feedback",
     paletteIcon: "💬",
     target: { kind: "action", onSelect: (ctx) => ctx.setIsFeedbackOpen?.(true) },
-    surfaces: { commandPalette: true },
+    surfaces: { commandPalette: false },
   },
   {
     id: "help-bug",
@@ -771,11 +774,11 @@ export const moduleRegistry: ModuleEntry[] = [
     paletteCategory: "Help & Feedback",
     paletteIcon: "🐞",
     target: { kind: "action", onSelect: (ctx) => ctx.setIsFeedbackOpen?.(true) },
-    surfaces: { commandPalette: true },
+    surfaces: { commandPalette: false },
   },
   {
     id: "tool-grades-modal",
-    label: "Grades Details Modal",
+    label: "Grade details",
     description: "Open detailed grade breakdown",
     icon: GraduationCap,
     group: "Tools",
@@ -793,7 +796,7 @@ export const moduleRegistry: ModuleEntry[] = [
     paletteCategory: "Tools",
     paletteIcon: "💬",
     target: { kind: "tab", tab: "profile" },
-    surfaces: { commandPalette: true },
+    surfaces: { commandPalette: false },
   },
 
   // Account
@@ -844,13 +847,13 @@ export const moduleRegistry: ModuleEntry[] = [
     paletteCategory: "Navigation",
     paletteIcon: "➕",
     target: { kind: "tab", tab: "more" },
-    surfaces: { commandPalette: true },
+    surfaces: { commandPalette: false },
     pinnable: true,
     pinLabel: "More",
   },
   {
     id: "feedback",
-    label: "Feedback and Bug Report Page",
+    label: "Feedback & bugs",
     description: "Open dedicated PostHog support page with DOM session replay and ticket history",
     icon: Info,
     group: "Help & Feedback",
@@ -858,6 +861,7 @@ export const moduleRegistry: ModuleEntry[] = [
     paletteIcon: "⚡",
     target: { kind: "tab", tab: "feedback" },
     surfaces: { commandPalette: true },
+    keywords: ["report a bug", "send feedback", "feedback status", "tickets"],
   },
   {
     id: "logout",

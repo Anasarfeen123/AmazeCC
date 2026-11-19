@@ -527,7 +527,7 @@ describe("FFCSGuidedSelector", () => {
     // Advance to Screen 2: Day & Slot Blocking
     fireEvent.click(screen.getByRole("button", { name: /Continue to Day & Slot Blocking/i }));
     expect(screen.getByText("4. Slot & Day Blocking")).toBeDefined();
-    expect(screen.getByText("INTERACTIVE VERTICAL TIMETABLE — TAP ANY CELL TO TOGGLE BLOCK")).toBeDefined();
+    expect(screen.getByText("Tap a cell to block or unblock that slot")).toBeDefined();
 
     // Verify per-day quick block buttons
     const blockMorningBtn = screen.getByRole("button", { name: /Block Morning Theory \(08:00 - 13:25\)/i });

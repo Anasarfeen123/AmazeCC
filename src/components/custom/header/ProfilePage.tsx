@@ -2078,28 +2078,10 @@ export default function ProfilePage({
   // 4. Data Sync Section
   const renderSyncContent = () => (
     <div className="space-y-6">
-      <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-5 shadow-2xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-ink pb-4">
-          <div>
-            <h3 className="font-display text-base font-bold uppercase text-text-heading">What to sync</h3>
-            <p className="text-xs text-text-muted mt-0.5">
-              Choose which modules refresh automatically to conserve data and API limits
-            </p>
-          </div>
-          <div className="flex gap-2 shrink-0">
-            <button
-              onClick={() => handleToggleAllSync(true)}
-              className="min-h-9 rounded-[8px] border-2 border-border-ink px-3 font-mono text-xs font-bold uppercase tracking-[0.06em] shadow-brutal-sm brutal-press cursor-pointer bg-secondary text-secondary-foreground"
-            >
-              Turn all on
-            </button>
-            <button
-              onClick={() => handleToggleAllSync(false)}
-              className="min-h-9 rounded-[8px] border-2 border-border-ink px-3 font-mono text-xs font-bold uppercase tracking-[0.06em] shadow-brutal-sm brutal-press cursor-pointer bg-surface text-text-primary"
-            >
-              Turn all off
-            </button>
-          </div>
+      <div className="bg-surface rounded-[14px] border-2 border-border-ink p-5 space-y-4 shadow-brutal-sm">
+        <div>
+          <h3 className="font-display text-base font-bold uppercase text-text-heading">When to sync</h3>
+          <p className="text-xs text-text-muted">How often AmazeCC refreshes from VTOP, and how much it pulls.</p>
         </div>
 
         {/* Background Sync Frequency */}
@@ -2107,8 +2089,7 @@ export default function ProfilePage({
           <div>
             <p className="text-sm font-bold text-text-primary">Refresh in the background</p>
             <p className="text-xs text-text-muted">
-              When off, syncing only happens when you tap Sync — nothing hits the server otherwise. When a cadence is
-              set, the sweep runs on that timer and pulls only what has come due (attendance at most once a day).
+              Off: only when you tap Sync. On: refreshes on that timer, and only what is due.
             </p>
           </div>
           <SelectField
@@ -2142,7 +2123,50 @@ export default function ProfilePage({
           </span>
         </button>
 
-        {/* Sync Toggles List */}
+        <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
+          <div>
+            <p className="text-sm font-bold text-text-primary">Data saver</p>
+            <p className="text-xs text-text-muted">Skips preloading big files on mobile data</p>
+          </div>
+          <Switch
+            checked={settings?.lowDataMode ?? false}
+            onCheckedChange={(val) => updateSetting("lowDataMode", val)}
+          />
+        </div>
+
+        <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
+          <div>
+            <p className="text-sm font-bold text-text-primary">Full reload when syncing</p>
+            <p className="text-xs text-text-muted">
+              Every Sync pulls everything, past semesters too. Slow; use it if something looks wrong.
+            </p>
+          </div>
+          <Switch checked={reloadAllData} onCheckedChange={setReloadAllData} />
+        </div>
+      </div>
+
+      <div className="bg-surface rounded-[14px] border-2 border-border-ink p-5 space-y-5 shadow-brutal-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-ink pb-4">
+          <div>
+            <h3 className="font-display text-base font-bold uppercase text-text-heading">What to sync</h3>
+            <p className="text-xs text-text-muted mt-0.5">Pick what gets refreshed. Fewer items sync faster.</p>
+          </div>
+          <div className="flex gap-2 shrink-0">
+            <button
+              onClick={() => handleToggleAllSync(true)}
+              className="min-h-9 rounded-[8px] border-2 border-border-ink px-3 font-mono text-xs font-bold uppercase tracking-[0.06em] shadow-brutal-sm brutal-press cursor-pointer bg-secondary text-secondary-foreground"
+            >
+              Turn all on
+            </button>
+            <button
+              onClick={() => handleToggleAllSync(false)}
+              className="min-h-9 rounded-[8px] border-2 border-border-ink px-3 font-mono text-xs font-bold uppercase tracking-[0.06em] shadow-brutal-sm brutal-press cursor-pointer bg-surface text-text-primary"
+            >
+              Turn all off
+            </button>
+          </div>
+        </div>
+
         <div className="divide-y divide-border-ink ">
           <div className="flex items-center justify-between py-3">
             <div>
@@ -2211,29 +2235,6 @@ export default function ProfilePage({
               checked={settings?.syncCourseCompletion ?? true}
               disabled={!(settings?.syncAdditionalData ?? true)}
               onCheckedChange={(val) => updateSetting("syncCourseCompletion", val)}
-            />
-          </div>
-
-          <div className="flex items-center justify-between py-3">
-            <div>
-              <p className="text-sm font-bold text-text-primary">Full reload when syncing</p>
-              <p className="text-xs text-text-muted">
-                Ignores the sync mode: every Sync pulls everything, past semesters included. Slow; for fixing bad data.
-              </p>
-            </div>
-            <Switch checked={reloadAllData} onCheckedChange={setReloadAllData} />
-          </div>
-
-          <div className="flex items-center justify-between py-3">
-            <div>
-              <p className="text-sm font-bold text-text-primary">Data saver</p>
-              <p className="text-xs text-text-muted">
-                Disables automatic prefetching of heavy assets on metered connections
-              </p>
-            </div>
-            <Switch
-              checked={settings?.lowDataMode ?? false}
-              onCheckedChange={(val) => updateSetting("lowDataMode", val)}
             />
           </div>
         </div>

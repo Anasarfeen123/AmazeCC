@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect, useRef } from "react";
+import DebouncedSearchInput from "../../../shared/DebouncedSearchInput";
 import {
   Search,
   Check,
@@ -1109,7 +1110,6 @@ export default function FFCSGuidedSelector({
 
   useOverlayBack("ffcs-guided-flow", true, handleSystemBack);
 
-
   // ── SLOT & FACULTY HELPERS ──
   const getSlotClusterKey = (slot: string): { cluster: string; letter: string } => {
     const s = slot.trim().toUpperCase();
@@ -1812,13 +1812,10 @@ export default function FFCSGuidedSelector({
         </div>
 
         <div className="relative shrink-0">
-          <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
+          <DebouncedSearchInput
             value={locksSearchQuery}
-            onChange={(e) => setLocksSearchQuery(e.target.value)}
-            placeholder="Search course code or title..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-800 bg-zinc-950/60 text-base sm:text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-zinc-600"
+            onChange={setLocksSearchQuery}
+            placeholder="Search course code or title"
           />
         </div>
 

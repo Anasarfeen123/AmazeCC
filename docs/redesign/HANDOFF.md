@@ -24,7 +24,7 @@ agent (Claude, Codex, Gemini, Cursor…) can continue without the chat history.
    screenshot you share, or a chat message. See §6.3 for the safe way.
 3. **Colours only through tokens** (`src/app/brand.css`). No raw hex in
    components. Run `python3 scripts/redesign/contrast.py` after any colour change.
-4. **Tests:** `tsc` 0 errors; `vitest` must stay at **28 failures** (the
+4. **Tests:** `tsc` 0 errors; `vitest` must stay at **20 failures** (the
    pre-existing baseline, §6.2); `eslint` 0 errors on touched files.
 5. **One commit per logical change** with a body: why, what, how it was
    verified. Commit messages end with the session line if your tool adds one.
@@ -151,7 +151,7 @@ grep -rEo "$P" src --include=*.tsx | cut -d: -f1 | sort | uniq -c | sort -rn | h
 ```bash
 cd frontend
 node_modules/.bin/tsc --noEmit -p tsconfig.json
-node_modules/.bin/vitest run            # expect: 28 failed
+node_modules/.bin/vitest run            # expect: 20 failed
 node_modules/.bin/eslint <files>
 python3 scripts/redesign/contrast.py    # exit 0 = all pairs pass
 python3 scripts/redesign/brandify.py <files> [--status] [--forced-dark] [--dry]
@@ -159,8 +159,8 @@ python3 scripts/redesign/brandify.py <files> [--status] [--forced-dark] [--dry]
 
 ### 6.2 Test baseline
 
-28 failures in 11 files, all pre-existing on `main`: `oauth2`,
-`ffcsClassmates` ×2, `ffcsTab.render`, `social-*` ×6,
+20 failures in 11 files, all pre-existing on `main`: `oauth2`,
+`ffcsClassmates` ×2, `social-*` ×6,
 `syncNotificationRedesign`. When a redesign change breaks a test that pins an
 old class name, update the test to the new class and keep its intent (see
 `weekStrip.test.ts`, `optionPicker.test.tsx` for examples).

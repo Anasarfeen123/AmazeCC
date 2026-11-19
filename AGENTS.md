@@ -22,4 +22,4 @@ Hard rules: work only on the fork `Anasarfeen123/AmazeCC` (push with
 `git push fork redesign`); never handle the user's VTOP password (use
 `scripts/redesign/shot.mjs` with `LOGIN=1`, which reads
 `~/.config/amazecc/vtop.env`); colours only through tokens in
-`src/app/brand.css`; keep `vitest` at the 28-failure baseline.
+`src/app/brand.css`; keep `vitest` at the 20-failure baseline.

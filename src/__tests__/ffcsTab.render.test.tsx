@@ -640,6 +640,8 @@ describe("FFCSTimetableTab", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       arrayBuffer: async () => new TextEncoder().encode(csvContent).buffer,
+      // The planner now reads report files as text (parseFastCSV).
+      text: async () => csvContent,
       json: async () => [],
     } as any);
 
@@ -719,6 +721,8 @@ describe("FFCSTimetableTab", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       arrayBuffer: async () => new TextEncoder().encode(csvContent).buffer,
+      // The planner now reads report files as text (parseFastCSV).
+      text: async () => csvContent,
     } as any);
 
     render(<FFCSTimetableTab />);
@@ -846,6 +850,8 @@ describe("FFCSTimetableTab", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       arrayBuffer: async () => new TextEncoder().encode(csvContent).buffer,
+      // The planner now reads report files as text (parseFastCSV).
+      text: async () => csvContent,
     } as any);
 
     storage.setItem(
@@ -909,6 +915,8 @@ describe("FFCSTimetableTab", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       arrayBuffer: async () => new TextEncoder().encode(csvContent).buffer,
+      // The planner now reads report files as text (parseFastCSV).
+      text: async () => csvContent,
     } as any);
 
     render(<FFCSTimetableTab />);
@@ -947,6 +955,8 @@ describe("FFCSTimetableTab", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       arrayBuffer: async () => new TextEncoder().encode(csvContent).buffer,
+      // The planner now reads report files as text (parseFastCSV).
+      text: async () => csvContent,
     } as any);
 
     storage.setItem(
@@ -1042,6 +1052,8 @@ describe("FFCSTimetableTab", () => {
       ok: true,
       json: async () => [],
       arrayBuffer: async () => new TextEncoder().encode(csvContent).buffer,
+      // The planner now reads report files as text (parseFastCSV).
+      text: async () => csvContent,
     } as any);
 
     const first = render(<FFCSTimetableTab />);
@@ -1065,6 +1077,8 @@ describe("FFCSTimetableTab", () => {
       ok: true,
       json: async () => [],
       arrayBuffer: async () => new TextEncoder().encode(csvContent).buffer,
+      // The planner now reads report files as text (parseFastCSV).
+      text: async () => csvContent,
     } as any);
 
     render(<FFCSTimetableTab />);
@@ -1087,6 +1101,8 @@ describe("FFCSTimetableTab", () => {
       ok: true,
       json: async () => [],
       arrayBuffer: async () => new TextEncoder().encode(csvContent).buffer,
+      // The planner now reads report files as text (parseFastCSV).
+      text: async () => csvContent,
     } as any);
 
     render(<FFCSTimetableTab />);
@@ -1118,6 +1134,7 @@ describe("FFCSTimetableTab", () => {
       json: async () => [],
       arrayBuffer: async () =>
         new TextEncoder().encode(String(input).includes("slot-timetable") ? csvMock : csvFinal).buffer,
+      text: async () => (String(input).includes("slot-timetable") ? csvMock : csvFinal),
     })) as any);
 
     const both = [

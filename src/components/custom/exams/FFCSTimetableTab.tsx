@@ -49,6 +49,7 @@ import {
 } from "lucide-react";
 
 import SearchInput from "../shared/SearchInput";
+import DebouncedSearchInput from "../shared/DebouncedSearchInput";
 import EmptyState from "../shared/EmptyState";
 import { useTheme } from "next-themes";
 import ThemeToggle from "@/components/custom/ThemeToggle";
@@ -3401,11 +3402,10 @@ export default function FFCSTimetableTab({
               <h3 className="font-bold text-lg text-text-heading flex items-center gap-2">
                 <Search className="w-5 h-5 text-blue-500" /> Search Course
               </h3>
-              <SearchInput
-                placeholder="Search by course code or title..."
+              <DebouncedSearchInput
+                placeholder="Search by course code or title"
                 value={courseSearchQuery}
-                onChange={(e) => setCourseSearchQuery(e.target.value)}
-                className="bg-surface-secondary/50 border-border-strong pl-10 pr-4 py-3 focus:border-blue-500/50 placeholder:text-muted-foreground"
+                onChange={setCourseSearchQuery}
                 autoFocus
               />
               <CourseCatalogFilters
@@ -3448,7 +3448,7 @@ export default function FFCSTimetableTab({
               you arrow through results.
             */}
               <div className="p-2 overflow-y-auto max-h-[50vh] custom-scrollbar bg-surface-secondary/5 rounded-xl">
-                {filteredSearchCourses.slice(0, 100).map((c) => {
+                {filteredSearchCourses.slice(0, 40).map((c) => {
                   const fullyAdded = isCourseFullyAdded(c.code, c.types, activeTimetable.courses);
                   // Grade rule: an `S` in this subject makes it unselectable —
                   // nothing to improve, nothing to retake.
@@ -3580,10 +3580,10 @@ export default function FFCSTimetableTab({
                     )}
                   </div>
                 )}
-                {filteredSearchCourses.length > 100 && (
-                  <div className="text-center py-4 text-xs text-muted-foreground font-medium flex items-center justify-center gap-2 border-t border-border-strong/30 mt-2">
-                    <Info className="w-3 h-3" /> Showing first 100 results. Refine search.
-                  </div>
+                {filteredSearchCourses.length > 40 && (
+                  <p className="mt-2 border-t-2 border-border-muted py-3 text-center font-mono text-xs text-text-muted">
+                    Showing 40 of {filteredSearchCourses.length}. Type more of the code or title to narrow it down.
+                  </p>
                 )}
               </div>
             </BottomSheet>

@@ -1,8 +1,6 @@
 "use client";
-import { Link2 } from "lucide-react";
 import { AboutSection } from "./AboutSection";
 import ResourcesSection from "../ResourcesSection";
-import { SectionHeader } from "../shared/primitives";
 
 /** The four destinations the About page drills into. */
 export type AboutSubpage = "main" | "hallOfFame" | "changelog" | "team";
@@ -26,18 +24,13 @@ export type AboutSubpage = "main" | "hallOfFame" | "changelog" | "team";
  * pushes a screen onto its own stack; Settings opens the modal it already keeps
  * mounted.
  */
-export default function AboutBody({
-  setActiveSubpage,
-}: {
-  setActiveSubpage: (page: AboutSubpage) => void;
-}) {
+export default function AboutBody({ setActiveSubpage }: { setActiveSubpage: (page: AboutSubpage) => void }) {
   return (
     <div className="space-y-6">
       <AboutSection />
-      <div className="space-y-3">
-        <SectionHeader icon={Link2} title="Resources" />
-        <ResourcesSection setActiveSubpage={setActiveSubpage} />
-      </div>
+      {/* ResourcesSection brings its own headings (Important links, Community,
+          Links, Project); a "Resources" header above them doubled up. */}
+      <ResourcesSection setActiveSubpage={setActiveSubpage} />
     </div>
   );
 }

@@ -882,7 +882,7 @@ export default function ProfilePage({
           same `showProfilePhoto` privacy switch, and the Shortcuts / Sign Out
           buttons it carried already exist on the settings hub — so removing it
           lost no action, only the repetition. */}
-      <div className="relative p-5 sm:p-6 rounded-2xl border-2 border-border-ink shadow-2xs bg-surface">
+      <div className="brutal-card brutal-card-hero relative rounded-[16px] p-5 sm:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 min-w-0">
           {displayProfileImage && (unifiedIdentity.photo || profileData?.image) ? (
             <img
@@ -893,8 +893,20 @@ export default function ProfilePage({
               className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl object-cover shadow-sm ring-2 ring-border-ink border-2 border-border-ink shrink-0"
             />
           ) : (
-            <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl text-white flex items-center justify-center font-bold text-2xl shadow-sm shrink-0">
-              {(resolvedFriendlyName ? resolvedFriendlyName[0] : (resolvedUsername || "A")[0]).toUpperCase()}
+            <div
+              aria-hidden
+              className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[14px] border-[3px] border-border-ink bg-ochre font-display text-2xl font-bold text-obsidian shadow-brutal-sm sm:h-18 sm:w-18"
+            >
+              {/* Initials from the name (it showed "2", the first digit of the
+                  registration number, when no nickname was set). */}
+              {(() => {
+                const name = resolvedFriendlyName || unifiedIdentity.name || "";
+                const letters = name
+                  .split(/\s+/)
+                  .filter((w) => /^[A-Za-z]/.test(w))
+                  .map((w) => w[0].toUpperCase());
+                return letters.length ? letters.slice(0, 2).join("") : "ST";
+              })()}
             </div>
           )}
           <div className="min-w-0 flex-1">
@@ -1173,7 +1185,8 @@ export default function ProfilePage({
       <div className="space-y-3">
         <SectionHeader icon={Shield} title="Stored logins" count={3} />
         <p className="px-1 -mt-1 text-xs leading-relaxed text-text-muted font-medium">
-          Saved on this device alone for autofill and auto-login. Nothing here ever leaves your phone.
+          Saved encrypted on this device so you stay signed in. When you sign in or sync, they are sent to VTOP through
+          the AmazeCC server, which does not keep them.
         </p>
         <div className={TILE_CARD}>
           <p className="text-sm font-bold text-text-heading font-outfit tracking-tight mb-3">VTOP portal</p>
@@ -2295,33 +2308,6 @@ export default function ProfilePage({
           <ChevronRight size={16} className="text-text-muted shrink-0" />
         </div>
 
-        {/* Keyboard Shortcuts */}
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={onOpenShortcutsHelp}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              onOpenShortcutsHelp();
-            }
-          }}
-          className="flex items-center justify-between p-4 hover:bg-surface-hover transition-colors cursor-pointer"
-        >
-          <div className="flex items-center gap-3.5 min-w-0 pr-4">
-            <div className="p-2.5 rounded-xl bg-secondary text-secondary-foreground shrink-0">
-              <Keyboard size={18} />
-            </div>
-            <div className="min-w-0">
-              <span className="font-bold text-xs text-text-heading block">Keyboard Shortcuts Cheat-Sheet</span>
-              <span className="text-xs text-text-muted block truncate mt-0.5">
-                View interactive hotkey shortcuts for quick navigation
-              </span>
-            </div>
-          </div>
-          <ChevronRight size={16} className="text-text-muted shrink-0" />
-        </div>
-
         {/* Reset Cache */}
         <div
           role="button"
@@ -2343,33 +2329,6 @@ export default function ProfilePage({
               <span className="font-bold text-xs text-danger-foreground block">Reset Application Cache</span>
               <span className="text-xs text-danger-foreground block truncate mt-0.5">
                 Clear all stored data, cached timetables, and reload fresh
-              </span>
-            </div>
-          </div>
-          <ChevronRight size={16} className="text-danger-foreground shrink-0" />
-        </div>
-
-        {/* Log Out */}
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={handleLogOutRequest}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              handleLogOutRequest();
-            }
-          }}
-          className="flex items-center justify-between p-4 hover:bg-danger-surface transition-colors cursor-pointer"
-        >
-          <div className="flex items-center gap-3.5 min-w-0 pr-4">
-            <div className="p-2.5 rounded-xl bg-danger-surface text-danger-foreground shrink-0">
-              <LogOut size={18} />
-            </div>
-            <div className="min-w-0">
-              <span className="font-bold text-xs text-danger-foreground block">Sign Out</span>
-              <span className="text-xs text-danger-foreground block truncate mt-0.5">
-                Removes your logins and all data stored on this device
               </span>
             </div>
           </div>

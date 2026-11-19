@@ -1,10 +1,12 @@
 "use client";
 
+import Switch from "../shared/primitives/Switch";
+
 import { useState, useEffect } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import { settingsAtom, unifiedIdentityAtom } from "@/store";
 import type { UnifiedUserIdentity } from "@/types";
-import { Switch } from "@amazecontinuityprojects/amazeui";
+
 import { api } from "@/lib/sync-engine";
 import {
   Bell,
@@ -255,19 +257,15 @@ export default function PushNotificationManager() {
       {/* Master Push Switch Header */}
       <div className="flex items-center justify-between p-4 rounded-2xl bg-surface border-2 border-border-ink shadow-xs">
         <div className="flex items-center gap-3">
-          <div
-            className={`w-10 h-10 rounded-xl flex items-center justify-center ${isEnabled ? "bg-secondary text-secondary-foreground" : "bg-surface-secondary text-text-muted"}`}
-          >
-            <Bell size={20} />
-          </div>
           <div>
-            <h4 className="text-sm font-bold text-text-heading">Push Notifications (VAPID)</h4>
+            <h4 className="text-sm font-bold text-text-heading">Push notifications</h4>
             <p className="text-xs text-text-muted">Receive real-time campus reminders on this device</p>
           </div>
         </div>
 
         <Switch
           checked={isEnabled}
+          label="Push notifications"
           onCheckedChange={(checked) => (checked ? subscribeToPush() : unsubscribeFromPush())}
         />
       </div>

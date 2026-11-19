@@ -1,6 +1,6 @@
 "use client";
-import { AboutSection as AboutSectionUI } from "../shared";
-import { getAssetPath } from "../../../lib/utils";
+import { Heart } from "lucide-react";
+import BrandLogo from "../shared/BrandLogo";
 import buildInfo from "@/data/buildInfo.json";
 
 /**
@@ -20,17 +20,32 @@ import buildInfo from "@/data/buildInfo.json";
 const buildDate = new Date(`${buildInfo.date}T00:00:00`);
 
 export function AboutSection() {
+  const facts: [string, string][] = [
+    ["Version", `#${buildInfo.commitHash}`],
+    ["Updated", buildDate.toLocaleDateString("en-GB", { month: "short", year: "numeric" })],
+    ["Platform", "Web app"],
+  ];
   return (
-    <AboutSectionUI
-      wordmarkLightSrc={getAssetPath("/images/icons/wordmarkLight.svg")}
-      wordmarkDarkSrc={getAssetPath("/images/icons/wordmarkDark.svg")}
-      tagline="Your ultimate college companion application."
-      version={`#${buildInfo.commitHash}`}
-      lastUpdated={buildDate.toLocaleDateString("en-US", {
-        month: "long",
-        year: "numeric",
-      })}
-      platform="Web App"
-    />
+    <section className="brutal-card brutal-card-hero rounded-[18px] p-6 sm:p-8">
+      <BrandLogo size="xl" tagline />
+      <p className="mt-4 max-w-md text-base leading-relaxed text-text-muted">
+        Attendance, marks, timetable and campus tools for VIT Chennai, in one place. Free, open source, made by
+        students.
+      </p>
+      <dl className="mt-5 flex flex-wrap gap-2">
+        {facts.map(([k, v]) => (
+          <div
+            key={k}
+            className="rounded-[8px] border-2 border-border-ink bg-surface-secondary px-2.5 py-1 font-mono text-xs uppercase"
+          >
+            <dt className="inline text-text-muted">{k} </dt>
+            <dd className="inline font-bold text-text-primary">{v}</dd>
+          </div>
+        ))}
+      </dl>
+      <p className="mt-5 flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+        Made with <Heart className="h-3.5 w-3.5 fill-coral text-coral" aria-label="love" /> by students at VIT Chennai
+      </p>
+    </section>
   );
 }

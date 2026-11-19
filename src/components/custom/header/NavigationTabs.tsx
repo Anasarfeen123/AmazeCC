@@ -614,8 +614,18 @@ export default function NavigationTabs({
     };
   };
 
+  // Home is its own item at the top (like the phone bottom bar), not one
+  // entry inside "Study".
+  const homeItem = useMemo<NavItem | null>(() => {
+    const e = registry.find((x) => x.id === "home" && x.surfaces.sidebar === true);
+    return e ? toNavItem(e) : null;
+  }, [registry, activeTab, activeSubTab, activeToolsSubTab, HostelActiveSubTab, navCtx]);
+
   const studyItems = useMemo<NavItem[]>(
-    () => registry.filter((e) => e.surfaces.sidebar === true && e.surfaces.sidebarGroup === "study").map(toNavItem),
+    () =>
+      registry
+        .filter((e) => e.id !== "home" && e.surfaces.sidebar === true && e.surfaces.sidebarGroup === "study")
+        .map(toNavItem),
     [registry, activeTab, activeSubTab, activeToolsSubTab, HostelActiveSubTab, navCtx],
   );
 
@@ -1243,6 +1253,18 @@ export default function NavigationTabs({
               >
                 {!showAcademicsPanel && !showToolsPanel && !showHostelPanel ? (
                   <div className="space-y-4">
+                    {homeItem && (
+                      <SidebarItem
+                        icon={<homeItem.icon className="h-[18px] w-[18px] stroke-[2.2]" aria-hidden="true" />}
+                        label={homeItem.label}
+                        isActive={homeItem.isActive}
+                        aria-current={homeItem.isActive ? "page" : undefined}
+                        data-sidebar-nav="true"
+                        className={SIDEBAR_ITEM_BRAND}
+                        onClick={homeItem.onSelect}
+                        onKeyDown={(event) => handleNavKeyDown(event, homeItem.onSelect)}
+                      />
+                    )}
                     {pinnedItems.length > 0 && (
                       <SidebarGroup>
                         <SidebarGroupLabel className={SIDEBAR_GROUP_LABEL_BRAND}>Pinned</SidebarGroupLabel>
@@ -1393,6 +1415,25 @@ export default function NavigationTabs({
             {/* Divider */}
             <div className="w-8 border-t border-sidebar-border mb-3" />
 
+            {/* Home first, on its own (same as the open sidebar and the bottom bar). */}
+            {homeItem && (
+              <div className="relative flex justify-center group/rail mb-3">
+                <button
+                  onClick={homeItem.onSelect}
+                  aria-current={homeItem.isActive ? "page" : undefined}
+                  className={`flex h-11 w-11 items-center justify-center rounded-[10px] transition-colors duration-150 ${
+                    homeItem.isActive
+                      ? railActiveStyles
+                      : "text-cream hover:bg-sidebar-accent border-2 border-transparent"
+                  } ${navButtonBase}`}
+                  title={homeItem.label}
+                  aria-label={`Open ${homeItem.label}`}
+                >
+                  <homeItem.icon className="h-5 w-5 stroke-[2.2]" />
+                </button>
+              </div>
+            )}
+
             {pinnedItems.length > 0 && (
               <>
                 <nav className="flex flex-col items-center gap-2.5 w-full mb-3" aria-label="Pinned rail shortcuts">
@@ -1427,7 +1468,7 @@ export default function NavigationTabs({
                 const GroupIcon = group.icon;
                 const isActive =
                   group.id === "study"
-                    ? activeTab === "home" || activeTab === "attendance" || activeTab === "academics"
+                    ? activeTab === "attendance" || activeTab === "academics" // Home has its own rail button
                     : group.id === "campus"
                       ? [
                           "payments",

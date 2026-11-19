@@ -30,10 +30,12 @@ const CELL =
  * `semiholiday` amber because a shortened list is still a list.
  */
 const TINT: Record<CalendarDayModel["dayType"], string> = {
-  instructional: "",
-  semiholiday: "bg-warning-surface",
+  // Teaching days get a quiet tile so the month reads as a grid; in dark the
+  // holiday/shortened tints were muddy brown, so they become solid fills.
+  instructional: "bg-surface-secondary",
+  semiholiday: "bg-warning-surface dark:bg-ochre",
   nonInstructional: "",
-  holiday: "bg-danger-surface",
+  holiday: "bg-danger-surface dark:bg-coral",
   other: "",
 };
 
@@ -149,9 +151,9 @@ export default function MonthGrid({
                   className={cn(
                     "text-xs font-bold font-outfit leading-none",
                     day.dayType === "holiday"
-                      ? "text-danger-foreground"
+                      ? "text-danger-foreground dark:text-obsidian"
                       : day.dayType === "semiholiday"
-                        ? "text-warning-foreground"
+                        ? "text-warning-foreground dark:text-obsidian"
                         : day.dayType === "nonInstructional"
                           ? "text-primary"
                           : "text-text-heading",

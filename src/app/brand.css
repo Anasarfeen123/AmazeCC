@@ -356,6 +356,20 @@
   color: var(--primary-foreground);
 }
 
+/* Status-coloured text (e.g. a mint "safe" number) inside a brand fill
+   becomes the fill's ink: mint on ochre or coral on sage is unreadable. */
+:is([class~="bg-highlight"], [class~="!bg-highlight"])
+  :is(.text-success-foreground, .text-warning-foreground, .text-danger-foreground) {
+  color: var(--highlight-foreground);
+}
+:is([class~="bg-secondary"], [class~="!bg-secondary"])
+  :is(.text-success-foreground, .text-warning-foreground, .text-danger-foreground) {
+  color: var(--secondary-foreground);
+}
+:is([class~="bg-primary"]) :is(.text-success-foreground, .text-warning-foreground, .text-danger-foreground) {
+  color: var(--primary-foreground);
+}
+
 /* Old solid accent fills in dark. The bridge maps blue/indigo/violet/purple
    500-700 to the deep teal scale, which disappears on the obsidian page (the
    grades bars, primary buttons and selected tabs in ~60 unconverted files).

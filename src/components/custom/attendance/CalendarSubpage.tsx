@@ -705,6 +705,8 @@ export default function CalendarSubpage({
           carousel={summaryCarousel}
           interactiveDots
           ariaLabel="Attendance summary"
+          // The page's one loud card (ochre, like Home's hero).
+          className="!bg-highlight"
         />
 
         {/* One slide per enrolled course, each a percentage of that course's own

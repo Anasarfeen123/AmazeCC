@@ -436,11 +436,9 @@ export default function FeedbackModal() {
                       <Video className="w-4 h-4" />
                     </div>
                     <div>
-                      <span className="text-xs font-bold text-text-primary block leading-tight">
-                        Record Bug Reproduction
-                      </span>
+                      <span className="text-xs font-bold text-text-primary block leading-tight">Show us the bug</span>
                       <span className="text-xs text-text-muted block mt-0.5">
-                        Records live virtual DOM while you navigate AmazeCC
+                        Record what happens in AmazeCC while you repeat it
                       </span>
                     </div>
                   </div>
@@ -452,13 +450,13 @@ export default function FeedbackModal() {
                   className="w-full min-h-11 py-2.5 px-3 rounded-xl bg-primary hover:brightness-110 text-primary-foreground text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs"
                 >
                   <span className="w-2.5 h-2.5 rounded-full bg-surface animate-pulse" />
-                  <span>Start Recording &amp; Replicate Glitch</span>
+                  <span>Start recording</span>
                 </button>
 
                 <p className="text-xs text-text-muted leading-relaxed">
-                  Tapping record closes this modal and pins a floating indicator to the top of your screen. Replicate
-                  the issue anywhere in the app, then tap <strong>&quot;Finish &amp; Review&quot;</strong> to return
-                  with the clip attached. If you reload, it cancels automatically.
+                  This window closes and a small bar stays at the top. Do what caused the bug, then tap{" "}
+                  <strong>&quot;Finish &amp; Review&quot;</strong> to come back with the recording attached. Reloading
+                  the page cancels it.
                 </p>
               </div>
             )}

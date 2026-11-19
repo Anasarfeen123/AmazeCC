@@ -425,7 +425,13 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
 
           <div className="flex items-center justify-between gap-2">
             <p className={`font-mono text-xs line-clamp-2 ${duesData ? "opacity-80" : "text-text-muted"}`}>
-              {hasPendingDues ? "Outstanding payments pending on VTOP" : duesData?.message || "No outstanding fee dues"}
+              {hasPendingDues ? (
+                "Outstanding payments pending on VTOP"
+              ) : duesData?.message ? (
+                <span data-private="fees">{duesData.message}</span>
+              ) : (
+                "No outstanding fee dues"
+              )}
             </p>
             {hasPendingDues && (
               <a
@@ -608,7 +614,9 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
                   {openTables.map((table, idx) => (
                     <div key={idx} className="space-y-2.5">
                       {table.caption && (
-                        <h4 className="text-xs font-bold text-text-muted uppercase tracking-wider">{table.caption}</h4>
+                        <h4 data-private="fees" className="text-xs font-bold text-text-muted uppercase tracking-wider">
+                          {table.caption}
+                        </h4>
                       )}
                       {table.rows?.map((row, ri) => (
                         <div
@@ -624,7 +632,10 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
                           <div className="grid grid-cols-2 gap-2.5 text-xs">
                             {table.headers?.map((header) => (
                               <div key={header} className="p-2.5 rounded-xl bg-surface border-2 border-border-ink">
-                                <span className="text-xs font-bold text-text-muted uppercase block mb-0.5">
+                                <span
+                                  data-private="fees"
+                                  className="text-xs font-bold text-text-muted uppercase block mb-0.5"
+                                >
                                   {header}
                                 </span>
                                 <span data-private="fees" className="font-bold text-text-primary break-words">

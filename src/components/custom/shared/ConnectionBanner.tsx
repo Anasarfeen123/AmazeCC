@@ -38,10 +38,10 @@ export default function ConnectionBanner({ enabled }: { enabled: boolean }) {
       className={`fixed inset-x-0 top-0 z-[60] flex justify-center px-3 pt-[calc(env(safe-area-inset-top,0px)+0.5rem)] pointer-events-none`}
     >
       <div
-        className={`pointer-events-auto flex max-w-xl items-start gap-2.5 rounded-xl border px-3 py-2 text-xs font-medium shadow-lg ${
+        className={`pointer-events-auto flex max-w-xl items-start gap-2.5 rounded-[12px] border-2 px-3 py-2 text-xs font-medium shadow-brutal-sm ${
           offline
-            ? "border-border-ink bg-amber-50/95 text-amber-900 dark:text-amber-100"
-            : "border-border-ink bg-rose-50/95 text-rose-900 dark:text-rose-100"
+            ? "border-border-ink bg-warning-surface text-warning-foreground"
+            : "border-border-ink bg-danger-surface text-danger-foreground"
         }`}
       >
         {offline ? (
@@ -70,7 +70,7 @@ export default function ConnectionBanner({ enabled }: { enabled: boolean }) {
               await checkVtopNow();
               setChecking(false);
             }}
-            className="shrink-0 rounded-md border border-current/30 px-2 py-0.5 font-bold hover:bg-black/5 disabled:opacity-60 cursor-pointer"
+            className="shrink-0 rounded-md border border-current/30 px-2 py-0.5 font-bold hover:bg-current/10 disabled:opacity-60 cursor-pointer"
           >
             {checking ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-label="Checking" /> : "Check now"}
           </button>

@@ -129,7 +129,7 @@ export default function TimetableGridShell({
                       "rounded-lg px-0.5 py-1 font-bold uppercase tracking-wider",
                       compact ? "text-xs" : "text-xs",
                       isToday
-                        ? "bg-amber-100 text-amber-900 ring-2 ring-amber-400 dark:text-amber-200 dark:ring-amber-500/70"
+                        ? "bg-warning-surface text-warning-foreground ring-2 ring-ochre"
                         : "bg-surface text-text-muted",
                     )}
                   >

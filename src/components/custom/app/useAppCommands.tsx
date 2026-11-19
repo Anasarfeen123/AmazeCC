@@ -290,7 +290,7 @@ export function useAppCommands(input: AppCommandInputs) {
         B: "text-warning-foreground bg-warning-surface border-border-ink",
         C: "text-warning-foreground bg-orange-50 dark:bg-orange-900/20 border-orange-200/50 dark:border-orange-800/30",
         D: "text-danger-foreground bg-danger-surface border-border-ink",
-        F: "text-red-800 dark:text-danger-foreground bg-red-100 border-border-ink",
+        F: "text-danger-foreground bg-danger-surface border-border-ink",
         N: "text-text-primary bg-surface-secondary border-border-ink",
       };
       const gc = gradeColors[g.grade] || gradeColors.N;

@@ -91,7 +91,7 @@ export default function UploadPaperModal({
       title="Upload Past Paper Link"
       subtitle={
         isAdmin ? (
-          <span className="bg-green-100 text-success-foreground text-xs uppercase font-bold px-2 py-0.5 rounded-[6px] dark:text-success-foreground">
+          <span className="bg-success-surface text-success-foreground text-xs uppercase font-bold px-2 py-0.5 rounded-[6px]">
             Admin Mode
           </span>
         ) : undefined

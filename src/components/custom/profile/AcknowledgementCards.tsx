@@ -98,9 +98,7 @@ export default function AcknowledgementCards({ creds, refreshKey }: { creds: any
               <p className="text-sm text-text-primary flex-1 min-w-0 leading-snug">{docName}</p>
               <span
                 className={`shrink-0 text-xs font-semibold px-2.5 py-1 rounded-[10px] ${
-                  isSubmitted
-                    ? "bg-emerald-100 text-success-foreground dark:text-success-foreground"
-                    : "bg-surface-secondary text-text-muted "
+                  isSubmitted ? "bg-success-surface text-success-foreground" : "bg-surface-secondary text-text-muted "
                 } min-h-9`}
               >
                 {status || (isSubmitted ? "Verified" : "Pending")}

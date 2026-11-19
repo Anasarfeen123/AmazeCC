@@ -60,7 +60,7 @@ export default function PeerTimetableSheet({
         <>
           {peer.handle} · published {relativePublished(peer.publishedAt)}
           {peer.stale && (
-            <span className="ml-1.5 inline-block align-middle bg-amber-100 text-warning-foreground text-xs uppercase font-bold px-2 py-0.5 rounded-[6px] dark:text-warning-foreground">
+            <span className="ml-1.5 inline-block align-middle bg-warning-surface text-warning-foreground text-xs uppercase font-bold px-2 py-0.5 rounded-[6px]">
               Stale
             </span>
           )}

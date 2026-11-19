@@ -30,9 +30,9 @@ interface EventItem {
 
 const badge = {
   violet: "bg-secondary text-secondary-foreground border-border-ink",
-  rose: "bg-rose-100 text-rose-800 border-border-ink dark:text-danger-foreground dark:border-rose-800/50",
-  amber: "bg-amber-100 text-amber-800 border-border-ink dark:text-warning-foreground dark:border-amber-800/50",
-  emerald: "bg-emerald-100 text-emerald-800 border-border-ink dark:text-success-foreground dark:border-emerald-800/50",
+  rose: "bg-danger-surface text-danger-foreground border-border-ink",
+  amber: "bg-warning-surface text-warning-foreground border-border-ink",
+  emerald: "bg-success-surface text-success-foreground border-border-ink",
   indigo: "bg-secondary text-primary border-border-ink dark:text-primary",
   gray: "bg-surface-secondary text-text-primary border-border-ink",
 };
@@ -520,7 +520,7 @@ export default function EventSearchPalette() {
                       className={cn(
                         "inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded text-xs font-semibold",
                         selectedEvent._source === "registered"
-                          ? "bg-emerald-100 text-emerald-800 dark:text-success-foreground"
+                          ? "bg-success-surface text-success-foreground"
                           : "bg-fuchsia-100 text-fuchsia-800   dark:bg-fuchsia-900/80 dark:text-fuchsia-300",
                       )}
                     >
@@ -675,7 +675,7 @@ export default function EventSearchPalette() {
                     className={cn(
                       "px-1.5 py-0.5 rounded text-xs font-bold",
                       ev._source === "registered"
-                        ? "bg-emerald-100 text-emerald-800 dark:text-success-foreground"
+                        ? "bg-success-surface text-success-foreground"
                         : "bg-fuchsia-100 text-fuchsia-800   dark:bg-fuchsia-900/80 dark:text-fuchsia-300",
                     )}
                   >

@@ -91,8 +91,8 @@ export default function UpcomingClassesList({
         <div
           className={`px-3 py-1 rounded-[10px] border ${
             predictedPercent >= thresholdPct
-              ? "bg-emerald-100 text-success-foreground border-border-ink dark:text-success-foreground dark:border-emerald-800/50"
-              : "bg-red-100 text-danger-foreground border-border-ink dark:text-danger-foreground dark:border-red-800/50"
+              ? "bg-success-surface text-success-foreground border-border-ink"
+              : "bg-danger-surface text-danger-foreground border-border-ink"
           } min-h-9`}
         >
           Predicted: {predictedPercent}%
@@ -116,7 +116,7 @@ export default function UpcomingClassesList({
               {...clickable(() => toggleAttendance(time))}
               className={`flex flex-col items-center justify-center rounded-lg border p-2 text-center cursor-pointer select-none transition-all duration-150 ${
                 isSkipped
-                  ? "bg-red-50/50 border-border-ink text-danger-foreground dark:text-danger-foreground"
+                  ? "bg-danger-surface border-border-ink text-danger-foreground"
                   : isIgnored
                     ? "bg-surface-secondary border-border-ink text-text-muted opacity-50"
                     : "bg-surface border-border-ink text-text-primary hover:border-border-ink dark:hover:border-border-ink"

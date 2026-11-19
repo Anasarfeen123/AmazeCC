@@ -234,7 +234,7 @@ export default function AttendanceCalendarView({
                         onClick={(e) => toggleIndividualNote(selectedOverallDate.date, c.courseCode, e)}
                         className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all shrink-0 ${
                           isSecured
-                            ? "bg-emerald-100 text-success-foreground dark:text-success-foreground"
+                            ? "bg-success-surface text-success-foreground"
                             : "bg-surface border border-border-ink text-text-muted hover:bg-surface-secondary "
                         }`}
                       >
@@ -445,7 +445,7 @@ export default function AttendanceCalendarView({
                       onClick={(e) => toggleIndividualNote(selectedOverallDate.date, c.courseCode, e)}
                       className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all shrink-0 ${
                         isSecured
-                          ? "bg-emerald-100 text-success-foreground dark:text-success-foreground"
+                          ? "bg-success-surface text-success-foreground"
                           : "bg-surface border border-border-ink text-text-muted hover:bg-surface-secondary "
                       }`}
                     >

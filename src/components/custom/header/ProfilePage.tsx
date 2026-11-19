@@ -84,10 +84,21 @@ import {
 } from "@/lib/privacyMode";
 
 export type SectionId =
-  "profile" | "credentials" | "preferences" | "academic" | "sync" | "sync-modes" | "navigation" | "advanced" | "about";
+  | "profile"
+  | "credentials"
+  | "preferences"
+  | "home-privacy"
+  | "academic"
+  | "sync"
+  | "sync-modes"
+  | "navigation"
+  | "advanced"
+  | "about";
 
 export interface SectionConfig {
   id: SectionId;
+  /** Hub heading the row is listed under. */
+  group?: "Account" | "App" | "Study" | "Data";
   label: string;
   subtitle: string;
   icon: any;
@@ -122,32 +133,45 @@ const DRILLDOWNS: Record<Exclude<SettingsScreen, "hub" | SectionId>, { label: st
 export const SECTIONS: SectionConfig[] = [
   {
     id: "profile",
-    label: "Student Profile",
-    subtitle: "Your details from VTOP: personal info, proctor and records",
+    label: "Your profile",
+    subtitle: "Your details from VTOP: personal info, proctor, records",
+    group: "Account",
     icon: User,
     iconBg: "bg-secondary",
     iconColor: "text-secondary-foreground",
   },
   {
     id: "credentials",
-    label: "VTOP Credentials",
-    subtitle: "Portal logins, password change, and stored session keys",
+    label: "VTOP login",
+    subtitle: "Your VTOP and Moodle logins, change password",
+    group: "Account",
     icon: Key,
     iconBg: "bg-warning-surface",
     iconColor: "text-warning-foreground",
   },
   {
     id: "preferences",
-    label: "Appearance & Privacy",
-    subtitle: "Theme, timetable layout, what Home shows, privacy blur, app icon",
+    label: "Appearance",
+    subtitle: "Theme, sounds, number format, timetable look, app icon",
+    group: "App",
     icon: Palette,
     iconBg: "bg-secondary",
     iconColor: "text-secondary-foreground",
   },
   {
+    id: "home-privacy",
+    label: "Home & privacy",
+    subtitle: "What Home shows, privacy mode, hiding your CGPA, photo",
+    group: "App",
+    icon: EyeOff,
+    iconBg: "bg-secondary",
+    iconColor: "text-secondary-foreground",
+  },
+  {
     id: "academic",
-    label: "Academic & Campus Life",
+    label: "Semester & campus",
     subtitle: "Semester, attendance goal, hostel or day scholar, focus timer",
+    group: "Study",
     icon: GraduationCap,
     iconBg: "bg-secondary",
     iconColor: "text-secondary-foreground",
@@ -155,7 +179,8 @@ export const SECTIONS: SectionConfig[] = [
   {
     id: "sync",
     label: "Sync",
-    subtitle: "When and what AmazeCC pulls from VTOP, sync modes, data saver",
+    subtitle: "When and what AmazeCC pulls from VTOP, data saver",
+    group: "Data",
     icon: RefreshCcw,
     iconBg: "bg-success-surface",
     iconColor: "text-success-foreground",
@@ -170,8 +195,9 @@ export const SECTIONS: SectionConfig[] = [
   },
   {
     id: "navigation",
-    label: "Navigation & Notifications",
-    subtitle: "Bottom bar shortcuts, push notifications, install the app",
+    label: "Bottom bar & notifications",
+    subtitle: "Bottom bar shortcuts, reminders, install the app",
+    group: "App",
     icon: Grid,
     iconBg: "bg-secondary",
     iconColor: "text-secondary-foreground",
@@ -179,7 +205,8 @@ export const SECTIONS: SectionConfig[] = [
   {
     id: "advanced",
     label: "Advanced",
-    subtitle: "API server, backup and restore, stored data on this device",
+    subtitle: "Server, backup and restore, data saved on this device",
+    group: "Data",
     icon: Shield,
     iconBg: "bg-danger-surface",
     iconColor: "text-danger-foreground",
@@ -187,7 +214,8 @@ export const SECTIONS: SectionConfig[] = [
   {
     id: "about",
     label: "About",
-    subtitle: "What's new, the team, hall of fame, campus links",
+    subtitle: "What's new, the team, campus links",
+    group: "Data",
     icon: Info,
     iconBg: "bg-secondary",
     iconColor: "text-secondary-foreground",
@@ -827,6 +855,7 @@ export default function ProfilePage({
                 ? "Dark"
                 : "Light",
       },
+      "home-privacy": { value: privacyCategories(settings).length ? "Private" : "Off" },
       academic: { value: semesterLabel(currSemesterID) },
       sync: {
         value: `${(resolveMode(settings?.defaultSyncMode || "quarterly", customSyncModes)?.label ?? "Quarterly").replace(/ Sync$/, "")} · ${
@@ -1524,14 +1553,15 @@ export default function ProfilePage({
 
   const renderPreferencesContent = () => (
     <div className="space-y-6">
-      {/* Theme & Layout Card */}
-      <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-5 shadow-2xs">
-        <h3 className="font-display text-base font-bold uppercase text-text-heading">Theme & timetable</h3>
-
+      <div className="bg-surface rounded-[14px] border-2 border-border-ink p-5 space-y-4 shadow-brutal-sm">
+        <div>
+          <h3 className="font-display text-base font-bold uppercase text-text-heading">Look & feel</h3>
+          <p className="text-xs text-text-muted">Theme, sounds and how numbers are shown.</p>
+        </div>
         {/* Theme Mode Switcher */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>
-            <p className="text-sm font-bold text-text-primary">Theme Mode</p>
+            <p className="text-sm font-bold text-text-primary">Theme</p>
             <p className="text-xs text-text-muted">Light, Dark, or Night (pitch black, easiest on the eyes at night)</p>
           </div>
           <SegmentedControl
@@ -1547,10 +1577,35 @@ export default function ProfilePage({
           />
         </div>
 
+        <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
+          <div>
+            <p className="text-sm font-bold text-text-primary">Sounds</p>
+            <p className="text-xs text-text-muted">Small sounds when you finish a task or flip a switch</p>
+          </div>
+          <Switch
+            checked={settings?.soundEnabled ?? true}
+            onCheckedChange={(val) => updateSetting("soundEnabled", val)}
+          />
+        </div>
+
+        <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
+          <div>
+            <p className="text-sm font-bold text-text-primary">One decimal place</p>
+            <p className="text-xs text-text-muted">Show 82.5% instead of 82.47%</p>
+          </div>
+          <Switch checked={decimalValues} onCheckedChange={setDecimalValues} />
+        </div>
+      </div>
+
+      <div className="bg-surface rounded-[14px] border-2 border-border-ink p-5 space-y-4 shadow-brutal-sm">
+        <div>
+          <h3 className="font-display text-base font-bold uppercase text-text-heading">Timetable</h3>
+          <p className="text-xs text-text-muted">How the timetable grid draws your classes.</p>
+        </div>
         {/* Timetable Pill Style */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>
-            <p className="text-sm font-bold text-text-primary">Timetable Class Density</p>
+            <p className="text-sm font-bold text-text-primary">Class density</p>
             <p className="text-xs text-text-muted">Choose between compact 2-line cards or spacious multi-line cards</p>
           </div>
           <SelectField
@@ -1567,7 +1622,7 @@ export default function ProfilePage({
         {/* Timetable Grid Layout */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>
-            <p className="text-sm font-bold text-text-primary">Timetable Grid Layout</p>
+            <p className="text-sm font-bold text-text-primary">Grid layout</p>
             <p className="text-xs text-text-muted">
               Auto uses the vertical day-by-time heatmap on phones and the full grid on larger screens
             </p>
@@ -1587,7 +1642,7 @@ export default function ProfilePage({
         {/* Vertical Grid Cell Density */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>
-            <p className="text-sm font-bold text-text-primary">Vertical Grid Cell Density</p>
+            <p className="text-sm font-bold text-text-primary">Vertical grid density</p>
             <p className="text-xs text-text-muted">
               Compact shows the slot only and fits the whole week on screen without swiping — phones default to it until
               you pick
@@ -1603,155 +1658,12 @@ export default function ProfilePage({
             className="shrink-0"
           />
         </div>
-
-        {/* Tasks Placement on Home */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
-          <div>
-            <p className="text-sm font-bold text-text-primary">Home Tasks Placement</p>
-            <p className="text-xs text-text-muted">
-              Display task badges inline with timetable classes or in a dedicated section below
-            </p>
-          </div>
-          <SelectField
-            value={settings?.tasksInlineOnHome !== false ? "inline" : "separate"}
-            onChange={(val) => updateSetting("tasksInlineOnHome", val === "inline")}
-            options={[
-              { value: "inline", label: "Inline (3rd line on each class)" },
-              { value: "separate", label: "Clean classes (Section below timetable)" },
-            ]}
-            className="shrink-0"
-          />
-        </div>
-      </div>
-
-      {/* Privacy & Visibility Toggles Card */}
-      <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-4 shadow-2xs">
-        <h3 className="font-display text-base font-bold uppercase text-text-heading">Home, privacy & sound</h3>
-
-        <div className="divide-y divide-border-ink ">
-          <div className="flex items-center justify-between py-3">
-            <div>
-              <p className="text-sm font-bold text-text-primary">Privacy mode</p>
-              <p className="text-xs text-text-muted">
-                Hides your CGPA by default; choose more under Private values. Shortcut: Alt/Option + P
-              </p>
-            </div>
-            <Switch
-              label="Privacy mode"
-              checked={selectedPrivacyCategories.length > 0}
-              onCheckedChange={(val) => setSettings((prev: any) => setPrivacyMode(prev, val))}
-            />
-          </div>
-
-          <div className="flex flex-wrap items-center justify-between gap-3 py-3">
-            <div>
-              <p className="text-sm font-bold text-text-primary">Cover style</p>
-              <p className="mt-0.5 text-xs text-text-muted">Comic is text; Marker is an opaque scribble.</p>
-            </div>
-            <SelectField
-              aria-label="Cover style"
-              value={settings?.privacyCoverStyle ?? "comic"}
-              onChange={(style) => updateSetting("privacyCoverStyle", style as "comic" | "marker")}
-              options={[
-                { value: "comic", label: "Comic  #@%!" },
-                { value: "marker", label: "Marker" },
-              ]}
-              searchable={false}
-              className="w-36 shrink-0"
-            />
-          </div>
-
-          <div className="py-3">
-            <details className="group relative">
-              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-[10px] border-2 border-border-ink bg-surface-secondary px-3 text-sm font-bold text-text-primary shadow-brutal-sm [&::-webkit-details-marker]:hidden">
-                <span className="min-w-0 truncate">Private values: {privacyCoverageLabel}</span>
-                <ChevronRight
-                  className="h-4 w-4 shrink-0 transition-transform duration-150 group-open:rotate-90"
-                  aria-hidden
-                />
-              </summary>
-              <div className="mt-2 divide-y-2 divide-border-ink overflow-hidden rounded-[10px] border-2 border-border-ink bg-surface shadow-brutal-sm">
-                {PRIVACY_CATEGORIES.map((category) => {
-                  const detail = PRIVACY_CATEGORY_DETAILS[category];
-                  return (
-                    <div key={category} className="flex items-center justify-between gap-4 px-3 py-2.5">
-                      <div className="min-w-0">
-                        <p className="text-sm font-bold text-text-primary">{detail.label}</p>
-                        <p className="text-xs text-text-muted">{detail.description}</p>
-                      </div>
-                      <Switch
-                        label={`Cover ${detail.label}`}
-                        checked={selectedPrivacyCategories.includes(category)}
-                        onCheckedChange={(val) =>
-                          setSettings((prev: any) => togglePrivacyCategory(prev, category, val))
-                        }
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            </details>
-          </div>
-
-          <div className="flex items-center justify-between py-3">
-            <div>
-              <p className="text-sm font-bold text-text-primary">Remove the CGPA card from Home</p>
-              <p className="text-xs text-text-muted">
-                When CGPA is hidden in Privacy Mode, Home leaves the card out instead of covering it
-              </p>
-            </div>
-            <Switch
-              label="Remove the CGPA card from Home"
-              checked={settings?.privacyRemoveCgpaCard !== false}
-              onCheckedChange={(val) => updateSetting("privacyRemoveCgpaCard", val)}
-            />
-          </div>
-
-          <div className="flex items-center justify-between py-3">
-            <div>
-              <p className="text-sm font-bold text-text-primary">Show GPA on Home</p>
-              <p className="text-xs text-text-muted">
-                Display cumulative CGPA score cards on the home page and sidebar
-              </p>
-            </div>
-            <Switch checked={settings?.showGpa ?? false} onCheckedChange={(val) => updateSetting("showGpa", val)} />
-          </div>
-
-          <div className="flex items-center justify-between py-3">
-            <div>
-              <p className="text-sm font-bold text-text-primary">Show my VTOP photo</p>
-              <p className="text-xs text-text-muted">
-                Off: the AmazeCC logo shows instead. On: your VTOP photo shows on Home, the sidebar and your profile
-              </p>
-            </div>
-            <Switch
-              checked={settings?.showProfilePhoto ?? false}
-              onCheckedChange={(val) => {
-                updateSetting("profilePhotoChosen", true);
-                updateSetting("showProfilePhoto", val);
-              }}
-            />
-          </div>
-
-          <div className="flex items-center justify-between py-3">
-            <div>
-              <p className="text-sm font-bold text-text-primary">Sound & Action Audio</p>
-              <p className="text-xs text-text-muted">
-                Play subtle audio feedback when completing tasks or toggling states
-              </p>
-            </div>
-            <Switch
-              checked={settings?.soundEnabled ?? true}
-              onCheckedChange={(val) => updateSetting("soundEnabled", val)}
-            />
-          </div>
-        </div>
       </div>
 
       {/* App Icon Card */}
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-4 shadow-2xs">
-        <h3 className="font-display text-base font-bold uppercase text-text-heading">Application Icon</h3>
-        <p className="text-xs text-text-muted">Choose which icon is displayed across header brandings</p>
+        <h3 className="font-display text-base font-bold uppercase text-text-heading">App icon</h3>
+        <p className="text-xs text-text-muted">The logo shown in the app header</p>
 
         <div className="flex gap-4 pt-1">
           <button
@@ -1793,16 +1705,156 @@ export default function ProfilePage({
     </div>
   );
 
+  // Home and privacy: what Home shows, and what is covered when someone is
+  // looking at your screen. Split out of "Appearance & Privacy" (2026-11-20),
+  // where these sat between theme and sound settings.
+  const renderHomePrivacyContent = () => (
+    <div className="space-y-6">
+      <div className="bg-surface rounded-[14px] border-2 border-border-ink p-5 space-y-4 shadow-brutal-sm">
+        <div>
+          <h3 className="font-display text-base font-bold uppercase text-text-heading">Home</h3>
+          <p className="text-xs text-text-muted">What the Home screen shows.</p>
+        </div>
+        {/* Tasks Placement on Home */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
+          <div>
+            <p className="text-sm font-bold text-text-primary">Tasks on Home</p>
+            <p className="text-xs text-text-muted">
+              Display task badges inline with timetable classes or in a dedicated section below
+            </p>
+          </div>
+          <SelectField
+            value={settings?.tasksInlineOnHome !== false ? "inline" : "separate"}
+            onChange={(val) => updateSetting("tasksInlineOnHome", val === "inline")}
+            options={[
+              { value: "inline", label: "Inline (3rd line on each class)" },
+              { value: "separate", label: "Clean classes (Section below timetable)" },
+            ]}
+            className="shrink-0"
+          />
+        </div>
+
+        <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
+          <div>
+            <p className="text-sm font-bold text-text-primary">Show GPA on Home</p>
+            <p className="text-xs text-text-muted">Display cumulative CGPA score cards on the home page and sidebar</p>
+          </div>
+          <Switch checked={settings?.showGpa ?? false} onCheckedChange={(val) => updateSetting("showGpa", val)} />
+        </div>
+
+        <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
+          <div>
+            <p className="text-sm font-bold text-text-primary">Show my VTOP photo</p>
+            <p className="text-xs text-text-muted">
+              Off: the AmazeCC logo shows instead. On: your VTOP photo shows on Home, the sidebar and your profile
+            </p>
+          </div>
+          <Switch
+            checked={settings?.showProfilePhoto ?? false}
+            onCheckedChange={(val) => {
+              updateSetting("profilePhotoChosen", true);
+              updateSetting("showProfilePhoto", val);
+            }}
+          />
+        </div>
+      </div>
+
+      <div className="bg-surface rounded-[14px] border-2 border-border-ink p-5 space-y-4 shadow-brutal-sm">
+        <div>
+          <h3 className="font-display text-base font-bold uppercase text-text-heading">Privacy</h3>
+          <p className="text-xs text-text-muted">
+            Cover numbers when someone can see your screen. Hover or tap a covered value to peek.
+          </p>
+        </div>
+        <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
+          <div>
+            <p className="text-sm font-bold text-text-primary">Privacy mode</p>
+            <p className="text-xs text-text-muted">
+              Hides your CGPA by default; choose more under Private values. Shortcut: Alt/Option + P
+            </p>
+          </div>
+          <Switch
+            label="Privacy mode"
+            checked={selectedPrivacyCategories.length > 0}
+            onCheckedChange={(val) => setSettings((prev: any) => setPrivacyMode(prev, val))}
+          />
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
+          <div>
+            <p className="text-sm font-bold text-text-primary">Cover style</p>
+            <p className="mt-0.5 text-xs text-text-muted">Comic is text; Marker is an opaque scribble.</p>
+          </div>
+          <SelectField
+            aria-label="Cover style"
+            value={settings?.privacyCoverStyle ?? "comic"}
+            onChange={(style) => updateSetting("privacyCoverStyle", style as "comic" | "marker")}
+            options={[
+              { value: "comic", label: "Comic  #@%!" },
+              { value: "marker", label: "Marker" },
+            ]}
+            searchable={false}
+            className="w-36 shrink-0"
+          />
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
+          <details className="group relative">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-[10px] border-2 border-border-ink bg-surface-secondary px-3 text-sm font-bold text-text-primary shadow-brutal-sm [&::-webkit-details-marker]:hidden">
+              <span className="min-w-0 truncate">Private values: {privacyCoverageLabel}</span>
+              <ChevronRight
+                className="h-4 w-4 shrink-0 transition-transform duration-150 group-open:rotate-90"
+                aria-hidden
+              />
+            </summary>
+            <div className="mt-2 divide-y-2 divide-border-ink overflow-hidden rounded-[10px] border-2 border-border-ink bg-surface shadow-brutal-sm">
+              {PRIVACY_CATEGORIES.map((category) => {
+                const detail = PRIVACY_CATEGORY_DETAILS[category];
+                return (
+                  <div key={category} className="flex items-center justify-between gap-4 px-3 py-2.5">
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-text-primary">{detail.label}</p>
+                      <p className="text-xs text-text-muted">{detail.description}</p>
+                    </div>
+                    <Switch
+                      label={`Cover ${detail.label}`}
+                      checked={selectedPrivacyCategories.includes(category)}
+                      onCheckedChange={(val) => setSettings((prev: any) => togglePrivacyCategory(prev, category, val))}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </details>
+        </div>
+
+        <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
+          <div>
+            <p className="text-sm font-bold text-text-primary">Remove the CGPA card from Home</p>
+            <p className="text-xs text-text-muted">
+              When CGPA is hidden in Privacy Mode, Home leaves the card out instead of covering it
+            </p>
+          </div>
+          <Switch
+            label="Remove the CGPA card from Home"
+            checked={settings?.privacyRemoveCgpaCard !== false}
+            onCheckedChange={(val) => updateSetting("privacyRemoveCgpaCard", val)}
+          />
+        </div>
+      </div>
+    </div>
+  );
+
   // 3. Academic & Schedule Section
   const renderAcademicContent = () => (
     <div className="space-y-6">
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-5 shadow-2xs">
-        <h3 className="font-display text-base font-bold uppercase text-text-heading">Semester & Terms</h3>
+        <h3 className="font-display text-base font-bold uppercase text-text-heading">Semester</h3>
 
         {/* Active Semester Selector */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>
-            <p className="text-sm font-bold text-text-primary">Active Semester</p>
+            <p className="text-sm font-bold text-text-primary">Semester</p>
             <p className="text-xs text-text-muted">Select term to fetch attendance, marks, and timetable</p>
           </div>
           <div className="flex gap-2 w-full sm:w-80 shrink-0">
@@ -1829,7 +1881,7 @@ export default function ProfilePage({
         {/* Academic Calendar Dropdown */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>
-            <p className="text-sm font-bold text-text-primary">Academic Calendar</p>
+            <p className="text-sm font-bold text-text-primary">Academic calendar</p>
             <p className="text-xs text-text-muted">Default calendar scheme for exam dates and working days</p>
           </div>
           <SelectField
@@ -1852,7 +1904,7 @@ export default function ProfilePage({
         {/* Target Attendance Threshold */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>
-            <p className="text-sm font-bold text-text-primary">Target Attendance Goal</p>
+            <p className="text-sm font-bold text-text-primary">Attendance goal</p>
             <p className="text-xs text-text-muted">Target threshold for safe bunk margin calculations</p>
           </div>
           <SelectField
@@ -1866,15 +1918,6 @@ export default function ProfilePage({
             ]}
             className="sm:w-80 shrink-0"
           />
-        </div>
-
-        {/* Precision Decimal Toggle */}
-        <div className="flex items-center justify-between py-1">
-          <div>
-            <p className="text-sm font-bold text-text-primary">Use One Decimal Place</p>
-            <p className="text-xs text-text-muted">Round attendance stats and scores to 1 decimal place instead of 2</p>
-          </div>
-          <Switch checked={decimalValues} onCheckedChange={setDecimalValues} />
         </div>
       </div>
 
@@ -1937,11 +1980,11 @@ export default function ProfilePage({
 
       {/* Residential & Hostel Card */}
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-4 shadow-2xs">
-        <h3 className="font-display text-base font-bold uppercase text-text-heading">Residential Status & Mess</h3>
+        <h3 className="font-display text-base font-bold uppercase text-text-heading">Hostel & mess</h3>
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>
-            <p className="text-sm font-bold text-text-primary">Hostel vs Day Scholar</p>
+            <p className="text-sm font-bold text-text-primary">Hostel or day scholar</p>
             <p className="text-xs text-text-muted">Affects mess menu shortcuts and gate pass integrations</p>
           </div>
           <div className="flex rounded-xl bg-surface-tertiary p-1 w-full sm:w-56 shrink-0">
@@ -2006,7 +2049,7 @@ export default function ProfilePage({
 
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-5 shadow-2xs">
         <div>
-          <h3 className="font-display text-base font-bold uppercase text-text-heading">Default Sync Mode</h3>
+          <h3 className="font-display text-base font-bold uppercase text-text-heading">Sync mode</h3>
           <p className="text-xs text-text-muted mt-0.5">
             Used by the reload button, the sync sheet and the command palette. The starred mode below is the current
             default — picking here, starring a row, or tapping a mode in the sync sheet all change it.
@@ -2062,7 +2105,7 @@ export default function ProfilePage({
         {/* Background Sync Frequency */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>
-            <p className="text-sm font-bold text-text-primary">Background Auto-Refresh</p>
+            <p className="text-sm font-bold text-text-primary">Refresh in the background</p>
             <p className="text-xs text-text-muted">
               When off, syncing only happens when you tap Sync — nothing hits the server otherwise. When a cadence is
               set, the sweep runs on that timer and pulls only what has come due (attendance at most once a day).
@@ -2103,8 +2146,8 @@ export default function ProfilePage({
         <div className="divide-y divide-border-ink ">
           <div className="flex items-center justify-between py-3">
             <div>
-              <p className="text-sm font-bold text-text-primary">Sync Profile & Hosteller Data</p>
-              <p className="text-xs text-text-muted">Credentials, contact numbers, and hostel room information</p>
+              <p className="text-sm font-bold text-text-primary">Profile & hostel details</p>
+              <p className="text-xs text-text-muted">Your contact details and hostel room</p>
             </div>
             <Switch
               checked={settings?.syncProfileData ?? true}
@@ -2114,7 +2157,7 @@ export default function ProfilePage({
 
           <div className="flex items-center justify-between py-3">
             <div>
-              <p className="text-sm font-bold text-text-primary">Sync extra records</p>
+              <p className="text-sm font-bold text-text-primary">Extra records</p>
               <p className="text-xs text-text-muted">Turns the three below on or off together</p>
             </div>
             <Switch
@@ -2129,7 +2172,7 @@ export default function ProfilePage({
             }`}
           >
             <div>
-              <p className="text-sm font-bold text-text-primary">Sync Extra-Curricular (EXC) Registration</p>
+              <p className="text-sm font-bold text-text-primary">Extra-curricular (EXC)</p>
               <p className="text-xs text-text-muted">Clubs, chapters, and co-curricular credit allocations</p>
             </div>
             <Switch
@@ -2145,7 +2188,7 @@ export default function ProfilePage({
             }`}
           >
             <div>
-              <p className="text-sm font-bold text-text-primary">Sync Minor & Honour Registrations</p>
+              <p className="text-sm font-bold text-text-primary">Minors & honours</p>
               <p className="text-xs text-text-muted">Minor degrees and honour program course completions</p>
             </div>
             <Switch
@@ -2161,7 +2204,7 @@ export default function ProfilePage({
             }`}
           >
             <div>
-              <p className="text-sm font-bold text-text-primary">Sync Course Completion Records</p>
+              <p className="text-sm font-bold text-text-primary">Course completion</p>
               <p className="text-xs text-text-muted">Completed coursework and credit eligibility records</p>
             </div>
             <Switch
@@ -2173,7 +2216,7 @@ export default function ProfilePage({
 
           <div className="flex items-center justify-between py-3">
             <div>
-              <p className="text-sm font-bold text-text-primary">Full reload on Sync</p>
+              <p className="text-sm font-bold text-text-primary">Full reload when syncing</p>
               <p className="text-xs text-text-muted">
                 Ignores the sync mode: every Sync pulls everything, past semesters included. Slow; for fixing bad data.
               </p>
@@ -2183,7 +2226,7 @@ export default function ProfilePage({
 
           <div className="flex items-center justify-between py-3">
             <div>
-              <p className="text-sm font-bold text-text-primary">Low Data Saver Mode</p>
+              <p className="text-sm font-bold text-text-primary">Data saver</p>
               <p className="text-xs text-text-muted">
                 Disables automatic prefetching of heavy assets on metered connections
               </p>
@@ -2251,7 +2294,7 @@ export default function ProfilePage({
 
       {/* Push Notifications Card */}
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-4 shadow-2xs">
-        <h3 className="font-display text-base font-bold uppercase text-text-heading">Push Notifications</h3>
+        <h3 className="font-display text-base font-bold uppercase text-text-heading">Notifications</h3>
         <p className="text-xs text-text-muted">
           Receive exam reminders, attendance alerts, and moodle deadline notifications
         </p>
@@ -2459,6 +2502,8 @@ export default function ProfilePage({
         return renderCredentialsContent();
       case "preferences":
         return renderPreferencesContent();
+      case "home-privacy":
+        return renderHomePrivacyContent();
       case "academic":
         return renderAcademicContent();
       case "sync":
@@ -2708,49 +2753,62 @@ export default function ProfilePage({
                   to put in it — otherwise a search with no hits drew a bare
                   2px-bordered box above the "no match" panel. */}
                       {filteredSections.length > 0 ? (
-                        <ListShell>
-                          {filteredSections.map((sec) => {
-                            const Icon = sec.icon;
-                            const summary = sectionSummary[sec.id];
+                        <div className="space-y-5">
+                          {(["Account", "App", "Study", "Data"] as const).map((group) => {
+                            const rows = filteredSections.filter((sec) => (sec.group ?? "Data") === group);
+                            if (rows.length === 0) return null;
                             return (
-                              <button
-                                key={sec.id}
-                                type="button"
-                                onClick={() => screens.go(sec.id)}
-                                className={`${LIST_ROW} cursor-pointer active:bg-surface-secondary `}
-                              >
-                                <div
-                                  className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border ${sec.iconBg} ${sec.iconColor}`}
-                                >
-                                  <Icon className="w-5 h-5" />
-                                </div>
-                                <ListRowText
-                                  title={sec.label}
-                                  subtitle={sec.subtitle}
-                                  titleTag="h3"
-                                  titleTooltip={sec.label}
-                                />
-                                <div className="flex items-center gap-2 shrink-0">
-                                  <span
-                                    className={cn(
-                                      "text-sm font-bold font-outfit tracking-tight leading-none truncate max-w-24 sm:max-w-32",
-                                      summary.tone === "emerald"
-                                        ? "text-success-foreground"
-                                        : summary.tone === "red"
-                                          ? "text-danger-foreground"
-                                          : summary.tone === "amber"
-                                            ? "text-warning-foreground"
-                                            : "text-text-primary",
-                                    )}
-                                  >
-                                    {summary.value}
-                                  </span>
-                                  <ChevronRight className="w-4 h-4 text-text-muted" />
-                                </div>
-                              </button>
+                              <section key={group} aria-label={group} className="space-y-2">
+                                <p className="px-1 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+                                  {group}
+                                </p>
+                                <ListShell>
+                                  {rows.map((sec) => {
+                                    const Icon = sec.icon;
+                                    const summary = sectionSummary[sec.id];
+                                    return (
+                                      <button
+                                        key={sec.id}
+                                        type="button"
+                                        onClick={() => screens.go(sec.id)}
+                                        className={`${LIST_ROW} cursor-pointer active:bg-surface-secondary `}
+                                      >
+                                        <div
+                                          className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border ${sec.iconBg} ${sec.iconColor}`}
+                                        >
+                                          <Icon className="w-5 h-5" />
+                                        </div>
+                                        <ListRowText
+                                          title={sec.label}
+                                          subtitle={sec.subtitle}
+                                          titleTag="h3"
+                                          titleTooltip={sec.label}
+                                        />
+                                        <div className="flex items-center gap-2 shrink-0">
+                                          <span
+                                            className={cn(
+                                              "text-sm font-bold font-outfit tracking-tight leading-none truncate max-w-24 sm:max-w-32",
+                                              summary.tone === "emerald"
+                                                ? "text-success-foreground"
+                                                : summary.tone === "red"
+                                                  ? "text-danger-foreground"
+                                                  : summary.tone === "amber"
+                                                    ? "text-warning-foreground"
+                                                    : "text-text-primary",
+                                            )}
+                                          >
+                                            {summary.value}
+                                          </span>
+                                          <ChevronRight className="w-4 h-4 text-text-muted" />
+                                        </div>
+                                      </button>
+                                    );
+                                  })}
+                                </ListShell>
+                              </section>
                             );
                           })}
-                        </ListShell>
+                        </div>
                       ) : (
                         <EmptyPanel
                           icon={<Search className="h-7 w-7" />}

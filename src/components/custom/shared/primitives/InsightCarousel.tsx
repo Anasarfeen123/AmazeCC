@@ -5,6 +5,7 @@ import { cn } from "@amazecontinuityprojects/amazeui";
 import { TILE, TONE_BADGE, TONE_TEXT } from "@/lib/uiTokens";
 import type { CarouselState } from "./useCarousel";
 import { useHorizontalSwipe } from "./useHorizontalSwipe";
+import type { PrivacyCategory } from "@/lib/privacyMode";
 
 /**
  * The rotating "insight" tile.
@@ -57,6 +58,8 @@ export interface InsightSlide {
   badgeClassName?: string;
   /** Hide class applied in place, e.g. `crayon-hide` for the CGPA privacy toggle. */
   blur?: string;
+  /** Makes the headline eligible for a category privacy switch. */
+  privacyCategory?: PrivacyCategory;
   /**
    * Accessible name for this slide's dot. Needed when the visible `label` is
    * identical across slides (e.g. two attendance tiles both labelled
@@ -165,7 +168,7 @@ export function InsightCarousel({
 
       <div className="flex min-h-0 flex-1 items-center min-w-0 relative z-10 pointer-events-none">
         <p
-          data-private
+          data-private={slide.privacyCategory ?? "all"}
           className={cn(
             "font-display font-bold tracking-tight truncate block",
             HEADLINE[headlineSize],

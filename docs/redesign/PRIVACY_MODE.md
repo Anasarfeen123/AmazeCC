@@ -15,20 +15,21 @@ and a comic style of cover.
 - Applied in: sidebar CGPA, Home stat tiles, Curriculum, InsightCarousel,
   Local storage viewer.
 
-## To do: per-category privacy
+## Per-category privacy (done 2026-11-19)
 
-1. Settings > Appearance & Privacy: replace the one switch with a list:
-   CGPA/GPA, attendance %, marks and grades, fees and payments, credits,
-   registration number, name/photo. Each on/off; "Hide all" master on top.
-2. Mark values with a category: `data-private="cgpa|attendance|marks|fees|credits|id"`
-   (today `data-private` has no value). Grep `data-private` to find them.
-3. CSS: `html.privacy-hide-cgpa [data-private~="cgpa"]` etc. (generate one
-   rule per category from a list in `useAppAppearance.ts`, which already
-   toggles `privacy-mode` on `<html>`). Keep peek on hover/focus/tap.
-4. Settings keys: `privacyCategories: string[]`; migrate `privacyMode:true` to
-   all categories, `CGPAHidden`/`blurGrades` to `["cgpa"]`.
-5. Cover style picker: Comic (#@%!, default) / Marker. Vary the symbols per
-   element (e.g. `data-grawlix` set from a hash of the key) so a page is not
-   all the same "#@%!".
-6. Tests: one per category (class present on <html>, element covered),
-   command palette toggles, Alt/Option+P still toggles "Hide all".
+- Settings > Appearance & Privacy has a Privacy mode master, its cover-style
+  dropdown, and individual controls for CGPA/GPA, attendance, marks/grades,
+  fees/payments, credits, registration number and name/photo.
+- The master is authoritative: when it is off, no cover remains on screen.
+  Turning it on starts with all categories; individual toggles refine that set.
+- `privacyCategories` and `privacyCoverStyle` persist in settings. A legacy
+  saved `privacyMode:true` becomes all categories; a pre-master CGPA hide is
+  read as the CGPA category.
+- `data-private` now names the relevant category for the Home/sidebar,
+  attendance, academics, payments and profile surfaces. Generic stat surfaces
+  remain covered by the master only.
+- CSS uses one root class per category and preserves hover/focus peeking. The
+  comic overlay now uses `visibility` as well as transparent text, so legacy
+  colour utilities cannot leak the hidden value.
+- `privacyMode.test.tsx` covers root category classes, legacy reads, master /
+  category interaction and tagged stat values.

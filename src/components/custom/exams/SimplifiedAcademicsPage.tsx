@@ -649,7 +649,7 @@ export default function SimplifiedAcademicsPage({
               <div
                 className={`flex min-w-[92px] flex-col items-end rounded-[10px] border-2 border-border-ink px-3 py-1.5 shadow-brutal-sm ${statColor}`}
               >
-                <span data-private className="font-display text-xl font-bold leading-none tabular-nums">
+                <span data-private="marks" className="font-display text-xl font-bold leading-none tabular-nums">
                   {grandWeightage.maxWeight > 0
                     ? `${grandWeightage.displayScore} / ${grandWeightage.displayMax}`
                     : `${grandWeightage.displayScore}`}

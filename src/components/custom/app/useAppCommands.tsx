@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useTheme } from "next-themes";
+import { privacyCategories, setHideAllPrivacy, togglePrivacyCategory } from "@/lib/privacyMode";
 import config from "../../../../config.json";
 import LibrarySearchPalette from "../palette/LibrarySearchPalette";
 import EventSearchPalette from "../palette/EventSearchPalette";
@@ -518,10 +519,27 @@ export function useAppCommands(input: AppCommandInputs) {
       });
     };
     toggle("Decimal Values in Attendance", "decimalValues", "Settings", "🔢");
-    toggle("Hide CGPA", "CGPAHidden", "Settings", "🙈");
+    result.push({
+      id: "setting-hide-cgpa",
+      label: "Hide CGPA",
+      description: privacyCategories(settings).includes("cgpa")
+        ? "Currently on — tap to reveal"
+        : "Currently off — tap to cover",
+      icon: "🙈",
+      category: "Settings",
+      onSelect: () =>
+        setSettings((prev) => togglePrivacyCategory(prev, "cgpa", !privacyCategories(prev).includes("cgpa"))),
+    });
     toggle("Dayscholar Bus Mode", "isDayscholarWithBus", "Settings", "🚌");
     toggle("Show Profile Photo on Dashboard", "showProfilePhoto", "Settings", "👤");
-    toggle("Privacy Mode (blur grades, attendance, marks, fees)", "privacyMode", "Settings", "🔒");
+    result.push({
+      id: "setting-hide-all-private",
+      label: "Privacy mode",
+      description: privacyCategories(settings).length ? "Currently on — tap to reveal" : "Currently off — tap to cover",
+      icon: "🔒",
+      category: "Settings",
+      onSelect: () => setSettings((prev) => setHideAllPrivacy(prev, !prev.privacyMode)),
+    });
     toggle("Hide Home Page Search Bar", "hideHomeSearchBar", "Settings", "🔍");
 
     [

@@ -563,6 +563,7 @@ export default function OverallAttendancePredictor({
               ? `+${formatPct(overallStats.delta, decimalValues)}`
               : formatPct(overallStats.delta, decimalValues)
           }
+          privacyCategory="attendance"
         />
         <InsightCarousel
           slides={summarySlides}

@@ -75,6 +75,13 @@ import SyncCadenceGuide from "../shared/SyncCadenceGuide";
 import { listModes, loadCustomModes, resolveMode, type SyncMode } from "@/lib/sync-engine/sync-modes";
 import { clearApiCache } from "../exams/GenericApiView";
 import { useTheme } from "next-themes";
+import {
+  PRIVACY_CATEGORIES,
+  PRIVACY_CATEGORY_DETAILS,
+  privacyCategories,
+  setHideAllPrivacy,
+  togglePrivacyCategory,
+} from "@/lib/privacyMode";
 
 export type SectionId =
   "profile" | "credentials" | "preferences" | "academic" | "sync" | "sync-modes" | "navigation" | "advanced" | "about";
@@ -885,13 +892,15 @@ export default function ProfilePage({
       <div className="brutal-card brutal-card-hero relative rounded-[16px] p-5 sm:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 min-w-0">
           {displayProfileImage && (unifiedIdentity.photo || profileData?.image) ? (
-            <img
-              loading="lazy"
-              decoding="async"
-              src={unifiedIdentity.photo || profileData.image}
-              alt="Profile"
-              className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl object-cover shadow-sm ring-2 ring-border-ink border-2 border-border-ink shrink-0"
-            />
+            <div data-private="identity" className="privacy-photo shrink-0">
+              <img
+                loading="lazy"
+                decoding="async"
+                src={unifiedIdentity.photo || profileData.image}
+                alt="Profile"
+                className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl object-cover shadow-sm ring-2 ring-border-ink border-2 border-border-ink"
+              />
+            </div>
           ) : (
             <div
               aria-hidden
@@ -939,7 +948,10 @@ export default function ProfilePage({
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-bold text-text-heading font-outfit tracking-tight truncate">
+                <h1
+                  data-private="identity"
+                  className="text-xl sm:text-2xl font-bold text-text-heading font-outfit tracking-tight truncate"
+                >
                   {resolvedDisplayName}
                 </h1>
                 <button
@@ -953,7 +965,10 @@ export default function ProfilePage({
               </div>
             )}
             <div className="flex flex-wrap items-center gap-2 mt-1 text-xs text-text-muted font-medium">
-              <span className="px-2 py-0.5 rounded-md bg-surface-secondary font-mono text-xs font-bold text-text-primary">
+              <span
+                data-private="id"
+                className="px-2 py-0.5 rounded-md bg-surface-secondary font-mono text-xs font-bold text-text-primary"
+              >
                 {resolvedUsername}
               </span>
               {(unifiedIdentity.programme || profileData?.branch) && (
@@ -1103,7 +1118,10 @@ export default function ProfilePage({
                     className="p-3.5 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-1"
                   >
                     <p className="text-xs font-bold text-text-muted uppercase tracking-wider">{String(label)}</p>
-                    <p className="font-bold text-xs sm:text-sm text-text-primary break-words font-outfit">
+                    <p
+                      data-private="identity"
+                      className="font-bold text-xs sm:text-sm text-text-primary break-words font-outfit"
+                    >
                       {String(val)}
                     </p>
                   </div>
@@ -1603,16 +1621,55 @@ export default function ProfilePage({
         <div className="divide-y divide-border-ink ">
           <div className="flex items-center justify-between py-3">
             <div>
-              <p className="text-sm font-bold text-text-primary">Privacy Mode</p>
+              <p className="text-sm font-bold text-text-primary">Privacy mode</p>
               <p className="text-xs text-text-muted">
-                Blur grades, attendance, marks and fees everywhere, for screen sharing or showing your phone. Hover or
-                tap a value to peek. Shortcut: Alt/Option + P
+                Turn it off to reveal everything. Turn it on to cover every category; choose a smaller set below.
+                Shortcut: Alt/Option + P
               </p>
             </div>
             <Switch
-              checked={settings?.privacyMode ?? false}
-              onCheckedChange={(val) => updateSetting("privacyMode", val)}
+              checked={privacyCategories(settings).length > 0}
+              onCheckedChange={(val) => setSettings((prev: any) => setHideAllPrivacy(prev, val))}
             />
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-3 py-3">
+            <div>
+              <p className="text-sm font-bold text-text-primary">Cover style</p>
+              <p className="mt-0.5 text-xs text-text-muted">Comic is text; Marker is an opaque scribble.</p>
+            </div>
+            <SelectField
+              value={settings?.privacyCoverStyle ?? "comic"}
+              onChange={(style) => updateSetting("privacyCoverStyle", style as "comic" | "marker")}
+              options={[
+                { value: "comic", label: "Comic  #@%!" },
+                { value: "marker", label: "Marker" },
+              ]}
+              searchable={false}
+              className="w-36 shrink-0"
+            />
+          </div>
+
+          <div className="py-3 space-y-1">
+            <p className="text-sm font-bold text-text-primary">Choose what to cover</p>
+            <p className="text-xs text-text-muted">Turn on only the details you do not want visible at a glance.</p>
+            <div className="mt-3 divide-y divide-border-ink border-y border-border-ink">
+              {PRIVACY_CATEGORIES.map((category) => {
+                const detail = PRIVACY_CATEGORY_DETAILS[category];
+                return (
+                  <div key={category} className="flex items-center justify-between gap-4 py-2.5">
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-text-primary">{detail.label}</p>
+                      <p className="text-xs text-text-muted">{detail.description}</p>
+                    </div>
+                    <Switch
+                      checked={privacyCategories(settings).includes(category)}
+                      onCheckedChange={(val) => setSettings((prev: any) => togglePrivacyCategory(prev, category, val))}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           <div className="flex items-center justify-between py-3">

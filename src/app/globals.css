@@ -691,21 +691,50 @@ html.has-stored-session .opening-screen-fallback {
  *   marks, fees. Hover, focus or tap peeks, as before.
  */
 .crayon-hide,
-.privacy-mode [data-private] {
+.privacy-mode [data-private],
+html.privacy-hide-cgpa [data-private~="cgpa"],
+html.privacy-hide-attendance [data-private~="attendance"],
+html.privacy-hide-marks [data-private~="marks"],
+html.privacy-hide-fees [data-private~="fees"],
+html.privacy-hide-credits [data-private~="credits"],
+html.privacy-hide-id [data-private~="id"],
+html.privacy-hide-identity [data-private~="identity"] {
   position: relative;
   display: inline-block;
   color: transparent !important;
   -webkit-text-fill-color: transparent;
   text-shadow: none !important;
   user-select: none;
+  /* `color: transparent` alone loses to a few legacy value utilities. Keep
+     the value's layout, but make its glyphs impossible to paint; the visible
+     replacement is the pseudo-element directly below. */
+  visibility: hidden !important;
 }
 .crayon-hide *,
-.privacy-mode [data-private] * {
+.privacy-mode [data-private] *,
+html.privacy-hide-cgpa [data-private~="cgpa"] *,
+html.privacy-hide-attendance [data-private~="attendance"] *,
+html.privacy-hide-marks [data-private~="marks"] *,
+html.privacy-hide-fees [data-private~="fees"] *,
+html.privacy-hide-credits [data-private~="credits"] *,
+html.privacy-hide-id [data-private~="id"] *,
+html.privacy-hide-identity [data-private~="identity"] * {
   color: transparent !important;
   -webkit-text-fill-color: transparent;
 }
+html.privacy-hide-identity [data-private~="identity"] img,
+.privacy-mode [data-private~="identity"] img {
+  opacity: 0;
+}
 .crayon-hide::after,
-.privacy-mode [data-private]::after {
+.privacy-mode [data-private]::after,
+html.privacy-hide-cgpa [data-private~="cgpa"]::after,
+html.privacy-hide-attendance [data-private~="attendance"]::after,
+html.privacy-hide-marks [data-private~="marks"]::after,
+html.privacy-hide-fees [data-private~="fees"]::after,
+html.privacy-hide-credits [data-private~="credits"]::after,
+html.privacy-hide-id [data-private~="id"]::after,
+html.privacy-hide-identity [data-private~="identity"]::after {
   /* Default style: plain comic "grawlix" text (#@%!) in the value's ink,
      like a cartoon censoring a word. Plain text only (user): no chip, no
      image. Left-aligned and unclipped so short values ("79%") show it all. */
@@ -722,10 +751,21 @@ html.has-stored-session .opening-screen-fallback {
   color: var(--crayon-ink, var(--text-heading));
   -webkit-text-fill-color: var(--crayon-ink, var(--text-heading));
   pointer-events: none;
+  visibility: visible;
 }
 /* Alternative style (html.hide-marker): a hand-drawn marker blackout. */
-.hide-marker :is(.crayon-hide, .privacy-mode [data-private])::after,
-.hide-marker.privacy-mode [data-private]::after {
+.hide-marker
+  :is(
+    .crayon-hide,
+    .privacy-mode [data-private],
+    .privacy-hide-cgpa [data-private~="cgpa"],
+    .privacy-hide-attendance [data-private~="attendance"],
+    .privacy-hide-marks [data-private~="marks"],
+    .privacy-hide-fees [data-private~="fees"],
+    .privacy-hide-credits [data-private~="credits"],
+    .privacy-hide-id [data-private~="id"],
+    .privacy-hide-identity [data-private~="identity"]
+  )::after {
   content: "";
   left: -0.45em;
   right: -0.45em;
@@ -756,19 +796,54 @@ html.has-stored-session .opening-screen-fallback {
 }
 .privacy-mode [data-private]:hover,
 .privacy-mode :focus-within > [data-private],
-.privacy-mode [data-private]:focus-within {
+.privacy-mode [data-private]:focus-within,
+html.privacy-hide-cgpa [data-private~="cgpa"]:hover,
+html.privacy-hide-attendance [data-private~="attendance"]:hover,
+html.privacy-hide-marks [data-private~="marks"]:hover,
+html.privacy-hide-fees [data-private~="fees"]:hover,
+html.privacy-hide-credits [data-private~="credits"]:hover,
+html.privacy-hide-id [data-private~="id"]:hover,
+html.privacy-hide-identity [data-private~="identity"]:hover,
+html.privacy-hide-cgpa [data-private~="cgpa"]:focus-within,
+html.privacy-hide-attendance [data-private~="attendance"]:focus-within,
+html.privacy-hide-marks [data-private~="marks"]:focus-within,
+html.privacy-hide-fees [data-private~="fees"]:focus-within,
+html.privacy-hide-credits [data-private~="credits"]:focus-within,
+html.privacy-hide-id [data-private~="id"]:focus-within,
+html.privacy-hide-identity [data-private~="identity"]:focus-within {
   color: inherit !important;
   -webkit-text-fill-color: currentColor;
   user-select: auto;
 }
 .privacy-mode [data-private]:hover *,
-.privacy-mode [data-private]:focus-within * {
+.privacy-mode [data-private]:focus-within *,
+html.privacy-hide-cgpa [data-private~="cgpa"]:hover *,
+html.privacy-hide-attendance [data-private~="attendance"]:hover *,
+html.privacy-hide-marks [data-private~="marks"]:hover *,
+html.privacy-hide-fees [data-private~="fees"]:hover *,
+html.privacy-hide-credits [data-private~="credits"]:hover *,
+html.privacy-hide-id [data-private~="id"]:hover *,
+html.privacy-hide-identity [data-private~="identity"]:hover * {
   color: inherit !important;
   -webkit-text-fill-color: currentColor;
 }
 .privacy-mode [data-private]:hover::after,
 .privacy-mode :focus-within > [data-private]::after,
-.privacy-mode [data-private]:focus-within::after {
+.privacy-mode [data-private]:focus-within::after,
+html.privacy-hide-cgpa [data-private~="cgpa"]:hover::after,
+html.privacy-hide-attendance [data-private~="attendance"]:hover::after,
+html.privacy-hide-marks [data-private~="marks"]:hover::after,
+html.privacy-hide-fees [data-private~="fees"]:hover::after,
+html.privacy-hide-credits [data-private~="credits"]:hover::after,
+html.privacy-hide-id [data-private~="id"]:hover::after,
+html.privacy-hide-identity [data-private~="identity"]:hover::after,
+html.privacy-hide-cgpa [data-private~="cgpa"]:focus-within::after,
+html.privacy-hide-attendance [data-private~="attendance"]:focus-within::after,
+html.privacy-hide-marks [data-private~="marks"]:focus-within::after,
+html.privacy-hide-fees [data-private~="fees"]:focus-within::after,
+html.privacy-hide-credits [data-private~="credits"]:focus-within::after,
+html.privacy-hide-id [data-private~="id"]:focus-within::after,
+html.privacy-hide-identity [data-private~="identity"]:focus-within::after {
   display: none;
 }
 @media print {

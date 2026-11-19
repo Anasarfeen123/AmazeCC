@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { privacyCategories } from "@/lib/privacyMode";
 
 /**
  * Vars the old accent-palette picker wrote inline on `<html>`. The picker and
@@ -57,11 +58,18 @@ const LEGACY_PALETTE_VARS = [
 ];
 
 export function useAppAppearance(settings: any, _theme?: unknown) {
-  // Privacy mode: CSS in globals.css blurs every [data-private] value.
+  // A saved pre-category Privacy Mode means "hide all". Older one-off CGPA
+  // settings also migrate here at read time, so no existing preference leaks.
   useEffect(() => {
     if (typeof document === "undefined") return;
-    document.documentElement.classList.toggle("privacy-mode", Boolean(settings?.privacyMode));
-  }, [settings?.privacyMode]);
+    const root = document.documentElement;
+    const categories = privacyCategories(settings);
+    root.classList.toggle("privacy-mode", Boolean(settings?.privacyMode));
+    for (const category of ["cgpa", "attendance", "marks", "fees", "credits", "id", "identity"] as const) {
+      root.classList.toggle(`privacy-hide-${category}`, categories.includes(category));
+    }
+    root.classList.toggle("hide-marker", settings?.privacyCoverStyle === "marker");
+  }, [settings]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;

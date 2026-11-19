@@ -2,6 +2,7 @@
 
 import type { ElementType, ReactNode } from "react";
 import { TILE, LIST_SHELL, SECTION_CHIP, TONE_BADGE, TONE_TEXT } from "@/lib/uiTokens";
+import type { PrivacyCategory } from "@/lib/privacyMode";
 
 /**
  * Section header: an indigo icon, a heavy title, an optional count chip and an
@@ -60,6 +61,7 @@ export function StatTile({
   variant = "default",
   height = "h-32 sm:h-36",
   className = "",
+  privacyCategory,
 }: {
   /**
    * Brand stat-card variants: `default` = surface card; `highlight` = solid
@@ -83,6 +85,8 @@ export function StatTile({
   tone?: string;
   height?: string;
   className?: string;
+  /** Makes this number eligible for one of the category privacy switches. */
+  privacyCategory?: PrivacyCategory;
 }) {
   // "neutral"/"default" means "no tint" — plain heading ink rather than a
   // toned-down grey, so an uncoloured tile does not look disabled.
@@ -129,7 +133,7 @@ export function StatTile({
 
       <div className="my-auto min-w-0">
         <p
-          data-private
+          data-private={privacyCategory ?? "all"}
           className={`font-display text-[32px] sm:text-[40px] font-bold tracking-tight leading-none truncate block ${valueTone}`}
         >
           {value}

@@ -42,6 +42,7 @@ import { isLabFatMarked, labFatPapersByDate, labSlotTokens, type LabFatPaper } f
 import { cn } from "@amazecontinuityprojects/amazeui";
 import { ICON_BUTTON, TILE_INTERACTIVE, TONE_BADGE } from "@/lib/uiTokens";
 import { facultyDisplayName, greetingName } from "@/lib/displayNames";
+import type { PrivacyCategory } from "@/lib/privacyMode";
 import BrandLogo from "../shared/BrandLogo";
 import TimetableGrid from "../attendance/TimetableGrid";
 import DesktopCourseDetail from "../attendance/DesktopCourseDetail";
@@ -835,6 +836,7 @@ export default function SimplifiedMobileHome({
       sub: `${overallAttendance.attended} of ${overallAttendance.total} attended`,
       badge: overallAttendance.status,
       badgeColor: undefined as string | undefined,
+      privacyCategory: "attendance" as const,
       tone: overallAttendance.status === "Safe" ? "emerald" : overallAttendance.status === "Warning" ? "amber" : "red",
       blur: undefined as string | undefined,
       onClick: () => {
@@ -867,6 +869,13 @@ export default function SimplifiedMobileHome({
                     ? "emerald"
                     : "amber",
         blur: s.id === "cgpa" && (settings?.CGPAHidden || settings?.blurGrades) ? "crayon-hide" : undefined,
+        privacyCategory: (s.id === "cgpa"
+          ? "cgpa"
+          : s.id === "credits"
+            ? "credits"
+            : s.id === "attendance"
+              ? "attendance"
+              : undefined) as PrivacyCategory | undefined,
         onClick: s.onClick,
       })),
     [insightSlides, settings?.CGPAHidden, settings?.blurGrades],
@@ -892,6 +901,7 @@ export default function SimplifiedMobileHome({
           badgeClassName: tile.badgeColor,
           tone: tile.tone,
           blur: tile.blur,
+          privacyCategory: tile.privacyCategory,
           onClick: tile.onClick,
         })),
     [allStatTiles, directStatIds],
@@ -1387,6 +1397,7 @@ export default function SimplifiedMobileHome({
                   badge={tile.badge}
                   tone={tile.tone}
                   variant={tile.id === "attendance" ? "highlight" : "default"}
+                  privacyCategory={tile.privacyCategory}
                   className={cn(tile.onClick && "brutal-press group")}
                 />
               </div>

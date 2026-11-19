@@ -15,6 +15,10 @@ export type Settings = {
   blurGrades?: boolean;
   /** Blur grades, attendance, marks and fees app-wide (screen sharing, showing your phone). */
   privacyMode?: boolean;
+  /** Individually chosen values to cover in Privacy mode. */
+  privacyCategories?: string[];
+  /** Comic is text grawlix; marker is the optional blackout cover. */
+  privacyCoverStyle?: "comic" | "marker";
   /**
    * @deprecated Removed with the brand redesign (one look, light/dark only).
    * Kept in the type so settings and backups saved before it still parse;
@@ -109,6 +113,8 @@ export const defaultSettings: Settings = {
   showProfilePhoto: true,
   blurGrades: false,
   privacyMode: false,
+  privacyCategories: [],
+  privacyCoverStyle: "comic",
   hideHomeSearchBar: false,
   reloadAllData: false,
   isSidebarCollapsed: false,

@@ -504,7 +504,7 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
                     </div>
                     <div className="text-right shrink-0">
                       <p
-                        data-private
+                        data-private="fees"
                         className={`font-bold text-sm font-outfit leading-tight ${
                           isDebit ? "text-danger-foreground" : "text-success-foreground"
                         }`}
@@ -513,7 +513,7 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
                         {fmtAmt(String(Math.abs(amt)), symbol)}
                       </p>
                       {entry.bookBalanceAmount && (
-                        <p data-private className="text-xs text-text-muted mt-0.5">
+                        <p data-private="fees" className="text-xs text-text-muted mt-0.5">
                           Bal {fmtAmt(entry.bookBalanceAmount, symbol)}
                         </p>
                       )}
@@ -547,7 +547,7 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
 
                 <div className="flex items-center gap-2 shrink-0">
                   <div className="text-right">
-                    <p data-private className="font-bold text-sm font-outfit text-text-heading leading-tight">
+                    <p data-private="fees" className="font-bold text-sm font-outfit text-text-heading leading-tight">
                       {fmtAmt(r.amount)}
                     </p>
                     <p className="text-xs font-bold uppercase text-success-foreground mt-0.5">Settled</p>

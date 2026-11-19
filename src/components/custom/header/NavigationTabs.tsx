@@ -1075,7 +1075,19 @@ export default function NavigationTabs({
                       <button
                         onClick={() => {
                           setSettings((prev: any) => {
-                            const next = { ...prev, CGPAHidden: !prev.CGPAHidden };
+                            const selected = new Set(
+                              Array.isArray(prev.privacyCategories) ? prev.privacyCategories : [],
+                            );
+                            const nextHidden = !selected.has("cgpa");
+                            if (nextHidden) selected.add("cgpa");
+                            else selected.delete("cgpa");
+                            const next = {
+                              ...prev,
+                              privacyMode: false,
+                              privacyCategories: [...selected],
+                              CGPAHidden: false,
+                              blurGrades: false,
+                            };
                             return next;
                           });
                         }}
@@ -1086,8 +1098,8 @@ export default function NavigationTabs({
                           CGPA
                         </span>
                         <span
-                          data-private
-                          className={`font-display text-base font-bold leading-none text-text-heading transition-all duration-300 ${settings.CGPAHidden ? "crayon-hide" : ""}`}
+                          data-private="cgpa"
+                          className="font-display text-base font-bold leading-none text-text-heading transition-all duration-300"
                         >
                           {marksData?.cgpa?.cgpa || "-"}
                         </span>
@@ -1118,7 +1130,7 @@ export default function NavigationTabs({
                         const below = attendancePercentage?.percentage < target;
                         return (
                           <span
-                            data-private
+                            data-private="attendance"
                             className={`inline-flex max-w-full items-baseline gap-1 font-display font-bold leading-none tabular-nums ${String(attendanceValue).length > 6 ? "text-[13px]" : "text-base"} ${below ? "text-danger-foreground" : "text-text-heading"}`}
                             title={below ? `Below your ${target}% target` : `At or above your ${target}% target`}
                           >
@@ -1142,7 +1154,10 @@ export default function NavigationTabs({
                       <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
                         Credits
                       </span>
-                      <span data-private className="font-display text-base font-bold leading-none text-text-heading">
+                      <span
+                        data-private="credits"
+                        className="font-display text-base font-bold leading-none text-text-heading"
+                      >
                         {credits}
                       </span>
                     </button>

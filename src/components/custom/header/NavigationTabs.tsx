@@ -666,6 +666,25 @@ export default function NavigationTabs({
     [studyItems, campusItems, toolsItems, accountItems],
   );
 
+  // TRIAL (user, 2026-11-19): a core-only sidebar. Most students use the
+  // timetable, grades and attendance ~99% of the time, so the sidebar keeps
+  // Home, Pinned, Study and Account; Campus and Tools live in the Modules
+  // sheet ("All modules"). Set to false to bring the full sidebar back.
+  const SIDEBAR_CORE_ONLY = true;
+  const visibleGroups = SIDEBAR_CORE_ONLY
+    ? groups
+        .filter((g) => g.id === "study" || g.id === "account")
+        // A page already under Pinned is not listed again in its group.
+        .map((g) => ({
+          ...g,
+          items: g.items.filter((it) => {
+            const entry = registry.find((e) => e.id === it.id);
+            return !(entry?.pinnable && (settings?.pinnedNavTabs ?? []).includes(entry.pinId ?? entry.id));
+          }),
+        }))
+        .filter((g) => g.items.length > 0)
+    : groups;
+
   const pinnedItems = useMemo(() => {
     const pinnedTabs = settings?.pinnedNavTabs ?? [];
     const tabData: Record<string, { label: string; icon: any; onSelect: () => void; isActive: boolean }> = {
@@ -1298,7 +1317,7 @@ export default function NavigationTabs({
                       </SidebarGroup>
                     )}
 
-                    {groups.map((group) => (
+                    {visibleGroups.map((group) => (
                       <SidebarGroup key={group.id}>
                         <SidebarGroupLabel className={SIDEBAR_GROUP_LABEL_BRAND}>{group.label}</SidebarGroupLabel>
                         <div className="space-y-0.5">
@@ -1329,6 +1348,17 @@ export default function NavigationTabs({
                         </div>
                       </SidebarGroup>
                     ))}
+                    {SIDEBAR_CORE_ONLY && (
+                      <SidebarItem
+                        icon={<LayoutGrid className="h-[18px] w-[18px] stroke-[2.2]" aria-hidden="true" />}
+                        label="All modules"
+                        isActive={isAppLibraryOpen}
+                        data-sidebar-nav="true"
+                        className={SIDEBAR_ITEM_BRAND}
+                        onClick={() => setIsAppLibraryOpen(true)}
+                        onKeyDown={(event) => handleNavKeyDown(event, () => setIsAppLibraryOpen(true))}
+                      />
+                    )}
                   </div>
                 ) : showAcademicsPanel ? (
                   <div className="space-y-4">
@@ -1476,7 +1506,7 @@ export default function NavigationTabs({
 
             {/* Navigation Rail Buttons */}
             <nav className="flex flex-col items-center gap-2.5 w-full" aria-label="Navigation rail">
-              {groups.map((group) => {
+              {visibleGroups.map((group) => {
                 const GroupIcon = group.icon;
                 const isActive =
                   group.id === "study"
@@ -1517,6 +1547,22 @@ export default function NavigationTabs({
                   </div>
                 );
               })}
+              {SIDEBAR_CORE_ONLY && (
+                <div className="relative flex justify-center group/rail">
+                  <button
+                    onClick={() => setIsAppLibraryOpen(true)}
+                    className={`flex h-11 w-11 items-center justify-center rounded-[10px] transition-colors duration-150 ${
+                      isAppLibraryOpen
+                        ? railActiveStyles
+                        : "text-cream hover:bg-sidebar-accent border-2 border-transparent"
+                    } ${navButtonBase}`}
+                    title="All modules"
+                    aria-label="All modules"
+                  >
+                    <LayoutGrid className="h-5 w-5 stroke-[2.2]" />
+                  </button>
+                </div>
+              )}
             </nav>
           </div>
         )}

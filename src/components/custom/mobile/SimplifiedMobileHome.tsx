@@ -61,7 +61,13 @@ import {
   type InsightSlide,
 } from "../shared/primitives";
 import { useAtom, useSetAtom, useAtomValue } from "jotai";
-import { isFeedbackModalOpenAtom, feedbackModalCategoryAtom, unifiedIdentityAtom, unifiedAcademicsAtom } from "@/store";
+import {
+  demoModeAtom,
+  isFeedbackModalOpenAtom,
+  feedbackModalCategoryAtom,
+  unifiedIdentityAtom,
+  unifiedAcademicsAtom,
+} from "@/store";
 import { tasksAtom } from "@/store/dataAtoms";
 import { getTypedStorageItem, setTypedStorageItem } from "@/lib/storage";
 import type { NormalizedCourse, UnifiedUserIdentity } from "@/types";
@@ -329,6 +335,7 @@ export default function SimplifiedMobileHome({
   const setFeedbackCategory = useSetAtom(feedbackModalCategoryAtom);
   const unifiedIdentity: UnifiedUserIdentity = useAtomValue(unifiedIdentityAtom);
   const unifiedAcademics = useAtomValue(unifiedAcademicsAtom);
+  const isDemoMode = useAtomValue(demoModeAtom);
   const [cachedProfile, setCachedProfile] = useState<any>(profileDataProp || null);
   const currentMinute = useNowMinute();
   const minuteNow = useMemo(() => new Date(currentMinute * 60_000), [currentMinute]);
@@ -632,6 +639,19 @@ export default function SimplifiedMobileHome({
       return !isNaN(pct) && pct < targetAttendancePct;
     }).length;
   }, [attendanceList, targetAttendancePct]);
+
+  // Installed app: show the number of low-attendance courses on the app icon
+  // (Badging API; Android Chrome, desktop Chrome/Edge, iOS 16.4+ home-screen
+  // apps). Cleared when nothing is low, and in demo mode.
+  useEffect(() => {
+    const nav = navigator as Navigator & {
+      setAppBadge?: (n?: number) => Promise<void>;
+      clearAppBadge?: () => Promise<void>;
+    };
+    if (!nav.setAppBadge || !nav.clearAppBadge) return;
+    const count = isDemoMode ? 0 : criticalCount;
+    (count > 0 ? nav.setAppBadge(count) : nav.clearAppBadge()).catch(() => {});
+  }, [criticalCount, isDemoMode]);
 
   // Parsed academic calendar events
   const analyzedCalendarResults = useMemo(() => {

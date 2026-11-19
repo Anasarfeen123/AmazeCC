@@ -21,7 +21,6 @@ import {
   EmptyPanel,
   IconButton,
   InsightCarousel,
-  KeyValue,
   ListRowText,
   ListShell,
   ListSkeleton,
@@ -434,19 +433,19 @@ export default function MarksHistoryTab({
     <div className="space-y-6">
       <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
         <StatTile
-          label="Terms recorded"
-          value={rows.filter((r) => r.courses.length > 0).length}
-          badge="All time"
-          tone="indigo"
-          sub={rows.length > 1 ? `${rows.length} terms published` : "so far"}
-        />
-        <StatTile
           label="Best term"
           value={best ? best.gpa.toFixed(2) : "—"}
           badge={best?.label}
           tone="emerald"
           privacyCategory="cgpa"
           sub={best ? "highest GPA on record" : "no GPA published yet"}
+        />
+        <StatTile
+          label="Terms recorded"
+          value={rows.filter((r) => r.courses.length > 0).length}
+          badge="All time"
+          tone="indigo"
+          sub={rows.length > 1 ? `${rows.length} terms published` : "so far"}
         />
       </div>
 
@@ -540,11 +539,6 @@ export default function MarksHistoryTab({
           tone={toneForGrade(course.grade)}
           sub={`${course.details?.length ?? 0} assessment${(course.details?.length ?? 0) === 1 ? "" : "s"}`}
         />
-      </div>
-
-      <div className="grid grid-cols-2 gap-2.5">
-        <KeyValue label="Course" value={course.courseCode} />
-        <KeyValue label="Type" value={course.courseType || "—"} />
       </div>
 
       {/* The halves, when the term's marks are cached. */}

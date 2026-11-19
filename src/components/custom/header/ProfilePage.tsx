@@ -152,7 +152,7 @@ export const SECTIONS: SectionConfig[] = [
   {
     id: "preferences",
     label: "Appearance",
-    subtitle: "Theme, sounds, number format, timetable look, app icon",
+    subtitle: "Theme, sounds, number format, timetable look",
     group: "App",
     icon: Palette,
     iconBg: "bg-secondary",
@@ -205,7 +205,7 @@ export const SECTIONS: SectionConfig[] = [
   {
     id: "advanced",
     label: "Advanced",
-    subtitle: "Server, backup and restore, data saved on this device",
+    subtitle: "Server, backup and restore, data on this device, app icon",
     group: "Data",
     icon: Shield,
     iconBg: "bg-danger-surface",
@@ -1659,49 +1659,6 @@ export default function ProfilePage({
           />
         </div>
       </div>
-
-      {/* App Icon Card */}
-      <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-4 shadow-2xs">
-        <h3 className="font-display text-base font-bold uppercase text-text-heading">App icon</h3>
-        <p className="text-xs text-text-muted">The logo shown in the app header</p>
-
-        <div className="flex gap-4 pt-1">
-          <button
-            onClick={() => handleIconChange("default")}
-            className={`flex flex-col items-center gap-2 p-3 rounded-2xl border transition-all cursor-pointer ${
-              appIcon === "default"
-                ? "border-border-ink bg-secondary ring-1 ring-border-ink"
-                : "border-border-ink hover:bg-surface-hover"
-            }`}
-          >
-            <img
-              loading="lazy"
-              decoding="async"
-              src={getAssetPath("/logo.png")}
-              alt="Default Icon"
-              className="w-12 h-12 rounded-xl shadow-xs object-cover"
-            />
-            <span className="text-xs font-bold text-text-primary">Default</span>
-          </button>
-          <button
-            onClick={() => handleIconChange("fire")}
-            className={`flex flex-col items-center gap-2 p-3 rounded-2xl border transition-all cursor-pointer ${
-              appIcon === "fire"
-                ? "border-border-ink bg-secondary ring-1 ring-border-ink"
-                : "border-border-ink hover:bg-surface-hover"
-            }`}
-          >
-            <img
-              loading="lazy"
-              decoding="async"
-              src={getAssetPath("/images/icons/fire.png")}
-              alt="Fire Icon"
-              className="w-12 h-12 rounded-xl shadow-xs object-cover"
-            />
-            <span className="text-xs font-bold text-text-primary">Fire</span>
-          </button>
-        </div>
-      </div>
     </div>
   );
 
@@ -2468,6 +2425,49 @@ export default function ProfilePage({
             </div>
           </div>
           <ChevronRight size={16} className="text-danger-foreground shrink-0" />
+        </div>
+      </div>
+
+      {/* App Icon Card */}
+      <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-4 shadow-2xs">
+        <h3 className="font-display text-base font-bold uppercase text-text-heading">App icon</h3>
+        <p className="text-xs text-text-muted">The logo shown in the app header. Most people keep the default.</p>
+
+        <div className="flex gap-4 pt-1">
+          <button
+            onClick={() => handleIconChange("default")}
+            className={`flex flex-col items-center gap-2 p-3 rounded-2xl border transition-all cursor-pointer ${
+              appIcon === "default"
+                ? "border-border-ink bg-secondary ring-1 ring-border-ink"
+                : "border-border-ink hover:bg-surface-hover"
+            }`}
+          >
+            <img
+              loading="lazy"
+              decoding="async"
+              src={getAssetPath("/logo.png")}
+              alt="Default Icon"
+              className="w-12 h-12 rounded-xl shadow-xs object-cover"
+            />
+            <span className="text-xs font-bold text-text-primary">Default</span>
+          </button>
+          <button
+            onClick={() => handleIconChange("fire")}
+            className={`flex flex-col items-center gap-2 p-3 rounded-2xl border transition-all cursor-pointer ${
+              appIcon === "fire"
+                ? "border-border-ink bg-secondary ring-1 ring-border-ink"
+                : "border-border-ink hover:bg-surface-hover"
+            }`}
+          >
+            <img
+              loading="lazy"
+              decoding="async"
+              src={getAssetPath("/images/icons/fire.png")}
+              alt="Fire Icon"
+              className="w-12 h-12 rounded-xl shadow-xs object-cover"
+            />
+            <span className="text-xs font-bold text-text-primary">Fire</span>
+          </button>
         </div>
       </div>
     </div>

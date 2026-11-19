@@ -507,7 +507,7 @@ export async function fetchWithFailover(input: RequestInfo | URL, init?: Request
     const method = init?.method ?? "GET";
     const res = await originalFetch(prepareInput(targetUrl), await withAmazeIdAuth(init, targetUrl, method));
     if (isFailoverStatus(res.status)) {
-      throw new Error(`Server error ${res.status}`);
+      throw new Error(`Server error ${res.status} (${uniccRouteName(urlStr)})`);
     }
     if (res.ok) noteAmazeccServing(uniccRouteName(urlStr));
     return res;
@@ -534,7 +534,8 @@ export async function fetchWithFailover(input: RequestInfo | URL, init?: Request
         try {
           const method = init?.method ?? "GET";
           const recovered = await originalFetch(prepareInput(urlStr), await withAmazeIdAuth(init, urlStr, method));
-          if (isFailoverStatus(recovered.status)) throw new Error(`Server error ${recovered.status}`);
+          if (isFailoverStatus(recovered.status))
+            throw new Error(`Server error ${recovered.status} (${uniccRouteName(urlStr)})`);
           if (recovered.ok) noteAmazeccServing(uniccRouteName(urlStr));
           return recovered;
         } catch (primaryError) {
@@ -563,7 +564,7 @@ export async function fetchWithFailover(input: RequestInfo | URL, init?: Request
         if (isFailoverStatus(backupRes.status)) {
           // A 5xx is a failure, not an answer. Returning it would hand the caller
           // an error page as if it were data and skip the UniCC hop.
-          throw new Error(`Server error ${backupRes.status}`);
+          throw new Error(`Server error ${backupRes.status} (${uniccRouteName(urlStr)})`);
         }
         if (backupRes.ok) noteAmazeccServing(uniccRouteName(urlStr));
         return backupRes;

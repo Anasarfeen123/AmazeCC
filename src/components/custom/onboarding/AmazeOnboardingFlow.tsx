@@ -28,6 +28,7 @@ import config from "../../../../config.json";
 import { api } from "@/lib/sync-engine";
 import SimplifiedMobileHome from "../mobile/SimplifiedMobileHome";
 import SelectField from "../shared/primitives/SelectField";
+import Switch from "../shared/primitives/Switch";
 import OnboardingIntro, { type IntroPhase } from "./OnboardingIntro";
 import {
   dismissSyncSession,
@@ -355,10 +356,10 @@ export default function AmazeOnboardingFlow({
 
   // Render Helpers for shared cards across vertical & horizontal dual-pane layouts
   const renderProfileCard = () => (
-    <div className="p-5 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-4 text-left">
+    <div className="p-5 sm:p-6 rounded-[16px] border-[3px] border-border-ink bg-surface shadow-brutal-md space-y-4 text-left">
       {/* Friendly Name */}
       <div className="space-y-1.5">
-        <label className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
+        <label className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
           What should we call you?
         </label>
         <input
@@ -372,7 +373,7 @@ export default function AmazeOnboardingFlow({
 
       {/* Current Semester Selector */}
       <div className="space-y-1.5">
-        <label className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
+        <label className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
           Current Semester
         </label>
         <div>
@@ -394,7 +395,7 @@ export default function AmazeOnboardingFlow({
 
       {/* Campus Residency & Bus Mode */}
       <div className="space-y-2">
-        <label className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
+        <label className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
           Campus Residency & Commute
         </label>
         <div className="grid grid-cols-2 gap-2.5">
@@ -411,10 +412,10 @@ export default function AmazeOnboardingFlow({
                   update("residentialStatus", opt.id);
                   if (opt.id === "hosteller") update("isDayscholarWithBus", false);
                 }}
-                className={`p-3 rounded-2xl border text-left transition-all flex flex-col justify-between h-20 cursor-pointer ${
+                className={`p-3 rounded-[12px] border-2 text-left transition-all flex flex-col justify-between h-20 cursor-pointer ${
                   isSelected
-                    ? "bg-secondary border-border-ink text-secondary-foreground ring-1 ring-border-ink"
-                    : "bg-surface-secondary border-border-ink text-text-muted hover:border-border-ink hover:text-text-secondary"
+                    ? "bg-secondary border-border-ink text-secondary-foreground shadow-brutal-sm"
+                    : "bg-surface border-border-ink text-text-primary hover:bg-surface-secondary"
                 }`}
               >
                 <div>
@@ -427,24 +428,18 @@ export default function AmazeOnboardingFlow({
         </div>
 
         {/* College Bus Registration Toggle */}
-        <div className="p-3 rounded-2xl bg-surface-secondary border border-border-ink flex items-center justify-between mt-1">
+        <div className="p-3 rounded-[12px] bg-surface-secondary border-2 border-border-ink flex items-center justify-between mt-1">
           <div className="flex items-center gap-2">
             <div>
-              <p className="text-xs font-bold text-text-heading">College Bus User?</p>
-              <p className="text-[9.5px] text-text-muted">Enable bus routes and stops</p>
+              <p className="text-sm font-bold text-text-heading">College bus user?</p>
+              <p className="text-xs text-text-muted">Show bus routes and stops</p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() => update("isDayscholarWithBus", !temp.isDayscholarWithBus)}
-            className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              temp.isDayscholarWithBus
-                ? "bg-primary text-primary-foreground shadow-xs"
-                : "bg-surface border border-border-ink text-text-muted hover:text-text-secondary"
-            }`}
-          >
-            {temp.isDayscholarWithBus ? "Yes" : "No"}
-          </button>
+          <Switch
+            checked={!!temp.isDayscholarWithBus}
+            onCheckedChange={(v) => update("isDayscholarWithBus", v)}
+            label="College bus user"
+          />
         </div>
       </div>
     </div>
@@ -516,20 +511,20 @@ export default function AmazeOnboardingFlow({
   );
 
   const renderDisplayCard = () => (
-    <div className="p-5 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-4 text-left">
+    <div className="p-5 sm:p-6 rounded-[16px] border-[3px] border-border-ink bg-surface shadow-brutal-md space-y-4 text-left">
       {/* Dashboard Avatar Option */}
       <div className="space-y-1.5">
-        <label className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
+        <label className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
           Dashboard Greeting Avatar
         </label>
         <div className="grid grid-cols-2 gap-2.5">
           <button
             type="button"
             onClick={() => update("showProfilePhoto", true)}
-            className={`p-3 rounded-2xl border text-left transition-all flex items-center gap-2.5 cursor-pointer ${
+            className={`p-3 rounded-[12px] border-2 text-left transition-all flex items-center gap-2.5 cursor-pointer ${
               temp.showProfilePhoto !== false
-                ? "bg-secondary border-border-ink text-secondary-foreground ring-1 ring-border-ink"
-                : "bg-surface-secondary border-border-ink text-text-muted hover:border-border-ink hover:text-text-secondary"
+                ? "bg-secondary border-border-ink text-secondary-foreground shadow-brutal-sm"
+                : "bg-surface border-border-ink text-text-primary hover:bg-surface-secondary"
             }`}
           >
             <div className="w-7 h-7 rounded-xl bg-surface-secondary flex items-center justify-center text-primary shrink-0 font-bold text-xs">
@@ -544,10 +539,10 @@ export default function AmazeOnboardingFlow({
           <button
             type="button"
             onClick={() => update("showProfilePhoto", false)}
-            className={`p-3 rounded-2xl border text-left transition-all flex items-center gap-2.5 cursor-pointer ${
+            className={`p-3 rounded-[12px] border-2 text-left transition-all flex items-center gap-2.5 cursor-pointer ${
               temp.showProfilePhoto === false
-                ? "bg-secondary border-border-ink text-secondary-foreground ring-1 ring-border-ink"
-                : "bg-surface-secondary border-border-ink text-text-muted hover:border-border-ink hover:text-text-secondary"
+                ? "bg-secondary border-border-ink text-secondary-foreground shadow-brutal-sm"
+                : "bg-surface border-border-ink text-text-primary hover:bg-surface-secondary"
             }`}
           >
             <img
@@ -568,7 +563,7 @@ export default function AmazeOnboardingFlow({
       {/* Target Attendance Goal */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <label className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
+          <label className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
             Target Attendance Goal
           </label>
           <span className="text-xs font-bold text-primary">{temp.targetAttendance || 75}%</span>
@@ -581,10 +576,10 @@ export default function AmazeOnboardingFlow({
                 key={pct}
                 type="button"
                 onClick={() => update("targetAttendance", pct)}
-                className={`py-2 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                className={`min-h-11 rounded-[10px] border-2 border-border-ink font-mono text-xs font-bold uppercase transition-all cursor-pointer ${
                   isSelected
-                    ? "bg-primary text-primary-foreground border-border-ink shadow-xs"
-                    : "bg-surface-secondary border-border-ink text-text-muted hover:text-text-secondary"
+                    ? "bg-secondary text-secondary-foreground shadow-brutal-sm"
+                    : "bg-surface text-text-primary hover:bg-surface-secondary"
                 }`}
               >
                 {pct}% Goal
@@ -600,27 +595,15 @@ export default function AmazeOnboardingFlow({
           <p className="text-xs font-bold text-text-heading">Show GPA on Home</p>
           <p className="text-xs text-text-muted">Quick grade indicator card</p>
         </div>
-        <button
-          type="button"
-          onClick={() => update("showGpa", !temp.showGpa)}
-          className={`w-10 h-5 rounded-full transition-colors p-0.5 cursor-pointer ${
-            temp.showGpa ? "bg-primary" : "bg-surface-secondary"
-          }`}
-        >
-          <div
-            className={`w-4 h-4 rounded-full bg-surface transition-transform ${
-              temp.showGpa ? "translate-x-5" : "translate-x-0"
-            }`}
-          />
-        </button>
+        <Switch checked={!!temp.showGpa} onCheckedChange={(v) => update("showGpa", v)} label="Show GPA on Home" />
       </div>
     </div>
   );
 
   const renderBottomNavCard = () => (
-    <div className="p-5 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-3.5 text-left">
+    <div className="p-5 sm:p-6 rounded-[16px] border-[3px] border-border-ink bg-surface shadow-brutal-md space-y-3.5 text-left">
       {/* Live Dock Preview */}
-      <div className="p-2.5 rounded-2xl bg-background border border-border-ink flex items-center justify-around">
+      <div className="p-2.5 rounded-[12px] bg-background border-2 border-border-ink flex items-center justify-around">
         <div className="flex flex-col items-center gap-0.5 opacity-60">
           <Sparkles className="w-3.5 h-3.5 text-primary" />
           <span className="text-xs font-bold text-text-muted">Home</span>
@@ -652,10 +635,10 @@ export default function AmazeOnboardingFlow({
               key={tab.id}
               type="button"
               onClick={() => togglePinnedTab(tab.id)}
-              className={`p-2.5 rounded-2xl border text-left transition-all flex items-center gap-2.5 cursor-pointer ${
+              className={`p-2.5 rounded-[12px] border-2 text-left transition-all flex items-center gap-2.5 cursor-pointer ${
                 isPinned
-                  ? "bg-secondary border-border-ink text-secondary-foreground shadow-xs"
-                  : "bg-surface-secondary border-border-ink text-text-muted hover:border-border-ink hover:text-text-secondary"
+                  ? "bg-secondary border-border-ink text-secondary-foreground shadow-brutal-sm"
+                  : "bg-surface border-border-ink text-text-primary hover:bg-surface-secondary"
               }`}
             >
               <div
@@ -677,7 +660,7 @@ export default function AmazeOnboardingFlow({
   );
 
   const renderNotificationsCard = () => (
-    <div className="p-5 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-3 text-left">
+    <div className="p-5 sm:p-6 rounded-[16px] border-[3px] border-border-ink bg-surface shadow-brutal-md space-y-3 text-left">
       {[
         { title: "Timetable Reminders", desc: "15 minutes before your class" },
         { title: "Attendance Safeguard", desc: "Alert if attendance drops below 75%" },
@@ -685,7 +668,7 @@ export default function AmazeOnboardingFlow({
       ].map((perk, i) => (
         <div
           key={i}
-          className="flex items-center gap-3 p-2.5 rounded-2xl bg-surface-secondary border border-border-ink"
+          className="flex items-center gap-3 p-2.5 rounded-[12px] bg-surface-secondary border-2 border-border-ink"
         >
           <div>
             <p className="text-xs font-bold text-text-heading">{perk.title}</p>
@@ -718,7 +701,7 @@ export default function AmazeOnboardingFlow({
 
       {/* Fresher Specific Callout if detected */}
       {eptData?.tables?.[0]?.rows?.length > 0 && (
-        <div className="p-3 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-0.5 mt-2">
+        <div className="p-3 rounded-[12px] bg-surface-secondary border-2 border-border-ink space-y-0.5 mt-2">
           <span className="text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-secondary text-secondary-foreground">
             Fresher Schedule Active
           </span>
@@ -733,7 +716,7 @@ export default function AmazeOnboardingFlow({
   const renderInstallCard = () => {
     const showManualSteps = !canInstall && !isInstalled && isIosSafari();
     return (
-      <div className="p-5 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-3 text-left">
+      <div className="p-5 sm:p-6 rounded-[16px] border-[3px] border-border-ink bg-surface shadow-brutal-md space-y-3 text-left">
         {[
           { title: "Full-Screen App", desc: "Opens like a native app, no browser chrome" },
           { title: "Works Offline", desc: "Your dashboard loads even on patchy campus wifi" },
@@ -741,7 +724,7 @@ export default function AmazeOnboardingFlow({
         ].map((perk, i) => (
           <div
             key={i}
-            className="flex items-center gap-3 p-2.5 rounded-2xl bg-surface-secondary border border-border-ink"
+            className="flex items-center gap-3 p-2.5 rounded-[12px] bg-surface-secondary border-2 border-border-ink"
           >
             <div>
               <p className="text-xs font-bold text-text-heading">{perk.title}</p>
@@ -890,7 +873,7 @@ export default function AmazeOnboardingFlow({
 
                   {/* Icon-Only Option Bar */}
                   <div className="space-y-2 pt-1 w-full">
-                    <label className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
+                    <label className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
                       Select Mode
                     </label>
                     <div className="inline-flex items-center gap-2 p-1.5 rounded-full bg-surface border border-border-ink shadow-lg">
@@ -916,7 +899,7 @@ export default function AmazeOnboardingFlow({
                     </div>
 
                     {/* Active Mode Summary Card */}
-                    <div className="p-3.5 rounded-2xl bg-surface border border-border-ink shadow-sm space-y-1 mt-2">
+                    <div className="p-3.5 rounded-[12px] bg-surface border-2 border-border-ink shadow-sm space-y-1 mt-2">
                       <p className="text-xs font-bold text-text-heading flex items-center gap-2 font-outfit">
                         <currentOption.icon className="w-4 h-4 text-primary" />
                         <span>{currentOption.title}</span>

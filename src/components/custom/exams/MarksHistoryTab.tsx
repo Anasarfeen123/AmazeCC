@@ -35,7 +35,7 @@ import {
   useSubpageStack,
   type InsightSlide,
 } from "../shared/primitives";
-import { LIST_ROW, TILE, TILE_CARD, TONE_TEXT } from "@/lib/uiTokens";
+import { LIST_ROW, TILE_CARD } from "@/lib/uiTokens";
 import {
   averageByType,
   bestTerm,
@@ -227,6 +227,7 @@ export default function MarksHistoryTab({
         value: active.gpa > 0 ? active.gpa.toFixed(2) : "—",
         sub: `${active.label} · ${active.courses.length} courses`,
         badge: "GPA",
+        privacyCategory: "cgpa",
         tone: active.gpa >= 9 ? "emerald" : active.gpa >= 8 ? "indigo" : "amber",
       });
     }
@@ -237,6 +238,7 @@ export default function MarksHistoryTab({
         value: best.gpa.toFixed(2),
         sub: best.label,
         badge: "Peak",
+        privacyCategory: "cgpa",
         tone: "emerald",
       });
     }
@@ -302,39 +304,26 @@ export default function MarksHistoryTab({
   // ── Hero: cumulative CGPA + a rotating read on where the standing is ──
   const hero = (
     <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
-      <div className={cn(TILE, "min-h-32 sm:min-h-36")}>
-        <div className="flex items-center justify-between gap-1">
-          <span className="text-xs sm:text-xs font-bold uppercase tracking-wider text-text-muted font-outfit truncate">
-            Cumulative
-          </span>
-          {cumulative.creditsRequired > 0 && (
-            <span className="text-xs sm:text-xs font-bold uppercase px-2 py-0.5 rounded-md shrink-0 border bg-secondary text-secondary-foreground border-border-ink">
-              {cumulative.creditsEarned.toFixed(0)}/{cumulative.creditsRequired.toFixed(0)} cr
-            </span>
-          )}
-        </div>
-        <div className="my-auto min-w-0">
-          <span
-            className={cn(
-              "text-3xl sm:text-4xl font-bold font-outfit tracking-tight leading-none block truncate",
-              cumulative.value > 0 ? TONE_TEXT.indigo : "text-text-heading",
-            )}
-          >
-            {cumulative.value > 0 ? cumulative.value.toFixed(2) : "—"}
-          </span>
-        </div>
-        <p className="text-xs sm:text-xs text-text-secondary dark:text-text-muted font-medium truncate">
-          {/* Only VTOP's own figure may be presented as the CGPA. The other two
-              are this app's arithmetic — a reconstruction of VTOP's formula, and
-              an unweighted mean — and a reader deserves to know which one they
-              are looking at. */}
-          {cumulative.source === "marks" || cumulative.source === "grades"
-            ? "Credit-weighted CGPA"
+      <StatTile
+        label="CGPA"
+        value={cumulative.value > 0 ? cumulative.value.toFixed(2) : "—"}
+        badge={
+          cumulative.creditsRequired > 0
+            ? `${cumulative.creditsEarned.toFixed(0)}/${cumulative.creditsRequired.toFixed(0)} cr`
+            : undefined
+        }
+        privacyCategory="cgpa"
+        height="min-h-32 sm:min-h-36"
+        // Only VTOP's own figure may be presented as the CGPA; the other two
+        // are this app's arithmetic, and the reader should know which it is.
+        sub={
+          cumulative.source === "marks" || cumulative.source === "grades"
+            ? "From VTOP, credit-weighted"
             : cumulative.source === "derived"
-              ? "Computed from your grades"
-              : "Mean of terms, not weighted"}
-        </p>
-      </div>
+              ? "Worked out from your grades"
+              : "Average of terms (not weighted)"
+        }
+      />
 
       <InsightCarousel slides={insightSlides} carousel={carousel} height="min-h-32 sm:min-h-36" />
     </div>
@@ -345,28 +334,16 @@ export default function MarksHistoryTab({
     <div className="space-y-6">
       {hero}
 
-      <p className="px-1 -mt-3 text-xs leading-relaxed text-text-muted font-medium">
-        GPA is the figure VTOP published for that term. Cumulative is credit-weighted across every term so far, so it
-        moves less than a single term&apos;s average does.
-      </p>
-
       <div className="space-y-3">
-        <SectionHeader
-          icon={BookOpen}
-          title="Courses"
-          count={active?.courses.length}
-          right={
-            rows.length > 1 ? (
-              <ChipTabs
-                size="sm"
-                options={rows.map((r) => ({ value: r.id, label: r.label }))}
-                value={active?.id ?? ""}
-                onChange={setActiveId}
-                className="max-w-[190px]"
-              />
-            ) : null
-          }
-        />
+        <SectionHeader icon={BookOpen} title="Courses" count={active?.courses.length} />
+        {rows.length > 1 && (
+          <ChipTabs
+            size="sm"
+            options={rows.map((r) => ({ value: r.id, label: r.label }))}
+            value={active?.id ?? ""}
+            onChange={setActiveId}
+          />
+        )}
 
         {!active || active.courses.length === 0 ? (
           <EmptyPanel
@@ -402,17 +379,23 @@ export default function MarksHistoryTab({
                 key={r.id}
                 type="button"
                 onClick={() => setActiveId(r.id)}
-                className={`${LIST_ROW} cursor-pointer`}
+                aria-pressed={isActive}
+                className={cn(`${LIST_ROW} cursor-pointer`, isActive && "bg-surface-secondary")}
               >
-                <span className="w-24 shrink-0 text-xs font-bold text-text-muted truncate">{r.label}</span>
+                <span
+                  className={cn(
+                    "w-24 shrink-0 text-xs font-bold truncate",
+                    isActive ? "text-text-heading" : "text-text-muted",
+                  )}
+                >
+                  {r.label}
+                </span>
                 <span className="min-w-0 flex-1">
                   <MiniBar pct={(r.gpa / 10) * 100} tone={gpaBarTone(r.gpa)} />
                 </span>
                 <span
-                  className={cn(
-                    "shrink-0 text-sm font-bold font-outfit tracking-tight leading-none w-10 text-right",
-                    isActive ? "text-primary" : "text-text-primary",
-                  )}
+                  data-private="cgpa"
+                  className="shrink-0 font-mono text-sm font-bold tracking-tight leading-none w-12 text-right text-text-heading"
                 >
                   {r.gpa > 0 ? r.gpa.toFixed(2) : "—"}
                 </span>
@@ -767,11 +750,12 @@ function numOrDash(value: unknown): string {
   return Number.isFinite(n) ? String(Math.round(n * 100) / 100) : "—";
 }
 
+/** Brand fills, same in every theme: mint 9+, ochre 8+, coral below. */
 function gpaBarTone(gpa: number): string {
   if (gpa <= 0) return "bg-surface-tertiary";
-  if (gpa >= 9) return "bg-emerald-500";
-  if (gpa >= 8) return "bg-primary";
-  return "bg-amber-500";
+  if (gpa >= 9) return "bg-mint";
+  if (gpa >= 8) return "bg-ochre";
+  return "bg-coral";
 }
 
 function pointsLabel(grade: string | undefined): string {

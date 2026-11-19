@@ -23,3 +23,13 @@ describe("greetingName", () => {
     expect(greetingName("")).toBe("");
   });
 });
+
+import { shortCourseName } from "../lib/displayNames";
+
+describe("shortCourseName", () => {
+  it("keeps short names and cuts long ones at a word", () => {
+    expect(shortCourseName("French I")).toBe("French I");
+    expect(shortCourseName("Complex Variables and Linear Algebra")).toBe("Complex Variables…");
+    expect(shortCourseName("Theory of Computation")).toBe("Theory…");
+  });
+});

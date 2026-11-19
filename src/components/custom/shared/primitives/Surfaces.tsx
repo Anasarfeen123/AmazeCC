@@ -1,5 +1,6 @@
 "use client";
 
+import { valueFitClass } from "@/lib/valueFit";
 import type { ElementType, ReactNode } from "react";
 import { TILE, LIST_SHELL, SECTION_CHIP, TONE_BADGE, TONE_TEXT } from "@/lib/uiTokens";
 import type { PrivacyCategory } from "@/lib/privacyMode";
@@ -134,7 +135,7 @@ export function StatTile({
       <div className="my-auto min-w-0">
         <p
           data-private={privacyCategory ?? "all"}
-          className={`font-display text-[32px] sm:text-[40px] font-bold tracking-tight leading-none break-words block ${valueTone}`}
+          className={`font-display font-bold tracking-tight block ${valueFitClass(value)} ${valueTone}`}
         >
           {value}
         </p>

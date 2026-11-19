@@ -69,7 +69,7 @@ export function useSubpageStack<T extends string>({
 
   return useMemo(
     () => ({ screen, isRoot, canGoBack: !isRoot || !!onExit, go, back, reset }),
-    [screen, isRoot, onExit, go, back, reset]
+    [screen, isRoot, onExit, go, back, reset],
   );
 }
 

@@ -41,7 +41,7 @@ import { dateKey } from "@/lib/calendarDay";
 import { isLabFatMarked, labFatPapersByDate, labSlotTokens, type LabFatPaper } from "@/lib/labFatWeek";
 import { cn } from "@amazecontinuityprojects/amazeui";
 import { ICON_BUTTON, TILE_INTERACTIVE, TONE_BADGE } from "@/lib/uiTokens";
-import { facultyDisplayName, greetingName } from "@/lib/displayNames";
+import { facultyDisplayName, greetingName, shortCourseName } from "@/lib/displayNames";
 import { privacyCategories, type PrivacyCategory } from "@/lib/privacyMode";
 import BrandLogo from "../shared/BrandLogo";
 import TimetableGrid from "../attendance/TimetableGrid";
@@ -756,8 +756,15 @@ export default function SimplifiedMobileHome({
       slides.push({
         id: "exam",
         title: "Next Exam",
-        headline: nextUpcomingExam.raw.courseCode,
-        subline: `${nextUpcomingExam.raw.examDate} • ${nextUpcomingExam.raw.examTime?.split("-")[0] || ""}`,
+        // The course name, not the code (user): codes mean little at a glance.
+        headline: shortCourseName(nextUpcomingExam.raw.courseTitle) || nextUpcomingExam.raw.courseCode,
+        subline: [
+          nextUpcomingExam.raw.courseTitle ? nextUpcomingExam.raw.courseCode : "",
+          nextUpcomingExam.raw.examDate,
+          nextUpcomingExam.raw.examTime?.split("-")[0]?.trim(),
+        ]
+          .filter(Boolean)
+          .join(" · "),
         badge: nextUpcomingExam.examType || "Exam",
         badgeColor: "bg-success-surface text-success-foreground border-border-ink",
         onClick: () => {

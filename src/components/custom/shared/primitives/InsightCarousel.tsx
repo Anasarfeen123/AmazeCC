@@ -1,5 +1,6 @@
 "use client";
 
+import { valueFitClass } from "@/lib/valueFit";
 import { useRef, type ReactNode } from "react";
 import { cn } from "@amazecontinuityprojects/amazeui";
 import { TILE, TONE_BADGE, TONE_TEXT } from "@/lib/uiTokens";
@@ -33,10 +34,6 @@ const LABEL = "font-mono text-xs font-semibold uppercase tracking-[0.06em] text-
 const BADGE =
   "max-sm:sr-only font-mono text-xs font-semibold uppercase tracking-[0.06em] px-1.5 py-0.5 rounded-[6px] border-2 shrink-0";
 const SUBLINE = "font-mono text-xs text-text-muted truncate";
-const HEADLINE: Record<string, string> = {
-  sm: "text-[32px] sm:text-[40px] leading-none",
-  lg: "text-[40px] sm:text-[56px] leading-none",
-};
 const DOT_ACTIVE = "w-4 bg-text-primary";
 const DOT_IDLE = "w-1.5 bg-border-muted";
 
@@ -178,8 +175,8 @@ export function InsightCarousel({
         <p
           data-private={slide.privacyCategory ?? "all"}
           className={cn(
-            "font-display font-bold tracking-tight truncate block",
-            HEADLINE[headlineSize],
+            "font-display font-bold tracking-tight block",
+            valueFitClass(slide.value, headlineSize),
             valueTone,
             slide.valueClassName,
             slide.blur,

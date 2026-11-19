@@ -1068,7 +1068,9 @@ export default function NavigationTabs({
                       />
                     </div>
                   </div>
-                  <div className="grid grid-flow-col auto-cols-fr gap-1.5">
+                  {/* Three tiles fit one row; with CGPA shown, four ~52px tiles
+                      overflowed ("CREDITS", "79.1%"), so they go 2 x 2. */}
+                  <div className={`grid gap-1.5 ${shouldDisplayGpa ? "grid-cols-2" : "grid-flow-col auto-cols-fr"}`}>
                     {shouldDisplayGpa && (
                       <button
                         onClick={() => {

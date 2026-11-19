@@ -203,6 +203,9 @@ await evalJs(
 await evalJs(
   `localStorage.setItem('theme', ${JSON.stringify(theme)}); document.documentElement.classList.toggle('dark', ${theme !== "light"}); document.documentElement.classList.toggle('night', ${theme === "night"})`,
 );
+// PRE_JS='...': run a snippet in the page before the reload, e.g. to flip a
+// setting: PRE_JS='const s=JSON.parse(localStorage.settings||"{}");s.showGpa=true;localStorage.settings=JSON.stringify(s)'
+if (process.env.PRE_JS) await evalJs(process.env.PRE_JS);
 if (!process.env.NO_RELOAD) {
   await send("Page.navigate", { url: BASE + "/" });
   await sleep(15000);

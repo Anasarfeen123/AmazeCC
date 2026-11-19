@@ -41,16 +41,13 @@ export default function PeerTimetableSheet({
   const shared = useMemo(() => sharedWithPeer(ownCourses, peer.courses ?? []), [ownCourses, peer.courses]);
   const metrics = useMemo(
     () => (peer.loaded ? computeOverlap(ownBusyMap, peer.busyMap) : null),
-    [peer.loaded, peer.busyMap, ownBusyMap]
+    [peer.loaded, peer.busyMap, ownBusyMap],
   );
   const byDay = useMemo(() => busyDays(peer.busyMap), [peer.busyMap]);
 
   const clashSlots = useMemo(
-    () =>
-      Object.keys(peer.busyMap ?? {}).filter(
-        (k) => ownBusyMap?.[k] !== undefined
-      ),
-    [peer.busyMap, ownBusyMap]
+    () => Object.keys(peer.busyMap ?? {}).filter((k) => ownBusyMap?.[k] !== undefined),
+    [peer.busyMap, ownBusyMap],
   );
 
   return (
@@ -63,138 +60,140 @@ export default function PeerTimetableSheet({
         <>
           {peer.handle} · published {relativePublished(peer.publishedAt)}
           {peer.stale && (
-            <span className="ml-1.5 inline-block align-middle bg-amber-100 text-amber-700 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full dark:bg-amber-900/30 dark:text-amber-400">
+            <span className="ml-1.5 inline-block align-middle bg-amber-100 text-warning-foreground text-xs uppercase font-bold px-2 py-0.5 rounded-[6px] dark:text-warning-foreground">
               Stale
             </span>
           )}
         </>
       }
-      icon={<span className="text-[11px] font-black font-outfit">{initials(peer.name)}</span>}
-      accent="border-indigo-500/20 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
+      icon={<span className="text-xs font-bold font-outfit">{initials(peer.name)}</span>}
+      accent="border-border-ink bg-secondary text-secondary-foreground"
       closeLabel="Close peer timetable"
     >
       <div className="text-left space-y-5">
         {peer.noGrant ? (
-          <div className="p-5 rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-800 text-center">
-            <p className="text-xs font-bold text-zinc-500 dark:text-zinc-400">
+          <div className="p-5 rounded-2xl border border-dashed border-border-ink text-center">
+            <p className="text-xs font-bold text-text-muted">
               You are not paired with this student, so their timetable is not available.
             </p>
           </div>
         ) : peer.error ? (
-          <div className="p-3 rounded-2xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/40">
-            <p className="text-xs font-bold text-red-600 dark:text-red-400">
-              Could not read this pairing. It may have been revoked, or the session may have
-              expired — try a sync.
+          <div className="p-3 rounded-2xl bg-danger-surface border border-border-ink">
+            <p className="text-xs font-bold text-danger-foreground">
+              Could not read this pairing. It may have been revoked, or the session may have expired — try a sync.
             </p>
           </div>
         ) : !peer.loaded ? (
-          <p className="text-xs font-bold text-zinc-500 dark:text-zinc-400">Loading…</p>
+          <p className="text-xs font-bold text-text-muted">Loading…</p>
         ) : (
           <>
             {metrics && (
               <div className="grid grid-cols-3 gap-2">
                 {[
-                  { label: "match", value: `${metrics.matchPct}%`, tone: metrics.matchPct >= 70 ? "emerald" : metrics.matchPct >= 40 ? "amber" : "red" },
-                  { label: "clash", value: `${metrics.sharedClassHours}h`, tone: metrics.sharedClassHours === 0 ? "emerald" : "amber" },
-                  { label: "free now", value: metrics.freeNow ? "Yes" : "No", tone: metrics.freeNow ? "emerald" : "zinc" },
+                  {
+                    label: "match",
+                    value: `${metrics.matchPct}%`,
+                    tone: metrics.matchPct >= 70 ? "emerald" : metrics.matchPct >= 40 ? "amber" : "red",
+                  },
+                  {
+                    label: "clash",
+                    value: `${metrics.sharedClassHours}h`,
+                    tone: metrics.sharedClassHours === 0 ? "emerald" : "amber",
+                  },
+                  {
+                    label: "free now",
+                    value: metrics.freeNow ? "Yes" : "No",
+                    tone: metrics.freeNow ? "emerald" : "zinc",
+                  },
                 ].map((s) => (
-                  <div key={s.label} className="p-3 rounded-2xl border border-zinc-200/70 dark:border-zinc-800 text-center">
-                    <p className={`text-lg font-black font-outfit leading-none ${TONE_TEXT[s.tone] ?? TONE_TEXT.zinc}`}>
+                  <div key={s.label} className="p-3 rounded-2xl border-2 border-border-ink text-center">
+                    <p className={`text-lg font-bold font-outfit leading-none ${TONE_TEXT[s.tone] ?? TONE_TEXT.zinc}`}>
                       {s.value}
                     </p>
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mt-1">
-                      {s.label}
-                    </p>
+                    <p className="text-xs font-bold uppercase tracking-wider text-text-muted mt-1">{s.label}</p>
                   </div>
                 ))}
               </div>
             )}
 
             {peer.visibility === "coarse" ? (
-              <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950/60 border border-zinc-200/70 dark:border-zinc-800 space-y-2">
-                <p className="flex items-center gap-1.5 text-[11px] font-black text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
-                  <EyeOff className="w-3.5 h-3.5 text-zinc-400" />
+              <div className="p-4 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-2">
+                <p className="flex items-center gap-1.5 text-xs font-bold text-text-primary uppercase tracking-wider">
+                  <EyeOff className="w-3.5 h-3.5 text-text-muted" />
                   Free / busy only
                 </p>
-                <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
-                  This pair is still returning free/busy only. Course codes, titles and venues are
-                  withheld by the server, so there is nothing more to show here.
+                <p className="text-xs text-text-muted font-medium leading-relaxed">
+                  This pair is still returning free/busy only. Course codes, titles and venues are withheld by the
+                  server, so there is nothing more to show here.
                 </p>
               </div>
             ) : peer.courses.length > 0 ? (
               <>
-              {(shared.sameClass.length > 0 || shared.sameCourse.length > 0) && (
+                {(shared.sameClass.length > 0 || shared.sameCourse.length > 0) && (
+                  <div className="space-y-2">
+                    <p className="flex items-center gap-1.5 text-xs font-bold text-text-primary uppercase tracking-wider">
+                      <BookOpen className="w-3.5 h-3.5 text-success-foreground" />
+                      Classes together
+                    </p>
+                    {shared.sameClass.map(({ mine }) => (
+                      <div
+                        key={`same-${mine.classId || mine.code}`}
+                        className="p-3 rounded-2xl border border-border-ink bg-success-surface"
+                      >
+                        <p className="text-xs font-bold text-text-primary font-outfit truncate">
+                          {mine.code} · {mine.title}
+                        </p>
+                        <p className="text-xs text-success-foreground font-bold mt-0.5 truncate">
+                          Same class{mine.venue ? ` · ${mine.venue}` : ""}
+                          {mine.componentType ? ` · ${mine.componentType}` : ""}
+                        </p>
+                      </div>
+                    ))}
+                    {shared.sameCourse.map(({ mine, theirs }) => (
+                      <div
+                        key={`course-${mine.classId || mine.code}-${mine.componentType}`}
+                        className="p-3 rounded-2xl border-2 border-border-ink"
+                      >
+                        <p className="text-xs font-bold text-text-primary font-outfit truncate">
+                          {mine.code} · {mine.title}
+                        </p>
+                        <p className="text-xs text-text-muted font-medium mt-0.5 truncate">
+                          Same course, other section
+                          {theirs.faculty ? ` · their faculty: ${theirs.faculty}` : ""}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 <div className="space-y-2">
-                  <p className="flex items-center gap-1.5 text-[11px] font-black text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
-                    <BookOpen className="w-3.5 h-3.5 text-emerald-500" />
-                    Classes together
+                  <p className="flex items-center gap-1.5 text-xs font-bold text-text-primary uppercase tracking-wider">
+                    <Clock className="w-3.5 h-3.5 text-primary" />
+                    Courses
                   </p>
-                  {shared.sameClass.map(({ mine }) => (
-                    <div
-                      key={`same-${mine.classId || mine.code}`}
-                      className="p-3 rounded-2xl border border-emerald-500/30 bg-emerald-500/5"
-                    >
-                      <p className="text-xs font-black text-zinc-800 dark:text-zinc-200 font-outfit truncate">
-                        {mine.code} · {mine.title}
+                  {peer.courses.map((c, i) => (
+                    <div key={`${c.classId || c.code}-${i}`} className="p-3 rounded-2xl border-2 border-border-ink">
+                      <p className="text-xs font-bold text-text-primary font-outfit truncate">
+                        {c.code} · {c.title}
                       </p>
-                      <p className="text-[11px] text-emerald-700 dark:text-emerald-400 font-bold mt-0.5 truncate">
-                        Same class{mine.venue ? ` · ${mine.venue}` : ""}
-                        {mine.componentType ? ` · ${mine.componentType}` : ""}
-                      </p>
-                    </div>
-                  ))}
-                  {shared.sameCourse.map(({ mine, theirs }) => (
-                    <div
-                      key={`course-${mine.classId || mine.code}-${mine.componentType}`}
-                      className="p-3 rounded-2xl border border-zinc-200/70 dark:border-zinc-800"
-                    >
-                      <p className="text-xs font-black text-zinc-800 dark:text-zinc-200 font-outfit truncate">
-                        {mine.code} · {mine.title}
-                      </p>
-                      <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium mt-0.5 truncate">
-                        Same course, other section
-                        {theirs.faculty ? ` · their faculty: ${theirs.faculty}` : ""}
+                      <p className="text-xs text-text-muted font-medium mt-0.5 flex items-center gap-1 truncate">
+                        {c.venue && <MapPin className="w-3 h-3 shrink-0" />}
+                        {c.venue || "—"}
+                        {c.componentType ? ` · ${c.componentType}` : ""}
                       </p>
                     </div>
                   ))}
                 </div>
-              )}
-              <div className="space-y-2">
-                <p className="flex items-center gap-1.5 text-[11px] font-black text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
-                  <Clock className="w-3.5 h-3.5 text-indigo-500" />
-                  Courses
-                </p>
-                {peer.courses.map((c, i) => (
-                  <div
-                    key={`${c.classId || c.code}-${i}`}
-                    className="p-3 rounded-2xl border border-zinc-200/70 dark:border-zinc-800"
-                  >
-                    <p className="text-xs font-black text-zinc-800 dark:text-zinc-200 font-outfit truncate">
-                      {c.code} · {c.title}
-                    </p>
-                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium mt-0.5 flex items-center gap-1 truncate">
-                      {c.venue && <MapPin className="w-3 h-3 shrink-0" />}
-                      {c.venue || "—"}
-                      {c.componentType ? ` · ${c.componentType}` : ""}
-                    </p>
-                  </div>
-                ))}
-              </div>
               </>
             ) : null}
 
             <div className="space-y-2">
-              <p className="text-[11px] font-black text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
-                Their week
-              </p>
+              <p className="text-xs font-bold text-text-primary uppercase tracking-wider">Their week</p>
               <div className="flex flex-wrap gap-1.5">
                 {byDay.length === 0 ? (
-                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
-                    Nothing published for this term.
-                  </p>
+                  <p className="text-xs text-text-muted font-medium">Nothing published for this term.</p>
                 ) : (
                   byDay.map((d) => (
-                    <span key={d.day} className={`${CHIP} border-zinc-200/60`}>
+                    <span key={d.day} className={`${CHIP} border-border-ink`}>
                       {d.day} {d.count}
                     </span>
                   ))
@@ -204,22 +203,20 @@ export default function PeerTimetableSheet({
 
             {clashSlots.length > 0 && (
               <div className="space-y-2">
-                <p className="text-[11px] font-black text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
-                  You both have class in
-                </p>
+                <p className="text-xs font-bold text-text-primary uppercase tracking-wider">You both have class in</p>
                 <div className="flex flex-wrap gap-1.5">
                   {clashSlots.slice(0, 12).map((k) => {
                     const parsed = parseSlotKey(k);
                     const slot = parsed ? slotMap[parsed.day]?.[parsed.slotId] : null;
                     return (
-                      <span key={k} className={`${CHIP} border-amber-500/30 text-amber-700 dark:text-amber-300`}>
+                      <span key={k} className={`${CHIP} border-border-ink text-warning-foreground`}>
                         {parsed?.day} {parsed?.slotId}
                         {slot ? ` · ${slot.time}` : ""}
                       </span>
                     );
                   })}
                   {clashSlots.length > 12 && (
-                    <span className={`${CHIP} border-zinc-200/60`}>+{clashSlots.length - 12} more</span>
+                    <span className={`${CHIP} border-border-ink`}>+{clashSlots.length - 12} more</span>
                   )}
                 </div>
               </div>

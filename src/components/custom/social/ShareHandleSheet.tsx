@@ -116,7 +116,7 @@ export default function ShareHandleSheet({ onClose }: { onClose: () => void }) {
       title={name}
       subtitle="Your handle"
       icon={<Link2 className="w-4.5 h-4.5" />}
-      accent="border-indigo-500/20 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
+      accent="border-border-ink bg-secondary text-secondary-foreground"
       closeLabel="Close share sheet"
     >
       <div className="text-left space-y-5">
@@ -126,7 +126,7 @@ export default function ShareHandleSheet({ onClose }: { onClose: () => void }) {
               type="button"
               onClick={copy}
               title="Tap to copy"
-              className="w-full text-center text-2xl font-black font-mono tracking-[0.2em] rounded-2xl px-3 py-5 text-indigo-700 dark:text-indigo-300 bg-zinc-50 dark:bg-zinc-950/60 border border-zinc-200/70 dark:border-zinc-800 hover:border-indigo-300 dark:hover:border-indigo-700 transition-colors cursor-pointer"
+              className="w-full text-center text-2xl font-bold font-mono tracking-[0.2em] rounded-2xl px-3 py-5 text-primary bg-surface-secondary border-2 border-border-ink hover:border-indigo-300 dark:hover:border-indigo-700 transition-colors cursor-pointer"
             >
               {handle}
             </button>
@@ -135,9 +135,9 @@ export default function ShareHandleSheet({ onClose }: { onClose: () => void }) {
               <button
                 type="button"
                 onClick={copy}
-                className="py-3 rounded-2xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-2"
+                className="py-3 rounded-2xl bg-surface-secondary hover:bg-surface-tertiary text-text-primary font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-2"
               >
-                {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                {copied ? <Check className="w-4 h-4 text-success-foreground" /> : <Copy className="w-4 h-4" />}
                 {copied ? "Copied" : "Copy handle"}
               </button>
               <button
@@ -151,19 +151,19 @@ export default function ShareHandleSheet({ onClose }: { onClose: () => void }) {
             </div>
 
             {inviteLink && (
-              <div className="p-3 rounded-2xl border border-zinc-200/80 dark:border-zinc-800 space-y-2.5">
-                <p className="flex items-center gap-1.5 text-[11px] font-black text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
-                  <Link2 className="w-3.5 h-3.5 text-indigo-500" />
+              <div className="p-3 rounded-2xl border-2 border-border-ink space-y-2.5">
+                <p className="flex items-center gap-1.5 text-xs font-bold text-text-primary uppercase tracking-wider">
+                  <Link2 className="w-3.5 h-3.5 text-primary" />
                   Invite link
                 </p>
-                <p className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 truncate" title={inviteLink}>
+                <p className="text-xs font-mono text-text-muted truncate" title={inviteLink}>
                   {inviteLink}
                 </p>
                 <div className={`grid gap-2 ${canNativeShare ? "grid-cols-2" : "grid-cols-1"}`}>
                   <button
                     type="button"
                     onClick={copyLink}
-                    className="py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-2"
+                    className="py-2.5 rounded-xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-2"
                   >
                     {linkCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                     {linkCopied ? "Link copied" : "Copy link"}
@@ -172,26 +172,26 @@ export default function ShareHandleSheet({ onClose }: { onClose: () => void }) {
                     <button
                       type="button"
                       onClick={nativeShare}
-                      className="py-2.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-2"
+                      className="py-2.5 rounded-xl bg-surface-secondary hover:bg-surface-tertiary text-text-primary font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-2"
                     >
                       <Share2 className="w-4 h-4" />
                       Share…
                     </button>
                   )}
                 </div>
-                <p className="text-[10.5px] text-zinc-400 dark:text-zinc-500 font-medium leading-relaxed">
+                <p className="text-xs text-text-muted font-medium leading-relaxed">
                   Opens AmazeCC with your handle filled in. They still confirm before anything is shared.
                 </p>
               </div>
             )}
 
-            <div className="flex flex-col items-center gap-3 p-4 rounded-2xl border border-zinc-200/80 dark:border-zinc-800">
+            <div className="flex flex-col items-center gap-3 p-4 rounded-2xl border-2 border-border-ink">
               {qrError ? (
-                <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium py-6 text-center">
+                <p className="text-xs text-text-muted font-medium py-6 text-center">
                   The QR code could not be drawn on this browser. Copy the handle instead.
                 </p>
               ) : (
-                <div id="social-handle-qr" className="bg-white p-4 rounded-2xl">
+                <div id="social-handle-qr" className="bg-surface p-4 rounded-2xl">
                   <QRCodeSVG value={inviteLink ?? handle} size={160} level="M" />
                 </div>
               )}
@@ -199,7 +199,7 @@ export default function ShareHandleSheet({ onClose }: { onClose: () => void }) {
                 <button
                   type="button"
                   onClick={downloadQR}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors cursor-pointer text-[11px] font-bold"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-secondary text-text-muted hover:bg-surface-hover transition-colors cursor-pointer text-xs font-bold"
                 >
                   <Download className="w-3.5 h-3.5" />
                   Save as image
@@ -207,32 +207,27 @@ export default function ShareHandleSheet({ onClose }: { onClose: () => void }) {
               )}
             </div>
 
-            <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-zinc-950/60 border border-zinc-200/70 dark:border-zinc-800 space-y-1.5">
-              <p className="flex items-center gap-1.5 text-[11px] font-black text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
-                <ShieldCheck className="w-3.5 h-3.5 text-indigo-500" />
+            <div className="p-3 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-1.5">
+              <p className="flex items-center gap-1.5 text-xs font-bold text-text-primary uppercase tracking-wider">
+                <ShieldCheck className="w-3.5 h-3.5 text-primary" />
                 What your handle gives away
               </p>
-              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
+              <p className="text-xs text-text-muted font-medium leading-relaxed">
                 Nothing. The handle identifies you, not your schedule. A student who enters it can request a pairing,
-                and{" "}
-                <strong className="text-zinc-700 dark:text-zinc-200">
-                  that grants them your timetable for this term
-                </strong>{" "}
-                — pairing is mutual, and every pair shares full detail: course, venue and title. End it any time from
+                and <strong className="text-text-primary">that grants them your timetable for this term</strong> —
+                pairing is mutual, and every pair shares full detail: course, venue and title. End it any time from
                 Pairs.
               </p>
             </div>
           </>
         ) : (
           <div className="space-y-4">
-            <div className="p-6 rounded-2xl border border-zinc-200/80 dark:border-zinc-800 text-center space-y-3">
-              <span className="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center border border-zinc-200 dark:border-zinc-800">
-                <RefreshCcw className="w-5 h-5 text-zinc-400" />
+            <div className="p-6 rounded-2xl border-2 border-border-ink text-center space-y-3">
+              <span className="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center border-2 border-border-ink">
+                <RefreshCcw className="w-5 h-5 text-text-muted" />
               </span>
-              <h4 className="text-sm font-black text-zinc-800 dark:text-zinc-100 font-outfit">
-                Your handle is not ready yet
-              </h4>
-              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed max-w-[280px] mx-auto">
+              <h4 className="text-sm font-bold text-text-primary font-outfit">Your handle is not ready yet</h4>
+              <p className="text-xs text-text-muted font-medium leading-relaxed max-w-[280px] mx-auto">
                 A handle is issued the first time your timetable is derived from VTOP. Run a sync and it will appear
                 here.
               </p>
@@ -241,7 +236,7 @@ export default function ShareHandleSheet({ onClose }: { onClose: () => void }) {
               type="button"
               onClick={requestSync}
               disabled={syncing}
-              className="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition-colors cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs transition-colors cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
             >
               {syncing ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCcw className="w-4 h-4" />}
               {syncing ? "Syncing…" : "Sync now"}

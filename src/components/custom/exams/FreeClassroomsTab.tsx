@@ -153,7 +153,7 @@ function RoomChip({
         "group inline-flex items-center rounded-xl border text-xs font-bold font-outfit shadow-2xs select-none transition-all duration-150",
         lab
           ? "bg-cyan-500/5 border-cyan-500/25 hover:border-cyan-400/50 hover:bg-cyan-500/10 text-cyan-800 dark:text-cyan-200"
-          : "bg-indigo-500/5 border-indigo-500/25 hover:border-indigo-400/50 hover:bg-indigo-500/10 text-indigo-800 dark:text-indigo-200",
+          : "bg-secondary border-border-ink hover:border-border-ink hover:bg-secondary text-secondary-foreground",
       )}
     >
       <button
@@ -161,11 +161,11 @@ function RoomChip({
         onClick={() => onInspect(code)}
         title={`Schedule for ${code}`}
         aria-label={`View the schedule for ${code}`}
-        className="pl-2.5 pr-1.5 py-1.5 cursor-pointer inline-flex items-center gap-1.5 active:scale-95 transition-transform"
+        className="pl-2.5 pr-1.5 py-1.5 cursor-pointer inline-flex items-center gap-1.5 transition-transform"
       >
         <span className="tabular-nums tracking-tight">{roomNumber(code)}</span>
         {lab && (
-          <span className="text-[9px] font-semibold px-1 py-0.2 rounded bg-cyan-500/20 text-cyan-700 dark:text-cyan-300">
+          <span className="text-xs font-semibold px-1 py-0.2 rounded bg-cyan-500/20 text-cyan-700 dark:text-cyan-300">
             Lab
           </span>
         )}
@@ -179,12 +179,12 @@ function RoomChip({
         title={`Copy ${code}`}
         aria-label={`Copy ${code}`}
         className={cn(
-          "pr-2 pl-1 py-1.5 cursor-pointer text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-100 transition-colors active:scale-90",
-          copied && "text-emerald-500",
+          "pr-2 pl-1 py-1.5 cursor-pointer text-text-muted hover:text-text-primary transition-colors active:scale-90",
+          copied && "text-success-foreground",
         )}
       >
         {copied ? (
-          <Check className="w-3.5 h-3.5 text-emerald-500" />
+          <Check className="w-3.5 h-3.5 text-success-foreground" />
         ) : (
           <Copy className="w-3 h-3 opacity-40 group-hover:opacity-100 transition-opacity" />
         )}
@@ -216,7 +216,7 @@ function DayPicker({
     <div
       role="tablist"
       aria-label="Day of week"
-      className="grid grid-cols-5 gap-1.5 p-1.5 rounded-2xl bg-zinc-100/90 dark:bg-zinc-900/90 border border-zinc-200/70 dark:border-zinc-800/70"
+      className="grid grid-cols-5 gap-1.5 p-1.5 rounded-2xl bg-surface-secondary border-2 border-border-ink"
     >
       {DAYS_OF_WEEK.map((d) => {
         const selected = value === d;
@@ -232,18 +232,14 @@ function DayPicker({
             className={cn(
               "flex flex-col items-center justify-center rounded-xl transition-all cursor-pointer",
               compact ? "gap-0 py-1.5 px-1" : "gap-0.5 py-2 px-1",
-              selected ? "bg-white dark:bg-zinc-800 shadow-xs" : "hover:bg-white/60 dark:hover:bg-zinc-800/50",
+              selected ? "bg-surface shadow-xs" : "hover:bg-white/60",
             )}
           >
             <span
               className={cn(
-                "font-black uppercase tracking-wide",
-                compact ? "text-[10px]" : "text-[11px]",
-                selected
-                  ? "text-indigo-600 dark:text-indigo-300"
-                  : isToday
-                    ? "text-emerald-600 dark:text-emerald-400"
-                    : "text-zinc-500 dark:text-zinc-400",
+                "font-bold uppercase tracking-wide",
+                compact ? "text-xs" : "text-xs",
+                selected ? "text-primary" : isToday ? "text-success-foreground" : "text-text-muted",
               )}
             >
               {DAY_LABELS[d].short}
@@ -738,16 +734,16 @@ export default function FreeClassroomsTab({
       {/* ── HERO STAT TILES ── */}
       {loading ? (
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
-          <Skeleton className="h-32 sm:h-36 rounded-[24px]" />
-          <Skeleton className="h-32 sm:h-36 rounded-[24px]" />
+          <Skeleton className="h-32 sm:h-36 rounded-[14px]" />
+          <Skeleton className="h-32 sm:h-36 rounded-[14px]" />
         </div>
       ) : error ? null : (
-        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+        <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
           <button
             type="button"
             onClick={jumpToNow}
             title="Jump to the current period"
-            className="w-full text-left cursor-pointer transition-transform hover:scale-[1.01] active:scale-[0.98]"
+            className="w-full text-left cursor-pointer transition-transform"
           >
             <StatTile
               label="Free now"
@@ -768,10 +764,10 @@ export default function FreeClassroomsTab({
 
       {/* ── TIME SELECTOR ── */}
       {!loading && !error && (
-        <div className="rounded-2xl p-3 sm:p-3.5 bg-zinc-50/80 dark:bg-zinc-900/60 border border-zinc-200/70 dark:border-zinc-800/70 space-y-2.5">
+        <div className="rounded-2xl p-3 sm:p-3.5 bg-surface-secondary border-2 border-border-ink space-y-2.5">
           <div className="flex items-center justify-between gap-2 px-0.5">
-            <div className="flex items-center gap-1.5 text-xs font-bold font-outfit text-zinc-700 dark:text-zinc-300">
-              <Clock className="w-3.5 h-3.5 text-indigo-500" />
+            <div className="flex items-center gap-1.5 text-xs font-bold font-outfit text-text-primary">
+              <Clock className="w-3.5 h-3.5 text-primary" />
               <span>Day & Slot</span>
             </div>
             {isLiveSlot ? (
@@ -780,7 +776,7 @@ export default function FreeClassroomsTab({
               <button
                 type="button"
                 onClick={jumpToNow}
-                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-[11px] font-bold font-outfit text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 active:scale-95 transition-all cursor-pointer"
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-bold font-outfit text-success-foreground bg-success-surface hover:bg-success-surface transition-all cursor-pointer"
                 title="Jump to current live period"
               >
                 <Zap className="w-3 h-3" />
@@ -818,7 +814,7 @@ export default function FreeClassroomsTab({
               <ChevronRight className="w-4 h-4" />
             </IconButton>
 
-            <span className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 tabular-nums shrink-0 hidden xs:inline">
+            <span className="text-xs font-bold text-text-muted tabular-nums shrink-0 hidden xs:inline">
               {positionLabel(periodIndex, periods.length)}
             </span>
           </div>
@@ -862,7 +858,7 @@ export default function FreeClassroomsTab({
 
           <div className="space-y-2.5">
             <div className="relative">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -875,7 +871,7 @@ export default function FreeClassroomsTab({
                   type="button"
                   onClick={() => setQuery("")}
                   aria-label="Clear filter"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg text-text-muted hover:text-text-primary transition-colors cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -937,14 +933,14 @@ export default function FreeClassroomsTab({
                   <div key={block.block} className={cn(TILE_CARD, "space-y-3 p-4 rounded-2xl")}>
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <span className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+                        <span className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border bg-success-surface border-border-ink text-success-foreground">
                           <Building2 className="w-4 h-4" />
                         </span>
                         <div className="min-w-0">
-                          <h3 className="text-sm font-black text-zinc-900 dark:text-white font-outfit tracking-tight truncate">
+                          <h3 className="text-sm font-bold text-text-heading font-outfit tracking-tight truncate">
                             {block.block} Block
                           </h3>
-                          <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium tabular-nums">
+                          <p className="text-xs text-text-muted font-medium tabular-nums">
                             {block.free} of {block.total} free
                           </p>
                         </div>
@@ -955,7 +951,7 @@ export default function FreeClassroomsTab({
                     </div>
 
                     {/* Progress bar */}
-                    <div className="h-1 w-full rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
+                    <div className="h-1 w-full rounded-full bg-surface-secondary overflow-hidden">
                       <m.div
                         className="h-full rounded-full bg-emerald-500"
                         initial={false}
@@ -981,7 +977,7 @@ export default function FreeClassroomsTab({
                       <button
                         type="button"
                         onClick={() => setExpanded((e) => ({ ...e, [block.block]: true }))}
-                        className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer active:scale-95 transition-transform"
+                        className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline cursor-pointer transition-transform"
                       >
                         +{hidden} more in {block.block}
                         <ChevronRight className="w-3.5 h-3.5" />
@@ -991,7 +987,7 @@ export default function FreeClassroomsTab({
                       <button
                         type="button"
                         onClick={() => setExpanded((e) => ({ ...e, [block.block]: false }))}
-                        className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 hover:underline cursor-pointer active:scale-95 transition-transform"
+                        className="text-xs font-bold text-text-muted hover:underline cursor-pointer transition-transform"
                       >
                         Show fewer
                       </button>
@@ -1003,7 +999,7 @@ export default function FreeClassroomsTab({
           )}
 
           {/* ── FOOTNOTE / ATTRIBUTION ── */}
-          <div className="flex items-center justify-between text-[11px] text-zinc-400 dark:text-zinc-500 pt-1 px-1">
+          <div className="flex items-center justify-between text-xs text-text-muted pt-1 px-1">
             <span className="inline-flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
               Rooms based on official campus FFCS course catalog
@@ -1021,12 +1017,12 @@ export default function FreeClassroomsTab({
           title={inspectedRoom}
           subtitle={`${DAY_LABELS[inspectDay].full} · ${timeline.filter((t) => t.occupants.length === 0).length}/${timeline.length} free`}
           icon={<DoorOpen className="w-5 h-5" />}
-          accent="bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400"
+          accent="bg-success-surface border-border-ink text-success-foreground"
           closeLabel="Close room inspector"
           trailing={
             <GhostButton onClick={() => handleCopy(inspectedRoom)} title="Copy room code" className="shrink-0">
               {copied === inspectedRoom ? (
-                <Check className="w-3.5 h-3.5 text-emerald-500" />
+                <Check className="w-3.5 h-3.5 text-success-foreground" />
               ) : (
                 <Copy className="w-3.5 h-3.5" />
               )}
@@ -1042,7 +1038,7 @@ export default function FreeClassroomsTab({
               <button
                 type="button"
                 onClick={() => setDay(inspectDay)}
-                className="inline-flex items-center gap-1.5 text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline cursor-pointer"
               >
                 Show {DAY_LABELS[inspectDay].full} in the list
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -1130,14 +1126,14 @@ function ListRow({
     <button
       type="button"
       onClick={onClick}
-      className={cn(LIST_ROW, "gap-3 cursor-pointer", selected && "bg-indigo-50/60 dark:bg-indigo-950/20")}
+      className={cn(LIST_ROW, "gap-3 cursor-pointer", selected && "bg-secondary")}
     >
       <span
         className={cn(
           "w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border",
           tone === "emerald"
-            ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400"
-            : "bg-zinc-100 dark:bg-zinc-800 border-zinc-200/60 dark:border-zinc-700/60 text-zinc-500 dark:text-zinc-400",
+            ? "bg-success-surface border-border-ink text-success-foreground"
+            : "bg-surface-secondary border-border-ink text-text-muted",
         )}
       >
         {icon}

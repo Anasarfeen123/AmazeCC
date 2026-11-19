@@ -19,10 +19,10 @@ const TIER_ICONS: Record<string, LucideIcon> = {
 };
 
 const CADENCE_CHIP: Record<string, string> = {
-  daily: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
-  weekly: "bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20",
-  monthly: "bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20",
-  quarterly: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+  daily: "bg-success-surface text-success-foreground border-border-ink",
+  weekly: "bg-secondary text-secondary-foreground border-border-ink",
+  monthly: "bg-secondary text-secondary-foreground border-border-ink",
+  quarterly: "bg-warning-surface text-warning-foreground border-border-ink",
 };
 
 /**
@@ -63,10 +63,8 @@ export default function SyncCadenceGuide() {
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 min-w-0">
-          <Layers className="w-4 h-4 text-indigo-500 shrink-0" />
-          <h3 className="text-sm font-extrabold text-zinc-900 dark:text-white font-outfit truncate">
-            What syncs, how often
-          </h3>
+          <Layers className="w-4 h-4 text-primary shrink-0" />
+          <h3 className="text-sm font-bold text-text-heading font-outfit truncate">What syncs, how often</h3>
         </div>
         {anyDisabled && (
           <button
@@ -75,7 +73,7 @@ export default function SyncCadenceGuide() {
               resetCadenceOverrides();
               setOverrides({});
             }}
-            className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors cursor-pointer shrink-0"
+            className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-text-muted hover:text-text-primary transition-colors cursor-pointer shrink-0"
             title="Re-enable every preset op"
           >
             <RotateCcw className="w-3 h-3" />
@@ -84,7 +82,7 @@ export default function SyncCadenceGuide() {
         )}
       </div>
 
-      <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-snug">
+      <p className="text-xs text-text-muted leading-snug">
         Everything is cumulative. Windows below gate automatic/background sync — picking a tier manually (or a semester
         switch) runs it fully, now. Turning an op off removes it from every tier; it will not be fetched automatically
         again until you turn it back on.
@@ -97,26 +95,21 @@ export default function SyncCadenceGuide() {
           const disabledCount = tier.steps.filter((s) => overrides[s.op] === false).length;
           const due = lastSynced(tier.steps[0]?.op ?? "nope");
           return (
-            <div
-              key={tier.id}
-              className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/60 dark:bg-zinc-900/40 overflow-hidden"
-            >
+            <div key={tier.id} className="rounded-2xl border-2 border-border-ink bg-surface-secondary overflow-hidden">
               <button
                 type="button"
                 onClick={() => setExpanded(open ? null : tier.id)}
                 aria-expanded={open}
-                className="w-full flex items-center gap-2.5 px-3 py-2.5 text-left cursor-pointer hover:bg-zinc-100/60 dark:hover:bg-zinc-800/40 transition-colors"
+                className="w-full flex items-center gap-2.5 px-3 py-2.5 text-left cursor-pointer hover:bg-surface-hover transition-colors"
               >
-                <span className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/15">
+                <span className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-secondary text-secondary-foreground border border-border-ink">
                   <Icon className="w-4 h-4" />
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-xs font-extrabold text-zinc-900 dark:text-zinc-100 font-outfit">
-                      {tier.label}
-                    </span>
+                    <span className="text-xs font-bold text-text-heading font-outfit">{tier.label}</span>
                     <span
-                      className={`text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded-md border shrink-0 ${CADENCE_CHIP[tier.id]}`}
+                      className={`text-xs font-bold uppercase px-1.5 py-0.5 rounded-md border shrink-0 ${CADENCE_CHIP[tier.id]}`}
                     >
                       {tier.id === "daily"
                         ? "Daily"
@@ -127,33 +120,29 @@ export default function SyncCadenceGuide() {
                             : "3 months"}
                     </span>
                     {disabledCount > 0 && (
-                      <span className="text-[9px] font-bold text-amber-600 dark:text-amber-400">
-                        {disabledCount} off
-                      </span>
+                      <span className="text-xs font-bold text-warning-foreground">{disabledCount} off</span>
                     )}
                   </div>
-                  <p className="text-[10px] text-zinc-500 dark:text-zinc-500 truncate mt-0.5">{tier.description}</p>
+                  <p className="text-xs text-text-muted truncate mt-0.5">{tier.description}</p>
                 </div>
-                <span className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500 shrink-0 tabular-nums">
+                <span className="text-xs font-medium text-text-muted shrink-0 tabular-nums">
                   {due === "never" ? "" : `synced ${due}`}
                 </span>
               </button>
 
               {open && (
-                <div className="border-t border-zinc-100 dark:border-zinc-800/80 px-3 py-2 space-y-1">
+                <div className="border-t border-border-ink px-3 py-2 space-y-1">
                   {tier.steps.map((step) => {
                     const enabled = overrides[step.op] !== false;
                     return (
                       <div
                         key={step.op}
                         role="group"
-                        className="flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-zinc-100/70 dark:hover:bg-zinc-800/50 transition-colors"
+                        className="flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-surface-hover transition-colors"
                       >
                         <div className="min-w-0 flex-1">
-                          <p className="text-[11px] font-bold text-zinc-700 dark:text-zinc-300 truncate">
-                            {getOpLabel(step.op)}
-                          </p>
-                          <p className="text-[9px] text-zinc-400 dark:text-zinc-500">
+                          <p className="text-xs font-bold text-text-primary truncate">{getOpLabel(step.op)}</p>
+                          <p className="text-xs text-text-muted">
                             {step.every ? `every ${step.every}d` : "every run"} · synced {lastSynced(step.op)}
                           </p>
                         </div>
@@ -167,11 +156,11 @@ export default function SyncCadenceGuide() {
                             toggle(tier.id, step.op);
                           }}
                           className={`relative w-9 h-5 rounded-full transition-colors cursor-pointer shrink-0 ${
-                            enabled ? "bg-indigo-500" : "bg-zinc-300 dark:bg-zinc-700"
+                            enabled ? "bg-primary" : "bg-surface-tertiary "
                           }`}
                         >
                           <span
-                            className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${
+                            className={`absolute top-0.5 w-4 h-4 rounded-full bg-surface shadow transition-all ${
                               enabled ? "left-[18px]" : "left-0.5"
                             }`}
                           />
@@ -179,7 +168,7 @@ export default function SyncCadenceGuide() {
                       </div>
                     );
                   })}
-                  <p className="text-[9px] text-zinc-400 dark:text-zinc-500 pt-1">
+                  <p className="text-xs text-text-muted pt-1">
                     Unchecking removes the op from <span className="font-bold">every</span> tier. Custom modes are
                     unaffected.
                   </p>

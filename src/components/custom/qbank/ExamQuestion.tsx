@@ -12,25 +12,25 @@ export default function ExamQuestion({ question, index }: { question: QBankQuest
   const handleReset = () => setSelectedOption(null);
 
   return (
-    <div className="bg-white  dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200  dark:border-gray-800 p-5 transition-colors">
+    <div className="bg-surface rounded-xl shadow-sm border border-border-ink p-5 transition-colors">
       {/* Header */}
       <div className="flex justify-between items-start mb-4">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="bg-blue-100 text-blue-700   dark:bg-blue-900/40 dark:text-blue-400 text-xs font-bold px-2.5 py-1 rounded-md">
+          <span className="bg-blue-100 text-primary dark:bg-blue-900/40 text-primary text-xs font-bold px-2.5 py-1 rounded-md">
             Q{index + 1}
           </span>
           {question.question_type && (
-            <span className="bg-purple-50 text-purple-600   dark:bg-purple-900/30 dark:text-purple-400 text-xs px-2 py-1 rounded-md font-medium">
+            <span className="bg-purple-50 text-primary dark:bg-purple-900/30 text-primary text-xs px-2 py-1 rounded-md font-medium">
               {question.question_type}
             </span>
           )}
           {question.topic_name && (
-            <span className="bg-gray-100 text-gray-600   dark:bg-gray-800 dark:text-gray-400 text-xs px-2 py-1 rounded-md">
+            <span className="bg-surface-secondary text-text-muted text-xs px-2 py-1 rounded-md">
               {question.topic_name}
             </span>
           )}
           {question.source_type && (
-            <span className="bg-green-50 text-green-700   dark:bg-green-900/30 dark:text-green-400 text-xs px-2 py-1 rounded-md font-medium border border-green-200 dark:border-green-800/40">
+            <span className="bg-success-surface text-success-foreground dark:text-success-foreground text-xs px-2 py-1 rounded-md font-medium border border-border-ink">
               {question.source_type} • {question.exam_semester} {question.exam_year}
             </span>
           )}
@@ -39,24 +39,24 @@ export default function ExamQuestion({ question, index }: { question: QBankQuest
           {selectedOption && (
             <button
               onClick={handleReset}
-              className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 dark:hover:text-gray-300 transition-colors"
+              className="p-1 text-text-muted hover:text-text-muted transition-colors"
               title="Reset"
             >
               <RotateCcw className="w-4 h-4" />
             </button>
           )}
-          <div className="text-sm font-semibold text-gray-500  dark:text-gray-500">[{question.marks || "?"} Marks]</div>
+          <div className="text-sm font-semibold text-text-muted">[{question.marks || "?"} Marks]</div>
         </div>
       </div>
 
       {/* Question Text */}
-      <div className="text-gray-800  dark:text-gray-200 text-base leading-relaxed mb-6 overflow-x-auto">
+      <div className="text-text-primary text-base leading-relaxed mb-6 overflow-x-auto">
         <Latex>{question.question_text || ""}</Latex>
       </div>
 
       {/* Fallback Image */}
       {question.image_url && (
-        <div className="mb-6 rounded-lg overflow-hidden border border-gray-200  dark:border-gray-800 bg-gray-50  dark:bg-gray-950">
+        <div className="mb-6 rounded-lg overflow-hidden border border-border-ink bg-surface-secondary">
           <img
             loading="lazy"
             decoding="async"
@@ -73,11 +73,11 @@ export default function ExamQuestion({ question, index }: { question: QBankQuest
           {Object.entries(question.options).map(([key, value]) => {
             const wrong = isWrong(key);
 
-            let btnClass = "border-gray-200  dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-slate-800";
+            let btnClass = "border-border-ink hover:bg-surface-hover";
             if (selectedOption) {
-              if (key === question.correct_answer) btnClass = "border-green-500 bg-green-50  dark:bg-green-900/20";
-              else if (wrong) btnClass = "border-red-500 bg-red-50  dark:bg-red-900/20";
-              else btnClass = "border-gray-200  dark:border-gray-800 opacity-40";
+              if (key === question.correct_answer) btnClass = "border-border-ink bg-success-surface";
+              else if (wrong) btnClass = "border-border-ink bg-danger-surface";
+              else btnClass = "border-border-ink opacity-40";
             }
 
             return (
@@ -87,16 +87,16 @@ export default function ExamQuestion({ question, index }: { question: QBankQuest
                 onClick={() => setSelectedOption(key)}
                 className={`w-full flex items-center p-3 rounded-lg border text-left transition-all ${btnClass}`}
               >
-                <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100  dark:bg-gray-800 text-sm font-semibold text-gray-700  dark:text-gray-300 mr-3">
+                <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-surface-secondary text-sm font-semibold text-text-primary mr-3">
                   {key}
                 </div>
-                <div className="flex-grow text-sm text-gray-700  dark:text-gray-300 overflow-x-auto">
+                <div className="flex-grow text-sm text-text-primary overflow-x-auto">
                   <Latex>{(value as string) || ""}</Latex>
                 </div>
                 {selectedOption && key === question.correct_answer && (
-                  <CheckCircle2 className="w-5 h-5 text-green-500 ml-2 shrink-0" />
+                  <CheckCircle2 className="w-5 h-5 text-success-foreground ml-2 shrink-0" />
                 )}
-                {selectedOption && wrong && <XCircle className="w-5 h-5 text-red-500 ml-2 shrink-0" />}
+                {selectedOption && wrong && <XCircle className="w-5 h-5 text-danger-foreground ml-2 shrink-0" />}
               </button>
             );
           })}
@@ -109,16 +109,14 @@ export default function ExamQuestion({ question, index }: { question: QBankQuest
           {!selectedOption ? (
             <button
               onClick={() => setSelectedOption("SHOW_ANSWER")}
-              className="text-sm px-4 py-2 bg-gray-100  dark:bg-black text-gray-700  dark:text-gray-300 border border-gray-200  dark:border-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors font-medium"
+              className="text-sm px-4 py-2 bg-surface-secondary text-text-primary border border-border-ink rounded-lg hover:bg-surface-hover transition-colors font-medium"
             >
               Show Answer / Hints
             </button>
           ) : (
-            <div className="p-4 bg-green-50  dark:bg-green-900/20 border border-green-200  dark:border-green-800/50 rounded-lg">
-              <h4 className="text-xs font-bold text-green-700  dark:text-green-400 uppercase tracking-wider mb-2">
-                Answer:
-              </h4>
-              <div className="text-sm text-gray-800  dark:text-white font-medium">
+            <div className="p-4 bg-success-surface border border-border-ink rounded-lg">
+              <h4 className="text-xs font-bold text-success-foreground uppercase tracking-wider mb-2">Answer:</h4>
+              <div className="text-sm text-text-primary font-medium">
                 <Latex>{question.correct_answer}</Latex>
               </div>
             </div>

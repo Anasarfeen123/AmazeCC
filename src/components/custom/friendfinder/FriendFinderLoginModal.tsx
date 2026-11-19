@@ -213,18 +213,18 @@ export default function FriendFinderLoginModal({
         maxWidth="max-w-md"
         title="Sign in with VTOP"
         subtitle="AmazeCC Unified Sync Engine"
-        icon={<Cpu className="w-5 h-5 text-indigo-500" />}
-        accent="bg-indigo-500/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-400"
+        icon={<Cpu className="w-5 h-5 text-primary" />}
+        accent="bg-secondary border-border-ink text-secondary-foreground"
         closeLabel="Close sign-in sheet"
       >
         <div className="space-y-4 pt-1">
           {/* Unified AmazeCC Sign-in Banner */}
-          <div className="rounded-2xl border border-indigo-500/20 bg-indigo-50/70 dark:bg-indigo-950/30 p-3.5 space-y-1.5 text-xs shadow-2xs">
-            <div className="flex items-center gap-2 font-bold font-outfit text-indigo-700 dark:text-indigo-300">
-              <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
+          <div className="rounded-2xl border border-border-ink bg-secondary p-3.5 space-y-1.5 text-xs shadow-2xs">
+            <div className="flex items-center gap-2 font-bold font-outfit text-primary">
+              <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
               <span>Unified Amaze Continuity Projects Sign-In</span>
             </div>
-            <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-[11px] sm:text-xs">
+            <p className="text-text-muted leading-relaxed text-xs sm:text-xs">
               Logging in here will log you into the rest of <strong>AmazeCC</strong>. Your VTOP session, attendance,
               timetable, and preferences are synchronized and instantly accessible across the Dashboard, FFCS Planner,
               and Event Hub.
@@ -232,28 +232,26 @@ export default function FriendFinderLoginModal({
           </div>
 
           {/* Sync Engine Status & Console */}
-          <div className="rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/90 dark:bg-zinc-900/80 p-3.5 space-y-2.5">
+          <div className="rounded-2xl border-2 border-border-ink bg-surface-secondary p-3.5 space-y-2.5">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <span className="p-1 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+                <span className="p-1 rounded-lg bg-secondary text-secondary-foreground">
                   {isSubmitting ? (
                     <RefreshCw className="w-3.5 h-3.5 animate-spin" />
                   ) : (
                     <Layers className="w-3.5 h-3.5" />
                   )}
                 </span>
-                <span className="text-xs font-bold font-outfit text-slate-800 dark:text-zinc-200">
-                  Sync Engine Console
-                </span>
+                <span className="text-xs font-bold font-outfit text-text-primary">Sync Engine Console</span>
               </div>
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-200/80 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300">
+              <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold px-2 py-0.5 rounded-[6px] bg-surface-tertiary text-text-muted">
                 <span
                   className={`w-1.5 h-1.5 rounded-full ${
                     isSubmitting
                       ? "bg-amber-500 animate-pulse"
                       : session.outcome === "success"
                         ? "bg-emerald-500"
-                        : "bg-indigo-500"
+                        : "bg-primary"
                   }`}
                 />
                 {isSubmitting ? "Synchronizing…" : session.outcome === "success" ? "Connected" : "Ready"}
@@ -262,26 +260,26 @@ export default function FriendFinderLoginModal({
 
             {/* Progress Bar (when active) */}
             {isSubmitting && (
-              <div className="w-full bg-slate-200/80 dark:bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+              <div className="w-full bg-surface-tertiary h-1.5 rounded-full overflow-hidden">
                 <div
-                  className="bg-gradient-to-r from-indigo-500 to-purple-600 h-full transition-all duration-300 rounded-full"
+                  className="h-full transition-all duration-300 rounded-full"
                   style={{ width: `${Math.max(5, session.progress)}%` }}
                 />
               </div>
             )}
 
             {/* Sync Engine Log Lines / Status Details */}
-            <div className="rounded-xl bg-white dark:bg-black/40 border border-slate-200/80 dark:border-zinc-800/80 p-2.5 max-h-24 overflow-y-auto font-mono text-[11px] leading-relaxed space-y-1">
+            <div className="rounded-xl bg-surface border-2 border-border-ink p-2.5 max-h-24 overflow-y-auto font-mono text-xs leading-relaxed space-y-1">
               {session.lines && session.lines.length > 0 ? (
                 session.lines.slice(-4).map((line, idx) => (
                   <div
                     key={idx}
                     className={`flex items-start gap-1.5 ${
                       line.status === "error"
-                        ? "text-rose-600 dark:text-rose-400"
+                        ? "text-danger-foreground"
                         : line.status === "success"
-                          ? "text-emerald-600 dark:text-emerald-400"
-                          : "text-slate-600 dark:text-zinc-400"
+                          ? "text-success-foreground"
+                          : "text-text-muted"
                     }`}
                   >
                     <span className="shrink-0 select-none">
@@ -291,7 +289,7 @@ export default function FriendFinderLoginModal({
                   </div>
                 ))
               ) : (
-                <div className="text-slate-400 dark:text-zinc-500 flex items-center justify-between text-[10px]">
+                <div className="text-text-muted flex items-center justify-between text-xs">
                   <span>Gateway: vtopcc.vit.ac.in</span>
                   <span>Semester: CH20262705</span>
                 </div>
@@ -302,14 +300,11 @@ export default function FriendFinderLoginModal({
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-3.5">
             <div>
-              <label
-                htmlFor="ff-vtop-username"
-                className="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1"
-              >
+              <label htmlFor="ff-vtop-username" className="block text-xs font-bold text-text-primary mb-1">
                 VTOP Username / Registration Number
               </label>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-zinc-500">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-muted">
                   <User className="w-4 h-4" />
                 </span>
                 <input
@@ -320,20 +315,17 @@ export default function FriendFinderLoginModal({
                   placeholder="e.g. 25BLC1081"
                   autoFocus
                   disabled={isSubmitting}
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-zinc-500 text-xs sm:text-sm font-medium focus:outline-hidden focus:ring-2 focus:ring-indigo-500 transition-all uppercase tracking-wider"
+                  className="w-full pl-9 pr-3 py-2.5 rounded-xl border-2 border-border-ink bg-surface text-text-heading placeholder:text-text-muted dark:placeholder:text-text-muted text-xs sm:text-sm font-medium focus:outline-hidden focus:ring-2 focus:ring-border-ink transition-all uppercase tracking-wider"
                 />
               </div>
             </div>
 
             <div>
-              <label
-                htmlFor="ff-vtop-password"
-                className="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1"
-              >
+              <label htmlFor="ff-vtop-password" className="block text-xs font-bold text-text-primary mb-1">
                 VTOP Password
               </label>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-zinc-500">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-muted">
                   <Lock className="w-4 h-4" />
                 </span>
                 <input
@@ -343,13 +335,13 @@ export default function FriendFinderLoginModal({
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your VTOP password"
                   disabled={isSubmitting}
-                  className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-zinc-500 text-xs sm:text-sm font-medium focus:outline-hidden focus:ring-2 focus:ring-indigo-500 transition-all"
+                  className="w-full pl-9 pr-10 py-2.5 rounded-xl border-2 border-border-ink bg-surface text-text-heading placeholder:text-text-muted dark:placeholder:text-text-muted text-xs sm:text-sm font-medium focus:outline-hidden focus:ring-2 focus:ring-border-ink transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-zinc-200 transition-colors cursor-pointer"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-text-muted hover:text-text-muted transition-colors cursor-pointer"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -358,7 +350,7 @@ export default function FriendFinderLoginModal({
 
             {/* Error Message */}
             {loginError && (
-              <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-700 dark:text-rose-400 text-xs flex items-start gap-2">
+              <div className="p-3 rounded-xl bg-danger-surface border border-border-ink text-danger-foreground text-xs flex items-start gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                 <span>{loginError}</span>
               </div>
@@ -370,14 +362,14 @@ export default function FriendFinderLoginModal({
                 type="button"
                 onClick={onClose}
                 disabled={isSubmitting}
-                className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-zinc-700 text-xs font-bold text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer disabled:opacity-50"
+                className="px-4 py-2.5 rounded-xl border-2 border-border-ink text-xs font-bold text-text-muted hover:bg-surface-hover transition-colors cursor-pointer disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting || !username.trim() || !password}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white text-xs sm:text-sm font-bold shadow-md shadow-indigo-500/20 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:brightness-110 text-primary-foreground text-xs sm:text-sm font-bold shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <>
@@ -395,12 +387,12 @@ export default function FriendFinderLoginModal({
           </form>
 
           {/* Privacy Note */}
-          <p className="text-[11px] text-center text-slate-400 dark:text-zinc-500">
+          <p className="text-xs text-center text-text-muted">
             Timetable sharing is voluntary and opt-in.{" "}
             <Link
               href="/friend-finder/disclaimer"
               onClick={onClose}
-              className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium"
+              className="text-primary hover:underline font-medium"
             >
               Read data disclaimer
             </Link>

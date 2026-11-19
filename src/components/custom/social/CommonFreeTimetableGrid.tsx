@@ -176,11 +176,11 @@ export default function CommonFreeTimetableGrid({
   if (!roster.length) {
     return (
       <div className={EMPTY_STATE}>
-        <span className="w-10 h-10 rounded-2xl mx-auto flex items-center justify-center border border-zinc-200 dark:border-zinc-800">
-          <Users className="w-4.5 h-4.5 text-zinc-400" />
+        <span className="w-10 h-10 rounded-2xl mx-auto flex items-center justify-center border-2 border-border-ink">
+          <Users className="w-4.5 h-4.5 text-text-muted" />
         </span>
-        <p className="text-xs font-bold text-zinc-500 dark:text-zinc-400 mt-3">No peer timetables loaded</p>
-        <p className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium mt-1.5 leading-relaxed max-w-[320px] mx-auto">
+        <p className="text-xs font-bold text-text-muted mt-3">No peer timetables loaded</p>
+        <p className="text-xs text-text-muted font-medium mt-1.5 leading-relaxed max-w-[320px] mx-auto">
           The grid compares your week against everyone you are paired with, so it needs at least one peer to have
           published a timetable.
         </p>
@@ -200,10 +200,10 @@ export default function CommonFreeTimetableGrid({
     return {
       content: (
         <>
-          <span className={compact ? "text-[13px] font-black leading-none" : "text-[15px] font-black leading-none"}>
+          <span className={compact ? "text-[13px] font-bold leading-none" : "text-[15px] font-bold leading-none"}>
             {cell.free}
           </span>
-          <span className="text-[9px] font-bold leading-none opacity-70">/{cell.total}</span>
+          <span className="text-xs font-bold leading-none opacity-70">/{cell.total}</span>
         </>
       ),
       title: description,
@@ -211,10 +211,10 @@ export default function CommonFreeTimetableGrid({
       onClick: () => setActiveCell(cell),
       tileClassName: [
         allFree
-          ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
+          ? "border-border-ink bg-success-surface text-success-foreground"
           : noneFree
-            ? "border-red-500/40 bg-red-500/15 text-red-700 dark:text-red-300"
-            : "border-amber-500/40 bg-amber-500/15 text-amber-700 dark:text-amber-300",
+            ? "border-border-ink bg-danger-surface text-danger-foreground"
+            : "border-border-ink bg-warning-surface text-warning-foreground",
         muted ? "opacity-25 saturate-50" : "",
       ]
         .filter(Boolean)
@@ -227,23 +227,21 @@ export default function CommonFreeTimetableGrid({
       {/* Flat toolbar. The old version nested this inside a TILE, which put four
           rounded bordered surfaces around one data cell. */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-        <div className="flex rounded-xl bg-zinc-100 dark:bg-zinc-950 p-1 border border-zinc-200/60 dark:border-zinc-800/60 overflow-x-auto max-w-full">
+        <div className="flex rounded-xl bg-surface-secondary p-1 border-2 border-border-ink overflow-x-auto max-w-full">
           {(["ALL", ...DAYS] as const).map((d) => (
             <button
               key={d}
               type="button"
               onClick={() => setDayFilter(d as "ALL" | Day)}
-              className={`px-2.5 py-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer whitespace-nowrap ${
-                dayFilter === d
-                  ? "bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-2xs"
-                  : "text-zinc-500 dark:text-zinc-400"
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                dayFilter === d ? "bg-surface text-primary shadow-2xs" : "text-text-muted"
               }`}
             >
               {d === "ALL" ? "All" : d}
             </button>
           ))}
         </div>
-        <label className="flex items-center gap-2 text-[11px] font-bold text-zinc-600 dark:text-zinc-400 cursor-pointer">
+        <label className="flex items-center gap-2 text-xs font-bold text-text-muted cursor-pointer">
           <input
             type="checkbox"
             checked={everyoneFreeOnly}
@@ -252,7 +250,7 @@ export default function CommonFreeTimetableGrid({
           />
           Highlight slots everyone is free
         </label>
-        <p className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium sm:ml-auto">
+        <p className="text-xs text-text-muted font-medium sm:ml-auto">
           {roster.length + 1} people · tap a slot for detail
         </p>
       </div>
@@ -266,21 +264,21 @@ export default function CommonFreeTimetableGrid({
           today={today}
         />
 
-        <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+        <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-text-muted">
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500/20 border border-emerald-500/40" />
+            <span className="w-2.5 h-2.5 rounded-sm bg-success-surface border border-border-ink" />
             everyone free
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-sm bg-amber-500/20 border border-amber-500/40" />
+            <span className="w-2.5 h-2.5 rounded-sm bg-warning-surface border border-border-ink" />
             partial
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-sm bg-red-500/20 border border-red-500/40" />
+            <span className="w-2.5 h-2.5 rounded-sm bg-danger-surface border border-border-ink" />
             everyone busy
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-sm border-2 border-zinc-300 dark:border-zinc-800" />
+            <span className="w-2.5 h-2.5 rounded-sm border-2 border-border-ink" />
             number free / people
           </span>
         </div>
@@ -307,38 +305,31 @@ export default function CommonFreeTimetableGrid({
               </span>
             }
             icon={<CalendarRange className="w-4.5 h-4.5" />}
-            accent="border-indigo-500/20 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
+            accent="border-border-ink bg-secondary text-secondary-foreground"
             closeLabel="Close cell detail"
           >
             <div className="text-left space-y-4">
               {activeCell.who.length > 0 && (
                 <div className="space-y-2">
-                  <p className="text-[11px] font-black text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
-                    Busy
-                  </p>
+                  <p className="text-xs font-bold text-text-primary uppercase tracking-wider">Busy</p>
                   {activeCell.who.map((w) => {
                     const parsed = parseSlotKey(w.key);
                     return (
-                      <div
-                        key={`${w.name}-${w.key}`}
-                        className="p-3 rounded-2xl border border-zinc-200/70 dark:border-zinc-800"
-                      >
+                      <div key={`${w.name}-${w.key}`} className="p-3 rounded-2xl border-2 border-border-ink">
                         {w.handle && onOpenPeer ? (
                           <button
                             type="button"
                             onClick={() => onOpenPeer(w.handle!)}
                             className="w-full text-left cursor-pointer"
                           >
-                            <p className="text-xs font-black text-zinc-800 dark:text-zinc-200 font-outfit truncate underline decoration-zinc-300 dark:decoration-zinc-700 underline-offset-2">
+                            <p className="text-xs font-bold text-text-primary font-outfit truncate underline decoration-zinc-300 dark:decoration-zinc-700 underline-offset-2">
                               {w.name}
                             </p>
                           </button>
                         ) : (
-                          <p className="text-xs font-black text-zinc-800 dark:text-zinc-200 font-outfit truncate">
-                            {w.name}
-                          </p>
+                          <p className="text-xs font-bold text-text-primary font-outfit truncate">{w.name}</p>
                         )}
-                        <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium mt-0.5 truncate">
+                        <p className="text-xs text-text-muted font-medium mt-0.5 truncate">
                           {parsed ? `${parsed.day} · ${parsed.slotId}` : w.key}
                           {w.entry.c ? ` · ${w.entry.c}` : ""}
                           {w.entry.v ? ` · ${w.entry.v}` : ""}
@@ -351,9 +342,7 @@ export default function CommonFreeTimetableGrid({
 
               {activeCell.freeNames.length > 0 && (
                 <div className="space-y-2">
-                  <p className="text-[11px] font-black text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
-                    Free
-                  </p>
+                  <p className="text-xs font-bold text-text-primary uppercase tracking-wider">Free</p>
                   <div className="flex flex-wrap gap-1.5">
                     {activeCell.freeNames.map((n) =>
                       n.handle && onOpenPeer ? (
@@ -375,7 +364,7 @@ export default function CommonFreeTimetableGrid({
                 </div>
               )}
 
-              <p className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium leading-relaxed flex items-start gap-1.5">
+              <p className="text-xs text-text-muted font-medium leading-relaxed flex items-start gap-1.5">
                 <Info className="w-3 h-3 mt-px shrink-0" />
                 Names and course detail come from each pair&apos;s timetable. An older free/busy-only grant contributes
                 occupancy without a course or venue.

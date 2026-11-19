@@ -53,8 +53,8 @@ const CLS_TONE: Record<AttendanceTone["cls"], string> = {
 function Section({ icon: Icon, label, children }: { icon: typeof User; label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-2">
-      <p className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-zinc-700 dark:text-zinc-300">
-        <Icon className="h-3.5 w-3.5 text-zinc-400" />
+      <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-text-primary">
+        <Icon className="h-3.5 w-3.5 text-text-muted" />
         {label}
       </p>
       {children}
@@ -87,7 +87,7 @@ export default function SlotDetailSheet({
   const rawType = course?.type || (course as any)?.componentType;
   const type = rawType ? (typeColors[rawType] ?? defaultColor) : null;
   const typeLabel = rawType ? (typeLabels[rawType] ?? rawType) : "";
-  const courseColor = course?.color || (course as any)?.ffcs?.color || "bg-blue-600";
+  const courseColor = course?.color || (course as any)?.ffcs?.color || "bg-primary";
 
   const facultyVal = course?.faculty;
   const facultyDisplay = facultyVal
@@ -153,8 +153,8 @@ export default function SlotDetailSheet({
               className={cn(
                 CHIP,
                 blockedSlots && hasSlot(blockedSlots, slot)
-                  ? "border-red-500/30 text-red-600 dark:text-red-400 line-through"
-                  : "border-zinc-200/60",
+                  ? "border-border-ink text-danger-foreground line-through"
+                  : "border-border-ink",
               )}
             >
               {slot}
@@ -163,8 +163,8 @@ export default function SlotDetailSheet({
         </div>
 
         {!course && (
-          <div className="rounded-2xl border border-dashed border-zinc-300 p-4 text-center dark:border-zinc-800">
-            <p className="text-xs font-bold text-zinc-500 dark:text-zinc-400">
+          <div className="rounded-2xl border border-dashed border-border-ink p-4 text-center">
+            <p className="text-xs font-bold text-text-muted">
               {cell.blocked
                 ? "You have ruled this slot out, so nothing is scheduled here."
                 : "Nothing scheduled here — this is a free slot."}
@@ -174,7 +174,7 @@ export default function SlotDetailSheet({
 
         {course && (
           <>
-            <div className="rounded-2xl border border-zinc-200/70 p-3.5 dark:border-zinc-800">
+            <div className="rounded-2xl border border-border-ink p-3.5">
               <div className="flex items-start gap-2">
                 <span
                   className={cn(
@@ -184,35 +184,33 @@ export default function SlotDetailSheet({
                 >
                   {course.code}
                 </span>
-                <p className="min-w-0 flex-1 font-outfit text-sm font-black leading-tight text-zinc-900 dark:text-white">
+                <p className="min-w-0 flex-1 font-outfit text-sm font-bold leading-tight text-text-heading">
                   {course.title}
                 </p>
               </div>
 
               <div className="mt-3 space-y-1.5">
                 {typeLabel && (
-                  <p className="flex items-center gap-1.5 text-[11px] font-bold">
-                    <BookOpen className="h-3 w-3 shrink-0 text-zinc-400" />
-                    <span
-                      className={cn("rounded-md border px-1.5 py-0.5 text-[10px]", type?.bg, type?.text, type?.border)}
-                    >
+                  <p className="flex items-center gap-1.5 text-xs font-bold">
+                    <BookOpen className="h-3 w-3 shrink-0 text-text-muted" />
+                    <span className={cn("rounded-md border px-1.5 py-0.5 text-xs", type?.bg, type?.text, type?.border)}>
                       {typeLabel}
                     </span>
                   </p>
                 )}
                 {Boolean(facultyDisplay) && (
-                  <p className="flex items-center gap-1.5 truncate text-[11px] font-medium text-zinc-600 dark:text-zinc-400">
-                    <User className="h-3 w-3 shrink-0 text-zinc-400" />
+                  <p className="flex items-center gap-1.5 truncate text-xs font-medium text-text-muted">
+                    <User className="h-3 w-3 shrink-0 text-text-muted" />
                     {facultyDisplay}
                   </p>
                 )}
-                <p className="flex items-center gap-1.5 truncate text-[11px] font-medium text-zinc-600 dark:text-zinc-400">
-                  <MapPin className="h-3 w-3 shrink-0 text-zinc-400" />
+                <p className="flex items-center gap-1.5 truncate text-xs font-medium text-text-muted">
+                  <MapPin className="h-3 w-3 shrink-0 text-text-muted" />
                   {course.venue || "Venue not published"}
                 </p>
                 {course.credits && course.credits !== "0" && (
-                  <p className="flex items-center gap-1.5 text-[11px] font-medium text-zinc-600 dark:text-zinc-400">
-                    <Coins className="h-3 w-3 shrink-0 text-zinc-400" />
+                  <p className="flex items-center gap-1.5 text-xs font-medium text-text-muted">
+                    <Coins className="h-3 w-3 shrink-0 text-text-muted" />
                     {course.credits} credits
                   </p>
                 )}
@@ -222,10 +220,10 @@ export default function SlotDetailSheet({
             {attendance && (
               <Section icon={EyeOff} label="Attendance">
                 <div className="flex items-center gap-2">
-                  <p className={cn("font-outfit text-2xl font-black leading-none", CLS_TONE[attendance.cls])}>
+                  <p className={cn("font-outfit text-2xl font-bold leading-none", CLS_TONE[attendance.cls])}>
                     {attendance.percentage}%
                   </p>
-                  <p className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">overall for this course</p>
+                  <p className="text-xs font-medium text-text-muted">overall for this course</p>
                 </div>
               </Section>
             )}
@@ -234,14 +232,11 @@ export default function SlotDetailSheet({
 
         {cell.shadowed.length > 0 && (
           <Section icon={EyeOff} label="Also at this time">
-            <p className="text-[11px] font-medium leading-relaxed text-zinc-500 dark:text-zinc-400">
+            <p className="text-xs font-medium leading-relaxed text-text-muted">
               A lab runs at this hour, so the cell shows the lab. The theory slot below is here so nothing goes missing.
             </p>
             {cell.shadowed.map((s, i) => (
-              <div
-                key={`${s.course.id}-${i}`}
-                className="rounded-2xl border border-zinc-200/70 p-3 dark:border-zinc-800"
-              >
+              <div key={`${s.course.id}-${i}`} className="rounded-2xl border border-border-ink p-3">
                 <div className="flex items-start gap-2">
                   <span
                     className={cn(
@@ -252,10 +247,8 @@ export default function SlotDetailSheet({
                     {s.course.code}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-outfit text-xs font-black text-zinc-800 dark:text-zinc-200">
-                      {s.course.title}
-                    </p>
-                    <p className="mt-0.5 text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+                    <p className="truncate font-outfit text-xs font-bold text-text-primary">{s.course.title}</p>
+                    <p className="mt-0.5 text-xs font-medium text-text-muted">
                       {s.label}
                       {s.course.venue ? ` · ${s.course.venue}` : ""}
                     </p>
@@ -277,10 +270,10 @@ export default function SlotDetailSheet({
                     type="button"
                     onClick={() => onToggleBlockSlot(slot)}
                     className={cn(
-                      "rounded-lg border px-2.5 py-1.5 text-[11px] font-bold transition-colors cursor-pointer",
+                      "rounded-lg border px-2.5 py-1.5 text-xs font-bold transition-colors cursor-pointer",
                       isBlocked
-                        ? "border-red-500/40 bg-red-500/10 text-red-600 dark:text-red-400"
-                        : "border-zinc-200/70 bg-white text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800",
+                        ? "border-border-ink bg-danger-surface text-danger-foreground"
+                        : "border-border-ink bg-surface text-text-muted hover:bg-surface-secondary",
                     )}
                   >
                     {isBlocked ? `Unblock ${slot}` : `Block ${slot}`}

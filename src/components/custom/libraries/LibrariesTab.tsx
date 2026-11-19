@@ -138,9 +138,7 @@ function PatronSections({ pages }: { pages: PatronPages }) {
               count={rows}
               right={
                 rows > 0 ? (
-                  <span
-                    className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md border ${TONE_BADGE[s.tone]}`}
-                  >
+                  <span className={`text-xs font-bold uppercase px-2 py-0.5 rounded-md border ${TONE_BADGE[s.tone]}`}>
                     {rows} item{rows === 1 ? "" : "s"}
                   </span>
                 ) : undefined
@@ -152,7 +150,7 @@ function PatronSections({ pages }: { pages: PatronPages }) {
                 {(page.alerts || []).map((a, i) => (
                   <p
                     key={i}
-                    className="p-3 rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 text-amber-700 dark:text-amber-300 text-xs font-bold flex items-start gap-2"
+                    className="p-3 rounded-2xl bg-warning-surface border border-border-ink text-warning-foreground text-xs font-bold flex items-start gap-2"
                   >
                     <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-px" />
                     {a}
@@ -163,9 +161,7 @@ function PatronSections({ pages }: { pages: PatronPages }) {
 
             {isEmpty ? (
               <div className={EMPTY_STATE}>
-                <p className="text-xs font-bold text-zinc-500 dark:text-zinc-400">
-                  Nothing in {s.label.toLowerCase()} yet
-                </p>
+                <p className="text-xs font-bold text-text-muted">Nothing in {s.label.toLowerCase()} yet</p>
               </div>
             ) : (
               (page.tables || [])
@@ -175,7 +171,7 @@ function PatronSections({ pages }: { pages: PatronPages }) {
                   return (
                     <div key={ti} className={LIST_SHELL}>
                       {table.caption && (
-                        <p className="px-4 pt-3 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                        <p className="px-4 pt-3 text-xs font-bold uppercase tracking-wider text-text-muted">
                           {table.caption}
                         </p>
                       )}
@@ -200,7 +196,7 @@ function PatronSections({ pages }: { pages: PatronPages }) {
                               <div className="min-w-0 flex-1">
                                 <div className="flex items-center gap-1.5 flex-wrap">
                                   <span
-                                    className={`text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded-md border ${
+                                    className={`text-xs font-bold uppercase px-1.5 py-0.5 rounded-md border ${
                                       isFine ? TONE_BADGE.red : TONE_BADGE.emerald
                                     }`}
                                   >
@@ -208,19 +204,15 @@ function PatronSections({ pages }: { pages: PatronPages }) {
                                   </span>
                                   {paid && (
                                     <span
-                                      className={`text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded-md border ${TONE_BADGE.emerald}`}
+                                      className={`text-xs font-bold uppercase px-1.5 py-0.5 rounded-md border ${TONE_BADGE.emerald}`}
                                     >
                                       Paid
                                     </span>
                                   )}
                                 </div>
-                                {desc && (
-                                  <p className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mt-1 truncate">
-                                    {desc}
-                                  </p>
-                                )}
+                                {desc && <p className="text-xs font-bold text-text-primary mt-1 truncate">{desc}</p>}
                                 {(created || updated) && (
-                                  <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium mt-0.5">
+                                  <p className="text-xs text-text-muted font-medium mt-0.5">
                                     {[created, updated !== created ? `updated ${updated}` : ""]
                                       .filter(Boolean)
                                       .join(" · ")}
@@ -230,7 +222,7 @@ function PatronSections({ pages }: { pages: PatronPages }) {
                               <div className="text-right shrink-0">
                                 {amount && (
                                   <p
-                                    className={`text-sm font-black font-outfit leading-tight ${
+                                    className={`text-sm font-bold font-outfit leading-tight ${
                                       isFine && !paid ? TONE_TEXT.red : TONE_TEXT.emerald
                                     }`}
                                   >
@@ -238,7 +230,7 @@ function PatronSections({ pages }: { pages: PatronPages }) {
                                   </p>
                                 )}
                                 {!paid && outstanding && (
-                                  <p className="text-[10px] font-bold text-red-500 dark:text-red-400">
+                                  <p className="text-xs font-bold text-danger-foreground">
                                     ₹{num(outstanding).toFixed(2)} due
                                   </p>
                                 )}
@@ -262,21 +254,17 @@ function PatronSections({ pages }: { pages: PatronPages }) {
                                 <BookOpen className="w-4 h-4" />
                               </span>
                               <div className="min-w-0 flex-1">
-                                <p className="text-sm font-bold text-zinc-900 dark:text-white truncate font-outfit leading-tight">
+                                <p className="text-sm font-bold text-text-heading truncate font-outfit leading-tight">
                                   {title}
                                 </p>
                                 {author && (
-                                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium mt-0.5 truncate">
-                                    by {author}
-                                  </p>
+                                  <p className="text-xs text-text-muted font-medium mt-0.5 truncate">by {author}</p>
                                 )}
                                 <div className="flex items-center gap-2 mt-1 flex-wrap">
                                   {callNumber && <span className={`${CHIP} font-mono`}>{callNumber}</span>}
                                   {itemType && <span className={CHIP}>{itemType}</span>}
                                   {returned && (
-                                    <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500">
-                                      Returned {returned}
-                                    </span>
+                                    <span className="text-xs font-bold text-text-muted">Returned {returned}</span>
                                   )}
                                 </div>
                               </div>
@@ -296,18 +284,14 @@ function PatronSections({ pages }: { pages: PatronPages }) {
                               <Search className="w-4 h-4" />
                             </span>
                             <div className="min-w-0 flex-1">
-                              <p className="text-sm font-bold text-zinc-900 dark:text-white truncate font-outfit leading-tight">
+                              <p className="text-sm font-bold text-text-heading truncate font-outfit leading-tight">
                                 {query || "Unknown search"}
                               </p>
-                              {date && (
-                                <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium mt-0.5 truncate">
-                                  {date}
-                                </p>
-                              )}
+                              {date && <p className="text-xs text-text-muted font-medium mt-0.5 truncate">{date}</p>}
                             </div>
                             {results && (
                               <span
-                                className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md border shrink-0 ${
+                                className={`text-xs font-bold uppercase px-2 py-0.5 rounded-md border shrink-0 ${
                                   n > 100 ? TONE_BADGE.amber : n > 0 ? TONE_BADGE.sky : TONE_BADGE.zinc
                                 }`}
                               >
@@ -614,21 +598,21 @@ export default function LibrariesTab({ loginToVTOP, onBack }: LibrariesTabProps)
         <button
           type="button"
           onClick={() => setScreen("dues")}
-          className={`${TILE} h-32 sm:h-36 transition-all hover:scale-[1.01] active:scale-[0.98] cursor-pointer`}
+          className={`${TILE} h-32 sm:h-36 transition-all cursor-pointer`}
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-outfit truncate">
+            <span className="text-xs sm:text-xs font-bold uppercase tracking-wider text-text-muted font-outfit truncate">
               Dues
             </span>
             <span
-              className={`text-[9px] sm:text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md shrink-0 border ${TONE_BADGE[duesTone]}`}
+              className={`text-xs sm:text-xs font-bold uppercase px-2 py-0.5 rounded-md shrink-0 border ${TONE_BADGE[duesTone]}`}
             >
               {duesOverdue > 0 ? `${duesOverdue} late` : "Clear"}
             </span>
           </div>
           <div className="my-auto min-w-0">
             <span
-              className={`text-3xl sm:text-4xl font-black font-outfit tracking-tight leading-none block truncate ${
+              className={`text-3xl sm:text-4xl font-bold font-outfit tracking-tight leading-none block truncate ${
                 duesOverdue > 0 ? TONE_TEXT.red : TONE_TEXT.emerald
               }`}
             >
@@ -636,10 +620,8 @@ export default function LibrariesTab({ loginToVTOP, onBack }: LibrariesTabProps)
             </span>
           </div>
           <div className="flex items-center justify-between gap-2">
-            <p className="text-[10.5px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-medium truncate">
-              outstanding
-            </p>
-            <ChevronRight className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+            <p className="text-xs sm:text-xs text-text-muted font-medium truncate">outstanding</p>
+            <ChevronRight className="w-3.5 h-3.5 text-text-muted shrink-0" />
           </div>
         </button>
 
@@ -651,8 +633,8 @@ export default function LibrariesTab({ loginToVTOP, onBack }: LibrariesTabProps)
       <div className="space-y-3">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2">
-            <Layers className="w-4 h-4 text-indigo-500" />
-            <h2 className="text-sm font-black text-zinc-900 dark:text-white font-outfit tracking-tight">Sections</h2>
+            <Layers className="w-4 h-4 text-primary" />
+            <h2 className="text-sm font-bold text-text-heading font-outfit tracking-tight">Sections</h2>
             <span className={SECTION_CHIP}>{SECTIONS.length}</span>
           </div>
         </div>
@@ -679,14 +661,14 @@ export default function LibrariesTab({ loginToVTOP, onBack }: LibrariesTabProps)
                     {count} {sectionSuffix(s.id)}
                   </span>
                 )}
-                <ChevronRight className="w-4 h-4 text-zinc-400 shrink-0" />
+                <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
               </button>
             );
           })}
         </div>
       </div>
 
-      <p className="px-1 -mt-3 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500 font-medium">
+      <p className="px-1 -mt-3 text-xs leading-relaxed text-text-muted font-medium">
         Library keys, scanning and book recommendations are not supported.
       </p>
     </>
@@ -704,10 +686,10 @@ export default function LibrariesTab({ loginToVTOP, onBack }: LibrariesTabProps)
               <User className="w-4.5 h-4.5" />
             </span>
             <div className="min-w-0">
-              <p className="font-bold text-sm text-zinc-900 dark:text-white truncate font-outfit leading-tight">
+              <p className="font-bold text-sm text-text-heading truncate font-outfit leading-tight">
                 {patronInfo?.name || "Library account"}
               </p>
-              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium truncate">
+              <p className="text-xs text-text-muted font-medium truncate">
                 {patronInfo?.cardnumber || card || "Koha patron record"}
               </p>
             </div>
@@ -715,7 +697,7 @@ export default function LibrariesTab({ loginToVTOP, onBack }: LibrariesTabProps)
           <button
             type="button"
             onClick={logout}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors cursor-pointer shrink-0`}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-secondary text-text-muted hover:bg-surface-hover transition-colors cursor-pointer shrink-0`}
           >
             <LogOut className="w-3.5 h-3.5" />
             Log out
@@ -726,9 +708,7 @@ export default function LibrariesTab({ loginToVTOP, onBack }: LibrariesTabProps)
           <PatronSections pages={patronPages} />
         ) : (
           <div className={EMPTY_STATE}>
-            <p className="text-xs font-bold text-zinc-500 dark:text-zinc-400">
-              Nothing cached yet — log in to load your record.
-            </p>
+            <p className="text-xs font-bold text-text-muted">Nothing cached yet — log in to load your record.</p>
           </div>
         )}
       </div>
@@ -736,16 +716,16 @@ export default function LibrariesTab({ loginToVTOP, onBack }: LibrariesTabProps)
       <div className="space-y-3">
         <SectionHeader icon={Library} title="Sign in to Koha" />
         <div className={`${TILE} space-y-3`}>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
+          <p className="text-xs text-text-muted font-medium">
             Use your library card and password. Save them on the Profile page to skip this next time.
           </p>
           {loginError && (
-            <p className="p-3 rounded-2xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/40 text-red-600 dark:text-red-400 text-xs font-bold">
+            <p className="p-3 rounded-2xl bg-danger-surface border border-border-ink text-danger-foreground text-xs font-bold">
               {loginError}
             </p>
           )}
           {loginBusy ? (
-            <p className="flex items-center gap-2 text-xs font-bold text-zinc-500 dark:text-zinc-400">
+            <p className="flex items-center gap-2 text-xs font-bold text-text-muted">
               <Loader2 className="w-4 h-4 animate-spin" />
               Signing in…
             </p>
@@ -776,7 +756,7 @@ export default function LibrariesTab({ loginToVTOP, onBack }: LibrariesTabProps)
               <button
                 type="submit"
                 disabled={!card.trim() || !password.trim()}
-                className="w-full px-4 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-black transition-colors cursor-pointer"
+                className="w-full px-4 py-2.5 rounded-2xl bg-primary hover:brightness-110 disabled:opacity-50 text-primary-foreground text-xs font-bold transition-colors cursor-pointer"
               >
                 Log in
               </button>
@@ -796,13 +776,11 @@ export default function LibrariesTab({ loginToVTOP, onBack }: LibrariesTabProps)
           title="Library dues"
           right={
             duesOverdue > 0 ? (
-              <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md border ${TONE_BADGE.red}`}>
+              <span className={`text-xs font-bold uppercase px-2 py-0.5 rounded-md border ${TONE_BADGE.red}`}>
                 {duesOverdue} overdue
               </span>
             ) : (
-              <span
-                className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md border ${TONE_BADGE.emerald}`}
-              >
+              <span className={`text-xs font-bold uppercase px-2 py-0.5 rounded-md border ${TONE_BADGE.emerald}`}>
                 <CheckCircle2 className="w-3 h-3 inline mr-1" />
                 Clear
               </span>

@@ -22,9 +22,7 @@ interface ToolsHubProps {
   setActiveTab?: (tab: string) => void;
 }
 
-export default function ToolsHub({
-  setActiveToolsSubTab,
-}: ToolsHubProps) {
+export default function ToolsHub({ setActiveToolsSubTab }: ToolsHubProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
 
@@ -35,7 +33,7 @@ export default function ToolsHub({
       subtitle: "Homework, tests, week scheduling, pomodoro & LMS sync",
       category: "academic",
       icon: CheckSquare,
-      iconColor: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/20",
+      iconColor: "text-success-foreground bg-success-surface border-border-ink",
     },
     {
       id: "attendance-predictor",
@@ -44,7 +42,7 @@ export default function ToolsHub({
       subtitle: "Simulate attendance percentages and safe bunk margins",
       category: "academic",
       icon: CalendarCheck,
-      iconColor: "text-blue-600 dark:text-blue-400 bg-blue-500/10 dark:bg-blue-500/20 border-blue-500/20",
+      iconColor: "text-secondary-foreground bg-secondary dark:bg-secondary border-border-ink",
     },
     {
       id: "qbank",
@@ -52,7 +50,7 @@ export default function ToolsHub({
       subtitle: "Previous years CAT & FAT question papers",
       category: "academic",
       icon: Database,
-      iconColor: "text-rose-600 dark:text-rose-400 bg-rose-500/10 dark:bg-rose-500/20 border-rose-500/20",
+      iconColor: "text-danger-foreground bg-danger-surface border-border-ink",
     },
     {
       id: "faculty-info",
@@ -60,7 +58,7 @@ export default function ToolsHub({
       subtitle: "Directory, cabins & direct contact details",
       category: "academic",
       icon: UserCheck,
-      iconColor: "text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 dark:bg-indigo-500/20 border-indigo-500/20",
+      iconColor: "text-secondary-foreground bg-secondary dark:bg-secondary border-border-ink",
     },
     {
       id: "marks-predictor",
@@ -68,7 +66,7 @@ export default function ToolsHub({
       subtitle: "Simulate test marks, weightage lost & FAT targets",
       category: "academic",
       icon: Sparkles,
-      iconColor: "text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 dark:bg-indigo-500/20 border-indigo-500/20",
+      iconColor: "text-secondary-foreground bg-secondary dark:bg-secondary border-border-ink",
     },
     {
       id: "social",
@@ -76,7 +74,7 @@ export default function ToolsHub({
       subtitle: "Share schedules & find common free slots",
       category: "social",
       icon: Users,
-      iconColor: "text-purple-600 dark:text-purple-400 bg-purple-500/10 dark:bg-purple-500/20 border-purple-500/20",
+      iconColor: "text-secondary-foreground bg-secondary dark:bg-secondary border-border-ink",
     },
     {
       id: "cabshare",
@@ -84,7 +82,7 @@ export default function ToolsHub({
       subtitle: "Find travel partners & split cab fares",
       category: "campus",
       icon: Car,
-      iconColor: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/20",
+      iconColor: "text-success-foreground bg-success-surface border-border-ink",
     },
     {
       id: "free-class",
@@ -100,18 +98,15 @@ export default function ToolsHub({
       subtitle: "Draft schedule & resolve slot clashes",
       category: "academic",
       icon: Compass,
-      iconColor: "text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 dark:bg-indigo-500/20 border-indigo-500/20",
+      iconColor: "text-secondary-foreground bg-secondary dark:bg-secondary border-border-ink",
     },
   ];
 
   const filteredTools = tools.filter((tool) => {
-    const matchesCategory =
-      categoryFilter === "all" || tool.category === categoryFilter;
+    const matchesCategory = categoryFilter === "all" || tool.category === categoryFilter;
     const term = searchTerm.toLowerCase().trim();
     const matchesSearch =
-      !term ||
-      tool.title.toLowerCase().includes(term) ||
-      tool.subtitle.toLowerCase().includes(term);
+      !term || tool.title.toLowerCase().includes(term) || tool.subtitle.toLowerCase().includes(term);
     return matchesCategory && matchesSearch;
   });
 
@@ -120,14 +115,14 @@ export default function ToolsHub({
       {/* Header Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-2xl bg-secondary border border-border-ink text-secondary-foreground flex items-center justify-center shrink-0">
             <Layers className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-white font-outfit tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-text-heading font-outfit tracking-tight">
               Tools & Utilities
             </h1>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
+            <p className="text-xs text-text-muted font-medium">
               Essential campus utilities, exam archives, and academic tools
             </p>
           </div>
@@ -135,13 +130,13 @@ export default function ToolsHub({
 
         {/* Search Bar */}
         <div className="relative w-full sm:w-72">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search tools..."
-            className="w-full pl-9 pr-4 py-2 rounded-2xl bg-surface dark:bg-surface-secondary border border-zinc-200/80 dark:border-zinc-800 text-xs sm:text-sm font-bold text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-2xs"
+            className="w-full pl-9 pr-4 py-2 rounded-2xl bg-surface dark:bg-surface-secondary border-2 border-border-ink text-xs sm:text-sm font-bold text-text-heading placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-border-ink shadow-2xs"
           />
         </div>
       </div>
@@ -159,10 +154,10 @@ export default function ToolsHub({
             <button
               key={cat.id}
               onClick={() => setCategoryFilter(cat.id)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                 isActive
-                  ? "bg-indigo-600 text-white shadow-xs"
-                  : "bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
+                  ? "bg-primary text-primary-foreground shadow-xs"
+                  : "bg-surface border-2 border-border-ink text-text-muted hover:text-text-heading "
               }`}
             >
               {cat.label}
@@ -178,39 +173,33 @@ export default function ToolsHub({
           return (
             <button
               key={tool.id}
-              onClick={() => tool.id === "ffcs" ? navigateToFFCSPlanner() : setActiveToolsSubTab(tool.id)}
-              className="group relative flex items-center justify-between p-3.5 sm:p-4 rounded-2xl border border-zinc-200/80 dark:border-zinc-800 card-surface hover:border-indigo-500/40 dark:hover:border-indigo-500/40 transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-sm active:scale-[0.99] text-left"
+              onClick={() => (tool.id === "ffcs" ? navigateToFFCSPlanner() : setActiveToolsSubTab(tool.id))}
+              className="group relative flex items-center justify-between p-3.5 sm:p-4 rounded-2xl border-2 border-border-ink card-surface hover:border-border-ink dark:hover:border-border-ink transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-sm active:scale-[0.99] text-left"
             >
               <div className="flex items-center gap-3.5 min-w-0 flex-1 pr-2">
                 <div
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${tool.iconColor} group-hover:scale-105 transition-transform duration-150`}
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${tool.iconColor} group- transition-transform duration-150`}
                 >
                   <Icon className="w-5 h-5" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h3 className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-white font-outfit tracking-tight truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  <h3 className="text-xs sm:text-sm font-bold text-text-heading font-outfit tracking-tight truncate group-text-primary dark:group-text-primary transition-colors">
                     {tool.title}
                   </h3>
-                  <p className="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-medium truncate mt-0.5">
-                    {tool.subtitle}
-                  </p>
+                  <p className="text-xs sm:text-xs text-text-muted font-medium truncate mt-0.5">{tool.subtitle}</p>
                 </div>
               </div>
-              <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all shrink-0" />
+              <ChevronRight className="w-4 h-4 text-text-muted group-text-primary dark:group-text-primary group-hover:translate-x-0.5 transition-all shrink-0" />
             </button>
           );
         })}
       </div>
 
       {filteredTools.length === 0 && (
-        <div className="p-12 rounded-[24px] border border-dashed border-zinc-300 dark:border-zinc-800 text-center space-y-2">
-          <Search className="w-8 h-8 text-zinc-400 mx-auto" />
-          <p className="text-sm font-bold text-zinc-700 dark:text-zinc-300">
-            No tools found matching &quot;{searchTerm}&quot;
-          </p>
-          <p className="text-xs text-zinc-400">
-            Try adjusting your search query or category filter.
-          </p>
+        <div className="p-12 rounded-[14px] border border-dashed border-border-ink text-center space-y-2">
+          <Search className="w-8 h-8 text-text-muted mx-auto" />
+          <p className="text-sm font-bold text-text-primary">No tools found matching &quot;{searchTerm}&quot;</p>
+          <p className="text-xs text-text-muted">Try adjusting your search query or category filter.</p>
         </div>
       )}
     </div>

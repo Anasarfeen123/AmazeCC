@@ -533,7 +533,7 @@ export default function SlotFacultySwapSheet({
         contentClassName="flex flex-col gap-3 !pb-0"
         title={onSwap ? "Switch Faculty" : "Faculty in this Slot"}
         subtitle={`${code} — ${courseTitle}`}
-        icon={<Users className="w-5 h-5 text-blue-400" />}
+        icon={<Users className="w-5 h-5 text-primary" />}
       >
         <div className="flex items-center justify-between gap-3 flex-wrap">
           <p className="text-xs text-muted-foreground flex-1 min-w-[200px]">
@@ -547,7 +547,7 @@ export default function SlotFacultySwapSheet({
                 type="button"
                 onClick={handleRestoreTutorial}
                 title="Show registration strategy guide"
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 active:bg-amber-500/30 text-amber-500 border border-amber-500/30 text-xs font-semibold transition-all cursor-pointer shadow-sm"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-warning-surface hover:bg-warning-surface active:bg-amber-500/30 text-warning-foreground border border-border-ink text-xs font-semibold transition-all cursor-pointer shadow-sm"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Guide</span>
@@ -559,7 +559,7 @@ export default function SlotFacultySwapSheet({
               disabled={isDownloading}
               data-testid="download-faculty-jpeg-btn"
               title="Download a JPEG reference sheet with all faculties in this slot and FFCS picking instructions"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 active:bg-blue-500/30 text-blue-400 border border-blue-500/30 text-xs font-semibold transition-all cursor-pointer disabled:opacity-50 shrink-0 shadow-sm"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-secondary hover:bg-secondary active:bg-blue-500/30 text-secondary-foreground border border-border-ink text-xs font-semibold transition-all cursor-pointer disabled:opacity-50 shrink-0 shadow-sm"
             >
               {isDownloading ? (
                 <>
@@ -577,7 +577,7 @@ export default function SlotFacultySwapSheet({
         </div>
 
         {downloadError && (
-          <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg p-2 flex items-center gap-2">
+          <div className="text-xs text-danger-foreground bg-danger-surface border border-border-ink rounded-lg p-2 flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{downloadError}</span>
           </div>
@@ -585,8 +585,8 @@ export default function SlotFacultySwapSheet({
 
         {/* Guide: How to pick it out in FFCS (Dismissible tutorial) */}
         {showTutorial && (
-          <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-3 text-xs flex flex-col gap-1.5 transition-all">
-            <div className="flex items-center justify-between gap-1.5 font-bold text-amber-500 text-xs">
+          <div className="bg-warning-surface border border-border-ink rounded-xl p-3 text-xs flex flex-col gap-1.5 transition-all">
+            <div className="flex items-center justify-between gap-1.5 font-bold text-warning-foreground text-xs">
               <div className="flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 shrink-0" />
                 <span>How to Pick It Out in FFCS:</span>
@@ -596,12 +596,12 @@ export default function SlotFacultySwapSheet({
                 onClick={handleDismissTutorial}
                 aria-label="Dismiss guide"
                 title="Dismiss guide"
-                className="p-1 -mr-1 -my-1 rounded-md text-amber-500/70 hover:text-amber-500 hover:bg-amber-500/10 transition-colors cursor-pointer"
+                className="p-1 -mr-1 -my-1 rounded-md text-warning-foreground hover:text-warning-foreground hover:bg-warning-surface transition-colors cursor-pointer"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
-            <ol className="list-decimal list-inside text-muted-foreground space-y-1 text-[11px] leading-relaxed pl-0.5">
+            <ol className="list-decimal list-inside text-muted-foreground space-y-1 text-xs leading-relaxed pl-0.5">
               <li>
                 Search course code <strong className="text-text-heading">{code}</strong> in VTOP Course Registration.
               </li>
@@ -619,11 +619,11 @@ export default function SlotFacultySwapSheet({
         <div className="flex flex-col gap-3 pb-2">
           {/* SECTION 1: Drop-In Combined Replacements (Shown First & Prioritized!) */}
           {isEmbedded && (filteredDropIns.length > 0 || !query) && (
-            <div className="bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-transparent border border-blue-500/25 rounded-2xl p-3.5 flex flex-col gap-2.5">
+            <div className="border border-border-ink rounded-2xl p-3.5 flex flex-col gap-2.5">
               <div className="flex items-center justify-between gap-2 flex-wrap">
                 <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[11px] font-bold tracking-wide uppercase">
-                    <Sparkles className="w-3 h-3 text-blue-400" /> Drop-In Combined Replacements
+                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-secondary text-secondary-foreground border border-border-ink text-xs font-bold tracking-wide uppercase">
+                    <Sparkles className="w-3 h-3 text-primary" /> Drop-In Combined Replacements
                   </span>
                   <span className="text-xs text-muted-foreground font-medium">
                     (Same Theory + Lab Slots · Zero Clash Risk)
@@ -633,7 +633,7 @@ export default function SlotFacultySwapSheet({
                   {allSlots.map((s) => (
                     <span
                       key={s}
-                      className="bg-blue-500/15 border border-blue-500/30 text-blue-300 text-[10px] font-semibold px-1.5 py-0.5 rounded-md"
+                      className="bg-secondary border border-border-ink text-secondary-foreground text-xs font-semibold px-1.5 py-0.5 rounded-md"
                     >
                       {s}
                     </span>
@@ -652,14 +652,14 @@ export default function SlotFacultySwapSheet({
                           onSwap(halves[0].id, off);
                         }
                       }}
-                      className={`w-full flex items-center justify-between gap-3 px-4 py-3 my-0.5 rounded-xl transition-colors border border-blue-500/25 bg-blue-500/5 ${
-                        onSwap ? "hover:bg-blue-500/15 cursor-pointer" : "cursor-default"
+                      className={`w-full flex items-center justify-between gap-3 px-4 py-3 my-0.5 rounded-xl transition-colors border border-border-ink bg-secondary ${
+                        onSwap ? "hover:bg-secondary cursor-pointer" : "cursor-default"
                       } text-left group`}
                     >
                       <div className="flex items-center gap-2 min-w-0">
                         <FacultyAvatar employeeId={off.ERP_ID} name={off.FACULTY} size="xs" tone="blue" />
                         <span className="font-bold text-sm text-text-heading truncate">{off.FACULTY}</span>
-                        <span className="text-[10px] text-blue-400 font-bold px-1.5 py-0.2 rounded bg-blue-500/20 border border-blue-500/30 shrink-0">
+                        <span className="text-xs text-secondary-foreground font-bold px-1.5 py-0.2 rounded bg-secondary border border-border-ink shrink-0">
                           Full Drop-In
                         </span>
                         <VitfacReviewPill
@@ -697,7 +697,7 @@ export default function SlotFacultySwapSheet({
                   <div className="flex items-center justify-between gap-2 flex-wrap">
                     <div className="flex items-center gap-2 flex-wrap">
                       {half.type && (
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                        <span className="text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-secondary text-secondary-foreground border border-border-ink">
                           {half.type}
                         </span>
                       )}
@@ -717,7 +717,7 @@ export default function SlotFacultySwapSheet({
                       {half.slots.map((s) => (
                         <span
                           key={s}
-                          className="bg-accent/50 border border-border-strong text-text-heading/80 text-[10px] px-1.5 py-0.5 rounded-md"
+                          className="bg-accent/50 border border-border-strong text-text-heading/80 text-xs px-1.5 py-0.5 rounded-md"
                         >
                           {s}
                         </span>
@@ -769,7 +769,7 @@ export default function SlotFacultySwapSheet({
           {filteredOtherOfferings.length > 0 && (
             <div className="flex flex-col gap-1.5 pt-2 border-t border-border-strong/40">
               <div className="flex items-center justify-between gap-2 px-2 flex-wrap">
-                <div className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground uppercase tracking-wider">
                   <Users className="w-3.5 h-3.5 text-muted-foreground" />
                   <span>
                     {isEmbedded
@@ -777,7 +777,7 @@ export default function SlotFacultySwapSheet({
                       : `Other Available Faculties for ${code}`}
                   </span>
                 </div>
-                <span className="text-[10px] text-muted-foreground font-medium">
+                <span className="text-xs text-muted-foreground font-medium">
                   {isEmbedded ? "(Grouped Theory + Lab · Clash checked)" : "(Clash checked)"}
                 </span>
               </div>
@@ -804,9 +804,9 @@ export default function SlotFacultySwapSheet({
                       }}
                       className={`w-full flex items-center justify-between gap-3 px-4 py-3 my-0.5 rounded-xl transition-all border ${
                         clashes
-                          ? "opacity-25 bg-black/60 dark:bg-black/80 border-zinc-800/40 dark:border-zinc-900/60 cursor-not-allowed select-none saturate-0"
+                          ? "opacity-25 bg-black/60 border-border-ink cursor-not-allowed select-none saturate-0"
                           : onSwap
-                            ? "hover:bg-surface-secondary/80 border-border/40 hover:border-amber-500/30 cursor-pointer bg-surface-secondary/20 shadow-xs"
+                            ? "hover:bg-surface-secondary/80 border-border/40 hover:border-border-ink cursor-pointer bg-surface-secondary/20 shadow-xs"
                             : "border-transparent cursor-default"
                       } text-left group`}
                     >
@@ -821,17 +821,17 @@ export default function SlotFacultySwapSheet({
                           <div className="flex items-center gap-1.5 flex-wrap">
                             <span
                               className={`text-sm truncate ${
-                                clashes ? "text-zinc-500 dark:text-zinc-500 font-medium" : "text-text-heading font-bold"
+                                clashes ? "text-text-muted font-medium" : "text-text-heading font-bold"
                               }`}
                             >
                               {off.FACULTY}
                             </span>
                             {(offIsEmbedded || isEmbedded) && (
                               <span
-                                className={`text-[10px] font-bold px-1.5 py-0.2 rounded border shrink-0 ${
+                                className={`text-xs font-bold px-1.5 py-0.2 rounded border shrink-0 ${
                                   clashes
-                                    ? "bg-zinc-800/40 text-zinc-600 border-zinc-700/30"
-                                    : "bg-blue-500/15 text-blue-400 border-blue-500/30"
+                                    ? "bg-zinc-800/40 text-text-muted border-border-ink"
+                                    : "bg-secondary text-secondary-foreground border-border-ink"
                                 }`}
                               >
                                 Embedded
@@ -850,26 +850,26 @@ export default function SlotFacultySwapSheet({
                             {offTheory && offTheory.length > 0 && offLab && offLab.length > 0 ? (
                               <>
                                 <span
-                                  className={`text-[10px] font-semibold ${clashes ? "text-zinc-600" : "text-amber-400/90"}`}
+                                  className={`text-xs font-semibold ${clashes ? "text-text-muted" : "text-warning-foreground"}`}
                                 >
                                   TH: {offTheory.join("+")}
                                 </span>
-                                <span className="text-[10px] text-muted-foreground/30">•</span>
+                                <span className="text-xs text-muted-foreground/30">•</span>
                                 <span
-                                  className={`text-[10px] font-semibold ${clashes ? "text-zinc-600" : "text-sky-600 dark:text-sky-400"}`}
+                                  className={`text-xs font-semibold ${clashes ? "text-text-muted" : "text-primary"}`}
                                 >
                                   LAB: {offLab.join("+")}
                                 </span>
                               </>
                             ) : (
                               <span
-                                className={`text-[10px] font-medium ${clashes ? "text-zinc-600" : "text-muted-foreground"}`}
+                                className={`text-xs font-medium ${clashes ? "text-text-muted" : "text-muted-foreground"}`}
                               >
                                 {offSlots.join("+")}
                               </span>
                             )}
-                            <span className="text-[10px] text-muted-foreground/30">•</span>
-                            <span className={`text-[10px] ${clashes ? "text-zinc-600" : "text-muted-foreground"}`}>
+                            <span className="text-xs text-muted-foreground/30">•</span>
+                            <span className={`text-xs ${clashes ? "text-text-muted" : "text-muted-foreground"}`}>
                               {off.ROOM || "TBA"}
                             </span>
                           </div>
@@ -879,13 +879,13 @@ export default function SlotFacultySwapSheet({
                       <div className="shrink-0 flex items-center gap-1.5">
                         {clashes ? (
                           <span
-                            className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-red-950/50 text-red-400/60 border border-red-900/30 max-w-[160px] truncate"
+                            className="text-xs font-semibold px-2 py-0.5 rounded-md bg-red-950/50 text-danger-foreground border border-red-900/30 max-w-[160px] truncate"
                             title={clashReason}
                           >
                             ⚠️ Clash
                           </span>
                         ) : (
-                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                          <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-success-surface text-success-foreground border border-border-ink">
                             ✓ No Clash
                           </span>
                         )}
@@ -918,7 +918,7 @@ export default function SlotFacultySwapSheet({
           )}
 
           {vitfacEnabled && (
-            <p className="text-[10px] text-muted-foreground/60 text-center pt-2 border-t border-border-strong/30 leading-tight">
+            <p className="text-xs text-muted-foreground/60 text-center pt-2 border-t border-border-strong/30 leading-tight">
               Disclaimer: Ratings are sourced from third-party platform{" "}
               <a
                 href="https://vitfac.pages.dev"
@@ -934,12 +934,12 @@ export default function SlotFacultySwapSheet({
         </div>
 
         {/* Sticky Bottom Search Box (Mobile-friendly thumb zone) */}
-        <div className="sticky bottom-0 -mx-4 sm:-mx-5 px-4 sm:px-5 py-2.5 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md border-t border-border-strong/40 z-20 shadow-[0_-8px_16px_-4px_rgba(0,0,0,0.06)] dark:shadow-[0_-8px_20px_-4px_rgba(0,0,0,0.4)] mt-auto">
+        <div className="sticky bottom-0 -mx-4 sm:-mx-5 px-4 sm:px-5 py-2.5 bg-surface border-t border-border-strong/40 z-20 shadow-[0_-8px_16px_-4px_rgba(0,0,0,0.06)] dark:shadow-[0_-8px_20px_-4px_rgba(0,0,0,0.4)] mt-auto">
           <SearchInput
             placeholder="Search by faculty name..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="bg-surface-secondary/50 border-border-strong pl-10 pr-4 py-2.5 focus:border-amber-500/50 placeholder:text-muted-foreground w-full"
+            className="bg-surface-secondary/50 border-border-strong pl-10 pr-4 py-2.5 focus:border-border-ink placeholder:text-muted-foreground w-full"
           />
         </div>
       </BottomSheet>

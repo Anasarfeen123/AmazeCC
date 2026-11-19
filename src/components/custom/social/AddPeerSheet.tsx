@@ -198,14 +198,14 @@ export default function AddPeerSheet({
       title="Pair with a student"
       subtitle="Enter their handle to share timetables both ways"
       icon={<Link2 className="w-4.5 h-4.5" />}
-      accent="border-indigo-500/20 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
+      accent="border-border-ink bg-secondary text-secondary-foreground"
       closeLabel="Close pair sheet"
     >
       <div className="text-left space-y-5">
         <div className="space-y-2">
           <label
             htmlFor="social-peer-handle"
-            className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-outfit block"
+            className="text-xs sm:text-xs font-bold uppercase tracking-wider text-text-muted font-outfit block"
           >
             Their handle
           </label>
@@ -228,7 +228,7 @@ export default function AddPeerSheet({
             spellCheck={false}
             className={`${FIELD_INPUT} font-mono tracking-widest uppercase`}
           />
-          <p className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium leading-relaxed">
+          <p className="text-xs text-text-muted font-medium leading-relaxed">
             Their handle is on their Social → Share screen. It identifies the person, not their schedule.
           </p>
         </div>
@@ -237,49 +237,49 @@ export default function AddPeerSheet({
         <button
           type="button"
           onClick={() => setScanning(true)}
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl border border-indigo-200/70 dark:border-indigo-800/50 bg-indigo-50/60 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100/70 dark:hover:bg-indigo-900/40 text-xs font-bold transition-colors cursor-pointer"
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl border-2 border-border-ink bg-secondary text-secondary-foreground hover:bg-indigo-100/70 dark:hover:bg-indigo-900/40 text-xs font-bold transition-colors cursor-pointer"
         >
           <Camera className="w-4 h-4" />
           <span>Scan their QR instead</span>
         </button>
 
         {stage === "checking" && (
-          <p className="flex items-center gap-2 text-xs font-bold text-zinc-500 dark:text-zinc-400">
+          <p className="flex items-center gap-2 text-xs font-bold text-text-muted">
             <Loader2 className="w-4 h-4 animate-spin" />
             Checking handle…
           </p>
         )}
 
         {stage === "ready" && (
-          <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-2">
-            <UserCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-            <p className="text-xs font-bold text-emerald-700 dark:text-emerald-300 truncate">
+          <div className="p-3 rounded-2xl bg-success-surface border border-border-ink flex items-center gap-2">
+            <UserCheck className="w-4 h-4 text-success-foreground shrink-0" />
+            <p className="text-xs font-bold text-success-foreground truncate">
               {foundName ? `${foundName} · ` : ""}Handle found
             </p>
           </div>
         )}
 
         {stage === "claimed" && (
-          <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-            <p className="text-xs font-bold text-emerald-700 dark:text-emerald-300">
+          <div className="p-3 rounded-2xl bg-success-surface border border-border-ink flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-success-foreground shrink-0" />
+            <p className="text-xs font-bold text-success-foreground">
               Paired. Their timetable will appear after the next sync.
             </p>
           </div>
         )}
 
         {isSelf ? (
-          <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-2">
-            <UserX className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-px" />
-            <p className="text-xs font-bold text-amber-700 dark:text-amber-300">
+          <div className="p-3 rounded-2xl bg-warning-surface border border-border-ink flex items-start gap-2">
+            <UserX className="w-4 h-4 text-warning-foreground shrink-0 mt-px" />
+            <p className="text-xs font-bold text-warning-foreground">
               That is your own handle. A pairing needs two people — the server rejects this too, so enter someone
               else&apos;s.
             </p>
           </div>
         ) : notFound ? (
-          <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-2">
-            <UserX className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-px" />
-            <p className="text-xs font-bold text-amber-700 dark:text-amber-300">
+          <div className="p-3 rounded-2xl bg-warning-surface border border-border-ink flex items-start gap-2">
+            <UserX className="w-4 h-4 text-warning-foreground shrink-0 mt-px" />
+            <p className="text-xs font-bold text-warning-foreground">
               No student has the handle {normaliseHandle(handle)}. Check for a typo — it is easier to read the wrong
               pair of characters than you would think.
             </p>
@@ -287,7 +287,7 @@ export default function AddPeerSheet({
         ) : error ? (
           <div
             role="alert"
-            className="p-3 rounded-2xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/40 text-red-600 dark:text-red-400 text-xs font-bold flex items-start gap-2"
+            className="p-3 rounded-2xl bg-danger-surface border border-border-ink text-danger-foreground text-xs font-bold flex items-start gap-2"
           >
             <UserX className="w-4 h-4 shrink-0 mt-px" />
             <div className="min-w-0">
@@ -296,7 +296,7 @@ export default function AddPeerSheet({
                 <button
                   type="button"
                   onClick={signInInteractive}
-                  className="mt-2 rounded-full bg-red-600 px-3 py-1.5 text-white hover:bg-red-700 dark:bg-red-300 dark:text-red-950 dark:hover:bg-red-200"
+                  className="mt-2 rounded-[10px] bg-red-600 px-3 py-1.5 text-white hover:bg-red-700 dark:bg-red-300 dark:text-red-950 dark:hover:bg-red-200 min-h-9"
                 >
                   Sign in with Amaze ID
                 </button>
@@ -306,23 +306,21 @@ export default function AddPeerSheet({
         ) : null}
 
         {/* The mutuality disclosure. This is the one irreversible part. */}
-        <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-zinc-950/60 border border-zinc-200/70 dark:border-zinc-800 space-y-1.5">
-          <p className="text-[11px] font-black text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
-            Before you pair
-          </p>
-          <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
-            Pairing is <strong className="text-zinc-700 dark:text-zinc-200">mutual and immediate</strong>. They are not
-            asked to accept, and they will be able to read your timetable for this term straight away. Either of you can
-            end it at any time from Pairs.
+        <div className="p-3 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-1.5">
+          <p className="text-xs font-bold text-text-primary uppercase tracking-wider">Before you pair</p>
+          <p className="text-xs text-text-muted font-medium leading-relaxed">
+            Pairing is <strong className="text-text-primary">mutual and immediate</strong>. They are not asked to
+            accept, and they will be able to read your timetable for this term straight away. Either of you can end it
+            at any time from Pairs.
           </p>
         </div>
 
-        <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-zinc-950/60 border border-zinc-200/70 dark:border-zinc-800 space-y-1.5">
-          <p className="flex items-center gap-1.5 text-[11px] font-black text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
-            <ShieldCheck className="w-3.5 h-3.5 text-indigo-500" />
+        <div className="p-3 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-1.5">
+          <p className="flex items-center gap-1.5 text-xs font-bold text-text-primary uppercase tracking-wider">
+            <ShieldCheck className="w-3.5 h-3.5 text-primary" />
             Full timetable detail
           </p>
-          <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
+          <p className="text-xs text-text-muted font-medium leading-relaxed">
             Timetable sharing is always full detail: course, venue and title are visible to everyone you pair with. That
             applies to both of you, and either side can end the pairing at any time.
           </p>
@@ -332,7 +330,7 @@ export default function AddPeerSheet({
           <button
             type="button"
             onClick={close}
-            className="flex-1 py-3 rounded-2xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-bold text-xs transition-colors cursor-pointer"
+            className="flex-1 py-3 rounded-2xl bg-surface-secondary hover:bg-surface-tertiary text-text-primary font-bold text-xs transition-colors cursor-pointer"
           >
             Cancel
           </button>
@@ -340,7 +338,7 @@ export default function AddPeerSheet({
             type="button"
             onClick={() => void claim()}
             disabled={busy || stage !== "ready" || isSelf}
-            className={`flex-1 py-3 rounded-2xl font-bold text-xs transition-all cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2 ${TONE_BADGE.indigo} bg-indigo-600 text-white border border-indigo-600 hover:bg-indigo-700`}
+            className={`flex-1 py-3 rounded-2xl font-bold text-xs transition-all cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2 ${TONE_BADGE.indigo} bg-primary text-primary-foreground border border-border-ink hover:brightness-110`}
           >
             {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Link2 className="w-4 h-4" />}
             {busy ? "Pairing…" : "Pair"}

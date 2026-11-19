@@ -1,27 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  Check,
-  ChevronUp,
-  Copy,
-  Database,
-  Eye,
-  EyeOff,
-  RefreshCcw,
-  Search,
-  Trash2,
-  X,
-} from "lucide-react";
+import { Check, ChevronUp, Copy, Database, Eye, EyeOff, RefreshCcw, Search, Trash2, X } from "lucide-react";
 import { CHIP, LIST_ROW, SEARCH_FIELD } from "@/lib/uiTokens";
-import {
-  EmptyPanel,
-  GhostButton,
-  IconButton,
-  ListRowText,
-  ListShell,
-  SectionHeader,
-} from "../shared/primitives";
+import { EmptyPanel, GhostButton, IconButton, ListRowText, ListShell, SectionHeader } from "../shared/primitives";
 
 /**
  * Local Storage, as a subpage of Settings.
@@ -95,13 +77,7 @@ interface StorageRow {
   sensitive: boolean;
 }
 
-function StorageRowBlock({
-  row,
-  onDelete,
-}: {
-  row: StorageRow;
-  onDelete: (key: string) => void;
-}) {
+function StorageRowBlock({ row, onDelete }: { row: StorageRow; onDelete: (key: string) => void }) {
   const [open, setOpen] = useState(false);
   const [revealed, setRevealed] = useState(!row.sensitive);
   const [copied, setCopied] = useState(false);
@@ -131,9 +107,7 @@ function StorageRowBlock({
           />
           {row.bytes > 90 && (
             <ChevronUp
-              className={`w-3.5 h-3.5 text-zinc-400 shrink-0 transition-transform ${
-                open ? "" : "rotate-180"
-              }`}
+              className={`w-3.5 h-3.5 text-text-muted shrink-0 transition-transform ${open ? "" : "rotate-180"}`}
             />
           )}
         </button>
@@ -142,35 +116,35 @@ function StorageRowBlock({
         <IconButton
           onClick={copy}
           title={`Copy value of ${row.key}`}
-          className="p-2 bg-transparent dark:bg-transparent border-transparent shadow-none hover:bg-zinc-100 dark:hover:bg-zinc-800"
+          className="p-2 bg-transparent dark:bg-transparent border-transparent shadow-none hover:bg-surface-hover"
         >
           {copied ? (
-            <Check className="w-3.5 h-3.5 text-emerald-500" />
+            <Check className="w-3.5 h-3.5 text-success-foreground" />
           ) : (
-            <Copy className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" />
+            <Copy className="w-3.5 h-3.5 text-text-muted" />
           )}
         </IconButton>
         <IconButton
           onClick={() => onDelete(row.key)}
           title={`Delete ${row.key}`}
-          className="p-2 bg-transparent dark:bg-transparent border-transparent shadow-none hover:bg-red-500/10 dark:hover:bg-red-500/10"
+          className="p-2 bg-transparent dark:bg-transparent border-transparent shadow-none hover:bg-danger-surface dark:hover:bg-danger-surface"
         >
-          <Trash2 className="w-3.5 h-3.5 text-red-500 dark:text-red-400" />
+          <Trash2 className="w-3.5 h-3.5 text-danger-foreground" />
         </IconButton>
       </div>
 
       {open && (
         <div className="px-4 pb-3 -mt-1">
-          <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/60 overflow-hidden">
+          <div className="rounded-xl border-2 border-border-ink bg-surface-secondary overflow-hidden">
             {row.sensitive && (
-              <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-zinc-200 dark:border-zinc-800">
-                <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+              <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-border-ink">
+                <span className="text-xs font-bold uppercase tracking-wider text-warning-foreground">
                   Sensitive value
                 </span>
                 <button
                   type="button"
                   onClick={() => setRevealed((v) => !v)}
-                  className="inline-flex items-center gap-1 text-[11px] font-bold text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white cursor-pointer"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-text-muted hover:text-text-heading cursor-pointer"
                 >
                   {revealed ? (
                     <>
@@ -185,7 +159,7 @@ function StorageRowBlock({
               </div>
             )}
             <pre
-              className={`max-h-72 overflow-auto whitespace-pre-wrap break-all p-3 text-[11px] font-mono leading-relaxed text-zinc-700 dark:text-zinc-300 ${
+              className={`max-h-72 overflow-auto whitespace-pre-wrap break-all p-3 text-xs font-mono leading-relaxed text-text-primary ${
                 row.sensitive && !revealed ? "blur-sm select-none" : ""
               }`}
             >
@@ -224,15 +198,13 @@ export default function LocalStorageSubpage() {
           };
         })
         .sort((a, b) => a.key.localeCompare(b.key)),
-    [entries]
+    [entries],
   );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return rows;
-    return rows.filter(
-      (r) => r.key.toLowerCase().includes(q) || r.pretty.toLowerCase().includes(q)
-    );
+    return rows.filter((r) => r.key.toLowerCase().includes(q) || r.pretty.toLowerCase().includes(q));
   }, [rows, query]);
 
   const totalBytes = useMemo(() => rows.reduce((n, r) => n + r.bytes, 0), [rows]);
@@ -247,7 +219,7 @@ export default function LocalStorageSubpage() {
       }
       load();
     },
-    [load]
+    [load],
   );
 
   const body = () => {
@@ -255,7 +227,7 @@ export default function LocalStorageSubpage() {
       return (
         <EmptyPanel
           variant="dashed"
-          icon={<Database className="w-6 h-6 text-zinc-400" />}
+          icon={<Database className="w-6 h-6 text-text-muted" />}
           title="Nothing stored yet"
           description="This browser has no local storage entries for the app. Sign in or sync once and they will appear here."
         />
@@ -265,7 +237,7 @@ export default function LocalStorageSubpage() {
       return (
         <EmptyPanel
           variant="dashed"
-          icon={<Search className="w-6 h-6 text-zinc-400" />}
+          icon={<Search className="w-6 h-6 text-text-muted" />}
           title={`No key matches “${query.trim()}”`}
           description="Search looks at both the key and the value, so a fragment of stored JSON will find it too."
           action={
@@ -299,7 +271,7 @@ export default function LocalStorageSubpage() {
               onClick={load}
               title="Re-read local storage"
               aria-label="Re-read local storage"
-              className="p-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 transition-all active:scale-95 cursor-pointer shrink-0"
+              className="p-2 rounded-xl bg-surface-secondary hover:bg-surface-tertiary border-2 border-border-ink text-text-primary transition-all cursor-pointer shrink-0"
             >
               <RefreshCcw className="w-4 h-4" />
             </button>
@@ -312,23 +284,15 @@ export default function LocalStorageSubpage() {
           neither is answerable by scrolling rows. */}
       {rows.length > 0 && (
         <div className="grid grid-cols-2 gap-3">
-          <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-zinc-950/50 border border-zinc-200/60 dark:border-zinc-800">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-              Total size
-            </p>
-            <p className="font-extrabold text-zinc-900 dark:text-white mt-0.5 tabular-nums">
-              {formatBytes(totalBytes)}
-            </p>
+          <div className="p-3 rounded-2xl bg-surface-secondary border-2 border-border-ink">
+            <p className="text-xs font-bold uppercase tracking-wider text-text-muted">Total size</p>
+            <p className="font-bold text-text-heading mt-0.5 tabular-nums">{formatBytes(totalBytes)}</p>
           </div>
-          <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-zinc-950/50 border border-zinc-200/60 dark:border-zinc-800">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-              Sensitive
-            </p>
+          <div className="p-3 rounded-2xl bg-surface-secondary border-2 border-border-ink">
+            <p className="text-xs font-bold uppercase tracking-wider text-text-muted">Sensitive</p>
             <p
-              className={`font-extrabold mt-0.5 tabular-nums ${
-                sensitiveCount > 0
-                  ? "text-amber-600 dark:text-amber-400"
-                  : "text-zinc-900 dark:text-white"
+              className={`font-bold mt-0.5 tabular-nums ${
+                sensitiveCount > 0 ? "text-warning-foreground" : "text-text-heading"
               }`}
             >
               {sensitiveCount} of {rows.length}
@@ -339,7 +303,7 @@ export default function LocalStorageSubpage() {
 
       {rows.length > 0 && (
         <div className="relative px-1">
-          <Search className="w-4 h-4 text-zinc-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-4 h-4 text-text-muted absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -352,7 +316,7 @@ export default function LocalStorageSubpage() {
               type="button"
               onClick={() => setQuery("")}
               aria-label="Clear search"
-              className="absolute right-3 top-1/2 -translate-y-1/2 hit-expand p-1 rounded-lg text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors cursor-pointer"
+              className="absolute right-3 top-1/2 -translate-y-1/2 hit-expand p-1 rounded-lg text-text-muted hover:text-text-muted transition-colors cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -361,9 +325,8 @@ export default function LocalStorageSubpage() {
       )}
 
       {sensitiveCount > 0 && rows.length > 0 && (
-        <p className="text-[11px] text-zinc-500 dark:text-zinc-400 px-1">
-          {sensitiveCount} {sensitiveCount === 1 ? "key is" : "keys are"} hidden until
-          revealed.
+        <p className="text-xs text-text-muted px-1">
+          {sensitiveCount} {sensitiveCount === 1 ? "key is" : "keys are"} hidden until revealed.
         </p>
       )}
 

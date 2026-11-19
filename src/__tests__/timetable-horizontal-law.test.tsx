@@ -42,7 +42,7 @@ function course(id: string, slots: string[]): AddedCourse {
 
 /** The Monday cell of the theory column at `periodIndex`, as rendered text. */
 const mondayCell = (container: HTMLElement, periodIndex: number) =>
-  (container.querySelectorAll("tbody tr")[0]?.children[periodIndex + 1]?.textContent ?? "");
+  container.querySelectorAll("tbody tr")[0]?.children[periodIndex + 1]?.textContent ?? "";
 
 const renderGrid = (props: Partial<Parameters<typeof HorizontalTimetableGrid>[0]> = {}) =>
   render(
@@ -52,7 +52,7 @@ const renderGrid = (props: Partial<Parameters<typeof HorizontalTimetableGrid>[0]
       labPeriods={LAB}
       days={DAYS}
       {...props}
-    />
+    />,
   );
 
 describe("a law course in the horizontal grid", () => {
@@ -110,9 +110,9 @@ describe("a law course in the horizontal grid", () => {
         toggled = slot;
       },
     });
-    const clickable = Array.from(
-      container.querySelectorAll("tbody tr")[0].children[1].querySelectorAll("div")
-    ).find((d) => (d as HTMLElement).className.includes("cursor-pointer"));
+    const clickable = Array.from(container.querySelectorAll("tbody tr")[0].children[1].querySelectorAll("div")).find(
+      (d) => (d as HTMLElement).className.includes("cursor-pointer"),
+    );
     (clickable as HTMLElement).click();
     expect(toggled).toBe("A");
   });
@@ -130,10 +130,11 @@ describe("a law course in the horizontal grid", () => {
   it("renders light mode compatible classes on ModernHorizontalTimetableGrid", () => {
     const { container } = renderGrid();
     const root = container.firstElementChild as HTMLElement;
-    expect(root.className).toContain("bg-white");
-    expect(root.className).toContain("dark:bg-[#0c1222]");
-    expect(root.className).toContain("border-slate-200");
-    expect(root.className).toContain("dark:border-white/10");
+    // Brand redesign: theme comes from tokens (paper in light, obsidian
+    // teal in dark) with an ink edge, not per-theme hard-coded colours.
+    expect(root.className).toContain("bg-surface");
+    expect(root.className).toContain("border-border-ink");
+    expect(root.className).not.toMatch(/#[0-9a-fA-F]{6}/);
   });
 
   it("numbers periods sequentially without duplicate P5", () => {

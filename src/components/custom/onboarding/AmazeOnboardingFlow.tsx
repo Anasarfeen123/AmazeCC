@@ -10,15 +10,12 @@ import {
   Check,
   GraduationCap,
   Bus,
-  Bell,
-  Palette,
   Loader2,
   User,
   CalendarCheck,
   Car,
   CreditCard,
   Key,
-  Smartphone,
   Download,
   Share,
   Plus,
@@ -347,6 +344,14 @@ export default function AmazeOnboardingFlow({
 
   const totalSteps = hasMultipleInterfaces ? 6 : 5;
   const visibleStep = hasMultipleInterfaces || step === 0 ? step : step - 1;
+  const stepLabels = [
+    "Profile",
+    ...(hasMultipleInterfaces ? ["Interface"] : []),
+    "Display & goals",
+    "Navigation",
+    "Alerts",
+    "Install",
+  ];
 
   // Render Helpers for shared cards across vertical & horizontal dual-pane layouts
   const renderProfileCard = () => (
@@ -603,7 +608,7 @@ export default function AmazeOnboardingFlow({
           }`}
         >
           <div
-            className={`w-4 h-4 rounded-full bg-white transition-transform ${
+            className={`w-4 h-4 rounded-full bg-surface transition-transform ${
               temp.showGpa ? "translate-x-5" : "translate-x-0"
             }`}
           />
@@ -828,7 +833,7 @@ export default function AmazeOnboardingFlow({
                 <button
                   type="button"
                   onClick={prevStep}
-                  className="flex items-center gap-1.5 text-xs font-bold text-text-muted hover:text-text-heading transition-colors cursor-pointer py-1.5 px-3 rounded-xl bg-surface border border-border-ink"
+                  className="flex min-h-10 cursor-pointer items-center gap-1.5 rounded-[10px] border-2 border-border-ink bg-surface px-3 font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-primary shadow-brutal-sm brutal-press"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   <span>Back</span>
@@ -839,16 +844,12 @@ export default function AmazeOnboardingFlow({
 
               {/* Step Indicator Pills */}
               {!isStandaloneInterfacePicker && (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5" aria-hidden>
                   {Array.from({ length: totalSteps }).map((_, i) => (
                     <div
                       key={i}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${
-                        i === visibleStep
-                          ? "w-7 bg-text-primary"
-                          : i < visibleStep
-                            ? "w-2.5 bg-text-muted"
-                            : "w-2 bg-surface-secondary"
+                      className={`h-2.5 rounded-[3px] border-2 border-border-ink transition-all duration-200 ${
+                        i === visibleStep ? "w-8 bg-ochre" : i < visibleStep ? "w-4 bg-secondary" : "w-4 bg-surface"
                       }`}
                     />
                   ))}
@@ -856,7 +857,7 @@ export default function AmazeOnboardingFlow({
               )}
 
               {!isStandaloneInterfacePicker ? (
-                <span className="text-xs font-bold text-text-muted font-outfit">
+                <span className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
                   Step {visibleStep + 1} of {totalSteps}
                 </span>
               ) : (
@@ -874,23 +875,16 @@ export default function AmazeOnboardingFlow({
               {step === 1 || isStandaloneInterfacePicker ? (
                 <>
                   <div className="flex items-center gap-3">
-                    <img
-                      loading="lazy"
-                      src={getAssetPath("/brand/icon-primary.svg")}
-                      alt="AmazeCC"
-                      decoding="async"
-                      className="w-12 h-12 rounded-2xl object-contain shadow-md border border-border-ink p-0.5 bg-surface shrink-0"
-                    />
                     <div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-primary font-outfit">
+                      <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
                         Workspace Layout
                       </span>
-                      <h2 className="text-2xl lg:text-3xl font-bold text-text-heading font-outfit tracking-tight">
+                      <h2 className="mt-2 font-display text-[28px] font-bold uppercase leading-[1.05] text-text-heading lg:text-[36px]">
                         Choose your interface
                       </h2>
                     </div>
                   </div>
-                  <p className="text-xs text-text-muted font-medium leading-relaxed">
+                  <p className="text-base leading-relaxed text-text-muted">
                     Pick how you want AmazeCC to look and feel. Switch between simplified or attendance anytime.
                   </p>
 
@@ -937,102 +931,110 @@ export default function AmazeOnboardingFlow({
               ) : step === 0 ? (
                 <>
                   <div className="flex items-center gap-3">
-                    <img
-                      loading="lazy"
-                      src={getAssetPath("/brand/icon-primary.svg")}
-                      alt="AmazeCC"
-                      decoding="async"
-                      className="w-12 h-12 rounded-2xl object-contain shadow-md border border-border-ink p-0.5 bg-surface shrink-0"
-                    />
                     <div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-primary font-outfit">
+                      <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
                         Getting Started
                       </span>
-                      <h1 className="text-2xl lg:text-3xl font-bold text-text-heading font-outfit tracking-tight">
+                      <h1 className="mt-2 font-display text-[28px] font-bold uppercase leading-[1.05] text-text-heading lg:text-[36px]">
                         Welcome to AmazeCC
                       </h1>
                     </div>
                   </div>
-                  <p className="text-xs text-text-muted font-medium leading-relaxed">
+                  <p className="text-base leading-relaxed text-text-muted">
                     Set up your personalized college companion in seconds.
                   </p>
                 </>
               ) : step === 2 ? (
                 <>
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-secondary border border-border-ink flex items-center justify-center text-secondary-foreground shrink-0">
-                      <Palette className="w-6 h-6" />
-                    </div>
                     <div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-primary font-outfit">
+                      <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
                         Personalization
                       </span>
-                      <h2 className="text-2xl lg:text-3xl font-bold text-text-heading font-outfit tracking-tight">
+                      <h2 className="mt-2 font-display text-[28px] font-bold uppercase leading-[1.05] text-text-heading lg:text-[36px]">
                         Display & Goals
                       </h2>
                     </div>
                   </div>
-                  <p className="text-xs text-text-muted font-medium leading-relaxed">
+                  <p className="text-base leading-relaxed text-text-muted">
                     Set your avatar, colors, and attendance safe goals.
                   </p>
                 </>
               ) : step === 3 ? (
                 <>
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-secondary border border-border-ink flex items-center justify-center text-secondary-foreground shrink-0">
-                      <Smartphone className="w-6 h-6" />
-                    </div>
                     <div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-primary font-outfit">
+                      <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
                         Navigation
                       </span>
-                      <h2 className="text-2xl lg:text-3xl font-bold text-text-heading font-outfit tracking-tight">
+                      <h2 className="mt-2 font-display text-[28px] font-bold uppercase leading-[1.05] text-text-heading lg:text-[36px]">
                         Bottom Navigation
                       </h2>
                     </div>
                   </div>
-                  <p className="text-xs text-text-muted font-medium leading-relaxed">
+                  <p className="text-base leading-relaxed text-text-muted">
                     Pin up to 4 quick-access tabs for your mobile dock.
                   </p>
                 </>
               ) : step === 4 ? (
                 <>
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-secondary border border-border-ink flex items-center justify-center text-secondary-foreground shrink-0">
-                      <Bell className="w-6 h-6" />
-                    </div>
                     <div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-primary font-outfit">
+                      <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
                         Smart Alerts
                       </span>
-                      <h2 className="text-2xl lg:text-3xl font-bold text-text-heading font-outfit tracking-tight">
+                      <h2 className="mt-2 font-display text-[28px] font-bold uppercase leading-[1.05] text-text-heading lg:text-[36px]">
                         Stay Ahead of Classes
                       </h2>
                     </div>
                   </div>
-                  <p className="text-xs text-text-muted font-medium leading-relaxed">
+                  <p className="text-base leading-relaxed text-text-muted">
                     Instant class alerts and low attendance safeguards.
                   </p>
                 </>
               ) : (
                 <>
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-secondary border border-border-ink flex items-center justify-center text-secondary-foreground shrink-0">
-                      <Download className="w-6 h-6" />
-                    </div>
                     <div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-primary font-outfit">
+                      <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
                         Install
                       </span>
-                      <h2 className="text-2xl lg:text-3xl font-bold text-text-heading font-outfit tracking-tight">
+                      <h2 className="mt-2 font-display text-[28px] font-bold uppercase leading-[1.05] text-text-heading lg:text-[36px]">
                         AmazeCC on Your Device
                       </h2>
                     </div>
                   </div>
-                  <p className="text-xs text-text-muted font-medium leading-relaxed">
+                  <p className="text-base leading-relaxed text-text-muted">
                     Add AmazeCC as a web app for a full-screen, offline-ready experience.
                   </p>
                 </>
+              )}
+
+              {/* The whole journey at a glance: fills the left column on wide
+                  screens and shows what is done and what comes next. */}
+              {!isStandaloneInterfacePicker && (
+                <ol className="mt-2 w-full space-y-1.5" aria-label="Setup steps">
+                  {stepLabels.map((label, i) => {
+                    const state = i === visibleStep ? "now" : i < visibleStep ? "done" : "next";
+                    return (
+                      <li
+                        key={label}
+                        aria-current={state === "now" ? "step" : undefined}
+                        className={`flex min-h-10 items-center gap-3 rounded-[10px] border-2 px-3 font-mono text-xs font-bold uppercase tracking-[0.06em] ${
+                          state === "now"
+                            ? "border-border-ink bg-ochre text-obsidian shadow-brutal-sm"
+                            : state === "done"
+                              ? "border-border-ink bg-secondary text-secondary-foreground"
+                              : "border-dashed border-border bg-transparent text-text-muted"
+                        }`}
+                      >
+                        <span className="tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+                        <span className="flex-1 truncate">{label}</span>
+                        <span>{state === "done" ? "Done" : state === "now" ? "Now" : ""}</span>
+                      </li>
+                    );
+                  })}
+                </ol>
               )}
             </div>
 
@@ -1043,7 +1045,7 @@ export default function AmazeOnboardingFlow({
                   type="button"
                   onClick={() => setActiveInterfaceIdx((prev) => (prev - 1 + interfaces.length) % interfaces.length)}
                   aria-label="Previous Interface"
-                  className="w-12 h-12 rounded-2xl bg-surface hover:bg-surface-secondary border border-border-ink text-text-heading flex items-center justify-center shadow-lg transition-all active:scale-90 cursor-pointer shrink-0"
+                  className="flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-heading shadow-brutal-sm brutal-press"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
@@ -1052,7 +1054,7 @@ export default function AmazeOnboardingFlow({
               <button
                 type="button"
                 onClick={nextStep}
-                className="flex-1 py-3.5 px-5 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
+                className="flex min-h-12 flex-1 cursor-pointer items-center justify-center gap-2 truncate rounded-[12px] border-2 border-border-ink bg-primary px-5 font-mono text-sm font-bold uppercase tracking-[0.06em] text-primary-foreground shadow-brutal-md brutal-press"
               >
                 <span className="truncate">
                   {isStandaloneInterfacePicker
@@ -1071,7 +1073,7 @@ export default function AmazeOnboardingFlow({
                   type="button"
                   onClick={() => setActiveInterfaceIdx((prev) => (prev + 1) % interfaces.length)}
                   aria-label="Next Interface"
-                  className="w-12 h-12 rounded-2xl bg-surface hover:bg-surface-secondary border border-border-ink text-text-heading flex items-center justify-center shadow-lg transition-all active:scale-90 cursor-pointer shrink-0"
+                  className="flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-heading shadow-brutal-sm brutal-press"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
@@ -1105,7 +1107,7 @@ export default function AmazeOnboardingFlow({
               <button
                 type="button"
                 onClick={prevStep}
-                className="flex items-center gap-1.5 text-xs font-bold text-text-muted hover:text-text-heading transition-colors cursor-pointer py-1.5 px-2.5 rounded-xl bg-surface border border-border-ink"
+                className="flex min-h-10 cursor-pointer items-center gap-1.5 rounded-[10px] border-2 border-border-ink bg-surface px-3 font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-primary shadow-brutal-sm brutal-press"
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>Back</span>
@@ -1116,16 +1118,12 @@ export default function AmazeOnboardingFlow({
 
             {/* Step Indicator Pills */}
             {!isStandaloneInterfacePicker && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5" aria-hidden>
                 {Array.from({ length: totalSteps }).map((_, i) => (
                   <div
                     key={i}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      i === visibleStep
-                        ? "w-7 bg-text-primary"
-                        : i < visibleStep
-                          ? "w-2.5 bg-text-muted"
-                          : "w-2 bg-surface-secondary"
+                    className={`h-2.5 rounded-[3px] border-2 border-border-ink transition-all duration-200 ${
+                      i === visibleStep ? "w-8 bg-ochre" : i < visibleStep ? "w-4 bg-secondary" : "w-4 bg-surface"
                     }`}
                   />
                 ))}
@@ -1133,7 +1131,7 @@ export default function AmazeOnboardingFlow({
             )}
 
             {!isStandaloneInterfacePicker ? (
-              <span className="text-xs font-bold text-text-muted font-outfit">
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
                 Step {visibleStep + 1} of {totalSteps}
               </span>
             ) : (
@@ -1162,17 +1160,10 @@ export default function AmazeOnboardingFlow({
                   className="my-auto w-full space-y-4 sm:space-y-5 text-center"
                 >
                   <div className="flex flex-col items-center gap-2.5">
-                    <img
-                      loading="lazy"
-                      src={getAssetPath("/brand/icon-primary.svg")}
-                      alt="AmazeCC"
-                      decoding="async"
-                      className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl object-contain shadow-lg border border-border-ink p-0.5 bg-surface"
-                    />
-                    <h1 className="text-2xl sm:text-3xl font-bold text-text-heading font-outfit tracking-tight">
+                    <h1 className="font-display text-[24px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[30px]">
                       Welcome to AmazeCC
                     </h1>
-                    <p className="text-xs text-text-muted font-medium max-w-xs">
+                    <p className="text-sm text-text-muted max-w-xs">
                       Set up your personalized college companion in seconds.
                     </p>
                   </div>
@@ -1194,14 +1185,7 @@ export default function AmazeOnboardingFlow({
                 >
                   {/* Header inside interface picker */}
                   <div className="flex flex-col items-center text-center space-y-2 shrink-0">
-                    <img
-                      loading="lazy"
-                      src={getAssetPath("/brand/icon-primary.svg")}
-                      alt="AmazeCC"
-                      decoding="async"
-                      className="w-11 h-11 rounded-2xl object-contain shadow-md border border-border-ink p-0.5 bg-surface"
-                    />
-                    <h2 className="text-xl sm:text-2xl font-bold text-text-heading font-outfit tracking-tight">
+                    <h2 className="font-display text-[24px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[30px]">
                       Choose your interface
                     </h2>
 
@@ -1245,15 +1229,10 @@ export default function AmazeOnboardingFlow({
                   className="my-auto w-full space-y-4 sm:space-y-5 text-center"
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 rounded-2xl bg-secondary border border-border-ink flex items-center justify-center text-secondary-foreground">
-                      <Palette className="w-6 h-6" />
-                    </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-text-heading font-outfit tracking-tight">
+                    <h2 className="font-display text-[24px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[30px]">
                       Display & Goals
                     </h2>
-                    <p className="text-xs text-text-muted font-medium">
-                      Set your avatar, colors, and attendance safe goals.
-                    </p>
+                    <p className="text-sm text-text-muted">Set your avatar, colors, and attendance safe goals.</p>
                   </div>
 
                   {/* Preferences Card */}
@@ -1272,15 +1251,10 @@ export default function AmazeOnboardingFlow({
                   className="my-auto w-full space-y-4 sm:space-y-5 text-center"
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 rounded-2xl bg-secondary border border-border-ink flex items-center justify-center text-secondary-foreground">
-                      <Smartphone className="w-6 h-6" />
-                    </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-text-heading font-outfit tracking-tight">
+                    <h2 className="font-display text-[24px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[30px]">
                       Bottom Navigation
                     </h2>
-                    <p className="text-xs text-text-muted font-medium">
-                      Pin up to 4 quick-access tabs for your mobile dock.
-                    </p>
+                    <p className="text-sm text-text-muted">Pin up to 4 quick-access tabs for your mobile dock.</p>
                   </div>
 
                   {/* Bottom Nav Customizer Card */}
@@ -1299,15 +1273,10 @@ export default function AmazeOnboardingFlow({
                   className="my-auto w-full space-y-4 sm:space-y-5 text-center"
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 rounded-2xl bg-secondary border border-border-ink flex items-center justify-center text-secondary-foreground">
-                      <Bell className="w-6 h-6" />
-                    </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-text-heading font-outfit tracking-tight">
+                    <h2 className="font-display text-[24px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[30px]">
                       Stay Ahead of Classes
                     </h2>
-                    <p className="text-xs text-text-muted font-medium">
-                      Instant class alerts and low attendance safeguards.
-                    </p>
+                    <p className="text-sm text-text-muted">Instant class alerts and low attendance safeguards.</p>
                   </div>
 
                   {/* Notification & Launch Card */}
@@ -1326,13 +1295,10 @@ export default function AmazeOnboardingFlow({
                   className="my-auto w-full space-y-4 sm:space-y-5 text-center"
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 rounded-2xl bg-secondary border border-border-ink flex items-center justify-center text-secondary-foreground">
-                      <Download className="w-6 h-6" />
-                    </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-text-heading font-outfit tracking-tight">
+                    <h2 className="font-display text-[24px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[30px]">
                       Install AmazeCC
                     </h2>
-                    <p className="text-xs text-text-muted font-medium max-w-xs">
+                    <p className="text-sm text-text-muted max-w-xs">
                       Add it as a web app for a full-screen, offline-ready experience.
                     </p>
                   </div>
@@ -1352,7 +1318,7 @@ export default function AmazeOnboardingFlow({
                 type="button"
                 onClick={() => setActiveInterfaceIdx((prev) => (prev - 1 + interfaces.length) % interfaces.length)}
                 aria-label="Previous Interface"
-                className="w-12 h-12 rounded-2xl bg-surface hover:bg-surface-secondary border border-border-ink text-text-heading flex items-center justify-center shadow-lg transition-all active:scale-90 cursor-pointer shrink-0"
+                className="flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-heading shadow-brutal-sm brutal-press"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
@@ -1362,7 +1328,7 @@ export default function AmazeOnboardingFlow({
             <button
               type="button"
               onClick={nextStep}
-              className="flex-1 py-3.5 px-5 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
+              className="flex min-h-12 flex-1 cursor-pointer items-center justify-center gap-2 truncate rounded-[12px] border-2 border-border-ink bg-primary px-5 font-mono text-sm font-bold uppercase tracking-[0.06em] text-primary-foreground shadow-brutal-md brutal-press"
             >
               <span className="truncate">
                 {isStandaloneInterfacePicker
@@ -1382,7 +1348,7 @@ export default function AmazeOnboardingFlow({
                 type="button"
                 onClick={() => setActiveInterfaceIdx((prev) => (prev + 1) % interfaces.length)}
                 aria-label="Next Interface"
-                className="w-12 h-12 rounded-2xl bg-surface hover:bg-surface-secondary border border-border-ink text-text-heading flex items-center justify-center shadow-lg transition-all active:scale-90 cursor-pointer shrink-0"
+                className="flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-heading shadow-brutal-sm brutal-press"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>

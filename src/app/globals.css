@@ -859,19 +859,59 @@ html.privacy-hide-identity [data-private~="identity"]:focus-within::after {
 /* Grawlix variants (user: different symbols and colours per value).
    GrawlixTagger (components/custom/theme) sets data-g="0..4" on each hidden
    element. Colours are theme tokens with readable contrast. */
-[data-g="1"]::after {
+:is(
+  .crayon-hide[data-g="1"],
+  .privacy-mode [data-g="1"],
+  .privacy-hide-cgpa [data-private~="cgpa"][data-g="1"],
+  .privacy-hide-attendance [data-private~="attendance"][data-g="1"],
+  .privacy-hide-marks [data-private~="marks"][data-g="1"],
+  .privacy-hide-fees [data-private~="fees"][data-g="1"],
+  .privacy-hide-credits [data-private~="credits"][data-g="1"],
+  .privacy-hide-id [data-private~="id"][data-g="1"],
+  .privacy-hide-identity [data-private~="identity"][data-g="1"]
+)::after {
   content: "$!*?" !important;
   --crayon-ink: var(--danger-foreground);
 }
-[data-g="2"]::after {
+:is(
+  .crayon-hide[data-g="2"],
+  .privacy-mode [data-g="2"],
+  .privacy-hide-cgpa [data-private~="cgpa"][data-g="2"],
+  .privacy-hide-attendance [data-private~="attendance"][data-g="2"],
+  .privacy-hide-marks [data-private~="marks"][data-g="2"],
+  .privacy-hide-fees [data-private~="fees"][data-g="2"],
+  .privacy-hide-credits [data-private~="credits"][data-g="2"],
+  .privacy-hide-id [data-private~="id"][data-g="2"],
+  .privacy-hide-identity [data-private~="identity"][data-g="2"]
+)::after {
   content: "&%#@" !important;
   --crayon-ink: var(--primary);
 }
-[data-g="3"]::after {
+:is(
+  .crayon-hide[data-g="3"],
+  .privacy-mode [data-g="3"],
+  .privacy-hide-cgpa [data-private~="cgpa"][data-g="3"],
+  .privacy-hide-attendance [data-private~="attendance"][data-g="3"],
+  .privacy-hide-marks [data-private~="marks"][data-g="3"],
+  .privacy-hide-fees [data-private~="fees"][data-g="3"],
+  .privacy-hide-credits [data-private~="credits"][data-g="3"],
+  .privacy-hide-id [data-private~="id"][data-g="3"],
+  .privacy-hide-identity [data-private~="identity"][data-g="3"]
+)::after {
   content: "*#!$" !important;
   --crayon-ink: var(--success-foreground);
 }
-[data-g="4"]::after {
+:is(
+  .crayon-hide[data-g="4"],
+  .privacy-mode [data-g="4"],
+  .privacy-hide-cgpa [data-private~="cgpa"][data-g="4"],
+  .privacy-hide-attendance [data-private~="attendance"][data-g="4"],
+  .privacy-hide-marks [data-private~="marks"][data-g="4"],
+  .privacy-hide-fees [data-private~="fees"][data-g="4"],
+  .privacy-hide-credits [data-private~="credits"][data-g="4"],
+  .privacy-hide-id [data-private~="id"][data-g="4"],
+  .privacy-hide-identity [data-private~="identity"][data-g="4"]
+)::after {
   content: "@$%&" !important;
   --crayon-ink: var(--warning-foreground);
 }

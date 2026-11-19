@@ -178,6 +178,6 @@ zoom without overlap; screen-reader labels for all icon buttons.
 
 ## R12 · Screenshot script polish
 
-`navLabel` clicks the first matching text (e.g. the Home stat label instead
-of the sidebar "Attendance"): prefer `[data-sidebar-nav]` and bottom-nav
-buttons; add a `--route` option; save console errors to a file.
+Done: `navLabel` now prefers `[data-sidebar-nav]` and bottom-nav buttons
+(use `PRE_W=1440` so the sidebar shows labels when clicking). Left: a
+`--route` option and saving console errors to a file (`console.mjs` prints them).

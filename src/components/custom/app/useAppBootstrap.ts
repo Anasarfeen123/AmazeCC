@@ -90,6 +90,26 @@ export function useAppBootstrap() {
     const storedRegisteredEvents = storage.registeredEvents.get();
 
     if (storedAttendance?.attendance) setAttendanceAndOD(storedAttendance);
+
+    // Demo data is set straight into atoms when the demo starts and is never
+    // written to storage, so a reload used to come back empty ("0 of 0
+    // attended", blank Attendance). Reload it from the demo file instead.
+    if (isDemoStored && !storedAttendance?.attendance) {
+      void fetch("/data/demoData.json")
+        .then((res) => (res.ok ? res.json() : null))
+        .then((demo: any) => {
+          if (!demo) return;
+          if (demo.attendance) setAttendanceAndOD(demo.attendance);
+          if (demo.marks) setMarksData(demo.marks);
+          if (demo.grades) setGradesData(demo.grades);
+          if (demo.allGrades) setAllGradesData(demo.allGrades);
+          if (demo.schedule) setScheduleData(demo.schedule);
+          if (demo.hostel) setHostelData(demo.hostel);
+          if (demo.calender) setCalendarData(demo.calender);
+          if (demo.registeredEvents) setRegisteredEvents(demo.registeredEvents);
+        })
+        .catch(() => {});
+    }
     if (storedMarks) setMarksData(storedMarks as object);
     if (storedMarksStats) setMarksStats(storedMarksStats as Record<string, unknown>);
     if (storedSchedule) setScheduleData(storedSchedule as object);

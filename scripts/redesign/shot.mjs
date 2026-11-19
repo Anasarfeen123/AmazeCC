@@ -205,7 +205,7 @@ if (!process.env.ONBOARD)
 await sleep(6000);
 if (path !== "/") {
   await evalJs(
-    `(() => { const b=[...document.querySelectorAll("button,a,[role=button]")].find(e=>e.textContent.trim().toLowerCase()===${JSON.stringify(path.toLowerCase())} && e.offsetParent); b&&b.click(); return !!b })()`,
+    `(() => { const b=(() => { const want=${JSON.stringify(path.toLowerCase())}; const match=(e)=>e.offsetParent && (e.textContent.trim().toLowerCase()===want || (e.getAttribute("aria-label")||"").toLowerCase().startsWith(want)); return [...document.querySelectorAll("[data-sidebar-nav], .mobile-bottom-nav-bar button")].find(match) || [...document.querySelectorAll("button,a,[role=button]")].find(match); })(); b&&b.click(); return !!b })()`,
   );
   await sleep(Number(process.env.NAV_WAIT || 20000));
 }

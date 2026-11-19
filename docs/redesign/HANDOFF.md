@@ -112,11 +112,9 @@ on 2026-11-18; `p9-*` = latest).
 
 ## 4. Known bugs (also on amazecc.com unless noted)
 
-1. **Demo data disappears after a reload.** Enter demo, reload: Home shows
-   "0 of 0 attended", Attendance is an empty page. Likely the restored semester
-   id (`config.json` current term) does not match the demo's `CH20252605`.
-   Screenshots therefore use `NO_RELOAD=1`.
-2. **Attendance page is blank in demo after reload** (same cause as 1).
+1. ~~Demo data disappears after a reload~~ — fixed (ROADMAP R5): demo data
+   was only ever set in memory; bootstrap now reloads it.
+2. ~~Attendance page blank in demo after reload~~ — same fix.
 3. `frontend/src/lib/posthog.ts` calls a non-existent `/support/identity-hash`
    (from the old handoff).
 4. Some classes in older files are broken strings like `text-sidebar-foreground/`

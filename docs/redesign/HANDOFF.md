@@ -324,3 +324,13 @@ NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next dev --webpack -p 3017   # backg
   `99187053`, `3237d906`, `0217361d`, `b694003f`, `1df957c0` (all pushed to
   `fork/redesign`). **Still next: owner review of /privacy and /terms; R9 only
   with user OK.**
+- **2026-11-19 (later still)** — Codex worked in parallel (per-category
+  privacy in `lib/privacyMode.ts`, course/task/payment polish; 8 commits).
+  User decisions since: Privacy Mode hides **CGPA only** by default (other
+  categories opt-in); option "Remove the CGPA card from Home" (default on);
+  hidden values use the text comic cover (symbols/colours vary,
+  `GrawlixTagger`); **Home is a standalone sidebar item** above Pinned, like
+  the bottom bar. Shortcuts are one scheme (`lib/shortcuts.ts`): `g`+letter
+  to go anywhere; Alt/Option + P privacy, B CGPA, T theme cycle, S sidebar
+  (Modules on phones); Ctrl/Cmd+K or `/` search; `?` help. 200% zoom:
+  titles/values wrap instead of truncating. shot.mjs: `PRE_JS`, `ONLY_W`.

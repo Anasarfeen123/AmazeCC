@@ -1500,7 +1500,7 @@ export default function ProfilePage({
             <button
               type="button"
               onClick={handleLogOutRequest}
-              className="inline-flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-700 cursor-pointer"
+              className="inline-flex min-h-11 items-center gap-2 rounded-[10px] border-2 border-border-ink bg-danger-surface px-4 py-2.5 text-sm font-bold text-danger-foreground transition-colors hover:brightness-95 cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
               Sign out and clear

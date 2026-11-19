@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Skeleton } from "@amazecontinuityprojects/amazeui";
 import { syncEngine } from "@/lib/sync-engine";
-import { GraduationCap, ClipboardCheck, Landmark, Building, Trophy, IdCard, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 export default function ProfileStatusCards({
   creds,
@@ -112,7 +112,6 @@ export default function ProfileStatusCards({
             className="p-4 sm:p-5 rounded-[14px] border-2 border-border-ink card-surface shadow-2xs space-y-3"
           >
             <div className="flex items-center gap-3">
-              <Skeleton className="w-10 h-10 rounded-2xl" />
               <div className="space-y-1.5 flex-1">
                 <Skeleton className="h-3 w-20 rounded" />
                 <Skeleton className="h-4 w-28 rounded" />
@@ -127,7 +126,6 @@ export default function ProfileStatusCards({
   const cards = [
     {
       id: "ept",
-      icon: GraduationCap,
       label: "EPT Schedule",
       subtitle: "English Proficiency Test",
       value: hasEpt ? `${eptCount} Scheduled Exam${eptCount > 1 ? "s" : ""}` : "No Active Exams",
@@ -135,11 +133,9 @@ export default function ProfileStatusCards({
       badgeColor: hasEpt
         ? "bg-secondary text-secondary-foreground border-border-ink"
         : "bg-surface-secondary text-text-muted border-border-ink",
-      iconBg: "bg-secondary text-secondary-foreground border-border-ink",
     },
     {
       id: "reg",
-      icon: ClipboardCheck,
       label: "Course Registration",
       subtitle: "Course selection schedule",
       value: hasReg ? "Schedule Active" : "Not Scheduled",
@@ -147,11 +143,9 @@ export default function ProfileStatusCards({
       badgeColor: hasReg
         ? "bg-success-surface text-success-foreground border-border-ink"
         : "bg-surface-secondary text-text-muted border-border-ink",
-      iconBg: "bg-success-surface text-success-foreground border-border-ink",
     },
     {
       id: "bank",
-      icon: Landmark,
       label: "Bank Details",
       subtitle: "Fee refund & direct deposit",
       value: hasBank ? "Verified & On File" : "Action Required",
@@ -159,11 +153,9 @@ export default function ProfileStatusCards({
       badgeColor: hasBank
         ? "bg-success-surface text-success-foreground border-border-ink"
         : "bg-warning-surface text-warning-foreground border-border-ink",
-      iconBg: "bg-success-surface text-success-foreground border-border-ink",
     },
     {
       id: "day",
-      icon: Building,
       label: "Dayboarder Info",
       subtitle: "Non-hosteller campus status",
       value: hasDay ? "Profile Verified" : "Not Provided",
@@ -171,11 +163,9 @@ export default function ProfileStatusCards({
       badgeColor: hasDay
         ? "bg-secondary text-secondary-foreground border-border-ink"
         : "bg-warning-surface text-warning-foreground border-border-ink",
-      iconBg: "bg-secondary text-secondary-foreground border-border-ink",
     },
     {
       id: "apaar",
-      icon: IdCard,
       label: "APAAR / ABC ID",
       subtitle: "Academic Bank of Credits",
       value: hasApaar ? "Linked to Portal" : "Not Linked",
@@ -183,18 +173,15 @@ export default function ProfileStatusCards({
       badgeColor: hasApaar
         ? "bg-secondary text-secondary-foreground border-border-ink"
         : "bg-surface-secondary text-text-muted border-border-ink",
-      iconBg: "bg-secondary text-secondary-foreground border-border-ink",
     },
     rank
       ? {
           id: "rank",
-          icon: Trophy,
           label: "VITEEE Entrance Rank",
           subtitle: "Merit examination rank",
           value: `AIR ${rank}`,
           color: "text-warning-foreground",
           badgeColor: "bg-warning-surface text-warning-foreground border-border-ink",
-          iconBg: "bg-warning-surface text-warning-foreground border-border-ink",
         }
       : null,
   ].filter(Boolean);
@@ -203,7 +190,6 @@ export default function ProfileStatusCards({
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
       {cards.map((card: any) => {
         const isClickable = card.id !== "rank" && card.id !== "apaar";
-        const Icon = card.icon;
 
         return (
           <button
@@ -218,9 +204,6 @@ export default function ProfileStatusCards({
             }`}
           >
             <div className="flex items-center gap-3.5 min-w-0">
-              <div className={`w-11 h-11 rounded-2xl ${card.iconBg} flex items-center justify-center shrink-0 border`}>
-                <Icon className="w-5 h-5" />
-              </div>
               <div className="min-w-0">
                 <p className="text-xs font-bold font-outfit text-text-heading truncate">{card.label}</p>
                 <p className="text-xs text-text-muted truncate mt-0.5">{card.subtitle}</p>

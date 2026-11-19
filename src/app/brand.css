@@ -233,9 +233,10 @@
   --text-disabled: #5a8279;
 
   --border-ink: #3f8f84;
-  /* Near-black, as in the reference mock: on the obsidian-teal page it reads
-     as a clear offset now that the steps are 3/5/7px. */
-  --shadow-ink: #000807;
+  /* Same colour as the border, like light mode (ink border + ink shadow), so
+     cards read as solid cut-outs. The old near-black (#000807) vanished on
+     the dark page and made dark look flat next to light (user, 2026-11-20). */
+  --shadow-ink: #3f8f84;
   --border-muted: color-mix(in oklab, #3f8f84 45%, transparent);
   --border-strong: #3f8f84;
 
@@ -304,7 +305,7 @@
   --border-ink: #4fb3a5;
   --border-strong: #4fb3a5;
   --border-muted: color-mix(in oklab, #4fb3a5 40%, transparent);
-  --shadow-ink: #0f4a44;
+  --shadow-ink: #4fb3a5; /* = border, see dark */
 
   --success-surface: color-mix(in oklab, #7fd6a5 16%, #0d1010);
   --warning-surface: color-mix(in oklab, #f9bc60 18%, #0d1010);

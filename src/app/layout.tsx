@@ -101,6 +101,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${geist.className} ${geistMono.className} ${dmSans.className} ${spaceGrotesk.variable} ${spaceMono.variable}`}
     >
       <head>
+        {/* AmazeCC has its own light/dark/Night themes. This tells the Dark Reader
+            extension to leave the page alone; its rewrites of SVG attributes
+            caused hydration-mismatch errors (user report, 2026-11-20). */}
+        <meta name="darkreader-lock" />
         {/* Production only: Next.js dev mode needs eval for fast refresh. See lib/csp.ts. */}
         {process.env.NODE_ENV === "production" && (
           <meta httpEquiv="Content-Security-Policy" content={buildContentSecurityPolicy()} />

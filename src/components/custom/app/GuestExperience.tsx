@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { ArrowRight, Moon, Sun } from "lucide-react";
+import { CycleWord } from "../landing/LandingMotion";
 
 /**
  * The below-the-fold landing (feature grid, predictor sandbox, showcase,
@@ -116,33 +117,66 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
         </div>
       </header>
 
-      {/* Hero: words on the left, the real product on the right. */}
-      <section className="relative z-10 mx-auto grid w-full max-w-7xl flex-1 items-center gap-10 px-4 py-12 sm:px-8 sm:py-16 lg:grid-cols-[1.05fr_1fr] lg:gap-12 lg:py-20">
-        <div className="max-w-2xl">
-          <p className="mb-5 inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-secondary-foreground">
+      {/* Hero: words on the left, the real product (with live-looking stickers) on the right. */}
+      <section
+        onMouseMove={(e) => {
+          const r = e.currentTarget.getBoundingClientRect();
+          e.currentTarget.style.setProperty("--mx", String(((e.clientX - r.left) / r.width) * 2 - 1));
+          e.currentTarget.style.setProperty("--my", String(((e.clientY - r.top) / r.height) * 2 - 1));
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.setProperty("--mx", "0");
+          e.currentTarget.style.setProperty("--my", "0");
+        }}
+        className="relative z-10 mx-auto grid w-full max-w-7xl flex-1 items-center gap-12 overflow-visible px-4 pb-16 pt-10 sm:px-8 sm:pt-14 lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:pb-24"
+      >
+        {/* Big logo glyph as a background shape */}
+        <img
+          src="/brand/glyph.svg"
+          alt=""
+          aria-hidden="true"
+          className="landing-parallax pointer-events-none absolute -left-24 top-10 -z-10 w-[520px] max-w-none opacity-[0.07] [--depth:-18px] dark:opacity-[0.1]"
+        />
+
+        <div className="relative max-w-2xl">
+          <p className="landing-pop mb-5 inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-secondary-foreground">
             Your campus companion // VIT Chennai
           </p>
-          <h1 className="font-display text-[40px] font-bold uppercase leading-[1.02] sm:text-6xl lg:text-[68px]">
+          <h1 className="font-display text-[40px] font-bold uppercase leading-[1.02] sm:text-6xl lg:text-[72px]">
             Your VIT life,
             <span className="block text-hero">all in one place.</span>
           </h1>
-          <p className="mt-6 max-w-xl text-base leading-7 text-text-muted sm:text-lg">
-            Attendance with the 75% line drawn for you, marks, timetable, exams, OD hours, mess, buses and your FFCS
-            plan. One app instead of five portals.
+          <p className="mt-6 max-w-xl font-display text-xl font-bold leading-snug sm:text-2xl">
+            Check your{" "}
+            <CycleWord
+              words={[
+                { text: "attendance", className: "bg-ochre text-obsidian" },
+                { text: "marks", className: "bg-sage text-obsidian" },
+                { text: "timetable", className: "bg-coral text-obsidian" },
+                { text: "FFCS plan", className: "bg-mint text-obsidian" },
+                { text: "mess menu", className: "bg-orange text-obsidian" },
+                { text: "OD hours", className: "bg-teal text-cream" },
+              ]}
+            />{" "}
+            in one tap.
+          </p>
+          <p className="mt-4 max-w-xl text-base leading-7 text-text-muted sm:text-lg">
+            The 75% line drawn on every course, marks with class averages, today&apos;s rooms, exam seats, buses and
+            your FFCS draft. One app instead of five portals.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <button
               type="button"
               onClick={onTryDemo}
-              className="inline-flex min-h-12 items-center justify-center rounded-[10px] border-2 border-border-ink bg-highlight px-6 font-mono text-[13px] font-bold uppercase tracking-[0.06em] text-highlight-foreground shadow-brutal-md brutal-press"
+              className="inline-flex min-h-14 items-center justify-center rounded-[10px] border-[3px] border-border-ink bg-highlight px-7 font-mono text-sm font-bold uppercase tracking-[0.06em] text-highlight-foreground shadow-brutal-lg brutal-press"
             >
               Try the demo
             </button>
             <button
               type="button"
               onClick={onGetStarted}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[10px] border-2 border-border-ink bg-surface px-6 font-mono text-[13px] font-bold uppercase tracking-[0.06em] text-text-primary shadow-brutal-md brutal-press"
+              className="inline-flex min-h-14 items-center justify-center gap-2 rounded-[10px] border-[3px] border-border-ink bg-surface px-7 font-mono text-sm font-bold uppercase tracking-[0.06em] text-text-primary shadow-brutal-lg brutal-press"
             >
               Sign in with VTOP
               <ArrowRight size={16} aria-hidden />
@@ -153,16 +187,19 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
           </p>
         </div>
 
-        <div className="relative mx-auto w-full max-w-xl pb-8 pr-6 lg:max-w-none" aria-hidden="true">
-          <div className="overflow-hidden rounded-[14px] border-[3px] border-border-ink bg-surface shadow-brutal-lg">
+        <div className="relative mx-auto w-full max-w-xl pb-10 pr-8 pt-6 lg:max-w-none" aria-hidden="true">
+          {/* Colour blocks behind the shots */}
+          <div className="landing-parallax absolute -right-2 top-0 h-[70%] w-[70%] rotate-3 rounded-[20px] border-[3px] border-border-ink bg-ochre [--depth:14px]" />
+          <div className="landing-parallax absolute -left-4 bottom-0 h-[45%] w-[45%] -rotate-6 rounded-[20px] border-[3px] border-border-ink bg-sage [--depth:-12px]" />
+
+          <div className="landing-parallax relative -rotate-2 overflow-hidden rounded-[14px] border-[3px] border-border-ink bg-surface shadow-brutal-lg [--depth:8px]">
             <div className="flex items-center gap-1.5 border-b-2 border-border-ink bg-surface-secondary px-3 py-2">
-              <span className="h-2.5 w-2.5 rounded-full border-2 border-border-ink bg-danger" />
-              <span className="h-2.5 w-2.5 rounded-full border-2 border-border-ink bg-highlight" />
-              <span className="h-2.5 w-2.5 rounded-full border-2 border-border-ink bg-secondary" />
+              <span className="h-2.5 w-2.5 rounded-full border-2 border-border-ink bg-coral" />
+              <span className="h-2.5 w-2.5 rounded-full border-2 border-border-ink bg-ochre" />
+              <span className="h-2.5 w-2.5 rounded-full border-2 border-border-ink bg-mint" />
               <span className="ml-2 font-mono text-xs text-text-muted">amazecc.com</span>
             </div>
-            {/* Both themes rendered, CSS picks one: avoids a hydration mismatch
-                  (the server does not know the theme). */}
+            {/* Both themes rendered, CSS picks one (the server does not know the theme). */}
             <img
               src="/landing/home-desktop-light.webp"
               alt=""
@@ -182,32 +219,98 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
               className="hidden h-auto w-full dark:block"
             />
           </div>
-          <div className="absolute -bottom-2 right-0 w-[34%] min-w-[120px] overflow-hidden rounded-[20px] border-[3px] border-border-ink bg-surface shadow-brutal-lg">
-            {/* Both themes rendered, CSS picks one: avoids a hydration mismatch
-                  (the server does not know the theme). */}
-            <img
-              src="/landing/home-phone-light.webp"
-              alt=""
-              width={390}
-              height={800}
-              loading="eager"
-              decoding="async"
-              className="block h-auto w-full dark:hidden"
-            />
-            <img
-              src="/landing/home-phone-dark.webp"
-              alt=""
-              width={390}
-              height={800}
-              loading="eager"
-              decoding="async"
-              className="hidden h-auto w-full dark:block"
-            />
+
+          <div className="landing-parallax absolute -bottom-2 right-0 w-[34%] min-w-[120px] [--depth:-16px]">
+            <div className="landing-float-b overflow-hidden rounded-[20px] border-[3px] border-border-ink bg-surface shadow-brutal-lg [--tilt:4deg]">
+              <img
+                src="/landing/home-phone-light.webp"
+                alt=""
+                width={390}
+                height={800}
+                loading="eager"
+                decoding="async"
+                className="block h-auto w-full dark:hidden"
+              />
+              <img
+                src="/landing/home-phone-dark.webp"
+                alt=""
+                width={390}
+                height={800}
+                loading="eager"
+                decoding="async"
+                className="hidden h-auto w-full dark:block"
+              />
+            </div>
           </div>
+
+          {/* Stickers */}
+          {[
+            {
+              t: "79% // safe",
+              c: "bg-ochre",
+              pos: "-left-3 top-2 sm:-left-8",
+              anim: "landing-float-a [--tilt:-6deg]",
+            },
+            { t: "Can skip 2", c: "bg-mint", pos: "left-[38%] -top-3", anim: "landing-float-b [--tilt:3deg]" },
+            {
+              t: "FAT // 20 Nov",
+              c: "bg-coral",
+              pos: "-left-2 bottom-[30%] sm:-left-10",
+              anim: "landing-float-b [--tilt:-4deg]",
+            },
+            { t: "39 OD hrs", c: "bg-sage", pos: "right-[30%] bottom-0", anim: "landing-float-a [--tilt:5deg]" },
+            {
+              t: "Next: DBMS 2:00",
+              c: "bg-orange",
+              pos: "-right-2 top-[38%] hidden sm:block",
+              anim: "landing-float-a [--tilt:-3deg]",
+            },
+          ].map((st, i) => (
+            <span
+              key={st.t}
+              style={{ animationDelay: `${i * 0.6}s` }}
+              className={`absolute ${st.pos} ${st.anim} z-10 whitespace-nowrap rounded-[8px] border-[3px] border-border-ink ${st.c} px-2.5 py-1 font-mono text-xs font-bold uppercase tracking-[0.06em] text-obsidian shadow-brutal-md sm:text-sm`}
+            >
+              {st.t}
+            </span>
+          ))}
         </div>
       </section>
 
       <LandingSections />
+
+      {/* Closing call to action */}
+      <section className="relative overflow-hidden border-t-[3px] border-border-ink bg-ochre px-4 py-20 text-obsidian sm:px-8 sm:py-28">
+        <img
+          src="/brand/glyph.svg"
+          alt=""
+          aria-hidden="true"
+          className="landing-float-a pointer-events-none absolute -right-16 -top-10 w-[420px] max-w-none opacity-90 [--tilt:-8deg] sm:-right-6"
+        />
+        <div className="relative mx-auto max-w-7xl">
+          <h2 className="max-w-3xl font-display text-[40px] font-bold uppercase leading-[1.02] sm:text-[64px]">
+            Stop opening five portals.
+          </h2>
+          <p className="mt-4 max-w-xl text-lg">See your real attendance, marks and timetable in under a minute.</p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={onGetStarted}
+              className="inline-flex min-h-14 items-center justify-center gap-2 rounded-[10px] border-[3px] border-obsidian bg-teal px-7 font-mono text-sm font-bold uppercase tracking-[0.06em] text-cream shadow-brutal-lg brutal-press"
+            >
+              Sign in with VTOP
+              <ArrowRight size={16} aria-hidden />
+            </button>
+            <button
+              type="button"
+              onClick={onTryDemo}
+              className="inline-flex min-h-14 items-center justify-center rounded-[10px] border-[3px] border-obsidian bg-cream px-7 font-mono text-sm font-bold uppercase tracking-[0.06em] text-obsidian shadow-brutal-lg brutal-press"
+            >
+              Try the demo
+            </button>
+          </div>
+        </div>
+      </section>
 
       <footer className="brand-sidebar border-t-2 border-border-ink px-4 py-10 sm:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-center md:justify-between">

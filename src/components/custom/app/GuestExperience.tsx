@@ -37,6 +37,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
   useEffect(() => setMounted(true), []);
   const isDark = mounted && resolvedTheme ? resolvedTheme === "dark" : true;
   const [isScrolled, setIsScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 40);
@@ -46,6 +47,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
   }, []);
 
   const scrollToSection = (sectionId: string) => {
+    setMenuOpen(false);
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -72,7 +74,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
               decoding="async"
               className="h-9 w-9 object-contain"
             />
-            <span className="font-display text-lg font-bold leading-none">AmazeCC</span>
+            <span className="font-display text-lg font-bold leading-none max-[430px]:sr-only">AmazeCC</span>
           </a>
           <nav aria-label="Sections" className="hidden items-center gap-1 lg:flex">
             {SECTIONS.map((section) => (
@@ -114,7 +116,52 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
           >
             Get started
           </button>
+          <button
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="landing-menu"
+            onClick={() => setMenuOpen((v) => !v)}
+            className="inline-flex min-h-10 items-center rounded-[10px] border-2 border-border-ink bg-surface px-3 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-primary shadow-brutal-sm lg:hidden"
+          >
+            {menuOpen ? "Close" : "Menu"}
+          </button>
         </div>
+
+        {/* Section menu below lg (the inline links are hidden there). */}
+        {menuOpen ? (
+          <nav
+            id="landing-menu"
+            aria-label="Sections"
+            className="absolute inset-x-4 top-full z-50 mt-2 grid gap-1 rounded-[14px] border-[3px] border-border-ink bg-surface p-2 shadow-brutal-lg sm:inset-x-8 lg:hidden"
+          >
+            {SECTIONS.map((section) => (
+              <button
+                key={section.id}
+                type="button"
+                onClick={() => scrollToSection(section.id)}
+                className="flex min-h-12 items-center rounded-[10px] px-3 text-left font-display text-base font-bold uppercase text-text-heading hover:bg-surface-secondary"
+              >
+                {section.label}
+              </button>
+            ))}
+            <a
+              href="/ffcs/"
+              className="flex min-h-12 items-center rounded-[10px] px-3 font-display text-base font-bold uppercase text-text-heading hover:bg-surface-secondary"
+            >
+              FFCS planner
+            </a>
+            <button
+              type="button"
+              onClick={() => {
+                setMenuOpen(false);
+                onTryDemo();
+              }}
+              className="mt-1 inline-flex min-h-12 items-center justify-center rounded-[10px] border-2 border-border-ink bg-highlight font-mono text-sm font-bold uppercase tracking-[0.06em] text-highlight-foreground"
+            >
+              Try the demo
+            </button>
+          </nav>
+        ) : null}
       </header>
 
       {/* Hero: words on the left, the real product (with live-looking stickers) on the right. */}

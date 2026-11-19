@@ -59,6 +59,12 @@ if (process.env.LS_THEME) {
   await send("Page.navigate", { url });
 }
 await sleep(10000);
+if (process.env.CLICK_SEL) {
+  await send("Runtime.evaluate", {
+    expression: `document.querySelector(${JSON.stringify(process.env.CLICK_SEL)})?.click()`,
+  });
+  await sleep(800);
+}
 const m = await send("Page.getLayoutMetrics");
 const cs = m.result.cssContentSize;
 console.log("size", cs.width, cs.height);

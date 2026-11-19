@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 import { ChipTabs, EmptyPanel, PageShell, SelectField } from "../shared/primitives";
-import { SEARCH_FIELD, TILE_INTERACTIVE_ROW } from "@/lib/uiTokens";
+import { LIST_ROW, LIST_SHELL, SEARCH_FIELD, TILE_INTERACTIVE_ROW } from "@/lib/uiTokens";
 import { formatSemesterName } from "@/lib/formatSemesterName";
 import { loadFrozenPastSemesters } from "@/lib/pastDataSync";
 import { BookOpen, Search, ChevronRight, GraduationCap, History, Sparkles } from "lucide-react";
@@ -580,24 +580,11 @@ export default function SimplifiedAcademicsPage({
 
     const grandWeightage = calculateGrandWeightage(course, decimalValues);
 
-    // Stat styling based on performance percentage
-    let statColor = "text-text-muted";
-    // Score block fill by band (ink text on every fill; same in both themes).
-    if (course.grade) {
-      statColor = "bg-secondary text-secondary-foreground";
-    } else if (grandWeightage.percentage !== null) {
-      if (grandWeightage.percentage >= 80) statColor = "bg-mint text-obsidian";
-      else if (grandWeightage.percentage >= 65) statColor = "bg-ochre text-obsidian";
-      else statColor = "bg-coral text-obsidian";
-    } else {
-      statColor = "bg-surface-secondary text-text-primary";
-    }
-
     return (
       <div
         key={course.courseCode}
         {...clickable(() => handleCourseClick(course.courseCode))}
-        className={`${TILE_INTERACTIVE_ROW} duration-200 group select-none`}
+        className={`${LIST_ROW} group cursor-pointer select-none`}
       >
         {/* Left Column: Clean Icon + Course Code, Title & Subtitle */}
         <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -617,7 +604,9 @@ export default function SimplifiedAcademicsPage({
             </div>
 
             {/* Course Title */}
-            <p className="mt-1.5 truncate font-display text-base font-bold text-text-heading">{displayTitle}</p>
+            <p className="mt-1.5 line-clamp-2 font-display text-base font-bold leading-snug text-text-heading">
+              {displayTitle}
+            </p>
 
             {/* Subtitle containing course type, credits and slot */}
             <p className="mt-0.5 truncate font-mono text-xs text-text-muted">
@@ -636,22 +625,21 @@ export default function SimplifiedAcademicsPage({
         </div>
 
         {/* Right Column: Overall Grand Weightage Points Scored & Forward Arrow */}
-        <div className="flex items-center gap-2.5 shrink-0 text-right">
+        <div className="flex items-center gap-1 sm:gap-2.5 shrink-0 text-right">
           <div>
             {course.grade ? (
-              <div
-                className={`flex min-w-[92px] flex-col items-end rounded-[10px] border-2 border-border-ink px-3 py-1.5 shadow-brutal-sm ${statColor}`}
-              >
-                <span data-private="marks" className="font-display text-xl font-bold leading-none">
+              <div className="flex flex-col items-end rounded-[10px] border-2 border-border-muted bg-surface-secondary px-2 py-1.5 text-text-primary sm:px-3">
+                <span data-private="marks" className="font-display text-base sm:text-xl font-bold leading-none">
                   {course.grade}
                 </span>
                 <span className="mt-1 font-mono text-xs font-bold uppercase opacity-80">Final grade</span>
               </div>
             ) : grandWeightage.hasAssessments ? (
-              <div
-                className={`flex min-w-[92px] flex-col items-end rounded-[10px] border-2 border-border-ink px-3 py-1.5 shadow-brutal-sm ${statColor}`}
-              >
-                <span data-private="marks" className="font-display text-xl font-bold leading-none tabular-nums">
+              <div className="flex flex-col items-end rounded-[10px] border-2 border-border-muted bg-surface-secondary px-2 py-1.5 text-text-primary sm:px-3">
+                <span
+                  data-private="marks"
+                  className="font-display text-base sm:text-xl font-bold leading-none tabular-nums whitespace-nowrap"
+                >
                   {grandWeightage.maxWeight > 0
                     ? `${grandWeightage.displayScore} / ${grandWeightage.displayMax}`
                     : `${grandWeightage.displayScore}`}
@@ -668,7 +656,7 @@ export default function SimplifiedAcademicsPage({
                 )}
               </div>
             ) : (
-              <div className="flex min-w-[92px] flex-col items-end rounded-[10px] border-2 border-dashed border-border px-3 py-1.5">
+              <div className="flex flex-col items-end rounded-[10px] border-2 border-dashed border-border px-2 py-1.5 sm:px-3">
                 <span className="font-mono text-xs font-bold uppercase text-text-primary">Pending</span>
                 <span className="mt-1 font-mono text-xs text-text-muted">No marks yet</span>
               </div>
@@ -742,7 +730,7 @@ export default function SimplifiedAcademicsPage({
                   </div>
 
                   {/* Course Pills */}
-                  <div className="space-y-2">{filteredSemCourses.map(renderCoursePill)}</div>
+                  <div className={LIST_SHELL}>{filteredSemCourses.map(renderCoursePill)}</div>
                 </div>
               );
             })
@@ -812,7 +800,7 @@ export default function SimplifiedAcademicsPage({
       {/* ── CURRENT SEMESTER COURSES PILLS LIST ── */}
       <div className="space-y-2">
         {filteredCurrentCourses.length > 0 ? (
-          filteredCurrentCourses.map(renderCoursePill)
+          <div className={LIST_SHELL}>{filteredCurrentCourses.map(renderCoursePill)}</div>
         ) : (
           <EmptyPanel
             variant="dashed"

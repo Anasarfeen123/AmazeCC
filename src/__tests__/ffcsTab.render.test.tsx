@@ -539,6 +539,9 @@ describe("FFCSTimetableTab", () => {
     getDefaultStore().set(settingsAtom, {
       ...getDefaultStore().get(settingsAtom),
       friendlyName: "Arjun Kumar",
+      // The logo is the default now; this student chose to show their photo.
+      showProfilePhoto: true,
+      profilePhotoChosen: true,
     });
     getDefaultStore().set(isLoggedInAtom, true);
     storage.setItem("IDs", JSON.stringify({ VtopUsername: "21BCE1234" }));

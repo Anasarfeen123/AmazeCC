@@ -103,8 +103,8 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
     <div className="space-y-6">
       {/* Title Header */}
       <div>
-        <h1 className="text-xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Hostel Hub</h1>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+        <h1 className="text-xl md:text-3xl font-bold text-text-heading tracking-tight">Hostel Hub</h1>
+        <p className="text-xs text-text-muted mt-1">
           Manage your residential status, laundry schedules, leave details, and dining.
         </p>
       </div>
@@ -112,28 +112,24 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
       {/* Grid Dashboard layout */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Card: Today's Mess */}
-        <div className="bg-white/50 dark:bg-slate-900/50 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 flex flex-col justify-between shadow-2xs hover:border-sky-500/35 transition-all">
+        <div className="bg-surface border-2 border-border-ink rounded-2xl p-5 flex flex-col justify-between shadow-2xs hover:border-border-ink transition-all">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400">
-                Mess Dining
-              </span>
-              <span className="text-xs text-gray-450 dark:text-gray-400 font-semibold">{activeMeal.time}</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-primary">Mess Dining</span>
+              <span className="text-xs text-text-muted font-semibold">{activeMeal.time}</span>
             </div>
             <div className="flex items-center gap-3">
               <span className="text-3xl shrink-0">{activeMeal.icon}</span>
               <div>
-                <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100">Current Meal: {activeMeal.name}</h3>
-                <p className="text-[10px] text-gray-400 mt-0.5">{nextMealCountdown}</p>
+                <h3 className="text-sm font-bold text-text-heading">Current Meal: {activeMeal.name}</h3>
+                <p className="text-xs text-text-muted mt-0.5">{nextMealCountdown}</p>
               </div>
             </div>
-            <div className="bg-gray-100/50 dark:bg-slate-800/10 border border-gray-150 dark:border-gray-800/60 rounded-xl p-3 text-xs max-h-24 overflow-y-auto">
+            <div className="bg-surface-secondary border border-border-muted rounded-xl p-3 text-xs max-h-24 overflow-y-auto">
               {menuItems ? (
-                <p className="whitespace-pre-line text-gray-700 dark:text-gray-300 font-medium leading-relaxed">
-                  {menuItems}
-                </p>
+                <p className="whitespace-pre-line text-text-primary font-medium leading-relaxed">{menuItems}</p>
               ) : (
-                <p className="text-gray-450 dark:text-gray-500 italic">
+                <p className="text-text-muted italic">
                   No menu cached. Tap view full menu to load it from the remote database.
                 </p>
               )}
@@ -141,7 +137,7 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
           </div>
           <Button
             onClick={() => setHostelActiveSubTab("mess")}
-            className="w-full bg-sky-500 hover:bg-sky-600 text-white text-xs mt-4 rounded-xl flex items-center justify-center gap-1.5 h-9"
+            className="w-full bg-primary hover:brightness-110 text-primary-foreground text-xs mt-4 rounded-xl flex items-center justify-center gap-1.5 h-9"
           >
             <span>View Full Menu</span>
             <ArrowRight size={14} />
@@ -149,32 +145,30 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
         </div>
 
         {/* Card: Laundry */}
-        <div className="bg-white/50 dark:bg-slate-900/50 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 flex flex-col justify-between shadow-2xs hover:border-sky-500/35 transition-all">
+        <div className="bg-surface border-2 border-border-ink rounded-2xl p-5 flex flex-col justify-between shadow-2xs hover:border-border-ink transition-all">
           <div className="space-y-3">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400 block">
-              Laundry Schedule
-            </span>
+            <span className="text-xs font-bold uppercase tracking-wider text-primary block">Laundry Schedule</span>
             <div className="flex items-center gap-3">
               <span className="text-3xl shrink-0">🧺</span>
               <div>
-                <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100">Weekly Slots</h3>
-                <p className="text-[10px] text-gray-400 mt-0.5">Check when laundry is available for your room range</p>
+                <h3 className="text-sm font-bold text-text-heading">Weekly Slots</h3>
+                <p className="text-xs text-text-muted mt-0.5">Check when laundry is available for your room range</p>
               </div>
             </div>
 
-            <div className="bg-gray-100/50 dark:bg-slate-800/10 border border-gray-150 dark:border-gray-800/60 rounded-xl p-3 text-xs space-y-2">
-              <div className="flex justify-between items-center text-gray-650 dark:text-gray-300">
+            <div className="bg-surface-secondary border border-border-muted rounded-xl p-3 text-xs space-y-2">
+              <div className="flex justify-between items-center text-text-muted">
                 <span>Active Slot today:</span>
-                <span className="font-semibold text-sky-600 dark:text-sky-400">Available</span>
+                <span className="font-semibold text-primary">Available</span>
               </div>
-              <div className="text-[10px] text-gray-500 dark:text-gray-450 leading-relaxed">
+              <div className="text-xs text-text-muted leading-relaxed">
                 Matches current calendar dates. Standard slots allocate up to two washings per week.
               </div>
             </div>
           </div>
           <Button
             onClick={() => setHostelActiveSubTab("laundry")}
-            className="w-full bg-sky-500 hover:bg-sky-600 text-white text-xs mt-4 rounded-xl flex items-center justify-center gap-1.5 h-9"
+            className="w-full bg-primary hover:brightness-110 text-primary-foreground text-xs mt-4 rounded-xl flex items-center justify-center gap-1.5 h-9"
           >
             <span>Check Schedule</span>
             <ArrowRight size={14} />
@@ -182,21 +176,17 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
         </div>
 
         {/* Card: Leave Management */}
-        <div className="bg-white/50 dark:bg-slate-900/50 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 flex flex-col justify-between shadow-2xs hover:border-sky-500/35 transition-all">
+        <div className="bg-surface border-2 border-border-ink rounded-2xl p-5 flex flex-col justify-between shadow-2xs hover:border-border-ink transition-all">
           <div className="space-y-3">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400 block">
-              Leaves & Outings
-            </span>
+            <span className="text-xs font-bold uppercase tracking-wider text-primary block">Leaves & Outings</span>
 
             {activeLeave ? (
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
-                  <span className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate">
-                    Leave Request Found
-                  </span>
+                  <CheckCircle2 size={16} className="text-success-foreground shrink-0" />
+                  <span className="text-xs font-semibold text-text-primary truncate">Leave Request Found</span>
                 </div>
-                <div className="bg-gray-100/50 dark:bg-slate-800/10 border border-gray-150 dark:border-gray-800/60 rounded-xl p-3 text-xs text-gray-650 dark:text-gray-300 space-y-1">
+                <div className="bg-surface-secondary border border-border-muted rounded-xl p-3 text-xs text-text-muted space-y-1">
                   <div className="truncate">
                     <strong>From:</strong> {activeLeave.from}
                   </div>
@@ -206,19 +196,21 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
                   <div className="truncate">
                     <strong>Place:</strong> {activeLeave.visitPlace}
                   </div>
-                  <div className="mt-1 pt-1.5 border-t border-gray-150 dark:border-gray-800/60 flex items-center justify-between text-[10px]">
+                  <div className="mt-1 pt-1.5 border-t border-border-muted flex items-center justify-between text-xs">
                     <span>Status:</span>
-                    <span className="font-semibold text-emerald-400 uppercase">{activeLeave.status || "Approved"}</span>
+                    <span className="font-semibold text-success-foreground uppercase">
+                      {activeLeave.status || "Approved"}
+                    </span>
                   </div>
                 </div>
               </div>
             ) : (
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <Info size={16} className="text-gray-400 shrink-0" />
-                  <span className="text-xs font-semibold text-gray-800 dark:text-gray-200">No Active Leave</span>
+                  <Info size={16} className="text-text-muted shrink-0" />
+                  <span className="text-xs font-semibold text-text-primary">No Active Leave</span>
                 </div>
-                <p className="text-[10px] text-gray-500 leading-relaxed">
+                <p className="text-xs text-text-muted leading-relaxed">
                   You do not currently have any active outings or leaves. Ensure to file on time via VTOP.
                 </p>
               </div>
@@ -226,7 +218,7 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
           </div>
           <Button
             onClick={() => setHostelActiveSubTab("leave")}
-            className="w-full bg-sky-500 hover:bg-sky-600 text-white text-xs mt-4 rounded-xl flex items-center justify-center gap-1.5 h-9"
+            className="w-full bg-primary hover:brightness-110 text-primary-foreground text-xs mt-4 rounded-xl flex items-center justify-center gap-1.5 h-9"
           >
             <span>Manage Leaves</span>
             <ArrowRight size={14} />
@@ -234,29 +226,27 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
         </div>
 
         {/* Card: Room Selection & Counselling */}
-        <div className="bg-white/50 dark:bg-slate-900/50 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 flex flex-col justify-between shadow-2xs hover:border-sky-500/35 transition-all">
+        <div className="bg-surface border-2 border-border-ink rounded-2xl p-5 flex flex-col justify-between shadow-2xs hover:border-border-ink transition-all">
           <div className="space-y-3">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400 block">
+            <span className="text-xs font-bold uppercase tracking-wider text-primary block">
               Room selection & counselling
             </span>
             <div className="flex items-center gap-3">
               <span className="text-3xl shrink-0">🤝</span>
               <div>
-                <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100">Booking Status</h3>
-                <p className="text-[10px] text-gray-400 mt-0.5">Check group requests and allocation status</p>
+                <h3 className="text-sm font-bold text-text-heading">Booking Status</h3>
+                <p className="text-xs text-text-muted mt-0.5">Check group requests and allocation status</p>
               </div>
             </div>
 
-            <div className="bg-gray-100/50 dark:bg-slate-800/10 border border-gray-150 dark:border-gray-800/60 rounded-xl p-3 text-xs space-y-1.5">
-              <p className="text-gray-700 dark:text-gray-300 font-semibold text-[11px]">Room Allocation:</p>
-              <p className="text-[10px] text-gray-450 dark:text-gray-500 italic">
-                Verify your Leader OTP in the counselling status portal.
-              </p>
+            <div className="bg-surface-secondary border border-border-muted rounded-xl p-3 text-xs space-y-1.5">
+              <p className="text-text-primary font-semibold text-xs">Room Allocation:</p>
+              <p className="text-xs text-text-muted italic">Verify your Leader OTP in the counselling status portal.</p>
             </div>
           </div>
           <Button
             onClick={() => setHostelActiveSubTab("counselling")}
-            className="w-full bg-sky-500 hover:bg-sky-600 text-white text-xs mt-4 rounded-xl flex items-center justify-center gap-1.5 h-9"
+            className="w-full bg-primary hover:brightness-110 text-primary-foreground text-xs mt-4 rounded-xl flex items-center justify-center gap-1.5 h-9"
           >
             <span>View Booking Status</span>
             <ArrowRight size={14} />
@@ -264,58 +254,55 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
         </div>
 
         {/* Card: Hostel Information */}
-        <div className="bg-white/50 dark:bg-slate-900/50 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 flex flex-col justify-between shadow-2xs hover:border-sky-500/35 transition-all md:col-span-2">
+        <div className="bg-surface border-2 border-border-ink rounded-2xl p-5 flex flex-col justify-between shadow-2xs hover:border-border-ink transition-all md:col-span-2">
           <div className="space-y-4">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400 block">
+            <span className="text-xs font-bold uppercase tracking-wider text-primary block">
               Hostel Room Information
             </span>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
               <div>
-                <span className="text-gray-450 block mb-0.5 text-[10px]">Hostel Block</span>
-                <span className="font-bold text-gray-850 dark:text-gray-200">{block}</span>
+                <span className="text-text-muted block mb-0.5 text-xs">Hostel Block</span>
+                <span className="font-bold text-text-primary">{block}</span>
               </div>
               <div>
-                <span className="text-gray-450 block mb-0.5 text-[10px]">Room Number</span>
-                <span className="font-bold text-gray-850 dark:text-gray-200">{room}</span>
+                <span className="text-text-muted block mb-0.5 text-xs">Room Number</span>
+                <span className="font-bold text-text-primary">{room}</span>
               </div>
               <div>
-                <span className="text-gray-450 block mb-0.5 text-[10px]">Mess Selection</span>
-                <span className="font-bold text-gray-850 dark:text-gray-200 capitalize">{messType} Mess</span>
+                <span className="text-text-muted block mb-0.5 text-xs">Mess Selection</span>
+                <span className="font-bold text-text-primary capitalize">{messType} Mess</span>
               </div>
               <div>
-                <span className="text-gray-450 block mb-0.5 text-[10px]">Chief Warden</span>
-                <span className="font-bold text-gray-850 dark:text-gray-200">Dr. K. Srinivasan</span>
+                <span className="text-text-muted block mb-0.5 text-xs">Chief Warden</span>
+                <span className="font-bold text-text-primary">Dr. K. Srinivasan</span>
               </div>
             </div>
 
-            <div className="h-px bg-gray-150 dark:bg-gray-850" />
+            <div className="h-px bg-gray-150" />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <p className="text-[10px] font-bold text-gray-450 uppercase mb-2">Emergency Contacts</p>
-                <div className="space-y-1.5 text-[11px] text-gray-700 dark:text-gray-350">
+                <p className="text-xs font-bold text-text-muted uppercase mb-2">Emergency Contacts</p>
+                <div className="space-y-1.5 text-xs text-text-primary">
                   <div className="flex items-center justify-between">
                     <span>Hostel Office:</span>
-                    <a
-                      href="tel:+914439931555"
-                      className="font-semibold text-sky-600 dark:text-sky-400 hover:underline"
-                    >
+                    <a href="tel:+914439931555" className="font-semibold text-primary hover:underline">
                       +91 44 3993 1555
                     </a>
                   </div>
                   <div className="flex items-center justify-between">
                     <span>Warden Office:</span>
-                    <a
-                      href="tel:+914439931666"
-                      className="font-semibold text-sky-600 dark:text-sky-400 hover:underline"
-                    >
+                    <a href="tel:+914439931666" className="font-semibold text-primary hover:underline">
                       +91 44 3993 1666
                     </a>
                   </div>
                   <div className="flex items-center justify-between">
                     <span>Medical / Ambulance:</span>
-                    <a href="tel:+914439931108" className="font-semibold text-rose-400 hover:underline font-bold">
+                    <a
+                      href="tel:+914439931108"
+                      className="font-semibold text-danger-foreground hover:underline font-bold"
+                    >
                       +91 44 3993 1108
                     </a>
                   </div>
@@ -323,30 +310,30 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
               </div>
 
               <div>
-                <p className="text-[10px] font-bold text-gray-450 uppercase mb-2">Useful Links</p>
-                <div className="space-y-1 text-[11px] text-gray-700 dark:text-gray-350">
+                <p className="text-xs font-bold text-text-muted uppercase mb-2">Useful Links</p>
+                <div className="space-y-1 text-xs text-text-primary">
                   <a
                     href="https://vtopcc.vit.ac.in/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between hover:text-sky-600 dark:hover:text-sky-600 dark:text-sky-400 transition-colors"
+                    className="flex items-center justify-between text-primary dark:hover:text-primary transition-colors"
                   >
                     <span>VTOP Portal</span>
-                    <ExternalLink size={11} className="text-gray-400" />
+                    <ExternalLink size={11} className="text-text-muted" />
                   </a>
                   <a
                     href="#"
-                    className="flex items-center justify-between hover:text-sky-600 dark:hover:text-sky-600 dark:text-sky-400 transition-colors"
+                    className="flex items-center justify-between text-primary dark:hover:text-primary transition-colors"
                   >
                     <span>Mess Change Request Form</span>
-                    <ChevronRight size={11} className="text-gray-400" />
+                    <ChevronRight size={11} className="text-text-muted" />
                   </a>
                   <a
                     href="#"
-                    className="flex items-center justify-between hover:text-sky-600 dark:hover:text-sky-600 dark:text-sky-400 transition-colors"
+                    className="flex items-center justify-between text-primary dark:hover:text-primary transition-colors"
                   >
                     <span>Hostel Grievance Register</span>
-                    <ChevronRight size={11} className="text-gray-400" />
+                    <ChevronRight size={11} className="text-text-muted" />
                   </a>
                 </div>
               </div>

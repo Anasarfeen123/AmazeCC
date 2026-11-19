@@ -75,7 +75,7 @@ export const CATEGORIES: {
     label: "Bug Report",
     icon: Bug,
     desc: "Glitch, broken button, or calculation error",
-    badgeClass: "text-rose-500 bg-rose-500/10 border-rose-500/20",
+    badgeClass: "text-danger-foreground bg-danger-surface border-border-ink",
     tag: "Urgent Fix",
     headlinePlaceholder: "e.g. Schedule clashes not showing on Safari",
     concernPlaceholder: "Explain what went wrong, which button you clicked, and what you expected to see...",
@@ -87,7 +87,7 @@ export const CATEGORIES: {
     label: "Feature Request",
     icon: Lightbulb,
     desc: "New tool ideas or workflow enhancements",
-    badgeClass: "text-indigo-500 bg-indigo-500/10 border-indigo-500/20",
+    badgeClass: "text-secondary-foreground bg-secondary border-border-ink",
     tag: "Idea",
     headlinePlaceholder: "e.g. Push notification when mess menu changes",
     concernPlaceholder: "Describe your idea and how it will improve your day at VIT...",
@@ -99,7 +99,7 @@ export const CATEGORIES: {
     label: "UI / UX Polish",
     icon: Sparkles,
     desc: "Haptics, themes, spacing, and animations",
-    badgeClass: "text-amber-500 bg-amber-500/10 border-amber-500/20",
+    badgeClass: "text-warning-foreground bg-warning-surface border-border-ink",
     tag: "Design",
     headlinePlaceholder: "e.g. High contrast mode for timetable grid",
     concernPlaceholder: "Tell us what could look sharper, smoother, or more comfortable...",
@@ -111,7 +111,7 @@ export const CATEGORIES: {
     label: "General Notes",
     icon: MessageSquare,
     desc: "Thoughts, suggestions, or quick questions",
-    badgeClass: "text-emerald-500 bg-emerald-500/10 border-emerald-500/20",
+    badgeClass: "text-success-foreground bg-success-surface border-border-ink",
     tag: "Feedback",
     headlinePlaceholder: "e.g. Quick note for the team",
     concernPlaceholder: "Share your question, suggestion, or quick thought...",
@@ -601,8 +601,8 @@ export default function FeedbackReportPage({
         eyebrow={
           <span className="inline-flex items-center gap-2">
             <span>AmazeCC Support</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-            <span className="text-indigo-600 dark:text-indigo-400 font-bold">PostHog Analytics</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+            <span className="text-primary font-bold">PostHog Analytics</span>
           </span>
         }
         title="Feedback and Support"
@@ -611,7 +611,7 @@ export default function FeedbackReportPage({
         actions={
           <div className="flex items-center gap-2">
             {isRecordingLive && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-500/10 text-rose-500 border border-rose-500/20 animate-pulse">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[10px] text-xs font-bold bg-danger-surface text-danger-foreground border border-border-ink animate-pulse min-h-9">
                 <span className="w-2 h-2 rounded-full bg-rose-500" />
                 DOM Recording Active
               </span>
@@ -628,21 +628,21 @@ export default function FeedbackReportPage({
               value="PostHog"
               sub="Direct developer desk (#712727)"
               tone="indigo"
-              icon={<ShieldCheck className="w-4 h-4 text-indigo-500" />}
+              icon={<ShieldCheck className="w-4 h-4 text-primary" />}
             />
             <StatTile
               label="My Support Tickets"
               value={tickets.length > 0 ? String(tickets.length) : "0"}
               sub={tickets.length > 0 ? "Active ticket discussions" : "No open tickets"}
               tone="amber"
-              icon={<MessageSquare className="w-4 h-4 text-amber-500" />}
+              icon={<MessageSquare className="w-4 h-4 text-warning-foreground" />}
             />
             <StatTile
               label="Telemetry & Replay"
               value={isRecordingLive ? "Recording" : "Ready"}
               sub={isIdentityVerified ? "HMAC Verified distinct ID" : userReg ? `Reg ${userReg}` : "Guest distinct ID"}
               tone="emerald"
-              icon={<CheckCircle2 className="w-4 h-4 text-emerald-500" />}
+              icon={<CheckCircle2 className="w-4 h-4 text-success-foreground" />}
             />
           </div>
 
@@ -662,7 +662,7 @@ export default function FeedbackReportPage({
                 className={`${LIST_ROW} cursor-pointer group`}
               >
                 <span
-                  className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center transition-transform group-hover:scale-105 ${TONE_ICON_TILE.indigo}`}
+                  className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center transition-transform group- ${TONE_ICON_TILE.indigo}`}
                 >
                   <Send className="w-5 h-5" />
                 </span>
@@ -672,7 +672,7 @@ export default function FeedbackReportPage({
                 />
                 <span className="flex items-center gap-2 shrink-0">
                   <ToneBadge tone="indigo">Create</ToneBadge>
-                  <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:translate-x-0.5 transition-transform" />
+                  <ChevronRight className="w-4 h-4 text-text-muted group-hover:translate-x-0.5 transition-transform" />
                 </span>
               </button>
 
@@ -683,7 +683,7 @@ export default function FeedbackReportPage({
                 className={`${LIST_ROW} cursor-pointer group`}
               >
                 <span
-                  className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center transition-transform group-hover:scale-105 ${TONE_ICON_TILE.amber}`}
+                  className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center transition-transform group- ${TONE_ICON_TILE.amber}`}
                 >
                   <MessageSquare className="w-5 h-5" />
                 </span>
@@ -699,7 +699,7 @@ export default function FeedbackReportPage({
                   ) : (
                     <ToneBadge tone="zinc">Support Desk</ToneBadge>
                   )}
-                  <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:translate-x-0.5 transition-transform" />
+                  <ChevronRight className="w-4 h-4 text-text-muted group-hover:translate-x-0.5 transition-transform" />
                 </span>
               </button>
 
@@ -710,7 +710,7 @@ export default function FeedbackReportPage({
                 className={`${LIST_ROW} cursor-pointer group`}
               >
                 <span
-                  className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center transition-transform group-hover:scale-105 ${TONE_ICON_TILE.emerald}`}
+                  className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center transition-transform group- ${TONE_ICON_TILE.emerald}`}
                 >
                   <ShieldCheck className="w-5 h-5" />
                 </span>
@@ -720,7 +720,7 @@ export default function FeedbackReportPage({
                 />
                 <span className="flex items-center gap-2 shrink-0">
                   <ToneBadge tone="emerald">Connected</ToneBadge>
-                  <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:translate-x-0.5 transition-transform" />
+                  <ChevronRight className="w-4 h-4 text-text-muted group-hover:translate-x-0.5 transition-transform" />
                 </span>
               </button>
             </ListShell>
@@ -752,12 +752,12 @@ export default function FeedbackReportPage({
                 exitNativeFullscreen().catch(() => {});
                 setActiveSubpage("overview");
               }}
-              className="flex items-center gap-1.5 text-xs font-bold text-zinc-400 hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-xl bg-zinc-900/60 border border-zinc-800 backdrop-blur-md active:scale-95"
+              className="flex items-center gap-1.5 text-xs font-bold text-text-muted hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-xl bg-zinc-900/60 border border-border-ink"
             >
               <ChevronLeft className="w-4 h-4" />
               <span>Support Sections</span>
             </button>
-            <span className="text-xs font-black uppercase tracking-wider text-indigo-400 font-outfit">New Report</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-primary font-outfit">New Report</span>
           </div>
 
           {/* Step Indicator Pills (matching AmazeOnboardingFlow) */}
@@ -768,7 +768,7 @@ export default function FeedbackReportPage({
                   key={i}
                   className={`h-1.5 rounded-full transition-all duration-300 ${
                     i === guidedStep - 1
-                      ? "w-7 bg-indigo-500 shadow-xs shadow-indigo-500/50"
+                      ? "w-7 bg-primary shadow-xs "
                       : i < guidedStep - 1
                         ? "w-2.5 bg-indigo-400/50"
                         : "w-2 bg-zinc-800"
@@ -776,18 +776,18 @@ export default function FeedbackReportPage({
                 />
               ))}
             </div>
-            <span className="text-[11px] font-bold text-zinc-400 font-outfit hidden sm:inline">
+            <span className="text-xs font-bold text-text-muted font-outfit hidden sm:inline">
               Step {guidedStep} of 4 ·{" "}
               {guidedStep === 1 ? "Category" : guidedStep === 2 ? "Concern" : guidedStep === 3 ? "Contact" : "Summary"}
             </span>
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1 bg-zinc-900/60 p-1 rounded-2xl border border-zinc-800 backdrop-blur-md">
+            <div className="flex items-center gap-1 bg-zinc-900/60 p-1 rounded-2xl border border-border-ink">
               <button
                 type="button"
                 onClick={() => setFlowMode("guided")}
-                className="px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 bg-indigo-600 text-white shadow-xs"
+                className="px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 bg-primary text-primary-foreground shadow-xs"
               >
                 <Sparkle className="w-3.5 h-3.5" />
                 <span>Guided Hero</span>
@@ -798,7 +798,7 @@ export default function FeedbackReportPage({
                   exitNativeFullscreen().catch(() => {});
                   setFlowMode("classic");
                 }}
-                className="px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 text-zinc-400 hover:text-white"
+                className="px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 text-text-muted hover:text-white"
               >
                 <Layers className="w-3.5 h-3.5" />
                 <span>Classic Form</span>
@@ -809,7 +809,7 @@ export default function FeedbackReportPage({
               type="button"
               onClick={handleToggleFullScreen}
               title={isNativeFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
-              className="p-2 rounded-xl bg-zinc-900/60 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer active:scale-95"
+              className="p-2 rounded-xl bg-zinc-900/60 border border-border-ink text-text-muted hover:text-white transition-colors cursor-pointer"
             >
               {isNativeFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
             </button>
@@ -821,7 +821,7 @@ export default function FeedbackReportPage({
                 setActiveSubpage("overview");
               }}
               title="Close"
-              className="p-2 rounded-xl bg-zinc-900/60 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer active:scale-95"
+              className="p-2 rounded-xl bg-zinc-900/60 border border-border-ink text-text-muted hover:text-white transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -832,15 +832,15 @@ export default function FeedbackReportPage({
         <main className="relative z-20 w-full max-w-xl sm:max-w-2xl mx-auto flex-1 flex flex-col items-center justify-center my-auto min-h-0 overflow-y-auto py-3 px-1">
           {submitSuccess ? (
             <div className="my-auto w-full text-center space-y-4 py-4">
-              <div className="w-16 h-16 mx-auto rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20 shadow-xl">
+              <div className="w-16 h-16 mx-auto rounded-full bg-success-surface text-success-foreground flex items-center justify-center border border-border-ink shadow-xl">
                 <CheckCircle2 className="w-10 h-10 animate-in zoom-in-75 duration-200" />
               </div>
               <div className="space-y-1.5 max-w-md mx-auto">
-                <h3 className="text-xl sm:text-2xl font-black text-white font-outfit">Report Dispatched to PostHog</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
+                <h3 className="text-xl sm:text-2xl font-bold text-white font-outfit">Report Dispatched to PostHog</h3>
+                <p className="text-xs text-text-muted leading-relaxed">
                   Your feedback and session metrics were securely delivered to our PostHog Support channel.
                   {submittedTicketId && (
-                    <span className="block mt-2 font-mono font-semibold text-indigo-400 text-xs bg-indigo-500/15 py-1.5 px-3 rounded-xl border border-indigo-500/30">
+                    <span className="block mt-2 font-mono font-semibold text-secondary-foreground text-xs bg-secondary py-1.5 px-3 rounded-xl border border-border-ink">
                       Ticket ID: #{submittedTicketId}
                     </span>
                   )}
@@ -850,7 +850,7 @@ export default function FeedbackReportPage({
                 <button
                   type="button"
                   onClick={handleResetForm}
-                  className="px-5 py-2.5 rounded-xl border border-zinc-800 hover:bg-zinc-800 text-xs font-bold text-zinc-200 transition-colors cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl border border-border-ink hover:bg-zinc-800 text-xs font-bold text-text-muted transition-colors cursor-pointer"
                 >
                   Submit Another Note
                 </button>
@@ -860,7 +860,7 @@ export default function FeedbackReportPage({
                     exitNativeFullscreen().catch(() => {});
                     setActiveSubpage("tickets");
                   }}
-                  className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-transform active:scale-95 cursor-pointer shadow-md"
+                  className="px-5 py-2.5 rounded-xl bg-primary hover:brightness-110 text-primary-foreground text-xs font-bold transition-transform cursor-pointer shadow-brutal-sm border-2 border-border-ink"
                 >
                   View Developer Tickets
                 </button>
@@ -871,7 +871,7 @@ export default function FeedbackReportPage({
                     handleResetForm();
                     setActiveSubpage("overview");
                   }}
-                  className="px-5 py-2.5 rounded-xl border border-zinc-800 hover:bg-zinc-800 text-xs font-bold text-zinc-200 transition-colors cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl border border-border-ink hover:bg-zinc-800 text-xs font-bold text-text-muted transition-colors cursor-pointer"
                 >
                   Back to Support Sections
                 </button>
@@ -890,14 +890,14 @@ export default function FeedbackReportPage({
                   className="my-auto w-full space-y-5 text-center"
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 font-outfit">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-bold uppercase tracking-wider bg-secondary text-secondary-foreground border border-border-ink font-outfit min-h-9">
                       <Sparkle className="w-3.5 h-3.5" />
                       Guided Hero · Step 1
                     </div>
-                    <h1 className="text-2xl sm:text-3xl font-black text-white font-outfit tracking-tight">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-white font-outfit tracking-tight">
                       What would you like to share?
                     </h1>
-                    <p className="text-xs sm:text-sm text-zinc-400 font-medium max-w-sm mx-auto">
+                    <p className="text-xs sm:text-sm text-text-muted font-medium max-w-sm mx-auto">
                       Select a category below to open a focused, clean screen.
                     </p>
                   </div>
@@ -914,23 +914,23 @@ export default function FeedbackReportPage({
                             setCategory(cat.id);
                             setGuidedStep(2);
                           }}
-                          className={`group p-4 sm:p-5 rounded-2xl border text-left transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between min-h-[120px] backdrop-blur-md ${
+                          className={`group p-4 sm:p-5 rounded-2xl border text-left transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between min-h-[120px] ${
                             isSelected
-                              ? "border-indigo-500 bg-indigo-500/15 ring-2 ring-indigo-500/30 shadow-lg"
-                              : "border-zinc-800/90 bg-zinc-900/60 hover:border-indigo-500/50 hover:bg-zinc-900/90 shadow-xs hover:shadow-lg hover:scale-[1.01] active:scale-[0.99]"
+                              ? "border-border-ink bg-secondary ring-2 ring-border-ink shadow-lg"
+                              : "border-border-ink bg-zinc-900/60 hover:border-border-ink hover:bg-zinc-900/90 shadow-xs hover:shadow-lg active:scale-[0.99]"
                           }`}
                         >
                           <div className="flex items-center justify-between w-full mb-2.5">
                             <div className={`p-2.5 rounded-xl ${cat.badgeClass}`}>
                               <Icon className="w-4.5 h-4.5" />
                             </div>
-                            <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700/80 font-outfit">
+                            <span className="text-xs font-bold uppercase px-2 py-0.5 rounded-[6px] bg-zinc-800 text-text-muted border border-border-ink font-outfit">
                               {cat.tag}
                             </span>
                           </div>
                           <div>
-                            <h3 className="text-sm sm:text-base font-black text-white font-outfit">{cat.label}</h3>
-                            <p className="text-xs text-zinc-400 font-medium leading-relaxed mt-1">{cat.desc}</p>
+                            <h3 className="text-sm sm:text-base font-bold text-white font-outfit">{cat.label}</h3>
+                            <p className="text-xs text-text-muted font-medium leading-relaxed mt-1">{cat.desc}</p>
                           </div>
                         </button>
                       );
@@ -955,31 +955,31 @@ export default function FeedbackReportPage({
                     >
                       <ActiveCatIcon className="w-6 h-6" />
                     </div>
-                    <h2 className="text-2xl sm:text-3xl font-black text-white font-outfit tracking-tight">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-white font-outfit tracking-tight">
                       {activeCatMeta.promptTitle}
                     </h2>
-                    <p className="text-xs sm:text-sm text-zinc-400 font-medium max-w-sm mx-auto">
+                    <p className="text-xs sm:text-sm text-text-muted font-medium max-w-sm mx-auto">
                       {activeCatMeta.promptSubtitle}
                     </p>
                   </div>
 
                   <div className="w-full space-y-3.5">
                     <div>
-                      <label className="block text-xs font-bold text-zinc-300 mb-1.5">
-                        Headline / Topic <span className="text-zinc-500 font-normal">(Optional)</span>
+                      <label className="block text-xs font-bold text-text-muted mb-1.5">
+                        Headline / Topic <span className="text-text-muted font-normal">(Optional)</span>
                       </label>
                       <input
                         type="text"
                         value={subject}
                         onChange={(e) => setSubject(e.target.value)}
                         placeholder={activeCatMeta.headlinePlaceholder}
-                        className="w-full px-4 py-3 rounded-2xl bg-zinc-900/90 border border-zinc-800 text-white placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-sm font-medium"
+                        className="w-full px-4 py-3 rounded-2xl bg-zinc-900/90 border border-border-ink text-white placeholder:text-text-muted focus:outline-none focus:border-border-ink focus:ring-1 focus:ring-border-ink transition-all text-sm font-medium"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-zinc-300 mb-1.5">
-                        Detailed Concern <span className="text-rose-500">*</span>
+                      <label className="block text-xs font-bold text-text-muted mb-1.5">
+                        Detailed Concern <span className="text-danger-foreground">*</span>
                       </label>
                       <textarea
                         required
@@ -987,14 +987,14 @@ export default function FeedbackReportPage({
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder={activeCatMeta.concernPlaceholder}
-                        className="w-full px-4 py-3.5 rounded-2xl bg-zinc-900/90 border border-zinc-800 text-sm font-medium text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-all leading-relaxed"
+                        className="w-full px-4 py-3.5 rounded-2xl bg-zinc-900/90 border border-border-ink text-sm font-medium text-white placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-border-ink focus:border-border-ink transition-all leading-relaxed"
                       />
                     </div>
 
                     {category === "bug" && (
                       <div className="space-y-3 pt-1">
                         <div>
-                          <label className="block text-xs font-bold text-zinc-300 mb-1.5">Severity Level</label>
+                          <label className="block text-xs font-bold text-text-muted mb-1.5">Severity Level</label>
                           <div className="grid grid-cols-3 gap-2">
                             {SEVERITIES.map((s) => (
                               <button
@@ -1003,8 +1003,8 @@ export default function FeedbackReportPage({
                                 onClick={() => setSeverity(s.value)}
                                 className={`py-2 px-3 rounded-xl border text-center transition-all cursor-pointer ${
                                   severity === s.value
-                                    ? "border-rose-500 bg-rose-500/20 text-rose-300 font-bold shadow-xs"
-                                    : "border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200 text-xs"
+                                    ? "border-border-ink bg-danger-surface text-danger-foreground font-bold shadow-xs"
+                                    : "border-border-ink bg-zinc-900/60 text-text-muted hover:bg-zinc-800 hover:text-text-muted text-xs"
                                 }`}
                               >
                                 <div className="text-xs font-bold">{s.label}</div>
@@ -1014,12 +1014,12 @@ export default function FeedbackReportPage({
                         </div>
 
                         {/* Reactive DOM recording toggle */}
-                        <div className="p-3.5 rounded-2xl border border-indigo-500/30 bg-indigo-500/10 space-y-2">
+                        <div className="p-3.5 rounded-2xl border border-border-ink bg-secondary space-y-2">
                           <div className="flex items-start justify-between gap-3">
                             <div className="flex items-start gap-3">
-                              <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-400 shrink-0 mt-0.5">
+                              <div className="p-2 rounded-xl bg-secondary text-secondary-foreground shrink-0 mt-0.5">
                                 {isRecordingLive ? (
-                                  <Video className="w-4.5 h-4.5 animate-pulse text-rose-500" />
+                                  <Video className="w-4.5 h-4.5 animate-pulse text-danger-foreground" />
                                 ) : (
                                   <VideoOff className="w-4.5 h-4.5" />
                                 )}
@@ -1030,17 +1030,17 @@ export default function FeedbackReportPage({
                                     Attach Reactive DOM Session Recording
                                   </span>
                                   {isRecordingLive && (
-                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse">
+                                    <span className="px-2 py-0.5 rounded-[6px] text-xs font-bold uppercase bg-danger-surface text-danger-foreground border border-border-ink animate-pulse">
                                       Active
                                     </span>
                                   )}
                                 </div>
-                                <p className="text-[11px] text-zinc-400 leading-relaxed">
+                                <p className="text-xs text-text-muted leading-relaxed">
                                   The session recording will automatically take place within the reactive DOM of the app
                                   so your phone is not overwhelmed by screen casting or video encoding. You can navigate
                                   anywhere in AmazeCC to replicate the glitch. If you reload, it cancels.
                                 </p>
-                                <p className="text-[10px] text-amber-400 font-medium">
+                                <p className="text-xs text-warning-foreground font-medium">
                                   Note: the recording may include personal data or grades rendered on screen during your
                                   session. Passwords and sensitive inputs are masked by default.
                                 </p>
@@ -1072,42 +1072,42 @@ export default function FeedbackReportPage({
                   className="my-auto w-full space-y-4 sm:space-y-5"
                 >
                   <div className="flex flex-col items-center text-center gap-2">
-                    <div className="w-12 h-12 mx-auto rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 flex items-center justify-center shadow-lg">
+                    <div className="w-12 h-12 mx-auto rounded-2xl bg-secondary border border-border-ink text-secondary-foreground flex items-center justify-center shadow-lg">
                       <Mail className="w-6 h-6" />
                     </div>
-                    <h2 className="text-2xl sm:text-3xl font-black text-white font-outfit tracking-tight">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-white font-outfit tracking-tight">
                       Where Should We Reach You?
                     </h2>
-                    <p className="text-xs sm:text-sm text-zinc-400 font-medium max-w-sm mx-auto">
+                    <p className="text-xs sm:text-sm text-text-muted font-medium max-w-sm mx-auto">
                       Developer updates and support responses will be delivered straight to your personal inbox.
                     </p>
                   </div>
 
                   <div className="w-full space-y-3.5">
                     <div>
-                      <label className="block text-xs font-bold text-zinc-300 mb-1.5">
-                        Personal Email Address <span className="text-zinc-500 font-normal">(Optional)</span>
+                      <label className="block text-xs font-bold text-text-muted mb-1.5">
+                        Personal Email Address <span className="text-text-muted font-normal">(Optional)</span>
                       </label>
                       <div className="relative">
-                        <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
+                        <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
                         <input
                           type="email"
                           value={contactEmail}
                           onChange={(e) => handleEmailChange(e.target.value)}
                           placeholder="your.personal.email@gmail.com"
-                          className="w-full pl-10 pr-4 py-3 rounded-2xl bg-zinc-900/90 border border-zinc-800 text-sm font-medium text-white placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                          className="w-full pl-10 pr-4 py-3 rounded-2xl bg-zinc-900/90 border border-border-ink text-sm font-medium text-white placeholder:text-text-muted focus:outline-none focus:border-border-ink focus:ring-1 focus:ring-border-ink transition-all"
                         />
                       </div>
-                      <p className="text-[11px] text-zinc-400 mt-1 leading-relaxed">
+                      <p className="text-xs text-text-muted mt-1 leading-relaxed">
                         Developer replies from the PostHog dashboard will be delivered to this email and synced in-app.
                       </p>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-zinc-300 mb-1.5">Author Identifier</label>
-                      <div className="px-4 py-3 rounded-2xl bg-zinc-900/90 border border-zinc-800 text-xs font-mono text-zinc-300 flex items-center justify-between">
+                      <label className="block text-xs font-bold text-text-muted mb-1.5">Author Identifier</label>
+                      <div className="px-4 py-3 rounded-2xl bg-zinc-900/90 border border-border-ink text-xs font-mono text-text-muted flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <ShieldCheck className="w-4 h-4 text-indigo-400" />
+                          <ShieldCheck className="w-4 h-4 text-primary" />
                           <span className="font-bold text-white">{distinctId}</span>
                         </div>
                         <ToneBadge tone={isIdentityVerified ? "emerald" : "indigo"}>
@@ -1116,8 +1116,8 @@ export default function FeedbackReportPage({
                       </div>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl bg-zinc-900/60 border border-zinc-800 flex items-start gap-2.5 text-xs text-zinc-400">
-                      <Info className="w-4 h-4 shrink-0 text-indigo-400 mt-0.5" />
+                    <div className="p-3.5 rounded-2xl bg-zinc-900/60 border border-border-ink flex items-start gap-2.5 text-xs text-text-muted">
+                      <Info className="w-4 h-4 shrink-0 text-primary mt-0.5" />
                       <p className="leading-relaxed">
                         On the next screen, you can review your complete submission summary and reproduction details
                         before sending anything to the engineering team.
@@ -1142,59 +1142,59 @@ export default function FeedbackReportPage({
                       <button
                         type="button"
                         onClick={() => setGuidedStep(3)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-zinc-800 text-xs font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border-ink text-xs font-bold text-text-muted hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
                       >
                         <ChevronLeft className="w-4 h-4" />
                         <span>Back to Contact</span>
                       </button>
-                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-outfit">
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-bold uppercase tracking-wider bg-success-surface text-success-foreground border border-border-ink font-outfit min-h-9">
                         Step 4 of 4 · Submission Summary
                       </div>
                     </div>
 
-                    <div className="w-12 h-12 mx-auto rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shadow-lg">
+                    <div className="w-12 h-12 mx-auto rounded-2xl bg-success-surface border border-border-ink text-success-foreground flex items-center justify-center shadow-lg">
                       <FileText className="w-6 h-6" />
                     </div>
-                    <h2 className="text-2xl sm:text-3xl font-black text-white font-outfit tracking-tight">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-white font-outfit tracking-tight">
                       Review Your Submission
                     </h2>
-                    <p className="text-xs sm:text-sm text-zinc-400 font-medium max-w-sm mx-auto">
+                    <p className="text-xs sm:text-sm text-text-muted font-medium max-w-sm mx-auto">
                       Verify your report details and telemetry before dispatching to our developers.
                     </p>
                   </div>
 
                   {/* Stat Strip */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full">
-                    <div className="p-3 rounded-2xl bg-zinc-900/90 border border-zinc-800 text-center shadow-xs">
-                      <div className="text-[10px] font-bold uppercase text-zinc-400 font-outfit">Category</div>
-                      <div className="text-xs font-black text-white mt-0.5 truncate">{activeCatMeta.label}</div>
+                    <div className="p-3 rounded-2xl bg-zinc-900/90 border border-border-ink text-center shadow-xs">
+                      <div className="text-xs font-bold uppercase text-text-muted font-outfit">Category</div>
+                      <div className="text-xs font-bold text-white mt-0.5 truncate">{activeCatMeta.label}</div>
                     </div>
-                    <div className="p-3 rounded-2xl bg-zinc-900/90 border border-zinc-800 text-center shadow-xs">
-                      <div className="text-[10px] font-bold uppercase text-zinc-400 font-outfit">Severity</div>
+                    <div className="p-3 rounded-2xl bg-zinc-900/90 border border-border-ink text-center shadow-xs">
+                      <div className="text-xs font-bold uppercase text-text-muted font-outfit">Severity</div>
                       <div
-                        className={`text-xs font-black mt-0.5 ${category === "bug" ? "text-rose-400" : "text-white"}`}
+                        className={`text-xs font-bold mt-0.5 ${category === "bug" ? "text-danger-foreground" : "text-white"}`}
                       >
                         {category === "bug" ? severity.toUpperCase() : "STANDARD"}
                       </div>
                     </div>
-                    <div className="p-3 rounded-2xl bg-zinc-900/90 border border-zinc-800 text-center shadow-xs">
-                      <div className="text-[10px] font-bold uppercase text-zinc-400 font-outfit">DOM Replay</div>
+                    <div className="p-3 rounded-2xl bg-zinc-900/90 border border-border-ink text-center shadow-xs">
+                      <div className="text-xs font-bold uppercase text-text-muted font-outfit">DOM Replay</div>
                       <div
-                        className={`text-xs font-black mt-0.5 ${enableSessionRecording ? "text-rose-400" : "text-zinc-500"}`}
+                        className={`text-xs font-bold mt-0.5 ${enableSessionRecording ? "text-danger-foreground" : "text-text-muted"}`}
                       >
                         {enableSessionRecording ? "ATTACHED" : "NONE"}
                       </div>
                     </div>
-                    <div className="p-3 rounded-2xl bg-zinc-900/90 border border-zinc-800 text-center shadow-xs">
-                      <div className="text-[10px] font-bold uppercase text-zinc-400 font-outfit">Identity</div>
-                      <div className="text-xs font-black text-indigo-400 mt-0.5 truncate">
+                    <div className="p-3 rounded-2xl bg-zinc-900/90 border border-border-ink text-center shadow-xs">
+                      <div className="text-xs font-bold uppercase text-text-muted font-outfit">Identity</div>
+                      <div className="text-xs font-bold text-primary mt-0.5 truncate">
                         {isIdentityVerified ? "VERIFIED" : userReg || "ANONYMOUS"}
                       </div>
                     </div>
                   </div>
 
                   {/* Detailed Summary */}
-                  <div className="w-full bg-zinc-900/90 border border-zinc-800 shadow-xl rounded-2xl p-4 sm:p-5 divide-y divide-zinc-800 space-y-3.5">
+                  <div className="w-full bg-zinc-900/90 border border-border-ink shadow-xl rounded-2xl p-4 sm:p-5 divide-y divide-border-muted space-y-3.5">
                     {/* Section 1: Category & Severity */}
                     <div className="flex items-start justify-between gap-4 pb-3">
                       <div className="flex items-center gap-3">
@@ -1203,23 +1203,23 @@ export default function FeedbackReportPage({
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="text-sm font-black text-white font-outfit">{activeCatMeta.label}</span>
-                            <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700 font-outfit">
+                            <span className="text-sm font-bold text-white font-outfit">{activeCatMeta.label}</span>
+                            <span className="text-xs font-bold uppercase px-2 py-0.5 rounded-[6px] bg-zinc-800 text-text-muted border border-border-ink font-outfit">
                               {activeCatMeta.tag}
                             </span>
                             {category === "bug" && (
-                              <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                              <span className="text-xs font-bold uppercase px-2 py-0.5 rounded-[6px] bg-danger-surface text-danger-foreground border border-border-ink">
                                 {severity}
                               </span>
                             )}
                           </div>
-                          <p className="text-xs text-zinc-400 mt-0.5">{activeCatMeta.desc}</p>
+                          <p className="text-xs text-text-muted mt-0.5">{activeCatMeta.desc}</p>
                         </div>
                       </div>
                       <button
                         type="button"
                         onClick={() => setGuidedStep(1)}
-                        className="inline-flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 hover:underline font-bold shrink-0 cursor-pointer"
+                        className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary hover:underline font-bold shrink-0 cursor-pointer"
                       >
                         <Pencil className="w-3 h-3" />
                         <span>Edit</span>
@@ -1229,20 +1229,20 @@ export default function FeedbackReportPage({
                     {/* Section 2: Concern Details */}
                     <div className="pt-3 space-y-1.5">
                       <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-black uppercase tracking-wider text-zinc-400 font-outfit">
+                        <span className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
                           Report Concern
                         </span>
                         <button
                           type="button"
                           onClick={() => setGuidedStep(2)}
-                          className="inline-flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 hover:underline font-bold cursor-pointer"
+                          className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary hover:underline font-bold cursor-pointer"
                         >
                           <Pencil className="w-3 h-3" />
                           <span>Edit</span>
                         </button>
                       </div>
                       {subject.trim() && <div className="text-sm font-bold text-white">{subject.trim()}</div>}
-                      <div className="p-3.5 rounded-xl bg-zinc-950/70 border border-zinc-800 text-xs sm:text-sm text-zinc-100 font-medium leading-relaxed whitespace-pre-wrap">
+                      <div className="p-3.5 rounded-xl bg-zinc-950/70 border border-border-ink text-xs sm:text-sm text-zinc-100 font-medium leading-relaxed whitespace-pre-wrap">
                         {description}
                       </div>
                     </div>
@@ -1250,45 +1250,45 @@ export default function FeedbackReportPage({
                     {/* Section 3: Telemetry & Recording */}
                     <div className="pt-3 space-y-1.5">
                       <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-black uppercase tracking-wider text-zinc-400 font-outfit">
+                        <span className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
                           Session Reproduction Telemetry
                         </span>
                         <button
                           type="button"
                           onClick={() => setGuidedStep(2)}
-                          className="inline-flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 hover:underline font-bold cursor-pointer"
+                          className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary hover:underline font-bold cursor-pointer"
                         >
                           <Pencil className="w-3 h-3" />
                           <span>Edit</span>
                         </button>
                       </div>
                       {enableSessionRecording ? (
-                        <div className="p-3 rounded-xl border border-rose-500/25 bg-rose-500/10 flex items-center justify-between">
+                        <div className="p-3 rounded-xl border border-border-ink bg-danger-surface flex items-center justify-between">
                           <div className="flex items-center gap-2.5">
-                            <div className="p-1.5 rounded-lg bg-rose-500/20 text-rose-400">
+                            <div className="p-1.5 rounded-lg bg-danger-surface text-danger-foreground">
                               <Video className="w-4 h-4 animate-pulse" />
                             </div>
                             <div>
                               <div className="text-xs font-bold text-white">Reactive DOM Session Replay Attached</div>
-                              <div className="text-[11px] text-zinc-400">
+                              <div className="text-xs text-text-muted">
                                 Safe in-DOM interaction replay will be sent with ticket
                               </div>
                             </div>
                           </div>
-                          <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                          <span className="text-xs font-bold uppercase px-2 py-0.5 rounded-[6px] bg-danger-surface text-danger-foreground border border-border-ink">
                             Active
                           </span>
                         </div>
                       ) : (
-                        <div className="p-3 rounded-xl border border-zinc-800 bg-zinc-950/50 flex items-center justify-between">
-                          <div className="flex items-center gap-2 text-xs text-zinc-400">
+                        <div className="p-3 rounded-xl border border-border-ink bg-zinc-950/50 flex items-center justify-between">
+                          <div className="flex items-center gap-2 text-xs text-text-muted">
                             <VideoOff className="w-4 h-4" />
                             <span>No session recording attached</span>
                           </div>
                           <button
                             type="button"
                             onClick={() => setGuidedStep(2)}
-                            className="text-xs text-indigo-400 hover:underline font-bold"
+                            className="text-xs text-primary hover:underline font-bold"
                           >
                             Attach
                           </button>
@@ -1299,28 +1299,28 @@ export default function FeedbackReportPage({
                     {/* Section 4: Contact & Route */}
                     <div className="pt-3 space-y-1.5">
                       <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-black uppercase tracking-wider text-zinc-400 font-outfit">
+                        <span className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
                           Contact & Destination
                         </span>
                         <button
                           type="button"
                           onClick={() => setGuidedStep(3)}
-                          className="inline-flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 hover:underline font-bold cursor-pointer"
+                          className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary hover:underline font-bold cursor-pointer"
                         >
                           <Pencil className="w-3 h-3" />
                           <span>Edit</span>
                         </button>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                        <div className="p-2.5 rounded-xl bg-zinc-950/50 border border-zinc-800">
-                          <span className="text-zinc-500 block text-[10px] uppercase font-bold">Email</span>
+                        <div className="p-2.5 rounded-xl bg-zinc-950/50 border border-border-ink">
+                          <span className="text-text-muted block text-xs uppercase font-bold">Email</span>
                           <span className="font-bold text-white truncate block mt-0.5">
                             {contactEmail.trim() || "In-app ticket updates only"}
                           </span>
                         </div>
-                        <div className="p-2.5 rounded-xl bg-zinc-950/50 border border-zinc-800">
-                          <span className="text-zinc-500 block text-[10px] uppercase font-bold">Destination</span>
-                          <span className="font-bold text-indigo-400 truncate block mt-0.5">
+                        <div className="p-2.5 rounded-xl bg-zinc-950/50 border border-border-ink">
+                          <span className="text-text-muted block text-xs uppercase font-bold">Destination</span>
+                          <span className="font-bold text-primary truncate block mt-0.5">
                             PostHog Support Channel (#712727)
                           </span>
                         </div>
@@ -1329,7 +1329,7 @@ export default function FeedbackReportPage({
                   </div>
 
                   {submitError && (
-                    <div className="p-3.5 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-semibold">
+                    <div className="p-3.5 rounded-xl bg-danger-surface border border-border-ink text-danger-foreground text-xs font-semibold">
                       {submitError}
                     </div>
                   )}
@@ -1341,12 +1341,12 @@ export default function FeedbackReportPage({
 
         {/* ── FOOTER: BACK & PRIMARY ACTION BUTTONS (AmazeOnboardingFlow style) ── */}
         {!submitSuccess && (
-          <footer className="relative z-20 w-full max-w-xl sm:max-w-2xl mx-auto flex items-center justify-between gap-3 shrink-0 pt-3 border-t border-zinc-800/80">
+          <footer className="relative z-20 w-full max-w-xl sm:max-w-2xl mx-auto flex items-center justify-between gap-3 shrink-0 pt-3 border-t border-border-ink">
             {guidedStep > 1 ? (
               <button
                 type="button"
                 onClick={() => setGuidedStep((prev) => (prev > 1 ? ((prev - 1) as any) : 1))}
-                className="flex items-center gap-1.5 text-xs font-bold text-zinc-400 hover:text-white transition-colors cursor-pointer py-3 px-4 rounded-2xl bg-zinc-900/80 border border-zinc-800 hover:bg-zinc-800 active:scale-95"
+                className="flex items-center gap-1.5 text-xs font-bold text-text-muted hover:text-white transition-colors cursor-pointer py-3 px-4 rounded-2xl bg-zinc-900/80 border border-border-ink hover:bg-zinc-800"
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>Back</span>
@@ -1356,13 +1356,13 @@ export default function FeedbackReportPage({
             )}
 
             {guidedStep === 1 ? (
-              <span className="text-xs text-zinc-500 font-medium">Select a category above to proceed</span>
+              <span className="text-xs text-text-muted font-medium">Select a category above to proceed</span>
             ) : guidedStep === 2 ? (
               <button
                 type="button"
                 disabled={!description.trim()}
                 onClick={() => setGuidedStep(3)}
-                className="py-3 px-6 rounded-2xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs sm:text-sm font-black font-outfit tracking-wide shadow-xl transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+                className="py-3 px-6 rounded-2xl bg-primary hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-xs sm:text-sm font-bold font-outfit tracking-wide shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer flex items-center gap-2"
               >
                 <span>Continue to Contact</span>
                 <ArrowRight className="w-4 h-4" />
@@ -1372,7 +1372,7 @@ export default function FeedbackReportPage({
                 type="button"
                 disabled={!description.trim()}
                 onClick={() => setGuidedStep(4)}
-                className="py-3 px-6 rounded-2xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs sm:text-sm font-black font-outfit tracking-wide shadow-xl transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+                className="py-3 px-6 rounded-2xl bg-primary hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-xs sm:text-sm font-bold font-outfit tracking-wide shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer flex items-center gap-2"
               >
                 <span>Review Summary</span>
                 <ArrowRight className="w-4 h-4" />
@@ -1382,7 +1382,7 @@ export default function FeedbackReportPage({
                 type="button"
                 disabled={isSubmitting || !description.trim()}
                 onClick={() => handleSubmit()}
-                className="py-3 px-8 rounded-2xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs sm:text-sm font-black font-outfit tracking-wide shadow-xl transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+                className="py-3 px-8 rounded-2xl bg-primary hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-xs sm:text-sm font-bold font-outfit tracking-wide shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer flex items-center gap-2"
               >
                 {isSubmitting ? (
                   <>
@@ -1454,17 +1454,17 @@ export default function FeedbackReportPage({
         <div className="space-y-6">
           {submitSuccess ? (
             <div
-              className={`${TILE_CARD} text-center py-12 px-6 space-y-4 max-w-xl mx-auto rounded-3xl border border-emerald-500/30 bg-emerald-500/5 shadow-xl`}
+              className={`${TILE_CARD} text-center py-12 px-6 space-y-4 max-w-xl mx-auto rounded-[14px] border border-border-ink bg-success-surface shadow-xl`}
             >
-              <div className="w-16 h-16 mx-auto rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center border border-emerald-500/20">
+              <div className="w-16 h-16 mx-auto rounded-full bg-success-surface text-success-foreground flex items-center justify-center border border-border-ink">
                 <CheckCircle2 className="w-10 h-10 animate-in zoom-in-75 duration-200" />
               </div>
               <div className="space-y-1.5 max-w-md mx-auto">
-                <h3 className="text-xl font-black text-text-primary font-outfit">Report Dispatched to PostHog</h3>
+                <h3 className="text-xl font-bold text-text-primary font-outfit">Report Dispatched to PostHog</h3>
                 <p className="text-xs text-text-muted leading-relaxed">
                   Your feedback and session metrics were securely delivered to our PostHog Support channel.
                   {submittedTicketId && (
-                    <span className="block mt-2 font-mono font-semibold text-indigo-500 text-xs bg-indigo-500/10 py-1.5 px-3 rounded-xl border border-indigo-500/20">
+                    <span className="block mt-2 font-mono font-semibold text-secondary-foreground text-xs bg-secondary py-1.5 px-3 rounded-xl border border-border-ink">
                       Ticket ID: #{submittedTicketId}
                     </span>
                   )}
@@ -1481,7 +1481,7 @@ export default function FeedbackReportPage({
                 <button
                   type="button"
                   onClick={() => setActiveSubpage("tickets")}
-                  className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-transform active:scale-95 cursor-pointer shadow-md"
+                  className="px-5 py-2.5 rounded-xl bg-primary hover:brightness-110 text-primary-foreground text-xs font-bold transition-transform cursor-pointer shadow-brutal-sm border-2 border-border-ink"
                 >
                   View Developer Tickets
                 </button>
@@ -1521,7 +1521,7 @@ export default function FeedbackReportPage({
                         onClick={() => setCategory(cat.id)}
                         className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                           isSelected
-                            ? "border-indigo-500/80 bg-indigo-500/5 ring-2 ring-indigo-500/20 shadow-xs"
+                            ? "border-border-ink bg-secondary ring-2 ring-border-ink shadow-xs"
                             : "border-border-strong dark:border-border bg-surface-secondary/40 hover:bg-surface-secondary"
                         }`}
                       >
@@ -1529,13 +1529,13 @@ export default function FeedbackReportPage({
                           <div className={`p-2 rounded-xl ${cat.badgeClass}`}>
                             <Icon className="w-4 h-4" />
                           </div>
-                          <span className="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-surface-tertiary text-text-muted border border-border-muted font-outfit">
+                          <span className="text-xs font-bold uppercase px-1.5 py-0.5 rounded bg-surface-tertiary text-text-muted border border-border-muted font-outfit">
                             {cat.tag}
                           </span>
                         </div>
                         <div>
                           <span className="text-xs font-bold text-text-primary block font-outfit">{cat.label}</span>
-                          <span className="text-[11px] text-text-muted leading-tight mt-0.5 block">{cat.desc}</span>
+                          <span className="text-xs text-text-muted leading-tight mt-0.5 block">{cat.desc}</span>
                         </div>
                       </button>
                     );
@@ -1557,12 +1557,12 @@ export default function FeedbackReportPage({
                         onClick={() => setSeverity(s.value)}
                         className={`py-2 px-3 rounded-xl border text-center transition-all cursor-pointer ${
                           severity === s.value
-                            ? "border-rose-500/70 bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold"
+                            ? "border-border-ink bg-danger-surface text-danger-foreground font-bold"
                             : "border-border-muted bg-surface-secondary/40 text-text-secondary text-xs"
                         }`}
                       >
                         <div className="text-xs font-bold">{s.label}</div>
-                        <div className="text-[10px] text-text-muted opacity-80 hidden sm:block">{s.desc}</div>
+                        <div className="text-xs text-text-muted opacity-80 hidden sm:block">{s.desc}</div>
                       </button>
                     ))}
                   </div>
@@ -1586,7 +1586,7 @@ export default function FeedbackReportPage({
 
                 <div>
                   <label className="block text-xs font-bold text-text-primary mb-1">
-                    Detailed Description <span className="text-rose-500">*</span>
+                    Detailed Description <span className="text-danger-foreground">*</span>
                   </label>
                   <textarea
                     required
@@ -1626,7 +1626,7 @@ export default function FeedbackReportPage({
                       placeholder="your.personal.email@gmail.com"
                       className={SEARCH_FIELD}
                     />
-                    <p className="text-[10px] text-text-muted mt-1 leading-tight">
+                    <p className="text-xs text-text-muted mt-1 leading-tight">
                       Developer replies from the PostHog dashboard will be delivered to this email and synced in-app.
                     </p>
                   </div>
@@ -1643,12 +1643,12 @@ export default function FeedbackReportPage({
               </div>
 
               {/* ── SESSION RECORDING SECTION ── */}
-              <div className={`${TILE_CARD} border-indigo-500/30 bg-indigo-500/5 space-y-3`}>
+              <div className={`${TILE_CARD} border-border-ink bg-secondary space-y-3`}>
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3">
-                    <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-500 shrink-0 mt-0.5">
+                    <div className="p-2.5 rounded-xl bg-secondary text-secondary-foreground shrink-0 mt-0.5">
                       {isRecordingLive ? (
-                        <Video className="w-5 h-5 animate-pulse text-rose-500" />
+                        <Video className="w-5 h-5 animate-pulse text-danger-foreground" />
                       ) : (
                         <VideoOff className="w-5 h-5" />
                       )}
@@ -1659,7 +1659,7 @@ export default function FeedbackReportPage({
                           Attach Reactive DOM Session Recording
                         </span>
                         {isRecordingLive && (
-                          <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-rose-500/10 text-rose-500 border border-rose-500/20 animate-pulse">
+                          <span className="px-2 py-0.5 rounded-[6px] text-xs font-bold uppercase bg-danger-surface text-danger-foreground border border-border-ink animate-pulse">
                             Recording Active
                           </span>
                         )}
@@ -1682,14 +1682,14 @@ export default function FeedbackReportPage({
 
                 {/* Active Recording Notice */}
                 {isBugRecordingActive && (
-                  <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/25 space-y-2">
+                  <div className="p-3.5 rounded-2xl bg-danger-surface border border-border-ink space-y-2">
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
                         <span className="relative flex h-2.5 w-2.5">
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
                           <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
                         </span>
-                        <span className="text-xs font-bold text-rose-600 dark:text-rose-400">
+                        <span className="text-xs font-bold text-danger-foreground">
                           Recording In Progress — Freely Navigate AmazeCC
                         </span>
                       </div>
@@ -1701,7 +1701,7 @@ export default function FeedbackReportPage({
                         Finish & Attach Clip
                       </button>
                     </div>
-                    <p className="text-[11px] text-text-muted leading-relaxed">
+                    <p className="text-xs text-text-muted leading-relaxed">
                       A floating pill is pinned to the top of the app. Switch tabs, trigger the glitch, and tap
                       &quot;Finish &amp; Review&quot; anytime to return here.
                     </p>
@@ -1710,11 +1710,11 @@ export default function FeedbackReportPage({
 
                 {/* Clip Attached Notice */}
                 {!isBugRecordingActive && hasClip && (
-                  <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 space-y-2">
+                  <div className="p-3.5 rounded-2xl bg-success-surface border border-border-ink space-y-2">
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                        <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300">
+                        <CheckCircle2 className="w-4 h-4 text-success-foreground" />
+                        <span className="text-xs font-bold text-success-foreground">
                           Bug Reproduction Clip Attached ({clipDuration}s)
                         </span>
                       </div>
@@ -1722,20 +1722,20 @@ export default function FeedbackReportPage({
                         <button
                           type="button"
                           onClick={startReproductionRecording}
-                          className="px-2.5 py-1 rounded-lg border border-border-muted bg-surface hover:bg-surface-secondary text-[11px] font-semibold text-text-primary cursor-pointer transition-colors"
+                          className="px-2.5 py-1 rounded-lg border border-border-muted bg-surface hover:bg-surface-secondary text-xs font-semibold text-text-primary cursor-pointer transition-colors"
                         >
                           Re-record
                         </button>
                         <button
                           type="button"
                           onClick={discardReproductionClip}
-                          className="px-2.5 py-1 rounded-lg border border-rose-500/20 text-[11px] font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 cursor-pointer transition-colors"
+                          className="px-2.5 py-1 rounded-lg border border-border-ink text-xs font-semibold text-danger-foreground hover:bg-danger-surface cursor-pointer transition-colors"
                         >
                           Discard
                         </button>
                       </div>
                     </div>
-                    <p className="text-[11px] text-text-muted leading-relaxed">
+                    <p className="text-xs text-text-muted leading-relaxed">
                       Your reproduction actions were captured in-session and will be attached to the developer ticket.
                     </p>
                   </div>
@@ -1755,9 +1755,9 @@ export default function FeedbackReportPage({
                   </div>
                 )}
 
-                <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-2.5 text-amber-700 dark:text-amber-400">
+                <div className="p-3 rounded-xl bg-warning-surface border border-border-ink flex items-start gap-2.5 text-warning-foreground">
                   <Info className="w-4 h-4 shrink-0 mt-0.5" />
-                  <p className="text-[11px] leading-relaxed">
+                  <p className="text-xs leading-relaxed">
                     <strong>Privacy Notice:</strong> Because this captures live DOM mutations within the app to help
                     reproduce bugs, the recording may include personal data or grades rendered on screen during your
                     session. Passwords and sensitive inputs are masked by default.
@@ -1766,21 +1766,21 @@ export default function FeedbackReportPage({
               </div>
 
               {submitError && (
-                <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-semibold">
+                <div className="p-3.5 rounded-xl bg-danger-surface border border-border-ink text-danger-foreground text-xs font-semibold">
                   {submitError}
                 </div>
               )}
 
               {/* Submit button */}
               <div className="flex items-center justify-between gap-4 pt-2">
-                <div className="flex items-center gap-2 text-[11px] text-text-muted">
-                  <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                <div className="flex items-center gap-2 text-xs text-text-muted">
+                  <ShieldCheck className="w-4 h-4 text-success-foreground" />
                   <span>Dispatched to PostHog EU/US Secure Ingestion</span>
                 </div>
                 <button
                   type="submit"
                   disabled={isSubmitting || !description.trim()}
-                  className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold text-xs sm:text-sm transition-all active:scale-[0.98] cursor-pointer shadow-md"
+                  className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary hover:brightness-110 disabled:opacity-50 text-primary-foreground font-bold text-xs sm:text-sm transition-all cursor-pointer shadow-brutal-sm border-2 border-border-ink"
                 >
                   {isSubmitting ? (
                     <>
@@ -1827,7 +1827,7 @@ export default function FeedbackReportPage({
               setActiveSubpage("report");
               requestNativeFullscreen().catch(() => {});
             }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white transition-all active:scale-95 cursor-pointer shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-primary hover:brightness-110 text-primary-foreground transition-all cursor-pointer shadow-xs"
           >
             <Send className="w-3.5 h-3.5" />
             <span>New Report</span>
@@ -1842,7 +1842,7 @@ export default function FeedbackReportPage({
                 <button
                   type="button"
                   onClick={() => setActiveTicket(null)}
-                  className="flex items-center gap-1.5 text-xs font-bold text-indigo-500 hover:text-indigo-600 cursor-pointer"
+                  className="flex items-center gap-1.5 text-xs font-bold text-primary text-primary cursor-pointer"
                 >
                   ← Back to All Tickets
                 </button>
@@ -1866,7 +1866,7 @@ export default function FeedbackReportPage({
                   <h3 className="text-base font-bold text-text-primary font-outfit">
                     {activeTicket.subject || `Ticket #${activeTicket.id}`}
                   </h3>
-                  <p className="text-[11px] text-text-muted mt-0.5">
+                  <p className="text-xs text-text-muted mt-0.5">
                     Created {new Date(activeTicket.created_at).toLocaleString()}
                   </p>
                 </div>
@@ -1883,15 +1883,15 @@ export default function FeedbackReportPage({
                         key={msg.id}
                         className={`p-3.5 rounded-2xl text-xs max-w-[85%] ${
                           msg.is_customer
-                            ? "ml-auto bg-indigo-600 text-white rounded-br-xs"
+                            ? "ml-auto bg-primary text-primary-foreground rounded-br-xs"
                             : "mr-auto bg-surface-secondary text-text-primary border border-border-muted rounded-bl-xs"
                         }`}
                       >
-                        <div className="font-semibold mb-1 opacity-90 text-[11px]">
+                        <div className="font-semibold mb-1 opacity-90 text-xs">
                           {msg.is_customer ? "You" : msg.sender?.name || "Support Team"}
                         </div>
                         <div className="whitespace-pre-wrap leading-relaxed">{msg.content}</div>
-                        <div className="text-[10px] opacity-60 text-right mt-1.5">
+                        <div className="text-xs opacity-60 text-right mt-1.5">
                           {new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                         </div>
                       </div>
@@ -1918,7 +1918,7 @@ export default function FeedbackReportPage({
                     type="button"
                     disabled={isSendingReply || !replyMessage.trim()}
                     onClick={handleSendReply}
-                    className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-bold shrink-0 transition-transform active:scale-95 cursor-pointer shadow-xs"
+                    className="px-4 py-2.5 rounded-xl bg-primary hover:brightness-110 disabled:opacity-50 text-primary-foreground text-xs font-bold shrink-0 transition-transform cursor-pointer shadow-xs"
                   >
                     {isSendingReply ? (
                       <RefreshCw className="w-3.5 h-3.5 animate-spin" />
@@ -1952,11 +1952,11 @@ export default function FeedbackReportPage({
               {isLoadingTickets ? (
                 <div className="py-12 text-center text-xs text-text-muted">Loading your tickets from PostHog...</div>
               ) : tickets.length === 0 ? (
-                <div className="py-12 text-center space-y-3 bg-surface-secondary/40 rounded-3xl border border-border-muted">
+                <div className="py-12 text-center space-y-3 bg-surface-secondary/40 rounded-[14px] border border-border-muted">
                   <MessageSquare className="w-8 h-8 text-text-muted mx-auto opacity-50" />
                   <div className="space-y-1">
                     <p className="text-xs font-bold text-text-primary font-outfit">No Support Tickets Yet</p>
-                    <p className="text-[11px] text-text-muted max-w-xs mx-auto">
+                    <p className="text-xs text-text-muted max-w-xs mx-auto">
                       Submit a bug report or feature request in the &quot;New Report&quot; subpage to start a
                       conversation with developers.
                     </p>
@@ -1982,13 +1982,13 @@ export default function FeedbackReportPage({
                         {t.last_message && (
                           <p className="text-xs text-text-muted truncate max-w-md">{t.last_message}</p>
                         )}
-                        <p className="text-[10px] text-text-muted opacity-80">
+                        <p className="text-xs text-text-muted opacity-80">
                           {new Date(t.created_at).toLocaleDateString()} at{" "}
                           {new Date(t.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                         </p>
                       </div>
                       <div className="shrink-0 flex items-center gap-2">
-                        <span className="text-xs font-bold text-indigo-500 hidden sm:inline">Open Thread</span>
+                        <span className="text-xs font-bold text-primary hidden sm:inline">Open Thread</span>
                         <ChevronRight className="w-4 h-4 text-text-muted" />
                       </div>
                     </div>
@@ -2030,22 +2030,22 @@ export default function FeedbackReportPage({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
           <div className="p-4 rounded-2xl border border-border-muted bg-surface dark:bg-surface-secondary space-y-1">
-            <span className="text-[10px] font-black uppercase text-text-muted font-outfit">Active Distinct ID</span>
+            <span className="text-xs font-bold uppercase text-text-muted font-outfit">Active Distinct ID</span>
             <div className="font-mono text-xs font-bold text-text-primary truncate">{distinctId}</div>
           </div>
           <div className="p-4 rounded-2xl border border-border-muted bg-surface dark:bg-surface-secondary space-y-1">
-            <span className="text-[10px] font-black uppercase text-text-muted font-outfit">Session ID</span>
+            <span className="text-xs font-bold uppercase text-text-muted font-outfit">Session ID</span>
             <div className="font-mono text-xs font-bold text-text-primary truncate">{sessionId}</div>
           </div>
           <div className="p-4 rounded-2xl border border-border-muted bg-surface dark:bg-surface-secondary space-y-1">
-            <span className="text-[10px] font-black uppercase text-text-muted font-outfit">Identity Verification</span>
+            <span className="text-xs font-bold uppercase text-text-muted font-outfit">Identity Verification</span>
             <div className="font-semibold text-xs text-text-primary flex items-center gap-1.5">
-              <span className={`w-2 h-2 rounded-full ${isIdentityVerified ? "bg-emerald-500" : "bg-indigo-500"}`} />
+              <span className={`w-2 h-2 rounded-full ${isIdentityVerified ? "bg-emerald-500" : "bg-primary"}`} />
               <span>{isIdentityVerified ? "HMAC Signed" : "Device Canonical"}</span>
             </div>
           </div>
           <div className="p-4 rounded-2xl border border-border-muted bg-surface dark:bg-surface-secondary space-y-1">
-            <span className="text-[10px] font-black uppercase text-text-muted font-outfit">Session Recorder</span>
+            <span className="text-xs font-bold uppercase text-text-muted font-outfit">Session Recorder</span>
             <div className="font-semibold text-xs text-text-primary flex items-center gap-1.5">
               <span
                 className={`w-2 h-2 rounded-full ${isRecordingLive ? "bg-rose-500 animate-pulse" : "bg-zinc-400"}`}
@@ -2064,21 +2064,21 @@ export default function FeedbackReportPage({
           <div className="space-y-3 text-xs text-text-muted">
             <div className="flex items-center justify-between py-1 border-b border-border-muted/50">
               <span>Reverse Proxy Endpoint</span>
-              <span className="font-mono text-[11px] text-text-primary">shoot.amazecc.com</span>
+              <span className="font-mono text-xs text-text-primary">shoot.amazecc.com</span>
             </div>
             <div className="flex items-center justify-between py-1 border-b border-border-muted/50">
               <span>Signed Token Identity Verification</span>
-              <span className="font-mono text-[11px] text-text-primary">
+              <span className="font-mono text-xs text-text-primary">
                 {isIdentityVerified ? "Active (HMAC-SHA256)" : "Client Mode"}
               </span>
             </div>
             <div className="flex items-center justify-between py-1 border-b border-border-muted/50">
               <span>Conversations Direct API</span>
-              <span className="font-mono text-[11px] text-text-primary">posthog.conversations.sendMessage</span>
+              <span className="font-mono text-xs text-text-primary">posthog.conversations.sendMessage</span>
             </div>
             <div className="flex items-center justify-between py-1">
               <span>Current Project ID</span>
-              <span className="font-mono text-[11px] text-text-primary">712727</span>
+              <span className="font-mono text-xs text-text-primary">712727</span>
             </div>
           </div>
         </div>

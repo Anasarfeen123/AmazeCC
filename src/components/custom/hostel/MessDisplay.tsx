@@ -272,10 +272,7 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
     return (
       <ul className="space-y-2">
         {cleanedLines.map((line, idx) => (
-          <li
-            key={idx}
-            className="flex items-start gap-2 text-xs font-medium text-text-primary leading-relaxed"
-          >
+          <li key={idx} className="flex items-start gap-2 text-xs font-medium text-text-primary leading-relaxed">
             <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-indigo-500/60 mt-1.5" />
             <span className="flex-1">{line}</span>
           </li>
@@ -319,9 +316,7 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
                 key={g}
                 onClick={() => setGender(g)}
                 className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                  gender === g
-                    ? "bg-surface text-primary shadow-xs"
-                    : "text-text-muted hover:text-text-heading "
+                  gender === g ? "bg-surface text-primary shadow-xs" : "text-text-muted hover:text-text-heading "
                 }`}
               >
                 {g === "Male" ? "Mens" : "Womens"}
@@ -340,9 +335,7 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
                 key={t.id}
                 onClick={() => setType(t.id)}
                 className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                  type === t.id
-                    ? "bg-surface text-primary shadow-xs"
-                    : "text-text-muted hover:text-text-heading "
+                  type === t.id ? "bg-surface text-primary shadow-xs" : "text-text-muted hover:text-text-heading "
                 }`}
               >
                 {t.label}
@@ -405,9 +398,7 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
                       key={meal.name}
                       onClick={() => setActiveMealMobile(meal.name)}
                       className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer ${
-                        isActive
-                          ? "bg-surface text-primary shadow-xs"
-                          : "text-text-muted hover:text-text-heading "
+                        isActive ? "bg-surface text-primary shadow-xs" : "text-text-muted hover:text-text-heading "
                       }`}
                     >
                       <MealIcon size={13} className={isActive ? meal.accentColor : "text-text-muted"} />
@@ -469,28 +460,23 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
                 return (
                   <div
                     key={meal.name}
-                    className={`card-surface border ${
-                      isCurrentNow
-                        ? "border-border-ink dark:border-border-ink ring-1 ring-border-ink"
-                        : "border-border-ink"
-                    } rounded-2xl p-4.5 shadow-xs hover:border-border-ink transition-all flex flex-col justify-between text-left`}
+                    className={`rounded-[14px] border-2 border-border-ink p-4.5 transition-all flex flex-col justify-between text-left ${
+                      // The meal being served now is the loud card (sage).
+                      isCurrentNow ? "bg-secondary shadow-brutal-md" : "card-surface shadow-brutal-sm"
+                    }`}
                   >
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between border-b border-border-ink pb-2.5">
+                      <div className="flex flex-wrap items-start justify-between gap-2 border-b border-border-ink pb-2.5">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-xl bg-surface-secondary flex items-center justify-center shrink-0">
-                            <MealIcon size={16} className={meal.accentColor} />
-                          </div>
+                          <MealIcon size={18} className="shrink-0 text-text-heading" aria-hidden />
                           <div>
-                            <h3 className="font-bold text-text-heading text-xs font-outfit">{meal.name}</h3>
-                            <p className="text-[9.5px] text-text-muted font-medium flex items-center gap-1 mt-0.5">
-                              <Clock size={9} /> {meal.time}
-                            </p>
+                            <h3 className="font-display text-base font-bold text-text-heading">{meal.name}</h3>
+                            <p className="mt-0.5 whitespace-nowrap font-mono text-xs text-text-muted">{meal.time}</p>
                           </div>
                         </div>
                         {isCurrentNow && (
-                          <span className="text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-success-surface text-success-foreground border border-border-ink shrink-0">
-                            Active
+                          <span className="shrink-0 rounded-[6px] border-2 border-obsidian bg-ochre px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-obsidian">
+                            Serving now
                           </span>
                         )}
                       </div>

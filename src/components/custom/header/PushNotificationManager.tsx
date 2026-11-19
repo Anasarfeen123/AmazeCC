@@ -241,7 +241,7 @@ export default function PushNotificationManager() {
 
   if (!isSupported) {
     return (
-      <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 border border-amber-200/50 text-xs font-medium">
+      <div className="p-4 rounded-xl bg-warning-surface text-warning-foreground border border-border-ink text-xs font-medium">
         Push notifications are not supported in this browser. Please use Chrome, Edge, Safari or Firefox.
       </div>
     );
@@ -253,18 +253,16 @@ export default function PushNotificationManager() {
   return (
     <div className="space-y-5">
       {/* Master Push Switch Header */}
-      <div className="flex items-center justify-between p-4 rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-gray-200/80 dark:border-gray-800 shadow-xs">
+      <div className="flex items-center justify-between p-4 rounded-2xl bg-surface border-2 border-border-ink shadow-xs">
         <div className="flex items-center gap-3">
           <div
-            className={`w-10 h-10 rounded-xl flex items-center justify-center ${isEnabled ? "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400" : "bg-gray-100 dark:bg-slate-800 text-gray-400"}`}
+            className={`w-10 h-10 rounded-xl flex items-center justify-center ${isEnabled ? "bg-secondary text-secondary-foreground" : "bg-surface-secondary text-text-muted"}`}
           >
             <Bell size={20} />
           </div>
           <div>
-            <h4 className="text-sm font-bold text-gray-900 dark:text-white">Push Notifications (VAPID)</h4>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              Receive real-time campus reminders on this device
-            </p>
+            <h4 className="text-sm font-bold text-text-heading">Push Notifications (VAPID)</h4>
+            <p className="text-xs text-text-muted">Receive real-time campus reminders on this device</p>
           </div>
         </div>
 
@@ -276,7 +274,7 @@ export default function PushNotificationManager() {
 
       {fetchStatus && (
         <div
-          className={`p-3 rounded-xl text-xs font-semibold flex items-center gap-2 ${isErrorStatus ? "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200/40" : "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border border-emerald-200/40"}`}
+          className={`p-3 rounded-xl text-xs font-semibold flex items-center gap-2 ${isErrorStatus ? "bg-danger-surface text-danger-foreground border border-border-ink" : "bg-success-surface text-success-foreground border border-border-ink"}`}
         >
           {isErrorStatus ? <AlertTriangle size={14} /> : <CheckCircle size={14} />}
           <span>{fetchStatus}</span>
@@ -286,19 +284,19 @@ export default function PushNotificationManager() {
       {isEnabled && (
         <div className="space-y-4 animate-fadeIn">
           {/* Test Push Button */}
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-transparent border border-indigo-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="p-4 rounded-2xl border border-border-ink flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
-                <Sparkles size={13} className="text-indigo-500" /> Test Notification System
+              <p className="text-xs font-bold text-text-heading flex items-center gap-1.5">
+                <Sparkles size={13} className="text-primary" /> Test Notification System
               </p>
-              <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
+              <p className="text-xs text-text-muted mt-0.5">
                 Send an instant VAPID push notification to verify permissions
               </p>
             </div>
             <button
               onClick={sendTestNotification}
               disabled={isTesting}
-              className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs disabled:opacity-50"
+              className="px-3.5 py-2 rounded-xl bg-primary hover:brightness-110 text-primary-foreground text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs disabled:opacity-50"
             >
               <Send size={13} />
               {isTesting ? "Sending..." : "Test Push"}
@@ -306,16 +304,16 @@ export default function PushNotificationManager() {
           </div>
 
           {/* Trigger Categories */}
-          <div className="p-4 rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-gray-200/80 dark:border-gray-800 space-y-3">
+          <div className="p-4 rounded-2xl bg-surface border-2 border-border-ink space-y-3">
             <div className="flex items-center justify-between">
-              <h5 className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 font-outfit">
+              <h5 className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
                 Notification Triggers
               </h5>
 
               {/* Class Reminder Lead Time Selector */}
-              <div className="flex items-center gap-1.5 bg-gray-100 dark:bg-black/50 px-2.5 py-1 rounded-xl border border-gray-200/60 dark:border-gray-800">
-                <Clock size={12} className="text-indigo-500" />
-                <span className="text-[10px] font-bold text-gray-500">Class Alert:</span>
+              <div className="flex items-center gap-1.5 bg-surface-secondary px-2.5 py-1 rounded-xl border-2 border-border-ink">
+                <Clock size={12} className="text-primary" />
+                <span className="text-xs font-bold text-text-muted">Class Alert:</span>
                 <SelectField
                   value={String(settings?.classReminderLeadMinutes || 15)}
                   onChange={(val) => updateSettingField("classReminderLeadMinutes", Number(val))}
@@ -328,7 +326,7 @@ export default function PushNotificationManager() {
                   size="xs"
                   role="group"
                   aria-label="Class alert lead time"
-                  className="w-auto shrink-0 [&>button:first-child]:border-none [&>button:first-child]:bg-transparent [&>button:first-child]:px-0 [&>button:first-child]:text-[11px] [&>button:first-child]:text-indigo-600 dark:[&>button:first-child]:text-indigo-400"
+                  className="w-auto shrink-0 [&>button:first-child]:border-none [&>button:first-child]:bg-transparent [&>button:first-child]:px-0 [&>button:first-child]:text-xs [&>button:first-child]:text-primary dark:[&>button:first-child]:text-primary"
                 />
               </div>
             </div>
@@ -340,28 +338,28 @@ export default function PushNotificationManager() {
                   label: "Low Attendance Alerts",
                   desc: "Notify immediately when course attendance drops below target",
                   icon: AlertTriangle,
-                  color: "text-red-500",
+                  color: "text-danger-foreground",
                 },
                 {
                   key: "notifyClassReminders",
                   label: "Class Timetable Reminders",
                   desc: "Remind before next scheduled lecture starts",
                   icon: Calendar,
-                  color: "text-indigo-500",
+                  color: "text-primary",
                 },
                 {
                   key: "notifyExamAlerts",
                   label: "Exam Schedule & Timetable Alerts",
                   desc: "Alerts for upcoming CAT/FAT exam dates & venues",
                   icon: FileText,
-                  color: "text-amber-500",
+                  color: "text-warning-foreground",
                 },
                 {
                   key: "notifyMarksRelease",
                   label: "Marks & Grade Release Alerts",
                   desc: "Push notification when new CAT/FAT/Lab marks are published",
                   icon: Award,
-                  color: "text-emerald-500",
+                  color: "text-success-foreground",
                 },
                 {
                   key: "notifyMessServing",
@@ -375,35 +373,35 @@ export default function PushNotificationManager() {
                   label: "Hostel Leave & Outpass Approvals",
                   desc: "Instant alert when warden approves or updates leave status",
                   icon: Plane,
-                  color: "text-rose-500",
+                  color: "text-danger-foreground",
                 },
                 {
                   key: "notifyBusUpdates",
                   label: "Day Scholar Bus Schedule Alerts",
                   desc: "Updates on bus routes, timings and delay alerts",
                   icon: Bus,
-                  color: "text-amber-600",
+                  color: "text-warning-foreground",
                 },
                 {
                   key: "notifyLibraryBooks",
                   label: "Library Due Date Reminders",
                   desc: "Reminders before Koha library book return deadlines",
                   icon: BookMarked,
-                  color: "text-sky-500",
+                  color: "text-primary",
                 },
                 {
                   key: "notifyAssignments",
                   label: "LMS & Assignment Reminders",
                   desc: "Remind about pending VITOL / Moodle assignment deadlines",
                   icon: BookOpen,
-                  color: "text-purple-500",
+                  color: "text-primary",
                 },
                 {
                   key: "notifyCirculars",
                   label: "Academic Circulars & Notices",
                   desc: "Instant alert on new university circulars and announcements",
                   icon: Bell,
-                  color: "text-blue-500",
+                  color: "text-primary",
                 },
               ].map((item) => {
                 const ItemIcon = item.icon;
@@ -411,13 +409,13 @@ export default function PushNotificationManager() {
                 return (
                   <div
                     key={item.key}
-                    className="flex items-center justify-between p-2.5 rounded-xl bg-gray-50/70 dark:bg-black/40 border border-gray-100 dark:border-gray-800/60"
+                    className="flex items-center justify-between p-2.5 rounded-xl bg-surface-secondary border-2 border-border-ink"
                   >
                     <div className="flex items-center gap-2.5">
                       <ItemIcon size={15} className={item.color} />
                       <div>
-                        <p className="text-xs font-semibold text-gray-800 dark:text-gray-200">{item.label}</p>
-                        <p className="text-[10px] text-gray-500 dark:text-gray-400">{item.desc}</p>
+                        <p className="text-xs font-semibold text-text-primary">{item.label}</p>
+                        <p className="text-xs text-text-muted">{item.desc}</p>
                       </div>
                     </div>
                     <Switch checked={active} onCheckedChange={(val) => updateSettingField(item.key as any, val)} />
@@ -428,18 +426,18 @@ export default function PushNotificationManager() {
           </div>
 
           {/* Sound & Quiet Hours */}
-          <div className="p-4 rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-gray-200/80 dark:border-gray-800 space-y-3">
-            <h5 className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 font-outfit">
+          <div className="p-4 rounded-2xl bg-surface border-2 border-border-ink space-y-3">
+            <h5 className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
               Sound & Quiet Hours
             </h5>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/70 dark:bg-black/40 border border-gray-100 dark:border-gray-800/60">
+              <div className="flex items-center justify-between p-3 rounded-xl bg-surface-secondary border-2 border-border-ink">
                 <div className="flex items-center gap-2">
-                  <Volume2 size={15} className="text-indigo-500" />
+                  <Volume2 size={15} className="text-primary" />
                   <div>
-                    <p className="text-xs font-semibold text-gray-800 dark:text-gray-200">Alert Sound</p>
-                    <p className="text-[10px] text-gray-500 dark:text-gray-400">Play notification sound</p>
+                    <p className="text-xs font-semibold text-text-primary">Alert Sound</p>
+                    <p className="text-xs text-text-muted">Play notification sound</p>
                   </div>
                 </div>
                 <Switch
@@ -448,12 +446,12 @@ export default function PushNotificationManager() {
                 />
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/70 dark:bg-black/40 border border-gray-100 dark:border-gray-800/60">
+              <div className="flex items-center justify-between p-3 rounded-xl bg-surface-secondary border-2 border-border-ink">
                 <div className="flex items-center gap-2">
-                  <Moon size={15} className="text-purple-500" />
+                  <Moon size={15} className="text-primary" />
                   <div>
-                    <p className="text-xs font-semibold text-gray-800 dark:text-gray-200">Quiet Hours Mode</p>
-                    <p className="text-[10px] text-gray-500 dark:text-gray-400">Mute alerts during night</p>
+                    <p className="text-xs font-semibold text-text-primary">Quiet Hours Mode</p>
+                    <p className="text-xs text-text-muted">Mute alerts during night</p>
                   </div>
                 </div>
                 <Switch
@@ -464,21 +462,21 @@ export default function PushNotificationManager() {
             </div>
 
             {settings?.pushQuietHoursEnabled && (
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-100 dark:bg-black/60 border border-gray-200 dark:border-gray-800">
-                <span className="text-xs font-bold text-gray-700 dark:text-gray-300">Quiet Hours Range:</span>
+              <div className="flex items-center gap-3 p-3 rounded-xl bg-surface-secondary border-2 border-border-ink">
+                <span className="text-xs font-bold text-text-primary">Quiet Hours Range:</span>
                 <div className="flex items-center gap-2">
                   <input
                     type="time"
                     value={settings?.pushQuietHoursStart || "22:00"}
                     onChange={(e) => updateSettingField("pushQuietHoursStart", e.target.value)}
-                    className="px-2 py-1 rounded bg-white dark:bg-slate-800 border border-gray-300 dark:border-gray-700 text-xs font-medium text-gray-900 dark:text-white"
+                    className="px-2 py-1 rounded bg-surface border-2 border-border-ink text-xs font-medium text-text-heading"
                   />
-                  <span className="text-xs font-bold text-gray-400">to</span>
+                  <span className="text-xs font-bold text-text-muted">to</span>
                   <input
                     type="time"
                     value={settings?.pushQuietHoursEnd || "07:00"}
                     onChange={(e) => updateSettingField("pushQuietHoursEnd", e.target.value)}
-                    className="px-2 py-1 rounded bg-white dark:bg-slate-800 border border-gray-300 dark:border-gray-700 text-xs font-medium text-gray-900 dark:text-white"
+                    className="px-2 py-1 rounded bg-surface border-2 border-border-ink text-xs font-medium text-text-heading"
                   />
                 </div>
               </div>
@@ -486,15 +484,15 @@ export default function PushNotificationManager() {
           </div>
 
           {/* Optional VAPID Key Customization */}
-          <div className="p-4 rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-gray-200/80 dark:border-gray-800 space-y-2">
+          <div className="p-4 rounded-2xl bg-surface border-2 border-border-ink space-y-2">
             <div className="flex items-center justify-between">
-              <h5 className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 font-outfit flex items-center gap-1.5">
-                <Key size={13} className="text-amber-500" /> VAPID Server Public Key
+              <h5 className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit flex items-center gap-1.5">
+                <Key size={13} className="text-warning-foreground" /> VAPID Server Public Key
               </h5>
               {settings?.customVapidKey && (
                 <button
                   onClick={() => updateSettingField("customVapidKey", "")}
-                  className="text-[10px] text-indigo-500 hover:underline font-semibold cursor-pointer"
+                  className="text-xs text-primary hover:underline font-semibold cursor-pointer"
                 >
                   Reset Default
                 </button>
@@ -505,7 +503,7 @@ export default function PushNotificationManager() {
               placeholder="System Default Key active (Paste custom VAPID public key if self-hosting)"
               value={settings?.customVapidKey || ""}
               onChange={(e) => updateSettingField("customVapidKey", e.target.value)}
-              className="w-full px-3 py-2 rounded-xl bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-800 text-xs font-mono text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none"
+              className="w-full px-3 py-2 rounded-xl bg-surface-secondary border-2 border-border-ink text-xs font-mono text-text-heading placeholder-gray-400 focus:outline-none"
             />
           </div>
         </div>

@@ -824,17 +824,15 @@ export default function StudentReportPage() {
                 className="group flex w-full items-center gap-3.5 p-3.5 text-left transition-colors hover:bg-surface-secondary/70 disabled:cursor-not-allowed disabled:opacity-50 sm:p-4"
               >
                 <span
-                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-transform group-hover:scale-105 ${tint}`}
+                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-transform group- ${tint}`}
                 >
                   <Icon className="h-5 w-5" />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-bold text-text-heading group-hover:text-indigo-600">
-                    {title}
-                  </span>
+                  <span className="block truncate text-sm font-bold text-text-heading group-text-primary">{title}</span>
                   <span className="mt-0.5 block text-xs text-text-secondary">{description}</span>
                 </span>
-                <ChevronRight className="h-4 w-4 shrink-0 text-zinc-400 transition-transform group-hover:translate-x-0.5 group-hover:text-indigo-500" />
+                <ChevronRight className="h-4 w-4 shrink-0 text-text-muted transition-transform group-hover:translate-x-0.5 group-text-primary" />
               </button>
             ))}
           </ListShell>
@@ -847,7 +845,7 @@ export default function StudentReportPage() {
             right={
               <button
                 type="button"
-                className="text-xs font-bold text-indigo-600"
+                className="min-h-9 rounded-[8px] border-2 border-border-ink bg-surface px-2.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-primary shadow-brutal-sm brutal-press"
                 onClick={() =>
                   setSegments(
                     Object.fromEntries(segmentOptions.map(([key]) => [key, true])) as Record<SegmentKey, boolean>,
@@ -901,7 +899,7 @@ export default function StudentReportPage() {
             </span>
           </div>
           {exportError && (
-            <p role="alert" className="text-sm text-red-700">
+            <p role="alert" className="text-sm text-danger-foreground">
               {exportError}
             </p>
           )}

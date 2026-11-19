@@ -1748,7 +1748,7 @@ export default function CourseDetailSubpage({
               type="button"
               onClick={() => handleDownloadMaterial("course-plan", scope)}
               disabled={disabled}
-              className={`${iconBtn} bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/20`}
+              className={`${iconBtn} bg-warning-surface hover:bg-warning-surface text-warning-foreground border-border-ink`}
               title={`Download ${tag ? `${tag} ` : ""}course plan Excel`}
               aria-label={`Download ${tag ? `${tag} ` : ""}course plan Excel`}
             >
@@ -1770,7 +1770,7 @@ export default function CourseDetailSubpage({
               type="button"
               onClick={() => handleDownloadMaterial("all-materials", scope)}
               disabled={disabled}
-              className={`${iconBtn} bg-violet-500/10 hover:bg-violet-500/20 text-violet-600 dark:text-violet-400 border-violet-500/20`}
+              className={`${iconBtn} bg-secondary hover:bg-secondary text-secondary-foreground border-border-ink`}
               title={`Download ${tag ? `${tag} ` : ""}all course materials ZIP`}
               aria-label={`Download ${tag ? `${tag} ` : ""}all course materials ZIP`}
             >
@@ -1796,7 +1796,7 @@ export default function CourseDetailSubpage({
               type="button"
               onClick={() => handleDownloadMaterial("general-materials", scope)}
               disabled={disabled}
-              className={`${iconBtn} bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/20`}
+              className={`${iconBtn} bg-success-surface hover:bg-success-surface text-success-foreground border-border-ink`}
               title={`Download ${tag ? `${tag} ` : ""}general materials ZIP`}
               aria-label={`Download ${tag ? `${tag} ` : ""}general materials ZIP`}
             >
@@ -1841,11 +1841,11 @@ export default function CourseDetailSubpage({
       />
       <div className="flex items-center gap-2 shrink-0">
         <span
-          className={`text-base font-black font-outfit tracking-tight leading-none ${TONE_TEXT[ATT_TONE[d.status] ?? "zinc"]}`}
+          className={`text-base font-bold font-outfit tracking-tight leading-none ${TONE_TEXT[ATT_TONE[d.status] ?? "zinc"]}`}
         >
           {d.total > 0 ? `${Number(d.pct.toFixed(1))}%` : "—"}
         </span>
-        <ChevronRight className="w-4 h-4 text-zinc-400" />
+        <ChevronRight className="w-4 h-4 text-text-muted" />
       </div>
     </button>
   );
@@ -1857,10 +1857,10 @@ export default function CourseDetailSubpage({
       </div>
       <ListRowText title={`${badge} Predictor`} subtitle={d.marginSubline} />
       <div className="flex items-center gap-2 shrink-0">
-        <span className={`text-base font-black font-outfit tracking-tight leading-none ${TONE_TEXT[d.marginTone]}`}>
+        <span className={`text-base font-bold font-outfit tracking-tight leading-none ${TONE_TEXT[d.marginTone]}`}>
           {d.upcomingTotal > 0 ? `${d.upcomingTotal}` : "—"}
         </span>
-        <ChevronRight className="w-4 h-4 text-zinc-400" />
+        <ChevronRight className="w-4 h-4 text-text-muted" />
       </div>
     </button>
   );
@@ -2004,7 +2004,7 @@ export default function CourseDetailSubpage({
                         <span className="block font-bold text-sm text-text-heading truncate font-outfit leading-tight">
                           {h.date}
                         </span>
-                        <span className={`block text-[11px] font-medium mt-0.5 ${TONE_TEXT[tone]}`}>{h.status}</span>
+                        <span className={`block text-xs font-medium mt-0.5 ${TONE_TEXT[tone]}`}>{h.status}</span>
                       </span>
                     </span>
                     {!isPresent && (
@@ -2047,8 +2047,8 @@ export default function CourseDetailSubpage({
               {blocks.map(({ key, label, data }) => (
                 <div key={key} className={TILE_CARD}>
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <h3 className="text-xs font-black uppercase tracking-widest text-text-heading flex items-center gap-2">
-                      <CalendarIcon size={16} className="text-blue-500 dark:text-blue-400" />
+                    <h3 className="text-xs font-bold uppercase tracking-widest text-text-heading flex items-center gap-2">
+                      <CalendarIcon size={16} className="text-primary" />
                       <span>{label}</span>
                     </h3>
                     <ToneBadge tone="blue">{data.length} left</ToneBadge>
@@ -2134,7 +2134,7 @@ export default function CourseDetailSubpage({
             </ToneBadge>
           }
         />
-        <p className="px-1 -mt-1 text-[11px] text-text-secondary dark:text-text-muted font-medium">
+        <p className="px-1 -mt-1 text-xs text-text-secondary dark:text-text-muted font-medium">
           {formatNumber(remaining)} weightage points still available across these {assessments.length} assessment
           {assessments.length === 1 ? "" : "s"}.
         </p>
@@ -2184,7 +2184,7 @@ export default function CourseDetailSubpage({
       </div>
 
       {error && (
-        <div className="p-4 text-sm text-red-600  dark:text-red-500 bg-red-50  dark:bg-red-900/20 rounded-2xl mb-4 flex items-center gap-2">
+        <div className="p-4 text-sm text-danger-foreground bg-danger-surface rounded-2xl mb-4 flex items-center gap-2">
           <XCircle className="w-4 h-4 shrink-0" /> {error}
         </div>
       )}
@@ -2260,12 +2260,12 @@ export default function CourseDetailSubpage({
                   }
                 />
                 <span className="flex items-center gap-2 shrink-0">
-                  <span className="text-base font-black font-outfit tracking-tight leading-none text-indigo-600 dark:text-indigo-400">
+                  <span className="text-base font-bold font-outfit tracking-tight leading-none text-primary">
                     {isSelectedPastSemester && selectedPastGrade
                       ? `Grade ${selectedPastGrade}`
                       : `${courseStats.projected}%`}
                   </span>
-                  <ChevronRight className="w-4 h-4 text-zinc-400" />
+                  <ChevronRight className="w-4 h-4 text-text-muted" />
                 </span>
               </button>
               {/* Grade Predictor */}
@@ -2277,12 +2277,12 @@ export default function CourseDetailSubpage({
                 </span>
                 <ListRowText title="Grade Predictor" subtitle="Simulate what-if scores and see what the FAT needs" />
                 <span className="flex items-center gap-2 shrink-0">
-                  <span className="text-base font-black font-outfit tracking-tight leading-none text-violet-600 dark:text-violet-400">
+                  <span className="text-base font-bold font-outfit tracking-tight leading-none text-primary">
                     {selectedGroup?.theory?.assessments?.length || selectedGroup?.lab?.assessments?.length
                       ? `${(selectedGroup?.theory?.assessments?.length || 0) + (selectedGroup?.lab?.assessments?.length || 0)} tests`
                       : "—"}
                   </span>
-                  <ChevronRight className="w-4 h-4 text-zinc-400" />
+                  <ChevronRight className="w-4 h-4 text-text-muted" />
                 </span>
               </button>
               {/* Grade History */}
@@ -2297,10 +2297,10 @@ export default function CourseDetailSubpage({
                   subtitle={`${isRelative ? "Relative grading" : "Absolute grading"}${courseGradeHistory.length > 0 ? ` · ${courseGradeHistory.length} record${courseGradeHistory.length === 1 ? "" : "s"}` : ""}`}
                 />
                 <span className="flex items-center gap-2 shrink-0">
-                  <span className="text-base font-black font-outfit tracking-tight leading-none text-text-heading">
+                  <span className="text-base font-bold font-outfit tracking-tight leading-none text-text-heading">
                     {selectedPastGrade ? `Grade ${selectedPastGrade}` : `${courseStats.projected}%`}
                   </span>
-                  <ChevronRight className="w-4 h-4 text-zinc-400" />
+                  <ChevronRight className="w-4 h-4 text-text-muted" />
                 </span>
               </button>
               {/* Course Plan */}
@@ -2315,10 +2315,10 @@ export default function CourseDetailSubpage({
                   subtitle={`${mainCourse?.faculty || "Faculty N/A"}${mainCourse?.courseType ? ` · ${isEmbedded ? "Embedded" : mainCourse.courseType}` : ""}`}
                 />
                 <span className="flex items-center gap-2 shrink-0">
-                  <span className="text-sm font-black font-outfit tracking-tight leading-none text-text-heading truncate max-w-24">
+                  <span className="text-sm font-bold font-outfit tracking-tight leading-none text-text-heading truncate max-w-24">
                     {mainCourse?.slot || "—"}
                   </span>
-                  <ChevronRight className="w-4 h-4 text-zinc-400" />
+                  <ChevronRight className="w-4 h-4 text-text-muted" />
                 </span>
               </button>
               {/* VTOP Course Page — teacher-uploaded files */}
@@ -2337,10 +2337,10 @@ export default function CourseDetailSubpage({
                   }
                 />
                 <span className="flex items-center gap-2 shrink-0">
-                  <span className="text-base font-black font-outfit tracking-tight leading-none text-sky-600 dark:text-sky-400">
+                  <span className="text-base font-bold font-outfit tracking-tight leading-none text-primary">
                     {viewLoading ? "…" : totalUploaded > 0 ? String(totalUploaded) : "—"}
                   </span>
-                  <ChevronRight className="w-4 h-4 text-zinc-400" />
+                  <ChevronRight className="w-4 h-4 text-text-muted" />
                 </span>
               </button>
               {/* QBank */}
@@ -2352,11 +2352,11 @@ export default function CourseDetailSubpage({
                 </span>
                 <ListRowText title="QBank" subtitle="Papers & extracted questions" />
                 <span className="flex items-center gap-2 shrink-0">
-                  <span className="text-base font-black font-outfit tracking-tight leading-none text-text-heading">
+                  <span className="text-base font-bold font-outfit tracking-tight leading-none text-text-heading">
                     {(selectedGroup?.theory?.assessments?.length || 0) + (selectedGroup?.lab?.assessments?.length || 0)}{" "}
                     tests
                   </span>
-                  <ChevronRight className="w-4 h-4 text-zinc-400" />
+                  <ChevronRight className="w-4 h-4 text-text-muted" />
                 </span>
               </button>
               {/* Tasks & Homework */}
@@ -2445,11 +2445,11 @@ export default function CourseDetailSubpage({
                 <span className="block text-sm font-bold text-text-heading font-outfit tracking-tight">
                   Simulate marks &amp; regimen
                 </span>
-                <span className="block text-[11px] text-text-secondary dark:text-text-muted font-medium mt-0.5 truncate">
+                <span className="block text-xs text-text-secondary dark:text-text-muted font-medium mt-0.5 truncate">
                   What-if scores, points lost and the exact FAT target
                 </span>
               </span>
-              <ChevronRight className="h-4 w-4 text-zinc-400 shrink-0" />
+              <ChevronRight className="h-4 w-4 text-text-muted shrink-0" />
             </button>
           )}
 
@@ -2469,11 +2469,11 @@ export default function CourseDetailSubpage({
           {/* Grade Insights */}
           <div className="space-y-3">
             <SectionHeader icon={Gauge} title="Grade insights" right={<ToneBadge tone="blue">Beta</ToneBadge>} />
-            <details className="group text-[11px] leading-relaxed text-text-secondary dark:text-text-muted">
+            <details className="group text-xs leading-relaxed text-text-secondary dark:text-text-muted">
               <summary className="cursor-pointer list-none inline-flex items-center gap-1 font-semibold text-text-heading hover:underline">
                 <Info className="h-3.5 w-3.5" /> How this works &amp; why it is safe
               </summary>
-              <div className={`${TILE_CARD} mt-3 space-y-2 text-[11px] font-medium`}>
+              <div className={`${TILE_CARD} mt-3 space-y-2 text-xs font-medium`}>
                 <p>
                   <strong>Proof of concept:</strong> an accurate class curve needs the class average and standard
                   deviation, which means aggregating the marks of every student. That cannot be done securely on your
@@ -2491,7 +2491,7 @@ export default function CourseDetailSubpage({
             {frozenCount > 0 && (
               <div className="flex items-center gap-2 px-1">
                 <ToneBadge tone="zinc">{frozenCount} pinned</ToneBadge>
-                <span className="text-[11px] text-text-muted font-medium">
+                <span className="text-xs text-text-muted font-medium">
                   Stand as recorded — no earlier mark on this device to update from.
                 </span>
               </div>
@@ -2509,7 +2509,7 @@ export default function CourseDetailSubpage({
                 <h4 className="text-sm font-bold text-text-heading font-outfit tracking-tight">
                   Absolute grading enforced
                 </h4>
-                <p className="text-[11px] text-text-secondary dark:text-text-muted font-medium mt-0.5">
+                <p className="text-xs text-text-secondary dark:text-text-muted font-medium mt-0.5">
                   Your grade comes from fixed percentage boundaries, not from how the class performed.
                 </p>
               </div>
@@ -2602,7 +2602,7 @@ export default function CourseDetailSubpage({
                             band starts again. */}
                     <div className={`${TILE_CARD} ${statsMissing ? "opacity-60 grayscale" : ""}`}>
                       {isRelative && (
-                        <p className="mb-2.5 flex items-center gap-2 text-[11px] font-medium text-text-secondary dark:text-text-muted flex-wrap">
+                        <p className="mb-2.5 flex items-center gap-2 text-xs font-medium text-text-secondary dark:text-text-muted flex-wrap">
                           <ToneDot tone={statsMissing ? "zinc" : early ? "amber" : "emerald"} />
                           {statsMissing ? (
                             <span>
@@ -2710,7 +2710,7 @@ export default function CourseDetailSubpage({
                   type="button"
                   onClick={handleDownloadSyllabus}
                   disabled={downloadingSyllabus}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 transition-all active:scale-[0.98] cursor-pointer disabled:opacity-50 shrink-0"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-secondary hover:bg-secondary text-secondary-foreground border border-border-ink transition-all cursor-pointer disabled:opacity-50 shrink-0"
                   title={`Download syllabus PDF for ${selectedCode}`}
                 >
                   {downloadingSyllabus ? (
@@ -2737,7 +2737,7 @@ export default function CourseDetailSubpage({
                   type="button"
                   onClick={handleDownloadCurriculum}
                   disabled={downloadingCurriculum}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 transition-all active:scale-[0.98] cursor-pointer disabled:opacity-50 shrink-0"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-success-surface hover:bg-success-surface text-success-foreground border border-border-ink transition-all cursor-pointer disabled:opacity-50 shrink-0"
                   title="Download full programme curriculum PDF"
                 >
                   {downloadingCurriculum ? (
@@ -2751,14 +2751,14 @@ export default function CourseDetailSubpage({
             </ListShell>
 
             {downloadError && (
-              <div className="p-3 text-xs text-red-600 dark:text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-2">
+              <div className="p-3 text-xs text-danger-foreground bg-danger-surface border border-border-ink rounded-xl flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{downloadError}</span>
               </div>
             )}
 
             {downloadSuccess && (
-              <div className="p-3 text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-2">
+              <div className="p-3 text-xs text-success-foreground bg-success-surface border border-border-ink rounded-xl flex items-center gap-2">
                 <Check className="w-4 h-4 shrink-0" />
                 <span>{downloadSuccess}</span>
               </div>
@@ -2842,13 +2842,11 @@ export default function CourseDetailSubpage({
               title="Quality Circle Meeting (QCM)"
               count={qcmTotalRows || undefined}
               right={
-                qcmLoading ? (
-                  <span className="text-xs font-bold text-indigo-500 animate-pulse">Syncing QCM…</span>
-                ) : null
+                qcmLoading ? <span className="text-xs font-bold text-primary animate-pulse">Syncing QCM…</span> : null
               }
             />
 
-            {qcmError && !qcmData && <p className="px-1 text-sm text-red-500">{qcmError}</p>}
+            {qcmError && !qcmData && <p className="px-1 text-sm text-danger-foreground">{qcmError}</p>}
 
             {qcmLoading && (!qcmData || qcmTotalRows === 0) ? (
               <ListSkeleton rows={3} />
@@ -2897,7 +2895,7 @@ export default function CourseDetailSubpage({
                           <div className="flex items-center gap-2 shrink-0">
                             {action && <ToneBadge tone="violet">{action}</ToneBadge>}
                             <ChevronRight
-                              className={`h-4 w-4 text-zinc-400 transition-transform duration-200 ${
+                              className={`h-4 w-4 text-text-muted transition-transform duration-200 ${
                                 isExpanded ? "rotate-90" : ""
                               }`}
                             />
@@ -2913,10 +2911,10 @@ export default function CourseDetailSubpage({
                               transition={{ duration: 0.22, ease: "easeInOut" }}
                               className="overflow-hidden"
                             >
-                              <div className="p-4 bg-surface-secondary/40 dark:bg-zinc-900/40 border-t border-border-muted dark:border-border/70 space-y-3">
+                              <div className="p-4 bg-surface-secondary/40 border-t border-border-muted dark:border-border/70 space-y-3">
                                 {suggestions && (
-                                  <div className="p-3 rounded-xl bg-surface dark:bg-zinc-800/60 border border-border-muted dark:border-zinc-700/60 space-y-1">
-                                    <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">
+                                  <div className="p-3 rounded-xl bg-surface border border-border-muted space-y-1">
+                                    <span className="text-xs font-bold uppercase tracking-wider text-text-muted block">
                                       Student Suggestions & Committee Feedback
                                     </span>
                                     <p className="text-xs sm:text-sm font-medium text-text-heading leading-relaxed">
@@ -2926,8 +2924,8 @@ export default function CourseDetailSubpage({
                                 )}
 
                                 {facultyReply && (
-                                  <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-950 dark:text-emerald-200 space-y-1">
-                                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block">
+                                  <div className="p-3 rounded-xl bg-success-surface border border-border-ink text-emerald-950 dark:text-emerald-200 space-y-1">
+                                    <span className="text-xs font-bold uppercase tracking-wider text-success-foreground block">
                                       Faculty Response / Action Taken
                                     </span>
                                     <p className="text-xs sm:text-sm font-medium leading-relaxed">{facultyReply}</p>
@@ -2935,8 +2933,8 @@ export default function CourseDetailSubpage({
                                 )}
 
                                 {hodComments && (
-                                  <div className="p-3 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-950 dark:text-violet-200 space-y-1">
-                                    <span className="text-[10px] font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400 block">
+                                  <div className="p-3 rounded-xl bg-secondary border border-border-ink text-violet-950 dark:text-violet-200 space-y-1">
+                                    <span className="text-xs font-bold uppercase tracking-wider text-primary block">
                                       HOD Remarks
                                     </span>
                                     <p className="text-xs sm:text-sm font-medium leading-relaxed">{hodComments}</p>
@@ -2988,7 +2986,7 @@ export default function CourseDetailSubpage({
                   type="button"
                   onClick={() => fetchViewDetail()}
                   disabled={viewLoading}
-                  className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-extrabold uppercase tracking-wider text-text-secondary dark:text-text-muted border border-border-muted dark:border-border bg-surface-secondary dark:bg-zinc-800 hover:bg-border-muted dark:hover:bg-zinc-700 transition-colors disabled:opacity-50 cursor-pointer"
+                  className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold uppercase tracking-wider text-text-secondary dark:text-text-muted border border-border-muted dark:border-border bg-surface-secondary hover:bg-border-muted transition-colors disabled:opacity-50 cursor-pointer"
                   title="Re-fetch this course's VTOP page (slow; 4-6 requests)"
                 >
                   <RefreshCw className={`w-3 h-3 ${viewLoading ? "animate-spin" : ""}`} />
@@ -3039,7 +3037,7 @@ export default function CourseDetailSubpage({
                                       type="button"
                                       onClick={() => handleDownloadReferenceMaterial(key, entry, row, mat)}
                                       disabled={downloadingRef !== null}
-                                      className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20 transition-all active:scale-[0.98] cursor-pointer disabled:opacity-50 shrink-0"
+                                      className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-secondary hover:bg-secondary text-secondary-foreground border border-border-ink transition-all cursor-pointer disabled:opacity-50 shrink-0"
                                       title={`Download ${mat.label} (${row.date})`}
                                       aria-label={`Download ${mat.label} for session on ${row.date}`}
                                     >
@@ -3056,7 +3054,7 @@ export default function CourseDetailSubpage({
                                   type="button"
                                   onClick={() => setMaterialSheet({ entry, row, scope })}
                                   disabled={downloadingRef !== null}
-                                  className="inline-flex items-center justify-center w-9 h-9 rounded-xl text-blue-600 dark:text-blue-400 border border-blue-500/20 bg-blue-500/10 hover:bg-blue-500/20 transition-all active:scale-[0.98] cursor-pointer disabled:opacity-50 shrink-0"
+                                  className="inline-flex items-center justify-center w-9 h-9 rounded-xl text-secondary-foreground border border-border-ink bg-secondary hover:bg-secondary transition-all cursor-pointer disabled:opacity-50 shrink-0"
                                   title={`${row.materials.length} reference files for this session`}
                                   aria-label={`Show ${row.materials.length} reference files for session on ${row.date}`}
                                 >
@@ -3078,11 +3076,9 @@ export default function CourseDetailSubpage({
             {/* Bulk downloads — per component when embedded */}
             <div className="space-y-4">
               <div className="px-1 flex items-center justify-between gap-2">
-                <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-text-muted">
-                  Course Materials
-                </span>
+                <span className="text-xs font-bold uppercase tracking-[0.14em] text-text-muted">Course Materials</span>
                 {isEmbedded && (
-                  <span className="text-[10px] font-semibold text-text-muted">Separate files for theory &amp; lab</span>
+                  <span className="text-xs font-semibold text-text-muted">Separate files for theory &amp; lab</span>
                 )}
               </div>
               {isEmbedded ? (
@@ -3155,7 +3151,7 @@ export default function CourseDetailSubpage({
                         onClick={() => setActiveHistoryTerm(gh.semester)}
                         className={`${LIST_ROW} cursor-pointer`}
                       >
-                        <span className="w-28 shrink-0 text-[11px] font-bold text-zinc-600 dark:text-zinc-300 truncate">
+                        <span className="w-28 shrink-0 text-xs font-bold text-text-muted truncate">
                           {historyTermLabel(gh.semester)}
                         </span>
                         <span className="min-w-0 flex-1">
@@ -3213,9 +3209,9 @@ export default function CourseDetailSubpage({
                                         : d.type || "Theory"
                                     }
                                   />
-                                  <span className="shrink-0 text-sm font-black font-outfit text-zinc-800 dark:text-zinc-100">
+                                  <span className="shrink-0 text-sm font-bold font-outfit text-text-primary">
                                     {d.scoredMark ?? "-"}
-                                    <span className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500 ml-0.5">
+                                    <span className="text-xs font-medium text-text-muted ml-0.5">
                                       /{d.maxMark ?? "-"}
                                     </span>
                                   </span>
@@ -3234,9 +3230,7 @@ export default function CourseDetailSubpage({
                                   <span className="w-14 shrink-0">
                                     <ToneBadge tone={toneForGrade(grade)}>{grade}</ToneBadge>
                                   </span>
-                                  <span className="text-xs font-bold text-zinc-600 dark:text-zinc-300 truncate">
-                                    {String(rangeStr)}
-                                  </span>
+                                  <span className="text-xs font-bold text-text-muted truncate">{String(rangeStr)}</span>
                                   {String(grade).toUpperCase() === String(letter ?? "").toUpperCase() && (
                                     <ToneBadge tone="indigo" className="ml-auto">
                                       Yours
@@ -3289,7 +3283,7 @@ export default function CourseDetailSubpage({
                     className={`${LIST_ROW} py-3.5 disabled:opacity-60`}
                     title={`Download ${mat.label} (${mat.materialDate})`}
                   >
-                    <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400">
+                    <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-secondary border-border-ink text-secondary-foreground">
                       <FileText className="w-5 h-5" />
                     </span>
                     <ListRowText
@@ -3297,7 +3291,7 @@ export default function CourseDetailSubpage({
                       subtitle={`${materialSheet.row?.date ?? ""} · Ref ${mat.materialId}`}
                     />
                     {isDownloading ? (
-                      <RefreshCw className="w-4 h-4 animate-spin text-blue-500 shrink-0" />
+                      <RefreshCw className="w-4 h-4 animate-spin text-primary shrink-0" />
                     ) : (
                       <Download className="w-4 h-4 text-text-muted shrink-0" />
                     )}

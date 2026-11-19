@@ -117,8 +117,8 @@ export function setCachedFriendFinderState(sem: string, state: ClassmatesState |
 }
 
 const PRIMARY_BUTTON =
-  "inline-flex items-center justify-center gap-2 rounded-2xl bg-indigo-500 hover:bg-indigo-600 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 text-white font-bold px-5 py-3 text-sm shadow-lg shadow-indigo-500/20 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
-const ACTION_BUTTON = `${GHOST_BUTTON} justify-center py-2.5 text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500`;
+  "inline-flex items-center justify-center gap-2 rounded-2xl bg-primary hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 text-primary-foreground font-bold px-5 py-3 text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-ink focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+const ACTION_BUTTON = `${GHOST_BUTTON} justify-center py-2.5 text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-ink`;
 
 const AVATAR_TONES = ["indigo", "emerald", "amber", "violet", "sky", "red"] as const;
 
@@ -134,11 +134,11 @@ function avatarTone(key: string): string {
 }
 
 function Avatar({ person, size = "md" }: { person: Pick<ClassmatePerson, "handle" | "name">; size?: "sm" | "md" }) {
-  const dims = size === "sm" ? "w-6 h-6 text-[10px]" : "w-10 h-10 text-sm";
+  const dims = size === "sm" ? "w-6 h-6 text-xs" : "w-10 h-10 text-sm";
   return (
     <span
       aria-hidden
-      className={`${dims} ${avatarTone(person.handle)} rounded-full border flex items-center justify-center shrink-0 font-black font-outfit`}
+      className={`${dims} ${avatarTone(person.handle)} rounded-full border flex items-center justify-center shrink-0 font-bold font-outfit`}
     >
       {initials(person.name)}
     </span>
@@ -146,7 +146,7 @@ function Avatar({ person, size = "md" }: { person: Pick<ClassmatePerson, "handle
 }
 
 function VerifiedTick({ className = "w-4 h-4" }: { className?: string }) {
-  return <BadgeCheck className={`${className} text-emerald-500 shrink-0`} aria-label="Registered in VTOP" />;
+  return <BadgeCheck className={`${className} text-success-foreground shrink-0`} aria-label="Registered in VTOP" />;
 }
 
 /**
@@ -446,7 +446,7 @@ function PersonChip({
           : undefined
       }
       className={`inline-flex items-center gap-1.5 rounded-2xl border border-border-strong dark:border-border bg-surface pl-1 pr-2.5 py-1 text-xs font-semibold text-text-heading max-w-full ${
-        onClick ? "cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" : ""
+        onClick ? "cursor-pointer hover:bg-surface-hover transition-colors" : ""
       }`}
     >
       <Avatar person={person} size="sm" />
@@ -455,7 +455,7 @@ function PersonChip({
         {person.regNo && isVitRegistrationNumber(person.regNo) ? ` (${person.regNo})` : ""}
       </span>
       {isMarked && markLabel ? (
-        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
+        <span className="text-xs font-bold px-1.5 py-0.5 rounded bg-warning-surface text-warning-foreground border border-border-ink">
           {markLabel}
         </span>
       ) : null}
@@ -483,10 +483,7 @@ function TrustPoints() {
         </li>
       ))}
       <li className="pt-1 text-xs text-muted-foreground pl-11">
-        <Link
-          href="/friend-finder/disclaimer"
-          className="text-indigo-600 dark:text-indigo-400 underline hover:opacity-80 font-medium"
-        >
+        <Link href="/friend-finder/disclaimer" className="text-primary underline hover:opacity-80 font-medium">
           Read Sharing & Liability Disclaimer →
         </Link>
       </li>
@@ -505,8 +502,8 @@ function Notice({
 }) {
   const palette =
     tone === "red"
-      ? "border-red-500/25 bg-red-500/10 text-red-700 dark:text-red-300"
-      : "border-amber-500/25 bg-amber-500/10 text-amber-800 dark:text-amber-200";
+      ? "border-border-ink bg-danger-surface text-danger-foreground"
+      : "border-border-ink bg-warning-surface text-amber-800 dark:text-amber-200";
   return (
     <div
       role="alert"
@@ -540,7 +537,7 @@ function InviteButton({ className = "" }: { className?: string }) {
   };
   return (
     <button type="button" onClick={() => void invite()} className={`${ACTION_BUTTON} ${className}`}>
-      {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Share2 className="w-3.5 h-3.5" />}
+      {copied ? <Check className="w-3.5 h-3.5 text-success-foreground" /> : <Share2 className="w-3.5 h-3.5" />}
       {copied ? "Link copied" : "Invite friends"}
     </button>
   );
@@ -567,7 +564,7 @@ function SectionCard({
           onClick();
         }
       }}
-      className={`px-4 py-4 space-y-3 ${onClick ? "cursor-pointer hover:bg-zinc-50/70 dark:hover:bg-zinc-800/40 active:scale-[0.99] transition-all" : ""}`}
+      className={`px-4 py-4 space-y-3 ${onClick ? "cursor-pointer hover:bg-surface-hover active:scale-[0.99] transition-all" : ""}`}
     >
       <div className="flex items-start gap-3">
         <span
@@ -577,7 +574,7 @@ function SectionCard({
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-sm font-bold text-text-heading leading-snug">
-            <span className="font-outfit font-black tracking-tight">{entry.code}</span>
+            <span className="font-outfit font-bold tracking-tight">{entry.code}</span>
             <span className="text-muted-foreground font-medium"> · </span>
             {entry.title.replace(/\s+-\s*|-\s+/g, "-")}
           </p>
@@ -589,20 +586,20 @@ function SectionCard({
               <UserRound className="w-3 h-3 shrink-0" />
               <span className="truncate">{displayName(entry.faculty)}</span>
             </span>
-            <span className="uppercase tracking-wide text-[10px] font-bold">{entry.type}</span>
+            <span className="uppercase tracking-wide text-xs font-bold">{entry.type}</span>
           </p>
         </div>
         <div className="flex items-center gap-1.5 shrink-0 self-center pl-1">
           <span
             aria-label={`${count} ${count === 1 ? "classmate" : "classmates"}`}
             title={`${count} ${count === 1 ? "classmate" : "classmates"}`}
-            className={`text-2xl sm:text-3xl font-black font-outfit tracking-tight leading-none ${
-              count ? "text-indigo-600 dark:text-indigo-400" : "text-zinc-300 dark:text-zinc-600"
+            className={`text-2xl sm:text-3xl font-bold font-outfit tracking-tight leading-none ${
+              count ? "text-primary" : "text-text-muted "
             }`}
           >
             {count}
           </span>
-          {onClick && <ChevronRight className="w-4 h-4 text-zinc-400 shrink-0" />}
+          {onClick && <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />}
         </div>
       </div>
       {count ? (
@@ -649,7 +646,7 @@ function AmazeCCLogoLeading() {
   return (
     <Link
       href="/"
-      className="inline-flex items-center transition-transform active:scale-95 py-0.5"
+      className="inline-flex items-center transition-transform py-0.5"
       title="AmazeCC Home"
       aria-label="AmazeCC Home"
     >
@@ -1055,7 +1052,7 @@ export default function FriendFinderTab({
       >
         <div className="space-y-4 p-1">
           {/* User Details Card */}
-          <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800/50 border border-border-subtle space-y-3">
+          <div className="p-4 rounded-2xl bg-surface-secondary border border-border-subtle space-y-3">
             <div className="flex items-center gap-3">
               <Avatar person={{ handle: me.handle, name: me.name }} size="md" />
               <div className="min-w-0 flex-1">
@@ -1070,14 +1067,14 @@ export default function FriendFinderTab({
             </div>
 
             <div className="grid grid-cols-2 gap-2 pt-1">
-              <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-900/60 border border-border-subtle/60">
-                <span className="block text-[11px] font-medium text-muted-foreground">Classes Shared</span>
+              <div className="p-2.5 rounded-xl bg-surface border border-border-subtle/60">
+                <span className="block text-xs font-medium text-muted-foreground">Classes Shared</span>
                 <span className="text-xs font-bold text-text-heading">
                   {me.classIds.length} {me.classIds.length === 1 ? "class" : "classes"}
                 </span>
               </div>
-              <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-900/60 border border-border-subtle/60">
-                <span className="block text-[11px] font-medium text-muted-foreground">Status</span>
+              <div className="p-2.5 rounded-xl bg-surface border border-border-subtle/60">
+                <span className="block text-xs font-medium text-muted-foreground">Status</span>
                 <div className="flex items-center gap-1 mt-0.5">
                   <ToneBadge size="sm" tone={me.source === "registered" ? "emerald" : "indigo"}>
                     {me.source === "registered" ? "Verified" : "Planned"}
@@ -1088,12 +1085,12 @@ export default function FriendFinderTab({
 
             {(state.handles?.length ?? 0) > 1 ? (
               <div className="pt-1">
-                <span className="block text-[11px] font-medium text-muted-foreground mb-1.5">Your Social handles</span>
+                <span className="block text-xs font-medium text-muted-foreground mb-1.5">Your Social handles</span>
                 <div className="flex flex-wrap gap-1.5">
                   {state.handles.map((handle) => (
                     <span
                       key={handle}
-                      className="px-2 py-1 rounded-lg bg-white dark:bg-zinc-900/60 border border-border-subtle/60 text-[11px] font-mono text-text-heading"
+                      className="px-2 py-1 rounded-lg bg-surface border border-border-subtle/60 text-xs font-mono text-text-heading"
                     >
                       {handle}
                     </span>
@@ -1103,10 +1100,10 @@ export default function FriendFinderTab({
             ) : null}
           </div>
           {/* Visibility Switch */}
-          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-800/40 border border-border-subtle">
+          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-surface-secondary border border-border-subtle">
             <div>
               <p className="text-xs font-bold text-text-heading">Visible to classmates</p>
-              <p className="text-[11px] text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 {me.discoverable ? "Others in your sections can find you" : "You are hidden from everyone"}
               </p>
             </div>
@@ -1136,7 +1133,7 @@ export default function FriendFinderTab({
               className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
                 confirmingRemove
                   ? "!bg-red-500 !text-white hover:!bg-red-600 shadow-sm"
-                  : "!bg-red-500/10 !text-red-600 dark:!text-red-400 hover:!bg-red-500/15 border border-red-500/20"
+                  : "!bg-danger-surface !text-danger-foreground dark:!text-danger-foreground hover:!bg-danger-surface border border-border-ink"
               }`}
             >
               <span className="flex items-center gap-2">
@@ -1163,11 +1160,11 @@ export default function FriendFinderTab({
               className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
                 confirmingLogout
                   ? "!bg-rose-600 !text-white hover:!bg-rose-700 shadow-sm"
-                  : "bg-zinc-100 hover:bg-zinc-200/80 dark:bg-zinc-800/80 dark:hover:bg-zinc-700/80 text-zinc-700 dark:text-zinc-200 border border-border-subtle"
+                  : "bg-surface-secondary hover:bg-surface-tertiary text-text-primary border border-border-subtle"
               }`}
             >
               <span className="flex items-center gap-2">
-                <LogOut className="w-4 h-4 text-rose-500" />
+                <LogOut className="w-4 h-4 text-danger-foreground" />
                 {confirmingLogout ? "Tap again to log out" : "Log out"}
               </span>
               <ChevronRight className="w-4 h-4 opacity-70" />
@@ -1273,7 +1270,7 @@ export default function FriendFinderTab({
                       setSelectedClassId(entry.id);
                     }
                   }}
-                  className={`${LIST_ROW} cursor-pointer hover:bg-zinc-50/70 dark:hover:bg-zinc-800/40 transition-all`}
+                  className={`${LIST_ROW} cursor-pointer hover:bg-surface-hover transition-all`}
                 >
                   <span
                     className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 ${TONE_ICON_TILE.indigo}`}
@@ -1294,12 +1291,12 @@ export default function FriendFinderTab({
                       {entry.type ? (
                         <>
                           <span>·</span>
-                          <span className="uppercase font-bold text-[10px]">{entry.type}</span>
+                          <span className="uppercase font-bold text-xs">{entry.type}</span>
                         </>
                       ) : null}
                     </p>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-zinc-400 shrink-0" />
+                  <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
                 </div>
               );
             })}
@@ -1339,7 +1336,7 @@ export default function FriendFinderTab({
     e.needsAmazeIdSignIn ? (
       <button
         type="button"
-        className={`${ACTION_BUTTON} !bg-indigo-500 !text-white hover:!bg-indigo-600`}
+        className={`${ACTION_BUTTON} !bg-primary !text-primary-foreground hover:!bg-primary`}
         onClick={signInInteractive}
       >
         <LogIn className="w-3.5 h-3.5" /> Sign in with Amaze ID
@@ -1347,7 +1344,7 @@ export default function FriendFinderTab({
     ) : e.needsSignIn ? (
       <button
         type="button"
-        className={`${ACTION_BUTTON} !bg-indigo-500 !text-white hover:!bg-indigo-600`}
+        className={`${ACTION_BUTTON} !bg-primary !text-primary-foreground hover:!bg-primary`}
         disabled={reauthing}
         onClick={() => void reauthenticate(e.retry)}
       >
@@ -1376,7 +1373,7 @@ export default function FriendFinderTab({
             <span className={`w-14 h-14 rounded-2xl border flex items-center justify-center ${TONE_ICON_TILE.indigo}`}>
               <UsersRound className="w-7 h-7" />
             </span>
-            <h3 className="text-lg sm:text-xl font-black font-outfit tracking-tight text-text-heading">
+            <h3 className="text-lg sm:text-xl font-bold font-outfit tracking-tight text-text-heading">
               {isDemo ? "Sign in to find your classmates" : "Find who's in your classes"}
             </h3>
             <p className="text-sm text-muted-foreground max-w-sm">
@@ -1440,7 +1437,7 @@ export default function FriendFinderTab({
           >
             <AlertTriangle className="w-7 h-7" />
           </span>
-          <h3 className="text-lg font-black font-outfit tracking-tight text-text-heading">
+          <h3 className="text-lg font-bold font-outfit tracking-tight text-text-heading">
             Switch to the upcoming winter course list
           </h3>
           <p className="text-sm text-muted-foreground max-w-sm mx-auto">
@@ -1531,7 +1528,7 @@ export default function FriendFinderTab({
                       const fac = selectedEntry.theorySection?.offering?.faculty || selectedEntry.faculty;
                       openFacultyReview({ name: fac, courseCode: selectedEntry.code });
                     }}
-                    className={`${ACTION_BUTTON} !border !border-indigo-500/30 !bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 hover:!bg-indigo-500/20`}
+                    className={`${ACTION_BUTTON} !border !border-border-ink !bg-secondary text-secondary-foreground hover:!bg-secondary`}
                   >
                     <Star className="w-3.5 h-3.5 fill-current" />
                     Faculty reviews
@@ -1541,7 +1538,7 @@ export default function FriendFinderTab({
 
               {/* Theory and Lab components breakdown */}
               {isSameFaculty(selectedEntry.theorySection?.offering, selectedEntry.labSection?.offering) ? (
-                <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-800/40 border border-border-subtle space-y-2.5 pt-2 border-t border-border-strong dark:border-border">
+                <div className="p-3.5 rounded-2xl bg-surface-secondary border border-border-subtle space-y-2.5 pt-2 border-t border-border-strong dark:border-border">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <ToneBadge size="sm" tone="indigo">
@@ -1560,7 +1557,7 @@ export default function FriendFinderTab({
                           courseCode: selectedEntry.code,
                         })
                       }
-                      className={`${ACTION_BUTTON} !py-1 !px-2 !text-xs !border !border-indigo-500/30 !bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 hover:!bg-indigo-500/20`}
+                      className={`${ACTION_BUTTON} !py-1 !px-2 !text-xs !border !border-border-ink !bg-secondary text-secondary-foreground hover:!bg-secondary`}
                     >
                       <Star className="w-3 h-3 fill-current" />
                       Review
@@ -1587,7 +1584,7 @@ export default function FriendFinderTab({
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-border-strong dark:border-border">
                   {/* Theory (ETH) */}
-                  <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-zinc-800/40 border border-border-subtle space-y-2">
+                  <div className="p-3 rounded-2xl bg-surface-secondary border border-border-subtle space-y-2">
                     <div className="flex items-center justify-between">
                       <ToneBadge size="sm" tone="indigo">
                         Theory (ETH)
@@ -1600,7 +1597,7 @@ export default function FriendFinderTab({
                             courseCode: selectedEntry.theorySection!.offering!.code,
                           })
                         }
-                        className={`${ACTION_BUTTON} !py-1 !px-2 !text-xs !border !border-indigo-500/30 !bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 hover:!bg-indigo-500/20`}
+                        className={`${ACTION_BUTTON} !py-1 !px-2 !text-xs !border !border-border-ink !bg-secondary text-secondary-foreground hover:!bg-secondary`}
                       >
                         <Star className="w-3 h-3 fill-current" />
                         Review
@@ -1625,7 +1622,7 @@ export default function FriendFinderTab({
                   </div>
 
                   {/* Lab (ELA) */}
-                  <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-zinc-800/40 border border-border-subtle space-y-2">
+                  <div className="p-3 rounded-2xl bg-surface-secondary border border-border-subtle space-y-2">
                     <div className="flex items-center justify-between">
                       <ToneBadge size="sm" tone="emerald">
                         Lab (ELA)
@@ -1638,7 +1635,7 @@ export default function FriendFinderTab({
                             courseCode: selectedEntry.labSection!.offering!.code,
                           })
                         }
-                        className={`${ACTION_BUTTON} !py-1 !px-2 !text-xs !border !border-indigo-500/30 !bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 hover:!bg-indigo-500/20`}
+                        className={`${ACTION_BUTTON} !py-1 !px-2 !text-xs !border !border-border-ink !bg-secondary text-secondary-foreground hover:!bg-secondary`}
                       >
                         <Star className="w-3 h-3 fill-current" />
                         Review
@@ -1665,20 +1662,20 @@ export default function FriendFinderTab({
               )}
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-border-strong dark:border-border">
-                <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/50">
-                  <span className="block text-[11px] font-medium text-muted-foreground">Course Code</span>
+                <div className="p-2.5 rounded-xl bg-surface-secondary">
+                  <span className="block text-xs font-medium text-muted-foreground">Course Code</span>
                   <span className="text-xs font-bold text-text-heading">{selectedEntry.code}</span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/50">
-                  <span className="block text-[11px] font-medium text-muted-foreground">Total Credits</span>
+                <div className="p-2.5 rounded-xl bg-surface-secondary">
+                  <span className="block text-xs font-medium text-muted-foreground">Total Credits</span>
                   <span className="text-xs font-bold text-text-heading">{selectedEntry.credits}</span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/50">
-                  <span className="block text-[11px] font-medium text-muted-foreground">Type</span>
+                <div className="p-2.5 rounded-xl bg-surface-secondary">
+                  <span className="block text-xs font-medium text-muted-foreground">Type</span>
                   <span className="text-xs font-bold text-text-heading uppercase">Embedded</span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/50">
-                  <span className="block text-[11px] font-medium text-muted-foreground">
+                <div className="p-2.5 rounded-xl bg-surface-secondary">
+                  <span className="block text-xs font-medium text-muted-foreground">
                     {selectedEntry.classIds.length > 1 ? "Class Numbers" : "Class Number"}
                   </span>
                   <span className="text-xs font-mono font-bold text-text-heading break-all whitespace-normal select-all">
@@ -1713,7 +1710,7 @@ export default function FriendFinderTab({
                 <button
                   type="button"
                   onClick={() => openFacultyReview({ name: selectedEntry.faculty, courseCode: selectedEntry.code })}
-                  className={`${ACTION_BUTTON} !border !border-indigo-500/30 !bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 hover:!bg-indigo-500/20`}
+                  className={`${ACTION_BUTTON} !border !border-border-ink !bg-secondary text-secondary-foreground hover:!bg-secondary`}
                 >
                   <Star className="w-3.5 h-3.5 fill-current" />
                   Faculty reviews
@@ -1721,20 +1718,20 @@ export default function FriendFinderTab({
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-border-strong dark:border-border">
-                <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/50">
-                  <span className="block text-[11px] font-medium text-muted-foreground">Course Code</span>
+                <div className="p-2.5 rounded-xl bg-surface-secondary">
+                  <span className="block text-xs font-medium text-muted-foreground">Course Code</span>
                   <span className="text-xs font-bold text-text-heading">{selectedEntry.code}</span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/50">
-                  <span className="block text-[11px] font-medium text-muted-foreground">Credits</span>
+                <div className="p-2.5 rounded-xl bg-surface-secondary">
+                  <span className="block text-xs font-medium text-muted-foreground">Credits</span>
                   <span className="text-xs font-bold text-text-heading">{selectedEntry.credits}</span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/50">
-                  <span className="block text-[11px] font-medium text-muted-foreground">Type</span>
+                <div className="p-2.5 rounded-xl bg-surface-secondary">
+                  <span className="block text-xs font-medium text-muted-foreground">Type</span>
                   <span className="text-xs font-bold text-text-heading uppercase">{selectedEntry.type}</span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/50">
-                  <span className="block text-[11px] font-medium text-muted-foreground">Class Number</span>
+                <div className="p-2.5 rounded-xl bg-surface-secondary">
+                  <span className="block text-xs font-medium text-muted-foreground">Class Number</span>
                   <span className="text-xs font-mono font-bold text-text-heading break-all whitespace-normal select-all">
                     {selectedEntry.id}
                   </span>
@@ -1764,7 +1761,7 @@ export default function FriendFinderTab({
                           handlePersonClick(p);
                         }
                       }}
-                      className="flex items-center gap-3 px-4 py-3 border-b last:border-b-0 border-border-subtle cursor-pointer hover:bg-zinc-50/70 dark:hover:bg-zinc-800/40 active:scale-[0.99] transition-all"
+                      className="flex items-center gap-3 px-4 py-3 border-b last:border-b-0 border-border-subtle cursor-pointer hover:bg-surface-hover active:scale-[0.99] transition-all"
                     >
                       <Avatar person={p} />
                       <div className="min-w-0 flex-1">
@@ -1794,7 +1791,7 @@ export default function FriendFinderTab({
                             Verified
                           </ToneBadge>
                         )}
-                        <ChevronRight className="w-4 h-4 text-zinc-400" />
+                        <ChevronRight className="w-4 h-4 text-text-muted" />
                       </div>
                     </div>
                   );
@@ -1855,7 +1852,7 @@ export default function FriendFinderTab({
                 >
                   <Sparkles className="w-6 h-6" />
                 </span>
-                <h3 className="text-lg sm:text-xl font-black font-outfit tracking-tight text-text-heading">
+                <h3 className="text-lg sm:text-xl font-bold font-outfit tracking-tight text-text-heading">
                   {editing ? "Change what you share" : "See who's in your classes"}
                 </h3>
                 <p className="text-sm text-muted-foreground">
@@ -1863,9 +1860,9 @@ export default function FriendFinderTab({
                 </p>
               </div>
               <TrustPoints />
-              <div className="flex items-center gap-2 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 px-3 py-2.5">
-                <UsersRound className="w-4 h-4 text-indigo-500 shrink-0" />
-                <span className="text-xs font-semibold text-indigo-700 dark:text-indigo-300">
+              <div className="flex items-center gap-2 rounded-2xl bg-secondary border border-border-ink px-3 py-2.5">
+                <UsersRound className="w-4 h-4 text-primary shrink-0" />
+                <span className="text-xs font-semibold text-primary">
                   {state.participants.toLocaleString()} {state.participants === 1 ? "student has" : "students have"}{" "}
                   joined this semester
                 </span>
@@ -1919,8 +1916,8 @@ export default function FriendFinderTab({
       leading={standaloneLogo ? <AmazeCCLogoLeading /> : undefined}
       onBack={standaloneLogo ? undefined : (onBack ?? (openedFromHome ? () => setActiveTab("home") : undefined))}
       eyebrow={
-        <span className="font-black tracking-tight text-zinc-700 dark:text-zinc-200">
-          Amaze<span className="text-indigo-600 dark:text-indigo-400">CC</span>
+        <span className="font-bold tracking-tight text-text-primary">
+          Amaze<span className="text-primary">CC</span>
         </span>
       }
       title="Find your friend"
@@ -1940,7 +1937,7 @@ export default function FriendFinderTab({
             title={copied ? "Link copied" : "Share with friends"}
             aria-label="Share"
           >
-            {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Share2 className="w-4 h-4" />}
+            {copied ? <Check className="w-4 h-4 text-success-foreground" /> : <Share2 className="w-4 h-4" />}
           </IconButton>
           <IconButton onClick={() => setIsProfileOpen(true)} title="Profile" aria-label="Profile">
             <UserRound className="w-4 h-4" />
@@ -1971,7 +1968,7 @@ export default function FriendFinderTab({
             >
               <EyeOff className="w-7 h-7" />
             </span>
-            <h3 className="text-lg font-black font-outfit tracking-tight text-text-heading">You&apos;re hidden</h3>
+            <h3 className="text-lg font-bold font-outfit tracking-tight text-text-heading">You&apos;re hidden</h3>
             <p className="text-sm text-muted-foreground max-w-sm mx-auto">
               Nobody can see you, and you can&apos;t see anyone either. Your classes are still saved.
             </p>
@@ -1990,14 +1987,14 @@ export default function FriendFinderTab({
               <StatTile
                 label="Classmates"
                 value={uniqueClassmates}
-                sub={<span className="text-[11px] text-muted-foreground">found</span>}
+                sub={<span className="text-xs text-muted-foreground">found</span>}
                 tone="indigo"
                 height="h-24 sm:h-28"
               />
               <StatTile
                 label="Joined"
                 value={state.participants.toLocaleString()}
-                sub={<span className="text-[11px] text-muted-foreground">students</span>}
+                sub={<span className="text-xs text-muted-foreground">students</span>}
                 tone="neutral"
                 height="h-24 sm:h-28"
               />
@@ -2028,7 +2025,7 @@ export default function FriendFinderTab({
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search friends by name, reg no, or course…"
                     aria-label="Search friends"
-                    className="w-full pl-10 pr-9 py-2.5 rounded-2xl bg-surface border border-border-strong dark:border-border text-sm text-text-heading placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-indigo-500/50 transition-all font-medium"
+                    className="w-full pl-10 pr-9 py-2.5 rounded-2xl bg-surface border border-border-strong dark:border-border text-sm text-text-heading placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-border-ink transition-all font-medium"
                   />
                   {searchQuery ? (
                     <button
@@ -2078,7 +2075,7 @@ export default function FriendFinderTab({
                               setSelectedFriend(o);
                             }
                           }}
-                          className={`${LIST_ROW} cursor-pointer hover:bg-zinc-50/70 dark:hover:bg-zinc-800/40 active:scale-[0.99] transition-all`}
+                          className={`${LIST_ROW} cursor-pointer hover:bg-surface-hover active:scale-[0.99] transition-all`}
                         >
                           <Avatar person={o} />
                           <div className="min-w-0 flex-1">
@@ -2114,11 +2111,11 @@ export default function FriendFinderTab({
                             <span
                               aria-label={`${o.shared} ${o.shared === 1 ? "class" : "classes"} shared`}
                               title={`${o.shared} ${o.shared === 1 ? "class" : "classes"} shared`}
-                              className="text-2xl sm:text-3xl font-black font-outfit tracking-tight leading-none text-indigo-600 dark:text-indigo-400 min-w-[24px] text-right"
+                              className="text-2xl sm:text-3xl font-bold font-outfit tracking-tight leading-none text-primary min-w-[24px] text-right"
                             >
                               {o.shared}
                             </span>
-                            <ChevronRight className="w-4 h-4 text-zinc-400 shrink-0" />
+                            <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
                           </div>
                         </div>
                       );
@@ -2135,7 +2132,7 @@ export default function FriendFinderTab({
                     <button
                       type="button"
                       onClick={() => setSearchQuery("")}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface border border-border-strong text-xs font-semibold text-text-heading hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors mt-2 cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface border border-border-strong text-xs font-semibold text-text-heading hover:bg-surface-hover transition-colors mt-2 cursor-pointer"
                     >
                       <X className="w-3.5 h-3.5" /> Clear search
                     </button>
@@ -2150,7 +2147,7 @@ export default function FriendFinderTab({
                   </div>
                 )}
                 {hasVerified ? (
-                  <p className="flex items-center gap-1.5 px-1 text-[11px] text-muted-foreground">
+                  <p className="flex items-center gap-1.5 px-1 text-xs text-muted-foreground">
                     <VerifiedTick className="w-3.5 h-3.5" /> Verified: registered in VTOP, not just planned
                   </p>
                 ) : null}

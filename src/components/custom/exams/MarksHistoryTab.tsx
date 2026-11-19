@@ -81,13 +81,13 @@ type Screen = (typeof SCREENS)[number];
 const GRADE_BAR: Record<string, string> = {
   S: "bg-amber-500",
   A: "bg-emerald-500",
-  B: "bg-blue-500",
+  B: "bg-primary",
   C: "bg-cyan-500",
-  D: "bg-violet-500",
+  D: "bg-primary",
   E: "bg-red-500",
   F: "bg-red-600",
   N: "bg-zinc-400",
-  P: "bg-violet-500",
+  P: "bg-primary",
 };
 
 export default function MarksHistoryTab({
@@ -287,7 +287,7 @@ export default function MarksHistoryTab({
               <button
                 type="button"
                 onClick={onRefresh}
-                className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-black text-white transition-colors hover:bg-indigo-700"
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition-colors hover:brightness-110"
               >
                 <RefreshCcw className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
                 Sync grades
@@ -304,11 +304,11 @@ export default function MarksHistoryTab({
     <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
       <div className={cn(TILE, "min-h-32 sm:min-h-36")}>
         <div className="flex items-center justify-between gap-1">
-          <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-outfit truncate">
+          <span className="text-xs sm:text-xs font-bold uppercase tracking-wider text-text-muted font-outfit truncate">
             Cumulative
           </span>
           {cumulative.creditsRequired > 0 && (
-            <span className="text-[9px] sm:text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md shrink-0 border bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20">
+            <span className="text-xs sm:text-xs font-bold uppercase px-2 py-0.5 rounded-md shrink-0 border bg-secondary text-secondary-foreground border-border-ink">
               {cumulative.creditsEarned.toFixed(0)}/{cumulative.creditsRequired.toFixed(0)} cr
             </span>
           )}
@@ -316,14 +316,14 @@ export default function MarksHistoryTab({
         <div className="my-auto min-w-0">
           <span
             className={cn(
-              "text-3xl sm:text-4xl font-black font-outfit tracking-tight leading-none block truncate",
-              cumulative.value > 0 ? TONE_TEXT.indigo : "text-zinc-900 dark:text-white",
+              "text-3xl sm:text-4xl font-bold font-outfit tracking-tight leading-none block truncate",
+              cumulative.value > 0 ? TONE_TEXT.indigo : "text-text-heading",
             )}
           >
             {cumulative.value > 0 ? cumulative.value.toFixed(2) : "—"}
           </span>
         </div>
-        <p className="text-[10.5px] sm:text-xs text-text-secondary dark:text-text-muted font-medium truncate">
+        <p className="text-xs sm:text-xs text-text-secondary dark:text-text-muted font-medium truncate">
           {/* Only VTOP's own figure may be presented as the CGPA. The other two
               are this app's arithmetic — a reconstruction of VTOP's formula, and
               an unweighted mean — and a reader deserves to know which one they
@@ -345,7 +345,7 @@ export default function MarksHistoryTab({
     <div className="space-y-6">
       {hero}
 
-      <p className="px-1 -mt-3 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500 font-medium">
+      <p className="px-1 -mt-3 text-xs leading-relaxed text-text-muted font-medium">
         GPA is the figure VTOP published for that term. Cumulative is credit-weighted across every term so far, so it
         moves less than a single term&apos;s average does.
       </p>
@@ -404,16 +404,14 @@ export default function MarksHistoryTab({
                 onClick={() => setActiveId(r.id)}
                 className={`${LIST_ROW} cursor-pointer`}
               >
-                <span className="w-24 shrink-0 text-[11px] font-bold text-zinc-600 dark:text-zinc-300 truncate">
-                  {r.label}
-                </span>
+                <span className="w-24 shrink-0 text-xs font-bold text-text-muted truncate">{r.label}</span>
                 <span className="min-w-0 flex-1">
                   <MiniBar pct={(r.gpa / 10) * 100} tone={gpaBarTone(r.gpa)} />
                 </span>
                 <span
                   className={cn(
-                    "shrink-0 text-sm font-black font-outfit tracking-tight leading-none w-10 text-right",
-                    isActive ? "text-indigo-600 dark:text-indigo-400" : "text-zinc-800 dark:text-zinc-100",
+                    "shrink-0 text-sm font-bold font-outfit tracking-tight leading-none w-10 text-right",
+                    isActive ? "text-primary" : "text-text-primary",
                   )}
                 >
                   {r.gpa > 0 ? r.gpa.toFixed(2) : "—"}
@@ -429,16 +427,16 @@ export default function MarksHistoryTab({
         onClick={() => stack.go("insights")}
         className={`${TILE_CARD} w-full flex items-center gap-3 text-left cursor-pointer hover:border-border-strong dark:hover:border-border transition-colors`}
       >
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-violet-500/20 bg-violet-500/10 text-violet-600 dark:text-violet-400">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-border-ink bg-secondary text-secondary-foreground">
           <BarChart3 className="h-4.5 w-4.5" />
         </span>
         <span className="min-w-0 flex-1">
           <span className="block text-sm font-bold text-text-heading font-outfit tracking-tight">Grade insights</span>
-          <span className="block text-[11px] text-text-secondary dark:text-text-muted font-medium mt-0.5 truncate">
+          <span className="block text-xs text-text-secondary dark:text-text-muted font-medium mt-0.5 truncate">
             Grade distribution, theory against lab, and score by term
           </span>
         </span>
-        <ChevronRight className="h-4 w-4 text-zinc-400 shrink-0" />
+        <ChevronRight className="h-4 w-4 text-text-muted shrink-0" />
       </button>
     </div>
   );
@@ -465,7 +463,7 @@ export default function MarksHistoryTab({
 
       <div className="space-y-3">
         <SectionHeader icon={Award} title="Grade distribution" count={distribution.reduce((s, r) => s + r.count, 0)} />
-        <p className="px-1 -mt-1 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500 font-medium">
+        <p className="px-1 -mt-1 text-xs leading-relaxed text-text-muted font-medium">
           Every graded course across all terms. Ungraded results are left out of the share entirely, so a term you have
           not been assessed on yet cannot distort it.
         </p>
@@ -481,10 +479,10 @@ export default function MarksHistoryTab({
                 <span className="min-w-0 flex-1">
                   <MiniBar pct={d.share} tone={GRADE_BAR[d.grade] ?? "bg-zinc-400"} />
                 </span>
-                <span className="shrink-0 text-sm font-black font-outfit text-zinc-800 dark:text-zinc-100 w-10 text-right">
+                <span className="shrink-0 text-sm font-bold font-outfit text-text-primary w-10 text-right">
                   {d.count}
                 </span>
-                <span className="shrink-0 text-[11px] font-bold text-zinc-400 dark:text-zinc-500 w-12 text-right">
+                <span className="shrink-0 text-xs font-bold text-text-muted w-12 text-right">
                   {d.share.toFixed(0)}%
                 </span>
               </div>
@@ -495,7 +493,7 @@ export default function MarksHistoryTab({
 
       <div className="space-y-3">
         <SectionHeader icon={Gauge} title="Theory against lab" count={byType.length} />
-        <p className="px-1 -mt-1 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500 font-medium">
+        <p className="px-1 -mt-1 text-xs leading-relaxed text-text-muted font-medium">
           An embedded course is published as two entries under one code, so averaging everything together hides whether
           it is your labs dragging the number.
         </p>
@@ -512,7 +510,7 @@ export default function MarksHistoryTab({
                     tone={t.avg >= 80 ? "bg-emerald-500" : t.avg >= 65 ? "bg-amber-500" : "bg-red-500"}
                   />
                 </span>
-                <span className="shrink-0 text-sm font-black font-outfit text-zinc-800 dark:text-zinc-100 w-12 text-right">
+                <span className="shrink-0 text-sm font-bold font-outfit text-text-primary w-12 text-right">
                   {t.avg.toFixed(1)}%
                 </span>
               </div>
@@ -526,16 +524,14 @@ export default function MarksHistoryTab({
         <ListShell>
           {rows.map((r) => (
             <div key={r.id} className={LIST_ROW}>
-              <span className="w-24 shrink-0 text-[11px] font-bold text-zinc-600 dark:text-zinc-300 truncate">
-                {r.label}
-              </span>
+              <span className="w-24 shrink-0 text-xs font-bold text-text-muted truncate">{r.label}</span>
               <span className="min-w-0 flex-1">
                 <MiniBar
                   pct={r.avgScore}
                   tone={r.avgScore >= 80 ? "bg-emerald-500" : r.avgScore >= 65 ? "bg-amber-500" : "bg-red-500"}
                 />
               </span>
-              <span className="shrink-0 text-sm font-black font-outfit text-zinc-800 dark:text-zinc-100 w-12 text-right">
+              <span className="shrink-0 text-sm font-bold font-outfit text-text-primary w-12 text-right">
                 {r.scored.length > 0 ? `${r.avgScore.toFixed(1)}%` : "—"}
               </span>
             </div>
@@ -574,7 +570,7 @@ export default function MarksHistoryTab({
       {isEmbeddedCourse(course) && segments && (
         <div className="space-y-3">
           <SectionHeader icon={Layers} title="Theory and lab" count={segments.length} />
-          <p className="px-1 -mt-1 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500 font-medium">
+          <p className="px-1 -mt-1 text-xs leading-relaxed text-text-muted font-medium">
             VTOP records an embedded course as a single blended grade. These are the two halves it blends, each scored
             out of 100 on its own.
           </p>
@@ -592,11 +588,11 @@ export default function MarksHistoryTab({
           </div>
 
           {blend && (
-            <p className="px-1 flex items-start gap-2 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500 font-medium">
+            <p className="px-1 flex items-start gap-2 text-xs leading-relaxed text-text-muted font-medium">
               <Info className="h-3.5 w-3.5 shrink-0 mt-px" />
               Weighted by {blend.theoryCredits} and {blend.labCredits} credits, the halves come to{" "}
-              <span className="font-bold text-zinc-600 dark:text-zinc-300">{blend.blended.toFixed(2)}</span>, against
-              the {blend.published} VTOP recorded.
+              <span className="font-bold text-text-muted">{blend.blended.toFixed(2)}</span>, against the{" "}
+              {blend.published} VTOP recorded.
             </p>
           )}
 
@@ -614,11 +610,9 @@ export default function MarksHistoryTab({
                   {s.assessments.map((a, i) => (
                     <div key={`${a.title}-${i}`} className="flex items-center gap-3 py-2.5 px-4">
                       <ListRowText title={a.title} subtitle={`${a.weightagePercent || "-"}% weightage`} />
-                      <span className="shrink-0 text-sm font-black font-outfit text-zinc-800 dark:text-zinc-100">
+                      <span className="shrink-0 text-sm font-bold font-outfit text-text-primary">
                         {a.scoredMark || "-"}
-                        <span className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500 ml-0.5">
-                          /{a.maxMark || "-"}
-                        </span>
+                        <span className="text-xs font-medium text-text-muted ml-0.5">/{a.maxMark || "-"}</span>
                       </span>
                     </div>
                   ))}
@@ -632,7 +626,7 @@ export default function MarksHistoryTab({
       {/* Embedded with no cached halves: say so rather than show a flat list the
           reader will read as the whole story. */}
       {isEmbeddedCourse(course) && !segments && (
-        <p className="px-1 flex items-start gap-2 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500 font-medium">
+        <p className="px-1 flex items-start gap-2 text-xs leading-relaxed text-text-muted font-medium">
           <Info className="h-3.5 w-3.5 shrink-0 mt-px" />
           VTOP records embedded courses as one blended grade, so the theory and lab halves are not part of the published
           record. Refresh to pull this term&apos;s marks and split them.
@@ -683,7 +677,7 @@ export default function MarksHistoryTab({
             one VTOP recorded. Saying so beats a reader adding up the column and
             concluding the app is wrong. */}
         {showReconciliation && course && (
-          <p className="px-1 flex items-start gap-2 text-[11px] leading-relaxed text-amber-600 dark:text-amber-400 font-medium">
+          <p className="px-1 flex items-start gap-2 text-xs leading-relaxed text-warning-foreground font-medium">
             <Info className="h-3.5 w-3.5 shrink-0 mt-px" />
             {componentBlend != null ? (
               <>
@@ -709,7 +703,7 @@ export default function MarksHistoryTab({
                 <span className="w-14 shrink-0">
                   <ToneBadge tone={toneForGrade(grade)}>{grade}</ToneBadge>
                 </span>
-                <span className="text-xs font-bold text-zinc-600 dark:text-zinc-300 truncate">{String(rangeStr)}</span>
+                <span className="text-xs font-bold text-text-muted truncate">{String(rangeStr)}</span>
                 {String(grade).toUpperCase() === String(course.grade ?? "").toUpperCase() && (
                   <ToneBadge tone="indigo" className="ml-auto">
                     Yours
@@ -774,9 +768,9 @@ function numOrDash(value: unknown): string {
 }
 
 function gpaBarTone(gpa: number): string {
-  if (gpa <= 0) return "bg-zinc-300 dark:bg-zinc-700";
+  if (gpa <= 0) return "bg-surface-tertiary";
   if (gpa >= 9) return "bg-emerald-500";
-  if (gpa >= 8) return "bg-indigo-500";
+  if (gpa >= 8) return "bg-primary";
   return "bg-amber-500";
 }
 
@@ -819,9 +813,9 @@ function AssessmentRow({ item }: { item: NonNullable<GradeItem["details"]>[numbe
   return (
     <div className="flex items-center gap-3 py-2.5 px-4">
       <ListRowText title={item.component} subtitle={`${item.weightagePercent ?? "-"}% weightage`} />
-      <span className="shrink-0 text-sm font-black font-outfit text-zinc-800 dark:text-zinc-100">
+      <span className="shrink-0 text-sm font-bold font-outfit text-text-primary">
         {item.scoredMark ?? "-"}
-        <span className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500 ml-0.5">/{item.maxMark ?? "-"}</span>
+        <span className="text-xs font-medium text-text-muted ml-0.5">/{item.maxMark ?? "-"}</span>
       </span>
     </div>
   );
@@ -832,7 +826,7 @@ function CourseRow({ course, onOpen }: { course: GradeItem; onOpen: () => void }
   const embedded = isEmbeddedCourse(course);
   return (
     <button type="button" onClick={onOpen} className={`${LIST_ROW} cursor-pointer`}>
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-border-muted bg-surface-secondary text-zinc-500 dark:text-zinc-400">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-border-muted bg-surface-secondary text-text-muted">
         {embedded ? <Layers className="h-4.5 w-4.5" /> : <GraduationCap className="h-4.5 w-4.5" />}
       </span>
       <ListRowText title={course.courseCode} subtitle={course.courseTitle} titleTooltip={course.courseTitle} />
@@ -840,15 +834,15 @@ function CourseRow({ course, onOpen }: { course: GradeItem; onOpen: () => void }
         /* The published number blends both halves, so a reader comparing it to
            their own marks needs to know that before they wonder why the
            subpage has two scores in it. */
-        <span className="hidden shrink-0 rounded-full bg-indigo-100 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-indigo-700 sm:inline dark:bg-indigo-900/30 dark:text-indigo-300">
+        <span className="hidden shrink-0 rounded-[6px] bg-indigo-100 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-primary sm:inline dark:bg-indigo-900/30 dark:text-primary">
           T+L
         </span>
       )}
-      <span className="shrink-0 text-[11px] font-bold text-zinc-500 dark:text-zinc-400 w-12 text-right">
+      <span className="shrink-0 text-xs font-bold text-text-muted w-12 text-right">
         {numOrDash(course.grandTotal)}%
       </span>
       <ToneBadge tone={toneForGrade(course.grade)}>{course.grade || "—"}</ToneBadge>
-      <ChevronRight className="h-4 w-4 text-zinc-400 shrink-0" />
+      <ChevronRight className="h-4 w-4 text-text-muted shrink-0" />
     </button>
   );
 }

@@ -2,16 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useAtom } from "jotai";
-import {
-  Clock,
-  Plus,
-  Trash2,
-  Bell,
-  Sparkles,
-  Timer,
-  AlertCircle,
-  Layers,
-} from "lucide-react";
+import { Clock, Plus, Trash2, Bell, Sparkles, Timer, AlertCircle, Layers } from "lucide-react";
 import BottomSheet from "../shared/BottomSheet";
 import { attendanceDataAtom } from "@/store/dataAtoms";
 import { settingsAtom } from "@/store/settingsAtoms";
@@ -99,7 +90,7 @@ export default function TaskEditSheet({
       setTitle(initialTitle || "");
       setKind("homework");
       setStatus("pending");
-      setCourseCode(initialCourseCode || (enrolledCourses[0]?.code || ""));
+      setCourseCode(initialCourseCode || enrolledCourses[0]?.code || "");
       setComponent(initialComponent || "both");
       setDueDate("");
       setReminders([]);
@@ -116,7 +107,7 @@ export default function TaskEditSheet({
       if (isNaN(d.getTime())) return "";
       const pad = (n: number) => String(n).padStart(2, "0");
       return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(
-        d.getHours()
+        d.getHours(),
       )}:${pad(d.getMinutes())}`;
     } catch {
       return "";
@@ -159,16 +150,11 @@ export default function TaskEditSheet({
 
   // Schedule chunk operations
   const addChunk = () => {
-    setSchedule([
-      ...schedule,
-      { day: "MON", start: "17:00", end: "18:00" },
-    ]);
+    setSchedule([...schedule, { day: "MON", start: "17:00", end: "18:00" }]);
   };
 
   const updateChunk = (index: number, patch: Partial<WeekChunk>) => {
-    setSchedule(
-      schedule.map((c, i) => (i === index ? { ...c, ...patch } : c))
-    );
+    setSchedule(schedule.map((c, i) => (i === index ? { ...c, ...patch } : c)));
   };
 
   const removeChunk = (index: number) => {
@@ -180,12 +166,8 @@ export default function TaskEditSheet({
       // Calculate minutes of first chunk
       const [sh, sm] = schedule[0].start.split(":").map(Number);
       const [eh, em] = schedule[0].end.split(":").map(Number);
-      const mins = Math.max(15, (eh * 60 + (em || 0)) - (sh * 60 + (sm || 0)));
-      const suggested = suggestPomodoros(
-        mins,
-        settings?.taskPomodoroFocus || 25,
-        settings?.taskPomodoroBreak || 5
-      );
+      const mins = Math.max(15, eh * 60 + (em || 0) - (sh * 60 + (sm || 0)));
+      const suggested = suggestPomodoros(mins, settings?.taskPomodoroFocus || 25, settings?.taskPomodoroBreak || 5);
       setPomodoro(suggested);
     } else {
       setPomodoro({
@@ -238,14 +220,14 @@ export default function TaskEditSheet({
       title={task ? "Edit Task" : "New Task"}
       subtitle="Course-linked homework, tests & study items"
       icon={<Layers className="w-5 h-5" />}
-      accent="bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border-indigo-100 dark:border-indigo-900/30"
+      accent="bg-secondary text-secondary-foreground border-border-ink"
       closeLabel={task ? "Close edit task" : "Close new task"}
     >
       <div className="flex flex-col max-h-[85vh] text-left">
         {/* Scrollable Form Body */}
         <div className="p-4 sm:p-5 space-y-4 overflow-y-auto min-h-0 flex-1">
           {error && (
-            <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs font-semibold flex items-center gap-2">
+            <div className="p-3 rounded-xl bg-danger-surface border border-border-ink text-danger-foreground text-xs font-semibold flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -253,21 +235,21 @@ export default function TaskEditSheet({
 
           {/* Title */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 mb-1.5">
-              Task Title <span className="text-red-500">*</span>
+            <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5">
+              Task Title <span className="text-danger-foreground">*</span>
             </label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Complete DA 2, Study for CAT 1"
-              className="w-full text-sm font-semibold rounded-xl bg-zinc-50 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full text-sm font-semibold rounded-xl bg-surface-secondary border-2 border-border-ink text-text-heading px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-border-ink"
             />
           </div>
 
           {/* Kind Selector */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 mb-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5">
               Type / Category
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -282,8 +264,8 @@ export default function TaskEditSheet({
                     onClick={() => setKind(k)}
                     className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
                       isSelected
-                        ? "bg-indigo-50 dark:bg-indigo-950/40 border-indigo-500 text-indigo-600 dark:text-indigo-400 ring-1 ring-indigo-500/20 shadow-2xs"
-                        : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-700"
+                        ? "bg-secondary border-border-ink text-secondary-foreground ring-1 ring-border-ink shadow-2xs"
+                        : "bg-surface border-border-ink text-text-primary hover:border-border-ink "
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5 shrink-0" />
@@ -297,9 +279,7 @@ export default function TaskEditSheet({
           {/* Status (if editing) */}
           {task && (
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 mb-1.5">
-                Status
-              </label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5">Status</label>
               <div className="flex gap-2">
                 {(["pending", "in_progress", "done"] as TaskStatus[]).map((s) => (
                   <button
@@ -309,9 +289,9 @@ export default function TaskEditSheet({
                     className={`flex-1 py-2 px-3 rounded-xl border text-xs font-bold capitalize transition-all cursor-pointer ${
                       status === s
                         ? s === "done"
-                          ? "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-600 dark:text-emerald-400"
-                          : "bg-indigo-50 dark:bg-indigo-950/40 border-indigo-500 text-indigo-600 dark:text-indigo-400"
-                        : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400"
+                          ? "bg-success-surface border-border-ink text-success-foreground"
+                          : "bg-secondary border-border-ink text-secondary-foreground"
+                        : "bg-surface border-border-ink text-text-muted"
                     }`}
                   >
                     {s.replace("_", " ")}
@@ -324,42 +304,40 @@ export default function TaskEditSheet({
           {/* Course Linking */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5">
                 Course Link
               </label>
               <div className="relative">
-                    <SelectField
-                      value={courseCode}
-                      onChange={(val) => setCourseCode(val)}
-                      options={[
-                        { value: "", label: "No Course (General)" },
-                        ...enrolledCourses.map((c) => ({
-                          value: c.code,
-                          label: `${c.code} - ${c.title}`,
-                        })),
-                      ]}
-                      searchable
-                      stacked
-                      role="group"
-                      aria-label="Course"
-                    />
+                <SelectField
+                  value={courseCode}
+                  onChange={(val) => setCourseCode(val)}
+                  options={[
+                    { value: "", label: "No Course (General)" },
+                    ...enrolledCourses.map((c) => ({
+                      value: c.code,
+                      label: `${c.code} - ${c.title}`,
+                    })),
+                  ]}
+                  searchable
+                  stacked
+                  role="group"
+                  aria-label="Course"
+                />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5">
                 Component
               </label>
-              <div className="flex rounded-xl bg-zinc-100 dark:bg-zinc-800/80 p-1 border border-zinc-200 dark:border-zinc-800">
+              <div className="flex rounded-xl bg-surface-secondary p-1 border-2 border-border-ink">
                 {(["theory", "lab", "both"] as TaskComponent[]).map((comp) => (
                   <button
                     key={comp}
                     type="button"
                     onClick={() => setComponent(comp)}
                     className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold uppercase transition-all cursor-pointer ${
-                      component === comp
-                        ? "bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-2xs"
-                        : "text-zinc-600 dark:text-zinc-400"
+                      component === comp ? "bg-surface text-primary shadow-2xs" : "text-text-muted"
                     }`}
                   >
                     {comp}
@@ -371,50 +349,52 @@ export default function TaskEditSheet({
 
           {/* Due Date */}
           <div>
-            <label htmlFor="task-due" className="block text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 mb-1.5">
+            <label
+              htmlFor="task-due"
+              className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5"
+            >
               Due Date & Time
             </label>
-            <input id="task-due"
+            <input
+              id="task-due"
               type="datetime-local"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="w-full text-xs font-semibold rounded-xl bg-zinc-50 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full text-xs font-semibold rounded-xl bg-surface-secondary border-2 border-border-ink text-text-heading px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-border-ink"
             />
           </div>
 
           {/* Reminders section */}
-          <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200/70 dark:border-zinc-800/70 space-y-2.5">
+          <div className="p-3.5 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-2.5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
-                <Bell className="w-3.5 h-3.5 text-indigo-500" />
+              <span className="text-xs font-bold uppercase tracking-wider text-text-primary flex items-center gap-1.5">
+                <Bell className="w-3.5 h-3.5 text-primary" />
                 In-App Reminders
               </span>
-              <span className="text-[10px] text-zinc-400">
-                {reminders.length} armed
-              </span>
+              <span className="text-xs text-text-muted">{reminders.length} armed</span>
             </div>
 
             {dueDate && (
               <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-[10px] font-semibold text-zinc-500">Quick:</span>
+                <span className="text-xs font-semibold text-text-muted">Quick:</span>
                 <button
                   type="button"
                   onClick={() => addLeadReminder(15)}
-                  className="relative hit-expand px-2 py-1 rounded-md text-[10px] font-bold bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 cursor-pointer"
+                  className="relative hit-expand px-2 py-1 rounded-md text-xs font-bold bg-surface border-2 border-border-ink text-text-primary text-primary cursor-pointer"
                 >
                   15m before
                 </button>
                 <button
                   type="button"
                   onClick={() => addLeadReminder(60)}
-                  className="relative hit-expand px-2 py-1 rounded-md text-[10px] font-bold bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 cursor-pointer"
+                  className="relative hit-expand px-2 py-1 rounded-md text-xs font-bold bg-surface border-2 border-border-ink text-text-primary text-primary cursor-pointer"
                 >
                   1h before
                 </button>
                 <button
                   type="button"
                   onClick={() => addLeadReminder(1440)}
-                  className="relative hit-expand px-2 py-1 rounded-md text-[10px] font-bold bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 cursor-pointer"
+                  className="relative hit-expand px-2 py-1 rounded-md text-xs font-bold bg-surface border-2 border-border-ink text-text-primary text-primary cursor-pointer"
                 >
                   1 day before
                 </button>
@@ -427,9 +407,9 @@ export default function TaskEditSheet({
                 {reminders.map((r, i) => (
                   <div
                     key={i}
-                    className="flex items-center justify-between text-xs py-1 px-2.5 rounded-lg bg-white dark:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-700/80"
+                    className="flex items-center justify-between text-xs py-1 px-2.5 rounded-lg bg-surface border-2 border-border-ink"
                   >
-                    <span className="font-semibold text-zinc-800 dark:text-zinc-200">
+                    <span className="font-semibold text-text-primary">
                       {new Date(r).toLocaleString(undefined, {
                         month: "short",
                         day: "numeric",
@@ -440,7 +420,7 @@ export default function TaskEditSheet({
                     <button
                       type="button"
                       onClick={() => removeReminder(i)}
-                      className="text-zinc-400 hover:text-red-500 cursor-pointer"
+                      className="text-text-muted hover:text-danger-foreground cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -455,13 +435,13 @@ export default function TaskEditSheet({
                 type="datetime-local"
                 value={customReminder}
                 onChange={(e) => setCustomReminder(e.target.value)}
-                className="flex-1 text-xs rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 px-3 py-1.5 text-zinc-900 dark:text-white"
+                className="flex-1 text-xs rounded-xl bg-surface border-2 border-border-ink px-3 py-1.5 text-text-heading"
               />
               <button
                 type="button"
                 onClick={handleAddCustomReminder}
                 disabled={!customReminder}
-                className="px-3 py-1.5 rounded-xl bg-indigo-600 disabled:opacity-50 text-white text-xs font-bold cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-primary disabled:opacity-50 text-primary-foreground text-xs font-bold cursor-pointer"
               >
                 Add
               </button>
@@ -469,21 +449,19 @@ export default function TaskEditSheet({
           </div>
 
           {/* Weekly Schedule Chunks */}
-          <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200/70 dark:border-zinc-800/70 space-y-2.5">
+          <div className="p-3.5 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-2.5">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-indigo-500" />
+                <span className="text-xs font-bold uppercase tracking-wider text-text-primary flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-primary" />
                   Weekly Time Slots
                 </span>
-                <p className="text-[10.5px] text-zinc-400">
-                  Allocates dedicated study chunks on the timetable
-                </p>
+                <p className="text-xs text-text-muted">Allocates dedicated study chunks on the timetable</p>
               </div>
               <button
                 type="button"
                 onClick={addChunk}
-                className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
+                className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 Add Slot
@@ -491,41 +469,36 @@ export default function TaskEditSheet({
             </div>
 
             {schedule.map((chunk, idx) => (
-              <div
-                key={idx}
-                className="flex items-center gap-2 p-2 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-700/80"
-              >
-                  <SelectField
-                    value={String(chunk.day)}
-                    onChange={(val) =>
-                      updateChunk(idx, { day: val as AttendanceDay })
-                    }
-                    options={ATTENDANCE_DAYS.map((d) => ({ value: d, label: d }))}
-                    searchable={false}
-                    size="sm"
-                    role="group"
-                    aria-label="Day"
-                    className="w-auto shrink-0 [&>button:first-child]:rounded-lg [&>button:first-child]:bg-zinc-100 dark:[&>button:first-child]:bg-zinc-700 [&>button:first-child]:px-2 [&>button:first-child]:text-xs [&>button:first-child]:uppercase"
-                  />
+              <div key={idx} className="flex items-center gap-2 p-2 rounded-xl bg-surface border-2 border-border-ink">
+                <SelectField
+                  value={String(chunk.day)}
+                  onChange={(val) => updateChunk(idx, { day: val as AttendanceDay })}
+                  options={ATTENDANCE_DAYS.map((d) => ({ value: d, label: d }))}
+                  searchable={false}
+                  size="sm"
+                  role="group"
+                  aria-label="Day"
+                  className="w-auto shrink-0 [&>button:first-child]:rounded-lg [&>button:first-child]:bg-surface-secondary dark:[&>button:first-child]:bg-zinc-700 [&>button:first-child]:px-2 [&>button:first-child]:text-xs [&>button:first-child]:uppercase"
+                />
 
                 <input
                   type="time"
                   value={chunk.start}
                   onChange={(e) => updateChunk(idx, { start: e.target.value })}
-                  className="text-xs font-medium rounded-lg bg-zinc-100 dark:bg-zinc-700 px-2 py-1.5 border border-zinc-200 dark:border-zinc-600 text-zinc-800 dark:text-zinc-200"
+                  className="text-xs font-medium rounded-lg bg-surface-secondary px-2 py-1.5 border border-border-ink text-text-primary"
                 />
-                <span className="text-xs text-zinc-400">–</span>
+                <span className="text-xs text-text-muted">–</span>
                 <input
                   type="time"
                   value={chunk.end}
                   onChange={(e) => updateChunk(idx, { end: e.target.value })}
-                  className="text-xs font-medium rounded-lg bg-zinc-100 dark:bg-zinc-700 px-2 py-1.5 border border-zinc-200 dark:border-zinc-600 text-zinc-800 dark:text-zinc-200"
+                  className="text-xs font-medium rounded-lg bg-surface-secondary px-2 py-1.5 border border-border-ink text-text-primary"
                 />
 
                 <button
                   type="button"
                   onClick={() => removeChunk(idx)}
-                  className="p-1.5 text-zinc-400 hover:text-red-500 cursor-pointer ml-auto"
+                  className="p-1.5 text-text-muted hover:text-danger-foreground cursor-pointer ml-auto"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
@@ -534,16 +507,16 @@ export default function TaskEditSheet({
           </div>
 
           {/* Pomodoro Settings */}
-          <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200/70 dark:border-zinc-800/70 space-y-2.5">
+          <div className="p-3.5 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-2.5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
-                <Timer className="w-3.5 h-3.5 text-amber-500" />
+              <span className="text-xs font-bold uppercase tracking-wider text-text-primary flex items-center gap-1.5">
+                <Timer className="w-3.5 h-3.5 text-warning-foreground" />
                 Pomodoro Focus Plan
               </span>
               <button
                 type="button"
                 onClick={handleAutoSuggestPomodoro}
-                className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-600 dark:text-amber-400 hover:underline cursor-pointer"
+                className="inline-flex items-center gap-1 text-xs font-bold text-warning-foreground hover:underline cursor-pointer"
               >
                 <Sparkles className="w-3 h-3" />
                 {pomodoro ? "Recalculate" : "Plan with Pomodoro"}
@@ -553,7 +526,7 @@ export default function TaskEditSheet({
             {pomodoro && (
               <div className="grid grid-cols-3 gap-2 pt-1">
                 <div>
-                  <label htmlFor="pomodoro-focusMin" className="block text-[10px] font-bold text-zinc-500 mb-1">
+                  <label htmlFor="pomodoro-focusMin" className="block text-xs font-bold text-text-muted mb-1">
                     Focus (min)
                   </label>
                   <input
@@ -562,14 +535,12 @@ export default function TaskEditSheet({
                     min="5"
                     max="120"
                     value={pomodoro.focusMin}
-                    onChange={(e) =>
-                      setPomodoro({ ...pomodoro, focusMin: Number(e.target.value) })
-                    }
-                    className="w-full text-xs font-bold rounded-lg bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 px-2.5 py-1.5 text-zinc-900 dark:text-white"
+                    onChange={(e) => setPomodoro({ ...pomodoro, focusMin: Number(e.target.value) })}
+                    className="w-full text-xs font-bold rounded-lg bg-surface border-2 border-border-ink px-2.5 py-1.5 text-text-heading"
                   />
                 </div>
                 <div>
-                  <label htmlFor="pomodoro-breakMin" className="block text-[10px] font-bold text-zinc-500 mb-1">
+                  <label htmlFor="pomodoro-breakMin" className="block text-xs font-bold text-text-muted mb-1">
                     Break (min)
                   </label>
                   <input
@@ -578,14 +549,12 @@ export default function TaskEditSheet({
                     min="1"
                     max="60"
                     value={pomodoro.breakMin}
-                    onChange={(e) =>
-                      setPomodoro({ ...pomodoro, breakMin: Number(e.target.value) })
-                    }
-                    className="w-full text-xs font-bold rounded-lg bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 px-2.5 py-1.5 text-zinc-900 dark:text-white"
+                    onChange={(e) => setPomodoro({ ...pomodoro, breakMin: Number(e.target.value) })}
+                    className="w-full text-xs font-bold rounded-lg bg-surface border-2 border-border-ink px-2.5 py-1.5 text-text-heading"
                   />
                 </div>
                 <div>
-                  <label htmlFor="pomodoro-rounds" className="block text-[10px] font-bold text-zinc-500 mb-1">
+                  <label htmlFor="pomodoro-rounds" className="block text-xs font-bold text-text-muted mb-1">
                     Rounds
                   </label>
                   <input
@@ -594,10 +563,8 @@ export default function TaskEditSheet({
                     min="1"
                     max="20"
                     value={pomodoro.rounds}
-                    onChange={(e) =>
-                      setPomodoro({ ...pomodoro, rounds: Number(e.target.value) })
-                    }
-                    className="w-full text-xs font-bold rounded-lg bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 px-2.5 py-1.5 text-zinc-900 dark:text-white"
+                    onChange={(e) => setPomodoro({ ...pomodoro, rounds: Number(e.target.value) })}
+                    className="w-full text-xs font-bold rounded-lg bg-surface border-2 border-border-ink px-2.5 py-1.5 text-text-heading"
                   />
                 </div>
               </div>
@@ -606,21 +573,25 @@ export default function TaskEditSheet({
 
           {/* Notes */}
           <div>
-            <label htmlFor="task-notes" className="block text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 mb-1.5">
+            <label
+              htmlFor="task-notes"
+              className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5"
+            >
               Notes / Instructions
             </label>
-            <textarea id="task-notes"
+            <textarea
+              id="task-notes"
               rows={3}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Additional details, submission portals, formulas..."
-              className="w-full text-xs font-medium rounded-xl bg-zinc-50 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full text-xs font-medium rounded-xl bg-surface-secondary border-2 border-border-ink text-text-heading p-3 focus:outline-none focus:ring-2 focus:ring-border-ink"
             />
           </div>
         </div>
 
         {/* Footer */}
-        <div className="p-4 sm:p-5 border-t border-zinc-200/70 dark:border-zinc-800/80 flex items-center justify-between gap-3 bg-zinc-50/50 dark:bg-zinc-900/30">
+        <div className="p-4 sm:p-5 border-t border-border-ink flex items-center justify-between gap-3 bg-surface-secondary">
           {task && onDelete ? (
             <button
               type="button"
@@ -630,7 +601,7 @@ export default function TaskEditSheet({
                   onClose();
                 }
               }}
-              className="text-xs font-bold text-red-600 dark:text-red-400 hover:underline px-2 py-1 cursor-pointer"
+              className="text-xs font-bold text-danger-foreground hover:underline px-2 py-1 cursor-pointer"
             >
               Delete Task
             </button>
@@ -642,14 +613,14 @@ export default function TaskEditSheet({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+              className="px-4 py-2 rounded-xl text-xs font-bold text-text-muted hover:bg-surface-hover cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="button"
               onClick={handleSave}
-              className="px-5 py-2 rounded-xl text-xs font-black bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs active:scale-[0.98] transition-all cursor-pointer"
+              className="px-5 py-2 rounded-xl text-xs font-bold bg-primary hover:brightness-110 text-primary-foreground shadow-xs transition-all cursor-pointer"
             >
               {task ? "Update Task" : "Create Task"}
             </button>

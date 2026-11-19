@@ -6,7 +6,7 @@ import { activeTabAtom } from "@/store";
 import { api } from "@/lib/sync-engine";
 import { Skeleton, cn } from "@amazecontinuityprojects/amazeui";
 import { Search, X, LayoutGrid, Users, Layers, RefreshCcw, ChevronRight, SearchX, Rss, WifiOff } from "lucide-react";
-import { LIST_ROW, SEARCH_FIELD, TONE_BADGE, TONE_ICON_TILE } from "@/lib/uiTokens";
+import { LIST_ROW, SEARCH_FIELD, TONE_BADGE, TONE_ICON_TILE, CHIP } from "@/lib/uiTokens";
 import { getSimilarity } from "@/lib/string-similarity";
 import ClubDetailsModal from "./ClubDetailsModal";
 import {
@@ -458,7 +458,7 @@ export default function ClubHubTab({
                   <ListRowText title={club.name} subtitle={subtitle} />
 
                   {club.type ? (
-                    <span className={cn(TONE_BADGE[tone] ?? TONE_BADGE.zinc, "shrink-0")}>{club.type}</span>
+                    <span className={cn(CHIP, TONE_BADGE[tone] ?? TONE_BADGE.zinc, "shrink-0")}>{club.type}</span>
                   ) : null}
 
                   <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />

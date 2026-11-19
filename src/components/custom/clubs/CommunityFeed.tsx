@@ -7,7 +7,7 @@ import { api } from "@/lib/sync-engine";
 import { Skeleton, cn } from "@amazecontinuityprojects/amazeui";
 import { m } from "framer-motion";
 import { ArrowUp, Calendar, MapPin, IndianRupee, ExternalLink, Rss, RefreshCcw, Building, WifiOff } from "lucide-react";
-import { TILE_CARD, TONE_BADGE } from "@/lib/uiTokens";
+import { TILE_CARD, TONE_BADGE, CHIP } from "@/lib/uiTokens";
 import {
   EmptyPanel,
   GhostButton,
@@ -272,7 +272,7 @@ export default function CommunityFeed({
                         })}
                       </p>
                     </div>
-                    {post.event_id && <span className={cn(TONE_BADGE.violet, "shrink-0")}>Event</span>}
+                    {post.event_id && <span className={cn(CHIP, TONE_BADGE.violet, "shrink-0")}>Event</span>}
                   </div>
 
                   <div className={MARKDOWN}>
@@ -303,7 +303,7 @@ export default function CommunityFeed({
                   {eventDetails && (
                     <div className="rounded-2xl bg-secondary border-2 border-border-ink p-4 flex flex-col sm:flex-row gap-4 items-center">
                       <div className="flex-1 w-full min-w-0">
-                        <span className={cn(TONE_BADGE.indigo, "mb-2 inline-block")}>Featured Event</span>
+                        <span className={cn(CHIP, TONE_BADGE.indigo, "mb-2 inline-block")}>Featured Event</span>
                         <h4 className="text-base font-bold text-text-heading font-outfit leading-snug">
                           {eventDetails.title}
                         </h4>

@@ -119,7 +119,6 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
               <span className="text-xs text-text-muted font-semibold">{activeMeal.time}</span>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-3xl shrink-0">{activeMeal.icon}</span>
               <div>
                 <h3 className="text-sm font-bold text-text-heading">Current Meal: {activeMeal.name}</h3>
                 <p className="text-xs text-text-muted mt-0.5">{nextMealCountdown}</p>
@@ -149,7 +148,6 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
           <div className="space-y-3">
             <span className="text-xs font-bold uppercase tracking-wider text-primary block">Laundry Schedule</span>
             <div className="flex items-center gap-3">
-              <span className="text-3xl shrink-0">🧺</span>
               <div>
                 <h3 className="text-sm font-bold text-text-heading">Weekly Slots</h3>
                 <p className="text-xs text-text-muted mt-0.5">Check when laundry is available for your room range</p>
@@ -232,7 +230,6 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
               Room selection & counselling
             </span>
             <div className="flex items-center gap-3">
-              <span className="text-3xl shrink-0">🤝</span>
               <div>
                 <h3 className="text-sm font-bold text-text-heading">Booking Status</h3>
                 <p className="text-xs text-text-muted mt-0.5">Check group requests and allocation status</p>

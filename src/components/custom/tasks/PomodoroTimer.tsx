@@ -171,7 +171,7 @@ export default function PomodoroTimer({
                 : "bg-warning-surface text-warning-foreground border-border-ink"
           }`}
         >
-          {phase === "completed" ? "Session Finished! 🎉" : phase === "focus" ? "Focus Time" : "Short Break"}
+          {phase === "completed" ? "Session finished" : phase === "focus" ? "Focus Time" : "Short Break"}
         </span>
 
         {/* Round indicators */}

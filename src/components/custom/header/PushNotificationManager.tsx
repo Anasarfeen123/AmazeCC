@@ -145,13 +145,13 @@ export default function PushNotificationManager() {
       const notificationData = { url: window.location.origin };
       if ("serviceWorker" in navigator) {
         const reg = await navigator.serviceWorker.ready;
-        await reg.showNotification("🔔 AmazeCC Push Notifications Active!", {
+        await reg.showNotification("AmazeCC notifications are on", {
           body: "Push alerts & VAPID keys are configured. Click to open AmazeCC.",
           icon: "/favicon.ico",
           data: notificationData,
         });
       } else {
-        new Notification("🔔 AmazeCC Push Notifications Active!", {
+        new Notification("AmazeCC notifications are on", {
           body: "Push alerts & VAPID keys are configured. Click to open AmazeCC.",
           icon: "/favicon.ico",
           data: notificationData,

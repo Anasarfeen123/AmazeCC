@@ -1514,8 +1514,8 @@ export default function ProfilePage({
             value={(settings?.timetablePillStyle as string) || "compact"}
             onChange={(val) => updateSetting("timetablePillStyle", val)}
             options={[
-              { value: "compact", label: "📋 Compact (2-Line Info + Percentage on Right)" },
-              { value: "detailed", label: "🃏 Detailed (Spacious Multi-line Card)" },
+              { value: "compact", label: "Compact (2-Line Info + Percentage on Right)" },
+              { value: "detailed", label: "Detailed (Spacious Multi-line Card)" },
             ]}
             className="shrink-0"
           />
@@ -1534,8 +1534,8 @@ export default function ProfilePage({
             onChange={(val) => updateSetting("timetableViewMode", val)}
             options={[
               { value: "auto", label: "✨ Auto (Recommended)" },
-              { value: "vertical", label: "📱 Vertical Heatmap (Days × Times)" },
-              { value: "horizontal", label: "📊 Full Grid (Days × Periods)" },
+              { value: "vertical", label: "Vertical Heatmap (Days × Times)" },
+              { value: "horizontal", label: "Full Grid (Days × Periods)" },
             ]}
             className="shrink-0"
           />
@@ -1554,8 +1554,8 @@ export default function ProfilePage({
             value={effectiveCellDensity(settings?.timetableCellDensity, settings?.timetableDensityTouched, isMobile)}
             onChange={(val) => setTimetableDensity(val as "full" | "compact")}
             options={[
-              { value: "full", label: "📋 Full (Slot + Course Code)" },
-              { value: "compact", label: "🔹 Compact (Slot Only, Fits Screen)" },
+              { value: "full", label: "Full (Slot + Course Code)" },
+              { value: "compact", label: "Compact (Slot Only, Fits Screen)" },
             ]}
             className="shrink-0"
           />
@@ -1574,7 +1574,7 @@ export default function ProfilePage({
             onChange={(val) => updateSetting("tasksInlineOnHome", val === "inline")}
             options={[
               { value: "inline", label: "✨ Unified (Inline 3rd line on classes)" },
-              { value: "separate", label: "📑 Clean classes (Section below timetable)" },
+              { value: "separate", label: "Clean classes (Section below timetable)" },
             ]}
             className="shrink-0"
           />

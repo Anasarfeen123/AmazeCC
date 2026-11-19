@@ -794,8 +794,8 @@ export default function SyncNotification({
 
                   <div className="rounded-xl p-3 bg-surface-secondary border border-border-ink text-xs text-text-muted leading-relaxed mt-1">
                     <p className="font-medium">
-                      🔒 <strong className="text-text-primary">Unified Sign-In:</strong> Logging in here synchronizes
-                      your timetable and profile, and signs you into all of AmazeCC.
+                      <strong className="text-text-primary">Unified Sign-In:</strong> Logging in here synchronizes your
+                      timetable and profile, and signs you into all of AmazeCC.
                     </p>
                   </div>
 

@@ -3104,7 +3104,7 @@ export default function FFCSTimetableTab({
                           onClick={() => downloadDossierHtml("dark")}
                           className="w-full text-left px-4 py-2 text-text-heading hover:bg-surface-secondary transition-colors border-t border-border-strong/50"
                         >
-                          🌙 Download HTML (Dark Mode)
+                          Download HTML (dark)
                         </button>
                         <button
                           onClick={() => downloadImage("jpg")}

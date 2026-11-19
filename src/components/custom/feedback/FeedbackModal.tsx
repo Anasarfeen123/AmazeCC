@@ -344,14 +344,16 @@ export default function FeedbackModal() {
                       type="button"
                       onClick={() => setRating(r.value)}
                       title={r.label}
-                      className={`flex-1 py-1.5 rounded-lg flex flex-col items-center gap-0.5 transition-all cursor-pointer ${
+                      aria-label={`${r.value} of 5: ${r.label}`}
+                      aria-pressed={isSelected}
+                      className={`flex min-h-11 flex-1 flex-col items-center justify-center rounded-[8px] border-2 transition-colors cursor-pointer ${
                         isSelected
-                          ? "bg-surface-primary text-text-primary shadow-sm scale-105 border border-border-muted"
-                          : "text-text-muted hover:text-text-secondary opacity-80"
+                          ? "border-border-ink bg-primary text-primary-foreground shadow-brutal-sm"
+                          : "border-transparent text-text-primary hover:border-border-ink"
                       }`}
                     >
-                      <span className="text-base leading-none">{r.emoji}</span>
-                      <span className="text-[9.5px] font-semibold">{r.value}</span>
+                      {/* The number; the word is the tooltip and accessible name (no emoji faces). */}
+                      <span className="font-display text-lg font-bold leading-none">{r.value}</span>
                     </button>
                   );
                 })}

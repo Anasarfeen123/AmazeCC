@@ -660,8 +660,8 @@ export default function MarksHistoryTab({
               </>
             ) : (
               <>
-                The weightage above sums to {weightedTotal(course.details)?.toFixed(2)}, while VTOP records{" "}
-                {numOrDash(course.grandTotal)}%. The recorded total is shown here.
+                These marks add up to {weightedTotal(course.details)?.toFixed(0)} of 100. VTOP&apos;s total (
+                {numOrDash(course.grandTotal)}%) also counts marks it does not list, so that is the one shown.
               </>
             )}
           </p>

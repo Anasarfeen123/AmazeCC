@@ -738,7 +738,7 @@ export default function FreeClassroomsTab({
           <Skeleton className="h-32 sm:h-36 rounded-[14px]" />
         </div>
       ) : error ? null : (
-        <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
           <button
             type="button"
             onClick={jumpToNow}
@@ -751,6 +751,9 @@ export default function FreeClassroomsTab({
               sub={`${metrics.blocks} ${metrics.blocks === 1 ? "block" : "blocks"} with space`}
               badge={isLiveSlot ? "Live" : "Selected"}
               tone={isLiveSlot ? "emerald" : "indigo"}
+              // The page's one loud card (the tile sits inside a button, so
+              // the summary-row rule would colour the button behind it).
+              variant="highlight"
             />
           </button>
           <InsightCarousel

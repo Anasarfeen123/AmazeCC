@@ -322,7 +322,7 @@ export default function CommonFreeTimetableGrid({
                             onClick={() => onOpenPeer(w.handle!)}
                             className="w-full text-left cursor-pointer"
                           >
-                            <p className="text-xs font-bold text-text-primary font-outfit truncate underline decoration-zinc-300 dark:decoration-zinc-700 underline-offset-2">
+                            <p className="text-xs font-bold text-text-primary font-outfit truncate underline decoration-border-ink underline-offset-2">
                               {w.name}
                             </p>
                           </button>

@@ -172,7 +172,7 @@ export default function AssessmentMarkSheet({
                   type="button"
                   disabled={locked}
                   onClick={() => onUpdateScoredMark(asm.id, Math.round((pct / 100) * maxMark * 10) / 10, true)}
-                  className="px-2.5 py-1.5 rounded-xl bg-surface-secondary border-2 border-border-ink hover:bg-secondary text-text-muted hover:text-primary text-xs font-bold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-surface-secondary dark:disabled:hover:bg-zinc-900"
+                  className="px-2.5 py-1.5 rounded-xl bg-surface-secondary border-2 border-border-ink hover:bg-secondary text-text-muted hover:text-primary text-xs font-bold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-surface-secondary"
                 >
                   {pct}%
                 </button>

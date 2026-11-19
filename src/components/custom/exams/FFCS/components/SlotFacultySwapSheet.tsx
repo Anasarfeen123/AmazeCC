@@ -559,7 +559,7 @@ export default function SlotFacultySwapSheet({
               disabled={isDownloading}
               data-testid="download-faculty-jpeg-btn"
               title="Download a JPEG reference sheet with all faculties in this slot and FFCS picking instructions"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-secondary hover:bg-secondary active:bg-blue-500/30 text-secondary-foreground border border-border-ink text-xs font-semibold transition-all cursor-pointer disabled:opacity-50 shrink-0 shadow-sm"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-secondary hover:bg-secondary active:brightness-95 text-secondary-foreground border border-border-ink text-xs font-semibold transition-all cursor-pointer disabled:opacity-50 shrink-0 shadow-sm"
             >
               {isDownloading ? (
                 <>

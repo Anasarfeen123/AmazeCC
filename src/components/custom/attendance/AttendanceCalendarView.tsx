@@ -286,7 +286,7 @@ export default function AttendanceCalendarView({
               {weekdays.map((day) => (
                 <div
                   key={day}
-                  className="font-bold py-2 border-b border-border-ink text-xs tracking-wider uppercase text-text-muted bg-gray-55/50"
+                  className="font-bold py-2 border-b border-border-ink text-xs tracking-wider uppercase text-text-muted bg-surface-secondary"
                 >
                   {day}
                 </div>

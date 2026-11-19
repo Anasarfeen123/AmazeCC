@@ -126,7 +126,7 @@ export default function ShareHandleSheet({ onClose }: { onClose: () => void }) {
               type="button"
               onClick={copy}
               title="Tap to copy"
-              className="w-full text-center text-2xl font-bold font-mono tracking-[0.2em] rounded-2xl px-3 py-5 text-primary bg-surface-secondary border-2 border-border-ink hover:border-indigo-300 dark:hover:border-indigo-700 transition-colors cursor-pointer"
+              className="w-full text-center text-2xl font-bold font-mono tracking-[0.2em] rounded-2xl px-3 py-5 text-primary bg-surface-secondary border-2 border-border-ink hover:border-primary transition-colors cursor-pointer"
             >
               {handle}
             </button>

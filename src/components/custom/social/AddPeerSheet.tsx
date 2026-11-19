@@ -237,7 +237,7 @@ export default function AddPeerSheet({
         <button
           type="button"
           onClick={() => setScanning(true)}
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl border-2 border-border-ink bg-secondary text-secondary-foreground hover:bg-indigo-100/70 dark:hover:bg-indigo-900/40 text-xs font-bold transition-colors cursor-pointer"
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl border-2 border-border-ink bg-secondary text-secondary-foreground hover:bg-secondary/70 text-xs font-bold transition-colors cursor-pointer"
         >
           <Camera className="w-4 h-4" />
           <span>Scan their QR instead</span>

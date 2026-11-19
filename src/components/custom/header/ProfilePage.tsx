@@ -944,7 +944,7 @@ export default function ProfilePage({
                 </h1>
                 <button
                   onClick={() => setIsEditingName(true)}
-                  className="p-1 rounded-lg text-text-muted text-primary hover:brightness-95 dark:hover:bg-indigo-950/40 transition-colors cursor-pointer"
+                  className="p-1 rounded-lg text-text-muted text-primary hover:brightness-95 transition-colors cursor-pointer"
                   title="Edit Preferred Name"
                   aria-label="Edit preferred name"
                 >
@@ -2578,7 +2578,7 @@ export default function ProfilePage({
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search all settings, credentials, profile, themes, semesters..."
-                      className="w-full pl-9 pr-4 py-2 text-xs font-medium border-2 border-border-ink bg-surface rounded-xl text-text-heading placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-border-ink transition-all"
+                      className="w-full pl-9 pr-4 py-2 text-xs font-medium border-2 border-border-ink bg-surface rounded-xl text-text-heading placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-border-ink transition-all"
                     />
                     {searchQuery && (
                       <button

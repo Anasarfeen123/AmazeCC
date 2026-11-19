@@ -86,7 +86,7 @@ export function FFCSShortcutsModal({ isOpen, onClose }: { isOpen: boolean; onClo
           <div className="pt-3 border-t border-border-strong text-right">
             <button
               onClick={onClose}
-              className="px-4 py-2 bg-indigo-650 hover:bg-indigo-750 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer"
+              className="px-4 py-2 bg-primary hover:brightness-110 text-primary-foreground border-2 border-border-ink text-xs font-bold rounded-xl transition-colors cursor-pointer"
             >
               Got it, thanks!
             </button>

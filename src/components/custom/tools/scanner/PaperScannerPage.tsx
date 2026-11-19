@@ -585,7 +585,7 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
                     key={meta.id}
                     type="button"
                     onClick={() => void openScan(meta.id)}
-                    className={`${LIST_ROW} group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500`}
+                    className={`${LIST_ROW} group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring`}
                   >
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border-muted dark:border-border bg-surface-secondary dark:bg-surface-secondary/60 text-text-secondary dark:text-text-muted">
                       <FileText className="h-4 w-4" aria-hidden />

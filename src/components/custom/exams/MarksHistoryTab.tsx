@@ -834,7 +834,7 @@ function CourseRow({ course, onOpen }: { course: GradeItem; onOpen: () => void }
         /* The published number blends both halves, so a reader comparing it to
            their own marks needs to know that before they wonder why the
            subpage has two scores in it. */
-        <span className="hidden shrink-0 rounded-[6px] bg-indigo-100 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-primary sm:inline dark:bg-indigo-900/30 dark:text-primary">
+        <span className="hidden shrink-0 rounded-[6px] bg-secondary px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-primary sm:inline dark:text-primary">
           T+L
         </span>
       )}

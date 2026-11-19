@@ -16,11 +16,11 @@ export default function ExamQuestion({ question, index }: { question: QBankQuest
       {/* Header */}
       <div className="flex justify-between items-start mb-4">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="bg-blue-100 text-primary dark:bg-blue-900/40 text-primary text-xs font-bold px-2.5 py-1 rounded-md">
+          <span className="bg-secondary text-secondary-foreground border-2 border-border-ink text-xs font-bold px-2.5 py-1 rounded-md">
             Q{index + 1}
           </span>
           {question.question_type && (
-            <span className="bg-purple-50 text-primary dark:bg-purple-900/30 text-primary text-xs px-2 py-1 rounded-md font-medium">
+            <span className="bg-surface-secondary text-text-primary border-2 border-border-ink text-xs px-2 py-1 rounded-md font-medium">
               {question.question_type}
             </span>
           )}

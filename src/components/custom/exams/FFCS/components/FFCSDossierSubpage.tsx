@@ -522,7 +522,7 @@ export default function FFCSDossierSubpage({
               <div
                 className={`px-4 py-2.5 rounded-xl border text-right ${
                   isLightMode
-                    ? "bg-blue-50/80 border-border-ink text-secondary-foreground"
+                    ? "bg-secondary/80 border-border-ink text-secondary-foreground"
                     : "bg-secondary border-border-ink text-secondary-foreground"
                 }`}
               >
@@ -532,7 +532,7 @@ export default function FFCSDossierSubpage({
               <div
                 className={`px-4 py-2.5 rounded-xl border text-right ${
                   isLightMode
-                    ? "bg-purple-50/80 border-border-ink text-primary"
+                    ? "bg-secondary border-border-ink text-primary"
                     : "bg-secondary border-border-ink text-primary"
                 }`}
               >
@@ -893,7 +893,7 @@ export default function FFCSDossierSubpage({
                       <span
                         className={`font-mono font-bold px-2 py-0.5 rounded border ${
                           isLightMode
-                            ? "bg-blue-50 text-secondary-foreground border-border-ink"
+                            ? "bg-secondary text-secondary-foreground border-border-ink"
                             : "bg-secondary text-secondary-foreground border-border-ink"
                         }`}
                       >

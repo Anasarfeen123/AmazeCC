@@ -231,7 +231,7 @@ export default function FacultyPriorityModal({
             type="button"
             onClick={add}
             disabled={!pending}
-            className="h-10 px-3.5 rounded-xl bg-secondary border border-border-ink text-secondary-foreground text-sm font-bold flex items-center gap-1.5 disabled:opacity-40 hover:bg-indigo-500/25 transition-colors shrink-0"
+            className="h-10 px-3.5 rounded-xl bg-secondary border border-border-ink text-secondary-foreground text-sm font-bold flex items-center gap-1.5 disabled:opacity-40 hover:brightness-95 transition-colors shrink-0"
           >
             <Plus className="w-4 h-4" /> Add
           </button>

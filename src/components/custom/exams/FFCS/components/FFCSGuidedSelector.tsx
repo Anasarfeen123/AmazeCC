@@ -2451,7 +2451,7 @@ export default function FFCSGuidedSelector({
                   value={facultySearchQuery}
                   onChange={(e) => setFacultySearchQuery(e.target.value)}
                   placeholder="Search faculty name..."
-                  className="w-full bg-background border border-border-ink rounded-xl pl-9 pr-3 py-1.5 text-base sm:text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-border-ink transition-colors"
+                  className="w-full bg-background border border-border-ink rounded-xl pl-9 pr-3 py-1.5 text-base sm:text-xs text-white placeholder:text-text-muted focus:outline-none focus:border-border-ink transition-colors"
                 />
               </div>
             )}
@@ -4587,7 +4587,7 @@ export default function FFCSGuidedSelector({
                   currentPill === p
                     ? "w-7 bg-primary shadow-xs "
                     : currentIdx > idx
-                      ? "w-2.5 bg-secondary hover:bg-indigo-400"
+                      ? "w-2.5 bg-secondary hover:bg-primary"
                       : "w-2 bg-surface-secondary"
                 }`}
                 title={`Step ${stepNum}`}
@@ -4707,7 +4707,7 @@ export default function FFCSGuidedSelector({
                         currentPill === p
                           ? "w-7 bg-primary shadow-xs "
                           : currentIdx > idx
-                            ? "w-2.5 bg-secondary hover:bg-indigo-400"
+                            ? "w-2.5 bg-secondary hover:bg-primary"
                             : "w-2 bg-surface-secondary"
                       }`}
                       title={`Step ${stepNum}`}

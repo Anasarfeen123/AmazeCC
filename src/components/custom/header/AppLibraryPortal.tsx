@@ -278,7 +278,7 @@ const AppLibraryPortal = memo(
                           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                             {academicsItems.map((sub) =>
                               renderItemCard(sub, {
-                                tint: "bg-purple-50 text-primary dark:bg-purple-950/30 text-primary",
+                                tint: "bg-secondary text-secondary-foreground",
                                 subtitle: "Academics Tracker",
                               }),
                             )}
@@ -310,7 +310,7 @@ const AppLibraryPortal = memo(
                           renderItemCard(item, {
                             tint:
                               group.name === "Study"
-                                ? "bg-purple-50 text-primary dark:bg-purple-950/30 text-primary"
+                                ? "bg-secondary text-secondary-foreground"
                                 : group.name === "Campus"
                                   ? "bg-warning-surface text-warning-foreground dark:text-warning-foreground"
                                   : group.name === "Tools"

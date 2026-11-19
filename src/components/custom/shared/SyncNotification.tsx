@@ -1208,7 +1208,7 @@ export default function SyncNotification({
                           setShowModeMenu(!showModeMenu);
                           setShowServerMenu(false);
                         }}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[10px] text-xs font-bold bg-secondary text-secondary-foreground border-2 border-border-ink hover:bg-blue-100/60 dark:hover:bg-blue-900/50 transition-colors cursor-pointer min-h-9"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[10px] text-xs font-bold bg-secondary text-secondary-foreground border-2 border-border-ink hover:brightness-95 transition-colors cursor-pointer min-h-9"
                         title="Change sync mode"
                       >
                         <Sparkles size={11} className="text-primary shrink-0" />

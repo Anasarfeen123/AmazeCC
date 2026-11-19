@@ -180,7 +180,7 @@ export default function LaundrySchedule({ hostelData, handleHostelDetailsFetch }
         {gender && (
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
             {/* Gender Segmented */}
-            <div className="flex rounded-lg bg-gray-150 p-1 shrink-0">
+            <div className="flex rounded-lg bg-surface-secondary p-1 shrink-0">
               {["Male", "Female"].map((g) => (
                 <button
                   key={g}
@@ -198,7 +198,7 @@ export default function LaundrySchedule({ hostelData, handleHostelDetailsFetch }
             </div>
 
             {/* Hostel Block Selector Segmented control */}
-            <div className="flex rounded-lg bg-gray-150 p-1 shrink-0 overflow-x-auto scrollbar-none">
+            <div className="flex rounded-lg bg-surface-secondary p-1 shrink-0 overflow-x-auto scrollbar-none">
               {hostelOptions[gender]?.map((h) => (
                 <button
                   key={h}
@@ -363,7 +363,7 @@ export default function LaundrySchedule({ hostelData, handleHostelDetailsFetch }
                   }
 
                   if (isClicked) {
-                    cellStyle += " ring-2 focus-visible:ring-ring ring-offset-2 ring-offset-slate-900/40 scale-105";
+                    cellStyle += " ring-2 focus-visible:ring-ring ring-offset-2 ring-offset-background scale-105";
                   }
 
                   return (

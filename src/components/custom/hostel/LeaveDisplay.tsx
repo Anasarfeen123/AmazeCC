@@ -62,7 +62,7 @@ export default function LeaveDisplay({ leaveData, handleHostelDetailsFetch }: Le
   const pendingLeaves = leaveData.filter((leave) => leave.status?.toUpperCase().includes("PENDING"));
 
   const getStatusColor = (status: string) => {
-    if (!status) return "bg-gray-550/20 text-text-muted border-border-muted";
+    if (!status) return "bg-surface-secondary text-text-muted border-border-muted";
     const norm = status.toUpperCase().trim();
     if (norm.includes("APPROVED") || norm.includes("CLOSED")) {
       return "bg-success-surface text-success-foreground border-border-ink";
@@ -334,7 +334,7 @@ export default function LeaveDisplay({ leaveData, handleHostelDetailsFetch }: Le
                   stacked
                   role="group"
                   aria-label="Leave type"
-                  className="[&>button:first-child]:border-border-ink [&>button:first-child]:bg-slate-950 [&>button:first-child]:text-white"
+                  className="[&>button:first-child]:border-border-ink [&>button:first-child]:bg-surface [&>button:first-child]:text-text-primary"
                 />
               </div>
 

@@ -195,24 +195,13 @@ export default function PomodoroTimer({
       <div className="relative flex items-center justify-center">
         {/* SVG Ring */}
         <svg className={`transform -rotate-90 ${compact ? "w-36 h-36" : "w-56 h-56"}`} viewBox="0 0 100 100">
-          <circle
-            cx="50"
-            cy="50"
-            r="44"
-            className="stroke-zinc-100 dark:stroke-zinc-800"
-            strokeWidth="6"
-            fill="transparent"
-          />
+          <circle cx="50" cy="50" r="44" className="stroke-border-muted" strokeWidth="6" fill="transparent" />
           <circle
             cx="50"
             cy="50"
             r="44"
             className={`transition-all duration-500 ${
-              phase === "break"
-                ? "stroke-emerald-500"
-                : phase === "completed"
-                  ? "stroke-amber-500"
-                  : "stroke-indigo-600 dark:stroke-indigo-500"
+              phase === "break" ? "stroke-emerald-500" : phase === "completed" ? "stroke-amber-500" : "stroke-primary"
             }`}
             strokeWidth="6"
             strokeDasharray={276.46}

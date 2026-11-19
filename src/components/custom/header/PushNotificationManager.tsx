@@ -501,7 +501,7 @@ export default function PushNotificationManager() {
               placeholder="System Default Key active (Paste custom VAPID public key if self-hosting)"
               value={settings?.customVapidKey || ""}
               onChange={(e) => updateSettingField("customVapidKey", e.target.value)}
-              className="w-full px-3 py-2 rounded-xl bg-surface-secondary border-2 border-border-ink text-xs font-mono text-text-heading placeholder-gray-400 focus:outline-none"
+              className="w-full px-3 py-2 rounded-xl bg-surface-secondary border-2 border-border-ink text-xs font-mono text-text-heading placeholder:text-text-muted focus:outline-none"
             />
           </div>
         </div>

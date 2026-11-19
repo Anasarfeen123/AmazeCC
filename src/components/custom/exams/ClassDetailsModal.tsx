@@ -109,7 +109,7 @@ export default function ClassDetailsModal({
               type="button"
               onClick={() => handleCopy(fullCopyText, "all")}
               title="Copy class details"
-              className="p-1.5 rounded-xl border-2 border-border-ink bg-surface text-text-muted hover:text-primary hover:border-indigo-300 dark:hover:border-border-ink transition-colors cursor-pointer"
+              className="p-1.5 rounded-xl border-2 border-border-ink bg-surface text-text-muted hover:text-primary hover:border-primary dark:hover:border-border-ink transition-colors cursor-pointer"
             >
               {copiedKey === "all" ? (
                 <Check className="w-3.5 h-3.5 text-success-foreground" />

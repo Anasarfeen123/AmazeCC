@@ -69,7 +69,7 @@ export function GeneratorTargetCoursesWidget({
       aria-label="Autogenerator target courses"
       className="w-full min-w-0 overflow-hidden rounded-2xl border border-border-ink bg-surface shadow-sm"
     >
-      <header className="hidden border-b border-border-strong/60 bg-indigo-500/[0.035] px-4 py-4 sm:px-5 lg:block">
+      <header className="hidden border-b border-border-strong/60 bg-surface-secondary px-4 py-4 sm:px-5 lg:block">
         <SectionHeader
           icon={Target}
           title="Target courses"

@@ -276,7 +276,7 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
               </div>
             </div>
 
-            <div className="h-px bg-gray-150" />
+            <div className="h-px bg-surface-secondary" />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>

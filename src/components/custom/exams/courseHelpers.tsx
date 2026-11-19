@@ -277,7 +277,7 @@ export function AssessmentRow({
                         key={b.grade}
                         className={`flex-1 rounded-lg border px-1.5 py-1.5 flex flex-col items-start gap-0.5 ${
                           isPlacement
-                            ? `${TONE_BADGE[toneForGrade(b.grade)]} border-transparent ring-2 ring-indigo-500`
+                            ? `${TONE_BADGE[toneForGrade(b.grade)]} border-transparent ring-2 ring-primary`
                             : TONE_BADGE.zinc
                         }`}
                       >

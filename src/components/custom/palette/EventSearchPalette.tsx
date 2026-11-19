@@ -29,11 +29,11 @@ interface EventItem {
 }
 
 const badge = {
-  violet: "bg-violet-100 text-primary border-border-ink dark:bg-violet-900/80 ",
+  violet: "bg-secondary text-secondary-foreground border-border-ink",
   rose: "bg-rose-100 text-rose-800 border-border-ink dark:text-danger-foreground dark:border-rose-800/50",
   amber: "bg-amber-100 text-amber-800 border-border-ink dark:text-warning-foreground dark:border-amber-800/50",
   emerald: "bg-emerald-100 text-emerald-800 border-border-ink dark:text-success-foreground dark:border-emerald-800/50",
-  indigo: "bg-indigo-100 text-primary border-border-ink dark:bg-indigo-900/80 dark:text-primary",
+  indigo: "bg-secondary text-primary border-border-ink dark:text-primary",
   gray: "bg-surface-secondary text-text-primary border-border-ink",
 };
 
@@ -391,7 +391,7 @@ export default function EventSearchPalette() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search events by name, venue, type..."
-          className="flex-1 bg-transparent text-sm text-text-heading placeholder-gray-400 dark:placeholder-gray-500 outline-none"
+          className="flex-1 bg-transparent text-sm text-text-heading placeholder:text-text-muted outline-none"
         />
         {query ? (
           <button

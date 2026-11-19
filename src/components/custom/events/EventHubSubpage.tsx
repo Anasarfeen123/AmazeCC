@@ -38,7 +38,7 @@ interface EventHubSubpageProps {
 
 /** Primary / secondary action surfaces, in the app's zinc + indigo dialect. */
 const ACTION_PRIMARY =
-  "inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-sm shadow-xs transition-all cursor-pointer disabled:bg-indigo-400 disabled:cursor-not-allowed whitespace-nowrap";
+  "inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-sm shadow-xs transition-all cursor-pointer disabled:bg-primary disabled:cursor-not-allowed whitespace-nowrap";
 const ACTION_TONE: Record<string, string> = {
   amber:
     "inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-warning-surface text-warning-foreground border border-border-ink font-bold text-sm transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap",
@@ -558,7 +558,7 @@ export default function EventHubSubpage({
                     <button
                       type="button"
                       onClick={() => setSelectedClub(club)}
-                      className="inline-flex items-center gap-1.5 max-w-full text-left text-xs font-bold text-secondary-foreground bg-secondary border-2 border-border-ink px-2.5 py-1.5 rounded-xl hover:brightness-95 dark:hover:bg-indigo-950/60 transition-colors cursor-pointer"
+                      className="inline-flex items-center gap-1.5 max-w-full text-left text-xs font-bold text-secondary-foreground bg-secondary border-2 border-border-ink px-2.5 py-1.5 rounded-xl hover:brightness-95 transition-colors cursor-pointer"
                     >
                       <Award className="w-3.5 h-3.5 shrink-0" />
                       <span title={club.club_name} className="truncate">

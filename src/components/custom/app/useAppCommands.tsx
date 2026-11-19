@@ -216,7 +216,7 @@ export function useAppCommands(input: AppCommandInputs) {
                 <span className="text-xs font-medium text-text-muted">{course.courseCode}</span>
                 <span className="text-xs text-text-muted">·</span>
                 <span
-                  className={`text-xs font-semibold px-1.5 py-0.5 rounded-md ${course.courseType?.toLowerCase().includes("lab") ? "bg-purple-100 text-primary dark:bg-purple-900/20 text-primary" : "bg-blue-100 text-primary dark:bg-blue-900/20 text-primary"}`}
+                  className={`rounded-[6px] border-2 border-border-ink px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-obsidian ${course.courseType?.toLowerCase().includes("lab") ? "bg-mint" : "bg-sage"}`}
                 >
                   {course.courseType || "Theory"}
                 </span>

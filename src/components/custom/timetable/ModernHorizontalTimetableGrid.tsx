@@ -84,7 +84,7 @@ export default function ModernHorizontalTimetableGrid({
       )}
 
       {/* Responsive scrollable table container */}
-      <div className="overflow-x-auto momentum-scroll scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700/60 touch-pan-x">
+      <div className="overflow-x-auto momentum-scroll scrollbar-thin scrollbar-thumb-border-ink touch-pan-x">
         <table className="w-full text-left border-collapse min-w-[1000px]">
           {/* Table Header */}
           <thead>

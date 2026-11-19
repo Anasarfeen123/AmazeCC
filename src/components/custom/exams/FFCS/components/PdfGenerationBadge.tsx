@@ -29,7 +29,7 @@ export default function PdfGenerationBadge({
   const strokeCircumference = 2 * Math.PI * strokeRadius;
   const strokeOffset = strokeCircumference * 0.28; // ~72% fill for the rotating spinner ring
 
-  const borderLeftColor = isError ? "border-l-rose-500" : isSuccess ? "border-l-emerald-500" : "border-l-indigo-600";
+  const borderLeftColor = isError ? "border-l-rose-500" : isSuccess ? "border-l-emerald-500" : "border-l-primary";
 
   return (
     <div
@@ -55,7 +55,7 @@ export default function PdfGenerationBadge({
                   cx="16"
                   cy="16"
                   r={strokeRadius}
-                  className="stroke-slate-200/80 dark:stroke-slate-800"
+                  className="stroke-border-muted"
                   strokeWidth="2.5"
                   fill="transparent"
                 />
@@ -63,7 +63,7 @@ export default function PdfGenerationBadge({
                   cx="16"
                   cy="16"
                   r={strokeRadius}
-                  className="stroke-indigo-600 dark:stroke-indigo-400"
+                  className="stroke-primary"
                   strokeWidth="3"
                   fill="transparent"
                   strokeDasharray={strokeCircumference}

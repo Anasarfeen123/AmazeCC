@@ -310,7 +310,7 @@ export default function CircularsTab({ loginToVTOP, onBack, setActiveTab }: Circ
           onClick={() => {
             void refreshCirculars();
           }}
-          className="p-2.5 rounded-full bg-blue-50 text-primary hover:brightness-95 transition-colors"
+          className="p-2.5 rounded-full bg-secondary text-primary hover:brightness-95 transition-colors"
           title="Reload"
         >
           <RefreshCcw className="w-5 h-5" />

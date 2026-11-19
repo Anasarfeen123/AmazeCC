@@ -478,7 +478,7 @@ export default function TaskEditSheet({
                   size="sm"
                   role="group"
                   aria-label="Day"
-                  className="w-auto shrink-0 [&>button:first-child]:rounded-lg [&>button:first-child]:bg-surface-secondary dark:[&>button:first-child]:bg-zinc-700 [&>button:first-child]:px-2 [&>button:first-child]:text-xs [&>button:first-child]:uppercase"
+                  className="w-auto shrink-0 [&>button:first-child]:rounded-lg [&>button:first-child]:bg-surface-secondary [&>button:first-child]:px-2 [&>button:first-child]:text-xs [&>button:first-child]:uppercase"
                 />
 
                 <input

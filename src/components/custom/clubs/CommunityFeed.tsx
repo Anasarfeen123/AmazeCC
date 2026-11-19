@@ -352,7 +352,7 @@ export default function CommunityFeed({
                           href={link.url}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 text-xs font-bold text-secondary-foreground bg-secondary border-2 border-border-ink px-3 py-1.5 rounded-xl hover:brightness-95 dark:hover:bg-indigo-950/60 transition-colors"
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-secondary-foreground bg-secondary border-2 border-border-ink px-3 py-1.5 rounded-xl hover:brightness-95 transition-colors"
                         >
                           {link.title}
                           <ExternalLink className="w-3.5 h-3.5" />

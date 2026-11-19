@@ -206,7 +206,7 @@ export default function VerticalTimetableGrid({
                   className={cn(
                     "font-mono font-bold tracking-tight rounded px-1 transition-all inline-block",
                     cell.slots.length === 1 ? "text-xs" : "text-xs",
-                    onToggleBlockSlot && "cursor-pointer active:scale-90 hover:ring-1 hover:ring-zinc-400",
+                    onToggleBlockSlot && "cursor-pointer active:scale-90 hover:ring-1 hover:ring-border-ink",
                     isSlotBlocked
                       ? "text-danger-foreground line-through bg-danger-surface border border-border-ink"
                       : isTheory

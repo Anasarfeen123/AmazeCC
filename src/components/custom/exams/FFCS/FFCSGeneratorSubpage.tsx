@@ -3060,7 +3060,7 @@ export function FFCSGeneratorSubpage({
 
                       <section
                         id="generator-ranking"
-                        className={`scroll-mt-24 space-y-4 rounded-xl border p-4 ${generatorViewMode === "modern" ? "border-border-ink bg-violet-500/[0.04]" : "border-border-strong/70 bg-surface-secondary/20"} ${showGeneratorSection("ranking") ? "" : "hidden"}`}
+                        className={`scroll-mt-24 space-y-4 rounded-xl border p-4 ${generatorViewMode === "modern" ? "border-border-ink bg-surface-secondary" : "border-border-strong/70 bg-surface-secondary/20"} ${showGeneratorSection("ranking") ? "" : "hidden"}`}
                       >
                         <div>
                           <h4 className="text-sm font-semibold text-text-heading">What matters most</h4>

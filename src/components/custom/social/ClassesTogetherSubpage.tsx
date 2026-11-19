@@ -30,7 +30,7 @@ function PeerChip({
     <button
       type="button"
       onClick={onOpen}
-      className="inline-flex items-center gap-1.5 max-w-full pl-1 pr-2.5 py-1 rounded-full border-2 border-border-ink hover:border-indigo-300 dark:hover:border-indigo-700 bg-surface transition-colors cursor-pointer"
+      className="inline-flex items-center gap-1.5 max-w-full pl-1 pr-2.5 py-1 rounded-full border-2 border-border-ink hover:border-primary bg-surface transition-colors cursor-pointer"
       title={showFaculty && match.theirs.faculty ? `${match.name} · ${match.theirs.faculty}` : match.name}
     >
       <span className="w-6 h-6 rounded-full bg-secondary text-secondary-foreground text-xs font-bold font-outfit flex items-center justify-center shrink-0">

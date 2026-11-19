@@ -366,7 +366,7 @@ export default function TabHelpFooter({ tabId }: { tabId: string }) {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[10px] bg-surface-secondary border-2 border-border-ink text-xs font-bold text-text-muted hover:text-primary hover:border-indigo-300 dark:hover:border-indigo-700 transition-all cursor-pointer shadow-2xs min-h-9"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[10px] bg-surface-secondary border-2 border-border-ink text-xs font-bold text-text-muted hover:text-primary hover:border-primary transition-all cursor-pointer shadow-2xs min-h-9"
         title={`Open detailed step-by-step guide for ${guide.tabName}`}
       >
         <HelpCircle className="w-3.5 h-3.5 text-primary shrink-0" />

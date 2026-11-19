@@ -201,7 +201,7 @@ export default function CourseFacultyCard({
           type="button"
           onClick={() => onOpenFacultySchedule?.(cleanName, effectiveEmpId)}
           disabled={!cleanName || !onOpenFacultySchedule}
-          className="min-h-[44px] h-11 sm:h-12 w-full inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-secondary hover:bg-secondary active:bg-indigo-500/25 text-secondary-foreground border border-border-ink dark:border-border-ink shadow-2xs transition-all duration-100 ease-out cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed select-none touch-manipulation"
+          className="min-h-[44px] h-11 sm:h-12 w-full inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-secondary hover:bg-secondary hover:brightness-95 text-secondary-foreground border border-border-ink dark:border-border-ink shadow-2xs transition-all duration-100 ease-out cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed select-none touch-manipulation"
           title="View faculty teaching schedule and timetable"
         >
           <CalendarDays className="w-4 h-4 text-primary shrink-0" />

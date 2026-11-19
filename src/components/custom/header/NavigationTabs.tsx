@@ -311,16 +311,19 @@ export default function NavigationTabs({
   const credits = marksData?.cgpa
     ? Number(marksData.cgpa.creditsEarned) + Number(marksData.cgpa.nonGradedRequirement || 0)
     : unifiedAcademics.cgpa || "-";
+  const formatAttendancePercentage = (value: unknown) => {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric) || numeric <= 0) return undefined;
+    return `${numeric.toFixed(settings.decimalValues ? 1 : 0)}%`;
+  };
   const normalizedOverallAttendance =
     settings.attendancePercentageOrString === "percentage"
-      ? unifiedAcademics.overallAttendancePercentage > 0
-        ? `${unifiedAcademics.overallAttendancePercentage}%`
-        : undefined
+      ? formatAttendancePercentage(unifiedAcademics.overallAttendancePercentage)
       : unifiedAcademics.overallAttendanceFormatted;
   const attendanceValue =
-    (attendancePercentage?.[settings.attendancePercentageOrString]
-      ? `${attendancePercentage[settings.attendancePercentageOrString]}${settings.attendancePercentageOrString === "percentage" ? "%" : ""}`
-      : normalizedOverallAttendance) || "-";
+    settings.attendancePercentageOrString === "percentage"
+      ? formatAttendancePercentage(attendancePercentage?.percentage) || normalizedOverallAttendance || "-"
+      : attendancePercentage?.str || normalizedOverallAttendance || "-";
 
   const profileName =
     settings.friendlyName ||
@@ -1070,7 +1073,14 @@ export default function NavigationTabs({
                   </div>
                   {/* Three tiles fit one row; with CGPA shown, four ~52px tiles
                       overflowed ("CREDITS", "79.1%"), so they go 2 x 2. */}
-                  <div className={`grid gap-1.5 ${shouldDisplayGpa ? "grid-cols-2" : "grid-flow-col auto-cols-fr"}`}>
+                  <m.div
+                    layout="position"
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.16, ease: "easeOut" }}
+                    className={`grid gap-1.5 ${shouldDisplayGpa ? "grid-cols-2" : "grid-flow-col auto-cols-fr"}`}
+                  >
                     {shouldDisplayGpa && (
                       <button
                         onClick={() => {
@@ -1178,7 +1188,7 @@ export default function NavigationTabs({
                         <span className="font-mono text-xs font-semibold text-text-muted">/40</span>
                       </span>
                     </button>
-                  </div>
+                  </m.div>
                 </div>
 
                 {/* Search Bar Input */}

@@ -1512,6 +1512,16 @@ export default function ProfilePage({
   );
 
   // 2. Appearance & Theme Section
+  const selectedPrivacyCategories = privacyCategories(settings);
+  const privacyCoverageLabel =
+    selectedPrivacyCategories.length === 0
+      ? "Nothing covered"
+      : selectedPrivacyCategories.length === PRIVACY_CATEGORIES.length
+        ? "Everything covered"
+        : selectedPrivacyCategories.length === 1
+          ? PRIVACY_CATEGORY_DETAILS[selectedPrivacyCategories[0]].label
+          : `${PRIVACY_CATEGORY_DETAILS[selectedPrivacyCategories[0]].label} +${selectedPrivacyCategories.length - 1}`;
+
   const renderPreferencesContent = () => (
     <div className="space-y-6">
       {/* Theme & Layout Card */}
@@ -1628,7 +1638,7 @@ export default function ProfilePage({
               </p>
             </div>
             <Switch
-              checked={privacyCategories(settings).length > 0}
+              checked={selectedPrivacyCategories.length > 0}
               onCheckedChange={(val) => setSettings((prev: any) => setHideAllPrivacy(prev, val))}
             />
           </div>
@@ -1650,26 +1660,35 @@ export default function ProfilePage({
             />
           </div>
 
-          <div className="py-3 space-y-1">
-            <p className="text-sm font-bold text-text-primary">Choose what to cover</p>
-            <p className="text-xs text-text-muted">Turn on only the details you do not want visible at a glance.</p>
-            <div className="mt-3 divide-y divide-border-ink border-y border-border-ink">
-              {PRIVACY_CATEGORIES.map((category) => {
-                const detail = PRIVACY_CATEGORY_DETAILS[category];
-                return (
-                  <div key={category} className="flex items-center justify-between gap-4 py-2.5">
-                    <div className="min-w-0">
-                      <p className="text-sm font-bold text-text-primary">{detail.label}</p>
-                      <p className="text-xs text-text-muted">{detail.description}</p>
+          <div className="py-3">
+            <details className="group relative">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-[10px] border-2 border-border-ink bg-surface-secondary px-3 text-sm font-bold text-text-primary shadow-brutal-sm [&::-webkit-details-marker]:hidden">
+                <span className="min-w-0 truncate">Private values: {privacyCoverageLabel}</span>
+                <ChevronRight
+                  className="h-4 w-4 shrink-0 transition-transform duration-150 group-open:rotate-90"
+                  aria-hidden
+                />
+              </summary>
+              <div className="mt-2 divide-y-2 divide-border-ink overflow-hidden rounded-[10px] border-2 border-border-ink bg-surface shadow-brutal-sm">
+                {PRIVACY_CATEGORIES.map((category) => {
+                  const detail = PRIVACY_CATEGORY_DETAILS[category];
+                  return (
+                    <div key={category} className="flex items-center justify-between gap-4 px-3 py-2.5">
+                      <div className="min-w-0">
+                        <p className="text-sm font-bold text-text-primary">{detail.label}</p>
+                        <p className="text-xs text-text-muted">{detail.description}</p>
+                      </div>
+                      <Switch
+                        checked={selectedPrivacyCategories.includes(category)}
+                        onCheckedChange={(val) =>
+                          setSettings((prev: any) => togglePrivacyCategory(prev, category, val))
+                        }
+                      />
                     </div>
-                    <Switch
-                      checked={privacyCategories(settings).includes(category)}
-                      onCheckedChange={(val) => setSettings((prev: any) => togglePrivacyCategory(prev, category, val))}
-                    />
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            </details>
           </div>
 
           <div className="flex items-center justify-between py-3">

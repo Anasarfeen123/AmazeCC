@@ -625,37 +625,47 @@ export default function AmazeOnboardingFlow({
         </div>
       </div>
 
-      {/* Tab Choices Grid */}
-      <div className="grid grid-cols-2 gap-2">
-        {AVAILABLE_NAV_TABS.map((tab) => {
-          const isPinned = (temp.pinnedNavTabs || []).includes(tab.id);
-          const Icon = tab.icon;
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => togglePinnedTab(tab.id)}
-              className={`p-2.5 rounded-[12px] border-2 text-left transition-all flex items-center gap-2.5 cursor-pointer ${
-                isPinned
-                  ? "bg-secondary border-border-ink text-secondary-foreground shadow-brutal-sm"
-                  : "bg-surface border-border-ink text-text-primary hover:bg-surface-secondary"
-              }`}
-            >
-              <div
-                className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ${
-                  isPinned ? "bg-primary text-primary-foreground" : "bg-surface-secondary text-text-muted"
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5" />
-              </div>
-              <div className="min-w-0">
-                <p className="font-bold text-xs text-text-heading font-outfit truncate">{tab.label}</p>
-                <p className="text-xs text-text-muted truncate">{tab.desc}</p>
-              </div>
-            </button>
-          );
-        })}
-      </div>
+      {/* Tab choices: the two most students use first; the rest are optional
+          and sit lower, smaller (user: keep rarely used things deeper). */}
+      {[AVAILABLE_NAV_TABS.slice(0, 2), AVAILABLE_NAV_TABS.slice(2)].map((list, li) => (
+        <div key={li} className={li === 0 ? "grid grid-cols-2 gap-2" : "space-y-2 pt-1"}>
+          {li === 1 && (
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+              Other shortcuts (optional)
+            </p>
+          )}
+          <div className={li === 1 ? "grid grid-cols-2 gap-2 opacity-90" : "contents"}>
+            {list.map((tab) => {
+              const isPinned = (temp.pinnedNavTabs || []).includes(tab.id);
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => togglePinnedTab(tab.id)}
+                  className={`p-2.5 rounded-[12px] border-2 text-left transition-all flex items-center gap-2.5 cursor-pointer ${
+                    isPinned
+                      ? "bg-secondary border-border-ink text-secondary-foreground shadow-brutal-sm"
+                      : "bg-surface border-border-ink text-text-primary hover:bg-surface-secondary"
+                  }`}
+                >
+                  <div
+                    className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ${
+                      isPinned ? "bg-primary text-primary-foreground" : "bg-surface-secondary text-text-muted"
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-bold text-xs text-text-heading font-outfit truncate">{tab.label}</p>
+                    <p className="text-xs text-text-muted truncate">{tab.desc}</p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ))}
     </div>
   );
 

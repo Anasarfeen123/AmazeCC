@@ -11,6 +11,7 @@ import AppLibraryPortal from "./AppLibraryPortal";
 
 import { getAssetPath } from "@/lib/utils";
 import { formatSemesterName } from "@/lib/formatSemesterName";
+import { privacyCategories, togglePrivacyCategory } from "@/lib/privacyMode";
 
 import { createTapTracker, getSectionRootTab, hasSectionHome, sectionHomeFor } from "@/lib/sectionHome";
 import { useOverlayBack } from "@/lib/overlayStack";
@@ -49,7 +50,7 @@ import {
   ScanLine,
   type LucideIcon,
 } from "lucide-react";
-import { AnimatePresence, m, type Variants } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import {
   useTheme,
   Sidebar,
@@ -313,7 +314,7 @@ export default function NavigationTabs({
     : unifiedAcademics.cgpa || "-";
   const formatAttendancePercentage = (value: unknown) => {
     const numeric = Number(value);
-    if (!Number.isFinite(numeric) || numeric <= 0) return undefined;
+    if (value == null || value === "" || !Number.isFinite(numeric) || numeric < 0) return undefined;
     return `${numeric.toFixed(settings.decimalValues ? 1 : 0)}%`;
   };
   const normalizedOverallAttendance =
@@ -324,14 +325,6 @@ export default function NavigationTabs({
     settings.attendancePercentageOrString === "percentage"
       ? formatAttendancePercentage(attendancePercentage?.percentage) || normalizedOverallAttendance || "-"
       : attendancePercentage?.str || normalizedOverallAttendance || "-";
-  const sidebarStatGridMotion: Variants = {
-    closed: { opacity: 0, y: -8, transition: { staggerChildren: 0.025, staggerDirection: -1 } },
-    open: { opacity: 1, y: 0, transition: { delayChildren: 0.035, staggerChildren: 0.04 } },
-  };
-  const sidebarStatMotion: Variants = {
-    closed: { opacity: 0, y: -5, scale: 0.94 },
-    open: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.15, ease: "easeOut" } },
-  };
 
   const profileName =
     settings.friendlyName ||
@@ -342,6 +335,7 @@ export default function NavigationTabs({
     "Student";
   const shouldDisplayGpa = shouldShowGpa(settings);
   const shouldDisplayProfilePhoto = shouldShowProfilePhoto(settings);
+  const hideIdentity = privacyCategories(settings).includes("identity");
   const initials = String(profileName)
     .split(" ")
     .map((part) => part[0])
@@ -1003,7 +997,7 @@ export default function NavigationTabs({
         ref={sidebarRef}
         data-sidebar-root="true"
         aria-label="Primary navigation"
-        className="brand-sidebar top-0 left-0 h-[100dvh] rounded-none border-0 border-r-2 border-border-ink shadow-none"
+        className="brand-sidebar top-0 left-0 h-[100dvh] rounded-none border-0 border-r-2 border-border-ink shadow-none !duration-200 motion-reduce:!duration-0"
         isOpen={isOpen}
         onOpenChange={(val) => persistSidebarState(!val)}
       >
@@ -1048,14 +1042,14 @@ export default function NavigationTabs({
           </div>
 
           {/* Profile Section, Semester summary, & Search */}
-          <AnimatePresence initial={false}>
+          <AnimatePresence initial={false} mode="wait">
             {isOpen ? (
               <m.div
                 key="header-expanded"
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.18 }}
+                transition={{ duration: 0.1 }}
                 className="overflow-hidden space-y-3"
               >
                 {/* Left-aligned clean Semester Summary Card */}
@@ -1081,34 +1075,13 @@ export default function NavigationTabs({
                   </div>
                   {/* Three tiles fit one row; with CGPA shown, four ~52px tiles
                       overflowed ("CREDITS", "79.1%"), so they go 2 x 2. */}
-                  <m.div
-                    layout="position"
-                    variants={sidebarStatGridMotion}
-                    initial="closed"
-                    animate="open"
-                    exit="closed"
-                    className={`grid gap-1.5 ${shouldDisplayGpa ? "grid-cols-2" : "grid-flow-col auto-cols-fr"}`}
-                  >
+                  <div className={`grid gap-1.5 ${shouldDisplayGpa ? "grid-cols-2" : "grid-flow-col auto-cols-fr"}`}>
                     {shouldDisplayGpa && (
-                      <m.button
-                        variants={sidebarStatMotion}
+                      <button
                         onClick={() => {
-                          setSettings((prev: any) => {
-                            const selected = new Set(
-                              Array.isArray(prev.privacyCategories) ? prev.privacyCategories : [],
-                            );
-                            const nextHidden = !selected.has("cgpa");
-                            if (nextHidden) selected.add("cgpa");
-                            else selected.delete("cgpa");
-                            const next = {
-                              ...prev,
-                              privacyMode: false,
-                              privacyCategories: [...selected],
-                              CGPAHidden: false,
-                              blurGrades: false,
-                            };
-                            return next;
-                          });
+                          setSettings((prev: any) =>
+                            togglePrivacyCategory(prev, "cgpa", !privacyCategories(prev).includes("cgpa")),
+                          );
                         }}
                         className="flex min-w-0 flex-col items-start gap-0.5 overflow-hidden rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
                         title="Click to show/hide CGPA"
@@ -1122,11 +1095,10 @@ export default function NavigationTabs({
                         >
                           {marksData?.cgpa?.cgpa || "-"}
                         </span>
-                      </m.button>
+                      </button>
                     )}
 
-                    <m.button
-                      variants={sidebarStatMotion}
+                    <button
                       onClick={() => {
                         setSettings((prev: any) => {
                           const next = {
@@ -1164,10 +1136,9 @@ export default function NavigationTabs({
                           </span>
                         );
                       })()}
-                    </m.button>
+                    </button>
 
-                    <m.button
-                      variants={sidebarStatMotion}
+                    <button
                       onClick={() => setGradesDisplayIsOpen(true)}
                       className="flex min-w-0 flex-col items-start gap-0.5 overflow-hidden rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
                       title="Click to view credits & grades details"
@@ -1181,10 +1152,9 @@ export default function NavigationTabs({
                       >
                         {credits}
                       </span>
-                    </m.button>
+                    </button>
 
-                    <m.button
-                      variants={sidebarStatMotion}
+                    <button
                       onClick={() => {
                         selectTab("attendance");
                         setActiveAttendanceSubTab("od");
@@ -1199,8 +1169,8 @@ export default function NavigationTabs({
                         {totalODHours}
                         <span className="font-mono text-xs font-semibold text-text-muted">/40</span>
                       </span>
-                    </m.button>
-                  </m.div>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Search Bar Input */}
@@ -1226,6 +1196,7 @@ export default function NavigationTabs({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
+                transition={{ duration: 0.1 }}
                 className="mt-3.5 flex flex-col items-center gap-3 w-full"
               >
                 {/* Same order as the open sidebar: toggle at the top (it used to
@@ -1505,58 +1476,45 @@ export default function NavigationTabs({
 
         {/* Profile, Theme, and Logout Footer */}
         <SidebarFooter className="bg-sidebar border-t-2 border-border-ink">
-          <AnimatePresence initial={false}>
-            {isOpen ? (
-              <m.div
-                key="footer-expanded"
-                layout
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.18 }}
-                className="shrink-0 space-y-2.5"
-              >
-                <m.div layoutId="sidebar-profile" transition={{ duration: 0.18, ease: "easeOut" }}>
-                  <SidebarProfile
-                    name={profileName}
-                    degree={(
-                      unifiedIdentity.programme ||
-                      profileData?.program ||
-                      profileData?.branch ||
-                      profileData?.batch ||
-                      ""
-                    ).replace("B.Tech ", "")}
-                    avatarUrl={shouldDisplayProfilePhoto ? unifiedIdentity.photo || profileData?.image : undefined}
-                    initials={initials || "ST"}
-                    onLogout={handleLogOutRequest}
-                  />
-                </m.div>
+          {isOpen ? (
+            <div className="shrink-0 space-y-2.5">
+              <div>
+                <SidebarProfile
+                  name={hideIdentity ? "Private" : profileName}
+                  degree={(
+                    unifiedIdentity.programme ||
+                    profileData?.program ||
+                    profileData?.branch ||
+                    profileData?.batch ||
+                    ""
+                  ).replace("B.Tech ", "")}
+                  avatarUrl={
+                    !hideIdentity && shouldDisplayProfilePhoto ? unifiedIdentity.photo || profileData?.image : undefined
+                  }
+                  initials={hideIdentity ? "--" : initials || "ST"}
+                  onLogout={handleLogOutRequest}
+                />
+              </div>
 
-                <div className="h-px bg-sidebar-accent" />
+              <div className="h-px bg-sidebar-accent" />
 
-                <SidebarThemeSwitch theme={theme} onThemeChange={handleThemeChange} />
-              </m.div>
-            ) : (
-              <m.div
-                key="footer-collapsed"
-                layout
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex flex-col items-center gap-3 w-full shrink-0"
-              >
-                {/* Same order as the open footer: profile, then theme. */}
-                <m.div layoutId="sidebar-profile" transition={{ duration: 0.18, ease: "easeOut" }}>
-                  <SidebarProfile
-                    avatarUrl={shouldDisplayProfilePhoto ? unifiedIdentity.photo || profileData?.image : undefined}
-                    initials={initials || "ST"}
-                    onProfileClick={() => selectTab("profile")}
-                  />
-                </m.div>
-                <SidebarThemeSwitch compact theme={theme} onThemeChange={handleThemeChange} />
-              </m.div>
-            )}
-          </AnimatePresence>
+              <SidebarThemeSwitch theme={theme} onThemeChange={handleThemeChange} />
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-3 w-full shrink-0">
+              {/* Same order as the open footer: profile, then theme. */}
+              <div>
+                <SidebarProfile
+                  avatarUrl={
+                    !hideIdentity && shouldDisplayProfilePhoto ? unifiedIdentity.photo || profileData?.image : undefined
+                  }
+                  initials={hideIdentity ? "--" : initials || "ST"}
+                  onProfileClick={() => selectTab("profile")}
+                />
+              </div>
+              <SidebarThemeSwitch compact theme={theme} onThemeChange={handleThemeChange} />
+            </div>
+          )}
         </SidebarFooter>
 
         {/* Floating popover beside the compact rail */}

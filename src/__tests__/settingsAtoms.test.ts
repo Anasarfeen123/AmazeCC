@@ -23,6 +23,14 @@ afterEach(() => {
 });
 
 describe("settingsAtom storage", () => {
+  it("migrates a saved CGPA-only hide before applying privacy defaults", () => {
+    localStorage.setItem("settings", JSON.stringify({ CGPAHidden: true, privacyMode: false }));
+    const unsub = store.sub(settingsAtom, () => {});
+    const value = store.get(settingsAtom);
+    unsub();
+    expect(value.privacyMode).toBe(true);
+    expect(value.privacyCategories).toEqual(["cgpa"]);
+  });
   it("reads a legacy blob over the defaults (migration shim)", () => {
     // A blob from before `decimalValues` (etc.) existed: only the fields the
     // user actually changed are present.

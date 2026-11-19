@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useDashboardNavigator } from "../dashboard/DashboardNavigator";
 import { createSequenceTracker, isTypingTarget, letterOf, NAV_SHORTCUTS, type NavTarget } from "@/lib/shortcuts";
-import { setHideAllPrivacy, togglePrivacyCategory } from "@/lib/privacyMode";
+import { privacyCategories, setHideAllPrivacy, togglePrivacyCategory } from "@/lib/privacyMode";
 
 export function useGlobalShortcuts({
   theme,
@@ -65,7 +65,7 @@ export function useGlobalShortcuts({
           go(nav.target);
         } else if (letter === "b") {
           e.preventDefault();
-          setSettings((prev) => togglePrivacyCategory(prev, "cgpa", !prev.privacyCategories?.includes("cgpa")));
+          setSettings((prev) => togglePrivacyCategory(prev, "cgpa", !privacyCategories(prev).includes("cgpa")));
         } else if (letter === "p") {
           e.preventDefault();
           setSettings((prev) => setHideAllPrivacy(prev, !prev.privacyMode));

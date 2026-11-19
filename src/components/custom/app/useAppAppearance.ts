@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { privacyCategories } from "@/lib/privacyMode";
+import { hasAllPrivacyCategories, privacyCategories } from "@/lib/privacyMode";
 
 /**
  * Vars the old accent-palette picker wrote inline on `<html>`. The picker and
@@ -64,7 +64,7 @@ export function useAppAppearance(settings: any, _theme?: unknown) {
     if (typeof document === "undefined") return;
     const root = document.documentElement;
     const categories = privacyCategories(settings);
-    root.classList.toggle("privacy-mode", Boolean(settings?.privacyMode));
+    root.classList.toggle("privacy-mode", hasAllPrivacyCategories(settings));
     for (const category of ["cgpa", "attendance", "marks", "fees", "credits", "id", "identity"] as const) {
       root.classList.toggle(`privacy-hide-${category}`, categories.includes(category));
     }

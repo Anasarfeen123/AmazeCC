@@ -27,6 +27,7 @@ describe("privacy mode", () => {
     const { unmount } = renderHook(() => useAppAppearance({ privacyMode: true, privacyCategories: ["fees"] }, "dark"));
     expect(document.documentElement.classList.contains("privacy-hide-fees")).toBe(true);
     expect(document.documentElement.classList.contains("privacy-hide-marks")).toBe(false);
+    expect(document.documentElement.classList.contains("privacy-mode")).toBe(false);
     unmount();
   });
 

@@ -833,7 +833,11 @@ export default function SimplifiedMobileHome({
         overallAttendance.percentage > 0
           ? `${overallAttendance.percentage.toFixed(settings?.decimalValues ? 1 : 0)}%`
           : "—",
-      sub: `${overallAttendance.attended} of ${overallAttendance.total} attended`,
+      sub: (
+        <span data-private="attendance">
+          {overallAttendance.attended} of {overallAttendance.total} attended
+        </span>
+      ),
       badge: overallAttendance.status,
       badgeColor: undefined as string | undefined,
       privacyCategory: "attendance" as const,
@@ -1309,7 +1313,7 @@ export default function SimplifiedMobileHome({
           <div className="flex items-start justify-between px-1">
             <div className="flex flex-col items-start min-w-0 text-left">
               {/* Avatar or AmazeCC Icon Above */}
-              <div className="mb-3">
+              <div className="mb-3" data-private={shouldDisplayProfilePhoto && profileImage ? "identity" : undefined}>
                 {shouldDisplayProfilePhoto && profileImage ? (
                   <img
                     loading="lazy"
@@ -1328,7 +1332,10 @@ export default function SimplifiedMobileHome({
               <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted leading-none mb-1.5">
                 <TimeBasedGreeting />,
               </p>
-              <h1 className="font-display text-[28px] sm:text-[36px] font-bold text-text-heading tracking-tight leading-none truncate max-w-full">
+              <h1
+                data-private="identity"
+                className="font-display text-[28px] sm:text-[36px] font-bold text-text-heading tracking-tight leading-none truncate max-w-full"
+              >
                 {profileName}
               </h1>
             </div>
@@ -1913,6 +1920,7 @@ export default function SimplifiedMobileHome({
                               )}
                               <span className="text-text-muted">•</span>
                               <span
+                                data-private="attendance"
                                 className={`inline-flex items-center gap-1 rounded-[6px] border-2 px-1.5 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] ${
                                   TONE_BADGE[
                                     bunkStatus === "safe" ? "emerald" : bunkStatus === "warning" ? "amber" : "red"
@@ -1941,6 +1949,7 @@ export default function SimplifiedMobileHome({
                           {/* Right: Attendance Percentage & Ratio */}
                           <div className="text-right shrink-0 flex flex-col items-end justify-center pl-2">
                             <span
+                              data-private="attendance"
                               className={`text-base font-bold font-outfit tracking-tight leading-none ${
                                 currentPct >= targetAttendancePct + 5
                                   ? "text-success-foreground"
@@ -1951,7 +1960,7 @@ export default function SimplifiedMobileHome({
                             >
                               {currentPct.toFixed(0)}%
                             </span>
-                            <span className="text-xs font-bold text-text-muted mt-0.5">
+                            <span data-private="attendance" className="text-xs font-bold text-text-muted mt-0.5">
                               {attended}/{total}
                             </span>
                           </div>
@@ -2007,10 +2016,11 @@ export default function SimplifiedMobileHome({
 
                           {/* Course Attendance % Badge */}
                           <div className="flex items-center gap-1.5 shrink-0">
-                            <span className="text-xs font-bold text-text-muted">
+                            <span data-private="attendance" className="text-xs font-bold text-text-muted">
                               {attended}/{total}
                             </span>
                             <span
+                              data-private="attendance"
                               className={`text-xs font-bold px-2 py-0.5 rounded-lg font-outfit ${
                                 currentPct >= targetAttendancePct + 5
                                   ? "bg-success-surface text-success-foreground"

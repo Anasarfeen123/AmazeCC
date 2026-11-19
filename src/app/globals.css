@@ -702,13 +702,9 @@ html.privacy-hide-identity [data-private~="identity"] {
   position: relative;
   display: inline-block;
   color: transparent !important;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent !important;
   text-shadow: none !important;
   user-select: none;
-  /* `color: transparent` alone loses to a few legacy value utilities. Keep
-     the value's layout, but make its glyphs impossible to paint; the visible
-     replacement is the pseudo-element directly below. */
-  visibility: hidden !important;
 }
 .crayon-hide *,
 .privacy-mode [data-private] *,
@@ -720,11 +716,15 @@ html.privacy-hide-credits [data-private~="credits"] *,
 html.privacy-hide-id [data-private~="id"] *,
 html.privacy-hide-identity [data-private~="identity"] * {
   color: transparent !important;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent !important;
 }
 html.privacy-hide-identity [data-private~="identity"] img,
 .privacy-mode [data-private~="identity"] img {
   opacity: 0;
+}
+html.privacy-hide-identity [data-private~="identity"]:hover img,
+.privacy-mode [data-private~="identity"]:hover img {
+  opacity: 1;
 }
 .crayon-hide::after,
 .privacy-mode [data-private]::after,
@@ -765,8 +765,15 @@ html.privacy-hide-identity [data-private~="identity"]::after {
     .privacy-hide-credits [data-private~="credits"],
     .privacy-hide-id [data-private~="id"],
     .privacy-hide-identity [data-private~="identity"]
-  )::after {
-  content: "";
+  )::after,
+html.hide-marker.privacy-hide-cgpa [data-private~="cgpa"]::after,
+html.hide-marker.privacy-hide-attendance [data-private~="attendance"]::after,
+html.hide-marker.privacy-hide-marks [data-private~="marks"]::after,
+html.hide-marker.privacy-hide-fees [data-private~="fees"]::after,
+html.hide-marker.privacy-hide-credits [data-private~="credits"]::after,
+html.hide-marker.privacy-hide-id [data-private~="id"]::after,
+html.hide-marker.privacy-hide-identity [data-private~="identity"]::after {
+  content: "" !important;
   left: -0.45em;
   right: -0.45em;
   top: -0.3em;
@@ -812,7 +819,7 @@ html.privacy-hide-credits [data-private~="credits"]:focus-within,
 html.privacy-hide-id [data-private~="id"]:focus-within,
 html.privacy-hide-identity [data-private~="identity"]:focus-within {
   color: inherit !important;
-  -webkit-text-fill-color: currentColor;
+  -webkit-text-fill-color: currentColor !important;
   user-select: auto;
 }
 .privacy-mode [data-private]:hover *,
@@ -825,7 +832,7 @@ html.privacy-hide-credits [data-private~="credits"]:hover *,
 html.privacy-hide-id [data-private~="id"]:hover *,
 html.privacy-hide-identity [data-private~="identity"]:hover * {
   color: inherit !important;
-  -webkit-text-fill-color: currentColor;
+  -webkit-text-fill-color: currentColor !important;
 }
 .privacy-mode [data-private]:hover::after,
 .privacy-mode :focus-within > [data-private]::after,

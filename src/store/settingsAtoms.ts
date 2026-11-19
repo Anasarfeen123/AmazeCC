@@ -176,7 +176,16 @@ const settingsStorage = {
     try {
       const raw = localStorage.getItem("settings");
       if (!raw) return initialValue;
-      const merged = { ...initialValue, ...JSON.parse(raw) } as Settings;
+      const saved = JSON.parse(raw);
+      const merged = { ...initialValue, ...saved } as Settings;
+      if (!("privacyCategories" in saved)) {
+        if (saved.privacyMode) {
+          merged.privacyCategories = ["cgpa", "attendance", "marks", "fees", "credits", "id", "identity"];
+        } else if (saved.CGPAHidden || saved.blurGrades) {
+          merged.privacyMode = true;
+          merged.privacyCategories = ["cgpa"];
+        }
+      }
       merged.defaultSyncMode = normalizeDefaultSyncMode(merged.defaultSyncMode) as Settings["defaultSyncMode"];
       // Legacy pickers stored "manual" for what is now "off".
       if ((merged.autoSyncInterval as string) === "manual") {

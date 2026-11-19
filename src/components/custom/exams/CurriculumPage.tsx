@@ -42,8 +42,9 @@ import {
 } from "../shared/primitives";
 import SelectField from "../shared/primitives/SelectField";
 import { CHIP, LIST_ROW, LIST_SHELL, SEARCH_FIELD, TILE } from "@/lib/uiTokens";
-import { readSettings, settingsAtom } from "@/store/settingsAtoms";
-import { useSetAtom } from "jotai";
+import { settingsAtom } from "@/store/settingsAtoms";
+import { useAtom } from "jotai";
+import { privacyCategories, togglePrivacyCategory } from "@/lib/privacyMode";
 import { storage, getTypedStorageItem, setTypedStorageItem } from "@/lib/storage";
 import { normalizeCourse } from "@/lib/courseNormalizer";
 import { buildCategoryRows, splitCurriculumRows, num, type CategoryRow } from "@/lib/curriculum";
@@ -284,20 +285,11 @@ export default function CurriculumPage({
   const [openBaskets, setOpenBaskets] = useState<Set<string>>(new Set());
 
   // ─ CGPA Blur State (persisted, single source of truth in the top bar) ─
-  const setSettings = useSetAtom(settingsAtom);
-  const [isCgpaBlurred, setIsCgpaBlurred] = useState<boolean>(() => {
-    const stored = readSettings();
-    if (typeof stored.CGPAHidden === "boolean") return stored.CGPAHidden;
-    if (typeof stored.blurGrades === "boolean") return stored.blurGrades;
-    return false;
-  });
+  const [privacySettings, setSettings] = useAtom(settingsAtom);
+  const isCgpaBlurred = privacyCategories(privacySettings).includes("cgpa");
 
   const toggleCgpaBlur = () => {
-    setIsCgpaBlurred((prev) => {
-      const next = !prev;
-      setSettings((prev) => ({ ...prev, CGPAHidden: next }));
-      return next;
-    });
+    setSettings((prev) => togglePrivacyCategory(prev, "cgpa", !privacyCategories(prev).includes("cgpa")));
   };
 
   // ─ Fetch Curriculum Data ─
@@ -1344,7 +1336,11 @@ export default function CurriculumPage({
           value={<span className={blurGrades}>{projectedCgpa.toFixed(2)}</span>}
           badge="Cumulative"
           tone="blue"
-          sub={`from ${currentCgpa.toFixed(2)} today`}
+          sub={
+            <>
+              from <span data-private="cgpa">{currentCgpa.toFixed(2)}</span> today
+            </>
+          }
         />
         <StatTile
           label="Credits open"

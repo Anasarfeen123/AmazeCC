@@ -294,6 +294,7 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
     () =>
       slides.map((s) => ({
         id: s.id,
+        privacyCategory: s.id === "receipts" ? undefined : ("fees" as const),
         label: s.title,
         value: s.headline,
         sub: s.subline,
@@ -575,7 +576,7 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
           >
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-2.5 text-xs">
-                <KeyValue label="Amount" value={fmtAmt(openReceipt.amount)} />
+                <KeyValue label="Amount" value={<span data-private="fees">{fmtAmt(openReceipt.amount)}</span>} />
                 <KeyValue label="Date" value={openReceipt.date || "—"} />
                 <KeyValue
                   label="Campus"

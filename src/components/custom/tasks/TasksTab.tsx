@@ -1,19 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import {
-  Columns,
-  List,
-  Calendar,
-  Timer,
-  Plus,
-  Download,
-  Clock,
-  AlertCircle,
-  CheckCircle2,
-  ListTodo,
-} from "lucide-react";
+import { Plus, Download, Clock, AlertCircle, CheckCircle2 } from "lucide-react";
 import { tasksAtom } from "@/store/dataAtoms";
 import { tasksQuickAddRequestAtom } from "@/store/uiAtoms";
 import {
@@ -27,10 +16,18 @@ import {
 import { subscribeReminders } from "@/lib/taskReminders";
 import { isDueOnDay } from "@/lib/taskMatch";
 import { getTodayAttendanceDay } from "@/lib/attendanceTimetable";
-import type { Task } from "@/types/tasks";
+import type { Task, TaskStatus } from "@/types/tasks";
 import { isTaskOverdue } from "@/types/tasks";
 import posthog from "posthog-js";
-import { InsightCarousel, PageShell, useCarousel, type InsightSlide } from "../shared/primitives";
+import {
+  ChipTabs,
+  InsightCarousel,
+  PageShell,
+  SegmentedControl,
+  useCarousel,
+  type InsightSlide,
+} from "../shared/primitives";
+import Button from "../shared/Button";
 import { TILE } from "@/lib/uiTokens";
 import KanbanView from "./KanbanView";
 import TaskListView from "./TaskListView";
@@ -71,14 +68,11 @@ const TONE_BADGE: Record<string, string> = {
 
 const CARD_BASE = `${TILE} min-h-36 sm:min-h-40`;
 
-const SEG_ACTIVE = "bg-primary text-primary-foreground shadow-xs";
-const SEG_IDLE = "bg-surface border-2 border-border-ink text-text-muted hover:text-text-heading";
-
-const VIEW_META: Record<TasksViewMode, { label: string; icon: React.ElementType; section: string }> = {
-  kanban: { label: "Kanban", icon: Columns, section: "Board" },
-  list: { label: "List", icon: List, section: "Timeline" },
-  week: { label: "Week", icon: Calendar, section: "Week plan" },
-  focus: { label: "Focus", icon: Timer, section: "Focus" },
+const VIEW_META: Record<TasksViewMode, { label: string; section: string }> = {
+  kanban: { label: "Board", section: "Board" },
+  list: { label: "List", section: "Timeline" },
+  week: { label: "Week", section: "Week plan" },
+  focus: { label: "Focus", section: "Focus" },
 };
 
 export default function TasksTab({ initialView = "kanban", initialCourseCode, onBack }: TasksTabProps) {
@@ -93,6 +87,7 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
   const [prefilledCourseCode, setPrefilledCourseCode] = useState<string | undefined>(initialCourseCode);
   const [prefilledTitle, setPrefilledTitle] = useState<string>("");
+  const [prefilledStatus, setPrefilledStatus] = useState<TaskStatus>("pending");
 
   // Moodle modal state
   const [isMoodleModalOpen, setIsMoodleModalOpen] = useState(false);
@@ -124,6 +119,7 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
     if (!quickAddRequest) return;
     setEditingTask(null);
     setPrefilledTitle(quickAddRequest.title || "");
+    setPrefilledStatus("pending");
     setPrefilledCourseCode(undefined);
     setIsEditSheetOpen(true);
     setQuickAddRequest(null);
@@ -177,9 +173,10 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
     }
   };
 
-  const handleOpenNewTask = () => {
+  const handleOpenNewTask = (status: TaskStatus = "pending") => {
     setEditingTask(null);
     setPrefilledTitle("");
+    setPrefilledStatus(status);
     setPrefilledCourseCode(initialCourseCode);
     setIsEditSheetOpen(true);
   };
@@ -220,7 +217,7 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
         id: "today",
         title: "Today",
         headline: String(todayTasks),
-        subline: todayTasks > 0 ? "session or due today" : "nothing scheduled today",
+        subline: todayTasks > 0 ? "Due or scheduled" : "Nothing scheduled",
         badge: "Today",
         tone: todayTasks > 0 ? "red" : "zinc",
         onClick: () => setViewMode("week"),
@@ -229,7 +226,7 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
         id: "overdue",
         title: "Overdue",
         headline: String(overdueTasks.length),
-        subline: overdueTasks.length > 0 ? "past due, still open" : "nothing past due",
+        subline: overdueTasks.length > 0 ? "Still open" : "None overdue",
         badge: overdueTasks.length > 0 ? "Overdue" : "Clear",
         tone: overdueTasks.length > 0 ? "red" : "emerald",
         onClick: () => setViewMode("list"),
@@ -238,7 +235,7 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
         id: "focus",
         title: "Focus",
         headline: String(scheduledChunks),
-        subline: scheduledChunks > 0 ? "weekly session chunks planned" : "no chunks scheduled yet",
+        subline: scheduledChunks > 0 ? "Sessions planned" : "No sessions planned",
         badge: "Focus",
         tone: "indigo",
         onClick: () => setViewMode("focus"),
@@ -247,7 +244,7 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
         id: "done",
         title: "Completed",
         headline: String(doneCount),
-        subline: doneCount > 0 ? "tasks finished" : "nothing finished yet",
+        subline: doneCount > 0 ? "Tasks finished" : "None finished yet",
         badge: "Done",
         tone: doneCount > 0 ? "emerald" : "zinc",
         onClick: () => setViewMode("kanban"),
@@ -281,22 +278,16 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
     >
       {/* ── ACTIONS ── */}
       <div className="flex items-center gap-2 flex-wrap">
-        <button
-          type="button"
+        <Button onClick={() => handleOpenNewTask()} icon={<Plus className="w-4 h-4" aria-hidden="true" />}>
+          New task
+        </Button>
+        <Button
+          variant="outline"
           onClick={() => setIsMoodleModalOpen(true)}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-warning-surface hover:bg-warning-surface text-warning-foreground border border-border-ink text-xs font-bold transition-all cursor-pointer shadow-2xs"
+          icon={<Download className="w-4 h-4" aria-hidden="true" />}
         >
-          <Download className="w-3.5 h-3.5" />
-          <span>Import LMS</span>
-        </button>
-        <button
-          type="button"
-          onClick={handleOpenNewTask}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary hover:brightness-110 text-primary-foreground text-xs font-bold transition-colors cursor-pointer"
-        >
-          <Plus className="w-3.5 h-3.5" />
-          <span>New Task</span>
-        </button>
+          Import LMS
+        </Button>
       </div>
 
       {/* ── STAT CARDS (static hero + rotating carousel) ── */}
@@ -308,7 +299,7 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
               Open tasks
             </span>
             <span
-              className={`text-xs sm:text-xs font-bold uppercase px-2 py-0.5 rounded-md shrink-0 border ${
+              className={`max-sm:sr-only text-xs sm:text-xs font-bold uppercase px-2 py-0.5 rounded-md shrink-0 border ${
                 TONE_BADGE[overdueTasks.length > 0 ? "red" : "emerald"]
               }`}
             >
@@ -322,7 +313,7 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
               {openTasks.length}
             </span>
           </div>
-          <p className="text-xs sm:text-xs text-text-muted font-medium truncate">
+          <p className="text-xs sm:text-xs text-text-muted font-medium">
             {dueThisWeek} due this week · {doneCount} done
           </p>
         </div>
@@ -339,44 +330,25 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
 
       {/* ── VIEW SEGMENTS + COURSE FILTER ── */}
       <div className="space-y-3">
-        <div className="flex flex-wrap items-center gap-1.5 bg-surface-secondary p-1.5 rounded-2xl border-2 border-border-ink w-fit">
-          {(Object.keys(VIEW_META) as TasksViewMode[]).map((mode) => {
-            const Icon = VIEW_META[mode].icon;
-            const isActive = viewMode === mode;
-            return (
-              <button
-                key={mode}
-                type="button"
-                onClick={() => setViewMode(mode)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
-                  isActive ? SEG_ACTIVE : SEG_IDLE
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                <span>{VIEW_META[mode].label}</span>
-              </button>
-            );
-          })}
-        </div>
+        <SegmentedControl
+          options={(Object.keys(VIEW_META) as TasksViewMode[]).map((mode) => ({
+            value: mode,
+            label: VIEW_META[mode].label,
+          }))}
+          value={viewMode}
+          onChange={setViewMode}
+          className="w-fit"
+        />
 
         {uniqueCourseCodes.length > 0 && (
-          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1">
-            {[{ id: "all", label: "All courses" }, ...uniqueCourseCodes.map((c) => ({ id: c, label: c }))].map((f) => {
-              const isActive = selectedCourseFilter === f.id;
-              return (
-                <button
-                  key={f.id}
-                  type="button"
-                  onClick={() => setSelectedCourseFilter(f.id)}
-                  className={`px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
-                    isActive ? SEG_ACTIVE : SEG_IDLE
-                  }`}
-                >
-                  {f.label}
-                </button>
-              );
-            })}
-          </div>
+          <ChipTabs
+            options={[
+              { value: "all", label: "All courses" },
+              ...uniqueCourseCodes.map((c) => ({ value: c, label: c })),
+            ]}
+            value={selectedCourseFilter}
+            onChange={setSelectedCourseFilter}
+          />
         )}
       </div>
 
@@ -384,15 +356,6 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
       <div className="space-y-4">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2">
-            {viewMode === "kanban" ? (
-              <ListTodo className="w-4 h-4 text-primary" />
-            ) : viewMode === "list" ? (
-              <List className="w-4 h-4 text-primary" />
-            ) : viewMode === "week" ? (
-              <Calendar className="w-4 h-4 text-primary" />
-            ) : (
-              <Timer className="w-4 h-4 text-primary" />
-            )}
             <h2 className="text-sm font-bold text-text-heading font-outfit tracking-tight">
               {VIEW_META[viewMode].section}
             </h2>
@@ -451,7 +414,7 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
         )}
 
         {viewMode === "week" && (
-          <TaskWeekView tasks={filteredTasks} onEdit={handleOpenEdit} onNewTask={handleOpenNewTask} />
+          <TaskWeekView tasks={filteredTasks} onEdit={handleOpenEdit} onNewTask={() => handleOpenNewTask()} />
         )}
 
         {viewMode === "focus" && (
@@ -463,6 +426,7 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
       <TaskEditSheet
         task={editingTask}
         initialTitle={prefilledTitle}
+        initialStatus={prefilledStatus}
         initialCourseCode={prefilledCourseCode}
         isOpen={isEditSheetOpen}
         onClose={() => {

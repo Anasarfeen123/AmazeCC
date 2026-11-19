@@ -18,6 +18,7 @@ interface TaskEditSheetProps {
   initialCourseCode?: string;
   initialComponent?: TaskComponent;
   initialTitle?: string;
+  initialStatus?: TaskStatus;
   isOpen: boolean;
   onClose: () => void;
   onSave: (draft: Partial<Task> & { title: string }) => void;
@@ -29,6 +30,7 @@ export default function TaskEditSheet({
   initialCourseCode = "",
   initialComponent = "both",
   initialTitle = "",
+  initialStatus = "pending",
   isOpen,
   onClose,
   onSave,
@@ -89,7 +91,7 @@ export default function TaskEditSheet({
     } else {
       setTitle(initialTitle || "");
       setKind("homework");
-      setStatus("pending");
+      setStatus(initialStatus);
       setCourseCode(initialCourseCode || enrolledCourses[0]?.code || "");
       setComponent(initialComponent || "both");
       setDueDate("");
@@ -99,7 +101,7 @@ export default function TaskEditSheet({
       setNotes("");
     }
     setError(null);
-  }, [task, initialCourseCode, initialComponent, initialTitle, isOpen, enrolledCourses]);
+  }, [task, initialCourseCode, initialComponent, initialTitle, initialStatus, isOpen, enrolledCourses]);
 
   function toLocalDatetime(iso: string): string {
     try {
@@ -190,6 +192,7 @@ export default function TaskEditSheet({
         title: cleanTitle,
         kind,
         status,
+        completedAt: status === "done" ? task?.completedAt || new Date().toISOString() : undefined,
         courseCode: sanitizeCourseCode(courseCode),
         component,
         dueDate: toIsoDatetime(dueDate),
@@ -235,10 +238,14 @@ export default function TaskEditSheet({
 
           {/* Title */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5">
+            <label
+              htmlFor="task-title"
+              className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5"
+            >
               Task Title <span className="text-danger-foreground">*</span>
             </label>
             <input
+              id="task-title"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -276,30 +283,29 @@ export default function TaskEditSheet({
             </div>
           </div>
 
-          {/* Status (if editing) */}
-          {task && (
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5">Status</label>
-              <div className="flex gap-2">
-                {(["pending", "in_progress", "done"] as TaskStatus[]).map((s) => (
-                  <button
-                    key={s}
-                    type="button"
-                    onClick={() => setStatus(s)}
-                    className={`flex-1 py-2 px-3 rounded-xl border text-xs font-bold capitalize transition-all cursor-pointer ${
-                      status === s
-                        ? s === "done"
-                          ? "bg-success-surface border-border-ink text-success-foreground"
-                          : "bg-secondary border-border-ink text-secondary-foreground"
-                        : "bg-surface border-border-ink text-text-muted"
-                    }`}
-                  >
-                    {s.replace("_", " ")}
-                  </button>
-                ))}
-              </div>
+          {/* Status */}
+          <div>
+            <span className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5">Status</span>
+            <div role="group" aria-label="Status" className="flex gap-2">
+              {(["pending", "in_progress", "done"] as TaskStatus[]).map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => setStatus(s)}
+                  aria-pressed={status === s}
+                  className={`flex-1 min-h-11 py-2 px-3 rounded-[10px] border-2 text-xs font-bold capitalize transition-all cursor-pointer ${
+                    status === s
+                      ? s === "done"
+                        ? "bg-success-surface border-border-ink text-success-foreground"
+                        : "bg-secondary border-border-ink text-secondary-foreground"
+                      : "bg-surface border-border-ink text-text-muted"
+                  }`}
+                >
+                  {s.replace("_", " ")}
+                </button>
+              ))}
             </div>
-          )}
+          </div>
 
           {/* Course Linking */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

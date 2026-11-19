@@ -10,6 +10,23 @@ memory; close it when idle). Screenshots: `scripts/redesign/shot.mjs`
 Every item says what to check on screen. Do not mark anything done without
 light + dark captures at 390 and 1440 (and 820 where layout changes).
 
+## Done 2026-11-20 (and what it changed)
+
+- Dark/Night: shadow colour = border colour; cards a step lighter than the
+  page (dark #003431, Night #0f1615); faint dot grid on the dark page;
+  second summary-row card sage-tinted. User: "better, could be better".
+- Marks pills (My Courses & Marks) and Grade History bars coloured by score
+  with brand mint / ochre / coral in every theme.
+- Grade History: CGPA and term GPAs respect privacy; term chips on their
+  own row; plain copy; no duplicate course boxes.
+- Classmates: only your batch by default (toggle "Only my batch").
+- Sidebar "All modules" trial rejected and reverted; row icons stay.
+- Skip-to-content link; shot.mjs gained KEYS= and EVAL=.
+
+Open from this round: a colour per course (asked the user, no answer yet);
+360px checks beyond Home; Find Classmates with a real account (batch
+filter not seen on screen).
+
 ## P0 — finish what is half done
 
 1. **Comic cover for hidden values** (`src/app/globals.css` "Hidden values",

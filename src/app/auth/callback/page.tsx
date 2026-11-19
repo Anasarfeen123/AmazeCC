@@ -33,7 +33,7 @@ export default function AuthCallbackPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-950 p-4">
       <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-3xl p-8 space-y-5 text-center">
-        <img src="/logo.png" alt="AmazeCC Logo" className="w-16 h-16 mx-auto object-contain drop-shadow-md" />
+        <img src="/brand/icon-primary.svg" alt="AmazeCC Logo" className="w-16 h-16 mx-auto object-contain" />
         {error ? (
           <>
             <h1 className="text-xl font-bold text-zinc-100">Sign-in didn&apos;t finish</h1>

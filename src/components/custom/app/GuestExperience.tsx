@@ -1,9 +1,10 @@
 "use client";
 
+import BrandLogo from "../shared/BrandLogo";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { ArrowRight, Moon, Sun } from "lucide-react";
+import { ArrowRight, Heart, Moon, Sun } from "lucide-react";
 import { CycleWord } from "../landing/LandingMotion";
 
 /**
@@ -64,17 +65,8 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
       >
         <div className="flex min-w-0 items-center gap-6">
           <a href="/" className="flex shrink-0 items-center gap-2.5" aria-label="AmazeCC home">
-            <img
-              loading="eager"
-              fetchPriority="high"
-              src="/brand/icon-primary.svg"
-              alt=""
-              width="36"
-              height="36"
-              decoding="async"
-              className="h-9 w-9 object-contain"
-            />
-            <span className="font-display text-lg font-bold leading-none max-[430px]:sr-only">AmazeCC</span>
+            <BrandLogo variant="mark" size="md" className="min-[431px]:hidden" />
+            <BrandLogo size="md" className="max-[430px]:hidden" />
           </a>
           <nav aria-label="Sections" className="hidden items-center gap-1 lg:flex">
             {SECTIONS.map((section) => (
@@ -100,7 +92,9 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
             onClick={() => setTheme(isDark ? "light" : "dark")}
             className="inline-flex h-10 w-10 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-primary shadow-brutal-sm brutal-press"
           >
-            {isDark ? <Sun size={16} aria-hidden /> : <Moon size={16} aria-hidden />}
+            <span key={isDark ? "sun" : "moon"} className="landing-pop">
+              {isDark ? <Sun size={16} aria-hidden /> : <Moon size={16} aria-hidden />}
+            </span>
           </button>
           <button
             type="button"
@@ -177,7 +171,12 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
         }}
         className="relative z-10 flex-1 overflow-hidden border-b-[3px] border-border-ink"
       >
-        {/* Campus art (the user's illustrations), day / night picked by CSS. */}
+        {/* Campus art (the user's illustrations), day / night picked by CSS. A soft
+            blur (user request) hides small artefacts in the art and keeps it
+            behind the content; scaled slightly so the blurred edge never shows.
+            Art is the one place the brand allows blur. Below lg the art keeps its
+            own shape at the bottom of the hero (cover cropped it into a close-up
+            on tall phone heroes). */}
         <img
           src="/landing/campus-day.webp"
           alt=""
@@ -186,7 +185,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
           height={941}
           loading="eager"
           decoding="async"
-          className="absolute inset-0 -z-20 h-full w-full object-cover object-[50%_75%] dark:hidden"
+          className="absolute inset-x-0 bottom-0 -z-20 h-auto w-full scale-105 blur-[10px] lg:inset-0 lg:h-full lg:object-cover lg:object-[50%_70%] dark:hidden"
         />
         <img
           src="/landing/campus-night.webp"
@@ -196,21 +195,21 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
           height={941}
           loading="eager"
           decoding="async"
-          className="absolute inset-0 -z-20 hidden h-full w-full object-cover object-[50%_75%] dark:block"
+          className="absolute inset-x-0 bottom-0 -z-20 h-auto w-full scale-105 blur-[10px] lg:inset-0 lg:h-full lg:object-cover lg:object-[50%_70%] hidden dark:block"
         />
         {/* Backdrop: a flat wash of the page colour so the art sits behind, not on top. */}
         <div aria-hidden="true" className="absolute inset-0 -z-10 bg-background/60 dark:bg-background/45" />
 
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-12 px-4 pb-16 pt-10 sm:px-8 sm:pt-14 lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:pb-24">
-          <div className="relative max-w-2xl rounded-[20px] border-[3px] border-border-ink bg-surface p-5 shadow-brutal-lg sm:p-8">
-            <p className="landing-pop mb-5 inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-secondary-foreground">
-              Your campus companion // VIT Chennai
-            </p>
-            <h1 className="font-display text-[40px] font-bold uppercase leading-[1.02] sm:text-6xl lg:text-[72px]">
+        <div className="mx-auto grid w-full max-w-7xl items-center gap-12 px-4 pb-14 pt-8 sm:px-8 sm:pt-12 lg:grid-cols-[1fr_1.1fr] lg:gap-10 lg:pb-20">
+          <div className="relative max-w-xl rounded-[20px] border-[3px] border-border-ink bg-surface p-5 shadow-brutal-lg sm:p-7">
+            <div className="landing-pop mb-6">
+              <BrandLogo size="md" tagline />
+            </div>
+            <h1 className="font-display text-[32px] font-bold uppercase leading-[1.05] sm:text-[44px] lg:text-[52px]">
               Your VIT life,
               <span className="block text-hero">all in one place.</span>
             </h1>
-            <p className="mt-6 max-w-xl font-display text-xl font-bold leading-snug sm:text-2xl">
+            <p className="mt-5 max-w-xl font-display text-lg font-bold leading-snug">
               Check your{" "}
               <CycleWord
                 words={[
@@ -224,7 +223,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
               />{" "}
               in one tap.
             </p>
-            <p className="mt-4 max-w-xl text-base leading-7 text-text-muted sm:text-lg">
+            <p className="mt-3 max-w-xl text-sm leading-6 text-text-muted sm:text-base">
               The 75% line drawn on every course, marks with class averages, today&apos;s rooms, exam seats, buses and
               your FFCS draft. One app instead of five portals.
             </p>
@@ -233,14 +232,14 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
               <button
                 type="button"
                 onClick={onTryDemo}
-                className="inline-flex min-h-14 items-center justify-center rounded-[10px] border-[3px] border-border-ink bg-highlight px-7 font-mono text-sm font-bold uppercase tracking-[0.06em] text-highlight-foreground shadow-brutal-lg brutal-press"
+                className="inline-flex min-h-12 items-center justify-center rounded-[10px] border-[3px] border-border-ink bg-highlight px-6 font-mono text-[13px] font-bold uppercase tracking-[0.06em] text-highlight-foreground shadow-brutal-lg brutal-press"
               >
                 Try the demo
               </button>
               <button
                 type="button"
                 onClick={onGetStarted}
-                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-[10px] border-[3px] border-border-ink bg-surface px-7 font-mono text-sm font-bold uppercase tracking-[0.06em] text-text-primary shadow-brutal-lg brutal-press"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[10px] border-[3px] border-border-ink bg-surface px-6 font-mono text-[13px] font-bold uppercase tracking-[0.06em] text-text-primary shadow-brutal-lg brutal-press"
               >
                 Sign in with VTOP
                 <ArrowRight size={16} aria-hidden />
@@ -333,7 +332,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
               <span
                 key={st.t}
                 style={{ animationDelay: `${i * 0.6}s` }}
-                className={`absolute ${st.pos} ${st.anim} z-10 whitespace-nowrap rounded-[8px] border-[3px] border-border-ink ${st.c} px-2.5 py-1 font-mono text-xs font-bold uppercase tracking-[0.06em] text-obsidian shadow-brutal-md sm:text-sm`}
+                className={`absolute ${st.pos} ${st.anim} z-10 whitespace-nowrap rounded-[8px] border-[3px] border-border-ink ${st.c} px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-obsidian shadow-brutal-sm`}
               >
                 {st.t}
               </span>
@@ -353,7 +352,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
           className="landing-float-a pointer-events-none absolute -right-16 -top-10 w-[420px] max-w-none opacity-90 [--tilt:-8deg] sm:-right-6"
         />
         <div className="relative mx-auto max-w-7xl">
-          <h2 className="max-w-3xl font-display text-[40px] font-bold uppercase leading-[1.02] sm:text-[64px]">
+          <h2 className="max-w-3xl font-display text-[32px] font-bold uppercase leading-[1.05] sm:text-[48px]">
             Stop opening five portals.
           </h2>
           <p className="mt-4 max-w-xl text-lg">See your real attendance, marks and timetable in under a minute.</p>
@@ -379,13 +378,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
 
       <footer className="brand-sidebar border-t-2 border-border-ink px-4 py-10 sm:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-3">
-            <img src="/brand/icon-primary.svg" alt="" className="h-10 w-10" />
-            <div className="leading-none">
-              <span className="block font-display text-lg font-bold text-cream">AmazeCC</span>
-              <span className="mt-1 block font-mono text-xs text-text-muted">Your campus companion</span>
-            </div>
-          </div>
+          <BrandLogo size="lg" tagline wordClassName="text-cream" />
           <nav
             aria-label="Footer"
             className="flex flex-wrap gap-x-5 gap-y-2 font-mono text-xs font-semibold uppercase tracking-[0.06em]"
@@ -406,7 +399,14 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
               </a>
             ))}
           </nav>
-          <p className="font-mono text-xs text-text-muted">Made by students. Not affiliated with VIT or VTOP.</p>
+          <div className="space-y-1 font-mono text-xs">
+            <p className="flex items-center gap-1.5 font-semibold uppercase tracking-[0.06em] text-cream">
+              Made with
+              <Heart size={14} className="fill-coral text-coral" aria-label="love" />
+              by students at VIT Chennai
+            </p>
+            <p className="text-text-muted">Not affiliated with VIT or VTOP.</p>
+          </div>
         </div>
       </footer>
     </main>

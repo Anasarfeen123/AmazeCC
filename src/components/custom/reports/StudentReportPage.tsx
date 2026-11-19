@@ -116,7 +116,6 @@ function dateLabel(value: unknown): string {
   return Number.isNaN(parsed.getTime()) ? String(value) : parsed.toLocaleDateString("en-IN");
 }
 
-
 function normalizedPhoto(value: unknown): string {
   if (typeof value !== "string" || !value) return "";
   if (/^https?:\/\//i.test(value) || value.startsWith("data:image/")) return value;
@@ -950,7 +949,7 @@ export default function StudentReportPage() {
           {snapshot && (
             <article>
               <header className="report-cover">
-                <img className="report-logo" src={getAssetPath("/logo.png")} alt="AmazeCC" />
+                <img className="report-logo" src={getAssetPath("/brand/icon-primary.svg")} alt="AmazeCC" />
                 <div className="report-cover-copy">
                   <p className="report-cover-eyebrow">AmazeCC · Academic portfolio</p>
                   <h1>Student Academic Report</h1>

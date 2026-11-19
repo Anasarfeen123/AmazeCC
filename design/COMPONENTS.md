@@ -38,6 +38,12 @@ Nested things inside a card get an edge, not another shadow.
 | `PageSkeleton`, `ListSkeleton`                                          | Loading placeholders.                                                                                                                                                                                        |
 | `useSubpageStack` + `SubpageScreen`                                     | In-page sub-screen stack with back.                                                                                                                                                                          |
 
+## Logo — `components/custom/shared/BrandLogo.tsx`
+
+`<BrandLogo variant="mark"|"lockup"|"wordmark" size="sm"|"md"|"lg"|"xl" tagline wordClassName markSrc />`.
+Rules in DESIGN_LANGUAGE §4b. `wordClassName="text-cream"` on teal panels;
+`markSrc` for the user's alternate app icon.
+
 ## Buttons — `components/custom/shared/Button.tsx`
 
 Native `<button>`: 10px, 2px ink edge, mono uppercase label, 44px tall.

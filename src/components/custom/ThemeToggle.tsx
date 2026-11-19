@@ -6,7 +6,8 @@ import { motion } from "framer-motion";
 import { Sun, Moon } from "lucide-react";
 
 /**
- * Light <-> dark switch.
+ * Light <-> dark switch: a soft cross-fade (CSS in globals.css, view
+ * transitions); instant where unsupported or under reduced motion.
  *
  * Two things made the old switch look wrong: hundreds of elements carry
  * `transition-all`/`transition-colors`, so after the reveal every surface
@@ -47,28 +48,12 @@ export function animateThemeCircularExpansion(
     return;
   }
 
-  const x = event && "clientX" in event && event.clientX > 0 ? event.clientX : window.innerWidth / 2;
-  const y = event && "clientY" in event && event.clientY > 0 ? event.clientY : window.innerHeight / 2;
-  const endRadius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
-
   pauseTransitions();
   const transition = (document as any).startViewTransition(() => {
     applyRootClass();
     setTheme(newTheme);
   });
 
-  transition.ready
-    .then(() => {
-      root.animate(
-        [{ clipPath: `circle(0px at ${x}px ${y}px)` }, { clipPath: `circle(${endRadius}px at ${x}px ${y}px)` }],
-        {
-          duration: 380,
-          easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
-          pseudoElement: "::view-transition-new(root)",
-        },
-      );
-    })
-    .catch(() => {});
   transition.finished.finally(resumeTransitions);
 }
 

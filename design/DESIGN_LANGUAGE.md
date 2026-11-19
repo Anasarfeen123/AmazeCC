@@ -53,12 +53,28 @@ Reference: the user's "ON-DUTY HOURS" light and dark mocks (described in
 - Never radius 0, never pill-round text buttons/badges (circles are fine for
   avatars, dots, switch thumbs).
 
+## 4b. The logo
+
+One component, `components/custom/shared/BrandLogo.tsx`:
+
+- **Mark** — the full-colour book-"A" tile. Phone app header, tablet rail,
+  favicon/app icon, small badges. Never recoloured, never cropped.
+- **Lockup** — mark + wordmark "Amaze" with **CC** stamped in an ochre block.
+  Landing header, sidebar (desktop), sign-in/sync screens.
+- **Lockup + tagline** ("YOUR CAMPUS COMPANION") — brand moments only: the
+  landing hero card and the footer.
+- One logo per view. On tablet/desktop the sidebar carries it, so pages do
+  not repeat it in their own headers.
+- The mark tips like a turning page on hover (`.brand-logo-mark`).
+- Do not use `/logo.png` or hand-built `<img>` + text logos.
+
 ## 5. Motion
 
 - 80–200ms, ease-out, no springs, no bounce, no scale pops, no blur.
 - Pressable things use `.brutal-press` (lift on hover, sink on press).
-- Light/dark switch: circular reveal with CSS transitions paused
-  (`.theme-switching`); instant for reduced motion.
+- Light/dark switch: a soft 320ms cross-fade (view transitions, CSS in
+  `globals.css`) with CSS transitions paused (`.theme-switching`); instant
+  for reduced motion. The old circular reveal was rejected.
 - `prefers-reduced-motion`: no movement; colour/shadow changes only.
 
 ## 6. Icons
@@ -71,7 +87,9 @@ Reference: the user's "ON-DUTY HOURS" light and dark mocks (described in
 
 ## 7. Banned
 
-Blur shadows, glows, gradients, glass / `backdrop-blur`, raw hex or
+Blur shadows, glows, gradients, glass / `backdrop-blur` (exception:
+illustration backgrounds such as the landing hero art may use a soft
+`blur-[3px]` to hide artefacts and sit behind content), raw hex or
 `zinc/gray/slate/indigo-*` classes in components, text under 12px, pill-round
 text buttons, emoji in UI, accent-colour pickers, colour-only status.
 

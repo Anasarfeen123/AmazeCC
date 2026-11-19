@@ -36,13 +36,13 @@ import {
 import { summariseAttendance } from "@/lib/attendanceSummary";
 import { shouldShowGpa, shouldShowProfilePhoto } from "@/lib/settingsVisibility";
 import { analyzeAllCalendars } from "@/lib/analyzeCalendar";
-import { getAssetPath } from "@/lib/utils";
 import { buildExamRows, classifyExamState } from "@/lib/examSchedule";
 import { dateKey } from "@/lib/calendarDay";
 import { isLabFatMarked, labFatPapersByDate, labSlotTokens, type LabFatPaper } from "@/lib/labFatWeek";
 import { cn } from "@amazecontinuityprojects/amazeui";
 import { ICON_BUTTON, TILE_INTERACTIVE, TONE_BADGE } from "@/lib/uiTokens";
 import { facultyDisplayName, greetingName } from "@/lib/displayNames";
+import BrandLogo from "../shared/BrandLogo";
 import TimetableGrid from "../attendance/TimetableGrid";
 import DesktopCourseDetail from "../attendance/DesktopCourseDetail";
 import BottomSheet from "../shared/BottomSheet";
@@ -1309,13 +1309,8 @@ export default function SimplifiedMobileHome({
                     className="h-11 w-11 rounded-[10px] border-2 border-border-ink object-cover shadow-brutal-sm"
                   />
                 ) : (
-                  <img
-                    loading="lazy"
-                    src={getAssetPath("/brand/icon-primary.svg")}
-                    alt="AmazeCC"
-                    decoding="async"
-                    className="h-11 w-11 object-contain"
-                  />
+                  // Phones only: on tablet/desktop the sidebar already carries the logo.
+                  <BrandLogo variant="mark" size="md" className="md:hidden" />
                 )}
               </div>
 

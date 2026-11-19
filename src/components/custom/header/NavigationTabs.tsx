@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import BrandLogo from "../shared/BrandLogo";
 import { useAtomValue } from "jotai";
 import { unifiedIdentityAtom, unifiedAcademicsAtom } from "@/store";
 import type { UnifiedUserIdentity } from "@/types";
@@ -988,10 +989,13 @@ export default function NavigationTabs({
           {/* Logo & Expand Toggle */}
           <div className={`flex items-center ${isOpen ? "justify-between w-full" : "justify-center w-full"}`}>
             <div className={`flex items-center min-w-0 ${isOpen ? "gap-2.5" : "justify-center"}`}>
-              <img loading="lazy" decoding="async" src={currentIcon} alt="AmazeCC" className="h-9 w-9 object-contain" />
-              {isOpen && (
-                <h2 className="truncate font-display text-lg font-bold leading-none text-text-heading">AmazeCC</h2>
-              )}
+              {/* Lockup when open, mark on the rail; honours the alternate app icon. */}
+              <BrandLogo
+                variant={isOpen ? "lockup" : "mark"}
+                size="md"
+                markSrc={currentIcon.includes("fire") ? currentIcon : undefined}
+                wordClassName="text-cream"
+              />
             </div>
             {isOpen && (
               <div className="flex items-center gap-0.5">

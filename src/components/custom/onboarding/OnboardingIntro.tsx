@@ -15,6 +15,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
+import BrandLogo from "../shared/BrandLogo";
 import { useAtomValue } from "jotai";
 import {
   AlertCircle,
@@ -79,22 +80,7 @@ function Shell({ children }: { children: React.ReactNode }) {
 }
 
 function Brand() {
-  return (
-    <div className="flex shrink-0 items-center gap-3">
-      <img
-        src="/brand/icon-primary.svg"
-        alt=""
-        width={40}
-        height={40}
-        decoding="async"
-        className="h-10 w-10 object-contain"
-      />
-      <div className="leading-none">
-        <span className="block font-display text-lg font-bold text-text-heading">AmazeCC</span>
-        <span className="mt-1 block font-mono text-xs text-text-muted">Your campus companion</span>
-      </div>
-    </div>
-  );
+  return <BrandLogo size="md" tagline />;
 }
 
 function FieldLabel({ children }: { children: React.ReactNode }) {

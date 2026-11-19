@@ -547,7 +547,7 @@ export default function AmazeOnboardingFlow({
           >
             <img
               loading="lazy"
-              src={getAssetPath("/logo.png")}
+              src={getAssetPath("/brand/icon-primary.svg")}
               alt="AmazeCC"
               decoding="async"
               className="w-7 h-7 rounded-xl object-contain border border-border-ink p-0.5 bg-surface shrink-0"
@@ -876,7 +876,7 @@ export default function AmazeOnboardingFlow({
                   <div className="flex items-center gap-3">
                     <img
                       loading="lazy"
-                      src={getAssetPath("/logo.png")}
+                      src={getAssetPath("/brand/icon-primary.svg")}
                       alt="AmazeCC"
                       decoding="async"
                       className="w-12 h-12 rounded-2xl object-contain shadow-md border border-border-ink p-0.5 bg-surface shrink-0"
@@ -939,7 +939,7 @@ export default function AmazeOnboardingFlow({
                   <div className="flex items-center gap-3">
                     <img
                       loading="lazy"
-                      src={getAssetPath("/logo.png")}
+                      src={getAssetPath("/brand/icon-primary.svg")}
                       alt="AmazeCC"
                       decoding="async"
                       className="w-12 h-12 rounded-2xl object-contain shadow-md border border-border-ink p-0.5 bg-surface shrink-0"
@@ -1164,7 +1164,7 @@ export default function AmazeOnboardingFlow({
                   <div className="flex flex-col items-center gap-2.5">
                     <img
                       loading="lazy"
-                      src={getAssetPath("/logo.png")}
+                      src={getAssetPath("/brand/icon-primary.svg")}
                       alt="AmazeCC"
                       decoding="async"
                       className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl object-contain shadow-lg border border-border-ink p-0.5 bg-surface"
@@ -1196,7 +1196,7 @@ export default function AmazeOnboardingFlow({
                   <div className="flex flex-col items-center text-center space-y-2 shrink-0">
                     <img
                       loading="lazy"
-                      src={getAssetPath("/logo.png")}
+                      src={getAssetPath("/brand/icon-primary.svg")}
                       alt="AmazeCC"
                       decoding="async"
                       className="w-11 h-11 rounded-2xl object-contain shadow-md border border-border-ink p-0.5 bg-surface"

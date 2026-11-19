@@ -107,8 +107,8 @@ function Heading({ label, title, sub, tone = "" }: { label: string; title: React
   return (
     <Reveal className={`max-w-2xl space-y-3 ${tone}`}>
       <span className={`${BADGE} bg-surface text-text-primary`}>{label}</span>
-      <h2 className="font-display text-[32px] font-bold uppercase leading-[1.02] sm:text-[48px]">{title}</h2>
-      {sub ? <p className="text-base opacity-80 sm:text-lg">{sub}</p> : null}
+      <h2 className="font-display text-[26px] font-bold uppercase leading-[1.05] sm:text-[38px]">{title}</h2>
+      {sub ? <p className="text-sm opacity-80 sm:text-base">{sub}</p> : null}
     </Reveal>
   );
 }
@@ -119,7 +119,7 @@ function AttendanceMini() {
   return (
     <div ref={ref} className="space-y-2">
       <div className="flex items-end justify-between">
-        <span className="font-display text-[56px] font-bold leading-none">
+        <span className="font-display text-[44px] font-bold leading-none">
           <CountUp to={79.1} decimals={1} suffix="%" />
         </span>
         <span className="pb-2 font-mono text-sm font-bold">53 of 67</span>
@@ -215,11 +215,11 @@ export default function LandingSections() {
     <div>
       {/* Ticker */}
       <div className="border-y-[3px] border-border-ink bg-ochre py-3 text-obsidian">
-        <Marquee items={MODULE_TAGS} itemClassName="font-display text-lg font-bold uppercase sm:text-2xl" />
+        <Marquee items={MODULE_TAGS} itemClassName="font-display text-base font-bold uppercase sm:text-lg" />
       </div>
 
       {/* Why: the portals students juggle today */}
-      <section id="sec-problem" className="bg-coral px-4 py-20 text-obsidian sm:px-8 sm:py-28">
+      <section id="sec-problem" className="bg-coral px-4 py-16 text-obsidian sm:px-8 sm:py-20">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center">
           <Heading
             label="Why AmazeCC"
@@ -245,7 +245,7 @@ export default function LandingSections() {
       </section>
 
       {/* Modules bento */}
-      <section id="sec-features" className="mx-auto max-w-7xl space-y-12 px-4 py-20 sm:px-8 sm:py-28">
+      <section id="sec-features" className="mx-auto max-w-7xl space-y-12 px-4 py-16 sm:px-8 sm:py-20">
         <Heading
           label="Modules"
           title={
@@ -275,7 +275,7 @@ export default function LandingSections() {
           </Reveal>
           <Reveal delay={120} className={`${CARD} bg-sage p-6 text-obsidian`}>
             <span className={`${BADGE} bg-cream ${INK}`}>Marks</span>
-            <p className="mt-4 font-display text-[44px] font-bold leading-none">
+            <p className="mt-4 font-display text-[36px] font-bold leading-none">
               <CountUp to={8.42} decimals={2} />
             </p>
             <p className="mt-1 font-mono text-xs font-bold uppercase">CGPA // plan with target grades</p>
@@ -317,7 +317,7 @@ export default function LandingSections() {
       </section>
 
       {/* Live simulator */}
-      <section className="border-y-[3px] border-border-ink bg-sage px-4 py-20 text-obsidian sm:px-8 sm:py-28">
+      <section className="border-y-[3px] border-border-ink bg-sage px-4 py-16 text-obsidian sm:px-8 sm:py-20">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center">
           <Heading
             label="Try it"
@@ -334,7 +334,7 @@ export default function LandingSections() {
               </span>
             </div>
             <div className="flex items-end justify-between gap-3">
-              <span className="font-display text-[64px] font-bold leading-none tabular-nums text-teal">
+              <span className="font-display text-[48px] font-bold leading-none tabular-nums text-teal">
                 {mockPercent.toFixed(1)}%
               </span>
               <span className="pb-2 font-mono text-sm font-bold">
@@ -390,7 +390,7 @@ export default function LandingSections() {
             [<CountUp key="t" to={2} />, "themes, light and dark"],
           ].map(([n, label], i) => (
             <Reveal as="li" key={i} delay={i * 80} className="border-l-[3px] border-ochre pl-4">
-              <p className="font-display text-[48px] font-bold leading-none text-ochre sm:text-[64px]">{n}</p>
+              <p className="font-display text-[40px] font-bold leading-none text-ochre sm:text-[48px]">{n}</p>
               <p className="mt-2 font-mono text-xs font-bold uppercase tracking-[0.06em]">{label}</p>
             </Reveal>
           ))}
@@ -398,7 +398,7 @@ export default function LandingSections() {
       </section>
 
       {/* Trust */}
-      <section className="mx-auto max-w-7xl space-y-12 px-4 py-20 sm:px-8 sm:py-28">
+      <section className="mx-auto max-w-7xl space-y-12 px-4 py-16 sm:px-8 sm:py-20">
         <Heading label="Trust" title="Built by students, kept on your phone" />
         <ul className="grid grid-cols-1 gap-5 pb-2 pr-2 sm:grid-cols-2 lg:grid-cols-4">
           {benefits.map((b, i) => (
@@ -418,7 +418,7 @@ export default function LandingSections() {
       {/* A day */}
       <section
         id="sec-timeline"
-        className="border-y-[3px] border-border-ink bg-surface-secondary px-4 py-20 sm:px-8 sm:py-28"
+        className="border-y-[3px] border-border-ink bg-surface-secondary px-4 py-16 sm:px-8 sm:py-20"
       >
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.3fr]">
           <Heading label="A day" title="One app from 8 am to 9 pm" />
@@ -443,7 +443,7 @@ export default function LandingSections() {
       </section>
 
       {/* Roadmap */}
-      <section id="sec-roadmap" className="mx-auto max-w-7xl space-y-12 px-4 py-20 sm:px-8 sm:py-28">
+      <section id="sec-roadmap" className="mx-auto max-w-7xl space-y-12 px-4 py-16 sm:px-8 sm:py-20">
         <Heading label="Roadmap" title="What is coming next" />
         <ul className="grid grid-cols-1 gap-5 pb-2 pr-2 sm:grid-cols-2 lg:grid-cols-4">
           {roadmap.map((r, i) => (
@@ -471,7 +471,7 @@ export default function LandingSections() {
       {/* FAQ */}
       <section
         id="sec-faq"
-        className="border-t-[3px] border-border-ink bg-mint px-4 py-20 text-obsidian sm:px-8 sm:py-28"
+        className="border-t-[3px] border-border-ink bg-mint px-4 py-16 text-obsidian sm:px-8 sm:py-20"
       >
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.4fr]">
           <Heading label="FAQ" title="Questions students ask" />
@@ -505,7 +505,7 @@ export default function LandingSections() {
         <Marquee
           reverse
           items={["Free", "Made by students", "Works offline", "Light and dark", "No ads", "For VIT Chennai"]}
-          itemClassName="font-display text-lg font-bold uppercase sm:text-2xl"
+          itemClassName="font-display text-base font-bold uppercase sm:text-lg"
         />
       </div>
     </div>

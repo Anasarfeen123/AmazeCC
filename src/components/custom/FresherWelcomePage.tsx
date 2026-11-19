@@ -1,6 +1,7 @@
 "use client";
 
 import { TONE_BADGE } from "@/lib/uiTokens";
+import BrandLogo from "./shared/BrandLogo";
 
 import React from "react";
 import { ExternalLink, Bus, BookOpen, FileText, GraduationCap, MapPin, CalendarDays } from "lucide-react";
@@ -112,7 +113,7 @@ export default function FresherWelcomePage({
         style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 0.75rem)" }}
       >
         <div className="flex items-center gap-2.5">
-          <img src="/brand/icon-primary.svg" alt="" className="h-9 w-9 object-contain" />
+          <BrandLogo variant="mark" size="md" />
           <span className="font-display text-lg font-bold leading-none text-text-heading">Fresher hub</span>
         </div>
         <button

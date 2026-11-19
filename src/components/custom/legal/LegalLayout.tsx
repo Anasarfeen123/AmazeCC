@@ -48,7 +48,7 @@ export default function LegalLayout({
   useEffect(() => setMounted(true), []);
 
   return (
-    <div className="min-h-[100dvh] w-full bg-background text-text-primary">
+    <div className="page-dots min-h-[100dvh] w-full bg-background text-text-primary">
       <header
         className="brand-sidebar sticky top-0 z-40 border-b-[3px] border-border-ink"
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}

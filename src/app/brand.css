@@ -730,9 +730,23 @@
 /* Dark/Night depth and detail (user, 2026-11-20: dark felt less playful and
    detailed than light). A faint dot grid on the page, and the second summary
    card gets a light sage tint so the stat row is not one flat colour. */
-.dark .dashboard-content {
-  background-image: radial-gradient(color-mix(in oklab, var(--border-ink) 30%, transparent) 1px, transparent 1.3px);
+/* Dot grid on the page in every theme (user liked it in dark and asked for
+   all three). One token per theme so each reads at the same strength:
+   ink on cream, teal on the dark pages. */
+:root {
+  --page-dot: color-mix(in oklab, #001e1d 16%, transparent);
+}
+.dark {
+  --page-dot: color-mix(in oklab, #3f8f84 34%, transparent);
+}
+.dark.night {
+  --page-dot: color-mix(in oklab, #4fb3a5 34%, transparent);
+}
+.dashboard-content,
+.page-dots {
+  background-image: radial-gradient(var(--page-dot) 1.1px, transparent 1.5px);
   background-size: 22px 22px;
+  background-position: 11px 11px;
 }
 .dark .summary-row > :nth-child(2) {
   background-color: color-mix(in oklab, var(--secondary) 16%, var(--surface)) !important;

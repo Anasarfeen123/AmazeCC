@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import "./globals.css";
 import posthog from "posthog-js";
 import ErrorDiagnosticCard from "@/components/custom/ErrorDiagnosticCard";
 import { isChunkLoadError, recoverFromChunkLoad } from "@/lib/chunkRecovery";
@@ -25,10 +26,10 @@ export default function GlobalError({ error, reset }: { error: ErrorWithDigest; 
 
   return (
     <html lang="en">
-      <body className="bg-surface-secondary text-foreground transition-colors duration-300">
+      <body className="bg-background font-sans text-text-primary antialiased">
         <ErrorDiagnosticCard
-          title="A critical app error occurred"
-          description="The app shell failed to render. Copy the full report and send it to support for root-cause analysis."
+          title="AmazeCC couldn't start"
+          description="The app failed to load. Your data is safe on this device. Reload, and if it keeps happening, send us a report."
           error={error}
           onRetry={reset}
         />

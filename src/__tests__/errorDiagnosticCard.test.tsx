@@ -23,7 +23,7 @@ describe("ErrorDiagnosticCard", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /Report this Bug to Developers/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Report this bug/i }));
     fireEvent.change(screen.getByPlaceholderText(/opened attendance/i), {
       target: { value: "Opened the home page" },
     });
@@ -43,7 +43,7 @@ describe("ErrorDiagnosticCard", () => {
         }),
       );
     });
-    expect(await screen.findByText("Bug Report Sent!")).toBeTruthy();
+    expect(await screen.findByText("Bug report sent")).toBeTruthy();
   });
 
   it("does not claim the report was sent when PostHog rejects it", async () => {
@@ -57,10 +57,10 @@ describe("ErrorDiagnosticCard", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /Report this Bug to Developers/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Report this bug/i }));
     fireEvent.click(screen.getByRole("button", { name: /Send Bug Report/i }));
 
     expect((await screen.findByRole("alert")).textContent).toContain("Could not send your report");
-    expect(screen.queryByText("Bug Report Sent!")).toBeNull();
+    expect(screen.queryByText("Bug report sent")).toBeNull();
   });
 });

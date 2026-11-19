@@ -25,8 +25,8 @@ export default function ErrorPage({ error, reset }: { error: ErrorWithDigest; re
 
   return (
     <ErrorDiagnosticCard
-      title="Something failed while loading this page"
-      description="Share this report with the developer to diagnose user-specific crashes that are difficult to reproduce."
+      title="This page crashed"
+      description="That's a bug on our side, not something you did. Your data is safe on this device. Try again, and if it keeps happening, send us a report."
       error={error}
       onRetry={reset}
     />

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -274,6 +275,8 @@ export interface FFCSSettingsModalProps {
  * interchangeable to everything except the eye.
  */
 function SettingsPane({ onClose, children }: { onClose: () => void; children: React.ReactNode }) {
+  const panelRef = useRef<HTMLElement>(null);
+  useFocusTrap(panelRef, true);
   useOverlayBack("ffcs-settings", true, onClose);
 
   useEffect(() => {
@@ -302,6 +305,7 @@ function SettingsPane({ onClose, children }: { onClose: () => void; children: Re
         className="absolute inset-0 bg-black/30"
       />
       <motion.aside
+        ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-label="Planner Settings"

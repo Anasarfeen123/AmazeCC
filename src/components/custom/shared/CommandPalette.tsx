@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo, useDeferredValue, useCallback } from "react";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 import { AnimatePresence, m } from "framer-motion";
 import {
   Search,
@@ -180,6 +181,8 @@ export function CommandPalette({ isOpen, onClose, commands, demoMode = false }: 
   const [kohaLoading, setKohaLoading] = useState(false);
   const deferredQuery = useDeferredValue(searchQuery);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, isOpen);
   const listRef = useRef<HTMLDivElement>(null);
 
   // Focus input & reset state when modal opens
@@ -334,6 +337,8 @@ export function CommandPalette({ isOpen, onClose, commands, demoMode = false }: 
       }
 
       if (activeSubpage) return;
+      // Let focused buttons and other controls handle Enter themselves.
+      if (e.target !== inputRef.current) return;
 
       if (e.key === "ArrowDown") {
         e.preventDefault();
@@ -369,6 +374,7 @@ export function CommandPalette({ isOpen, onClose, commands, demoMode = false }: 
 
         {/* Modal Container */}
         <m.div
+          ref={dialogRef}
           initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -6 }}

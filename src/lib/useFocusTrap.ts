@@ -2,6 +2,7 @@ import { useEffect, type RefObject } from "react";
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+const activeTraps: symbol[] = [];
 
 /**
  * Keeps keyboard focus inside an open dialog/sheet (ROADMAP R11).
@@ -11,12 +12,18 @@ const FOCUSABLE =
  * While open: Tab / Shift+Tab wrap around inside the panel.
  * On close: focus goes back to the element that opened it.
  */
-export function useFocusTrap(ref: RefObject<HTMLElement | null>, active: boolean) {
+export function useFocusTrap(
+  ref: RefObject<HTMLElement | null>,
+  active: boolean,
+  restoreRef?: RefObject<HTMLElement | null>,
+) {
   useEffect(() => {
     if (!active) return;
     const panel = ref.current;
     if (!panel) return;
-    const previous = document.activeElement as HTMLElement | null;
+    const previous = restoreRef?.current ?? (document.activeElement as HTMLElement | null);
+    const token = Symbol("focus-trap");
+    activeTraps.push(token);
 
     const items = () =>
       [...panel.querySelectorAll<HTMLElement>(FOCUSABLE)].filter((el) => el.getClientRects().length > 0);
@@ -31,7 +38,7 @@ export function useFocusTrap(ref: RefObject<HTMLElement | null>, active: boolean
     }
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "Tab") return;
+      if (e.key !== "Tab" || activeTraps[activeTraps.length - 1] !== token) return;
       const list = items();
       if (list.length === 0) {
         e.preventDefault();
@@ -51,7 +58,10 @@ export function useFocusTrap(ref: RefObject<HTMLElement | null>, active: boolean
     document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("keydown", onKey);
-      if (previous && document.contains(previous)) previous.focus({ preventScroll: true });
+      const index = activeTraps.indexOf(token);
+      const wasTop = index === activeTraps.length - 1;
+      if (index !== -1) activeTraps.splice(index, 1);
+      if (wasTop && previous && document.contains(previous)) previous.focus({ preventScroll: true });
     };
-  }, [ref, active]);
+  }, [ref, active, restoreRef]);
 }

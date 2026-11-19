@@ -4,6 +4,7 @@ import { forwardRef, useCallback, useEffect, useLayoutEffect, useRef, useState }
 import { createPortal } from "react-dom";
 import { Check, ChevronDown, Search, X } from "lucide-react";
 import { cn } from "@amazecontinuityprojects/amazeui";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 
 /**
  * The option picker, owned by this repo.
@@ -70,6 +71,8 @@ const OptionPicker = forwardRef<HTMLDivElement, OptionPickerProps>(function Opti
   const [query, setQuery] = useState("");
   const isMobile = useIsMobile();
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, open && isMobile, triggerRef);
   // null until measured: the panel is never painted at (0, 0). It used to
   // start there and jump to the trigger a frame later, which read as the
   // dropdown flying in from the top-left corner.
@@ -139,10 +142,14 @@ const OptionPicker = forwardRef<HTMLDivElement, OptionPickerProps>(function Opti
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        setOpen(false);
+      }
     };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    document.addEventListener("keydown", onKey, true);
+    return () => document.removeEventListener("keydown", onKey, true);
   }, [open]);
 
   const handleSelect = (opt: OptionPickerOption) => {
@@ -284,6 +291,7 @@ const OptionPicker = forwardRef<HTMLDivElement, OptionPickerProps>(function Opti
               className="absolute inset-0 bg-[color-mix(in_oklab,var(--shadow-ink)_55%,transparent)] border-none p-0 cursor-default"
             />
             <div
+              ref={dialogRef}
               role="dialog"
               aria-modal="true"
               aria-label="Choose an option"

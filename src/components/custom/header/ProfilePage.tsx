@@ -1638,6 +1638,7 @@ export default function ProfilePage({
               </p>
             </div>
             <Switch
+              label="Privacy mode"
               checked={selectedPrivacyCategories.length > 0}
               onCheckedChange={(val) => setSettings((prev: any) => setHideAllPrivacy(prev, val))}
             />
@@ -1679,6 +1680,7 @@ export default function ProfilePage({
                         <p className="text-xs text-text-muted">{detail.description}</p>
                       </div>
                       <Switch
+                        label={`Cover ${detail.label}`}
                         checked={selectedPrivacyCategories.includes(category)}
                         onCheckedChange={(val) =>
                           setSettings((prev: any) => togglePrivacyCategory(prev, category, val))

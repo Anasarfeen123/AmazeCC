@@ -17,7 +17,9 @@ import { initPwaInstallListeners } from "@/lib/pwaInstall";
  */
 export default function ServiceWorkerRegistrar() {
   useEffect(() => {
-    if ("serviceWorker" in navigator) {
+    // Serwist is disabled in next.config.mjs during development, so there is
+    // no worker to register until a production build is running.
+    if (process.env.NODE_ENV !== "development" && "serviceWorker" in navigator) {
       // `updateViaCache: "none"` keeps Safari from serving a stale sw.js out
       // of its HTTP cache — on iOS a cached worker script is the classic way
       // offline support "stops working" after a deploy.

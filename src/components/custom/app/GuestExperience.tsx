@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { ArrowRight, Calendar, Heart, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, Moon, Sun } from "lucide-react";
 
 /**
  * The below-the-fold landing (feature grid, predictor sandbox, showcase,
@@ -16,9 +16,9 @@ const LandingSections = dynamic(() => import("../landing/LandingSections"), {
 });
 
 const SECTIONS = [
-  { id: "sec-problem", label: "The Challenge" },
+  { id: "sec-problem", label: "Why" },
   { id: "sec-features", label: "Modules" },
-  { id: "sec-timeline", label: "Timeline" },
+  { id: "sec-timeline", label: "A day" },
   { id: "sec-roadmap", label: "Roadmap" },
   { id: "sec-faq", label: "FAQ" },
 ];
@@ -30,7 +30,11 @@ interface GuestExperienceProps {
 
 export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperienceProps) {
   const { resolvedTheme, setTheme } = useTheme();
-  const isDark = resolvedTheme ? resolvedTheme === "dark" : true;
+  // Theme is only known in the browser; until mount, render the dark variant
+  // the server rendered so hydration matches.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isDark = mounted && resolvedTheme ? resolvedTheme === "dark" : true;
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -44,180 +48,197 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  return (
-    <main className="relative flex min-h-screen flex-col overflow-x-hidden bg-slate-50 text-slate-950 selection:bg-indigo-500/30 dark:bg-[#03060f] dark:text-white">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[radial-gradient(ellipse_at_top,_rgba(99,102,241,0.17),_transparent_68%)]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(to_right,#e2e8f060_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f060_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] dark:bg-[linear-gradient(to_right,#1f293708_1px,transparent_1px),linear-gradient(to_bottom,#1f293708_1px,transparent_1px)]"
-      />
+  const navLink =
+    "rounded-[8px] px-2 py-1.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted transition-colors hover:bg-surface-secondary hover:text-text-heading";
 
+  return (
+    <main className="relative flex min-h-screen flex-col overflow-x-hidden bg-background text-text-heading selection:bg-secondary">
       <header
-        className={`sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between border-b px-5 transition-all duration-300 sm:px-8 ${
-          isScrolled
-            ? "border-slate-200/80 bg-white/90 backdrop-blur-md dark:border-neutral-900 dark:bg-[#03060Fd0]"
-            : "border-transparent bg-transparent"
+        className={`sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between gap-3 px-4 transition-colors duration-200 sm:px-8 ${
+          isScrolled ? "border-b-2 border-border-ink bg-background" : "border-b-2 border-transparent bg-background"
         }`}
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
-        <div className="flex min-w-0 items-center gap-7">
-          <a href="/" className="flex shrink-0 items-center gap-2.5 font-bold tracking-tight" aria-label="AmazeCC home">
+        <div className="flex min-w-0 items-center gap-6">
+          <a href="/" className="flex shrink-0 items-center gap-2.5" aria-label="AmazeCC home">
             <img
               loading="eager"
               fetchPriority="high"
-              src="/logo.png"
+              src="/brand/icon-primary.svg"
               alt=""
-              width="32"
-              height="32"
+              width="36"
+              height="36"
               decoding="async"
-              className="h-8 w-8 rounded-lg object-contain"
+              className="h-9 w-9 object-contain"
             />
-            <span>AmazeCC</span>
+            <span className="font-display text-lg font-bold leading-none">AmazeCC</span>
           </a>
-          <nav className="hidden items-center gap-5 text-xs font-semibold text-slate-500 dark:text-gray-400 lg:flex">
+          <nav aria-label="Sections" className="hidden items-center gap-1 lg:flex">
             {SECTIONS.map((section) => (
-              <button
-                key={section.id}
-                type="button"
-                onClick={() => scrollToSection(section.id)}
-                className="transition-colors hover:text-slate-900 dark:hover:text-white"
-              >
+              <button key={section.id} type="button" onClick={() => scrollToSection(section.id)} className={navLink}>
                 {section.label}
               </button>
             ))}
           </nav>
         </div>
 
-        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+        <div className="flex shrink-0 items-center gap-2">
           <a
             href="/ffcs/"
-            title="Open FFCS Planner without login"
-            className="flex items-center gap-1.5 rounded-lg border border-indigo-200/60 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-600 transition-colors hover:text-indigo-700 dark:border-indigo-800/40 dark:bg-indigo-950/40 dark:text-indigo-400 dark:hover:text-indigo-300"
+            title="Open the FFCS planner without signing in"
+            className={`hidden sm:inline-flex ${navLink}`}
           >
-            <Calendar size={13} />
-            <span className="hidden sm:inline">FFCS Planner</span>
+            FFCS planner
           </a>
           <button
             type="button"
-            aria-label="Toggle color theme"
-            title="Toggle color theme"
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            title={isDark ? "Light mode" : "Dark mode"}
             onClick={() => setTheme(isDark ? "light" : "dark")}
-            className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 dark:border-white/15 dark:text-slate-200 dark:hover:bg-white/10"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-primary shadow-brutal-sm brutal-press"
           >
-            ◐
+            {isDark ? <Sun size={16} aria-hidden /> : <Moon size={16} aria-hidden />}
           </button>
           <button
             type="button"
             onClick={onTryDemo}
-            className="hidden rounded-lg px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:text-slate-950 dark:text-gray-300 dark:hover:text-white sm:block"
+            className="hidden min-h-10 items-center rounded-[10px] border-2 border-border-ink bg-surface px-3 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-primary shadow-brutal-sm brutal-press sm:inline-flex"
           >
             Try demo
           </button>
           <button
             type="button"
             onClick={onGetStarted}
-            className="min-h-9 rounded-xl bg-indigo-600 px-4 py-2 text-xs font-extrabold text-white shadow-md shadow-indigo-600/20 transition-colors hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+            className="inline-flex min-h-10 items-center rounded-[10px] border-2 border-border-ink bg-primary px-3 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-primary-foreground shadow-brutal-sm brutal-press"
           >
-            Get Started
+            Get started
           </button>
         </div>
       </header>
 
-      <section className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-5 py-16 sm:px-8 sm:py-24">
-        <div className="max-w-3xl">
-          <p className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-indigo-700 dark:text-indigo-300">
-            <Sparkles size={12} /> The student workspace for VIT
+      {/* Hero: words on the left, the real product on the right. */}
+      <section className="relative z-10 mx-auto grid w-full max-w-7xl flex-1 items-center gap-10 px-4 py-12 sm:px-8 sm:py-16 lg:grid-cols-[1.05fr_1fr] lg:gap-12 lg:py-20">
+        <div className="max-w-2xl">
+          <p className="mb-5 inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-secondary-foreground">
+            Your campus companion // VIT Chennai
           </p>
-          <h1 className="text-4xl font-black leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
+          <h1 className="font-display text-[40px] font-bold uppercase leading-[1.02] sm:text-6xl lg:text-[68px]">
             Your VIT life,
-            <span className="block bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 bg-clip-text text-transparent dark:from-indigo-300 dark:via-violet-300 dark:to-fuchsia-300">
-              all in one place.
-            </span>
+            <span className="block text-hero">all in one place.</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300 sm:text-lg">
-            Keep attendance, marks, schedules, campus services, and your FFCS plan together in one clear workspace.
+          <p className="mt-6 max-w-xl text-base leading-7 text-text-muted sm:text-lg">
+            Attendance with the 75% line drawn for you, marks, timetable, exams, OD hours, mess, buses and your FFCS
+            plan. One app instead of five portals.
           </p>
 
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <button
-              type="button"
-              onClick={onGetStarted}
-              className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-extrabold text-white shadow-lg shadow-indigo-600/20 transition-colors hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-            >
-              Get Started
-              <ArrowRight size={16} />
-            </button>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <button
               type="button"
               onClick={onTryDemo}
-              className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white/70 px-6 py-3 text-sm font-bold text-slate-800 transition-colors hover:bg-white dark:border-white/15 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/10"
+              className="inline-flex min-h-12 items-center justify-center rounded-[10px] border-2 border-border-ink bg-highlight px-6 font-mono text-[13px] font-bold uppercase tracking-[0.06em] text-highlight-foreground shadow-brutal-md brutal-press"
             >
-              <Zap size={15} />
               Try the demo
             </button>
             <button
               type="button"
-              onClick={() => scrollToSection("sec-features")}
-              className="min-h-12 rounded-xl border border-transparent px-6 py-3 text-sm font-bold text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+              onClick={onGetStarted}
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[10px] border-2 border-border-ink bg-surface px-6 font-mono text-[13px] font-bold uppercase tracking-[0.06em] text-text-primary shadow-brutal-md brutal-press"
             >
-              Explore features
+              Sign in with VTOP
+              <ArrowRight size={16} aria-hidden />
             </button>
           </div>
-          <p className="mt-3 min-h-5 text-xs text-slate-500 dark:text-slate-400" aria-live="polite">
-            Sign in with your VTOP credentials — they never leave this browser.
+          <p className="mt-4 font-mono text-xs text-text-muted" aria-live="polite">
+            Free // made by students // your password is stored encrypted on this device
           </p>
+        </div>
 
-          <dl className="mt-10 grid max-w-xl grid-cols-3 gap-6 border-t border-slate-200/50 dark:border-neutral-900/50">
-            {[
-              { value: "30+", label: "Student tools" },
-              { value: "10+", label: "Modules" },
-              { value: "100%", label: "Free & local" },
-            ].map((stat) => (
-              <div key={stat.label}>
-                <dt className="text-[10px] font-bold uppercase text-slate-500 dark:text-gray-500">{stat.label}</dt>
-                <dd className="text-xl font-black text-slate-900 dark:text-white">{stat.value}</dd>
-              </div>
-            ))}
-          </dl>
+        <div className="relative mx-auto w-full max-w-xl pb-8 pr-6 lg:max-w-none" aria-hidden="true">
+          <div className="overflow-hidden rounded-[14px] border-[3px] border-border-ink bg-surface shadow-brutal-lg">
+            <div className="flex items-center gap-1.5 border-b-2 border-border-ink bg-surface-secondary px-3 py-2">
+              <span className="h-2.5 w-2.5 rounded-full border-2 border-border-ink bg-danger" />
+              <span className="h-2.5 w-2.5 rounded-full border-2 border-border-ink bg-highlight" />
+              <span className="h-2.5 w-2.5 rounded-full border-2 border-border-ink bg-secondary" />
+              <span className="ml-2 font-mono text-xs text-text-muted">amazecc.com</span>
+            </div>
+            {/* Both themes rendered, CSS picks one: avoids a hydration mismatch
+                  (the server does not know the theme). */}
+            <img
+              src="/landing/home-desktop-light.webp"
+              alt=""
+              width={1200}
+              height={717}
+              loading="eager"
+              decoding="async"
+              className="block h-auto w-full dark:hidden"
+            />
+            <img
+              src="/landing/home-desktop-dark.webp"
+              alt=""
+              width={1200}
+              height={717}
+              loading="eager"
+              decoding="async"
+              className="hidden h-auto w-full dark:block"
+            />
+          </div>
+          <div className="absolute -bottom-2 right-0 w-[34%] min-w-[120px] overflow-hidden rounded-[20px] border-[3px] border-border-ink bg-surface shadow-brutal-lg">
+            {/* Both themes rendered, CSS picks one: avoids a hydration mismatch
+                  (the server does not know the theme). */}
+            <img
+              src="/landing/home-phone-light.webp"
+              alt=""
+              width={390}
+              height={800}
+              loading="eager"
+              decoding="async"
+              className="block h-auto w-full dark:hidden"
+            />
+            <img
+              src="/landing/home-phone-dark.webp"
+              alt=""
+              width={390}
+              height={800}
+              loading="eager"
+              decoding="async"
+              className="hidden h-auto w-full dark:block"
+            />
+          </div>
         </div>
       </section>
 
       <LandingSections />
 
-      <footer className="border-t border-slate-200 bg-slate-100 px-6 py-8 text-center transition-colors dark:border-neutral-900 dark:bg-[#020409]/60">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-xs text-slate-500 dark:text-gray-500 md:flex-row">
-          <div>
-            <span className="font-bold text-slate-900 dark:text-white">AmazeCC</span>
+      <footer className="brand-sidebar border-t-2 border-border-ink px-4 py-10 sm:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div className="flex items-center gap-3">
+            <img src="/brand/icon-primary.svg" alt="" className="h-10 w-10" />
+            <div className="leading-none">
+              <span className="block font-display text-lg font-bold text-cream">AmazeCC</span>
+              <span className="mt-1 block font-mono text-xs text-text-muted">Your campus companion</span>
+            </div>
           </div>
-          <div className="flex gap-4">
-            <a href="/ffcs/" className="transition-colors hover:text-slate-900 dark:hover:text-white">
-              FFCS Planner
-            </a>
-            <span className="text-slate-300 dark:text-neutral-800">•</span>
-            <a href="/privacy/" className="transition-colors hover:text-slate-900 dark:hover:text-white">
-              Privacy
-            </a>
-            <span className="text-slate-300 dark:text-neutral-800">•</span>
-            <a href="/terms/" className="transition-colors hover:text-slate-900 dark:hover:text-white">
-              Terms
-            </a>
-            <span className="text-slate-300 dark:text-neutral-800">•</span>
-            <a
-              href="https://github.com/AmazeContinuityProjects/AmazeCC"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-colors hover:text-slate-900 dark:hover:text-white"
-            >
-              GitHub
-            </a>
-          </div>
-          <p className="flex items-center gap-1.5 text-[10px] font-semibold">
-            Made with <Heart size={10} className="inline shrink-0 fill-rose-500 text-rose-500" /> by students. Not
-            affiliated with VIT or VTOP.
-          </p>
+          <nav
+            aria-label="Footer"
+            className="flex flex-wrap gap-x-5 gap-y-2 font-mono text-xs font-semibold uppercase tracking-[0.06em]"
+          >
+            {[
+              ["FFCS planner", "/ffcs/"],
+              ["Privacy", "/privacy/"],
+              ["Terms", "/terms/"],
+              ["GitHub", "https://github.com/AmazeContinuityProjects/AmazeCC"],
+            ].map(([label, href]) => (
+              <a
+                key={label}
+                href={href}
+                {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                className="text-cream underline-offset-4 hover:underline"
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+          <p className="font-mono text-xs text-text-muted">Made by students. Not affiliated with VIT or VTOP.</p>
         </div>
       </footer>
     </main>

@@ -192,7 +192,9 @@ NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next dev --webpack -p 3017   # backg
   limit: the `navLabel` argument clicks the first element whose text matches,
   so "Attendance" hits the Home stat card label, not the sidebar link; make
   it prefer `[data-sidebar-nav]` / bottom-nav buttons before relying on it.
-- `fullpage.mjs <url> <out.png>` captures a page viewport by viewport.
+- `fullpage.mjs <url> <out.png> [width] [scale]` captures a page viewport by
+  viewport (`THEME=light|dark` emulates the OS, `LS_THEME=light|dark` forces the
+  app theme). `console.mjs <url>` prints console errors and exceptions.
 
 ### 6.4 Code map
 

@@ -47,8 +47,17 @@ const send = (method, params = {}) =>
     ws.send(JSON.stringify({ id: i, method, params }));
   });
 await send("Page.enable");
-await send("Emulation.setDeviceMetricsOverride", { width: +w, height: 1000, deviceScaleFactor: 1, mobile: false });
+await send("Emulation.setDeviceMetricsOverride", { width: +w, height: 1000, deviceScaleFactor: 1, mobile: +w < 800 });
+if (process.env.THEME)
+  await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: process.env.THEME }] });
 await send("Page.navigate", { url });
+if (process.env.LS_THEME) {
+  await sleep(6000);
+  await send("Runtime.evaluate", {
+    expression: `localStorage.setItem("theme", ${JSON.stringify(process.env.LS_THEME)})`,
+  });
+  await send("Page.navigate", { url });
+}
 await sleep(10000);
 const m = await send("Page.getLayoutMetrics");
 const cs = m.result.cssContentSize;

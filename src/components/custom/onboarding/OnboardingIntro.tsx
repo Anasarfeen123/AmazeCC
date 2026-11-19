@@ -401,7 +401,7 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
                 </button>
 
                 <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs text-text-muted">
-                  <span>Credentials never leave this browser.</span>
+                  <span>Saved encrypted on this device; sent only to sign you in.</span>
                   <a href="/ffcs/" className="font-bold text-primary transition-colors hover:text-primary">
                     Skip — open FFCS Planner
                   </a>

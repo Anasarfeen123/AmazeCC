@@ -1,142 +1,46 @@
 "use client";
 
 /**
- * The marketing/feature sections that sit under the guest hero.
+ * The sections under the guest hero (brand redesign, ROADMAP R1).
  *
- * Split out of `LoginForm` when the landing moved into `GuestExperience`, and
- * kept behind a dynamic import so the guest route paints its hero without
- * paying for ~480 lines of below-the-fold markup (and framer-motion's
- * `whileInView` work).
+ * Kept behind a dynamic import (see GuestExperience) so the hero paints first.
+ * Brand rules: no gradients, glass, 3D tilt, icon wells or emoji; every section
+ * uses the same heading (mono badge, display title, one sentence); cards are
+ * ink-edged with hard shadows; the attendance simulator is a real mini UI.
  */
 
 import { useState } from "react";
-import { LazyMotion, domAnimation, m, useMotionValue, useTransform, useSpring } from "framer-motion";
-import {
-  Activity,
-  BookOpen,
-  Calendar,
-  CheckCircle2,
-  ChevronDown,
-  CreditCard,
-  FileText,
-  GraduationCap,
-  Heart,
-  Home,
-  Lock,
-  MessageSquareWarning,
-  Minus,
-  Plus,
-  RotateCcw,
-  ShieldAlert,
-  Sparkles,
-  TrendingUp,
-  UserCheck,
-} from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
-function Tilt3DCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [6, -6]), { stiffness: 180, damping: 22 });
-  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-6, 6]), { stiffness: 180, damping: 22 });
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (
-      typeof window === "undefined" ||
-      window.innerWidth < 1024 ||
-      !window.matchMedia("(hover: hover) and (pointer: fine)").matches
-    ) {
-      return;
-    }
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
-    const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
-    mx.set(x);
-    my.set(y);
-  };
-
-  const handleMouseLeave = () => {
-    mx.set(0);
-    my.set(0);
-  };
-
-  return (
-    <m.div
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d", perspective: 1000 }}
-      className={className}
-    >
-      {children}
-    </m.div>
-  );
-}
 const features = [
   {
-    icon: Activity,
-    iconColor: "text-indigo-500",
-    title: "Attendance Tracker",
-    desc: "Predict safety margins and skip lists instantly with an offline-first calculator.",
+    tag: "Daily",
+    title: "Attendance",
+    desc: "Every course with the 75% line drawn, and how many classes you can skip or must attend.",
   },
   {
-    icon: GraduationCap,
-    iconColor: "text-purple-500",
-    title: "Academics Hub",
-    desc: "Access courses, grade lists, schedules, and active curriculum structures.",
+    tag: "Daily",
+    title: "Timetable",
+    desc: "Today's classes, rooms and faculty, with the academic calendar folded in.",
   },
   {
-    icon: TrendingUp,
-    iconColor: "text-pink-500",
-    title: "CGPA Predictor",
-    desc: "Set target grades, calculate SGPA distributions, and monitor credit levels.",
+    tag: "Grades",
+    title: "Marks and CGPA",
+    desc: "Course marks, class averages and a CGPA you can plan against target grades.",
   },
+  { tag: "Exams", title: "Exam schedule", desc: "CAT, FAT and lab exams with venue, seat and reporting time." },
   {
-    icon: UserCheck,
-    iconColor: "text-blue-500",
-    title: "Faculty Explorer",
-    desc: "Search professor cabinets, designations, emails, and student feedback.",
+    tag: "Planning",
+    title: "FFCS planner",
+    desc: "Draft slots, catch clashes and compare timetables before registration.",
   },
-  {
-    icon: Home,
-    iconColor: "text-emerald-500",
-    title: "Hostel & Logistics",
-    desc: "Check daily mess menus, visual room details, counseling slots, and leaves.",
-  },
-  {
-    icon: FileText,
-    iconColor: "text-amber-500",
-    title: "Question Bank",
-    desc: "Search and download previous years' exam question papers offline.",
-  },
-  {
-    icon: Heart,
-    iconColor: "text-rose-500",
-    title: "FFCS Wishlist",
-    desc: "Draft mock wishlist classes to prepare for upcoming registration sessions.",
-  },
-  {
-    icon: CreditCard,
-    iconColor: "text-teal-500",
-    title: "Payments Ledger",
-    desc: "Track tuition transactions, invoice records, and pending fee structures.",
-  },
-  {
-    icon: BookOpen,
-    iconColor: "text-cyan-500",
-    title: "Libraries search",
-    desc: "Search the OPAC catalog books and view checkouts from Koha accounts.",
-  },
-  {
-    icon: Calendar,
-    iconColor: "text-violet-500",
-    title: "FFCS Planner",
-    desc: "Design draft schedules and check slot collisions before registration.",
-  },
-  {
-    icon: Sparkles,
-    iconColor: "text-orange-500",
-    title: "Event Hub",
-    desc: "View upcoming club events, register profiles, and secure ticket passes.",
-  },
+  { tag: "Campus", title: "Hostel and mess", desc: "Mess menu, leave, laundry and room details in one place." },
+  { tag: "Campus", title: "Faculty finder", desc: "Where a teacher is right now, their cabin and free slots." },
+  { tag: "Campus", title: "Free classrooms", desc: "Empty rooms by block and hour, for group study or a quiet break." },
+  { tag: "Money", title: "Payments", desc: "Fee dues, receipts and wallet history without digging through VTOP." },
+  { tag: "Reading", title: "Libraries", desc: "Search the catalogue, see what you have borrowed and when it is due." },
+  { tag: "Clubs", title: "Events", desc: "Club events and hackathons, with your registrations kept together." },
+  { tag: "Exams", title: "Question bank", desc: "Previous papers by course, saved for offline revision." },
 ];
 
 const companionTimeline = [
@@ -174,7 +78,10 @@ const companionTimeline = [
 
 const benefits = [
   { title: "Everything in one place", desc: "No more loading VTOP, Koha, EventHub, and Mess PDFs separately." },
-  { title: "Privacy First", desc: "100% local processing. Your passwords and keys never leave your browser." },
+  {
+    title: "Privacy first",
+    desc: "Your records live on your phone. Your VTOP password is stored encrypted on this device and is only sent to sign you in to VTOP.",
+  },
   {
     title: "Offline Support",
     desc: "Your schedule, marks, and attendance details are cached for instant offline lookup.",
@@ -212,7 +119,7 @@ const faqs = [
   },
   {
     q: "Does it store passwords?",
-    a: "No. All authentication occurs directly on your client browser. Credentials and sessions are preserved in your local browser cache securely.",
+    a: "It keeps them on your device, encrypted. To fetch your data, your user ID and password are sent to the AmazeCC server to sign you in to VTOP, and the records it fetches are saved on your device.",
   },
   {
     q: "Can alumni use it?",
@@ -223,609 +130,245 @@ const faqs = [
 export default function LandingSections() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  // Attendance predictor sandbox — a live toy, so it owns its own counts.
+  // Attendance simulator: a live toy, so it owns its own counts.
   const [mockAttended, setMockAttended] = useState(17);
   const [mockTotal, setMockTotal] = useState(20);
   const mockPercent = mockTotal > 0 ? (mockAttended / mockTotal) * 100 : 0;
+  const below = mockPercent < 75;
+  const canSkip = Math.max(0, Math.floor(mockAttended / 0.75) - mockTotal);
+  const mustAttend = below ? Math.ceil((0.75 * mockTotal - mockAttended) / 0.25) : 0;
+  const verdict = below
+    ? `Attend the next ${mustAttend} class${mustAttend === 1 ? "" : "es"} to get back to 75%.`
+    : canSkip > 0
+      ? `You can skip ${canSkip} class${canSkip === 1 ? "" : "es"} and stay above 75%.`
+      : "Exactly at the line. Do not skip the next one.";
 
-  const handleSimulateAttend = () => {
-    setMockAttended((prev) => prev + 1);
-    setMockTotal((prev) => prev + 1);
-  };
+  const card = "rounded-[14px] border-2 border-border-ink bg-surface shadow-brutal-md";
+  const badge =
+    "inline-flex rounded-[6px] border-2 border-border-ink px-1.5 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em]";
+  const btn =
+    "inline-flex min-h-11 flex-1 items-center justify-center rounded-[10px] border-2 border-border-ink px-3 font-mono text-xs font-semibold uppercase tracking-[0.06em] shadow-brutal-sm brutal-press";
 
-  const handleSimulateSkip = () => {
-    setMockTotal((prev) => prev + 1);
-  };
-
-  const handleSimulateReset = () => {
-    setMockAttended(17);
-    setMockTotal(20);
-  };
-
-  const getSkipStatus = () => {
-    if (mockPercent < 75) {
-      return {
-        text: "Critical: Attendance below 75% limit!",
-        color: "text-rose-600 dark:text-rose-400 bg-rose-500/10 border border-rose-500/20",
-      };
-    }
-    const maxTotal = Math.floor(mockAttended / 0.75);
-    const skipCount = maxTotal - mockTotal;
-    if (skipCount > 0) {
-      return {
-        text: `Safe to skip: Yes (${skipCount} class${skipCount > 1 ? "es" : ""})`,
-        color: "text-emerald-650 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20",
-      };
-    }
-    return {
-      text: "Borderline: Exactly 75%. Do not skip.",
-      color: "text-amber-600 dark:text-amber-450 bg-amber-500/10 border border-amber-500/20",
-    };
-  };
-
-  const skipStatus = getSkipStatus();
-  const radius = 24;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (Math.min(mockPercent, 100) / 100) * circumference;
+  const Heading = ({ label, title, sub }: { label: string; title: string; sub?: string }) => (
+    <div className="max-w-2xl space-y-3">
+      <span className={`${badge} bg-secondary text-secondary-foreground`}>{label}</span>
+      <h2 className="font-display text-[28px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[40px]">
+        {title}
+      </h2>
+      {sub ? <p className="text-base text-text-muted">{sub}</p> : null}
+    </div>
+  );
 
   return (
-    <LazyMotion features={domAnimation}>
-      {/* Problem Section (Emojis Replaced with Lucide Icons) */}
+    <div className="space-y-0">
+      {/* Why: the portals students juggle today */}
       <section
         id="sec-problem"
-        className="bg-slate-100/50 border-y border-slate-200 dark:bg-[#02040a]/40 dark:border-neutral-900 py-20 px-6"
+        className="border-y-2 border-border-ink bg-surface-secondary px-4 py-16 sm:px-8 sm:py-20"
       >
-        <m.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.05 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="max-w-4xl mx-auto text-center space-y-8"
-        >
-          <div className="space-y-3">
-            <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest block">
-              The Portal Challenge
-            </span>
-            <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white font-[family-name:var(--font-outfit)]">
-              Tired of hopping between disconnected links?
-            </h2>
-            <p className="text-xs md:text-sm text-slate-600 dark:text-gray-400 max-w-xl mx-auto leading-relaxed font-medium">
-              Most students waste hours daily logging into multiple outdated gateways just to check attendance, look up
-              room validation OTPs, or retrieve mess menus.
-            </p>
-          </div>
-
-          {/* Floating tags */}
-          <div className="flex flex-wrap gap-4 justify-center items-center py-6">
-            <m.div
-              initial={{ opacity: 0, scale: 0.9, y: 10 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0, ease: "easeOut" }}
-              className="bg-white border border-slate-200/80 dark:bg-neutral-900/60 dark:border-white/[0.08] rounded-2xl px-4 py-3 text-xs text-rose-600 dark:text-rose-400/90 rotate-[-2deg] shadow-sm select-none flex items-center gap-2 font-semibold"
-            >
-              <ShieldAlert size={14} className="text-rose-500 shrink-0" />
-              VTOP Session Expired (Re-login)
-            </m.div>
-            <m.div
-              initial={{ opacity: 0, scale: 0.9, y: 10 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.08, ease: "easeOut" }}
-              className="bg-white border border-slate-200/80 dark:bg-neutral-900/60 dark:border-white/[0.08] rounded-2xl px-4 py-3 text-xs text-amber-600 dark:text-amber-400/90 rotate-[1.5deg] shadow-sm select-none flex items-center gap-2 font-semibold"
-            >
-              <MessageSquareWarning size={14} className="text-amber-500 shrink-0" />
-              Outing Pass OTP Pending
-            </m.div>
-            <m.div
-              initial={{ opacity: 0, scale: 0.9, y: 10 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.16, ease: "easeOut" }}
-              className="bg-white border border-slate-200/80 dark:bg-neutral-900/60 dark:border-white/[0.08] rounded-2xl px-4 py-3 text-xs text-purple-600 dark:text-purple-400/90 rotate-[-1deg] shadow-sm select-none flex items-center gap-2 font-semibold"
-            >
-              <Lock size={14} className="text-purple-500 shrink-0" />
-              Laundry Booking Slot Locked
-            </m.div>
-            <m.div
-              initial={{ opacity: 0, scale: 0.9, y: 10 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.24, ease: "easeOut" }}
-              className="bg-white border border-slate-200/80 dark:bg-neutral-900/60 dark:border-white/[0.08] rounded-2xl px-4 py-3 text-xs text-sky-600 dark:text-sky-400/90 rotate-[2deg] shadow-sm select-none flex items-center gap-2 font-semibold"
-            >
-              <BookOpen size={14} className="text-sky-500 shrink-0" />
-              Mess Menu PDF (Page 4)
-            </m.div>
-            <m.div
-              initial={{ opacity: 0, scale: 0.9, y: 10 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.32, ease: "easeOut" }}
-              className="bg-white border border-slate-200/80 dark:bg-neutral-900/60 dark:border-white/[0.08] rounded-2xl px-4 py-3 text-xs text-emerald-600 dark:text-emerald-400/90 rotate-[-1.5deg] shadow-sm select-none flex items-center gap-2 font-semibold"
-            >
-              <CreditCard size={14} className="text-emerald-500 shrink-0" />
-              Koha Book Catalog Error
-            </m.div>
-          </div>
-
-          <div className="flex flex-col items-center justify-center space-y-2">
-            <div className="h-10 w-[1px] bg-gradient-to-b from-indigo-500 to-transparent" />
-            <span className="text-[10px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-4 py-1.5 rounded-full select-none">
-              AmazeCC Unifies Everything
-            </span>
-            <div className="h-10 w-[1px] bg-gradient-to-t from-indigo-500 to-transparent" />
-          </div>
-        </m.div>
-      </section>
-
-      {/* Features Module Grid Section (Emojis Replaced with elegant Lucide icons) */}
-      <section id="sec-features" className="max-w-7xl mx-auto px-6 py-24 space-y-16">
-        <m.div
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="text-center space-y-3"
-        >
-          <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest block">
-            Comprehensive Modules
-          </span>
-          <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white font-[family-name:var(--font-outfit)]">
-            Everything inside one application
-          </h2>
-          <p className="text-xs md:text-sm text-slate-600 dark:text-gray-400 max-w-xl mx-auto font-medium">
-            A unified layout that groups core widgets, predictive calculators, and offline catalogs under cohesive
-            interfaces.
-          </p>
-        </m.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
-          {features.map((feat, idx) => (
-            <Tilt3DCard key={idx} className="h-full">
-              <m.div
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, amount: 0.05 }}
-                transition={{ duration: 0.45, delay: (idx % 3) * 0.07, ease: "easeOut" }}
-                className="bg-white border border-slate-200/80 hover:border-indigo-500/40 dark:bg-[#050814]/70 dark:border-white/[0.08] p-6 rounded-[24px] flex flex-col justify-between hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300 h-full group"
-              >
-                <div className="space-y-3">
-                  <div
-                    className={`p-2.5 w-fit rounded-2xl ${feat.iconColor} bg-slate-100 dark:bg-neutral-900 group-hover:scale-110 transition-transform duration-300`}
-                  >
-                    <feat.icon className="h-6 w-6 stroke-[1.8]" />
-                  </div>
-                  <h3 className="text-sm font-extrabold text-slate-900 dark:text-white uppercase tracking-wider font-[family-name:var(--font-outfit)]">
-                    {feat.title}
-                  </h3>
-                  <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed font-medium">{feat.desc}</p>
-                </div>
-              </m.div>
-            </Tilt3DCard>
-          ))}
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:items-center">
+          <Heading
+            label="Why AmazeCC"
+            title="Five portals for one day of college"
+            sub="VTOP for attendance, another site for the mess menu, a PDF for the bus, Koha for books, a group chat for events. AmazeCC puts them on one screen."
+          />
+          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {[
+              ["VTOP", "Session expired. Log in again."],
+              ["Mess", "Menu is page 4 of a PDF."],
+              ["Hostel", "Outing pass OTP pending."],
+              ["Library", "Catalogue search failed."],
+            ].map(([where, pain]) => (
+              <li key={where} className={`${card} p-4`}>
+                <span className={`${badge} bg-danger-surface text-danger-foreground`}>{where}</span>
+                <p className="mt-2 text-sm text-text-primary">{pain}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      {/* Attendance Predictor Sandbox Section */}
-      <section className="bg-slate-100/50 border-y border-slate-200 dark:bg-[#050814]/40 dark:border-neutral-900 py-24 px-6 relative">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/5 blur-[120px] pointer-events-none" />
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <m.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.05 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="lg:col-span-7 space-y-4 text-left"
-          >
-            <span className="text-[10px] font-black text-indigo-605 dark:text-indigo-400 uppercase tracking-widest block">
-              Predictive Calculator
-            </span>
-            <h2 className="text-3xl font-black text-slate-900 dark:text-white font-[family-name:var(--font-outfit)]">
-              Simulate attendance margins live
-            </h2>
-            <p className="text-xs md:text-sm text-slate-600 dark:text-gray-400 leading-relaxed font-medium max-w-xl">
-              Calculate safe margins before skip classes. Adjust the simulator below to check the real-time safety
-              limits, percentage ratios, and skip counts immediately.
-            </p>
-            <div className="flex items-center gap-6 pt-2 text-xs font-semibold text-slate-500 dark:text-gray-300">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                <span>75% safety guard</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-indigo-550 dark:bg-indigo-400" />
-                <span>Dynamic percentage</span>
-              </div>
-            </div>
-          </m.div>
+      {/* Modules */}
+      <section id="sec-features" className="mx-auto max-w-7xl space-y-10 px-4 py-16 sm:px-8 sm:py-24">
+        <Heading
+          label="Modules"
+          title="Everything you open VTOP for"
+          sub="And a few things VTOP never had. All of it works offline once synced."
+        />
+        <ul className="grid grid-cols-1 gap-4 pr-1.5 pb-1.5 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((f) => (
+            <li key={f.title} className={`${card} flex flex-col gap-2 p-5`}>
+              <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+                {f.tag}
+              </span>
+              <h3 className="font-display text-lg font-bold uppercase leading-tight text-text-heading">{f.title}</h3>
+              <p className="text-sm text-text-muted">{f.desc}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-          {/* Simulator Card Box */}
-          <m.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.05 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="lg:col-span-5 bg-white border border-slate-200 dark:bg-neutral-950 dark:border-white/[0.08] p-6 rounded-[24px] space-y-4 shadow-xl"
-          >
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-neutral-900 pb-3">
-              <div>
-                <span className="text-[9px] font-black uppercase tracking-wider text-indigo-605 dark:text-indigo-400 block">
-                  Attendance Preview
-                </span>
-                <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
-                  Predictor Sandbox
-                </h3>
-              </div>
-              <button
-                onClick={handleSimulateReset}
-                className="relative hit-expand p-1.5 rounded-lg text-gray-400 hover:text-slate-900 dark:text-gray-500 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
-                title="Reset Demo"
+      {/* Live attendance simulator */}
+      <section className="border-y-2 border-border-ink bg-surface-secondary px-4 py-16 sm:px-8 sm:py-24">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:items-center">
+          <Heading
+            label="Try it"
+            title="Know before you skip"
+            sub="Tap attend or skip and watch the number move. The real app does this for every course, every day."
+          />
+          <div className={`${card} space-y-4 p-5 mr-1.5`}>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+                {"BCSE302L // Database Systems"}
+              </span>
+              <span
+                className={`${badge} ${below ? "bg-danger-surface text-danger-foreground" : "bg-success-surface text-success-foreground"}`}
               >
-                <RotateCcw size={12} />
-              </button>
+                {below ? "Below 75%" : "Safe"}
+              </span>
             </div>
-
-            <div className="flex items-center justify-between gap-4">
-              <div className="space-y-1">
-                <span className="text-[10px] font-bold text-slate-500 dark:text-gray-400">
-                  CSE3002 - COMPILER DESIGN
-                </span>
-                <div className="text-xs font-semibold text-slate-650 dark:text-gray-350">
-                  Attended: <span className="text-slate-900 dark:text-white font-black">{mockAttended}</span> /{" "}
-                  {mockTotal}
-                </div>
-              </div>
-
-              {/* Circle chart */}
-              <div className="relative h-14 w-14 flex items-center justify-center shrink-0">
-                <svg className="w-14 h-14 transform -rotate-90">
-                  <circle
-                    cx="28"
-                    cy="28"
-                    r={radius}
-                    className="stroke-slate-100 dark:stroke-neutral-850"
-                    strokeWidth="4.5"
-                    fill="transparent"
-                  />
-                  <circle
-                    cx="28"
-                    cy="28"
-                    r={radius}
-                    className="stroke-indigo-600 dark:stroke-indigo-500 transition-all duration-300"
-                    strokeWidth="4.5"
-                    fill="transparent"
-                    strokeDasharray={circumference}
-                    strokeDashoffset={strokeDashoffset}
-                    strokeLinecap="round"
-                  />
-                </svg>
-                <span className="absolute text-[10px] font-black text-slate-900 dark:text-white font-mono">
-                  {Math.round(mockPercent)}%
-                </span>
-              </div>
+            <div className="flex items-end justify-between gap-3">
+              <span className="font-display text-[56px] font-bold leading-none text-hero tabular-nums">
+                {mockPercent.toFixed(1)}%
+              </span>
+              <span className="pb-1 font-mono text-sm text-text-muted">
+                {mockAttended} of {mockTotal}
+              </span>
             </div>
-
-            <div
-              className={`p-3 rounded-xl text-[10px] font-bold text-center transition-all duration-300 ${skipStatus.color}`}
-            >
-              {skipStatus.text}
+            <div className="relative h-4 w-full overflow-hidden rounded-[6px] border-2 border-border-ink bg-surface-secondary">
+              <div
+                className={`h-full transition-[width] duration-300 ${below ? "bg-danger" : "bg-primary"}`}
+                style={{ width: `${Math.min(100, mockPercent)}%` }}
+              />
+              <div aria-hidden className="absolute inset-y-0 left-[75%] w-0.5 bg-text-primary" />
             </div>
-
+            <p className="text-sm text-text-primary" aria-live="polite">
+              {verdict}
+            </p>
             <div className="flex gap-2">
               <button
-                onClick={handleSimulateAttend}
-                className="flex-1 py-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 dark:bg-neutral-950 dark:border-neutral-850 dark:hover:border-emerald-500/30 rounded-xl text-[9px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-450 flex items-center justify-center gap-1 transition-all cursor-pointer"
+                type="button"
+                className={`${btn} bg-success-surface text-success-foreground`}
+                onClick={() => {
+                  setMockAttended((v) => v + 1);
+                  setMockTotal((v) => v + 1);
+                }}
               >
-                <Plus size={11} /> Attend
+                Attend
               </button>
               <button
-                onClick={handleSimulateSkip}
-                className="flex-1 py-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 dark:bg-neutral-950 dark:border-neutral-850 dark:hover:border-rose-500/30 rounded-xl text-[9px] font-bold uppercase tracking-wider text-rose-600 dark:text-rose-450 flex items-center justify-center gap-1 transition-all cursor-pointer"
+                type="button"
+                className={`${btn} bg-danger-surface text-danger-foreground`}
+                onClick={() => setMockTotal((v) => v + 1)}
               >
-                <Minus size={11} /> Skip
+                Skip
+              </button>
+              <button
+                type="button"
+                className={`${btn} flex-none bg-surface text-text-primary`}
+                onClick={() => {
+                  setMockAttended(17);
+                  setMockTotal(20);
+                }}
+              >
+                Reset
               </button>
             </div>
-          </m.div>
-        </div>
-      </section>
-
-      {/* UI Showcase Layout */}
-      <section className="max-w-7xl mx-auto px-6 py-24 space-y-16">
-        <m.div
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center space-y-3"
-        >
-          <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest block">
-            User Interface
-          </span>
-          <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white font-[family-name:var(--font-outfit)]">
-            Designed for clarity
-          </h2>
-          <p className="text-xs md:text-sm text-slate-600 dark:text-gray-400 max-w-xl mx-auto font-medium">
-            A high-fidelity layout optimized for fast reading, dark preferences, and desktop-first tracking.
-          </p>
-        </m.div>
-
-        {/* Showcase Skeletons (Emojis replaced with Lucide Icons) */}
-        <div className="relative max-w-4xl mx-auto h-[450px] overflow-hidden rounded-[24px] border border-slate-200 bg-slate-100/40 dark:border-neutral-900 dark:bg-[#050711]/50 p-6 md:p-8 flex items-center justify-center shadow-md dark:shadow-xl">
-          {/* Desktop layout skeleton card */}
-          <m.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            className="hidden md:flex absolute top-10 left-10 right-28 bottom-10 bg-white border border-slate-200/80 dark:bg-neutral-950 dark:border-neutral-850 rounded-2xl shadow-2xl overflow-hidden -rotate-2 origin-top-left transition-transform duration-500 hover:rotate-0"
-          >
-            <div className="w-1/4 border-r border-slate-100 dark:border-neutral-900 p-4 space-y-4 bg-white dark:bg-neutral-950 select-none">
-              <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-neutral-900">
-                <div className="w-4 h-4 rounded bg-indigo-500 shrink-0" />
-                <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-wider">
-                  AmazeCC
-                </span>
-              </div>
-              <div className="space-y-2">
-                <div className="h-6 rounded bg-slate-50 dark:bg-neutral-900 flex items-center px-2 text-[9px] text-slate-700 dark:text-gray-400 font-bold gap-1">
-                  <Calendar size={11} className="text-indigo-550 dark:text-indigo-400 shrink-0" /> Calendar
-                </div>
-                <div className="h-6 rounded flex items-center px-2 text-[9px] text-slate-500 dark:text-gray-500 font-bold gap-1">
-                  <Activity size={11} className="text-slate-400 shrink-0" /> Attendance
-                </div>
-                <div className="h-6 rounded flex items-center px-2 text-[9px] text-slate-500 dark:text-gray-500 font-bold gap-1">
-                  <Home size={11} className="text-slate-400 shrink-0" /> Hostel Hub
-                </div>
-              </div>
-            </div>
-
-            <div className="flex-1 p-6 space-y-4 bg-slate-50/50 dark:bg-neutral-900/20 select-none">
-              <div className="flex items-center justify-between border-b border-slate-100 dark:border-neutral-900 pb-3">
-                <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
-                  Semester Course List
-                </span>
-                <span className="text-[9px] bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full font-bold">
-                  Active
-                </span>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white border border-slate-100 dark:bg-neutral-950 dark:border-neutral-850 p-3 rounded-xl space-y-2">
-                  <span className="text-[9px] font-bold text-slate-400 dark:text-gray-400 uppercase tracking-widest block font-mono">
-                    BMAT201L
-                  </span>
-                  <div className="h-1.5 w-3/4 rounded bg-indigo-500" />
-                  <span className="text-[9px] text-slate-500 dark:text-gray-500 font-bold block">
-                    Complex Variables
-                  </span>
-                </div>
-                <div className="bg-white border border-slate-100 dark:bg-neutral-950 dark:border-neutral-850 p-3 rounded-xl space-y-2">
-                  <span className="text-[9px] font-bold text-slate-400 dark:text-gray-400 uppercase tracking-widest block font-mono">
-                    CSE3002
-                  </span>
-                  <div className="h-1.5 w-1/2 rounded bg-indigo-500" />
-                  <span className="text-[9px] text-slate-500 dark:text-gray-500 font-bold block">Compiler Design</span>
-                </div>
-              </div>
-            </div>
-          </m.div>
-
-          {/* Mobile layout skeleton card */}
-          <m.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
-            className="absolute md:right-6 md:bottom-6 left-1/2 md:left-auto top-1/2 md:top-auto -translate-x-1/2 -translate-y-1/2 md:translate-x-0 md:translate-y-0 w-52 h-80 bg-white border-4 border-slate-200 dark:bg-neutral-950 dark:border-neutral-800 rounded-[24px] shadow-2xl p-4 overflow-hidden md:rotate-3 transition-transform duration-500 hover:rotate-0"
-          >
-            <div className="w-12 h-4 bg-slate-100 dark:bg-neutral-850 rounded-full mx-auto mb-4" />
-            <div className="space-y-4 select-none">
-              <div className="flex items-center justify-between">
-                <span className="text-[9px] font-bold text-slate-900 dark:text-white uppercase">Today's Hub</span>
-                <span className="text-[9px] text-indigo-600 dark:text-indigo-400 font-bold font-mono">22BCE1234</span>
-              </div>
-              <div className="bg-slate-50 dark:bg-neutral-900 p-2.5 rounded-xl space-y-2">
-                <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
-                  <CheckCircle2 size={10} className="text-emerald-500 shrink-0" /> Attendance Safe
-                </span>
-                <div className="h-1 bg-indigo-500 rounded w-full" />
-              </div>
-              <div className="bg-slate-50/50 border border-slate-100 dark:bg-[#050711] dark:border-neutral-900 p-2.5 rounded-xl space-y-2">
-                <span className="text-[10px] text-slate-500 dark:text-gray-400 font-bold block">Hostel Laundry</span>
-                <span className="text-[10px] text-slate-405 dark:text-gray-500 block">D-Block Slot #03 locked</span>
-              </div>
-            </div>
-          </m.div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="bg-slate-100/50 border-y border-slate-200 dark:bg-[#02040a]/40 dark:border-neutral-900 py-24 px-6">
-        <div className="max-w-7xl mx-auto space-y-16">
-          <m.div
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center space-y-3"
-          >
-            <span className="text-[10px] font-black text-indigo-650 dark:text-indigo-400 uppercase tracking-widest block">
-              Why AmazeCC?
-            </span>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white font-[family-name:var(--font-outfit)]">
-              Built for speed and complete trust
-            </h2>
-            <p className="text-xs md:text-sm text-slate-600 dark:text-gray-400 max-w-xl mx-auto font-medium">
-              Design choices aligned to speed, local privacy, and simplicity.
-            </p>
-          </m.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-            {benefits.map((benefit, idx) => (
-              <m.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: (idx % 4) * 0.08, ease: "easeOut" }}
-                className="bg-white border border-slate-200 dark:bg-neutral-950/40 dark:border-white/[0.08] p-6 rounded-2xl space-y-2 shadow-xs dark:shadow-none"
-              >
-                <h3 className="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider font-[family-name:var(--font-outfit)]">
-                  {benefit.title}
-                </h3>
-                <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed font-medium">{benefit.desc}</p>
-              </m.div>
-            ))}
           </div>
         </div>
       </section>
 
-      {/* Timeline walkthrough */}
-      <section id="sec-timeline" className="max-w-7xl mx-auto px-6 py-24 space-y-16">
-        <m.div
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center space-y-3"
-        >
-          <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest block">
-            Daily Walkthrough
-          </span>
-          <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white font-[family-name:var(--font-outfit)]">
-            A typical day with AmazeCC
-          </h2>
-          <p className="text-xs md:text-sm text-slate-650 dark:text-gray-400 max-w-xl mx-auto font-medium">
-            See how AmazeCC supports your schedule checks and mess menu updates throughout college hours.
-          </p>
-        </m.div>
-
-        <div className="max-w-3xl mx-auto space-y-8 relative before:absolute before:left-4 before:top-2 before:bottom-2 before:w-[1px] before:bg-slate-200 dark:before:bg-neutral-900">
-          {companionTimeline.map((item, idx) => (
-            <m.div
-              key={idx}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.05 }}
-              transition={{ duration: 0.5, delay: idx * 0.06, ease: "easeOut" }}
-              className="flex gap-6 relative pl-8 text-left"
+      {/* Trust */}
+      <section className="mx-auto max-w-7xl space-y-10 px-4 py-16 sm:px-8 sm:py-24">
+        <Heading label="Trust" title="Built by students, kept on your phone" />
+        <ul className="grid grid-cols-1 gap-4 pr-1.5 pb-1.5 sm:grid-cols-2 lg:grid-cols-4">
+          {benefits.map((b, i) => (
+            <li
+              key={b.title}
+              className={`${card} p-5 ${i === 1 ? "!bg-teal text-cream dark:!bg-surface-tertiary dark:text-text-primary" : ""}`}
             >
-              <div className="absolute left-2.5 top-1.5 w-3.5 h-3.5 rounded-full bg-indigo-600 border-4 border-slate-50 dark:border-neutral-950 shrink-0" />
-              <div className="space-y-1">
-                <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 font-mono">
-                  {item.time}
-                </span>
-                <h3 className="text-sm font-extrabold text-slate-900 dark:text-white uppercase tracking-wider font-[family-name:var(--font-outfit)]">
-                  {item.title}
-                </h3>
-                <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed font-medium">{item.desc}</p>
-              </div>
-            </m.div>
+              <h3 className="font-display text-base font-bold uppercase leading-tight">{b.title}</h3>
+              <p className={`mt-2 text-sm ${i === 1 ? "opacity-85" : "text-text-muted"}`}>{b.desc}</p>
+            </li>
           ))}
+        </ul>
+      </section>
+
+      {/* A day with AmazeCC */}
+      <section
+        id="sec-timeline"
+        className="border-y-2 border-border-ink bg-surface-secondary px-4 py-16 sm:px-8 sm:py-24"
+      >
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_1.2fr]">
+          <Heading label="A day" title="One app from 8 am to 9 pm" />
+          <ol className="divide-y-2 divide-border-muted rounded-[14px] border-2 border-border-ink bg-surface shadow-brutal-md mr-1.5">
+            {companionTimeline.map((t) => (
+              <li key={t.time} className="grid grid-cols-[88px_1fr] gap-3 px-4 py-3">
+                <span className="font-mono text-sm font-bold text-hero">{t.time}</span>
+                <div>
+                  <p className="font-display text-sm font-bold uppercase text-text-heading">{t.title}</p>
+                  <p className="text-sm text-text-muted">{t.desc}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
       {/* Roadmap */}
-      <section
-        id="sec-roadmap"
-        className="bg-slate-100/50 border-t border-slate-200 dark:bg-[#02040a]/40 dark:border-neutral-900 py-24 px-6"
-      >
-        <div className="max-w-7xl mx-auto space-y-16">
-          <m.div
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center space-y-3"
-          >
-            <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest block">
-              Project Roadmap
-            </span>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white font-[family-name:var(--font-outfit)]">
-              What is coming next
-            </h2>
-            <p className="text-xs md:text-sm text-slate-655 dark:text-gray-400 max-w-xl mx-auto font-medium">
-              Continuous upgrades to extend scheduling assistance.
-            </p>
-          </m.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-            {roadmap.map((item, idx) => (
-              <m.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: (idx % 4) * 0.08, ease: "easeOut" }}
-                className="bg-white border border-slate-200 dark:bg-neutral-950/60 dark:border-white/[0.08] p-6 rounded-2xl flex flex-col justify-between space-y-4 shadow-xs dark:shadow-none"
+      <section id="sec-roadmap" className="mx-auto max-w-7xl space-y-10 px-4 py-16 sm:px-8 sm:py-24">
+        <Heading label="Roadmap" title="What is coming next" />
+        <ul className="grid grid-cols-1 gap-4 pr-1.5 pb-1.5 sm:grid-cols-2 lg:grid-cols-4">
+          {roadmap.map((r) => (
+            <li key={r.title} className={`${card} p-5`}>
+              <span
+                className={`${badge} ${
+                  r.status === "In Progress"
+                    ? "bg-highlight text-highlight-foreground"
+                    : r.status === "Planned"
+                      ? "bg-secondary text-secondary-foreground"
+                      : "bg-surface-secondary text-text-muted"
+                }`}
               >
-                <div className="space-y-2">
-                  <span className="text-[9px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full w-fit block">
-                    {item.status}
-                  </span>
-                  <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider pt-2 font-[family-name:var(--font-outfit)]">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed font-medium">{item.desc}</p>
+                {r.status}
+              </span>
+              <h3 className="mt-3 font-display text-base font-bold uppercase leading-tight text-text-heading">
+                {r.title}
+              </h3>
+              <p className="mt-1 text-sm text-text-muted">{r.desc}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* FAQ */}
+      <section id="sec-faq" className="border-t-2 border-border-ink bg-surface-secondary px-4 py-16 sm:px-8 sm:py-24">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_1.4fr]">
+          <Heading label="FAQ" title="Questions students ask" />
+          <div className="divide-y-2 divide-border-muted overflow-hidden rounded-[14px] border-2 border-border-ink bg-surface shadow-brutal-md">
+            {faqs.map((f, i) => {
+              const open = openFaq === i;
+              return (
+                <div key={f.q}>
+                  <button
+                    type="button"
+                    aria-expanded={open}
+                    onClick={() => setOpenFaq(open ? null : i)}
+                    className="flex min-h-14 w-full items-center justify-between gap-3 px-4 text-left font-display text-sm font-bold uppercase text-text-heading hover:bg-surface-secondary"
+                  >
+                    {f.q}
+                    <ChevronDown
+                      aria-hidden
+                      className={`h-4 w-4 shrink-0 transition-transform duration-150 ${open ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                  {open ? <p className="px-4 pb-4 text-sm text-text-muted">{f.a}</p> : null}
                 </div>
-              </m.div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
-
-      {/* FAQ Accordion */}
-      <section id="sec-faq" className="max-w-4xl mx-auto px-6 py-24 space-y-16">
-        <m.div
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center space-y-3"
-        >
-          <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest block">
-            Support & FAQs
-          </span>
-          <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white font-[family-name:var(--font-outfit)]">
-            Frequently Asked Questions
-          </h2>
-          <p className="text-xs md:text-sm text-slate-600 dark:text-gray-400 max-w-xl mx-auto font-medium">
-            Answers to common questions regarding credentials and connections.
-          </p>
-        </m.div>
-
-        <div className="space-y-4">
-          {faqs.map((faq, idx) => {
-            const isOpen = openFaq === idx;
-            return (
-              <m.div
-                key={idx}
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.05 }}
-                transition={{ duration: 0.4, delay: idx * 0.06, ease: "easeOut" }}
-                className="border border-slate-200 bg-white dark:border-white/[0.08] dark:bg-neutral-950/40 rounded-2xl overflow-hidden shadow-xs dark:shadow-none"
-              >
-                <button
-                  onClick={() => setOpenFaq(isOpen ? null : idx)}
-                  className="w-full flex items-center justify-between p-5 text-left text-xs font-bold text-slate-900 hover:bg-slate-50 dark:text-white dark:hover:bg-neutral-900/30 uppercase tracking-wider transition-colors cursor-pointer"
-                >
-                  <span>{faq.q}</span>
-                  <ChevronDown
-                    size={14}
-                    className={`text-slate-400 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
-                  />
-                </button>
-                {isOpen && (
-                  <div className="p-5 border-t border-slate-200 bg-slate-50/50 text-slate-600 dark:border-neutral-900 dark:bg-neutral-950/20 dark:text-gray-400 text-xs leading-relaxed font-medium animate-fadeIn">
-                    {faq.a}
-                  </div>
-                )}
-              </m.div>
-            );
-          })}
-        </div>
-      </section>
-    </LazyMotion>
+    </div>
   );
 }

@@ -104,6 +104,18 @@ type MobileNavItem = {
   onClick: () => void;
 };
 
+/** Short names for /?tab= deep links (manifest shortcuts use these). */
+const TAB_ALIASES: Record<string, string> = {
+  timetable: "attendance-calendar",
+  calendar: "attendance-calendar",
+  attendance: "attendance-calendar",
+  courses: "academics-courses",
+  marks: "academics-courses",
+  grades: "academics-grades",
+  exams: "academics-schedule",
+  tasks: "tools-tasks",
+};
+
 const MobileBottomNav = memo(function MobileBottomNav({
   items,
   onItemTap,
@@ -593,6 +605,25 @@ export default function NavigationTabs({
     ],
   );
   const registry = useMemo(() => getModuleRegistry(navCtx), [navCtx]);
+
+  // Deep link /?tab=<registry id or alias>: the installed app's home-screen
+  // shortcuts (manifest.json) and notifications open a screen this way.
+  // Before this nothing read `tab`, so the shortcuts all opened Home.
+  const deepLinkDone = useRef(false);
+  useEffect(() => {
+    if (deepLinkDone.current) return;
+    deepLinkDone.current = true;
+    try {
+      const url = new URL(window.location.href);
+      const raw = url.searchParams.get("tab");
+      if (!raw) return;
+      url.searchParams.delete("tab");
+      window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
+      const id = TAB_ALIASES[raw] ?? raw;
+      const entry = registry.find((e) => e.id === id);
+      if (entry) activateEntry(entry, navCtx);
+    } catch {}
+  }, [registry, navCtx]);
 
   const toNavItem = (entry: ModuleEntry): NavItem => {
     let isActive = false;

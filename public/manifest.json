@@ -2,35 +2,69 @@
     "id": "/",
     "name": "AmazeCC",
     "short_name": "AmazeCC",
-    "description": "Elevate your university life with seamless timetable syncing, attendance tracking, and smart grade calculations.",
+    "description": "Timetable, attendance, marks and grades for VIT Chennai students, in one app that works offline.",
     "lang": "en",
-    "categories": ["education", "productivity"],
+    "categories": [
+        "education",
+        "productivity"
+    ],
     "start_url": "/",
     "scope": "/",
     "display": "standalone",
-    "background_color": "#003A3A",
+    "background_color": "#001E1D",
     "theme_color": "#004643",
     "shortcuts": [
         {
-            "name": "Dashboard",
-            "short_name": "Dashboard",
-            "description": "Open the AmazeCC dashboard",
-            "url": "/",
-            "icons": [{ "src": "/favicon/web-app-manifest-192x192.png", "sizes": "192x192", "type": "image/png" }]
-        },
-        {
-            "name": "Tasks",
-            "short_name": "Tasks",
-            "description": "Open today's tasks",
-            "url": "/?tab=tasks",
-            "icons": [{ "src": "/favicon/web-app-manifest-192x192.png", "sizes": "192x192", "type": "image/png" }]
-        },
-        {
             "name": "Timetable",
             "short_name": "Timetable",
-            "description": "Open the timetable",
-            "url": "/?tab=timetable",
-            "icons": [{ "src": "/favicon/web-app-manifest-192x192.png", "sizes": "192x192", "type": "image/png" }]
+            "description": "Today's classes and the calendar",
+            "url": "/?tab=timetable&source=shortcut",
+            "icons": [
+                {
+                    "src": "/brand/shortcuts/timetable.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                }
+            ]
+        },
+        {
+            "name": "Marks",
+            "short_name": "Marks",
+            "description": "Your courses and marks this semester",
+            "url": "/?tab=marks&source=shortcut",
+            "icons": [
+                {
+                    "src": "/brand/shortcuts/marks.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                }
+            ]
+        },
+        {
+            "name": "Grade History",
+            "short_name": "Grades",
+            "description": "Every term's grades and CGPA",
+            "url": "/?tab=grades&source=shortcut",
+            "icons": [
+                {
+                    "src": "/brand/shortcuts/grades.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                }
+            ]
+        },
+        {
+            "name": "Exam Schedule",
+            "short_name": "Exams",
+            "description": "Upcoming exams and seats",
+            "url": "/?tab=exams&source=shortcut",
+            "icons": [
+                {
+                    "src": "/brand/shortcuts/exams.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                }
+            ]
         }
     ],
     "share_target": {
@@ -68,6 +102,17 @@
             "purpose": "maskable"
         }
     ],
-    "orientation": "portrait",
-    "gcm_sender_id": "103953800507"
+    "orientation": "any",
+    "gcm_sender_id": "103953800507",
+    "display_override": [
+        "standalone",
+        "minimal-ui"
+    ],
+    "launch_handler": {
+        "client_mode": [
+            "focus-existing",
+            "auto"
+        ]
+    },
+    "prefer_related_applications": false
 }

@@ -56,7 +56,6 @@ export const KIND_CONFIG: Record<TaskKind, { label: string; badgeClass: string; 
 export default function TaskCard({ task, onEdit, onStatusCycle, onDelete, compact = false }: TaskCardProps) {
   const overdue = isTaskOverdue(task);
   const kindMeta = KIND_CONFIG[task.kind] || KIND_CONFIG.homework;
-  const KindIcon = kindMeta.icon;
 
   const formatDueDate = (iso: string) => {
     try {
@@ -103,10 +102,7 @@ export default function TaskCard({ task, onEdit, onStatusCycle, onDelete, compac
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap mb-1">
             {/* Kind badge */}
-            <span
-              className={`text-[9.5px] font-bold uppercase px-2 py-0.5 rounded-md border flex items-center gap-1 ${kindMeta.badgeClass}`}
-            >
-              <KindIcon className="w-2.5 h-2.5" />
+            <span className={`text-xs font-bold uppercase px-2 py-0.5 rounded-md border ${kindMeta.badgeClass}`}>
               {kindMeta.label}
             </span>
 
@@ -122,7 +118,7 @@ export default function TaskCard({ task, onEdit, onStatusCycle, onDelete, compac
 
             {/* Overdue chip */}
             {overdue && (
-              <span className="text-[9.5px] font-bold uppercase px-1.5 py-0.5 rounded bg-red-500 text-white shrink-0 animate-pulse">
+              <span className="text-xs font-bold uppercase px-1.5 py-0.5 rounded-md border border-border-ink bg-danger-surface text-danger-foreground shrink-0">
                 Overdue
               </span>
             )}

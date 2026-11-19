@@ -656,14 +656,16 @@ export default function SimplifiedAcademicsPage({
                     ? `${grandWeightage.displayScore} / ${grandWeightage.displayMax}`
                     : `${grandWeightage.displayScore}`}
                 </span>
-                <span
-                  data-private={grandWeightage.percentage !== null ? "marks" : undefined}
-                  className="mt-1 font-mono text-xs font-bold uppercase opacity-80"
-                >
-                  {grandWeightage.percentage !== null
-                    ? `${formatUpToTwoDecimals(grandWeightage.percentage, decimalValues)}%`
-                    : "Weightage"}
-                </span>
+                {grandWeightage.maxWeight !== 100 && (
+                  <span
+                    data-private={grandWeightage.percentage !== null ? "marks" : undefined}
+                    className="mt-1 font-mono text-xs font-bold uppercase opacity-80"
+                  >
+                    {grandWeightage.percentage !== null
+                      ? `${formatUpToTwoDecimals(grandWeightage.percentage, decimalValues)}%`
+                      : "Weightage"}
+                  </span>
+                )}
               </div>
             ) : (
               <div className="flex min-w-[92px] flex-col items-end rounded-[10px] border-2 border-dashed border-border px-3 py-1.5">

@@ -1,188 +1,145 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { ArrowLeft, ShieldCheck, FileText } from "lucide-react";
 import Link from "next/link";
-import ThemeToggle from "@/components/custom/ThemeToggle";
+import LegalLayout, { type LegalSection } from "@/components/custom/legal/LegalLayout";
+
+/*
+ * Plain-language terms. The data-handling paragraph must agree with the
+ * privacy policy (/privacy), which was checked against the code; the old
+ * version said the app "does not collect, store, or transmit any personal
+ * information to any server", which was not true (sign-in goes through the
+ * AmazeCC server; Social, Cab Share, uploads and feedback are stored).
+ */
+
+const sections: LegalSection[] = [
+  {
+    id: "what",
+    title: "What AmazeCC is",
+    body: (
+      <p>
+        AmazeCC is a free, open-source student project that helps you see and organise your VIT Chennai data from VTOP
+        (attendance, marks, timetable, exams and more) and use campus tools built around it. It is{" "}
+        <strong>not an official VIT product</strong> and is not affiliated with, endorsed by or supported by Vellore
+        Institute of Technology or any of its departments.
+      </p>
+    ),
+  },
+  {
+    id: "account",
+    title: "Your account and VTOP",
+    body: (
+      <>
+        <p>
+          You sign in with your own VTOP account. You are responsible for it: use AmazeCC only with your own
+          credentials, and preferably on devices and networks you trust.
+        </p>
+        <p>
+          To fetch your data, your VTOP ID and password pass through the AmazeCC server to VTOP; the server does not
+          save your password. The full details are in the <Link href="/privacy">privacy policy</Link>.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "fair-use",
+    title: "Using AmazeCC fairly",
+    body: (
+      <ul>
+        <li>Do not use AmazeCC to access anyone else&rsquo;s account or data.</li>
+        <li>Do not try to overload, scrape or break AmazeCC, VTOP or other VIT services through it.</li>
+        <li>
+          Only upload or post what you have the right to share (question papers, club posts, Cab Share trips), and
+          nothing abusive or misleading.
+        </li>
+        <li>We may remove content or limit access that breaks these rules.</li>
+      </ul>
+    ),
+  },
+  {
+    id: "sharing",
+    title: "Features where you share with others",
+    body: (
+      <p>
+        Friend Finder, Social, Cab Share and club features are optional. When you use them, what you choose to share is
+        visible to the other students the feature is designed for. You decide what to share and can remove it. Friend
+        Finder has its own <Link href="/friend-finder/disclaimer">disclaimer</Link>; please read it before you opt in.
+      </p>
+    ),
+  },
+  {
+    id: "payments",
+    title: "Payments and other portals",
+    body: (
+      <p>
+        AmazeCC never handles money. &ldquo;Pay now&rdquo; and similar buttons open the official payment or event
+        portal, and anything you do there is under that portal&rsquo;s own terms. The same goes for VTOP, the Events
+        portal, the library, Moodle and VITOL.
+      </p>
+    ),
+  },
+  {
+    id: "accuracy",
+    title: "No guarantees",
+    body: (
+      <>
+        <p>
+          AmazeCC is provided as is. It shows data as VTOP returns it and adds estimates (attendance predictions, grade
+          predictions, class averages) that can be wrong. Always check anything important, like attendance shortage or
+          exam details, on VTOP itself.
+        </p>
+        <p>
+          The app may be unavailable, or features may stop working when VTOP or other VIT services change. The
+          developers are not responsible for losses or decisions based on what AmazeCC shows.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "free",
+    title: "Free and non-commercial",
+    body: (
+      <p>
+        AmazeCC is free. It shows no ads and does not sell data. It is built by students for learning and to make campus
+        life easier.
+      </p>
+    ),
+  },
+  {
+    id: "changes",
+    title: "Changes",
+    body: (
+      <p>
+        We may update these terms as the app changes; the date at the top will change with them. Using AmazeCC after an
+        update means you accept the new version.
+      </p>
+    ),
+  },
+  {
+    id: "contact",
+    title: "Contact",
+    body: (
+      <p>
+        Questions about these terms: <a href="mailto:sugeeth2007@gmail.com">sugeeth2007@gmail.com</a>.
+      </p>
+    ),
+  },
+];
 
 export default function TermsOfServicePage() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full px-4 py-24 bg-surface-secondary dark:bg-[#03060F] transition-colors duration-300 relative overflow-hidden text-text-primary font-sans">
-      {/* Ambient Background Glows */}
-      <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-secondary dark:bg-secondary " />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-secondary dark:bg-secondary " />
-      </div>
-
-      {/* Sticky Header Navigation */}
-      <nav
-        className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-[#03060F]/80 border-b border-border-ink transition-all"
-        style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
-      >
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-xs font-bold text-text-muted hover:text-primary transition-colors py-1.5 px-3 rounded-xl bg-surface-secondary border border-border-ink"
-            >
-              <ArrowLeft size={14} />
-              <span>Back to Login</span>
-            </Link>
-          </div>
-
-          {/* Switcher Tab between Privacy, Terms & Friend Finder Disclaimer */}
-          <div className="flex items-center gap-1 p-1 bg-surface-tertiary rounded-2xl border border-border-ink">
-            <Link
-              href="/privacy"
-              className="px-3 py-1 rounded-xl text-xs font-semibold text-text-muted hover:text-text-heading flex items-center gap-1.5 transition-all"
-            >
-              <ShieldCheck size={13} />
-              <span className="hidden sm:inline">Privacy Policy</span>
-              <span className="sm:hidden">Privacy</span>
-            </Link>
-            <Link
-              href="/terms"
-              className="px-3 py-1 rounded-xl text-xs font-bold bg-surface text-primary shadow-xs flex items-center gap-1.5 transition-all"
-            >
-              <FileText size={13} />
-              <span className="hidden sm:inline">Terms of Service</span>
-              <span className="sm:hidden">Terms</span>
-            </Link>
-            <Link
-              href="/friend-finder/disclaimer"
-              className="px-3 py-1 rounded-xl text-xs font-semibold text-text-muted hover:text-text-heading flex items-center gap-1.5 transition-all"
-            >
-              <ShieldCheck size={13} />
-              <span className="hidden sm:inline">Friend Finder</span>
-              <span className="sm:hidden">Disclaimer</span>
-            </Link>
-          </div>
-
-          <div className="flex items-center gap-3">{mounted && <ThemeToggle />}</div>
-        </div>
-      </nav>
-
-      <div className="w-full max-w-2xl space-y-6 relative z-10 pt-10">
-        {/* Content Card */}
-        <div className="card-surface border border-border-strong dark:border-border rounded-[14px] p-8 shadow-xl space-y-6 text-text-primary">
-          <div className="border-b border-border-ink pb-4">
-            <h1 className="text-3xl font-bold text-text-heading leading-tight font-[family-name:var(--font-outfit)]">
-              Terms of Service
-            </h1>
-            <p className="text-xs text-text-muted mt-1 font-medium">Last updated: June 23, 2026</p>
-          </div>
-
-          <div className="space-y-5 text-sm leading-relaxed font-medium">
-            <p>
-              Welcome to <strong>AmazeCC</strong>. By using this application, you agree to the following Terms of
-              Service. Please read them carefully before using the app.
-            </p>
-
-            <section className="space-y-2">
-              <h2 className="text-lg font-bold text-text-heading">Purpose</h2>
-              <p>
-                <strong>AmazeCC</strong> is an experimental web application created solely for educational and personal
-                use. It provides tools to help students view and organize their academic data retrieved from{" "}
-                <strong>VTOP</strong> (VIT’s official portal). This app is not an official VIT product and is{" "}
-                <strong>not affiliated, endorsed, or maintained by Vellore Institute of Technology (VIT)</strong> in any
-                manner.
-              </p>
-            </section>
-
-            <section className="space-y-2">
-              <h2 className="text-lg font-bold text-text-heading">Data Handling</h2>
-              <p>
-                The app does <strong>not collect, store, or transmit any personal information</strong> to any server.
-                All your login credentials, academic data, and settings remain{" "}
-                <strong>entirely on your local device</strong> via browser local storage. Once you close or clear your
-                browser data, all information is removed.
-              </p>
-              <p>
-                When you log in, the app connects directly to the official <strong>VTOP</strong> website to retrieve
-                your academic data for display. This data is processed locally in your browser and never shared
-                externally. At the same time, the applicatiion also connects to the <strong>Events Hub</strong> website
-                to retrieve your registered events for display. It allows you to download your receipts, your
-                certificates by streaming the download. The app does not handle payments gateway of any sort or kind,
-                and will not receive or send payments. This app provides a beta feature - "Pay Now" button that
-                redirects to the official payment portal, as such does not handle payments. By clicking the pay now
-                button, you automatically accept to the Event Hub Terms and Conditions, and similarly thereof absolve
-                the developer of this site of any responsibility. This data is also processed locally in your browser
-                and never shared externally.
-              </p>
-            </section>
-
-            <section className="space-y-2">
-              <h2 className="text-lg font-bold text-text-heading">No Monetization or Commercial Use</h2>
-              <p>
-                <strong>AmazeCC</strong> is a free and non-commercial project. The developer does not earn revenue,
-                display advertisements, sell data, or monetize the service in any way. The app is provided purely for
-                fun, learning, and experimentation purposes.
-              </p>
-            </section>
-
-            <section className="space-y-2">
-              <h2 className="text-lg font-bold text-text-heading">Disclaimer of Liability</h2>
-              <p>
-                The app is provided on an &ldquo;as-is&rdquo; basis with no guarantees of accuracy, reliability, or
-                availability. The developer is{" "}
-                <strong>not responsible for any data inaccuracies, login failures, or service interruptions</strong>{" "}
-                that may occur due to VTOP updates, VIT Event Hubs updates,or other external factors.
-              </p>
-              <p>
-                Users are solely responsible for the use of their VTOP credentials within the app. It is recommended to
-                use this app only on trusted devices and networks. You use this application at your own risk and
-                discretion.
-              </p>
-            </section>
-
-            <section className="space-y-2">
-              <h2 className="text-lg font-bold text-text-heading">Friend Finder & Voluntary Timetable Sharing</h2>
-              <p>
-                AmazeCC provides an optional <strong>Friend Finder</strong> feature enabling students to discover peers
-                enrolled in matching course sections. Participation is 100% voluntary and opt-in. The developer
-                expressly disclaims all liability and responsibility for any data, real names, or registration numbers
-                you voluntarily choose to share with classmates. For comprehensive data boundaries and terms, please
-                consult the dedicated{" "}
-                <Link href="/friend-finder/disclaimer" className="text-primary underline font-semibold">
-                  Friend Finder Disclaimer
-                </Link>
-                .
-              </p>
-            </section>
-
-            <section className="space-y-2">
-              <h2 className="text-lg font-bold text-text-heading">Affiliation</h2>
-              <p>
-                This app is an <strong>independent student project</strong> and is in no way affiliated with, endorsed
-                by, or supported by Vellore Institute of Technology (VIT) or any of its departments. This project is
-                created out of personal interest, curiosity and learning, and is not an official VIT product.
-              </p>
-            </section>
-
-            <section className="space-y-2">
-              <h2 className="text-lg font-bold text-text-heading">Changes to Terms</h2>
-              <p>
-                These terms may be updated periodically to reflect improvements or changes in app behavior. Continued
-                use of the app after updates constitutes acceptance of the revised terms.
-              </p>
-            </section>
-
-            <section className="space-y-2">
-              <h2 className="text-lg font-bold text-text-heading">Contact</h2>
-              <p>
-                For any concerns, questions, or feedback related to this app or these Terms of Service, you can contact
-                the developer at <strong>sugeeth2007@gmail.com</strong>.
-              </p>
-            </section>
-          </div>
-        </div>
-      </div>
-    </div>
+    <LegalLayout
+      active="terms"
+      eyebrow="Terms"
+      title="Terms of service"
+      updated="19 Nov 2026"
+      summary={[
+        "AmazeCC is a free student project. It is not an official VIT app.",
+        "Use it only with your own VTOP account. You are responsible for that account.",
+        "Predictions and averages are estimates: check anything important on VTOP.",
+        "Only share or upload what you have the right to. Sharing features are optional.",
+        "AmazeCC never handles payments; Pay now opens the official portal.",
+      ]}
+      sections={sections}
+    />
   );
 }

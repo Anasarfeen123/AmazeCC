@@ -1,191 +1,186 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { ArrowLeft, ShieldCheck, FileText } from "lucide-react";
 import Link from "next/link";
-import ThemeToggle from "@/components/custom/ThemeToggle";
+import LegalLayout, { type LegalSection } from "@/components/custom/legal/LegalLayout";
+
+/*
+ * Every statement here was checked against the code on 2026-11-19
+ * (frontend + amazecc-api). If you change how data flows, update this page in
+ * the same change. Sources:
+ *   - credentials vault: src/lib/credentialVault.ts (AES-GCM, this browser)
+ *   - VTOP sign-in relay: api/src/app/api/login/route.ts (password passed to
+ *     VTOP, not stored)
+ *   - class statistics: api/src/lib/marksStats.ts (running averages only)
+ *   - analytics: src/lib/posthog.ts (identify by registration number + name,
+ *     autocapture off, session recording off unless you start a bug
+ *     recording), Google Analytics in src/app/layout.tsx
+ *   - server tables: social_*, cabshare_*, push_subscriptions,
+ *     papers_archive/qbank_*, gorobo_*, club_* in amazecc-api
+ */
+
+const sections: LegalSection[] = [
+  {
+    id: "on-device",
+    title: "What stays on your device",
+    body: (
+      <>
+        <p>
+          Your VTOP user ID and password are saved <strong>encrypted in this browser</strong> (AES-GCM, with a key that
+          cannot be read out of the browser), so you do not have to sign in every time.
+        </p>
+        <p>
+          The academic data AmazeCC fetches for you (attendance, marks, grades, timetable, exams, payments and so on),
+          your settings, and the app&rsquo;s cache are stored in this browser&rsquo;s local storage. Signing out, or
+          clearing this site&rsquo;s data in your browser, removes all of it.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "sign-in",
+    title: "How signing in works",
+    body: (
+      <>
+        <p>
+          VTOP has no public API, so the AmazeCC server signs in to VTOP for you. When you sign in or sync, your VTOP
+          user ID and password are sent over an encrypted (HTTPS) connection to the AmazeCC server, which passes them to
+          VTOP, solves the captcha, and returns your data to your device.
+        </p>
+        <p>
+          The server <strong>does not save your VTOP password</strong>. The data it fetches is sent back to you; it is
+          not kept in a database except for the features listed in &ldquo;What the AmazeCC server keeps&rdquo; below.
+        </p>
+        <p>
+          <strong>Amaze ID</strong> is an optional AmazeCC account that links your AmazeCC apps. If you create one, your
+          account details and the link to your VTOP registration number are stored by AmazeCC.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "server",
+    title: "What the AmazeCC server keeps",
+    body: (
+      <>
+        <p>Only when you use these features, and only what each one needs:</p>
+        <ul>
+          <li>
+            <strong>Friend Finder / Social:</strong> if you choose to share, your name, registration number, the
+            sections you are enrolled in and any handles you add, so classmates in the same sections can find you. See
+            the <Link href="/friend-finder/disclaimer">Friend Finder disclaimer</Link>.
+          </li>
+          <li>
+            <strong>Cab Share:</strong> the trips you post or join and what you choose to show on them.
+          </li>
+          <li>
+            <strong>Push notifications:</strong> your browser&rsquo;s push subscription, if you turn notifications on.
+          </li>
+          <li>
+            <strong>Question papers:</strong> papers you choose to upload to the question bank.
+          </li>
+          <li>
+            <strong>Clubs, events and GoRoBo:</strong> the posts, orders and details you submit there.
+          </li>
+          <li>
+            <strong>Feedback and bug reports:</strong> your message, the email you give (optional) and the technical
+            details of the error, so we can reply and fix it.
+          </li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    id: "statistics",
+    title: "Class statistics for grade prediction",
+    body: (
+      <p>
+        To show class averages in the grade predictor, your marks are sent to the server, which updates running averages
+        for each course (a mean and spread) and then discards your individual marks. Your marks are not stored or linked
+        to you.
+      </p>
+    ),
+  },
+  {
+    id: "analytics",
+    title: "Analytics and error tracking",
+    body: (
+      <>
+        <p>
+          <strong>Google Analytics</strong> collects anonymous, aggregate usage: pages visited, device type and similar.
+        </p>
+        <p>
+          <strong>PostHog</strong> (through shoot.amazecc.com) is used to find and fix errors and to understand which
+          features are used. When you are signed in it is linked to your <strong>registration number and name</strong>,
+          so we can trace a bug to the account it happened on. It does not record your screen: session recording is off
+          unless you start a bug recording yourself from the feedback screen, and it does not capture what you type.
+        </p>
+        <p>We do not sell your data, show ads, or share analytics with anyone else.</p>
+      </>
+    ),
+  },
+  {
+    id: "other-sites",
+    title: "Other services you reach through AmazeCC",
+    body: (
+      <p>
+        Some features talk to other VIT services on your behalf (VTOP, the Events portal, the library, Moodle, VITOL).
+        &ldquo;Pay now&rdquo; buttons open the official payment page; AmazeCC never handles payments. Those services
+        have their own policies.
+      </p>
+    ),
+  },
+  {
+    id: "your-choices",
+    title: "Your choices",
+    body: (
+      <ul>
+        <li>Sign out or clear this site&rsquo;s data to remove everything stored on your device.</li>
+        <li>Hide yourself or delete your Friend Finder profile at any time from Friend Finder.</li>
+        <li>Turn push notifications off in Settings or your browser.</li>
+        <li>
+          To delete data the server keeps for you (Amaze ID, Social, Cab Share, feedback), email us and we will remove
+          it.
+        </li>
+      </ul>
+    ),
+  },
+  {
+    id: "open-source",
+    title: "Open source",
+    body: (
+      <p>
+        AmazeCC is an open-source student project. Anyone can read the code to check how data is handled. Contributors
+        follow the project&rsquo;s license.
+      </p>
+    ),
+  },
+  {
+    id: "contact",
+    title: "Contact",
+    body: (
+      <p>
+        Questions or deletion requests: <a href="mailto:sugeeth2007@gmail.com">sugeeth2007@gmail.com</a>. We will update
+        this page when how AmazeCC handles data changes, and change the date above.
+      </p>
+    ),
+  },
+];
 
 export default function PrivacyPolicyPage() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full px-4 py-24 bg-surface-secondary dark:bg-[#03060F] transition-colors duration-300 relative overflow-hidden text-text-primary font-sans">
-      {/* Ambient Background Glows */}
-      <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-secondary dark:bg-secondary " />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-secondary dark:bg-secondary " />
-      </div>
-
-      {/* Sticky Header Navigation */}
-      <nav
-        className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-[#03060F]/80 border-b border-border-ink transition-all"
-        style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
-      >
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-xs font-bold text-text-muted hover:text-primary transition-colors py-1.5 px-3 rounded-xl bg-surface-secondary border border-border-ink"
-            >
-              <ArrowLeft size={14} />
-              <span>Back to Login</span>
-            </Link>
-          </div>
-
-          {/* Switcher Tab between Privacy, Terms & Friend Finder */}
-          <div className="flex items-center gap-1 p-1 bg-surface-tertiary rounded-2xl border border-border-ink">
-            <Link
-              href="/privacy"
-              className="px-3 py-1 rounded-xl text-xs font-bold bg-surface text-primary shadow-xs flex items-center gap-1.5 transition-all"
-            >
-              <ShieldCheck size={13} />
-              <span className="hidden sm:inline">Privacy Policy</span>
-              <span className="sm:hidden">Privacy</span>
-            </Link>
-            <Link
-              href="/terms"
-              className="px-3 py-1 rounded-xl text-xs font-semibold text-text-muted hover:text-text-heading flex items-center gap-1.5 transition-all"
-            >
-              <FileText size={13} />
-              <span className="hidden sm:inline">Terms of Service</span>
-              <span className="sm:hidden">Terms</span>
-            </Link>
-            <Link
-              href="/friend-finder/disclaimer"
-              className="px-3 py-1 rounded-xl text-xs font-semibold text-text-muted hover:text-text-heading flex items-center gap-1.5 transition-all"
-            >
-              <ShieldCheck size={13} />
-              <span className="hidden sm:inline">Friend Finder</span>
-              <span className="sm:hidden">Disclaimer</span>
-            </Link>
-          </div>
-
-          <div className="flex items-center gap-3">{mounted && <ThemeToggle />}</div>
-        </div>
-      </nav>
-
-      <div className="w-full max-w-2xl space-y-6 relative z-10 pt-10">
-        {/* Content Card */}
-        <div className="card-surface border border-border-strong dark:border-border rounded-[14px] p-8 shadow-xl space-y-6 text-text-primary">
-          <div className="border-b border-border-ink pb-4">
-            <h1 className="text-3xl font-bold text-text-heading leading-tight font-[family-name:var(--font-outfit)]">
-              Privacy Policy
-            </h1>
-            <p className="text-xs text-text-muted mt-1 font-medium">Last updated: 11 Nov, 2025</p>
-          </div>
-
-          <div className="space-y-5 text-sm leading-relaxed font-medium">
-            <p>
-              This Privacy Policy describes how <strong>AmazeCC</strong> handles data when you use the app.
-            </p>
-
-            <section className="space-y-2">
-              <h2 className="text-lg font-bold text-text-heading">Data Storage</h2>
-              <p>
-                All data fetched from <strong>VTOP</strong> (including your academic data, credentials, or related
-                content) is stored <strong>locally on your device</strong>. No information from VTOP is ever uploaded,
-                transmitted, or stored on any external servers controlled by this app, with the exception of the Grade
-                Prediction feature.
-              </p>
-            </section>
-
-            <section className="space-y-2">
-              <h2 className="text-lg font-bold text-text-heading">Grade Prediction & Statistics</h2>
-              <p>
-                To calculate global class statistics (mean and standard deviation) for the Grade Prediction feature,
-                your academic marks are temporarily sent to our server via an encrypted connection. The server strictly
-                processes the numbers in-memory to incrementally update the class-wide averages using Welford's
-                Algorithm and then <strong>immediately discards</strong> your individual marks. We do not store, map, or
-                link any marks to any user. The process is completely anonymous.
-              </p>
-            </section>
-
-            <section className="space-y-2">
-              <h2 className="text-lg font-bold text-text-heading">Friend Finder (Voluntary Timetable Matching)</h2>
-              <p>
-                The optional <strong>Friend Finder</strong> feature allows students to find classmates sharing their
-                registered course sections for the upcoming semester. If and only if you explicitly choose to publish
-                your registered timetable, your verified name, university registration number (e.g.{" "}
-                <code>25BXX0001</code>), and enrolled section identifiers are shared with classmates enrolled in those
-                exact sections.
-              </p>
-              <p>
-                Visibility is strictly reciprocal: only students sharing your sections can view you. You can switch your
-                profile to &ldquo;Hidden&rdquo; or permanently delete your timetable registration at any time. For more
-                information, read our{" "}
-                <Link href="/friend-finder/disclaimer" className="text-primary underline font-semibold">
-                  Friend Finder Data Sharing Disclaimer
-                </Link>
-                .
-              </p>
-            </section>
-
-            <section className="space-y-2">
-              <h2 className="text-lg font-bold text-text-heading">Cookies & Analytics</h2>
-              <p>
-                <strong>AmazeCC</strong> uses <strong>Posthog via shoot.amazecc.com</strong> and{" "}
-                <strong>Google Analytics</strong> to gather <em>anonymous, aggregate data</em> such as page visits,
-                device types, and general interaction information. These analytics help improve the app’s performance
-                and user experience.
-              </p>
-              <p>
-                This data does <strong>not</strong> include any privately identifiable information such as login
-                credentials, or academic records. The analytics cookies are handled entirely by <strong>Google</strong>{" "}
-                and <strong>Posthog</strong> under their respective privacy policies. Posthog is configured to track
-                user interactions to help track down errors and analyse features as a part of an extended experiment to
-                optimise the app. Errors are tracked by associating the error with your profile, which contains minimal
-                identifiable info to track down errors for your particular configuration. The data is not shared with
-                any third party and is used purely for debugging and improving the app.
-              </p>
-              <p>
-                AmazeCC does not sell data, or share analytics with any third party. These analytics are used purely for{" "}
-                <strong>educational and experimental</strong> purposes.
-              </p>
-            </section>
-
-            <section className="space-y-2">
-              <h2 className="text-lg font-bold text-text-heading">Notifications</h2>
-              <p>
-                The app may send push notifications if you opt in. You can disable push notifications at any time
-                through your browser settings. There are no background processes that track or monitor user behavior.
-              </p>
-            </section>
-
-            <section className="space-y-2">
-              <h2 className="text-lg font-bold text-text-heading">Local Storage</h2>track users, create profiles,
-              <p>
-                Settings, preferences, and any cached data are stored using your browser’s local storage mechanism. This
-                data never leaves your device and can be cleared manually at any time from within the app.
-              </p>
-            </section>
-
-            <section className="space-y-2">
-              <h2 className="text-lg font-bold text-text-heading">Open Source</h2>
-              <p>
-                <strong>AmazeCC</strong> is an <strong>open-source project</strong> created for learning and
-                experimentation purposes. The source code is publicly available, and anyone is welcome to explore,
-                modify, or contribute improvements through the project’s GitHub repository.
-              </p>
-              <p>
-                Contributions are voluntary and governed by the project’s open-source license. No data collected by
-                contributors or modifications affects user privacy or transmits information externally.
-              </p>
-            </section>
-
-            <section className="space-y-2">
-              <h2 className="text-lg font-bold text-text-heading">Contact</h2>
-              <p>
-                For any concerns or questions about this Privacy Policy, you can reach out to the developer at{" "}
-                <strong>sugeeth2007@gmail.com</strong>.
-              </p>
-            </section>
-          </div>
-        </div>
-      </div>
-    </div>
+    <LegalLayout
+      active="privacy"
+      eyebrow="Privacy"
+      title="Privacy policy"
+      updated="19 Nov 2026"
+      summary={[
+        "Your VTOP password is saved encrypted in your browser, and your academic data stays on your device.",
+        "To sign in, the AmazeCC server relays your ID and password to VTOP over HTTPS. It does not save your password.",
+        "The server only keeps what you choose to share: Friend Finder, Cab Share, uploads, feedback, notifications.",
+        "Error tracking (PostHog) is linked to your registration number and name. No ads, nothing sold.",
+        "Sign out to clear your device; email us to delete anything on the server.",
+      ]}
+      sections={sections}
+    />
   );
 }

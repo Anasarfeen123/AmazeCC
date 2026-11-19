@@ -784,6 +784,7 @@ export default function SimplifiedAcademicsPage({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search course code or name..."
+            aria-label="Search your courses"
             className={`${SEARCH_FIELD} pl-9 pr-4 text-xs sm:text-sm shadow-2xs focus:ring-2 focus:ring-border-ink`}
           />
         </div>

@@ -1,5 +1,7 @@
 "use client";
 
+import { useRef } from "react";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 import { AnimatePresence, m } from "framer-motion";
 import { ArrowLeft, Search, X } from "lucide-react";
 import type { ReactNode } from "react";
@@ -44,6 +46,8 @@ export function BrandSheet({
   headerRight,
   className = "",
 }: BrandSheetProps) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(panelRef, open);
   return (
     <AnimatePresence>
       {open && (
@@ -58,6 +62,7 @@ export function BrandSheet({
             className="fixed inset-0 z-[55] bg-[color-mix(in_oklab,var(--shadow-ink)_55%,transparent)] md:hidden"
           />
           <m.div
+            ref={panelRef}
             role="dialog"
             aria-modal="true"
             aria-label={title}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useFocusTrap } from "@/lib/useFocusTrap";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
@@ -191,6 +192,7 @@ export default function BottomSheet({
 
   // Grabber-initiated swipe-down to dismiss (content keeps native scrolling)
   const panelRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(panelRef, true);
   const dragState = useRef({ startY: 0, dy: 0, dragging: false });
 
   const onGrabberPointerDown = (e: React.PointerEvent) => {
@@ -329,6 +331,9 @@ export default function BottomSheet({
     // phone, which is the thing this placement exists to avoid.
     <motion.div
       ref={panelRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label={typeof title === "string" ? title : undefined}
       initial={{ y: "100%" }}
       animate={{ y: 0 }}
       exit={{ y: "100%" }}
@@ -342,6 +347,9 @@ export default function BottomSheet({
   ) : (
     <motion.div
       ref={panelRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label={typeof title === "string" ? title : undefined}
       initial={{ y: "100%" }}
       animate={{ y: 0 }}
       exit={{ y: "100%" }}

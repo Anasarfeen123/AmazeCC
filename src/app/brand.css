@@ -681,3 +681,22 @@
     transition: none;
   }
 }
+
+/* Reduced motion, app-wide (ROADMAP R11). Framer Motion already follows the
+   user setting (MotionConfig reducedMotion="user"); this covers Tailwind's
+   decorative keyframes. Loading spinners keep turning: they carry meaning. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse,
+  .animate-bounce,
+  .animate-ping,
+  [class*="animate-in"],
+  [class*="animate-out"],
+  .brutal-press {
+    animation: none !important;
+  }
+  .brutal-press,
+  [class*="hover:scale-"],
+  [class*="active:scale-"] {
+    transform: none !important;
+  }
+}

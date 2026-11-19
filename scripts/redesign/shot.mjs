@@ -235,6 +235,22 @@ for (const word of (process.env.CLICK_TEXTS || "").split("|").filter(Boolean)) {
     );
   await sleep(Number(process.env.CLICK_WAIT || 4000));
 }
+// A11Y=1: list controls with no accessible name, unlabeled fields, images
+// without alt, and a missing aria-current in the nav (R11).
+if (process.env.A11Y) {
+  const res = await evalJs(`(() => {
+    const vis = (e) => !!(e.offsetParent || e.getClientRects().length);
+    const name = (e) => (e.getAttribute("aria-label") || e.getAttribute("title") || (e.getAttribute("aria-labelledby") && document.getElementById(e.getAttribute("aria-labelledby"))?.textContent) || e.textContent || "").trim();
+    const desc = (e) => e.tagName.toLowerCase() + "." + String(e.className).split(" ").slice(0, 5).join(".");
+    const out = [];
+    for (const e of document.querySelectorAll("button, a[href], [role=button], [role=tab], [role=menuitem]")) if (vis(e) && !name(e) && !e.querySelector("img[alt]:not([alt=''])")) out.push("NONAME " + desc(e));
+    for (const e of document.querySelectorAll("input:not([type=hidden]), select, textarea")) { if (!vis(e)) continue; const id = e.id; const lab = (id && document.querySelector("label[for='" + id + "']")) || e.closest("label"); if (!lab && !e.getAttribute("aria-label") && !e.getAttribute("aria-labelledby") && !e.getAttribute("title")) out.push("NOLABEL " + desc(e) + " ph=" + (e.getAttribute("placeholder") || "")); }
+    for (const e of document.querySelectorAll("img")) if (vis(e) && !e.hasAttribute("alt")) out.push("NOALT " + (e.getAttribute("src") || "").slice(-40));
+    if (!document.querySelector("[aria-current]")) out.push("NO aria-current anywhere");
+    return [...new Set(out)].slice(0, 40).join("\\n");
+  })()`);
+  console.log("A11Y\n" + (res || "clean"));
+}
 const SIZES = process.env.ONLY_TABLET
   ? [["tablet", 820, 1180, true]]
   : process.env.ONLY_DESKTOP

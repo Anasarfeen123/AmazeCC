@@ -148,9 +148,11 @@ export function InsightCarousel({
           type="button"
           onClick={slide.onClick}
           disabled={!slideClickable}
-          aria-label={ariaLabel}
+          // Always named: the card's own text sits above this button with
+          // pointer-events off, so a screen reader would otherwise hear "button".
+          aria-label={ariaLabel ?? slideText(slide)}
           tabIndex={slideClickable ? 0 : -1}
-          className="absolute inset-0 z-0 rounded-[24px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-strong dark:focus-visible:ring-text-secondary focus-visible:ring-inset"
+          className="absolute inset-0 z-0 rounded-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-strong dark:focus-visible:ring-text-secondary focus-visible:ring-inset"
         />
       ) : null}
 
@@ -204,4 +206,10 @@ export function InsightCarousel({
       </div>
     </div>
   );
+}
+
+/** Plain-text name for a slide (its fields may be nodes; numbers and strings only). */
+function slideText(slide: InsightSlide): string {
+  const t = (n: ReactNode) => (typeof n === "string" || typeof n === "number" ? String(n) : "");
+  return [t(slide.label), t(slide.value), t(slide.sub)].filter(Boolean).join(", ") || "Open details";
 }

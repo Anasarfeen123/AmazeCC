@@ -220,6 +220,16 @@ the whole `src/`.
 
 ## R11 · Accessibility pass
 
+**Status 2026-11-19:** `shot.mjs A11Y=1` probe (unnamed controls, unlabeled
+fields, images without alt, aria-current) is clean on Home (desktop +
+phone), Academics, Attendance, Payments, Libraries, Free classrooms,
+Faculty schedule, Hostel, Find classmates, Paper scanner, Transport.
+Sheets/dialogs (BottomSheet, BrandSheet) trap focus and restore it
+(`lib/useFocusTrap.ts`, tested). Reduced motion covers Tailwind keyframes
+(brand.css) as well as Framer. Still to do: keyboard walk of the sidebar
+and spotlight by hand; 200% zoom check; the other role="dialog" panels
+(OptionPicker, CommandPalette, FFCS settings) use their own focus code.
+
 Keyboard order in sidebar, sheets and spotlight; focus trapped in dialogs;
 `aria-current` on all nav; reduced motion on every animated screen; 200%
 zoom without overlap; screen-reader labels for all icon buttons.

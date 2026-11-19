@@ -520,7 +520,12 @@ export default function OverallAttendancePredictor({
       syncedOps={["attendanceMarks"]}
       eyebrow="Attendance · Predictor"
       title="Attendance Predictor & Simulator"
-      subtitle={`Projected ${formatPct(overallStats.predictedPct, decimalValues)}% · target ${targetThreshold}%`}
+      subtitle={
+        <>
+          Projected <span data-private="attendance">{formatPct(overallStats.predictedPct, decimalValues)}%</span> ·
+          target {targetThreshold}%
+        </>
+      }
       onBack={onBack}
       actions={
         <>
@@ -558,7 +563,11 @@ export default function OverallAttendancePredictor({
           icon={<Sparkles className="w-4 h-4 text-primary" />}
           tone={overallStats.predictedPct >= targetThreshold ? "emerald" : "red"}
           value={`${formatPct(overallStats.predictedPct, decimalValues)}%`}
-          sub={`Now ${formatPct(overallStats.currentPct, decimalValues)}%`}
+          sub={
+            <>
+              Now <span data-private="attendance">{formatPct(overallStats.currentPct, decimalValues)}%</span>
+            </>
+          }
           badge={
             overallStats.delta >= 0
               ? `+${formatPct(overallStats.delta, decimalValues)}`
@@ -849,10 +858,11 @@ export default function OverallAttendancePredictor({
                           course.locked ? "Locked" : "",
                           course.slotName,
                           course.meetingDays?.join(", ") || "No timetable",
-                          `now ${formatPct(course.currentPct, decimalValues)}%`,
                         ]
                           .filter(Boolean)
-                          .join(" // ")}
+                          .join(" // ")}{" "}
+                        {" // now "}
+                        <span data-private="attendance">{formatPct(course.currentPct, decimalValues)}%</span>
                       </p>
                     </div>
 
@@ -860,6 +870,7 @@ export default function OverallAttendancePredictor({
                       {/* Projected % as a coloured block, like the Academics list:
                           mint = at/above target, ochre = within 5 points, coral = below. */}
                       <span
+                        data-private="attendance"
                         className={`min-w-[76px] rounded-[10px] border-2 border-border-ink px-2.5 py-1.5 text-right font-display text-lg font-bold leading-none text-obsidian shadow-brutal-sm ${
                           isSafe ? "bg-mint" : isClose ? "bg-ochre" : "bg-coral"
                         }`}

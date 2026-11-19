@@ -642,7 +642,9 @@ export default function SimplifiedAcademicsPage({
               <div
                 className={`flex min-w-[92px] flex-col items-end rounded-[10px] border-2 border-border-ink px-3 py-1.5 shadow-brutal-sm ${statColor}`}
               >
-                <span className="font-display text-xl font-bold leading-none">{course.grade}</span>
+                <span data-private="marks" className="font-display text-xl font-bold leading-none">
+                  {course.grade}
+                </span>
                 <span className="mt-1 font-mono text-xs font-bold uppercase opacity-80">Final grade</span>
               </div>
             ) : grandWeightage.hasAssessments ? (
@@ -654,7 +656,10 @@ export default function SimplifiedAcademicsPage({
                     ? `${grandWeightage.displayScore} / ${grandWeightage.displayMax}`
                     : `${grandWeightage.displayScore}`}
                 </span>
-                <span className="mt-1 font-mono text-xs font-bold uppercase opacity-80">
+                <span
+                  data-private={grandWeightage.percentage !== null ? "marks" : undefined}
+                  className="mt-1 font-mono text-xs font-bold uppercase opacity-80"
+                >
                   {grandWeightage.percentage !== null
                     ? `${formatUpToTwoDecimals(grandWeightage.percentage, decimalValues)}%`
                     : "Weightage"}

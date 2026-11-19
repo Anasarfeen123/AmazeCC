@@ -869,7 +869,7 @@ export default function ProfilePage({
         value: `${(settings?.pinnedNavTabs ?? []).length} pinned`,
       },
       advanced: {
-        value: apiChoice === "backup" ? "Mirror API" : apiChoice === "custom" ? "Custom API" : "Default API",
+        value: apiChoice === "backup" ? "Backup server" : apiChoice === "custom" ? "Custom server" : "Main server",
       },
       about: { value: "v3.2.0" },
     };
@@ -2325,9 +2325,9 @@ export default function ProfilePage({
               <Database size={18} />
             </div>
             <div className="min-w-0">
-              <span className="font-bold text-xs text-text-heading block">Local Storage Viewer</span>
+              <span className="font-bold text-xs text-text-heading block">Data on this device</span>
               <span className="text-xs text-text-muted block truncate mt-0.5">
-                Inspect raw client cache entries, tokens, and database keys
+                See everything AmazeCC has saved in this browser
               </span>
             </div>
           </div>
@@ -2341,9 +2341,9 @@ export default function ProfilePage({
               <Link2 size={18} />
             </div>
             <div className="min-w-0 flex-1">
-              <span className="font-bold text-xs text-text-heading block">API Endpoint</span>
+              <span className="font-bold text-xs text-text-heading block">Server</span>
               <span className="text-xs text-text-muted block mt-0.5">
-                Switch between the production API and its mirror
+                Main server or the backup one, if the main one is down
               </span>
             </div>
           </div>
@@ -2360,8 +2360,8 @@ export default function ProfilePage({
               applyApiChoice(choice);
             }}
             options={[
-              { value: "default", label: "Default" },
-              ...(hasBackupApi() ? [{ value: "backup" as ApiHostChoice, label: "Mirror" }] : []),
+              { value: "default", label: "Main" },
+              ...(hasBackupApi() ? [{ value: "backup" as ApiHostChoice, label: "Backup" }] : []),
               { value: "custom", label: "Custom" },
             ]}
           />
@@ -2410,10 +2410,8 @@ export default function ProfilePage({
               <Save size={18} />
             </div>
             <div className="min-w-0">
-              <span className="font-bold text-xs text-text-heading block">Backup / Export Settings</span>
-              <span className="text-xs text-text-muted block truncate mt-0.5">
-                Save application preferences, layout options, and custom name to file
-              </span>
+              <span className="font-bold text-xs text-text-heading block">Back up settings</span>
+              <span className="text-xs text-text-muted block truncate mt-0.5">Save your settings to a file</span>
             </div>
           </div>
           <ChevronRight size={16} className="text-text-muted shrink-0" />
@@ -2437,10 +2435,8 @@ export default function ProfilePage({
               <ExternalLink size={18} />
             </div>
             <div className="min-w-0">
-              <span className="font-bold text-xs text-text-heading block">Restore / Import Settings</span>
-              <span className="text-xs text-text-muted block truncate mt-0.5">
-                Import and restore configuration from a settings backup JSON file
-              </span>
+              <span className="font-bold text-xs text-text-heading block">Restore settings</span>
+              <span className="text-xs text-text-muted block truncate mt-0.5">Load settings from a backup file</span>
             </div>
           </div>
           <ChevronRight size={16} className="text-text-muted shrink-0" />
@@ -2464,9 +2460,9 @@ export default function ProfilePage({
               <RefreshCcw size={18} />
             </div>
             <div className="min-w-0">
-              <span className="font-bold text-xs text-danger-foreground block">Reset Application Cache</span>
+              <span className="font-bold text-xs text-danger-foreground block">Clear everything on this device</span>
               <span className="text-xs text-danger-foreground block truncate mt-0.5">
-                Clear all stored data, cached timetables, and reload fresh
+                Removes saved data and signs you out
               </span>
             </div>
           </div>
@@ -2689,7 +2685,7 @@ export default function ProfilePage({
           <PageShell
             eyebrow="Settings"
             title={sec?.label ?? drill?.label ?? "Settings"}
-            subtitle={sec ? sec.subtitle : drill ? drill.subtitle : "Categories, appearance, sync and account"}
+            subtitle={sec ? sec.subtitle : drill ? drill.subtitle : "Your account, how the app looks, sync"}
             onBack={screens.canGoBack ? screens.back : undefined}
           >
             <SubpageScreen id={screens.screen}>
@@ -2717,7 +2713,7 @@ export default function ProfilePage({
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search all settings, credentials, profile, themes, semesters..."
+                      placeholder="Search settings"
                       className="w-full pl-9 pr-4 py-2 text-xs font-medium border-2 border-border-ink bg-surface rounded-xl text-text-heading placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-border-ink transition-all"
                     />
                     {searchQuery && (

@@ -284,7 +284,7 @@ export default function DesktopCourseDetail({
                   })}
                   className={`font-display text-lg font-bold min-w-6 text-center select-none ${
                     simulatedSkips !== 0
-                      ? "cursor-pointer hover:text-danger-foreground hover:scale-110 transition-all text-primary text-primary font-bold"
+                      ? "cursor-pointer hover:text-danger-foreground hover:scale-110 transition-all text-primary font-bold"
                       : "text-text-primary"
                   }`}
                   title={simulatedSkips !== 0 ? "Click to reset to 0" : ""}

@@ -1877,7 +1877,7 @@ export default function SimplifiedMobileHome({
                                 {cls.slotName}
                               </span>
                               <h3
-                                className="font-bold text-sm text-text-heading truncate font-outfit leading-tight"
+                                className="min-w-0 font-bold text-sm text-text-heading line-clamp-2 font-outfit leading-tight"
                                 title={cls.courseTitle}
                               >
                                 {cls.courseTitle}

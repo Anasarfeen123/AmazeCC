@@ -3543,7 +3543,7 @@ export default function FFCSTimetableTab({
                       <button
                         type="button"
                         onClick={() => setSearchLockedOnly(false)}
-                        className="mt-2 text-xs font-semibold text-primary text-primary hover:underline cursor-pointer"
+                        className="mt-2 text-xs font-semibold text-primary hover:underline cursor-pointer"
                       >
                         Show all catalogue courses instead
                       </button>
@@ -3556,7 +3556,7 @@ export default function FFCSTimetableTab({
                           setCatalogCurriculumOnly(false);
                           setCatalogCategories([]);
                         }}
-                        className="mt-2 text-xs font-semibold text-primary text-primary hover:underline cursor-pointer"
+                        className="mt-2 text-xs font-semibold text-primary hover:underline cursor-pointer"
                       >
                         Clear slot and curriculum filters
                       </button>

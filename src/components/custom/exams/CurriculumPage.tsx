@@ -788,7 +788,7 @@ export default function CurriculumPage({
         }}
         title={`Download ${code} syllabus`}
         aria-label={`Download ${code} syllabus`}
-        className="p-1.5 rounded-lg bg-surface-secondary hover:brightness-95 text-text-muted text-primary text-primary transition-colors cursor-pointer shrink-0"
+        className="p-1.5 rounded-lg bg-surface-secondary hover:brightness-95 text-text-muted text-primary transition-colors cursor-pointer shrink-0"
       >
         {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
       </button>

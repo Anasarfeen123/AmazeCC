@@ -1842,7 +1842,7 @@ export default function FeedbackReportPage({
                 <button
                   type="button"
                   onClick={() => setActiveTicket(null)}
-                  className="flex items-center gap-1.5 text-xs font-bold text-primary text-primary cursor-pointer"
+                  className="flex items-center gap-1.5 text-xs font-bold text-primary cursor-pointer"
                 >
                   ← Back to All Tickets
                 </button>

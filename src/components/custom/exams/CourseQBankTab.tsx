@@ -110,9 +110,7 @@ export default function CourseQBankTab({ courseCode, username }: { courseCode: s
           <button
             onClick={() => setDetailTab("papers")}
             className={`flex-1 sm:flex-none px-5 py-2 text-sm font-semibold rounded-md transition-all ${
-              detailTab === "papers"
-                ? "bg-surface text-primary text-primary shadow-sm"
-                : "text-text-muted hover:text-text-heading "
+              detailTab === "papers" ? "bg-surface text-primary shadow-sm" : "text-text-muted hover:text-text-heading "
             }`}
           >
             Papers ({papers.length})
@@ -121,7 +119,7 @@ export default function CourseQBankTab({ courseCode, username }: { courseCode: s
             onClick={() => setDetailTab("questions")}
             className={`flex-1 sm:flex-none px-5 py-2 text-sm font-semibold rounded-md transition-all ${
               detailTab === "questions"
-                ? "bg-surface text-primary text-primary shadow-sm"
+                ? "bg-surface text-primary shadow-sm"
                 : "text-text-muted hover:text-text-heading "
             }`}
           >

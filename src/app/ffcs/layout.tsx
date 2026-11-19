@@ -28,9 +28,13 @@ export const metadata: Metadata = {
     "Offline-first conflict-free timetable planner, smart slot generator, faculty ratings, and class clash resolver for VIT.",
   manifest: "/ffcs-manifest.json",
   icons: {
-    icon: [{ url: "/favicon/FFCS.png", type: "image/png" }],
-    shortcut: "/favicon/FFCS.png",
-    apple: "/favicon/FFCS.png",
+    icon: [
+      { url: "/favicon/favicon.ico" },
+      { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon/favicon.ico",
+    apple: "/favicon/apple-touch-icon.png",
   },
   appleWebApp: {
     capable: true,
@@ -46,7 +50,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/favicon/FFCS.png",
+        url: "/brand/icon-primary-512.png",
         width: 512,
         height: 512,
         alt: "AmazeCC FFCS Icon",

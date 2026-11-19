@@ -23,6 +23,13 @@ light + dark captures at 390 and 1440 (and 820 where layout changes).
 - Sidebar "All modules" trial rejected and reverted; row icons stay.
 - Skip-to-content link; shot.mjs gained KEYS= and EVAL=.
 
+- Settings (2026-11-20): hub grouped Account / App / Study / Data;
+  "Appearance & Privacy" split into Appearance (Look & feel, Timetable,
+  App icon) and Home & privacy (Home, Privacy); Sync split into When to
+  sync / What to sync; sentence-case labels, plain Advanced wording.
+  Rows were moved, not rewritten (same settings keys). Candidates still
+  to ask the user about: the Default/Fire app icon picker, the Focus
+  timer defaults living in Semester & campus.
 Open from this round: a colour per course (asked the user, no answer yet);
 360px checks beyond Home; Find Classmates with a real account (batch
 filter not seen on screen).

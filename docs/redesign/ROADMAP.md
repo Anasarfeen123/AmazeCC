@@ -64,7 +64,8 @@ colours: `coral`, `orange`, `mint`, `obsidian` (ink text ≥ 5:1 on all).
 
 **Campus art.** The user's illustrations: `public/landing/campus-day.webp`
 (light) and `public/landing/campus-night.webp` (dark, lit windows and stars),
-shown as a full-bleed panorama after the first ticker, picked by CSS. Replace
+now the **hero background** (picked by CSS), under a flat page-colour wash
+(`bg-background/60`, dark `/45`) with the headline on a solid brand card. Replace
 them in place to update; keep ~1670×940, WebP quality ~80.
 
 ## R2 · FFCS planner bugs ("bugging so much", demo and real)

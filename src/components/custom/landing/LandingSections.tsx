@@ -218,54 +218,6 @@ export default function LandingSections() {
         <Marquee items={MODULE_TAGS} itemClassName="font-display text-lg font-bold uppercase sm:text-2xl" />
       </div>
 
-      {/* Campus panorama (illustration by the user; night version derived from it) */}
-      <section aria-label="Made for VIT Chennai" className="relative overflow-hidden border-b-[3px] border-border-ink">
-        <img
-          src="/landing/campus-day.webp"
-          alt="Illustration of the VIT Chennai campus: hostel towers, trees and the main road"
-          width={1672}
-          height={941}
-          loading="lazy"
-          decoding="async"
-          className="block h-[460px] w-full object-cover object-[50%_80%] sm:h-auto dark:hidden"
-        />
-        <img
-          src="/landing/campus-night.webp"
-          alt="The same campus at night: lit windows, street lamps and a starry sky"
-          width={1672}
-          height={941}
-          loading="lazy"
-          decoding="async"
-          className="hidden h-[460px] w-full object-cover object-[50%_80%] sm:h-auto dark:block"
-        />
-        <div className="absolute inset-x-0 top-0 px-4 pt-6 sm:px-8 sm:pt-10">
-          <Reveal className="mx-auto max-w-7xl">
-            <div className={`${CARD} max-w-md bg-surface p-5 sm:ml-[18%] sm:p-6`}>
-              <span className={`${BADGE} bg-ochre ${INK}`}>Made for VIT Chennai</span>
-              <h2 className="mt-3 font-display text-2xl font-bold uppercase leading-tight text-text-heading sm:text-3xl">
-                Your campus, on one screen
-              </h2>
-              <p className="mt-2 text-sm text-text-muted sm:text-base">
-                Classes in AB1, lunch at the mess, the 16:45 bus, a book due at the library. AmazeCC knows the day you
-                actually have.
-              </p>
-            </div>
-          </Reveal>
-        </div>
-        <span
-          aria-hidden="true"
-          className="landing-float-a absolute bottom-[14%] right-[8%] hidden rounded-[8px] border-[3px] border-obsidian bg-ochre px-2.5 py-1 font-mono text-sm font-bold uppercase text-obsidian shadow-brutal-md [--tilt:-4deg] sm:block"
-        >
-          Bus 14 // 16:45
-        </span>
-        <span
-          aria-hidden="true"
-          className="landing-float-b absolute bottom-[34%] left-[30%] hidden rounded-[8px] border-[3px] border-obsidian bg-mint px-2.5 py-1 font-mono text-sm font-bold uppercase text-obsidian shadow-brutal-md [--tilt:3deg] md:block"
-        >
-          Mess open till 14:30
-        </span>
-      </section>
-
       {/* Why: the portals students juggle today */}
       <section id="sec-problem" className="bg-coral px-4 py-20 text-obsidian sm:px-8 sm:py-28">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center">

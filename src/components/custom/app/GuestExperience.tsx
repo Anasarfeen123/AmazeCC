@@ -175,152 +175,170 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
           e.currentTarget.style.setProperty("--mx", "0");
           e.currentTarget.style.setProperty("--my", "0");
         }}
-        className="relative z-10 mx-auto grid w-full max-w-7xl flex-1 items-center gap-12 overflow-visible px-4 pb-16 pt-10 sm:px-8 sm:pt-14 lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:pb-24"
+        className="relative z-10 flex-1 overflow-hidden border-b-[3px] border-border-ink"
       >
-        {/* Big logo glyph as a background shape */}
+        {/* Campus art (the user's illustrations), day / night picked by CSS. */}
         <img
-          src="/brand/glyph.svg"
+          src="/landing/campus-day.webp"
           alt=""
           aria-hidden="true"
-          className="landing-parallax pointer-events-none absolute -left-24 top-10 -z-10 w-[520px] max-w-none opacity-[0.07] [--depth:-18px] dark:opacity-[0.1]"
+          width={1672}
+          height={941}
+          loading="eager"
+          decoding="async"
+          className="absolute inset-0 -z-20 h-full w-full object-cover object-[50%_75%] dark:hidden"
         />
+        <img
+          src="/landing/campus-night.webp"
+          alt=""
+          aria-hidden="true"
+          width={1671}
+          height={941}
+          loading="eager"
+          decoding="async"
+          className="absolute inset-0 -z-20 hidden h-full w-full object-cover object-[50%_75%] dark:block"
+        />
+        {/* Backdrop: a flat wash of the page colour so the art sits behind, not on top. */}
+        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-background/60 dark:bg-background/45" />
 
-        <div className="relative max-w-2xl">
-          <p className="landing-pop mb-5 inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-secondary-foreground">
-            Your campus companion // VIT Chennai
-          </p>
-          <h1 className="font-display text-[40px] font-bold uppercase leading-[1.02] sm:text-6xl lg:text-[72px]">
-            Your VIT life,
-            <span className="block text-hero">all in one place.</span>
-          </h1>
-          <p className="mt-6 max-w-xl font-display text-xl font-bold leading-snug sm:text-2xl">
-            Check your{" "}
-            <CycleWord
-              words={[
-                { text: "attendance", className: "bg-ochre text-obsidian" },
-                { text: "marks", className: "bg-sage text-obsidian" },
-                { text: "timetable", className: "bg-coral text-obsidian" },
-                { text: "FFCS plan", className: "bg-mint text-obsidian" },
-                { text: "mess menu", className: "bg-orange text-obsidian" },
-                { text: "OD hours", className: "bg-teal text-cream" },
-              ]}
-            />{" "}
-            in one tap.
-          </p>
-          <p className="mt-4 max-w-xl text-base leading-7 text-text-muted sm:text-lg">
-            The 75% line drawn on every course, marks with class averages, today&apos;s rooms, exam seats, buses and
-            your FFCS draft. One app instead of five portals.
-          </p>
+        <div className="mx-auto grid w-full max-w-7xl items-center gap-12 px-4 pb-16 pt-10 sm:px-8 sm:pt-14 lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:pb-24">
+          <div className="relative max-w-2xl rounded-[20px] border-[3px] border-border-ink bg-surface p-5 shadow-brutal-lg sm:p-8">
+            <p className="landing-pop mb-5 inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-secondary-foreground">
+              Your campus companion // VIT Chennai
+            </p>
+            <h1 className="font-display text-[40px] font-bold uppercase leading-[1.02] sm:text-6xl lg:text-[72px]">
+              Your VIT life,
+              <span className="block text-hero">all in one place.</span>
+            </h1>
+            <p className="mt-6 max-w-xl font-display text-xl font-bold leading-snug sm:text-2xl">
+              Check your{" "}
+              <CycleWord
+                words={[
+                  { text: "attendance", className: "bg-ochre text-obsidian" },
+                  { text: "marks", className: "bg-sage text-obsidian" },
+                  { text: "timetable", className: "bg-coral text-obsidian" },
+                  { text: "FFCS plan", className: "bg-mint text-obsidian" },
+                  { text: "mess menu", className: "bg-orange text-obsidian" },
+                  { text: "OD hours", className: "bg-teal text-cream" },
+                ]}
+              />{" "}
+              in one tap.
+            </p>
+            <p className="mt-4 max-w-xl text-base leading-7 text-text-muted sm:text-lg">
+              The 75% line drawn on every course, marks with class averages, today&apos;s rooms, exam seats, buses and
+              your FFCS draft. One app instead of five portals.
+            </p>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <button
-              type="button"
-              onClick={onTryDemo}
-              className="inline-flex min-h-14 items-center justify-center rounded-[10px] border-[3px] border-border-ink bg-highlight px-7 font-mono text-sm font-bold uppercase tracking-[0.06em] text-highlight-foreground shadow-brutal-lg brutal-press"
-            >
-              Try the demo
-            </button>
-            <button
-              type="button"
-              onClick={onGetStarted}
-              className="inline-flex min-h-14 items-center justify-center gap-2 rounded-[10px] border-[3px] border-border-ink bg-surface px-7 font-mono text-sm font-bold uppercase tracking-[0.06em] text-text-primary shadow-brutal-lg brutal-press"
-            >
-              Sign in with VTOP
-              <ArrowRight size={16} aria-hidden />
-            </button>
-          </div>
-          <p className="mt-4 font-mono text-xs text-text-muted" aria-live="polite">
-            Free // made by students // your password is stored encrypted on this device
-          </p>
-        </div>
-
-        <div className="relative mx-auto w-full max-w-xl pb-10 pr-8 pt-6 lg:max-w-none" aria-hidden="true">
-          {/* Colour blocks behind the shots */}
-          <div className="landing-parallax absolute -right-2 top-0 h-[70%] w-[70%] rotate-3 rounded-[20px] border-[3px] border-border-ink bg-ochre [--depth:14px]" />
-          <div className="landing-parallax absolute -left-4 bottom-0 h-[45%] w-[45%] -rotate-6 rounded-[20px] border-[3px] border-border-ink bg-sage [--depth:-12px]" />
-
-          <div className="landing-parallax relative -rotate-2 overflow-hidden rounded-[14px] border-[3px] border-border-ink bg-surface shadow-brutal-lg [--depth:8px]">
-            <div className="flex items-center gap-1.5 border-b-2 border-border-ink bg-surface-secondary px-3 py-2">
-              <span className="h-2.5 w-2.5 rounded-full border-2 border-border-ink bg-coral" />
-              <span className="h-2.5 w-2.5 rounded-full border-2 border-border-ink bg-ochre" />
-              <span className="h-2.5 w-2.5 rounded-full border-2 border-border-ink bg-mint" />
-              <span className="ml-2 font-mono text-xs text-text-muted">amazecc.com</span>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={onTryDemo}
+                className="inline-flex min-h-14 items-center justify-center rounded-[10px] border-[3px] border-border-ink bg-highlight px-7 font-mono text-sm font-bold uppercase tracking-[0.06em] text-highlight-foreground shadow-brutal-lg brutal-press"
+              >
+                Try the demo
+              </button>
+              <button
+                type="button"
+                onClick={onGetStarted}
+                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-[10px] border-[3px] border-border-ink bg-surface px-7 font-mono text-sm font-bold uppercase tracking-[0.06em] text-text-primary shadow-brutal-lg brutal-press"
+              >
+                Sign in with VTOP
+                <ArrowRight size={16} aria-hidden />
+              </button>
             </div>
-            {/* Both themes rendered, CSS picks one (the server does not know the theme). */}
-            <img
-              src="/landing/home-desktop-light.webp"
-              alt=""
-              width={1200}
-              height={717}
-              loading="eager"
-              decoding="async"
-              className="block h-auto w-full dark:hidden"
-            />
-            <img
-              src="/landing/home-desktop-dark.webp"
-              alt=""
-              width={1200}
-              height={717}
-              loading="eager"
-              decoding="async"
-              className="hidden h-auto w-full dark:block"
-            />
+            <p className="mt-4 font-mono text-xs text-text-muted" aria-live="polite">
+              Free // made by students // your password is stored encrypted on this device
+            </p>
           </div>
 
-          <div className="landing-parallax absolute -bottom-2 right-0 w-[34%] min-w-[120px] [--depth:-16px]">
-            <div className="landing-float-b overflow-hidden rounded-[20px] border-[3px] border-border-ink bg-surface shadow-brutal-lg [--tilt:4deg]">
+          <div className="relative mx-auto w-full max-w-xl pb-10 pr-8 pt-6 lg:max-w-none" aria-hidden="true">
+            {/* Colour blocks behind the shots */}
+            <div className="landing-parallax absolute -right-2 top-0 h-[70%] w-[70%] rotate-3 rounded-[20px] border-[3px] border-border-ink bg-ochre [--depth:14px]" />
+            <div className="landing-parallax absolute -left-4 bottom-0 h-[45%] w-[45%] -rotate-6 rounded-[20px] border-[3px] border-border-ink bg-sage [--depth:-12px]" />
+
+            <div className="landing-parallax relative -rotate-2 overflow-hidden rounded-[14px] border-[3px] border-border-ink bg-surface shadow-brutal-lg [--depth:8px]">
+              <div className="flex items-center gap-1.5 border-b-2 border-border-ink bg-surface-secondary px-3 py-2">
+                <span className="h-2.5 w-2.5 rounded-full border-2 border-border-ink bg-coral" />
+                <span className="h-2.5 w-2.5 rounded-full border-2 border-border-ink bg-ochre" />
+                <span className="h-2.5 w-2.5 rounded-full border-2 border-border-ink bg-mint" />
+                <span className="ml-2 font-mono text-xs text-text-muted">amazecc.com</span>
+              </div>
+              {/* Both themes rendered, CSS picks one (the server does not know the theme). */}
               <img
-                src="/landing/home-phone-light.webp"
+                src="/landing/home-desktop-light.webp"
                 alt=""
-                width={390}
-                height={800}
+                width={1200}
+                height={717}
                 loading="eager"
                 decoding="async"
                 className="block h-auto w-full dark:hidden"
               />
               <img
-                src="/landing/home-phone-dark.webp"
+                src="/landing/home-desktop-dark.webp"
                 alt=""
-                width={390}
-                height={800}
+                width={1200}
+                height={717}
                 loading="eager"
                 decoding="async"
                 className="hidden h-auto w-full dark:block"
               />
             </div>
-          </div>
 
-          {/* Stickers */}
-          {[
-            {
-              t: "79% // safe",
-              c: "bg-ochre",
-              pos: "-left-3 top-2 sm:-left-8",
-              anim: "landing-float-a [--tilt:-6deg]",
-            },
-            { t: "Can skip 2", c: "bg-mint", pos: "left-[38%] -top-3", anim: "landing-float-b [--tilt:3deg]" },
-            {
-              t: "FAT // 20 Nov",
-              c: "bg-coral",
-              pos: "-left-2 bottom-[30%] sm:-left-10",
-              anim: "landing-float-b [--tilt:-4deg]",
-            },
-            { t: "39 OD hrs", c: "bg-sage", pos: "right-[30%] bottom-0", anim: "landing-float-a [--tilt:5deg]" },
-            {
-              t: "Next: DBMS 2:00",
-              c: "bg-orange",
-              pos: "-right-2 top-[38%] hidden sm:block",
-              anim: "landing-float-a [--tilt:-3deg]",
-            },
-          ].map((st, i) => (
-            <span
-              key={st.t}
-              style={{ animationDelay: `${i * 0.6}s` }}
-              className={`absolute ${st.pos} ${st.anim} z-10 whitespace-nowrap rounded-[8px] border-[3px] border-border-ink ${st.c} px-2.5 py-1 font-mono text-xs font-bold uppercase tracking-[0.06em] text-obsidian shadow-brutal-md sm:text-sm`}
-            >
-              {st.t}
-            </span>
-          ))}
+            <div className="landing-parallax absolute -bottom-2 right-0 w-[34%] min-w-[120px] [--depth:-16px]">
+              <div className="landing-float-b overflow-hidden rounded-[20px] border-[3px] border-border-ink bg-surface shadow-brutal-lg [--tilt:4deg]">
+                <img
+                  src="/landing/home-phone-light.webp"
+                  alt=""
+                  width={390}
+                  height={800}
+                  loading="eager"
+                  decoding="async"
+                  className="block h-auto w-full dark:hidden"
+                />
+                <img
+                  src="/landing/home-phone-dark.webp"
+                  alt=""
+                  width={390}
+                  height={800}
+                  loading="eager"
+                  decoding="async"
+                  className="hidden h-auto w-full dark:block"
+                />
+              </div>
+            </div>
+
+            {/* Stickers */}
+            {[
+              {
+                t: "79% // safe",
+                c: "bg-ochre",
+                pos: "-left-3 top-2 sm:-left-8",
+                anim: "landing-float-a [--tilt:-6deg]",
+              },
+              { t: "Can skip 2", c: "bg-mint", pos: "left-[38%] -top-3", anim: "landing-float-b [--tilt:3deg]" },
+              {
+                t: "FAT // 20 Nov",
+                c: "bg-coral",
+                pos: "-left-2 bottom-[30%] sm:-left-10",
+                anim: "landing-float-b [--tilt:-4deg]",
+              },
+              { t: "39 OD hrs", c: "bg-sage", pos: "right-[30%] bottom-0", anim: "landing-float-a [--tilt:5deg]" },
+              {
+                t: "Next: DBMS 2:00",
+                c: "bg-orange",
+                pos: "-right-2 top-[38%] hidden sm:block",
+                anim: "landing-float-a [--tilt:-3deg]",
+              },
+            ].map((st, i) => (
+              <span
+                key={st.t}
+                style={{ animationDelay: `${i * 0.6}s` }}
+                className={`absolute ${st.pos} ${st.anim} z-10 whitespace-nowrap rounded-[8px] border-[3px] border-border-ink ${st.c} px-2.5 py-1 font-mono text-xs font-bold uppercase tracking-[0.06em] text-obsidian shadow-brutal-md sm:text-sm`}
+              >
+                {st.t}
+              </span>
+            ))}
+          </div>
         </div>
       </section>
 

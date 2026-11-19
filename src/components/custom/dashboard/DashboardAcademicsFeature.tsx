@@ -32,8 +32,8 @@ interface DashboardAcademicsFeatureProps {
 function FeatureLoading() {
   return (
     <div className="min-h-40 space-y-4 p-4" role="status" aria-label="Loading academics">
-      <div className="h-6 w-32 animate-pulse rounded-lg bg-slate-200 dark:bg-neutral-800" />
-      <div className="h-36 w-full animate-pulse rounded-2xl bg-slate-200 dark:bg-neutral-800" />
+      <div className="h-6 w-32 animate-pulse rounded-lg bg-surface-tertiary dark:bg-neutral-800" />
+      <div className="h-36 w-full animate-pulse rounded-2xl bg-surface-tertiary dark:bg-neutral-800" />
     </div>
   );
 }
@@ -73,7 +73,10 @@ export default function DashboardAcademicsFeature({
 
   return (
     <div className="animate-fadeIn">
-      {(activeSubTab === "courses-simplified" || activeSubTab === "simplified-academics" || activeSubTab === "overview" || activeSubTab === "course-dashboard") && (
+      {(activeSubTab === "courses-simplified" ||
+        activeSubTab === "simplified-academics" ||
+        activeSubTab === "overview" ||
+        activeSubTab === "course-dashboard") && (
         <CourseDashboard
           marksData={marksData}
           allGradesData={allGradesData}

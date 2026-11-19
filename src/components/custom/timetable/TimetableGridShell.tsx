@@ -112,8 +112,8 @@ export default function TimetableGridShell({
               <th
                 scope="col"
                 className={cn(
-                  "sticky left-0 top-0 z-30 rounded-lg bg-white px-1 py-1 font-black uppercase tracking-wider text-zinc-400 dark:bg-zinc-950 dark:text-zinc-500",
-                  compact ? "w-12 min-w-12 text-[9px]" : "w-14 min-w-14 text-[9px]",
+                  "sticky left-0 top-0 z-30 rounded-lg bg-surface px-1 py-1 font-bold uppercase tracking-wider text-text-muted",
+                  compact ? "w-12 min-w-12 text-xs" : "w-14 min-w-14 text-xs",
                 )}
               >
                 Time
@@ -126,11 +126,11 @@ export default function TimetableGridShell({
                     key={day.id}
                     scope="col"
                     className={cn(
-                      "rounded-lg px-0.5 py-1 font-black uppercase tracking-wider",
-                      compact ? "text-[9px]" : "text-[10px]",
+                      "rounded-lg px-0.5 py-1 font-bold uppercase tracking-wider",
+                      compact ? "text-xs" : "text-xs",
                       isToday
-                        ? "bg-amber-100 text-amber-900 ring-2 ring-amber-400 dark:bg-amber-950/60 dark:text-amber-200 dark:ring-amber-500/70"
-                        : "bg-white text-zinc-500 dark:bg-zinc-950 dark:text-zinc-400",
+                        ? "bg-amber-100 text-amber-900 ring-2 ring-amber-400 dark:text-amber-200 dark:ring-amber-500/70"
+                        : "bg-surface text-text-muted",
                     )}
                   >
                     <span className="block leading-none">{day.name.substring(0, 3)}</span>
@@ -138,7 +138,7 @@ export default function TimetableGridShell({
                       <span
                         className={cn(
                           "mt-0.5 block font-bold leading-none opacity-70",
-                          compact ? "text-[9px]" : "text-[9px]",
+                          compact ? "text-xs" : "text-xs",
                         )}
                       >
                         {date.getDate()}
@@ -157,12 +157,12 @@ export default function TimetableGridShell({
                   <tr key={band.index}>
                     <th
                       scope="row"
-                      className="sticky left-0 z-10 rounded-lg bg-white px-1 py-0.5 text-[9px] font-bold uppercase tracking-wider text-zinc-400 dark:bg-zinc-950 dark:text-zinc-600"
+                      className="sticky left-0 z-10 rounded-lg bg-surface px-1 py-0.5 text-xs font-bold uppercase tracking-wider text-text-muted"
                     >
                       {band.label}
                     </th>
                     <td colSpan={days.length} className="p-0 align-middle">
-                      <div className="h-1 rounded-full bg-zinc-200 dark:bg-zinc-800" />
+                      <div className="h-1 rounded-full bg-surface-tertiary" />
                     </td>
                   </tr>
                 );
@@ -184,26 +184,20 @@ export default function TimetableGridShell({
                   <th
                     scope="row"
                     className={cn(
-                      "sticky left-0 z-10 rounded-lg bg-white dark:bg-zinc-950",
+                      "sticky left-0 z-10 rounded-lg bg-surface",
                       compact ? "w-12 min-w-12 px-0.5 py-0.5" : "w-14 min-w-14 px-1 py-1",
                     )}
                   >
                     {fullyCovered ? (
-                      <span className="block text-[9px] leading-tight text-zinc-300 dark:text-zinc-700">
-                        &middot;&middot;&middot;
-                      </span>
+                      <span className="block text-xs leading-tight text-text-muted">&middot;&middot;&middot;</span>
                     ) : compact ? (
-                      <span className="block text-[9px] font-bold leading-tight text-zinc-600 dark:text-zinc-300">
-                        {band.shortLabel}
-                      </span>
+                      <span className="block text-xs font-bold leading-tight text-text-muted">{band.shortLabel}</span>
                     ) : (
                       <>
-                        <span className="block text-[9px] font-bold leading-tight text-zinc-600 dark:text-zinc-300">
+                        <span className="block text-xs font-bold leading-tight text-text-muted">
                           {band.startLabel || "—"}
                         </span>
-                        <span className="block text-[9px] font-medium leading-tight text-zinc-400 dark:text-zinc-500">
-                          {band.endLabel}
-                        </span>
+                        <span className="block text-xs font-medium leading-tight text-text-muted">{band.endLabel}</span>
                       </>
                     )}
                   </th>
@@ -235,7 +229,7 @@ export default function TimetableGridShell({
                           title={cell.title}
                           aria-label={cell.ariaLabel}
                           className={cn(
-                            "flex w-full cursor-pointer flex-col items-center justify-center gap-0.5 rounded-lg border-2 transition-all duration-200 active:scale-95",
+                            "flex w-full cursor-pointer flex-col items-center justify-center gap-0.5 rounded-lg border-2 transition-all duration-200",
                             spans ? "absolute inset-0 h-full" : "relative",
                             compact ? "min-h-[38px] overflow-hidden px-0.5 py-1" : "min-h-[52px] px-1 py-1.5",
                             cell.tileClassName,

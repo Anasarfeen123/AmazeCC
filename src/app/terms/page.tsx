@@ -13,23 +13,23 @@ export default function TermsOfServicePage() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full px-4 py-24 bg-slate-50/60 dark:bg-[#03060F] transition-colors duration-300 relative overflow-hidden text-slate-800 dark:text-gray-200 font-sans">
+    <div className="flex flex-col items-center justify-center min-h-screen w-full px-4 py-24 bg-surface-secondary dark:bg-[#03060F] transition-colors duration-300 relative overflow-hidden text-text-primary font-sans">
       {/* Ambient Background Glows */}
       <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-500/10 dark:bg-indigo-500/5 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-500/10 dark:bg-purple-500/5 blur-[120px]" />
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-secondary dark:bg-secondary blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-secondary dark:bg-secondary blur-[120px]" />
       </div>
 
       {/* Sticky Header Navigation */}
       <nav
-        className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-[#03060F]/80 backdrop-blur-xl border-b border-slate-200/80 dark:border-white/[0.08] transition-all"
+        className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-[#03060F]/80 border-b border-border-ink transition-all"
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
         <div className="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors py-1.5 px-3 rounded-xl bg-slate-100 dark:bg-neutral-900/60 border border-slate-200/60 dark:border-white/[0.06]"
+              className="inline-flex items-center gap-2 text-xs font-bold text-text-muted hover:text-primary transition-colors py-1.5 px-3 rounded-xl bg-surface-secondary dark:bg-neutral-900/60 border border-border-ink"
             >
               <ArrowLeft size={14} />
               <span>Back to Login</span>
@@ -37,10 +37,10 @@ export default function TermsOfServicePage() {
           </div>
 
           {/* Switcher Tab between Privacy, Terms & Friend Finder Disclaimer */}
-          <div className="flex items-center gap-1 p-1 bg-slate-200/60 dark:bg-neutral-900/80 rounded-2xl border border-slate-200/60 dark:border-white/[0.06]">
+          <div className="flex items-center gap-1 p-1 bg-surface-tertiary dark:bg-neutral-900/80 rounded-2xl border border-border-ink">
             <Link
               href="/privacy"
-              className="px-3 py-1 rounded-xl text-xs font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white flex items-center gap-1.5 transition-all"
+              className="px-3 py-1 rounded-xl text-xs font-semibold text-text-muted hover:text-text-heading flex items-center gap-1.5 transition-all"
             >
               <ShieldCheck size={13} />
               <span className="hidden sm:inline">Privacy Policy</span>
@@ -48,7 +48,7 @@ export default function TermsOfServicePage() {
             </Link>
             <Link
               href="/terms"
-              className="px-3 py-1 rounded-xl text-xs font-extrabold bg-white dark:bg-neutral-800 text-indigo-600 dark:text-white shadow-xs flex items-center gap-1.5 transition-all"
+              className="px-3 py-1 rounded-xl text-xs font-bold bg-surface dark:bg-neutral-800 text-primary shadow-xs flex items-center gap-1.5 transition-all"
             >
               <FileText size={13} />
               <span className="hidden sm:inline">Terms of Service</span>
@@ -56,7 +56,7 @@ export default function TermsOfServicePage() {
             </Link>
             <Link
               href="/friend-finder/disclaimer"
-              className="px-3 py-1 rounded-xl text-xs font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white flex items-center gap-1.5 transition-all"
+              className="px-3 py-1 rounded-xl text-xs font-semibold text-text-muted hover:text-text-heading flex items-center gap-1.5 transition-all"
             >
               <ShieldCheck size={13} />
               <span className="hidden sm:inline">Friend Finder</span>
@@ -70,12 +70,12 @@ export default function TermsOfServicePage() {
 
       <div className="w-full max-w-2xl space-y-6 relative z-10 pt-10">
         {/* Content Card */}
-        <div className="card-surface border border-border-strong dark:border-border rounded-[24px] p-8 shadow-xl space-y-6 text-slate-700 dark:text-gray-300">
-          <div className="border-b border-slate-100 dark:border-white/[0.08] pb-4">
-            <h1 className="text-3xl font-black text-slate-900 dark:text-white leading-tight font-[family-name:var(--font-outfit)]">
+        <div className="card-surface border border-border-strong dark:border-border rounded-[14px] p-8 shadow-xl space-y-6 text-text-primary">
+          <div className="border-b border-border-ink pb-4">
+            <h1 className="text-3xl font-bold text-text-heading leading-tight font-[family-name:var(--font-outfit)]">
               Terms of Service
             </h1>
-            <p className="text-xs text-slate-500 dark:text-gray-400 mt-1 font-medium">Last updated: June 23, 2026</p>
+            <p className="text-xs text-text-muted mt-1 font-medium">Last updated: June 23, 2026</p>
           </div>
 
           <div className="space-y-5 text-sm leading-relaxed font-medium">
@@ -85,7 +85,7 @@ export default function TermsOfServicePage() {
             </p>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Purpose</h2>
+              <h2 className="text-lg font-bold text-text-heading">Purpose</h2>
               <p>
                 <strong>AmazeCC</strong> is an experimental web application created solely for educational and personal
                 use. It provides tools to help students view and organize their academic data retrieved from{" "}
@@ -96,7 +96,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Data Handling</h2>
+              <h2 className="text-lg font-bold text-text-heading">Data Handling</h2>
               <p>
                 The app does <strong>not collect, store, or transmit any personal information</strong> to any server.
                 All your login credentials, academic data, and settings remain{" "}
@@ -118,7 +118,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">No Monetization or Commercial Use</h2>
+              <h2 className="text-lg font-bold text-text-heading">No Monetization or Commercial Use</h2>
               <p>
                 <strong>AmazeCC</strong> is a free and non-commercial project. The developer does not earn revenue,
                 display advertisements, sell data, or monetize the service in any way. The app is provided purely for
@@ -127,7 +127,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Disclaimer of Liability</h2>
+              <h2 className="text-lg font-bold text-text-heading">Disclaimer of Liability</h2>
               <p>
                 The app is provided on an &ldquo;as-is&rdquo; basis with no guarantees of accuracy, reliability, or
                 availability. The developer is{" "}
@@ -142,19 +142,14 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-                Friend Finder & Voluntary Timetable Sharing
-              </h2>
+              <h2 className="text-lg font-bold text-text-heading">Friend Finder & Voluntary Timetable Sharing</h2>
               <p>
                 AmazeCC provides an optional <strong>Friend Finder</strong> feature enabling students to discover peers
                 enrolled in matching course sections. Participation is 100% voluntary and opt-in. The developer
                 expressly disclaims all liability and responsibility for any data, real names, or registration numbers
                 you voluntarily choose to share with classmates. For comprehensive data boundaries and terms, please
                 consult the dedicated{" "}
-                <Link
-                  href="/friend-finder/disclaimer"
-                  className="text-indigo-600 dark:text-indigo-400 underline font-semibold"
-                >
+                <Link href="/friend-finder/disclaimer" className="text-primary underline font-semibold">
                   Friend Finder Disclaimer
                 </Link>
                 .
@@ -162,7 +157,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Affiliation</h2>
+              <h2 className="text-lg font-bold text-text-heading">Affiliation</h2>
               <p>
                 This app is an <strong>independent student project</strong> and is in no way affiliated with, endorsed
                 by, or supported by Vellore Institute of Technology (VIT) or any of its departments. This project is
@@ -171,7 +166,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Changes to Terms</h2>
+              <h2 className="text-lg font-bold text-text-heading">Changes to Terms</h2>
               <p>
                 These terms may be updated periodically to reflect improvements or changes in app behavior. Continued
                 use of the app after updates constitutes acceptance of the revised terms.
@@ -179,7 +174,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Contact</h2>
+              <h2 className="text-lg font-bold text-text-heading">Contact</h2>
               <p>
                 For any concerns, questions, or feedback related to this app or these Terms of Service, you can contact
                 the developer at <strong>sugeeth2007@gmail.com</strong>.

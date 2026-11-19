@@ -102,7 +102,7 @@ export default function TransportRegistration({
         {registeredRoute ? (
           <div className="mt-4 flex items-center gap-3 rounded-2xl border border-border-muted bg-surface-secondary dark:bg-background/50 p-3">
             <span
-              className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border font-black text-sm font-outfit ${TONE_ICON_TILE[routeTone(registeredRoute.type)]}`}
+              className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border font-bold text-sm font-outfit ${TONE_ICON_TILE[routeTone(registeredRoute.type)]}`}
             >
               {registeredRoute.id}
             </span>
@@ -114,7 +114,7 @@ export default function TransportRegistration({
         ) : (
           <div className="mt-4 flex items-center gap-3 rounded-2xl border border-border-muted bg-surface-secondary dark:bg-background/50 p-3">
             <span
-              className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border font-black text-sm font-outfit ${TONE_ICON_TILE.zinc}`}
+              className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border font-bold text-sm font-outfit ${TONE_ICON_TILE.zinc}`}
             >
               ?
             </span>
@@ -141,7 +141,7 @@ export default function TransportRegistration({
             <button
               type="button"
               onClick={handleTrackBus}
-              className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-4 py-3 text-sm font-black text-white transition-colors hover:bg-indigo-700 active:scale-[0.98]"
+              className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-colors hover:brightness-110"
             >
               <Navigation className="h-4 w-4" />
               Track my bus
@@ -151,7 +151,7 @@ export default function TransportRegistration({
             href="https://vtopcc.vit.ac.in/vtop/transport/transportRegistration"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl border border-border-strong bg-surface px-4 py-3 text-sm font-black text-text-heading transition-colors hover:bg-surface-secondary dark:hover:bg-surface-hover"
+            className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl border border-border-strong bg-surface px-4 py-3 text-sm font-bold text-text-heading transition-colors hover:bg-surface-secondary dark:hover:bg-surface-hover"
           >
             <ExternalLink className="h-4 w-4" />
             Open in VTOP
@@ -164,13 +164,13 @@ export default function TransportRegistration({
       {data.qrCode && (
         <div className={TILE_CARD}>
           <div className="flex items-center gap-2">
-            <QrCode className="h-4 w-4 text-indigo-500" />
-            <h3 className="text-sm font-black text-text-heading font-outfit tracking-tight">
+            <QrCode className="h-4 w-4 text-primary" />
+            <h3 className="text-sm font-bold text-text-heading font-outfit tracking-tight">
               Daily attendance QR
             </h3>
           </div>
           <div className="mt-3 flex justify-center">
-            <div className="rounded-2xl bg-white p-3 border border-border-muted">
+            <div className="rounded-2xl bg-surface p-3 border border-border-muted">
               <img loading="lazy"
                 src={data.qrCode}
                 alt="Daily attendance QR code"
@@ -179,7 +179,7 @@ export default function TransportRegistration({
               />
             </div>
           </div>
-          <p className="mt-2 text-center text-[11px] font-medium text-text-muted">
+          <p className="mt-2 text-center text-xs font-medium text-text-muted">
             Scan this on the bus to mark your attendance.
           </p>
         </div>

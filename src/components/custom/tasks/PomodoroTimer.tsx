@@ -30,21 +30,9 @@ export default function PomodoroTimer({
   const [settings] = useAtom(settingsAtom);
   const [, setSessions] = useAtom(pomodoroSessionsAtom);
 
-  const focusMinutes =
-    task?.pomodoro?.focusMin ||
-    initialFocusMin ||
-    settings?.taskPomodoroFocus ||
-    25;
-  const breakMinutes =
-    task?.pomodoro?.breakMin ||
-    initialBreakMin ||
-    settings?.taskPomodoroBreak ||
-    5;
-  const totalRounds =
-    task?.pomodoro?.rounds ||
-    initialRounds ||
-    settings?.taskPomodoroRounds ||
-    4;
+  const focusMinutes = task?.pomodoro?.focusMin || initialFocusMin || settings?.taskPomodoroFocus || 25;
+  const breakMinutes = task?.pomodoro?.breakMin || initialBreakMin || settings?.taskPomodoroBreak || 5;
+  const totalRounds = task?.pomodoro?.rounds || initialRounds || settings?.taskPomodoroRounds || 4;
 
   const [phase, setPhase] = useState<TimerPhase>("focus");
   const [currentRound, setCurrentRound] = useState(1);
@@ -158,10 +146,7 @@ export default function PomodoroTimer({
 
   // Derived progress
   const totalPhaseSeconds = (phase === "focus" ? focusMinutes : breakMinutes) * 60;
-  const progressPercent = Math.min(
-    100,
-    Math.max(0, ((totalPhaseSeconds - timeLeft) / totalPhaseSeconds) * 100)
-  );
+  const progressPercent = Math.min(100, Math.max(0, ((totalPhaseSeconds - timeLeft) / totalPhaseSeconds) * 100));
 
   const formatTime = (secs: number) => {
     const m = Math.floor(secs / 60);
@@ -182,15 +167,11 @@ export default function PomodoroTimer({
             phase === "focus"
               ? "bg-secondary text-secondary-foreground border-border-ink"
               : phase === "break"
-              ? "bg-success-surface text-success-foreground border-border-ink"
-              : "bg-warning-surface text-warning-foreground border-border-ink"
+                ? "bg-success-surface text-success-foreground border-border-ink"
+                : "bg-warning-surface text-warning-foreground border-border-ink"
           }`}
         >
-          {phase === "completed"
-            ? "Session Finished! 🎉"
-            : phase === "focus"
-            ? "Focus Time"
-            : "Short Break"}
+          {phase === "completed" ? "Session Finished! 🎉" : phase === "focus" ? "Focus Time" : "Short Break"}
         </span>
 
         {/* Round indicators */}
@@ -198,14 +179,12 @@ export default function PomodoroTimer({
           {Array.from({ length: totalRounds }).map((_, i) => (
             <div
               key={i}
-              className={`rounded-full transition-all ${
-                compact ? "w-1.5 h-1.5" : "w-2.5 h-2.5"
-              } ${
+              className={`rounded-full transition-all ${compact ? "w-1.5 h-1.5" : "w-2.5 h-2.5"} ${
                 i + 1 < currentRound || phase === "completed"
                   ? "bg-primary "
                   : i + 1 === currentRound
-                  ? "bg-primary ring-2 ring-border-ink animate-pulse"
-                  : "bg-surface-tertiary "
+                    ? "bg-primary ring-2 ring-border-ink animate-pulse"
+                    : "bg-surface-tertiary "
               }`}
             />
           ))}
@@ -215,10 +194,7 @@ export default function PomodoroTimer({
       {/* Big Circular Ring Display */}
       <div className="relative flex items-center justify-center">
         {/* SVG Ring */}
-        <svg
-          className={`transform -rotate-90 ${compact ? "w-36 h-36" : "w-56 h-56"}`}
-          viewBox="0 0 100 100"
-        >
+        <svg className={`transform -rotate-90 ${compact ? "w-36 h-36" : "w-56 h-56"}`} viewBox="0 0 100 100">
           <circle
             cx="50"
             cy="50"
@@ -235,8 +211,8 @@ export default function PomodoroTimer({
               phase === "break"
                 ? "stroke-emerald-500"
                 : phase === "completed"
-                ? "stroke-amber-500"
-                : "stroke-indigo-600 dark:stroke-indigo-500"
+                  ? "stroke-amber-500"
+                  : "stroke-indigo-600 dark:stroke-indigo-500"
             }`}
             strokeWidth="6"
             strokeDasharray={276.46}
@@ -276,9 +252,7 @@ export default function PomodoroTimer({
           type="button"
           onClick={toggleRun}
           className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold text-primary-foreground shadow-xs transition-all cursor-pointer ${
-            isRunning
-              ? "bg-zinc-800 hover:bg-zinc-900 "
-              : "bg-primary hover:brightness-110"
+            isRunning ? "bg-zinc-800 hover:bg-zinc-900 " : "bg-primary hover:brightness-110"
           }`}
         >
           {isRunning ? (

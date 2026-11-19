@@ -669,7 +669,7 @@ export default function SimplifiedAcademicsPage({
           </div>
 
           {/* Navigation indicator */}
-          <div className="p-1 rounded-lg text-text-muted group-text-primary dark:group-text-primary group-hover:translate-x-0.5 transition-all">
+          <div className="p-1 rounded-lg text-text-muted group-hover:text-primary group-hover:translate-x-0.5 transition-all">
             <ChevronRight className="w-4 h-4" />
           </div>
         </div>

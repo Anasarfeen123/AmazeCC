@@ -63,15 +63,15 @@ describe("ChangelogModal Live Changelog Icon Redesign", () => {
     const featureIcon = screen.getByTitle("Feature");
     expect(featureIcon).toBeDefined();
     expect(featureIcon.className).toContain("rounded-xl");
-    expect(featureIcon.className).toContain("border-emerald-500");
+    expect(featureIcon.className).toContain("bg-success-surface");
 
     const fixIcon = screen.getByTitle("Bug Fix");
     expect(fixIcon).toBeDefined();
-    expect(fixIcon.className).toContain("border-rose-500");
+    expect(fixIcon.className).toContain("bg-danger-surface");
 
     const perfIcon = screen.getByTitle("Performance");
     expect(perfIcon).toBeDefined();
-    expect(perfIcon.className).toContain("border-amber-500");
+    expect(perfIcon.className).toContain("bg-warning-surface");
 
     // Verify author names and commit hashes are present and readable
     expect(screen.getByText(/Sugeeth/i)).toBeDefined();

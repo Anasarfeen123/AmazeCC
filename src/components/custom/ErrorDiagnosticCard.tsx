@@ -103,22 +103,22 @@ export default function ErrorDiagnosticCard(props: ErrorDiagnosticCardProps) {
           <button
             type="button"
             onClick={() => setIsBugModalOpen(true)}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-2.5 px-5 rounded-2xl bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/30 dark:hover:bg-rose-900/40 border border-rose-200 dark:border-rose-800 text-xs font-bold text-rose-700 dark:text-rose-300 shadow-sm active:scale-95 transition-all cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-2.5 px-5 rounded-2xl bg-danger-surface hover:bg-rose-100 dark:hover:bg-rose-900/40 border border-border-ink text-xs font-bold text-danger-foreground shadow-sm transition-all cursor-pointer"
           >
-            <Bug className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+            <Bug className="w-4 h-4 text-danger-foreground" />
             <span>Report this Bug to Developers</span>
           </button>
         </div>
 
         {/* Modal for reporting crash directly */}
         {isBugModalOpen && (
-          <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="w-full max-w-md rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 shadow-2xl animate-in fade-in duration-200">
+          <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 p-4">
+            <div className="w-full max-w-md rounded-2xl bg-surface border-2 border-border-ink p-6 shadow-2xl animate-in fade-in duration-200">
               {isSent ? (
                 <div className="text-center py-4 space-y-3">
-                  <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto" />
-                  <h3 className="font-bold text-base text-zinc-900 dark:text-zinc-100">Bug Report Sent!</h3>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                  <CheckCircle2 className="w-12 h-12 text-success-foreground mx-auto" />
+                  <h3 className="font-bold text-base text-text-heading">Bug Report Sent!</h3>
+                  <p className="text-xs text-text-muted">
                     Our team received your crash details and diagnostic logs. We will look into it immediately.
                   </p>
                   <Button
@@ -134,21 +134,21 @@ export default function ErrorDiagnosticCard(props: ErrorDiagnosticCardProps) {
               ) : (
                 <form onSubmit={handleSendBugReport} className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-bold text-sm">
+                    <div className="flex items-center gap-2 text-danger-foreground font-bold text-sm">
                       <Bug className="w-4 h-4" />
                       <span>Report Crash / Bug</span>
                     </div>
                     <button
                       type="button"
                       onClick={() => setIsBugModalOpen(false)}
-                      className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 text-xs font-bold p-1 cursor-pointer"
+                      className="text-text-muted hover:text-text-muted text-xs font-bold p-1 cursor-pointer"
                     >
                       ✕
                     </button>
                   </div>
 
-                  <div className="flex items-start gap-2.5 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/40 text-[11px] text-amber-800 dark:text-amber-300">
-                    <AlertTriangle className="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
+                  <div className="flex items-start gap-2.5 p-3 rounded-xl bg-warning-surface border border-border-ink text-xs text-amber-800 dark:text-warning-foreground">
+                    <AlertTriangle className="w-4 h-4 shrink-0 text-warning-foreground mt-0.5" />
                     <span>
                       Crash details (<strong className="font-mono">{props.error?.name || "Exception"}</strong>) will be
                       securely attached to your report.
@@ -156,20 +156,20 @@ export default function ErrorDiagnosticCard(props: ErrorDiagnosticCardProps) {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-zinc-500 uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1">
                       What were you doing when this happened? (optional)
                     </label>
                     <textarea
                       value={userComment}
                       onChange={(e) => setUserComment(e.target.value)}
                       placeholder="e.g., opened attendance, switched semester..."
-                      className="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 p-2.5 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-rose-500"
+                      className="w-full rounded-xl border-2 border-border-ink bg-surface-secondary p-2.5 text-xs text-text-heading focus:outline-none focus:ring-1 focus:ring-rose-500"
                       rows={3}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-zinc-500 uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1">
                       Your Email (for developer updates)
                     </label>
                     <input
@@ -177,12 +177,12 @@ export default function ErrorDiagnosticCard(props: ErrorDiagnosticCardProps) {
                       value={contactEmail}
                       onChange={(e) => setContactEmail(e.target.value)}
                       placeholder="personal@gmail.com"
-                      className="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 p-2.5 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-rose-500"
+                      className="w-full rounded-xl border-2 border-border-ink bg-surface-secondary p-2.5 text-xs text-text-heading focus:outline-none focus:ring-1 focus:ring-rose-500"
                     />
                   </div>
 
                   {submissionError && (
-                    <p role="alert" className="text-xs font-medium text-red-600 dark:text-red-400">
+                    <p role="alert" className="text-xs font-medium text-danger-foreground">
                       {submissionError}
                     </p>
                   )}

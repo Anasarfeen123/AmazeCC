@@ -25,44 +25,35 @@ interface TaskCardProps {
   compact?: boolean;
 }
 
-export const KIND_CONFIG: Record<
-  TaskKind,
-  { label: string; badgeClass: string; icon: React.ElementType }
-> = {
+export const KIND_CONFIG: Record<TaskKind, { label: string; badgeClass: string; icon: React.ElementType }> = {
   test: {
     label: "Test",
-    badgeClass: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20",
+    badgeClass: "bg-danger-surface text-danger-foreground border-border-ink",
     icon: AlertCircle,
   },
   "digital-assignment": {
     label: "Digital Assignment",
-    badgeClass: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+    badgeClass: "bg-warning-surface text-warning-foreground border-border-ink",
     icon: BookOpen,
   },
   homework: {
     label: "Homework",
-    badgeClass: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20",
+    badgeClass: "bg-secondary text-secondary-foreground border-border-ink",
     icon: Layers,
   },
   study: {
     label: "Study",
-    badgeClass: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+    badgeClass: "bg-success-surface text-success-foreground border-border-ink",
     icon: BookOpen,
   },
   reminder: {
     label: "Reminder",
-    badgeClass: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
+    badgeClass: "bg-secondary text-secondary-foreground border-border-ink",
     icon: Clock,
   },
 };
 
-export default function TaskCard({
-  task,
-  onEdit,
-  onStatusCycle,
-  onDelete,
-  compact = false,
-}: TaskCardProps) {
+export default function TaskCard({ task, onEdit, onStatusCycle, onDelete, compact = false }: TaskCardProps) {
   const overdue = isTaskOverdue(task);
   const kindMeta = KIND_CONFIG[task.kind] || KIND_CONFIG.homework;
   const KindIcon = kindMeta.icon;
@@ -84,7 +75,7 @@ export default function TaskCard({
   return (
     <div
       {...clickable(() => onEdit(task))}
-      className="group relative rounded-2xl card-surface border border-zinc-200/70 dark:border-zinc-800/80 p-3.5 shadow-2xs hover:shadow-xs hover:border-zinc-300 dark:hover:border-zinc-700 transition-all cursor-pointer text-left"
+      className="group relative rounded-2xl card-surface border-2 border-border-ink p-3.5 shadow-2xs hover:shadow-xs hover:border-border-ink transition-all cursor-pointer text-left"
     >
       <div className="flex items-start justify-between gap-2.5">
         {/* Cycle status checkbox */}
@@ -94,17 +85,17 @@ export default function TaskCard({
             e.stopPropagation();
             onStatusCycle?.(task.id);
           }}
-          className="mt-0.5 shrink-0 text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
+          className="mt-0.5 shrink-0 text-text-muted hover:text-primary transition-colors cursor-pointer"
           title={`Status: ${task.status}. Click to advance.`}
         >
           {task.status === "done" ? (
-            <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+            <CheckCircle2 className="w-5 h-5 text-success-foreground" />
           ) : task.status === "in_progress" ? (
-            <div className="w-5 h-5 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin-slow flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-indigo-500" />
+            <div className="w-5 h-5 rounded-full border-2 border-border-ink border-t-transparent animate-spin-slow flex items-center justify-center">
+              <div className="w-2 h-2 rounded-full bg-primary" />
             </div>
           ) : (
-            <Circle className="w-5 h-5 text-zinc-300 dark:text-zinc-600 group-hover:text-zinc-400" />
+            <Circle className="w-5 h-5 text-text-muted group-hover:text-text-muted" />
           )}
         </button>
 
@@ -113,7 +104,7 @@ export default function TaskCard({
           <div className="flex items-center gap-1.5 flex-wrap mb-1">
             {/* Kind badge */}
             <span
-              className={`text-[9.5px] font-extrabold uppercase px-2 py-0.5 rounded-md border flex items-center gap-1 ${kindMeta.badgeClass}`}
+              className={`text-[9.5px] font-bold uppercase px-2 py-0.5 rounded-md border flex items-center gap-1 ${kindMeta.badgeClass}`}
             >
               <KindIcon className="w-2.5 h-2.5" />
               {kindMeta.label}
@@ -121,19 +112,17 @@ export default function TaskCard({
 
             {/* Course Code chip */}
             {task.courseCode && (
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200/60 dark:border-zinc-700/60">
+              <span className="text-xs font-bold px-1.5 py-0.5 rounded bg-surface-secondary text-text-primary border-2 border-border-ink">
                 {task.courseCode}
                 {task.component !== "both" && (
-                  <span className="opacity-70 ml-1 uppercase text-[10px]">
-                    ({task.component})
-                  </span>
+                  <span className="opacity-70 ml-1 uppercase text-xs">({task.component})</span>
                 )}
               </span>
             )}
 
             {/* Overdue chip */}
             {overdue && (
-              <span className="text-[9.5px] font-black uppercase px-1.5 py-0.5 rounded bg-red-500 text-white shrink-0 animate-pulse">
+              <span className="text-[9.5px] font-bold uppercase px-1.5 py-0.5 rounded bg-red-500 text-white shrink-0 animate-pulse">
                 Overdue
               </span>
             )}
@@ -141,7 +130,7 @@ export default function TaskCard({
 
           {/* Title */}
           <h4
-            className={`text-sm font-bold leading-tight font-outfit text-zinc-900 dark:text-white break-words ${
+            className={`text-sm font-bold leading-tight font-outfit text-text-heading break-words ${
               task.status === "done" ? "line-through opacity-60" : ""
             }`}
           >
@@ -150,18 +139,14 @@ export default function TaskCard({
 
           {/* Notes summary if any */}
           {task.notes && !compact && (
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-1 mt-1 font-medium">
-              {task.notes}
-            </p>
+            <p className="text-xs text-text-muted line-clamp-1 mt-1 font-medium">{task.notes}</p>
           )}
 
           {/* Metadata row: due date, chunks, pomodoro */}
-          <div className="flex items-center gap-2.5 mt-2 text-[11px] text-zinc-500 dark:text-zinc-400 flex-wrap">
+          <div className="flex items-center gap-2.5 mt-2 text-xs text-text-muted flex-wrap">
             {task.dueDate && (
               <span
-                className={`flex items-center gap-1 font-medium ${
-                  overdue ? "text-red-600 dark:text-red-400 font-bold" : ""
-                }`}
+                className={`flex items-center gap-1 font-medium ${overdue ? "text-danger-foreground font-bold" : ""}`}
               >
                 <Calendar className="w-3 h-3" />
                 {formatDueDate(task.dueDate)}
@@ -169,14 +154,14 @@ export default function TaskCard({
             )}
 
             {task.schedule && task.schedule.length > 0 && (
-              <span className="flex items-center gap-1 font-medium text-indigo-600 dark:text-indigo-400">
+              <span className="flex items-center gap-1 font-medium text-primary">
                 <Clock className="w-3 h-3" />
                 {task.schedule.length} {task.schedule.length === 1 ? "chunk" : "chunks"}
               </span>
             )}
 
             {task.pomodoro && (
-              <span className="flex items-center gap-1 font-medium text-amber-600 dark:text-amber-400">
+              <span className="flex items-center gap-1 font-medium text-warning-foreground">
                 <Timer className="w-3 h-3" />
                 {task.pomodoro.rounds}×{task.pomodoro.focusMin}m
               </span>
@@ -194,7 +179,7 @@ export default function TaskCard({
               e.stopPropagation();
               onEdit(task);
             }}
-            className="relative hit-expand p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+            className="relative hit-expand p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors"
             title="Edit task"
           >
             <Edit2 className="w-3.5 h-3.5" />
@@ -208,7 +193,7 @@ export default function TaskCard({
                   onDelete(task.id);
                 }
               }}
-              className="relative hit-expand p-1.5 rounded-lg text-zinc-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+              className="relative hit-expand p-1.5 rounded-lg text-text-muted hover:text-danger-foreground dark:hover:text-danger-foreground hover:bg-danger-surface dark:hover:bg-red-950/30 transition-colors"
               title="Delete task"
             >
               <Trash2 className="w-3.5 h-3.5" />

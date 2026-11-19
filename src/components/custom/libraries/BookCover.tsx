@@ -58,12 +58,12 @@ export default function BookCover({
     setFailed(false);
   }, [src]);
 
-  const frameClass = `${className} shrink-0 overflow-hidden bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center`;
+  const frameClass = `${className} shrink-0 overflow-hidden bg-surface-secondary flex items-center justify-center`;
 
   if (!src || failed) {
     return (
       <span className={frameClass}>
-        <BookOpen className="w-4 h-4 text-zinc-300 dark:text-zinc-600" />
+        <BookOpen className="w-4 h-4 text-text-muted" />
       </span>
     );
   }

@@ -795,7 +795,7 @@ export default function StudentReportPage() {
                 icon: FileText,
                 action: downloadPdf,
                 disabled: isDownloading || !snapshot,
-                tint: "bg-rose-50 text-rose-600 border-rose-200 dark:bg-rose-950/30 dark:text-rose-300 dark:border-rose-900",
+                tint: "bg-danger-surface text-danger-foreground border-border-ink dark:text-danger-foreground",
               },
               {
                 key: "json",
@@ -804,7 +804,7 @@ export default function StudentReportPage() {
                 icon: FileJson2,
                 action: downloadJson,
                 disabled: !snapshot,
-                tint: "bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-900",
+                tint: "bg-warning-surface text-warning-foreground border-border-ink dark:text-warning-foreground",
               },
               {
                 key: "html",
@@ -813,7 +813,7 @@ export default function StudentReportPage() {
                 icon: Code2,
                 action: downloadHtml,
                 disabled: !snapshot,
-                tint: "bg-indigo-50 text-indigo-600 border-indigo-200 dark:bg-indigo-950/30 dark:text-indigo-300 dark:border-indigo-900",
+                tint: "bg-indigo-50 text-primary border-indigo-200 dark:bg-indigo-950/30 dark:text-primary",
               },
             ].map(({ key, title, description, icon: Icon, action, disabled, tint }) => (
               <button
@@ -824,15 +824,17 @@ export default function StudentReportPage() {
                 className="group flex w-full items-center gap-3.5 p-3.5 text-left transition-colors hover:bg-surface-secondary/70 disabled:cursor-not-allowed disabled:opacity-50 sm:p-4"
               >
                 <span
-                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-transform group- ${tint}`}
+                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-transform ${tint}`}
                 >
                   <Icon className="h-5 w-5" />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-bold text-text-heading group-text-primary">{title}</span>
+                  <span className="block truncate text-sm font-bold text-text-heading group-hover:text-primary">
+                    {title}
+                  </span>
                   <span className="mt-0.5 block text-xs text-text-secondary">{description}</span>
                 </span>
-                <ChevronRight className="h-4 w-4 shrink-0 text-text-muted transition-transform group-hover:translate-x-0.5 group-text-primary" />
+                <ChevronRight className="h-4 w-4 shrink-0 text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
               </button>
             ))}
           </ListShell>

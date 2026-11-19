@@ -256,7 +256,7 @@ export default function LaundrySchedule({ hostelData, handleHostelDetailsFetch }
                 <p className="text-xs text-text-muted">Scheduled for room range {nextSlot.RoomNumber}.</p>
               </div>
             ) : (
-              <div className="bg-surface-secondary0/5 border border-border-muted p-4 rounded-xl space-y-2 text-xs text-text-muted italic">
+              <div className="bg-surface-secondary border border-border-muted p-4 rounded-xl space-y-2 text-xs text-text-muted italic">
                 <p className="text-xs">Enter a valid room number to locate your slots in {hostel} Block.</p>
               </div>
             )}
@@ -426,7 +426,7 @@ export default function LaundrySchedule({ hostelData, handleHostelDetailsFetch }
                     </div>
                   </div>
                 ) : (
-                  <div className="bg-surface-secondary0/5 border border-border-muted p-4 rounded-xl text-center text-xs text-text-muted italic">
+                  <div className="bg-surface-secondary border border-border-muted p-4 rounded-xl text-center text-xs text-text-muted italic">
                     No active laundry slots scheduled for this date.
                   </div>
                 )}

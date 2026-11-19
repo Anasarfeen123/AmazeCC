@@ -105,13 +105,13 @@ export function RegistrationModalContent({ creds, onClose }: { creds: any; onClo
   if (error || !hasData) {
     return (
       <div className="flex flex-col items-center text-center py-4 space-y-3">
-        <div className="p-3 rounded-full bg-amber-50 dark:bg-amber-900/30">
-          <Clock className="w-8 h-8 text-amber-500" />
+        <div className="p-3 rounded-full bg-warning-surface">
+          <Clock className="w-8 h-8 text-warning-foreground" />
         </div>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">No registration schedule available</p>
+        <p className="text-sm text-text-muted">No registration schedule available</p>
         <button
           onClick={onClose}
-          className="px-4 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+          className="px-4 py-2 rounded-xl bg-surface-secondary text-sm font-medium text-text-muted hover:bg-surface-hover transition-colors cursor-pointer"
         >
           Close
         </button>
@@ -121,12 +121,12 @@ export function RegistrationModalContent({ creds, onClose }: { creds: any; onClo
 
   return (
     <div className="flex flex-col items-center text-center py-4 space-y-4">
-      <div className="p-4 rounded-full bg-blue-50 dark:bg-blue-900/30">
-        <Clock className="w-10 h-10 text-blue-600 dark:text-blue-400" />
+      <div className="p-4 rounded-full bg-secondary">
+        <Clock className="w-10 h-10 text-primary" />
       </div>
       <div>
-        <p className="text-lg font-bold text-zinc-900 dark:text-zinc-100 font-outfit">Registration Scheduled</p>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+        <p className="text-lg font-bold text-text-heading font-outfit">Registration Scheduled</p>
+        <p className="text-sm text-text-muted mt-1">
           {date && <span>Date: {date}</span>}
           {date && time && <span>{" • "}</span>}
           {time && <span>Time: {time}</span>}
@@ -135,7 +135,7 @@ export function RegistrationModalContent({ creds, onClose }: { creds: any; onClo
       </div>
       <button
         onClick={handleMarkRead}
-        className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-colors cursor-pointer"
+        className="px-5 py-2.5 rounded-xl bg-primary hover:brightness-110 text-primary-foreground text-sm font-semibold transition-colors cursor-pointer"
       >
         Mark as Read
       </button>
@@ -218,34 +218,34 @@ export function BankDayStatusModal({ endpoint, title, creds }: { endpoint: strin
       <div className="flex items-center gap-4 p-4 rounded-xl">
         {hasContent ? (
           <>
-            <div className="p-3 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400">
+            <div className="p-3 rounded-full bg-emerald-100 text-success-foreground">
               <CheckCircle className="w-8 h-8" />
             </div>
             <div>
-              <p className="font-semibold text-emerald-700 dark:text-emerald-300 text-lg">{title} Filled</p>
-              <p className="text-sm text-emerald-600/70 dark:text-emerald-400/70">
+              <p className="font-semibold text-success-foreground text-lg">{title} Filled</p>
+              <p className="text-sm text-success-foreground">
                 Your {title.toLowerCase()} has been submitted successfully
               </p>
             </div>
           </>
         ) : (
           <>
-            <div className="p-3 rounded-full bg-zinc-100 dark:bg-zinc-700 text-zinc-400">
+            <div className="p-3 rounded-full bg-surface-secondary text-text-muted">
               <AlertCircle className="w-8 h-8" />
             </div>
             <div>
-              <p className="font-semibold text-zinc-700 dark:text-zinc-300 text-lg">{title} Not Filled</p>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">No {title.toLowerCase()} found in the system</p>
+              <p className="font-semibold text-text-primary text-lg">{title} Not Filled</p>
+              <p className="text-sm text-text-muted">No {title.toLowerCase()} found in the system</p>
             </div>
           </>
         )}
       </div>
       {details.length > 0 && (
-        <div className="rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 divide-y divide-zinc-200/60 dark:divide-zinc-800/60 overflow-hidden">
+        <div className="rounded-xl border-2 border-border-ink divide-y divide-border-muted dark:divide-border-muted overflow-hidden">
           {details.map((d, i) => (
             <div key={i} className="flex items-start justify-between gap-4 px-4 py-2.5 text-sm">
-              <span className="text-zinc-500 dark:text-zinc-400 shrink-0">{d.label}</span>
-              <span className="text-zinc-900 dark:text-zinc-100 font-medium text-right break-words">{d.value}</span>
+              <span className="text-text-muted shrink-0">{d.label}</span>
+              <span className="text-text-heading font-medium text-right break-words">{d.value}</span>
             </div>
           ))}
         </div>

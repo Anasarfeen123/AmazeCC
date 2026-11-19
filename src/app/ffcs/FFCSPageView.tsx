@@ -18,7 +18,7 @@ const FFCSTimetableTab = dynamic(() => import("@/components/custom/exams/FFCSTim
   ssr: false,
   loading: () => (
     <div className="flex min-h-[50vh] items-center justify-center" aria-busy="true">
-      <span className="animate-pulse text-sm text-slate-500 dark:text-gray-400">Loading planner…</span>
+      <span className="animate-pulse text-sm text-text-muted">Loading planner…</span>
     </div>
   ),
 });

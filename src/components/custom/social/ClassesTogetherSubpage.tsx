@@ -30,17 +30,15 @@ function PeerChip({
     <button
       type="button"
       onClick={onOpen}
-      className="inline-flex items-center gap-1.5 max-w-full pl-1 pr-2.5 py-1 rounded-full border border-zinc-200/80 dark:border-zinc-800 hover:border-indigo-300 dark:hover:border-indigo-700 bg-white dark:bg-zinc-900 transition-colors cursor-pointer"
+      className="inline-flex items-center gap-1.5 max-w-full pl-1 pr-2.5 py-1 rounded-full border-2 border-border-ink hover:border-indigo-300 dark:hover:border-indigo-700 bg-surface transition-colors cursor-pointer"
       title={showFaculty && match.theirs.faculty ? `${match.name} · ${match.theirs.faculty}` : match.name}
     >
-      <span className="w-6 h-6 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[9px] font-black font-outfit flex items-center justify-center shrink-0">
+      <span className="w-6 h-6 rounded-full bg-secondary text-secondary-foreground text-xs font-bold font-outfit flex items-center justify-center shrink-0">
         {initials(match.name)}
       </span>
-      <span className="text-[11px] font-bold text-zinc-700 dark:text-zinc-200 truncate">{match.name}</span>
+      <span className="text-xs font-bold text-text-primary truncate">{match.name}</span>
       {showFaculty && match.theirs.faculty && (
-        <span className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500 truncate">
-          · {match.theirs.faculty}
-        </span>
+        <span className="text-xs font-medium text-text-muted truncate">· {match.theirs.faculty}</span>
       )}
     </button>
   );
@@ -64,13 +62,11 @@ export default function ClassesTogetherSubpage({
 
   const empty = (title: string, body: string) => (
     <div className={EMPTY_STATE}>
-      <span className="w-10 h-10 rounded-2xl mx-auto flex items-center justify-center border border-zinc-200 dark:border-zinc-800">
-        <BookOpen className="w-4.5 h-4.5 text-zinc-400" />
+      <span className="w-10 h-10 rounded-2xl mx-auto flex items-center justify-center border-2 border-border-ink">
+        <BookOpen className="w-4.5 h-4.5 text-text-muted" />
       </span>
-      <p className="text-xs font-bold text-zinc-500 dark:text-zinc-400 mt-3">{title}</p>
-      <p className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium mt-1.5 leading-relaxed max-w-[320px] mx-auto">
-        {body}
-      </p>
+      <p className="text-xs font-bold text-text-muted mt-3">{title}</p>
+      <p className="text-xs text-text-muted font-medium mt-1.5 leading-relaxed max-w-[320px] mx-auto">{body}</p>
     </div>
   );
 
@@ -85,10 +81,10 @@ export default function ClassesTogetherSubpage({
         )
       ) : loading && rows.length === 0 ? (
         <div className={EMPTY_STATE} aria-busy="true">
-          <span className="w-10 h-10 rounded-2xl mx-auto flex items-center justify-center border border-zinc-200 dark:border-zinc-800">
-            <BookOpen className="w-4.5 h-4.5 text-zinc-400 animate-pulse" />
+          <span className="w-10 h-10 rounded-2xl mx-auto flex items-center justify-center border-2 border-border-ink">
+            <BookOpen className="w-4.5 h-4.5 text-text-muted animate-pulse" />
           </span>
-          <p className="text-xs font-bold text-zinc-500 dark:text-zinc-400 mt-3">Comparing timetables…</p>
+          <p className="text-xs font-bold text-text-muted mt-3">Comparing timetables…</p>
         </div>
       ) : peers.length === 0 ? (
         empty("Nobody to compare with yet", "Pair with classmates and the courses you share show up here.")
@@ -99,10 +95,10 @@ export default function ClassesTogetherSubpage({
           {rows.map((row) => (
             <div key={row.course.classId || `${row.course.code}-${row.course.componentType}`} className="p-4 space-y-3">
               <div className="min-w-0">
-                <p className="text-xs font-black text-zinc-800 dark:text-zinc-200 font-outfit truncate">
+                <p className="text-xs font-bold text-text-primary font-outfit truncate">
                   {row.course.code} · {row.course.title}
                 </p>
-                <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium mt-0.5 flex items-center gap-1 truncate">
+                <p className="text-xs text-text-muted font-medium mt-0.5 flex items-center gap-1 truncate">
                   {row.course.venue && <MapPin className="w-3 h-3 shrink-0" />}
                   {[row.course.venue, row.course.componentType, row.course.faculty].filter(Boolean).join(" · ") || "—"}
                 </p>
@@ -110,7 +106,7 @@ export default function ClassesTogetherSubpage({
 
               {row.sameClass.length > 0 && (
                 <div className="space-y-1.5">
-                  <p className="text-[10px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                  <p className="text-xs font-bold uppercase tracking-wider text-success-foreground">
                     In your class · {row.sameClass.length}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
@@ -123,7 +119,7 @@ export default function ClassesTogetherSubpage({
 
               {row.otherSection.length > 0 && (
                 <div className="space-y-1.5">
-                  <p className="text-[10px] font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                  <p className="text-xs font-bold uppercase tracking-wider text-text-muted">
                     Other sections · {row.otherSection.length}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
@@ -139,14 +135,14 @@ export default function ClassesTogetherSubpage({
       )}
 
       {coarseCount > 0 && (
-        <p className="px-1 -mt-3 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500 font-medium flex items-start gap-1.5">
+        <p className="px-1 -mt-3 text-xs leading-relaxed text-text-muted font-medium flex items-start gap-1.5">
           <UserRound className="w-3 h-3 mt-px shrink-0" />
           {coarseCount === 1 ? "1 pair shares" : `${coarseCount} pairs share`} free/busy only, so their courses cannot
           be compared.
         </p>
       )}
       {rows.length > 0 && (
-        <p className="px-1 -mt-3 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500 font-medium">
+        <p className="px-1 -mt-3 text-xs leading-relaxed text-text-muted font-medium">
           <span className={`${CHIP} mr-1`}>In your class</span>means the same VTOP class: same section, faculty and
           slots.
         </p>

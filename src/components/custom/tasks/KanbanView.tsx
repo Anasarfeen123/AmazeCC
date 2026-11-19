@@ -18,29 +18,23 @@ const COLUMNS: { id: TaskStatus; title: string; icon: React.ElementType; color: 
     id: "pending",
     title: "Pending",
     icon: Clock,
-    color: "border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300",
+    color: "border-border-ink text-text-primary",
   },
   {
     id: "in_progress",
     title: "In Progress",
     icon: PlayCircle,
-    color: "border-indigo-500 text-indigo-600 dark:text-indigo-400",
+    color: "border-border-ink text-primary",
   },
   {
     id: "done",
     title: "Done",
     icon: CheckCircle2,
-    color: "border-emerald-500 text-emerald-600 dark:text-emerald-400",
+    color: "border-border-ink text-success-foreground",
   },
 ];
 
-export default function KanbanView({
-  tasks,
-  onEdit,
-  onStatusCycle,
-  onDelete,
-  onNewTask,
-}: KanbanViewProps) {
+export default function KanbanView({ tasks, onEdit, onStatusCycle, onDelete, onNewTask }: KanbanViewProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
       {COLUMNS.map((col) => {
@@ -50,23 +44,21 @@ export default function KanbanView({
         return (
           <div
             key={col.id}
-            className="flex flex-col rounded-[24px] bg-zinc-100/70 dark:bg-zinc-900/40 border border-zinc-200/70 dark:border-zinc-800/70 p-3 sm:p-4 min-h-[300px]"
+            className="flex flex-col rounded-[14px] bg-surface-secondary border-2 border-border-ink p-3 sm:p-4 min-h-[300px]"
           >
             {/* Column Header */}
             <div className="flex items-center justify-between pb-3 px-1">
               <div className="flex items-center gap-2">
                 <Icon className={`w-4 h-4 ${col.color}`} />
-                <h3 className="font-outfit font-black text-sm text-zinc-900 dark:text-white">
-                  {col.title}
-                </h3>
-                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 border border-zinc-200/60 dark:border-zinc-700/60">
+                <h3 className="font-outfit font-bold text-sm text-text-heading">{col.title}</h3>
+                <span className="text-xs font-bold px-2 py-0.5 rounded-[6px] bg-surface text-text-muted border-2 border-border-ink">
                   {colTasks.length}
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => onNewTask(col.id)}
-                className="p-1 rounded-lg hover:bg-white dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400 transition-colors cursor-pointer"
+                className="p-1 rounded-lg hover:bg-surface text-text-muted transition-colors cursor-pointer"
                 title={`Add ${col.title} task`}
               >
                 <Plus className="w-4 h-4" />
@@ -76,14 +68,12 @@ export default function KanbanView({
             {/* Task Cards Column */}
             <div className="space-y-2.5 flex-1">
               {colTasks.length === 0 ? (
-                <div className="h-32 flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800 text-center p-4">
-                  <p className="text-xs font-semibold text-zinc-400 dark:text-zinc-500">
-                    No {col.title.toLowerCase()} tasks
-                  </p>
+                <div className="h-32 flex flex-col items-center justify-center rounded-2xl border border-dashed border-border-ink text-center p-4">
+                  <p className="text-xs font-semibold text-text-muted">No {col.title.toLowerCase()} tasks</p>
                   <button
                     type="button"
                     onClick={() => onNewTask(col.id)}
-                    className="mt-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
+                    className="mt-2 text-xs font-bold text-primary hover:underline cursor-pointer"
                   >
                     + Add Task
                   </button>

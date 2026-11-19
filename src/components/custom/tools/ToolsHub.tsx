@@ -178,18 +178,18 @@ export default function ToolsHub({ setActiveToolsSubTab }: ToolsHubProps) {
             >
               <div className="flex items-center gap-3.5 min-w-0 flex-1 pr-2">
                 <div
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${tool.iconColor} group- transition-transform duration-150`}
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${tool.iconColor} transition-transform duration-150`}
                 >
                   <Icon className="w-5 h-5" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h3 className="text-xs sm:text-sm font-bold text-text-heading font-outfit tracking-tight truncate group-text-primary dark:group-text-primary transition-colors">
+                  <h3 className="text-xs sm:text-sm font-bold text-text-heading font-outfit tracking-tight truncate group-hover:text-primary transition-colors">
                     {tool.title}
                   </h3>
                   <p className="text-xs sm:text-xs text-text-muted font-medium truncate mt-0.5">{tool.subtitle}</p>
                 </div>
               </div>
-              <ChevronRight className="w-4 h-4 text-text-muted group-text-primary dark:group-text-primary group-hover:translate-x-0.5 transition-all shrink-0" />
+              <ChevronRight className="w-4 h-4 text-text-muted group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0" />
             </button>
           );
         })}

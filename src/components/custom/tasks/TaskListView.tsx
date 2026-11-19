@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  AlertCircle,
-  Calendar,
-  Clock,
-  CalendarDays,
-  CalendarCheck,
-  CheckCircle2,
-} from "lucide-react";
+import { AlertCircle, Calendar, Clock, CalendarDays, CalendarCheck, CheckCircle2 } from "lucide-react";
 import type { Task } from "@/types/tasks";
 import TaskCard from "./TaskCard";
 
@@ -19,13 +12,7 @@ interface TaskListViewProps {
   onNewTask: () => void;
 }
 
-export default function TaskListView({
-  tasks,
-  onEdit,
-  onStatusCycle,
-  onDelete,
-  onNewTask,
-}: TaskListViewProps) {
+export default function TaskListView({ tasks, onEdit, onStatusCycle, onDelete, onNewTask }: TaskListViewProps) {
   const now = new Date();
   const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
   const endOfToday = startOfToday + 86400000;
@@ -71,7 +58,7 @@ export default function TaskListView({
       title: "Overdue",
       icon: AlertCircle,
       tasks: overdue,
-      color: "text-red-500",
+      color: "text-danger-foreground",
       hideIfEmpty: true,
     },
     {
@@ -79,7 +66,7 @@ export default function TaskListView({
       title: "Due Today",
       icon: Clock,
       tasks: today,
-      color: "text-amber-500",
+      color: "text-warning-foreground",
       hideIfEmpty: false,
     },
     {
@@ -87,7 +74,7 @@ export default function TaskListView({
       title: "This Week",
       icon: Calendar,
       tasks: thisWeek,
-      color: "text-indigo-500",
+      color: "text-primary",
       hideIfEmpty: false,
     },
     {
@@ -95,7 +82,7 @@ export default function TaskListView({
       title: "Upcoming",
       icon: CalendarDays,
       tasks: later,
-      color: "text-blue-500",
+      color: "text-primary",
       hideIfEmpty: false,
     },
     {
@@ -103,7 +90,7 @@ export default function TaskListView({
       title: "No Due Date",
       icon: CalendarCheck,
       tasks: noDueDate,
-      color: "text-zinc-400",
+      color: "text-text-muted",
       hideIfEmpty: false,
     },
     {
@@ -111,7 +98,7 @@ export default function TaskListView({
       title: "Completed",
       icon: CheckCircle2,
       tasks: completed,
-      color: "text-emerald-500",
+      color: "text-success-foreground",
       hideIfEmpty: true,
     },
   ];
@@ -127,17 +114,15 @@ export default function TaskListView({
             <div className="flex items-center justify-between px-1">
               <div className="flex items-center gap-2">
                 <Icon className={`w-4 h-4 ${grp.color}`} />
-                <h3 className="font-outfit font-black text-sm text-zinc-900 dark:text-white">
-                  {grp.title}
-                </h3>
-                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 border border-zinc-200/60 dark:border-zinc-700/60">
+                <h3 className="font-outfit font-bold text-sm text-text-heading">{grp.title}</h3>
+                <span className="text-xs font-bold px-2 py-0.5 rounded-[6px] bg-surface-secondary text-text-muted border-2 border-border-ink">
                   {grp.tasks.length}
                 </span>
               </div>
             </div>
 
             {grp.tasks.length === 0 ? (
-              <div className="py-4 px-4 rounded-2xl bg-zinc-50/60 dark:bg-zinc-900/30 border border-zinc-200/50 dark:border-zinc-800 text-xs font-medium text-zinc-400 text-center">
+              <div className="py-4 px-4 rounded-2xl bg-surface-secondary border-2 border-border-ink text-xs font-medium text-text-muted text-center">
                 No tasks {grp.title.toLowerCase()}
               </div>
             ) : (

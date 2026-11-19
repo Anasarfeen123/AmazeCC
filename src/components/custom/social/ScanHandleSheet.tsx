@@ -85,9 +85,7 @@ export default function ScanHandleSheet({
       if (!window.isSecureContext) {
         if (!cancelled) {
           setState("unsupported");
-          setMessage(
-            "Scanning a QR needs a secure connection. Open the app over HTTPS and try again."
-          );
+          setMessage("Scanning a QR needs a secure connection. Open the app over HTTPS and try again.");
         }
         return;
       }
@@ -122,7 +120,7 @@ export default function ScanHandleSheet({
               // Wrong code, or a real QR that is not a handle. Say what was read
               // so the mismatch is obvious, and keep the camera up.
               setMessage(
-                `That QR is not a handle (read "${String(decodedText).slice(0, 32)}"). Point the camera at a peer's Share screen.`
+                `That QR is not a handle (read "${String(decodedText).slice(0, 32)}"). Point the camera at a peer's Share screen.`,
               );
               return;
             }
@@ -131,7 +129,7 @@ export default function ScanHandleSheet({
           },
           // Fires on every frame that fails to decode. There is nothing to do
           // with that, and surfacing it would flicker the UI nonstop.
-          () => {}
+          () => {},
         );
 
         if (cancelled) {
@@ -145,7 +143,7 @@ export default function ScanHandleSheet({
         if (name === "NotAllowedError" || name === "SecurityError") {
           setState("denied");
           setMessage(
-            "Camera access was blocked. Allow it in your browser's site settings, or type the handle instead."
+            "Camera access was blocked. Allow it in your browser's site settings, or type the handle instead.",
           );
         } else if (name === "NotFoundError" || name === "OverconstrainedError") {
           setState("unsupported");
@@ -155,7 +153,7 @@ export default function ScanHandleSheet({
           setMessage(
             err instanceof Error && err.message
               ? `The camera would not start: ${err.message}`
-              : "The camera would not start."
+              : "The camera would not start.",
           );
         }
       }
@@ -179,7 +177,7 @@ export default function ScanHandleSheet({
       title="Scan their handle"
       subtitle="Point the camera at the QR on their Social → Share screen"
       icon={<Camera className="w-4.5 h-4.5" />}
-      accent="border-indigo-500/20 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
+      accent="border-border-ink bg-secondary text-secondary-foreground"
       closeLabel="Close scanner"
     >
       <div className="text-left space-y-4">
@@ -190,28 +188,26 @@ export default function ScanHandleSheet({
         */}
         <div
           id={REGION_ID}
-          className="w-full min-h-[240px] overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800 bg-zinc-950"
+          className="w-full min-h-[240px] overflow-hidden rounded-2xl border-2 border-border-ink bg-zinc-950"
         />
 
         {busy && (
-          <p className="flex items-center gap-2 text-xs font-bold text-zinc-500 dark:text-zinc-400">
+          <p className="flex items-center gap-2 text-xs font-bold text-text-muted">
             <Loader2 className="w-4 h-4 animate-spin" />
             Starting the camera&hellip;
           </p>
         )}
 
         {state === "scanning" && !message && (
-          <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
-            Looking for a handle&hellip;
-          </p>
+          <p className="text-xs text-text-muted font-medium">Looking for a handle&hellip;</p>
         )}
 
         {message && (
           <p
             className={`p-3 rounded-2xl border text-xs font-bold flex items-start gap-2 ${
               state === "scanning"
-                ? "border-amber-200 dark:border-amber-900/40 bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300"
-                : "border-red-200 dark:border-red-900/40 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400"
+                ? "border-border-ink bg-warning-surface text-warning-foreground"
+                : "border-border-ink bg-danger-surface text-danger-foreground"
             }`}
           >
             <CameraOff className="w-4 h-4 shrink-0 mt-px" />
@@ -223,7 +219,7 @@ export default function ScanHandleSheet({
           <button
             type="button"
             onClick={onClose}
-            className="w-full py-3 rounded-2xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-bold text-xs transition-colors cursor-pointer"
+            className="w-full py-3 rounded-2xl bg-surface-secondary hover:bg-surface-tertiary text-text-primary font-bold text-xs transition-colors cursor-pointer"
           >
             Close
           </button>

@@ -146,10 +146,7 @@ export default function BottomSheet({
    * keyboard. `SyncNotification` is the caller that cares: it *parks* on
    * backdrop, swipe and system back, and only its X cancels.
    */
-  const handleDismiss = useCallback(
-    () => (onSwipeDown ?? onClose)(),
-    [onSwipeDown, onClose]
-  );
+  const handleDismiss = useCallback(() => (onSwipeDown ?? onClose)(), [onSwipeDown, onClose]);
 
   const keyboardInset = useKeyboardInset(avoidKeyboard);
   const lifted = avoidKeyboard && keyboardInset > 0;
@@ -252,7 +249,7 @@ export default function BottomSheet({
         <button
           onClick={onClose}
           aria-label="Close"
-          className="relative z-10 shrink-0 rounded-full bg-zinc-100 p-2 text-zinc-500 transition-colors hover:bg-zinc-200 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 cursor-pointer hit-expand"
+          className="relative z-10 shrink-0 rounded-full bg-surface-secondary p-2 text-text-muted transition-colors hover:bg-surface-tertiary cursor-pointer hit-expand"
         >
           <X className="h-4 w-4" />
         </button>
@@ -267,7 +264,7 @@ export default function BottomSheet({
         onPointerUp={endGrabberDrag}
         onPointerCancel={endGrabberDrag}
       >
-        <div className="h-1 w-12 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+        <div className="h-1 w-12 rounded-full bg-surface-tertiary" />
       </div>
 
       <span className="w-9 shrink-0" aria-hidden />
@@ -301,14 +298,12 @@ export default function BottomSheet({
     </>
   );
 
-  const surface =
-    "flex flex-col overflow-hidden bg-white dark:bg-zinc-950 border border-zinc-200/70 dark:border-zinc-800/80";
+  const surface = "flex flex-col overflow-hidden bg-surface border-2 border-border-ink";
 
   // Shared by both placements: bottom-anchored, so both keep the safe-area
   // inset and both slide up out of the bottom edge. The only difference is the
   // horizontal box — a drawer runs edge to edge, a centred card does not.
-  const anchoredBottom =
-    "fixed bottom-0 left-0 right-0 mx-auto sm:bottom-6 max-h-[88dvh] ";
+  const anchoredBottom = "fixed bottom-0 left-0 right-0 mx-auto sm:bottom-6 max-h-[88dvh] ";
 
   const panelStyle = {
     willChange: "transform",
@@ -339,7 +334,7 @@ export default function BottomSheet({
       exit={{ y: "100%" }}
       transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
       data-prevent-swipe="true"
-      className={`${anchoredBottom}w-[calc(100%-2rem)] ${maxWidth} ${surface} rounded-[28px] shadow-[0_-15px_40px_-15px_rgba(0,0,0,0.3)] ${className}`}
+      className={`${anchoredBottom}w-[calc(100%-2rem)] ${maxWidth} ${surface} rounded-[14px] shadow-[0_-15px_40px_-15px_rgba(0,0,0,0.3)] ${className}`}
       style={panelStyle}
     >
       {panelBody}
@@ -352,7 +347,7 @@ export default function BottomSheet({
       exit={{ y: "100%" }}
       transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
       data-prevent-swipe="true"
-      className={`${anchoredBottom}w-full ${maxWidth} ${surface} rounded-t-[28px] sm:rounded-[28px] shadow-[0_-15px_40px_-15px_rgba(0,0,0,0.3)] ${className}`}
+      className={`${anchoredBottom}w-full ${maxWidth} ${surface} rounded-t-[28px] sm:rounded-[14px] shadow-[0_-15px_40px_-15px_rgba(0,0,0,0.3)] ${className}`}
       style={panelStyle}
     >
       {panelBody}
@@ -408,12 +403,12 @@ export default function BottomSheet({
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
         onClick={dismissable ? handleBackdropClick : undefined}
-        className="fixed inset-0 bg-black/45 backdrop-blur-xs"
+        className="fixed inset-0 bg-black/45"
         style={{ willChange: "opacity", zIndex: backdropZIndex }}
       />
       {panel}
     </>,
-    document.body
+    document.body,
   );
 }
 
@@ -432,7 +427,7 @@ function TitleCard({
   title,
   subtitle,
   icon,
-  accent = "bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border-indigo-100 dark:border-indigo-900/30",
+  accent = "bg-secondary text-secondary-foreground border-border-ink",
   trailing,
   closeLabel,
   onClose,
@@ -446,20 +441,12 @@ function TitleCard({
   onClose: () => void;
 }) {
   return (
-    <div className="p-4 sm:p-5 mb-4 border border-zinc-200/70 dark:border-zinc-800/80 rounded-2xl flex items-center justify-between gap-3 bg-zinc-50/80 dark:bg-zinc-900/70">
+    <div className="p-4 sm:p-5 mb-4 border-2 border-border-ink rounded-2xl flex items-center justify-between gap-3 bg-surface-secondary">
       <div className="flex items-center gap-3 min-w-0">
-        {icon && (
-          <div className={`p-2 rounded-2xl border shrink-0 ${accent}`}>{icon}</div>
-        )}
+        {icon && <div className={`p-2 rounded-2xl border shrink-0 ${accent}`}>{icon}</div>}
         <div className="min-w-0">
-          <h2 className="text-base font-black text-zinc-900 dark:text-white truncate">
-            {title}
-          </h2>
-          {subtitle && (
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-snug">
-              {subtitle}
-            </p>
-          )}
+          <h2 className="text-base font-bold text-text-heading truncate">{title}</h2>
+          {subtitle && <p className="text-xs text-text-muted leading-snug">{subtitle}</p>}
         </div>
       </div>
       <div className="flex items-center gap-2 shrink-0">

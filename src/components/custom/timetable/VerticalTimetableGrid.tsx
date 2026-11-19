@@ -111,7 +111,7 @@ export default function VerticalTimetableGrid({
         venue: norm.venue || c.venue || c.slotVenue || "",
         credits: String(norm.credits ?? c.credits ?? "0"),
         type: norm.componentType || c.type || c.courseType || "",
-        color: c.color || c.ffcs?.color || "bg-blue-600",
+        color: c.color || c.ffcs?.color || "bg-primary",
       };
     });
   }, [courses]);
@@ -171,8 +171,8 @@ export default function VerticalTimetableGrid({
       if (cell.kind === "course" && cell.course) {
         return (
           <div className="flex flex-col items-center justify-center w-full min-w-0 leading-none px-0.5">
-            <span className="font-black text-[10px] leading-tight truncate w-full text-center">{cell.course.code}</span>
-            <span className="font-mono text-[9px] opacity-90 font-bold leading-tight truncate">
+            <span className="font-bold text-xs leading-tight truncate w-full text-center">{cell.course.code}</span>
+            <span className="font-mono text-xs opacity-90 font-bold leading-tight truncate">
               {cell.slots.join("+")}
             </span>
           </div>
@@ -204,14 +204,14 @@ export default function VerticalTimetableGrid({
                     }
                   }}
                   className={cn(
-                    "font-mono font-black tracking-tight rounded px-1 transition-all inline-block",
-                    cell.slots.length === 1 ? "text-[10px]" : "text-[9px]",
+                    "font-mono font-bold tracking-tight rounded px-1 transition-all inline-block",
+                    cell.slots.length === 1 ? "text-xs" : "text-xs",
                     onToggleBlockSlot && "cursor-pointer active:scale-90 hover:ring-1 hover:ring-zinc-400",
                     isSlotBlocked
-                      ? "text-rose-300 line-through bg-rose-500/20 border border-rose-500/30"
+                      ? "text-danger-foreground line-through bg-danger-surface border border-border-ink"
                       : isTheory
-                        ? "text-zinc-200 dark:text-zinc-100 hover:bg-zinc-800/60"
-                        : "text-zinc-400 dark:text-zinc-400 hover:bg-zinc-800/60",
+                        ? "text-text-muted hover:bg-zinc-800/60"
+                        : "text-text-muted hover:bg-zinc-800/60",
                   )}
                   title={`${slot} (${isTheory ? "Theory" : "Lab"})${isSlotBlocked ? " - Blocked" : " - Available"}${onToggleBlockSlot ? " (Tap to toggle)" : ""}`}
                 >
@@ -240,7 +240,7 @@ export default function VerticalTimetableGrid({
             {cell.slots.map((slot, i) => (
               <span
                 key={`${slot}-${i}`}
-                className={cn("text-[10px] leading-[1.15]", i === 0 ? "font-black" : "font-bold opacity-75")}
+                className={cn("text-xs leading-[1.15]", i === 0 ? "font-bold" : "font-bold opacity-75")}
               >
                 {i === 0 ? slot : `+${slot}`}
               </span>
@@ -251,8 +251,8 @@ export default function VerticalTimetableGrid({
             <span
               className={cn(
                 "leading-tight",
-                compact ? "w-full truncate text-[10px]" : "break-all text-[11px]",
-                cell.kind === "course" ? "font-black" : "font-bold",
+                compact ? "w-full truncate text-xs" : "break-all text-xs",
+                cell.kind === "course" ? "font-bold" : "font-bold",
                 cell.kind === "empty" && "opacity-60",
               )}
             >
@@ -261,13 +261,13 @@ export default function VerticalTimetableGrid({
           )
         )}
         {!compact && cell.kind === "course" && cell.course && (
-          <span className="w-full truncate text-center text-[9px] font-semibold leading-tight">{cell.course.code}</span>
+          <span className="w-full truncate text-center text-xs font-semibold leading-tight">{cell.course.code}</span>
         )}
         {!compact && cell.blocked && (
-          <span className="text-[9px] font-black uppercase leading-tight tracking-wider">Blocked</span>
+          <span className="text-xs font-bold uppercase leading-tight tracking-wider">Blocked</span>
         )}
         {!compact && !cell.blocked && cell.partiallyBlocked && (
-          <span className="text-[9px] font-bold uppercase leading-tight tracking-wider opacity-80">Partly blocked</span>
+          <span className="text-xs font-bold uppercase leading-tight tracking-wider opacity-80">Partly blocked</span>
         )}
       </>
     );
@@ -290,19 +290,18 @@ export default function VerticalTimetableGrid({
       onClick: () => handleTap(cell),
       tileClassName: cn(
         cell.kind === "blocked" &&
-          "border-red-500/40 bg-[repeating-linear-gradient(45deg,transparent,transparent_2px,rgba(239,68,68,0.3)_2px,rgba(239,68,68,0.3)_4px)] bg-red-950/40 text-red-200 shadow-inner",
+          "border-border-ink bg-[repeating-linear-gradient(45deg,transparent,transparent_2px,rgba(239,68,68,0.3)_2px,rgba(239,68,68,0.3)_4px)] bg-red-950/40 text-red-200 shadow-inner",
         cell.kind !== "blocked" &&
           cell.partiallyBlocked &&
-          "border-amber-500/40 bg-[repeating-linear-gradient(45deg,transparent,transparent_2px,rgba(245,158,11,0.15)_2px,rgba(245,158,11,0.15)_4px)] bg-amber-950/20 text-amber-200 shadow-inner",
+          "border-border-ink bg-[repeating-linear-gradient(45deg,transparent,transparent_2px,rgba(245,158,11,0.15)_2px,rgba(245,158,11,0.15)_4px)] bg-amber-950/20 text-amber-200 shadow-inner",
         cell.kind === "course" &&
           cell.course &&
           cn(courseColorClass(cell.course.color), "border-2 border-obsidian shadow-brutal-sm"),
-        cell.kind === "gap" &&
-          "animate-pulse border-yellow-500/60 bg-yellow-500/20 text-yellow-600 dark:text-yellow-200",
+        cell.kind === "gap" && "animate-pulse border-border-ink bg-warning-surface text-warning-foreground",
         cell.kind === "empty" &&
           cn(
-            "border-dashed border-zinc-300/90 bg-zinc-100/50 text-zinc-400 dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-600",
-            isToday && "border-amber-400/70 bg-amber-50/60 dark:border-amber-500/40 dark:bg-amber-500/10",
+            "border-dashed border-border-ink bg-surface-secondary text-text-muted",
+            isToday && "border-border-ink bg-amber-50/60 dark:border-border-ink dark:bg-warning-surface",
           ),
       ),
     };
@@ -314,25 +313,25 @@ export default function VerticalTimetableGrid({
 
       <div
         className={cn(
-          "flex flex-wrap items-center gap-x-3 gap-y-1 px-1 font-medium text-zinc-500 dark:text-zinc-400",
-          compact ? "gap-x-2.5 text-[9px]" : "text-[10px]",
+          "flex flex-wrap items-center gap-x-3 gap-y-1 px-1 font-medium text-text-muted",
+          compact ? "gap-x-2.5 text-xs" : "text-xs",
         )}
       >
         <span className="flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-[3px] border-2 border-dashed border-zinc-300 dark:border-zinc-800" />
+          <span className="h-2.5 w-2.5 rounded-[3px] border-2 border-dashed border-border-ink" />
           free
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-[3px] border-2 border-zinc-300 bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900" />
+          <span className="h-2.5 w-2.5 rounded-[3px] border-2 border-border-ink bg-surface-secondary" />
           class
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-[3px] border-2 border-red-500/40 bg-red-500/30" />
+          <span className="h-2.5 w-2.5 rounded-[3px] border-2 border-border-ink bg-red-500/30" />
           blocked
         </span>
         {today && grid.days.some((d) => d.id.toLowerCase() === today) && (
           <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-[3px] border-2 border-amber-400 bg-amber-50 dark:border-amber-500/40 dark:bg-amber-500/10" />
+            <span className="h-2.5 w-2.5 rounded-[3px] border-2 border-border-ink bg-warning-surface dark:border-border-ink dark:bg-warning-surface" />
             today
           </span>
         )}

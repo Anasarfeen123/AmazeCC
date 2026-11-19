@@ -66,15 +66,15 @@ export default function AcknowledgementCards({ creds, refreshKey }: { creds: any
 
   return (
     <div className="solid-card">
-      <div className="p-5 border-b border-gray-100/50  dark:border-gray-800/50">
+      <div className="p-5 border-b border-border-ink">
         <div className="flex items-center gap-2">
-          <FileText className="w-4 h-4 text-gray-500  dark:text-gray-400" />
-          <h4 className="text-sm font-semibold text-gray-500  dark:text-gray-400 uppercase tracking-wider">
+          <FileText className="w-4 h-4 text-text-muted" />
+          <h4 className="text-sm font-semibold text-text-muted uppercase tracking-wider">
             {ack?.title || "Document Acknowledgement"}
           </h4>
         </div>
         {(ack?.registerNo || ack?.programme || ack?.branch) && (
-          <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 space-y-0.5">
+          <div className="mt-2 text-xs text-text-muted space-y-0.5">
             {ack.registerNo && <div>Register No: {ack.registerNo}</div>}
             {ack.programme && <div>{ack.programme}</div>}
             {ack.branch && <div>{ack.branch}</div>}
@@ -87,26 +87,21 @@ export default function AcknowledgementCards({ creds, refreshKey }: { creds: any
           const status = doc?.status || "";
           const isSubmitted = /submitted|verified|accepted/i.test(status);
           return (
-            <div
-              key={idx}
-              className="flex items-center gap-3 px-5 py-3.5 hover:bg-gray-50/50 dark:hover:bg-slate-800/30 dark:hover:bg-gray-800/30 transition-colors"
-            >
+            <div key={idx} className="flex items-center gap-3 px-5 py-3.5 hover:bg-surface-hover transition-colors">
               <div
                 className={`p-1.5 rounded-lg shrink-0 ${
-                  isSubmitted
-                    ? "bg-emerald-100  dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400"
-                    : "bg-gray-100  text-gray-400"
+                  isSubmitted ? "bg-emerald-100 text-success-foreground" : "bg-surface-secondary text-text-muted"
                 }`}
               >
                 <FileText className="w-3.5 h-3.5" />
               </div>
-              <p className="text-sm text-gray-700  dark:text-gray-300 flex-1 min-w-0 leading-snug">{docName}</p>
+              <p className="text-sm text-text-primary flex-1 min-w-0 leading-snug">{docName}</p>
               <span
-                className={`shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ${
+                className={`shrink-0 text-xs font-semibold px-2.5 py-1 rounded-[10px] ${
                   isSubmitted
-                    ? "bg-emerald-100 text-emerald-700   dark:bg-emerald-900/30 dark:text-emerald-400"
-                    : "bg-gray-100 text-gray-500   dark:bg-gray-800 dark:text-gray-400"
-                }`}
+                    ? "bg-emerald-100 text-success-foreground dark:text-success-foreground"
+                    : "bg-surface-secondary text-text-muted "
+                } min-h-9`}
               >
                 {status || (isSubmitted ? "Verified" : "Pending")}
               </span>

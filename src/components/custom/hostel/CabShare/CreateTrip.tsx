@@ -26,7 +26,7 @@ import SelectField from "../../shared/primitives/SelectField";
 import { ListSkeleton } from "../../shared/primitives";
 import { FIELD_INPUT, TILE_CARD, TONE_ICON_TILE } from "@/lib/uiTokens";
 
-const FIELD_LABEL = "block text-[10px] font-black uppercase tracking-wider text-text-muted";
+const FIELD_LABEL = "block text-xs font-bold uppercase tracking-wider text-text-muted";
 
 /** Label + icon-led control, the one wrapper the date/time/seats/tolerance share. */
 // Descendant (not `> child`) selectors: `SelectField` renders its own wrapper
@@ -156,8 +156,8 @@ export default function CreateTrip({
           <MapPin className="h-5 w-5" />
         </span>
         <div className="min-w-0">
-          <h2 className="text-base font-black text-text-heading font-outfit tracking-tight">Post a ride</h2>
-          <p className="text-[11px] text-text-secondary dark:text-text-muted font-medium leading-relaxed mt-0.5">
+          <h2 className="text-base font-bold text-text-heading font-outfit tracking-tight">Post a ride</h2>
+          <p className="text-xs text-text-secondary dark:text-text-muted font-medium leading-relaxed mt-0.5">
             Add your route and timing so others can request to share the cab.
           </p>
         </div>
@@ -170,7 +170,7 @@ export default function CreateTrip({
       ) : (
         <form onSubmit={handleSubmit} className="mt-5 grid gap-4 lg:grid-cols-2">
           {error && (
-            <div className="flex items-center gap-2 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm font-semibold text-red-600 dark:text-red-400 lg:col-span-2">
+            <div className="flex items-center gap-2 rounded-2xl border border-border-ink bg-danger-surface p-4 text-sm font-semibold text-danger-foreground lg:col-span-2">
               <AlertCircle className="h-4 w-4 shrink-0" />
               {error}
             </div>
@@ -246,9 +246,9 @@ export default function CreateTrip({
               {(["mixed", "boys", "girls"] as const).map((opt) => (
                 <label
                   key={opt}
-                  className={`flex cursor-pointer items-center justify-center rounded-2xl border px-4 py-3 text-sm font-black capitalize transition-colors ${
+                  className={`flex cursor-pointer items-center justify-center rounded-2xl border px-4 py-3 text-sm font-bold capitalize transition-colors ${
                     gender === opt
-                      ? "border-indigo-500 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
+                      ? "border-border-ink bg-secondary text-secondary-foreground"
                       : "border-border-strong text-text-secondary dark:text-text-muted hover:bg-surface-secondary dark:hover:bg-surface-hover"
                   }`}
                 >
@@ -282,7 +282,7 @@ export default function CreateTrip({
           <button
             type="submit"
             disabled={submitting}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-4 py-3 text-sm font-black text-white transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-70 lg:col-span-2"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-colors hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70 lg:col-span-2"
           >
             {submitting ? (
               <Loader2 className="w-5 h-5 animate-spin" />

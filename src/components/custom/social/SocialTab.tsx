@@ -272,25 +272,25 @@ export default function SocialTab({ attendanceData, isDemo }: { attendanceData: 
         {/* People — pinned */}
         <button type="button" onClick={() => setScreen("people")} className={`${TILE} h-32 sm:h-36`}>
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-outfit truncate">
+            <span className="text-xs sm:text-xs font-bold uppercase tracking-wider text-text-muted font-outfit truncate">
               People
             </span>
             <span
-              className={`text-[9px] sm:text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md shrink-0 border ${TONE_BADGE[syncBadge.tone]}`}
+              className={`text-xs sm:text-xs font-bold uppercase px-2 py-0.5 rounded-md shrink-0 border ${TONE_BADGE[syncBadge.tone]}`}
             >
               {syncBadge.label}
             </span>
           </div>
           <div className="my-auto min-w-0">
-            <span className="text-3xl sm:text-4xl font-black font-outfit tracking-tight leading-none block truncate">
+            <span className="text-3xl sm:text-4xl font-bold font-outfit tracking-tight leading-none block truncate">
               {peers.length}
             </span>
           </div>
           <div className="flex items-center justify-between gap-2">
-            <p className="text-[10.5px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-medium truncate">
+            <p className="text-xs sm:text-xs text-text-muted font-medium truncate">
               {freeNowHandles.size} free right now
             </p>
-            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />
+            <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
           </div>
         </button>
 
@@ -365,14 +365,14 @@ export default function SocialTab({ attendanceData, isDemo }: { attendanceData: 
                     {s.count} {s.suffix}
                   </span>
                 )}
-                <span className="w-4 h-4 text-zinc-400 shrink-0 flex items-center justify-end">›</span>
+                <span className="w-4 h-4 text-text-muted shrink-0 flex items-center justify-end">›</span>
               </button>
             );
           })}
         </div>
       </div>
 
-      <p className="px-1 -mt-3 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500 font-medium">
+      <p className="px-1 -mt-3 text-xs leading-relaxed text-text-muted font-medium">
         Your timetable is derived from VTOP by the server, never uploaded from this device. Pairing is mutual, and
         either side can end it from Pairs.
       </p>
@@ -409,7 +409,7 @@ export default function SocialTab({ attendanceData, isDemo }: { attendanceData: 
       {syncError && (
         <div
           role="alert"
-          className="flex items-start gap-2.5 rounded-2xl border border-amber-500/25 bg-amber-500/10 px-3.5 py-3 text-sm text-amber-800 dark:text-amber-300"
+          className="flex items-start gap-2.5 rounded-2xl border border-border-ink bg-warning-surface px-3.5 py-3 text-sm text-amber-800 dark:text-warning-foreground"
         >
           <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
           <div className="min-w-0">
@@ -419,7 +419,7 @@ export default function SocialTab({ attendanceData, isDemo }: { attendanceData: 
               <button
                 type="button"
                 onClick={signInInteractive}
-                className="mt-2 rounded-full bg-amber-700 px-3 py-1.5 text-xs font-bold text-white hover:bg-amber-800 dark:bg-amber-300 dark:text-amber-950 dark:hover:bg-amber-200"
+                className="mt-2 rounded-[10px] bg-amber-700 px-3 py-1.5 text-xs font-bold text-white hover:bg-amber-800 dark:bg-amber-300 dark:text-amber-950 dark:hover:bg-amber-200 min-h-9"
               >
                 Sign in with Amaze ID
               </button>
@@ -433,12 +433,12 @@ export default function SocialTab({ attendanceData, isDemo }: { attendanceData: 
               the back navigation, so a BackButton here would be wrong. */}
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
-              <span className="w-11 h-11 rounded-2xl flex items-center justify-center text-xs font-black font-outfit border border-indigo-500/20 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 shrink-0">
+              <span className="w-11 h-11 rounded-2xl flex items-center justify-center text-xs font-bold font-outfit border border-border-ink bg-secondary text-secondary-foreground shrink-0">
                 {initials(name)}
               </span>
               <div className="min-w-0">
-                <p className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 leading-none mb-1">Campus</p>
-                <h1 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-white tracking-tight leading-tight font-outfit truncate">
+                <p className="text-xs font-semibold text-text-muted leading-none mb-1">Campus</p>
+                <h1 className="text-xl sm:text-2xl font-bold text-text-heading tracking-tight leading-tight font-outfit truncate">
                   Social
                 </h1>
               </div>
@@ -467,7 +467,7 @@ export default function SocialTab({ attendanceData, isDemo }: { attendanceData: 
 
           <div className="flex items-center gap-2 px-1 -mt-3 flex-wrap">
             <span className={`${CHIP} font-mono tracking-widest`}>{myHandle}</span>
-            <span className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium truncate">
+            <span className="text-xs text-text-muted font-medium truncate">
               {hasPublished ? "your handle" : "sync to publish your week"}
             </span>
           </div>
@@ -483,16 +483,12 @@ export default function SocialTab({ attendanceData, isDemo }: { attendanceData: 
               type="button"
               onClick={onSyncNow}
               disabled={syncing}
-              className="inline-flex items-center gap-1.5 rounded-full border border-zinc-300/70 dark:border-zinc-700 px-3 py-1.5 text-[11px] font-bold text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-1.5 rounded-[10px] border-2 border-border-ink px-3 py-1.5 text-xs font-bold text-text-muted hover:bg-surface-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed min-h-9"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${syncing ? "animate-spin" : ""}`} aria-hidden="true" />
               {syncing ? "Syncing…" : "Sync now"}
             </button>
-            <span
-              className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500 truncate"
-              role="status"
-              aria-live="polite"
-            >
+            <span className="text-xs font-medium text-text-muted truncate" role="status" aria-live="polite">
               {syncing
                 ? "logging in and refreshing"
                 : syncFailed || syncError

@@ -6,11 +6,7 @@ import BottomSheet from "../shared/BottomSheet";
 import { SectionHeader, initials } from "./rows";
 import { useSocialData } from "@/lib/social/useSocialData";
 import { usePeerTimetables } from "@/lib/social/usePeerTimetables";
-import {
-  normaliseGroupName,
-  useSocialGroups,
-  type GroupSummary,
-} from "@/lib/social/useSocialGroups";
+import { normaliseGroupName, useSocialGroups, type GroupSummary } from "@/lib/social/useSocialGroups";
 import { GROUP_NAME_MAX, type BusyMap } from "@/lib/social/types";
 import { FIELD_INPUT, TONE_BADGE } from "@/lib/libraries/ui";
 
@@ -49,7 +45,7 @@ export default function GroupMembersSheet({
   // racing over the same key.
   const groupApi = useSocialGroups({ ownBusyMap, knownHandles: known, busyByHandle });
 
-  const existing = groupId ? groupApi.groups.find((g) => g.id === groupId) ?? null : null;
+  const existing = groupId ? (groupApi.groups.find((g) => g.id === groupId) ?? null) : null;
   const [name, setName] = useState(existing?.name ?? "");
   const [selected, setSelected] = useState<string[]>(existing?.handles ?? []);
   const [error, setError] = useState<string | null>(null);
@@ -61,9 +57,7 @@ export default function GroupMembersSheet({
   }, [existing]);
 
   const toggle = useCallback((handle: string) => {
-    setSelected((prev) =>
-      prev.includes(handle) ? prev.filter((h) => h !== handle) : [...prev, handle]
-    );
+    setSelected((prev) => (prev.includes(handle) ? prev.filter((h) => h !== handle) : [...prev, handle]));
   }, []);
 
   const save = useCallback(() => {
@@ -96,10 +90,7 @@ export default function GroupMembersSheet({
     >
       <div className="space-y-5">
         <div className="space-y-1.5">
-          <label
-            htmlFor="group-name"
-            className="text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 dark:text-zinc-500"
-          >
+          <label htmlFor="group-name" className="text-xs font-bold uppercase tracking-wider text-text-muted">
             Name
           </label>
           <input
@@ -112,13 +103,10 @@ export default function GroupMembersSheet({
           />
         </div>
 
-        <SectionHeader
-          icon={Users}
-          title={`Members (${selected.length}/${known.length})`}
-        />
+        <SectionHeader icon={Users} title={`Members (${selected.length}/${known.length})`} />
 
         {known.length === 0 ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="text-sm text-text-muted">
             Pair with someone first — a group is made from people you already share with.
           </p>
         ) : (
@@ -131,25 +119,21 @@ export default function GroupMembersSheet({
                   type="button"
                   onClick={() => toggle(p.handle)}
                   aria-pressed={on}
-                  className="w-full flex items-center gap-3 text-left p-2.5 rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors"
+                  className="w-full flex items-center gap-3 text-left p-2.5 rounded-2xl border-2 border-border-ink bg-surface hover:bg-surface-hover transition-colors"
                 >
-                  <span className="w-9 h-9 rounded-xl flex items-center justify-center text-[11px] font-black font-outfit bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 shrink-0">
+                  <span className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold font-outfit bg-surface-secondary text-text-muted shrink-0">
                     {initials(p.name)}
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-bold text-zinc-900 dark:text-white truncate">
-                      {p.name}
-                    </span>
-                    <span className="block text-[10px] font-mono text-zinc-400 dark:text-zinc-500 truncate">
+                    <span className="block text-sm font-bold text-text-heading truncate">{p.name}</span>
+                    <span className="block text-xs font-mono text-text-muted truncate">
                       {p.handle}
                       {!p.loaded && " · loading"}
                     </span>
                   </span>
                   <span
                     className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 border ${
-                      on
-                        ? "bg-indigo-500 border-indigo-500 text-white"
-                        : "border-zinc-300 dark:border-zinc-700 text-transparent"
+                      on ? "bg-primary border-border-ink text-primary-foreground" : "border-border-ink text-transparent"
                     }`}
                   >
                     <Check className="w-3.5 h-3.5" />
@@ -170,7 +154,7 @@ export default function GroupMembersSheet({
           <button
             type="button"
             onClick={save}
-            className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold px-4 py-3 transition-colors"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground text-sm font-bold px-4 py-3 transition-colors"
           >
             {existing ? "Save group" : "Create group"}
           </button>
@@ -180,7 +164,7 @@ export default function GroupMembersSheet({
               onClick={() => onOpenGrid(existing.id)}
               title="Open this group's grid"
               aria-label="Open this group's grid"
-              className="p-3 rounded-2xl border border-zinc-200/80 dark:border-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              className="p-3 rounded-2xl border-2 border-border-ink text-text-muted hover:bg-surface-hover transition-colors"
             >
               <FolderPlus className="w-4 h-4" />
             </button>
@@ -190,7 +174,7 @@ export default function GroupMembersSheet({
             onClick={onClose}
             title="Close"
             aria-label="Close"
-            className="p-3 rounded-2xl border border-zinc-200/80 dark:border-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+            className="p-3 rounded-2xl border-2 border-border-ink text-text-muted hover:bg-surface-hover transition-colors"
           >
             <X className="w-4 h-4" />
           </button>

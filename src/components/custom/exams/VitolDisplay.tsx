@@ -156,9 +156,7 @@ export function VitolUserPassForm({ handleFetchVitol }) {
         </div>
 
         <div className="flex flex-col text-left">
-          <label className="text-sm font-medium text-text-primary mb-1">
-            Username (Registration No.)
-          </label>
+          <label className="text-sm font-medium text-text-primary mb-1">Username (Registration No.)</label>
           <input
             className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 
                         dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100

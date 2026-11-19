@@ -23,7 +23,7 @@ const MODE_OPTIONS: readonly ExperienceModeOption<LayoutMode>[] = [
     Icon: Compass,
     iconClass: "bg-secondary text-secondary-foreground border-border-ink",
     selectedClass: "bg-secondary",
-    activeColor: "bg-indigo-600 hover:bg-primary",
+    activeColor: "bg-primary hover:bg-primary",
   },
   {
     value: "modern",
@@ -33,7 +33,7 @@ const MODE_OPTIONS: readonly ExperienceModeOption<LayoutMode>[] = [
     Icon: LayoutDashboard,
     iconClass: "bg-secondary text-secondary-foreground border-border-ink",
     selectedClass: "bg-secondary",
-    activeColor: "bg-blue-600 hover:bg-primary",
+    activeColor: "bg-primary hover:bg-primary",
   },
   {
     value: "classic",

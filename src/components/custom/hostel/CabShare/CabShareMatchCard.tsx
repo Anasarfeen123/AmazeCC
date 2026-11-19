@@ -25,21 +25,21 @@ const MATCH_TONE = {
 } as const;
 
 const MATCH_SURFACE = {
-  amber: "border-amber-500/20 bg-amber-500/10",
-  violet: "border-violet-500/20 bg-violet-500/10",
-  blue: "border-blue-500/20 bg-blue-500/10",
+  amber: "border-border-ink bg-warning-surface",
+  violet: "border-border-ink bg-secondary",
+  blue: "border-border-ink bg-secondary",
 } as const;
 
 const MATCH_INK = {
-  amber: "text-amber-700 dark:text-amber-400",
-  violet: "text-violet-700 dark:text-violet-400",
-  blue: "text-blue-700 dark:text-blue-400",
+  amber: "text-warning-foreground",
+  violet: "text-primary",
+  blue: "text-primary",
 } as const;
 
 const MATCH_WELL = {
-  amber: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
-  violet: "bg-violet-500/10 text-violet-600 dark:text-violet-400",
-  blue: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
+  amber: "bg-warning-surface text-warning-foreground",
+  violet: "bg-secondary text-secondary-foreground",
+  blue: "bg-secondary text-secondary-foreground",
 } as const;
 
 type MatchKind = keyof typeof MATCH_TONE;
@@ -160,8 +160,8 @@ export default function CabShareMatchCard() {
             <Icon className="h-5 w-5" />
           </span>
           <div className="min-w-0">
-            <h3 className={`text-sm font-black font-outfit tracking-tight ${MATCH_INK[tone]}`}>{title}</h3>
-            <p className="text-[11px] font-medium text-text-secondary dark:text-text-muted mt-0.5">{sub}</p>
+            <h3 className={`text-sm font-bold font-outfit tracking-tight ${MATCH_INK[tone]}`}>{title}</h3>
+            <p className="text-xs font-medium text-text-secondary dark:text-text-muted mt-0.5">{sub}</p>
           </div>
         </div>
         {children}
@@ -180,7 +180,7 @@ export default function CabShareMatchCard() {
     <>
       <p className="flex items-center gap-1 text-xs font-bold text-text-heading">{hub}</p>
       {time ? (
-        <p className="mt-0.5 flex items-center gap-1 text-[11px] font-medium text-text-secondary dark:text-text-muted">
+        <p className="mt-0.5 flex items-center gap-1 text-xs font-medium text-text-secondary dark:text-text-muted">
           {time}
         </p>
       ) : null}
@@ -213,8 +213,8 @@ export default function CabShareMatchCard() {
             }
             right={
               <div className="text-right">
-                <p className="text-[11px] font-medium text-text-muted">Host</p>
-                <p className="text-xs font-black text-text-heading">{trip.owner_name}</p>
+                <p className="text-xs font-medium text-text-muted">Host</p>
+                <p className="text-xs font-bold text-text-heading">{trip.owner_name}</p>
               </div>
             }
           />
@@ -244,7 +244,7 @@ export default function CabShareMatchCard() {
                   />
                 }
                 right={
-                  <span className="shrink-0 text-[11px] font-bold text-text-secondary dark:text-text-muted">
+                  <span className="shrink-0 text-xs font-bold text-text-secondary dark:text-text-muted">
                     <Clock className="h-3 w-3" /> {req.trip?.preferred_time}
                   </span>
                 }
@@ -277,8 +277,8 @@ export default function CabShareMatchCard() {
             }
             right={
               <div className="text-right">
-                <p className="text-[11px] font-medium text-text-muted">Contact</p>
-                <p className="text-xs font-black text-text-heading">
+                <p className="text-xs font-medium text-text-muted">Contact</p>
+                <p className="text-xs font-bold text-text-heading">
                   {acceptedMatch.role === "host"
                     ? acceptedMatch.requests.find((r: any) => r.status === "accepted")?.phone_number
                     : acceptedMatch.owner_phone}

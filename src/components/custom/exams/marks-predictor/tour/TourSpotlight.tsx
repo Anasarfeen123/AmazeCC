@@ -144,7 +144,7 @@ export function TourSpotlight() {
               }
         }
       >
-        <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+        <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
           Step {tour.stepIndex + 1} of {tour.total}
         </p>
         <h3 className="mt-1 font-bold text-sm text-text-heading">{step.title}</h3>
@@ -171,7 +171,7 @@ export function TourSpotlight() {
             <button
               type="button"
               onClick={tour.next}
-              className="flex items-center gap-1.5 text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 text-xs font-semibold bg-primary hover:brightness-110 text-primary-foreground px-3 py-2 rounded-lg transition-colors cursor-pointer"
             >
               {tour.stepIndex + 1 === tour.total ? "Finish" : "Next"}
               {tour.stepIndex + 1 !== tour.total && <ArrowRight className="w-3.5 h-3.5" />}

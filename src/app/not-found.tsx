@@ -10,40 +10,36 @@ export default function NotFoundPage() {
   const pathname = usePathname();
 
   return (
-    <main className="min-h-screen w-full bg-slate-50 px-4 text-foreground transition-colors duration-300 dark:bg-[#03060F] flex items-center justify-center py-10">
+    <main className="min-h-screen w-full bg-surface-secondary px-4 text-foreground transition-colors duration-300 dark:bg-[#03060F] flex items-center justify-center py-10">
       <div className="w-full max-w-xl animate-in fade-in duration-300">
-        <Card className="w-full border-border-strong dark:border-border card-surface shadow-2xl rounded-[24px] overflow-hidden relative text-center">
+        <Card className="w-full border-border-strong dark:border-border card-surface shadow-2xl rounded-[14px] overflow-hidden relative text-center">
           {/* Subtle background gradient glow */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-bl-full pointer-events-none -z-10" />
+          <div className="absolute top-0 right-0 w-32 h-32 bg-secondary rounded-bl-full pointer-events-none -z-10" />
 
           <CardHeader className="pt-8">
             {/* Professional Search/404 Icon */}
             <div className="flex justify-center mb-6">
-              <div className="relative flex items-center justify-center w-20 h-20 rounded-full bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-650 dark:text-indigo-400">
+              <div className="relative flex items-center justify-center w-20 h-20 rounded-full bg-secondary dark:bg-secondary text-secondary-foreground text-secondary-foreground">
                 <HelpCircle className="w-10 h-10 stroke-[2]" />
-                <div className="absolute inset-0 rounded-full border border-indigo-500/35 animate-pulse duration-2000 pointer-events-none" />
+                <div className="absolute inset-0 rounded-full border border-border-ink animate-pulse duration-2000 pointer-events-none" />
               </div>
             </div>
 
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-500 font-[family-name:var(--font-outfit)]">
+            <p className="text-xs font-bold uppercase tracking-widest text-text-muted font-[family-name:var(--font-outfit)]">
               Routing Error
             </p>
-            <CardTitle className="text-xl md:text-2xl font-black tracking-tight text-slate-900 dark:text-white mt-1">
+            <CardTitle className="text-xl md:text-2xl font-bold tracking-tight text-text-heading mt-1">
               Page not found
             </CardTitle>
-            <CardDescription className="text-xs md:text-sm mt-2 text-slate-500 dark:text-gray-400 font-medium max-w-sm mx-auto leading-relaxed">
+            <CardDescription className="text-xs md:text-sm mt-2 text-text-muted font-medium max-w-sm mx-auto leading-relaxed">
               The requested resource does not exist, has been moved, or may be temporary unavailable.
             </CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-6 px-6 md:px-8 pb-8">
-            <div className="rounded-2xl border border-slate-205 dark:border-neutral-900 bg-slate-50/50 dark:bg-neutral-950/20 p-4 text-xs font-semibold text-slate-700 dark:text-gray-300 leading-relaxed text-left flex justify-between items-center">
-              <span className="text-slate-455 dark:text-gray-550 font-bold uppercase tracking-wider text-[9px]">
-                Requested path
-              </span>
-              <span className="font-mono text-slate-500 dark:text-gray-400 truncate max-w-[65%]">
-                {pathname || "unknown"}
-              </span>
+            <div className="rounded-2xl border border-border-muted dark:border-neutral-900 bg-surface-secondary dark:bg-neutral-950/20 p-4 text-xs font-semibold text-text-primary leading-relaxed text-left flex justify-between items-center">
+              <span className="text-text-muted font-bold uppercase tracking-wider text-xs">Requested path</span>
+              <span className="font-mono text-text-muted truncate max-w-[65%]">{pathname || "unknown"}</span>
             </div>
 
             <div className="flex flex-wrap justify-center gap-3">
@@ -60,7 +56,7 @@ export default function NotFoundPage() {
               <Button
                 asChild
                 variant="outline"
-                className="rounded-xl font-bold text-xs py-2 min-h-11 px-5 cursor-pointer gap-1.5 border-rose-200 dark:border-rose-900/40 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20"
+                className="rounded-xl font-bold text-xs py-2 min-h-11 px-5 cursor-pointer gap-1.5 border-border-ink text-danger-foreground hover:bg-danger-surface dark:hover:bg-rose-950/20"
               >
                 <Link href="/?tab=feedback&category=bug">
                   <Bug className="w-4 h-4" />

@@ -59,13 +59,13 @@ const DAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
  * `courseColorClass()` (src/lib/courseColors.ts).
  */
 const ATT_COLORS = [
-  "bg-blue-600",
-  "bg-purple-600",
+  "bg-primary",
+  "bg-primary",
   "bg-emerald-500",
   "bg-red-600",
   "bg-amber-500",
   "bg-pink-500",
-  "bg-indigo-600",
+  "bg-primary",
   "bg-teal-500",
   "bg-cyan-600",
   "bg-fuchsia-500",

@@ -610,7 +610,7 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
                         {examTag || meta.kind}
                       </ToneBadge>
                       <ChevronRight
-                        className="h-4 w-4 text-text-muted transition-colors group-text-primary dark:group-text-primary"
+                        className="h-4 w-4 text-text-muted transition-colors group-hover:text-primary"
                         aria-hidden
                       />
                     </div>
@@ -642,7 +642,7 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
                 }}
                 className="flex items-center gap-3.5 p-3.5 rounded-2xl border border-border-muted dark:border-border hover:bg-surface-secondary dark:hover:bg-surface-secondary/60 transition-all cursor-pointer text-left group active:scale-[0.99]"
               >
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-secondary-foreground group- transition-transform">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-transform">
                   <Camera className="h-5 w-5" />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -654,7 +654,7 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
               </button>
 
               <label className="flex items-center gap-3.5 p-3.5 rounded-2xl border border-border-muted dark:border-border hover:bg-surface-secondary dark:hover:bg-surface-secondary/60 transition-all cursor-pointer text-left group active:scale-[0.99]">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-success-surface text-success-foreground group- transition-transform">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-success-surface text-success-foreground transition-transform">
                   <Smartphone className="h-5 w-5" />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -673,7 +673,7 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
               </label>
 
               <label className="flex items-center gap-3.5 p-3.5 rounded-2xl border border-border-muted dark:border-border hover:bg-surface-secondary dark:hover:bg-surface-secondary/60 transition-all cursor-pointer text-left group active:scale-[0.99]">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-secondary-foreground group- transition-transform">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-transform">
                   <ImageUp className="h-5 w-5" />
                 </div>
                 <div className="min-w-0 flex-1">

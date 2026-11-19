@@ -464,7 +464,7 @@ function MainRuntime({ initialIntent, onSignedOut }: MainProps) {
             for anyone not on the allowlist, and not even an <audio> element for
             them. Mounted at the root so it survives sub-tab navigation. */}
         <IntroSong authorizedId={authorizedID} />
-        <m.div className="min-h-screen bg-gray-50  dark:bg-black flex flex-col text-gray-900  dark:text-zinc-100 transition-colors">
+        <m.div className="min-h-screen bg-surface-secondary flex flex-col text-text-heading transition-colors">
           <SyncSessionHost
             activeModeId={activeModeId}
             modes={allModes}
@@ -534,7 +534,7 @@ function MainRuntime({ initialIntent, onSignedOut }: MainProps) {
               },
             }}
           />
-          {/* <div className="top-0 left-0 w-full bg-blue-500 text-white text-center py-2 font-medium">
+          {/* <div className="top-0 left-0 w-full bg-primary text-primary-foreground text-center py-2 font-medium">
         Scheduled maintenance on December 29, 2025 ( afternoon ). API services will be temporarily unavailable.
       </div> */}
 
@@ -560,7 +560,7 @@ function MainRuntime({ initialIntent, onSignedOut }: MainProps) {
 function OpeningScreen() {
   return (
     <div
-      className="flex min-h-screen items-center justify-center gap-3 bg-slate-50 text-slate-600 dark:bg-black dark:text-slate-300"
+      className="flex min-h-screen items-center justify-center gap-3 bg-surface-secondary text-text-muted"
       role="status"
       aria-label="Opening your workspace"
     >
@@ -603,29 +603,27 @@ function GlobalShortcutsModal({ onClose }: { onClose: () => void }) {
       maxWidth="max-w-lg"
       title="Keyboard Shortcuts"
       icon={<Keyboard className="w-5 h-5" />}
-      accent="bg-indigo-500/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-400"
+      accent="bg-secondary border-border-ink text-secondary-foreground"
       closeLabel="Close shortcuts help"
     >
       <div className="flex flex-col min-h-0">
         <div className="space-y-5">
           {categories.map((cat, idx) => (
             <div key={idx} className="space-y-2">
-              <h4 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-                {cat.title}
-              </h4>
-              <div className="divide-y divide-gray-100 dark:divide-gray-850/40 border border-gray-150 dark:border-gray-800/80 rounded-xl overflow-hidden bg-white/40 dark:bg-slate-900/10">
+              <h4 className="text-xs font-bold text-text-muted uppercase tracking-wider">{cat.title}</h4>
+              <div className="divide-y divide-border-muted dark:divide-border-muted border border-border-muted rounded-xl overflow-hidden bg-surface">
                 {cat.items.map((item, iIdx) => (
                   <div key={iIdx} className="flex items-center justify-between px-3.5 py-2.5 text-xs">
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">{item.desc}</span>
+                    <span className="text-text-primary font-medium">{item.desc}</span>
                     <div className="flex items-center gap-1">
                       {item.keys.map((k, kIdx) => (
                         <span key={kIdx} className="flex items-center gap-1">
                           {kIdx > 0 && (
-                            <span className="text-[10px] text-gray-400 font-bold px-0.5">
+                            <span className="text-xs text-text-muted font-bold px-0.5">
                               {"joiner" in item ? item.joiner : "+"}
                             </span>
                           )}
-                          <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-md font-mono text-[10px] font-bold text-gray-800 dark:text-gray-200 shadow-xs">
+                          <kbd className="px-1.5 py-0.5 bg-surface-secondary border-2 border-border-ink rounded-md font-mono text-xs font-bold text-text-primary shadow-xs">
                             {k}
                           </kbd>
                         </span>
@@ -637,10 +635,10 @@ function GlobalShortcutsModal({ onClose }: { onClose: () => void }) {
             </div>
           ))}
         </div>
-        <div className="pt-3 border-t border-zinc-200/70 dark:border-zinc-800/70 flex justify-end">
+        <div className="pt-3 border-t border-border-ink flex justify-end">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition-all cursor-pointer active:scale-95"
+            className="px-5 py-2.5 bg-primary hover:brightness-110 text-primary-foreground text-xs font-bold rounded-xl transition-all cursor-pointer"
           >
             Got it, thanks!
           </button>

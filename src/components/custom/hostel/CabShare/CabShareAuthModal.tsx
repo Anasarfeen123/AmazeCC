@@ -8,7 +8,7 @@ import { AlertCircle, ArrowRight, Car, ExternalLink, Loader2, Phone, Shield } fr
 import { ListRowText, ListShell, SectionHeader } from "../../shared/primitives";
 import { FIELD_INPUT, LIST_ROW, TILE_CARD, TONE_ICON_TILE } from "@/lib/uiTokens";
 
-const FIELD_LABEL = "block text-[10px] font-black uppercase tracking-wider text-text-muted";
+const FIELD_LABEL = "block text-xs font-bold uppercase tracking-wider text-text-muted";
 const AUTH_BASE = process.env.NEXT_PUBLIC_AUTH_URL ?? "https://auth.amazecc.com";
 
 const STEPS = [
@@ -149,8 +149,8 @@ export default function CabShareAuthModal({
             <Car className="h-5 w-5" />
           </span>
           <div className="min-w-0">
-            <p className="text-[10px] font-black uppercase tracking-wider text-text-muted">One-time setup</p>
-            <h2 className="mt-1 text-lg font-black font-outfit tracking-tight text-text-heading">
+            <p className="text-xs font-bold uppercase tracking-wider text-text-muted">One-time setup</p>
+            <h2 className="mt-1 text-lg font-bold font-outfit tracking-tight text-text-heading">
               Start using Cab Share
             </h2>
             <p className="mt-1 text-xs font-medium leading-relaxed text-text-secondary dark:text-text-muted">
@@ -161,7 +161,7 @@ export default function CabShareAuthModal({
 
         <div className="mt-5 space-y-4">
           {error && (
-            <div className="flex items-center gap-2 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm font-semibold text-red-600 dark:text-red-400">
+            <div className="flex items-center gap-2 rounded-2xl border border-border-ink bg-danger-surface p-4 text-sm font-semibold text-danger-foreground">
               <AlertCircle className="h-5 w-5 shrink-0" />
               <span>{error}</span>
             </div>
@@ -183,7 +183,7 @@ export default function CabShareAuthModal({
               <button
                 type="button"
                 onClick={signInInteractive}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-4 py-3 text-sm font-black text-white transition-colors hover:bg-indigo-700"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-colors hover:brightness-110"
               >
                 Sign up or sign in with Amaze ID <ArrowRight className="h-4 w-4" />
               </button>
@@ -199,7 +199,7 @@ export default function CabShareAuthModal({
                 href={`${AUTH_BASE}/account`}
                 target="_blank"
                 rel="noreferrer"
-                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-4 py-3 text-sm font-black text-white transition-colors hover:bg-indigo-700"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-colors hover:brightness-110"
               >
                 Link VTOP in Amaze ID <ExternalLink className="h-4 w-4" />
               </a>
@@ -231,13 +231,13 @@ export default function CabShareAuthModal({
                   />
                 </span>
               </label>
-              <p className="flex items-center gap-1.5 text-[11px] font-medium text-text-muted">
+              <p className="flex items-center gap-1.5 text-xs font-medium text-text-muted">
                 <Shield className="h-3.5 w-3.5" /> Shared only with confirmed ride matches.
               </p>
               <button
                 type="submit"
                 disabled={loading}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-4 py-3 text-sm font-black text-white transition-colors hover:bg-indigo-700 disabled:opacity-70"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-colors hover:brightness-110 disabled:opacity-70"
               >
                 {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Register phone & continue"}
               </button>
@@ -261,7 +261,7 @@ export default function CabShareAuthModal({
         <ListShell>
           {STEPS.map(([title, description], index) => (
             <div key={title} className={LIST_ROW}>
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-surface-secondary border border-border-muted text-[11px] font-black text-indigo-600 dark:text-indigo-400">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-surface-secondary border border-border-muted text-xs font-bold text-primary">
                 {index + 1}
               </span>
               <ListRowText title={title} subtitle={description} />

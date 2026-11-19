@@ -71,7 +71,7 @@ export default function LeaveDisplay({ leaveData, handleHostelDetailsFetch }: Le
       return "bg-warning-surface text-warning-foreground border-border-ink animate-pulse";
     }
     if (norm.includes("CANCELLED")) {
-      return "bg-surface-secondary0/10 text-text-muted border-border-muted";
+      return "bg-surface-secondary text-text-muted border-border-muted";
     }
     return "bg-danger-surface text-danger-foreground border-border-ink";
   };

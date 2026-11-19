@@ -99,7 +99,7 @@ const TONE_BADGE: Record<string, string> = {
   emerald: "bg-success-surface text-success-foreground border-border-ink",
   indigo: "bg-secondary text-secondary-foreground border-border-ink",
   blue: "bg-secondary text-secondary-foreground border-border-ink",
-  zinc: "bg-surface-secondary0/10 text-text-muted border-border-muted",
+  zinc: "bg-surface-secondary text-text-muted border-border-muted",
 };
 
 // Hero cards use the OD-hours sizing (a touch shorter than the course page)
@@ -552,7 +552,7 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
                     </p>
                     <p className="text-xs font-bold uppercase text-success-foreground mt-0.5">Settled</p>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-text-muted group-text-primary dark:group-text-primary transition-all" />
+                  <ChevronRight className="w-4 h-4 text-text-muted group-hover:text-primary transition-all" />
                 </div>
               </button>
             ))}

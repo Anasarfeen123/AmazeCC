@@ -187,7 +187,7 @@ export default function QBankSubpage({
         />
 
         <div className="relative">
-          <GraduationCap className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+          <GraduationCap className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <input
             type="search"
             value={searchQuery}
@@ -198,7 +198,7 @@ export default function QBankSubpage({
           />
         </div>
 
-        {globalCoursesLoading && <p className="text-xs text-zinc-500 dark:text-zinc-400">Loading community courses…</p>}
+        {globalCoursesLoading && <p className="text-xs text-text-muted">Loading community courses…</p>}
 
         <SectionHeader title="Courses" count={filteredCourses.length} />
 
@@ -224,12 +224,10 @@ export default function QBankSubpage({
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="text-sm font-black text-zinc-900 dark:text-white">{c.code}</p>
-                      <p className="mt-1 line-clamp-2 text-sm font-medium text-zinc-500 dark:text-zinc-400">
-                        {c.title}
-                      </p>
+                      <p className="text-sm font-bold text-text-heading">{c.code}</p>
+                      <p className="mt-1 line-clamp-2 text-sm font-medium text-text-muted">{c.title}</p>
                     </div>
-                    <ChevronRight className="w-4 h-4 shrink-0 text-zinc-400" />
+                    <ChevronRight className="w-4 h-4 shrink-0 text-text-muted" />
                   </div>
                   <div className="mt-4 flex flex-wrap gap-1.5">
                     <ToneBadge tone="zinc">Papers</ToneBadge>
@@ -270,7 +268,7 @@ export default function QBankSubpage({
       />
 
       {error && (
-        <div className="p-4 rounded-2xl border border-red-500/20 bg-red-500/10 text-red-700 dark:text-red-300 flex items-start gap-3">
+        <div className="p-4 rounded-2xl border border-border-ink bg-danger-surface text-danger-foreground flex items-start gap-3">
           <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
           <div className="min-w-0">
             <h3 className="font-semibold text-sm">Failed to load QBank data</h3>
@@ -306,15 +304,15 @@ export default function QBankSubpage({
                   href={p.file_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`${TILE_CARD} p-4 hover:border-sky-500/30 transition-colors`}
+                  className={`${TILE_CARD} p-4 hover:border-border-ink transition-colors`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 rounded-2xl bg-secondary border border-border-ink text-secondary-foreground flex items-center justify-center shrink-0">
                       <FileText className="w-5 h-5" />
                     </div>
                     <div className="min-w-0">
-                      <h4 className="font-bold text-sm text-zinc-900 dark:text-white truncate">{p.title}</h4>
-                      <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                      <h4 className="font-bold text-sm text-text-heading truncate">{p.title}</h4>
+                      <p className="text-xs text-text-muted">
                         {p.source_type} • {p.exam_semester} {p.exam_year}
                       </p>
                     </div>

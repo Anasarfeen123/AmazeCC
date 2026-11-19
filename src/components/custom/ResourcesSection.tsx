@@ -56,9 +56,9 @@ function ResourceRow({
       </span>
       <ListRowText title={title} subtitle={desc} />
       {href ? (
-        <ExternalLink className="w-4 h-4 text-zinc-400 shrink-0" />
+        <ExternalLink className="w-4 h-4 text-text-muted shrink-0" />
       ) : (
-        <ChevronRight className="w-4 h-4 text-zinc-400 shrink-0" />
+        <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
       )}
     </>
   );

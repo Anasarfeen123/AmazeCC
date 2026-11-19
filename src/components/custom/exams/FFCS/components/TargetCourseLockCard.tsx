@@ -61,8 +61,8 @@ export function TargetCourseLockCard({
     ? "border-border-strong/50 bg-surface-secondary/20 opacity-60"
     : tone === "neutral"
       ? isSelected
-        ? "border-border-muted bg-surface-secondary0/[0.08] shadow-sm /[0.08]"
-        : "border-border-ink bg-surface-secondary0/[0.025] hover:border-border-ink hover:bg-surface-secondary0/[0.06] /[0.04] /[0.08]"
+        ? "border-border-muted bg-surface-secondary shadow-sm /[0.08]"
+        : "border-border-ink bg-surface-secondary hover:border-border-ink hover:bg-surface-secondary /[0.04] /[0.08]"
       : isSelected
         ? "border-border-ink bg-surface-secondary/30 shadow-sm"
         : "border-transparent bg-transparent hover:border-border-strong hover:bg-surface-secondary/50";

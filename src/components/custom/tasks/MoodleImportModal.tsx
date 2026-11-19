@@ -14,11 +14,7 @@ interface MoodleImportModalProps {
   onImportComplete: () => void;
 }
 
-export default function MoodleImportModal({
-  isOpen,
-  onClose,
-  onImportComplete,
-}: MoodleImportModalProps) {
+export default function MoodleImportModal({ isOpen, onClose, onImportComplete }: MoodleImportModalProps) {
   const [moodleData] = useAtom(moodleDataAtom);
   const [tasks, setTasks] = useAtom(tasksAtom);
 
@@ -55,9 +51,7 @@ export default function MoodleImportModal({
   };
 
   const handleImport = () => {
-    const itemsToImport = previews.filter((p) =>
-      selectedUrls.has(p.url || p.title)
-    );
+    const itemsToImport = previews.filter((p) => selectedUrls.has(p.url || p.title));
     const updated = importMoodleTasks(itemsToImport);
     setTasks(updated);
     onImportComplete();
@@ -74,7 +68,7 @@ export default function MoodleImportModal({
       title="Import from Moodle LMS"
       subtitle="Sync pending digital assignments into your timetable tasks"
       icon={<Download className="w-5 h-5" />}
-      accent="bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border-amber-100 dark:border-amber-900/30"
+      accent="bg-warning-surface text-warning-foreground border-border-ink"
       closeLabel="Close Moodle import"
     >
       <div className="flex flex-col max-h-[80vh] text-left">
@@ -82,30 +76,24 @@ export default function MoodleImportModal({
         <div className="p-4 sm:p-5 space-y-3 overflow-y-auto min-h-0 flex-1">
           {previews.length === 0 ? (
             <div className="py-10 text-center space-y-2">
-              <BookOpen className="w-8 h-8 text-zinc-300 dark:text-zinc-600 mx-auto" />
-              <p className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-                No LMS assignments found in Moodle data.
-              </p>
-              <p className="text-[11px] text-zinc-400">
-                Make sure you are logged in to LMS or have synced Moodle.
-              </p>
+              <BookOpen className="w-8 h-8 text-text-muted mx-auto" />
+              <p className="text-xs font-semibold text-text-muted">No LMS assignments found in Moodle data.</p>
+              <p className="text-xs text-text-muted">Make sure you are logged in to LMS or have synced Moodle.</p>
             </div>
           ) : (
             <>
               {availableToImport.length > 0 && (
                 <div className="flex items-center justify-between pb-1">
-                  <span className="text-xs font-bold text-zinc-600 dark:text-zinc-400">
+                  <span className="text-xs font-bold text-text-muted">
                     {availableToImport.length} new assignment
                     {availableToImport.length === 1 ? "" : "s"} found
                   </span>
                   <button
                     type="button"
                     onClick={toggleSelectAll}
-                    className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
+                    className="text-xs font-bold text-primary hover:underline cursor-pointer"
                   >
-                    {selectedUrls.size === availableToImport.length
-                      ? "Deselect All"
-                      : "Select All"}
+                    {selectedUrls.size === availableToImport.length ? "Deselect All" : "Select All"}
                   </button>
                 </div>
               )}
@@ -121,10 +109,10 @@ export default function MoodleImportModal({
                       {...clickable(() => !item.alreadyImported && toggleItem(key))}
                       className={`p-3 rounded-xl border flex items-start gap-3 transition-all ${
                         item.alreadyImported
-                          ? "bg-zinc-50/50 dark:bg-zinc-900/30 border-zinc-200/50 dark:border-zinc-800/50 opacity-60 cursor-default"
+                          ? "bg-surface-secondary border-border-ink opacity-60 cursor-default"
                           : isChecked
-                          ? "bg-indigo-50/70 dark:bg-indigo-950/30 border-indigo-500/40 cursor-pointer shadow-2xs"
-                          : "bg-white dark:bg-zinc-900 border-zinc-200/80 dark:border-zinc-800 cursor-pointer hover:border-zinc-300"
+                            ? "bg-secondary border-border-ink cursor-pointer shadow-2xs"
+                            : "bg-surface border-border-ink cursor-pointer hover:border-border-ink"
                       }`}
                     >
                       <input
@@ -132,36 +120,35 @@ export default function MoodleImportModal({
                         checked={isChecked || item.alreadyImported}
                         disabled={item.alreadyImported}
                         onChange={() => toggleItem(key)}
-                        className="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500"
+                        className="mt-0.5 rounded text-primary focus:ring-border-ink"
                       />
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5 flex-wrap mb-1">
                           {item.courseCode && (
-                            <span className="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                            <span className="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-surface-secondary text-text-primary">
                               {item.courseCode}
                             </span>
                           )}
                           {item.alreadyImported && (
-                            <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded">
+                            <span className="text-xs font-bold text-success-foreground bg-success-surface px-1.5 py-0.2 rounded">
                               Already Imported
                             </span>
                           )}
                           {item.isPast && !item.alreadyImported && (
-                            <span className="text-[9px] font-bold text-red-500 bg-red-500/10 px-1.5 py-0.2 rounded">
+                            <span className="text-xs font-bold text-danger-foreground bg-danger-surface px-1.5 py-0.2 rounded">
                               Past Due
                             </span>
                           )}
                         </div>
 
-                        <h4 className="text-xs font-bold text-zinc-900 dark:text-white font-outfit leading-snug">
-                          {item.title}
-                        </h4>
+                        <h4 className="text-xs font-bold text-text-heading font-outfit leading-snug">{item.title}</h4>
 
                         {item.dueDate && (
-                          <p className="text-[10.5px] text-zinc-500 dark:text-zinc-400 mt-1 flex items-center gap-1">
-                            <Clock className="w-3 h-3 text-zinc-400" />
-                            Due: {new Date(item.dueDate).toLocaleString(undefined, {
+                          <p className="text-xs text-text-muted mt-1 flex items-center gap-1">
+                            <Clock className="w-3 h-3 text-text-muted" />
+                            Due:{" "}
+                            {new Date(item.dueDate).toLocaleString(undefined, {
                               month: "short",
                               day: "numeric",
                               hour: "2-digit",
@@ -179,11 +166,11 @@ export default function MoodleImportModal({
         </div>
 
         {/* Footer */}
-        <div className="p-4 sm:p-5 border-t border-zinc-200/70 dark:border-zinc-800/80 flex items-center justify-between gap-3 bg-zinc-50/50 dark:bg-zinc-900/30">
+        <div className="p-4 sm:p-5 border-t border-border-ink flex items-center justify-between gap-3 bg-surface-secondary">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-xs font-bold text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+            className="px-4 py-2 rounded-xl text-xs font-bold text-text-muted hover:bg-surface-hover cursor-pointer"
           >
             Cancel
           </button>
@@ -191,7 +178,7 @@ export default function MoodleImportModal({
             type="button"
             onClick={handleImport}
             disabled={selectedUrls.size === 0}
-            className="px-5 py-2 rounded-xl text-xs font-black bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white shadow-xs active:scale-[0.98] transition-all cursor-pointer flex items-center gap-1.5"
+            className="px-5 py-2 rounded-xl text-xs font-bold bg-primary hover:brightness-110 disabled:opacity-50 text-primary-foreground shadow-xs transition-all cursor-pointer flex items-center gap-1.5"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Import ({selectedUrls.size})</span>

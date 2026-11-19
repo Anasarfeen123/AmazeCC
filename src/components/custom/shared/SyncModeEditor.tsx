@@ -40,7 +40,7 @@ const COST_CHIP: Record<string, string> = {
 const AUTH_BADGE: Record<string, string> = {
   vtop: "bg-secondary text-secondary-foreground",
   eventhub: "bg-cyan-500/10 text-cyan-700 dark:text-cyan-400",
-  none: "bg-surface-secondary0/10 text-text-muted",
+  none: "bg-surface-secondary text-text-muted",
 };
 
 const AUTH_LABEL: Record<string, string> = {
@@ -576,7 +576,7 @@ export function SyncModeEditorContent({ onChanged, onRun, defaultId, onSetDefaul
                     )}
                     <button
                       onClick={() => startEdit(m)}
-                      className="p-1.5 rounded-lg text-text-muted hover:bg-surface-secondary0/10 cursor-pointer"
+                      className="p-1.5 rounded-lg text-text-muted hover:bg-surface-secondary cursor-pointer"
                       title="Edit"
                     >
                       <Pencil size={13} />
@@ -626,7 +626,7 @@ export function SyncModeEditorContent({ onChanged, onRun, defaultId, onSetDefaul
                       duplicateMode(m);
                       refresh();
                     }}
-                    className="p-1.5 rounded-lg text-text-muted hover:bg-surface-secondary0/10 cursor-pointer"
+                    className="p-1.5 rounded-lg text-text-muted hover:bg-surface-secondary cursor-pointer"
                     title="Duplicate as custom"
                   >
                     <Copy size={13} />

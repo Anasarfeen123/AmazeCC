@@ -364,7 +364,7 @@ export default function ScannerEditor({
                   className={`rounded-full border-2 border-white shadow-2xl transition-all ${
                     isDragging
                       ? "h-6 w-6 bg-primary ring-4 ring-border-ink scale-125"
-                      : "h-4.5 w-4.5 bg-indigo-600 hover:scale-115 ring-2 ring-black/40"
+                      : "h-4.5 w-4.5 bg-primary hover:scale-115 ring-2 ring-black/40"
                   }`}
                 />
               </button>

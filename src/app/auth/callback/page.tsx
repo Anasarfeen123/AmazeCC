@@ -32,24 +32,24 @@ export default function AuthCallbackPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-950 p-4">
-      <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-3xl p-8 space-y-5 text-center">
+      <div className="w-full max-w-md bg-zinc-900 border border-border-ink rounded-[14px] p-8 space-y-5 text-center">
         <img src="/brand/icon-primary.svg" alt="AmazeCC Logo" className="w-16 h-16 mx-auto object-contain" />
         {error ? (
           <>
             <h1 className="text-xl font-bold text-zinc-100">Sign-in didn&apos;t finish</h1>
-            <p className="text-sm text-zinc-400">{error}</p>
+            <p className="text-sm text-text-muted">{error}</p>
             <button
               type="button"
               onClick={() => signInInteractive()}
-              className="w-full h-11 rounded-xl font-semibold text-sm bg-indigo-600 hover:bg-indigo-500 text-white transition-colors cursor-pointer"
+              className="w-full h-11 rounded-xl font-semibold text-sm bg-primary hover:brightness-110 text-primary-foreground transition-colors cursor-pointer"
             >
               Try again with Amaze ID
             </button>
           </>
         ) : (
           <>
-            <div className="animate-spin rounded-full h-10 w-10 border-4 border-t-transparent border-indigo-500 mx-auto" />
-            <p className="text-sm text-zinc-400">Finishing sign-in with Amaze ID…</p>
+            <div className="animate-spin rounded-full h-10 w-10 border-4 border-t-transparent border-border-ink mx-auto" />
+            <p className="text-sm text-text-muted">Finishing sign-in with Amaze ID…</p>
           </>
         )}
       </div>

@@ -91,7 +91,7 @@ export default function UploadPaperModal({
       title="Upload Past Paper Link"
       subtitle={
         isAdmin ? (
-          <span className="bg-green-100 text-green-700 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full dark:bg-green-900/30 dark:text-green-400">
+          <span className="bg-green-100 text-success-foreground text-xs uppercase font-bold px-2 py-0.5 rounded-[6px] dark:text-success-foreground">
             Admin Mode
           </span>
         ) : undefined
@@ -100,7 +100,7 @@ export default function UploadPaperModal({
     >
       {success ? (
         <div className="py-8 text-center flex flex-col items-center">
-          <div className="w-16 h-16 bg-green-100  dark:bg-green-900/30 text-green-500 rounded-full flex items-center justify-center mb-4">
+          <div className="w-16 h-16 bg-green-100 text-success-foreground rounded-full flex items-center justify-center mb-4">
             <UploadCloud className="w-8 h-8" />
           </div>
           <h3 className="text-lg font-bold text-foreground mb-2">Upload Successful!</h3>
@@ -111,7 +111,7 @@ export default function UploadPaperModal({
       ) : (
         <form onSubmit={handleUpload} className="space-y-5 pt-1">
           {error && (
-            <div className="p-3 rounded-lg bg-red-50 text-red-700 text-sm border border-red-200 flex items-start gap-2">
+            <div className="p-3 rounded-lg bg-danger-surface text-danger-foreground text-sm border border-border-ink flex items-start gap-2">
               <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
               <span>{error}</span>
             </div>
@@ -214,9 +214,9 @@ export default function UploadPaperModal({
             />
           </div>
 
-          <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-yellow-500 mt-0.5 shrink-0" />
-            <div className="text-sm text-yellow-600 dark:text-yellow-400">
+          <div className="bg-warning-surface border border-border-ink rounded-lg p-3 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-warning-foreground mt-0.5 shrink-0" />
+            <div className="text-sm text-warning-foreground">
               <strong>Important:</strong> Please ensure the link is set to "Anyone with the link can view" before
               submitting. Your paper will be reviewed by an admin before being published to the Q-Bank.
             </div>

@@ -40,18 +40,14 @@ export default function Links() {
             >
               <Globe className="w-4.5 h-4.5" />
             </span>
-            <ListRowText
-              title={link.label}
-              titleTooltip={link.url}
-              subtitle={link.url}
-            />
+            <ListRowText title={link.label} titleTooltip={link.url} subtitle={link.url} />
             <a
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
               title={`Open ${link.url}`}
               aria-label={`Open ${link.label}`}
-              className="shrink-0 text-zinc-400 hover:text-sky-600 dark:hover:text-sky-400 transition-colors"
+              className="shrink-0 text-text-muted hover:text-primary transition-colors"
             >
               <ExternalLink className="w-4 h-4" />
             </a>
@@ -61,12 +57,8 @@ export default function Links() {
               className={`${GHOST_BUTTON} shrink-0`}
               title={`Copy ${link.url}`}
             >
-              {copied ? (
-                <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              ) : (
-                <Copy className="w-3.5 h-3.5" />
-              )}
-              <span className="text-[11px]">{copied ? "Copied" : "Copy"}</span>
+              {copied ? <Check className="w-3.5 h-3.5 text-success-foreground" /> : <Copy className="w-3.5 h-3.5" />}
+              <span className="text-xs">{copied ? "Copied" : "Copy"}</span>
             </button>
           </div>
         );

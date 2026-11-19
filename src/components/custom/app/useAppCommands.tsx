@@ -285,7 +285,7 @@ export function useAppCommands(input: AppCommandInputs) {
     const gradeDetail = (g: any) => {
       const gradeColors: Record<string, string> = {
         S: "text-success-foreground bg-success-surface border-border-ink",
-        A: "text-primary bg-blue-50 dark:bg-blue-900/20 border-border-ink",
+        A: "text-secondary-foreground bg-secondary border-border-ink",
         B: "text-warning-foreground bg-warning-surface border-border-ink",
         C: "text-warning-foreground bg-orange-50 dark:bg-orange-900/20 border-orange-200/50 dark:border-orange-800/30",
         D: "text-danger-foreground bg-danger-surface border-border-ink",
@@ -689,7 +689,7 @@ export function useAppCommands(input: AppCommandInputs) {
           const newPerc = total > 0 ? (attended / (total + miss)) * 100 : 0;
           const newPercStr = newPerc.toFixed(1);
           const newColor =
-            newPerc >= 75 ? "text-primary bg-blue-50 dark:bg-blue-900/20" : "text-danger-foreground bg-danger-surface";
+            newPerc >= 75 ? "text-secondary-foreground bg-secondary" : "text-danger-foreground bg-danger-surface";
           result.push({
             id: `course-miss-${code}-${miss}`,
             label: `Miss ${miss} class${miss > 1 ? "es" : ""} in ${shortName}`,
@@ -837,7 +837,7 @@ export function useAppCommands(input: AppCommandInputs) {
             grade === "S"
               ? "text-success-foreground bg-success-surface"
               : grade === "A"
-                ? "text-primary bg-blue-50 dark:bg-blue-900/20"
+                ? "text-secondary-foreground bg-secondary"
                 : grade === "B"
                   ? "text-warning-foreground bg-warning-surface"
                   : grade === "C"
@@ -876,7 +876,7 @@ export function useAppCommands(input: AppCommandInputs) {
           grade === "S"
             ? "text-success-foreground bg-success-surface"
             : grade === "A"
-              ? "text-primary bg-blue-50 dark:bg-blue-900/20"
+              ? "text-secondary-foreground bg-secondary"
               : grade === "B"
                 ? "text-warning-foreground bg-warning-surface"
                 : grade === "C"

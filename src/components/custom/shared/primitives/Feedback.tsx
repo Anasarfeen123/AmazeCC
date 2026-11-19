@@ -56,9 +56,9 @@ export function ToneDot({
   const dots: Record<string, string> = {
     emerald: "bg-emerald-500",
     amber: "bg-amber-500",
-    sky: "bg-sky-500",
-    violet: "bg-violet-500",
-    indigo: "bg-indigo-500",
+    sky: "bg-sage",
+    violet: "bg-primary",
+    indigo: "bg-primary",
     red: "bg-red-500",
     cyan: "bg-cyan-500",
     zinc: "bg-text-secondary",

@@ -80,13 +80,13 @@ export default function FeedbackStatusModal({ isOpen, onClose, loginToVTOP }: Pr
               </div>
             )}
             {error && (
-              <div className="flex items-center gap-3 p-4 text-red-600  dark:text-red-500">
+              <div className="flex items-center gap-3 p-4 text-danger-foreground">
                 <XCircle className="w-5 h-5 shrink-0" />
                 <p className="text-sm font-medium">{error}</p>
               </div>
             )}
             {!loading && !error && totalRows === 0 && (
-              <div className="flex flex-col items-center py-8 text-gray-400  dark:text-gray-500">
+              <div className="flex flex-col items-center py-8 text-text-muted">
                 <Clock className="w-10 h-10 mb-3" />
                 <p className="text-sm font-medium">No feedback data available</p>
               </div>
@@ -104,15 +104,15 @@ export default function FeedbackStatusModal({ isOpen, onClose, loginToVTOP }: Pr
                     <Card key={sem.value} variant="glass" className="overflow-hidden">
                       <button
                         onClick={() => toggleExpand(sem.label)}
-                        className="w-full flex items-center justify-between p-4 hover:bg-white/40 dark:hover:bg-slate-800/40 transition-colors"
+                        className="w-full flex items-center justify-between p-4 hover:bg-white/40 transition-colors"
                       >
                         <div className="flex items-center gap-3">
                           {isExpanded ? (
-                            <ChevronDown className="w-4 h-4 text-gray-400" />
+                            <ChevronDown className="w-4 h-4 text-text-muted" />
                           ) : (
-                            <ChevronRight className="w-4 h-4 text-gray-400" />
+                            <ChevronRight className="w-4 h-4 text-text-muted" />
                           )}
-                          <h4 className="text-sm font-semibold text-gray-700  dark:text-gray-300">{sem.label}</h4>
+                          <h4 className="text-sm font-semibold text-text-primary">{sem.label}</h4>
                         </div>
                         <Badge
                           variant={done === sem.rows.length && sem.rows.length > 0 ? "success" : "danger"}
@@ -129,11 +129,11 @@ export default function FeedbackStatusModal({ isOpen, onClose, loginToVTOP }: Pr
                             return (
                               <div
                                 key={i}
-                                className="flex items-center justify-between p-3 rounded-xl bg-white/50  dark:bg-gray-800/50 border border-gray-100  dark:border-gray-700"
+                                className="flex items-center justify-between p-3 rounded-xl bg-white/50 border border-border-ink"
                               >
                                 <div className="flex items-center gap-3 min-w-0 flex-1">
-                                  <BookOpen className="w-4 h-4 text-gray-400 shrink-0" />
-                                  <p className="text-sm font-medium text-gray-800  dark:text-gray-200 truncate">
+                                  <BookOpen className="w-4 h-4 text-text-muted shrink-0" />
+                                  <p className="text-sm font-medium text-text-primary truncate">
                                     {row.feedbackType || "N/A"}
                                   </p>
                                 </div>
@@ -154,7 +154,7 @@ export default function FeedbackStatusModal({ isOpen, onClose, loginToVTOP }: Pr
                       )}
                       {isExpanded && sem.rows.length === 0 && (
                         <div className="px-4 pb-4">
-                          <p className="text-sm text-gray-400  dark:text-gray-500 text-center py-2">No courses found</p>
+                          <p className="text-sm text-text-muted text-center py-2">No courses found</p>
                         </div>
                       )}
                     </Card>

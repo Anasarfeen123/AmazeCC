@@ -461,7 +461,7 @@ export default function FacultyScheduleTab({
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-sm font-bold text-text-heading truncate">{group.canonical}</span>
             {empId && (
-              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 shrink-0">
+              <span className="text-xs font-mono font-bold px-1.5 py-0.5 rounded bg-surface-secondary text-text-muted shrink-0">
                 #{empId}
               </span>
             )}
@@ -478,7 +478,7 @@ export default function FacultyScheduleTab({
             {group.names.length > 1 ? ` · ${group.names.length} spelling${group.names.length === 1 ? "" : "s"}` : ""}
           </span>
         </span>
-        <ChevronRight className="h-4 w-4 text-zinc-400 shrink-0" />
+        <ChevronRight className="h-4 w-4 text-text-muted shrink-0" />
       </div>
     );
   };
@@ -520,7 +520,7 @@ export default function FacultyScheduleTab({
                 <button
                   type="button"
                   onClick={() => setSearch("")}
-                  className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-black text-white transition-colors hover:bg-indigo-700"
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition-colors hover:brightness-110"
                 >
                   Clear search
                 </button>
@@ -547,7 +547,7 @@ export default function FacultyScheduleTab({
                wondering where their own professors went. Name the two ways in:
                a synced timetable/semester, or an FFCS draft (the latter only
                when the planner's picks are being counted at all). */
-            <div className="rounded-2xl border border-dashed border-border-muted p-4 text-[11px] leading-relaxed font-medium text-text-secondary dark:text-text-muted">
+            <div className="rounded-2xl border border-dashed border-border-muted p-4 text-xs leading-relaxed font-medium text-text-secondary dark:text-text-muted">
               Once your timetable and marks are synced
               {openedFromHome ? "" : " — or you add courses in the FFCS planner"} — the faculties teaching{" "}
               <span className="font-bold text-text-heading">your</span> courses will be listed here first.

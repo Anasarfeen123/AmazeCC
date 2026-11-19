@@ -119,20 +119,20 @@ export default function CabShareTab({ onBack }: { onBack?: () => void }) {
               className={cn(TILE_INTERACTIVE_ROW, "flex-col items-start justify-end gap-2 p-4 sm:p-5")}
             >
               <span className="flex w-full items-center justify-between gap-2">
-                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-outfit truncate">
+                <span className="text-xs sm:text-xs font-bold uppercase tracking-wider text-text-muted font-outfit truncate">
                   Post a ride
                 </span>
-                <ChevronRight className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                <ChevronRight className="h-4 w-4 shrink-0 text-success-foreground" />
               </span>
               <span className="my-auto flex w-full items-center gap-3">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-success-surface border border-border-ink text-success-foreground">
                   <Plus className="h-5 w-5" />
                 </span>
                 <span className="min-w-0 text-left">
-                  <span className="block text-base font-black font-outfit tracking-tight leading-tight text-text-heading">
+                  <span className="block text-base font-bold font-outfit tracking-tight leading-tight text-text-heading">
                     Split your cab
                   </span>
-                  <span className="block text-[11px] text-text-secondary dark:text-text-muted font-medium mt-0.5 truncate">
+                  <span className="block text-xs text-text-secondary dark:text-text-muted font-medium mt-0.5 truncate">
                     {pendingCount > 0 ? `${pendingCount} pending on your rides` : "Offer your route to others"}
                   </span>
                 </span>

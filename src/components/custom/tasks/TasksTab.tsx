@@ -66,7 +66,7 @@ const TONE_BADGE: Record<string, string> = {
   amber: "bg-warning-surface text-warning-foreground border-border-ink",
   emerald: "bg-success-surface text-success-foreground border-border-ink",
   indigo: "bg-secondary text-secondary-foreground border-border-ink",
-  zinc: "bg-surface-secondary0/10 text-text-muted border-border-muted",
+  zinc: "bg-surface-secondary text-text-muted border-border-muted",
 };
 
 const CARD_BASE = `${TILE} min-h-36 sm:min-h-40`;

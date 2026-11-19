@@ -87,7 +87,7 @@ const BusFinder = ({
             disabled={refreshing}
           >
             <RefreshCcw
-              className={`w-4 h-4 ${refreshing ? "animate-spin text-indigo-500" : ""}`}
+              className={`w-4 h-4 ${refreshing ? "animate-spin text-primary" : ""}`}
             />
           </IconButton>
         ) : null
@@ -152,7 +152,7 @@ const BusFinder = ({
                     <button
                       type="button"
                       onClick={() => setSearchQuery("")}
-                      className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-black text-white transition-colors hover:bg-indigo-700"
+                      className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition-colors hover:brightness-110"
                     >
                       Clear search
                     </button>
@@ -169,7 +169,7 @@ const BusFinder = ({
                     className={`${LIST_ROW} cursor-pointer`}
                   >
                     <span
-                      className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border font-black text-sm font-outfit ${TONE_ICON_TILE[routeTone(bus.type)]}`}
+                      className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border font-bold text-sm font-outfit ${TONE_ICON_TILE[routeTone(bus.type)]}`}
                     >
                       {bus.id}
                     </span>
@@ -179,7 +179,7 @@ const BusFinder = ({
                       subtitle={`${bus.type} · ${bus.stops?.length || bus.boardingPoints.length} stops`}
                     />
                     <ToneBadge tone={routeTone(bus.type)}>{bus.type}</ToneBadge>
-                    <ChevronRight className="w-4 h-4 text-zinc-400 shrink-0" />
+                    <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
                   </button>
                 ))}
               </ListShell>
@@ -212,13 +212,13 @@ function BusDetailSheet({ bus, onClose }: { bus: BusRoute; onClose: () => void }
         <span className="inline-flex items-center gap-2 flex-wrap">
           <ToneBadge tone={routeTone(bus.type)}>{bus.type}</ToneBadge>
           {bus.busLocation ? (
-            <span title={bus.busLocation} className="text-[11px] font-medium text-text-secondary dark:text-text-muted truncate max-w-32">
+            <span title={bus.busLocation} className="text-xs font-medium text-text-secondary dark:text-text-muted truncate max-w-32">
               {bus.busLocation}
             </span>
           ) : null}
         </span>
       }
-      icon={<span className="text-sm font-black font-outfit">{bus.id}</span>}
+      icon={<span className="text-sm font-bold font-outfit">{bus.id}</span>}
       accent={TONE_ICON_TILE[routeTone(bus.type)]}
       closeLabel="Close route"
     >
@@ -234,7 +234,7 @@ function BusDetailSheet({ bus, onClose }: { bus: BusRoute; onClose: () => void }
             <ListShell>
               {boardingPoints.map((bp, i) => (
                 <div key={`${bp}-${i}`} className="flex items-center gap-2.5 py-2.5 px-4">
-                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700 shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-surface-tertiary shrink-0" />
                   <span className="text-xs font-semibold text-text-heading">{bp}</span>
                 </div>
               ))}
@@ -257,7 +257,7 @@ function BusDetailSheet({ bus, onClose }: { bus: BusRoute; onClose: () => void }
             href={bus.whatsappGroup}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full py-3 text-sm font-black bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded-2xl border border-emerald-500/20 transition-colors"
+            className="flex items-center justify-center gap-2 w-full py-3 text-sm font-bold bg-success-surface hover:bg-success-surface text-success-foreground rounded-2xl border border-border-ink transition-colors"
           >
             <MessageCircle className="h-4 w-4" />
             Join WhatsApp Group

@@ -1,11 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo, memo } from "react";
 import { api } from "@/lib/sync-engine";
-import {
-  loadFacultyRoster,
-  getFacultyDirectoryProfile,
-  getFacultyReview,
-} from "@/lib/vitfacService";
+import { loadFacultyRoster, getFacultyDirectoryProfile, getFacultyReview } from "@/lib/vitfacService";
 import {
   Search,
   User,
@@ -181,7 +177,7 @@ const FacultyCard = memo(
                   rel="noopener noreferrer"
                   title={`Open ${profile.name}'s public profile`}
                   aria-label={`Open ${profile.name}'s public profile`}
-                  className="shrink-0 text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                  className="shrink-0 text-text-muted hover:text-primary transition-colors"
                 >
                   <ExternalLink className="w-4 h-4" />
                 </a>
@@ -203,7 +199,7 @@ const FacultyCard = memo(
             <a
               href={`mailto:${profile.email}`}
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-2 min-w-0 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
+              className="flex items-center gap-2 min-w-0 text-xs font-bold text-primary hover:underline"
             >
               <Mail className="w-3.5 h-3.5 shrink-0" />
               <span className="truncate">{profile.email}</span>
@@ -230,7 +226,7 @@ const FacultyCard = memo(
               e.stopPropagation();
               onViewSchedule?.();
             }}
-            className="mt-3 w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 py-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 transition-colors cursor-pointer"
+            className="mt-3 w-full flex items-center justify-center gap-2 rounded-xl bg-secondary hover:bg-secondary border border-border-ink py-2 text-xs font-bold text-secondary-foreground transition-colors cursor-pointer"
           >
             <CalendarDays className="w-3.5 h-3.5" />
             <span>View full schedule</span>
@@ -243,7 +239,7 @@ const FacultyCard = memo(
           type="button"
           onClick={() => setExpanded((v) => !v)}
           aria-expanded={expanded}
-          className="mt-3 w-full flex items-center justify-between gap-2 border-t border-border-muted pt-3 text-[10px] font-bold text-zinc-500 dark:text-zinc-400 hover:text-text-heading transition-colors"
+          className="mt-3 w-full flex items-center justify-between gap-2 border-t border-border-muted pt-3 text-xs font-bold text-text-muted hover:text-text-heading transition-colors"
         >
           <span>{expanded ? "Show less" : "View full details"}</span>
           {loading ? (
@@ -254,7 +250,7 @@ const FacultyCard = memo(
         </button>
 
         {expanded && !loading && !profile.email && !profile.intercom && (
-          <p className="mt-2 text-[11px] text-text-muted">
+          <p className="mt-2 text-xs text-text-muted">
             Additional contact details are not published on the public portal.
           </p>
         )}
@@ -480,12 +476,12 @@ export default function FacultyInfoTab({
           </span>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-black text-text-heading font-outfit tracking-tight">
+              <h2 className="text-base font-bold text-text-heading font-outfit tracking-tight">
                 Select a school or department
               </h2>
               <ToneBadge tone="indigo">Directory</ToneBadge>
             </div>
-            <p className="mt-1 text-[11px] font-medium leading-relaxed text-text-secondary dark:text-text-muted">
+            <p className="mt-1 text-xs font-medium leading-relaxed text-text-secondary dark:text-text-muted">
               Pick a department to load its faculty list, designations, employee IDs and intercom numbers.
             </p>
           </div>
@@ -524,7 +520,7 @@ export default function FacultyInfoTab({
                 <button
                   type="button"
                   onClick={() => setSchoolSearchTerm("")}
-                  className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-black text-white transition-colors hover:bg-indigo-700"
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition-colors hover:brightness-110"
                 >
                   Clear search
                 </button>
@@ -551,7 +547,7 @@ export default function FacultyInfoTab({
                     <GraduationCap className="w-4.5 h-4.5" />
                   </span>
                   <ListRowText title={cleanName} subtitle={acronym || undefined} titleTooltip={school.school_name} />
-                  <ChevronRight className="w-4 h-4 text-zinc-400 shrink-0" />
+                  <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
                 </button>
               );
             })}
@@ -607,7 +603,7 @@ export default function FacultyInfoTab({
               <button
                 type="button"
                 onClick={() => setSearchTerm("")}
-                className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-black text-white transition-colors hover:bg-indigo-700"
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition-colors hover:brightness-110"
               >
                 Clear search
               </button>
@@ -651,7 +647,7 @@ export default function FacultyInfoTab({
         onBack={() => (isRoot ? stack.back() : handleBackToSchools())}
       >
         {error && (
-          <div className="flex items-center justify-between gap-3 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-xs font-semibold text-red-600 dark:text-red-400">
+          <div className="flex items-center justify-between gap-3 rounded-2xl border border-border-ink bg-danger-surface p-4 text-xs font-semibold text-danger-foreground">
             <div className="flex items-center gap-2 min-w-0">
               <XCircle className="w-4 h-4 shrink-0" />
               <span className="truncate">{error}</span>

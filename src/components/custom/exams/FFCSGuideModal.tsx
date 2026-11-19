@@ -34,13 +34,13 @@ export default function FFCSGuideModal({ isOpen, onClose }: FFCSGuideModalProps)
           contentClassName="space-y-8"
           title="FFCS Planner Guide"
           icon={<BookOpen className="w-5 h-5" />}
-          accent="bg-blue-500/10 border-blue-500/20 text-blue-500"
+          accent="bg-secondary border-border-ink text-secondary-foreground"
           closeLabel="Close FFCS guide"
         >
           {/* Welcome */}
           <section>
             <h4 className="text-lg font-bold text-text-heading mb-3 flex items-center gap-2">
-              <span className="bg-blue-500/20 text-blue-500 p-1.5 rounded-lg">
+              <span className="bg-secondary text-secondary-foreground p-1.5 rounded-lg">
                 <BookOpen className="w-4 h-4" />
               </span>
               What is the FFCS Planner?
@@ -56,7 +56,7 @@ export default function FFCSGuideModal({ isOpen, onClose }: FFCSGuideModalProps)
           {/* Adding Courses */}
           <section>
             <h4 className="text-lg font-bold text-text-heading mb-3 flex items-center gap-2">
-              <span className="bg-emerald-500/20 text-emerald-500 p-1.5 rounded-lg">
+              <span className="bg-success-surface text-success-foreground p-1.5 rounded-lg">
                 <Search className="w-4 h-4" />
               </span>
               Adding Courses
@@ -86,7 +86,7 @@ export default function FFCSGuideModal({ isOpen, onClose }: FFCSGuideModalProps)
           {/* Auto-Generator */}
           <section>
             <h4 className="text-lg font-bold text-text-heading mb-3 flex items-center gap-2">
-              <span className="bg-purple-500/20 text-purple-500 p-1.5 rounded-lg">
+              <span className="bg-secondary text-secondary-foreground p-1.5 rounded-lg">
                 <Zap className="w-4 h-4" />
               </span>
               The Auto-Generator
@@ -156,7 +156,7 @@ export default function FFCSGuideModal({ isOpen, onClose }: FFCSGuideModalProps)
           {/* Settings & sharing */}
           <section>
             <h4 className="text-lg font-bold text-text-heading mb-3 flex items-center gap-2">
-              <span className="bg-sky-500/20 text-sky-500 p-1.5 rounded-lg">
+              <span className="bg-secondary text-secondary-foreground p-1.5 rounded-lg">
                 <Settings2 className="w-4 h-4" />
               </span>
               Settings, Sharing &amp; the Tour
@@ -189,7 +189,7 @@ export default function FFCSGuideModal({ isOpen, onClose }: FFCSGuideModalProps)
           <div className="pt-4 border-t border-border-strong text-right">
             <button
               onClick={onClose}
-              className="px-5 py-2 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl transition-colors"
+              className="px-5 py-2 bg-primary hover:brightness-110 text-primary-foreground font-bold rounded-xl transition-colors"
             >
               Got it, let's build!
             </button>

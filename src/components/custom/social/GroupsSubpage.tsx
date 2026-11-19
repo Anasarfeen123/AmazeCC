@@ -68,7 +68,7 @@ export default function GroupsSubpage({ onBack }: { onBack: () => void }) {
       type="button"
       onClick={handlePrune}
       title="Remove people you are no longer paired with"
-      className="self-start p-2 rounded-xl bg-zinc-100 hover:bg-zinc-200/80 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 transition-all active:scale-95 cursor-pointer"
+      className="self-start p-2 rounded-xl bg-surface-secondary hover:bg-surface-tertiary border-2 border-border-ink text-text-primary transition-all cursor-pointer"
     >
       <Users className="w-4 h-4" />
     </button>
@@ -80,7 +80,7 @@ export default function GroupsSubpage({ onBack }: { onBack: () => void }) {
 
       {summaries.length === 0 ? (
         <div className="text-center py-10 space-y-3">
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="text-sm text-text-muted">
             No groups yet. A group collects people you are already paired with so you can find a slot free for all of
             them.
           </p>
@@ -91,7 +91,7 @@ export default function GroupsSubpage({ onBack }: { onBack: () => void }) {
               // there is exactly one place a group is born.
               setEditing(null);
             }}
-            className="inline-flex items-center gap-1.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold px-4 py-2.5 transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground text-sm font-bold px-4 py-2.5 transition-colors"
           >
             <FolderPlus className="w-4 h-4" />
             New group
@@ -116,7 +116,7 @@ export default function GroupsSubpage({ onBack }: { onBack: () => void }) {
           <button
             type="button"
             onClick={() => setEditing(null)}
-            className="w-full inline-flex items-center justify-center gap-1.5 rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 text-xs font-bold py-2.5 hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors"
+            className="w-full inline-flex items-center justify-center gap-1.5 rounded-2xl border border-dashed border-border-ink text-text-muted text-xs font-bold py-2.5 hover:bg-surface-hover transition-colors"
           >
             <FolderPlus className="w-3.5 h-3.5" />
             New group

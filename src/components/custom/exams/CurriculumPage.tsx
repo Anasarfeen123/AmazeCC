@@ -732,7 +732,7 @@ export default function CurriculumPage({
       headline: expectedGraduation,
       subline: `${remainingCredits.toFixed(1)} credits remaining`,
       badge: "ETA",
-      badgeClass: "bg-surface-secondary0/10 text-text-muted border border-border-muted",
+      badgeClass: "bg-surface-secondary text-text-muted border border-border-muted",
       tone: "text-text-primary",
       onClick: () => setScreen("planner"),
     });
@@ -778,7 +778,7 @@ export default function CurriculumPage({
       );
     }
     return (
-      <span className="text-xs font-bold uppercase px-1.5 py-0.5 rounded-md bg-surface-secondary0/10 text-text-muted border border-border-muted">
+      <span className="text-xs font-bold uppercase px-1.5 py-0.5 rounded-md bg-surface-secondary text-text-muted border border-border-muted">
         Left
       </span>
     );

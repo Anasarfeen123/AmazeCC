@@ -34,8 +34,8 @@ function StatusDot({ freeNow, known }: { freeNow: boolean; known: boolean }) {
     <span
       aria-label={known ? (freeNow ? "Free right now" : "In class right now") : "Status unknown"}
       title={known ? (freeNow ? "Free right now" : "In class right now") : "Status unknown"}
-      className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white dark:border-zinc-900 ${
-        !known ? "bg-zinc-300 dark:bg-zinc-700" : freeNow ? "bg-emerald-500" : "bg-amber-500"
+      className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white ${
+        !known ? "bg-surface-tertiary " : freeNow ? "bg-emerald-500" : "bg-amber-500"
       }`}
     />
   );
@@ -45,7 +45,7 @@ function Avatar({ name, tone = "indigo", children }: { name: string; tone?: stri
   return (
     <span className="relative shrink-0">
       <span
-        className={`w-10 h-10 rounded-2xl flex items-center justify-center text-[11px] font-black font-outfit border ${TONE_ICON_TILE[tone] ?? TONE_ICON_TILE.indigo}`}
+        className={`w-10 h-10 rounded-2xl flex items-center justify-center text-xs font-bold font-outfit border ${TONE_ICON_TILE[tone] ?? TONE_ICON_TILE.indigo}`}
       >
         {initials(name)}
       </span>
@@ -90,11 +90,9 @@ export function PeopleRow({
         <StatusDot freeNow={metrics?.freeNow ?? true} known={Boolean(metrics)} />
       </Avatar>
       <ListRowText title={peer.name} subtitle={meta} />
-      {isStale && (
-        <span className={`${CHIP} shrink-0 border-amber-500/20 text-amber-600 dark:text-amber-400`}>Stale</span>
-      )}
+      {isStale && <span className={`${CHIP} shrink-0 border-border-ink text-warning-foreground`}>Stale</span>}
       {right}
-      {onOpen && <ChevronRight className="w-4 h-4 text-zinc-400 shrink-0" />}
+      {onOpen && <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />}
     </>
   );
 
@@ -134,14 +132,14 @@ export function PairRow({
     <div className={`${LIST_ROW} cursor-default`}>
       <Avatar name={name} tone={visibility === "full" ? "emerald" : "indigo"}>
         <span
-          className={`w-3.5 h-3.5 rounded-full border-2 border-white dark:border-zinc-900 ${
-            visibility === "full" ? "bg-emerald-500" : "bg-zinc-300 dark:bg-zinc-700"
+          className={`w-3.5 h-3.5 rounded-full border-2 border-white ${
+            visibility === "full" ? "bg-emerald-500" : "bg-surface-tertiary "
           }`}
         />
       </Avatar>
       <ListRowText title={name} subtitle={`${handle} · paired ${relativePublished(createdAt)}`} />
       <span
-        className={`text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-md border shrink-0 ${
+        className={`text-xs font-bold uppercase px-2 py-0.5 rounded-md border shrink-0 ${
           visibility === "full" ? TONE_BADGE.emerald : TONE_BADGE.zinc
         }`}
       >
@@ -153,7 +151,7 @@ export function PairRow({
         disabled={busy}
         title="End this pairing"
         aria-label={`End pairing with ${name}`}
-        className="p-2 rounded-xl bg-zinc-100 hover:bg-red-50 dark:bg-zinc-900 dark:hover:bg-red-950/40 border border-zinc-200/80 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-red-600 dark:hover:text-red-400 transition-all active:scale-95 cursor-pointer shadow-2xs shrink-0 disabled:opacity-50"
+        className="p-2 rounded-xl bg-surface-secondary hover:bg-danger-surface dark:hover:bg-red-950/40 border-2 border-border-ink text-text-primary hover:text-danger-foreground dark:hover:text-danger-foreground transition-all cursor-pointer shadow-2xs shrink-0 disabled:opacity-50"
       >
         <Trash2 className="w-3.5 h-3.5" />
       </button>
@@ -181,13 +179,13 @@ export function FreeNowRow({
   return (
     <button type="button" onClick={onOpen} className={`${LIST_ROW} cursor-pointer`}>
       <Avatar name={peer.name} tone="emerald">
-        <span className="w-3.5 h-3.5 rounded-full border-2 border-white dark:border-zinc-900 bg-emerald-500" />
+        <span className="w-3.5 h-3.5 rounded-full border-2 border-white bg-emerald-500" />
       </Avatar>
       <ListRowText
         title={peer.name}
         subtitle={venue ? `${slotLabel ?? "Free"} · ${venue}` : (slotLabel ?? "Free for the rest of the slot")}
       />
-      <ChevronRight className="w-4 h-4 text-zinc-400 shrink-0" />
+      <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
     </button>
   );
 }
@@ -253,13 +251,11 @@ export function GroupRow({
         />
         {!empty && commonFreeHours !== undefined && (
           <span className="text-right shrink-0">
-            <span className={`block text-sm font-black font-outfit ${TONE_TEXT[tone] ?? ""}`}>{commonFreeHours}h</span>
-            <span className="block text-[9px] font-extrabold uppercase text-zinc-400 dark:text-zinc-500 leading-none">
-              common
-            </span>
+            <span className={`block text-sm font-bold font-outfit ${TONE_TEXT[tone] ?? ""}`}>{commonFreeHours}h</span>
+            <span className="block text-xs font-bold uppercase text-text-muted leading-none">common</span>
           </span>
         )}
-        <ChevronRight className="w-4 h-4 text-zinc-400 shrink-0" />
+        <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
       </button>
       <div className="flex items-center gap-1 shrink-0">
         <button
@@ -267,7 +263,7 @@ export function GroupRow({
           onClick={onEdit}
           title="Choose members"
           aria-label={`Choose members of ${name}`}
-          className="p-2 rounded-xl bg-zinc-100 hover:bg-zinc-200/80 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 transition-all active:scale-95 cursor-pointer shadow-2xs"
+          className="p-2 rounded-xl bg-surface-secondary hover:bg-surface-tertiary border-2 border-border-ink text-text-primary transition-all cursor-pointer shadow-2xs"
         >
           <Pencil className="w-3.5 h-3.5" />
         </button>
@@ -276,7 +272,7 @@ export function GroupRow({
           onClick={onDelete}
           title="Delete this group"
           aria-label={`Delete group ${name}`}
-          className="p-2 rounded-xl bg-zinc-100 hover:bg-red-50 dark:bg-zinc-900 dark:hover:bg-red-950/40 border border-zinc-200/80 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-red-600 dark:hover:text-red-400 transition-all active:scale-95 cursor-pointer shadow-2xs"
+          className="p-2 rounded-xl bg-surface-secondary hover:bg-danger-surface dark:hover:bg-red-950/40 border-2 border-border-ink text-text-primary hover:text-danger-foreground dark:hover:text-danger-foreground transition-all cursor-pointer shadow-2xs"
         >
           <Trash2 className="w-3.5 h-3.5" />
         </button>
@@ -314,7 +310,7 @@ export function ToneNumber({
 }) {
   return (
     <span
-      className={`block truncate font-black font-outfit tracking-tight leading-none ${TONE_TEXT[tone] ?? TONE_TEXT.zinc} ${className}`}
+      className={`block truncate font-bold font-outfit tracking-tight leading-none ${TONE_TEXT[tone] ?? TONE_TEXT.zinc} ${className}`}
     >
       {value}
     </span>

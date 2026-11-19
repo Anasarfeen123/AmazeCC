@@ -158,7 +158,7 @@ export const formatTitle = (title: string) => {
  * This was a card, and it was built on amazeui's `ExpandableSection`. That
  * component's header is `justify-between`, which pinned a two-word title hard
  * left and the score hard right with a third of a screen of dead space between
- * them — and it carries its own border, padding and `hover:bg-gray-50`, so
+ * them — and it carries its own border, padding and `hover:bg-surface-secondary`, so
  * dropping one inside a `ListShell` stacked card chrome inside card chrome.
  * Both problems go away by owning the row: `LIST_ROW` supplies the chrome, and
  * the expand is local state.
@@ -199,8 +199,7 @@ export function AssessmentRow({
   // A pending row ("-" or blank) has no mark to place; reading it as 0% put an F on it.
   const rawScored = String(detail.scoredMark ?? "").trim();
   const isRecorded = rawScored !== "" && rawScored !== "-" && Number.isFinite(Number(rawScored));
-  const gradePlacement =
-    !isRecorded || (isRelative && !statsUsable) ? "?" : gradeAt(asmPct, ladder);
+  const gradePlacement = !isRecorded || (isRelative && !statsUsable) ? "?" : gradeAt(asmPct, ladder);
   const gradeBounds = ladder
     .filter((b) => ["S", "A", "B", "C"].includes(b.grade))
     .map((b) => ({ grade: b.grade, range: `>= ${sBoundaryCalc(b.limit, detail.maxMark)}` }));
@@ -225,17 +224,17 @@ export function AssessmentRow({
         {/* Capped rather than flexing: this block is what drifted away from the
             title when the row was allowed to fill a 430px card. */}
         <span className="w-20 shrink-0 text-right">
-          <span className="block text-sm font-black font-outfit tracking-tight leading-none text-text-heading">
+          <span className="block text-sm font-bold font-outfit tracking-tight leading-none text-text-heading">
             {formatNumber(detail.scoredMark)}
-            <span className="text-[10px] font-bold text-text-muted"> / {formatNumber(detail.maxMark)}</span>
+            <span className="text-xs font-bold text-text-muted"> / {formatNumber(detail.maxMark)}</span>
           </span>
           <span className="mt-1.5 block">
-            <MiniBar pct={asmPct} tone={scopeTone === "blue" ? "bg-blue-500" : "bg-emerald-500"} />
+            <MiniBar pct={asmPct} tone={scopeTone === "blue" ? "bg-primary" : "bg-emerald-500"} />
           </span>
         </span>
 
         <ChevronDown
-          className={`w-4 h-4 shrink-0 text-zinc-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`w-4 h-4 shrink-0 text-text-muted transition-transform duration-200 ${open ? "rotate-180" : ""}`}
         />
       </button>
 
@@ -245,7 +244,7 @@ export function AssessmentRow({
           className="px-4 pb-4 pt-3 bg-surface-tertiary/40 dark:bg-background/40 border-t border-border-muted dark:border-border"
         >
           {isRelative && !statsUsable ? (
-            <p className="text-[11px] text-text-secondary dark:text-text-muted italic text-center py-2">
+            <p className="text-xs text-text-secondary dark:text-text-muted italic text-center py-2">
               {aStat?.count > 0
                 ? `Only ${aStat.count} ${aStat.count === 1 ? "student has" : "students have"} shared this assessment — the curve needs at least ${MIN_CURVE_SAMPLE}.`
                 : "Not enough data to calculate class statistics for this assessment yet."}
@@ -267,7 +266,7 @@ export function AssessmentRow({
               )}
 
               <div>
-                <p className="text-text-muted text-[10px] uppercase font-bold tracking-wider mb-2">
+                <p className="text-text-muted text-xs uppercase font-bold tracking-wider mb-2">
                   {isRelative ? "Grade placement preview" : "Absolute grade range preview"}
                 </p>
                 <div className="flex gap-2">
@@ -282,14 +281,14 @@ export function AssessmentRow({
                             : TONE_BADGE.zinc
                         }`}
                       >
-                        <span className="text-sm font-black">{b.grade}</span>
-                        <span className="text-[9px] font-bold opacity-80">{b.range}</span>
+                        <span className="text-sm font-bold">{b.grade}</span>
+                        <span className="text-xs font-bold opacity-80">{b.range}</span>
                       </span>
                     );
                   })}
                 </div>
                 {gradePlacement !== "?" && (
-                  <p className={`mt-2.5 text-[11px] font-bold ${TONE_TEXT[toneForGrade(gradePlacement)]}`}>
+                  <p className={`mt-2.5 text-xs font-bold ${TONE_TEXT[toneForGrade(gradePlacement)]}`}>
                     Hypothetical placement: Grade {gradePlacement}
                   </p>
                 )}

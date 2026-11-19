@@ -70,7 +70,7 @@ export default function ExperienceModePickerModal<T extends string = string>({
   };
 
   const selectedOpt = options.find((o) => o.value === selected);
-  const activeColor = selectedOpt?.activeColor || "bg-indigo-600 hover:bg-indigo-500";
+  const activeColor = selectedOpt?.activeColor || "bg-primary hover:bg-primary";
   const buttonText = typeof applyLabel === "function" ? applyLabel(selected, selectedOpt) : applyLabel;
 
   return (
@@ -85,12 +85,12 @@ export default function ExperienceModePickerModal<T extends string = string>({
       <div className="flex items-start justify-between gap-3 border-b border-border-strong/60 pb-4">
         <div className="flex items-center gap-3">
           {HeaderIcon ? (
-            <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-500 flex items-center justify-center shrink-0 shadow-xs">
+            <div className="w-10 h-10 rounded-2xl bg-secondary border border-border-ink text-secondary-foreground flex items-center justify-center shrink-0 shadow-xs">
               <HeaderIcon className="w-5 h-5" />
             </div>
           ) : null}
           <div className="min-w-0">
-            <h2 className="text-lg font-black text-text-heading tracking-tight leading-tight">{title}</h2>
+            <h2 className="text-lg font-bold text-text-heading tracking-tight leading-tight">{title}</h2>
             {subtitle ? <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{subtitle}</p> : null}
           </div>
         </div>
@@ -108,27 +108,29 @@ export default function ExperienceModePickerModal<T extends string = string>({
                 role="radio"
                 aria-checked={isSelected}
                 onClick={() => setSelected(option.value)}
-                className={`w-full flex items-center gap-3 p-3.5 sm:p-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500 ${
-                  isSelected ? (option.selectedClass ?? "bg-indigo-500/5") : "hover:bg-surface-secondary/60"
+                className={`w-full flex items-center gap-3 p-3.5 sm:p-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-ink ${
+                  isSelected ? (option.selectedClass ?? "bg-secondary") : "hover:bg-surface-secondary/60"
                 }`}
               >
                 <span
                   className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 ${
-                    option.iconClass ?? "bg-indigo-500/10 text-indigo-500 border-indigo-500/20"
+                    option.iconClass ?? "bg-secondary text-secondary-foreground border-border-ink"
                   }`}
                 >
                   <IconComponent className="w-4 h-4" />
                 </span>
                 <ListRowText title={option.title} titleTag="span" subtitle={option.description} />
                 {option.badge ? (
-                  <span className="hidden sm:inline-flex text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full bg-surface-secondary text-muted-foreground border border-border-strong/60 shrink-0">
+                  <span className="hidden sm:inline-flex text-xs font-bold uppercase tracking-wider px-2 py-1 rounded-[10px] bg-surface-secondary text-muted-foreground border border-border-strong/60 shrink-0 min-h-9">
                     {option.badge}
                   </span>
                 ) : null}
                 <span
                   aria-hidden="true"
                   className={`w-5 h-5 rounded-full flex items-center justify-center border shrink-0 transition-colors ${
-                    isSelected ? "bg-indigo-600 border-indigo-600 text-white" : "border-border-strong text-transparent"
+                    isSelected
+                      ? "bg-primary border-border-ink text-primary-foreground"
+                      : "border-border-strong text-transparent"
                   }`}
                 >
                   <Check className="w-3 h-3 stroke-[3]" />
@@ -145,7 +147,7 @@ export default function ExperienceModePickerModal<T extends string = string>({
             type="checkbox"
             checked={remember}
             onChange={(e) => setRemember(e.target.checked)}
-            className="w-4 h-4 rounded border-border-strong text-indigo-600 focus:ring-indigo-500/30 cursor-pointer"
+            className="w-4 h-4 rounded border-border-strong text-primary focus:ring-border-ink cursor-pointer"
           />
           <span>{rememberLabel}</span>
         </label>

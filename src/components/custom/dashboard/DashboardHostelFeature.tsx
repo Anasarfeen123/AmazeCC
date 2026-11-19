@@ -51,7 +51,7 @@ export default function DashboardHostelFeature({
       {activeSubTab === "counselling" && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Hostel Counselling</h2>
+            <h2 className="text-xl font-bold text-text-heading">Hostel Counselling</h2>
             <button
               onClick={() => setCounsellingRefreshKey((key) => key + 1)}
               className="p-2.5 rounded-full bg-info-surface text-info hover:bg-info-surface transition-colors"

@@ -35,10 +35,7 @@ export function PageSkeleton({
       {tiles > 0 ? (
         <div className={`grid ${cols} gap-3`}>
           {Array.from({ length: tiles }).map((_, i) => (
-            <div
-              key={i}
-              className="rounded-[24px] border border-slate-200/70 dark:border-white/[0.08] p-4 space-y-3 min-h-[112px]"
-            >
+            <div key={i} className="rounded-[14px] border border-border-ink p-4 space-y-3 min-h-[112px]">
               <Skeleton className="h-2.5 w-16 rounded" />
               <Skeleton className="h-7 w-20 rounded-lg" />
               <Skeleton className="h-2.5 w-24 rounded" />

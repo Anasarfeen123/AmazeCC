@@ -277,7 +277,7 @@ export default function CourseQBankTab({ courseCode, username }: { courseCode: s
                     <FileText className="w-6 h-6" />
                   </div>
                   <div className="min-w-0 flex-1 pt-1">
-                    <h4 className="font-bold text-sm text-text-heading truncate group-text-primary dark:group-text-primary transition-colors">
+                    <h4 className="font-bold text-sm text-text-heading truncate group-hover:text-primary transition-colors">
                       {p.title}
                     </h4>
                     <p className="text-xs font-bold uppercase tracking-widest text-text-muted mt-1">{p.source_type}</p>

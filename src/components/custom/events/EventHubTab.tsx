@@ -108,7 +108,7 @@ function CardSkeletonGrid({ count }: { count: number }) {
           <Skeleton className="mb-3.5 w-full h-40 rounded-2xl" />
           <Skeleton className="h-3.5 w-4/5 rounded" />
           <Skeleton className="mt-2 h-3 w-1/2 rounded" />
-          <div className="mt-3 pt-3 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center gap-2">
+          <div className="mt-3 pt-3 border-t border-border-ink flex items-center gap-2">
             <Skeleton className="h-4 w-12 rounded" />
             <Skeleton className="h-4 w-14 rounded" />
           </div>
@@ -128,7 +128,7 @@ function EventCard({ event, onOpen }: { event: any; onOpen: (e: any) => void }) 
       <div className={cn(TILE_CARD, "h-full flex flex-col")}>
         {/* Posters vary wildly in shape, so the frame takes the poster's own
             height rather than cropping it to a fixed ratio. */}
-        <div className="mb-3.5 w-full overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-800">
+        <div className="mb-3.5 w-full overflow-hidden rounded-2xl bg-surface-secondary">
           <img
             src={eventhubImageUrl(event.eid)}
             alt=""
@@ -138,19 +138,16 @@ function EventCard({ event, onOpen }: { event: any; onOpen: (e: any) => void }) 
           />
         </div>
 
-        <h3
-          className="font-bold text-sm text-zinc-900 dark:text-white font-outfit leading-tight line-clamp-2"
-          title={event.title}
-        >
+        <h3 className="font-bold text-sm text-text-heading font-outfit leading-tight line-clamp-2" title={event.title}>
           {event.title}
         </h3>
 
-        <p className="mt-1.5 flex items-center gap-1.5 text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
-          <Calendar className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+        <p className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-text-muted">
+          <Calendar className="w-3.5 h-3.5 text-text-muted shrink-0" />
           <span className="truncate">{eventDateLabel(event.date)}</span>
           {event.time ? (
             <>
-              <span className="text-zinc-300 dark:text-zinc-700 shrink-0">&bull;</span>
+              <span className="text-text-muted shrink-0">&bull;</span>
               <span className="truncate">{event.time}</span>
             </>
           ) : null}
@@ -163,11 +160,11 @@ function EventCard({ event, onOpen }: { event: any; onOpen: (e: any) => void }) 
           {event.eligibility ? <DotPill tone="sky">{event.eligibility}</DotPill> : null}
         </div>
 
-        <div className="mt-auto pt-3 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between gap-2">
-          <span className="text-[11px] font-extrabold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 truncate">
+        <div className="mt-auto pt-3 border-t border-border-ink flex items-center justify-between gap-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-text-muted truncate">
             {priceLabel(event)}
           </span>
-          <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-indigo-600 dark:text-indigo-400 shrink-0">
+          <span className="inline-flex items-center gap-0.5 text-xs font-bold text-primary shrink-0">
             Details
             <ChevronRight className="w-3.5 h-3.5" />
           </span>
@@ -576,8 +573,8 @@ export default function EventHubTab({
       {/* ── HERO STATS ── */}
       {loading ? (
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
-          <Skeleton className="h-32 sm:h-36 rounded-[24px]" />
-          <Skeleton className="h-32 sm:h-36 rounded-[24px]" />
+          <Skeleton className="h-32 sm:h-36 rounded-[14px]" />
+          <Skeleton className="h-32 sm:h-36 rounded-[14px]" />
         </div>
       ) : error ? null : (
         <>
@@ -585,7 +582,7 @@ export default function EventHubTab({
             <button
               type="button"
               onClick={() => setViewMode("registered")}
-              className="w-full text-left cursor-pointer transition-transform hover:scale-[1.01] active:scale-[0.98]"
+              className="w-full text-left cursor-pointer transition-transform"
               title="Show my registrations"
             >
               <StatTile
@@ -605,7 +602,7 @@ export default function EventHubTab({
             />
           </div>
 
-          <p className="px-1 -mt-3 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500 font-medium">
+          <p className="px-1 -mt-3 text-xs leading-relaxed text-text-muted font-medium">
             A blank fee means the event is free to enter. Registration and payment run on the official Event Hub portal
             — tap any card for the full details.
           </p>
@@ -634,7 +631,7 @@ export default function EventHubTab({
         <div
           className={cn(
             TILE_CARD,
-            "flex items-center gap-3 text-sm font-semibold text-red-600 dark:text-red-400 border-red-500/25",
+            "flex items-center gap-3 text-sm font-semibold text-danger-foreground border-border-ink",
           )}
         >
           <CalendarOff className="w-4 h-4 shrink-0" />
@@ -672,7 +669,7 @@ export default function EventHubTab({
           {!isRegisteredView && (
             <div className="space-y-3">
               <div className="relative">
-                <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+                <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" />
                 <input
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -685,7 +682,7 @@ export default function EventHubTab({
                     type="button"
                     onClick={() => setSearchQuery("")}
                     aria-label="Clear search"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 hit-expand p-1 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 hit-expand p-1 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors cursor-pointer"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>

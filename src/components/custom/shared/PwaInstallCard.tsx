@@ -6,17 +6,14 @@ import { usePwaInstall } from "@/lib/pwaInstall";
 
 const DISMISS_KEY = "pwaInstallCardDismissed";
 
-const isIosDevice = () =>
-  typeof navigator !== "undefined" && /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isIosDevice = () => typeof navigator !== "undefined" && /iphone|ipad|ipod/i.test(navigator.userAgent);
 
 const isStandalone = () =>
   typeof window !== "undefined" &&
   (window.matchMedia?.("(display-mode: standalone)").matches ||
     (navigator as unknown as { standalone?: boolean }).standalone === true);
 
-const isTouchDevice = () =>
-  typeof window !== "undefined" &&
-  ("ontouchstart" in window || navigator.maxTouchPoints > 0);
+const isTouchDevice = () => typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0);
 
 /**
  * "Install app" offer for the settings hub.
@@ -61,21 +58,19 @@ export default function PwaInstallCard() {
   };
 
   return (
-    <div className="relative bg-white dark:bg-zinc-900/80 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 p-5 space-y-3 shadow-2xs">
+    <div className="relative bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-3 shadow-2xs">
       <button
         onClick={dismiss}
         aria-label="Dismiss install offer"
-        className="absolute top-3.5 right-3.5 hit-expand flex items-center justify-center rounded-full p-1 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+        className="absolute top-3.5 right-3.5 hit-expand flex items-center justify-center rounded-full p-1 text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors cursor-pointer"
       >
         <X className="h-4 w-4" />
       </button>
 
-      <h3 className="text-sm font-extrabold text-zinc-900 dark:text-white font-outfit pr-8">
-        Install AmazeCC
-      </h3>
-      <p className="text-xs text-zinc-500 dark:text-zinc-400">
-        Add AmazeCC to your home screen for the full-screen app: offline support,
-        push notifications, and no browser chrome around it.
+      <h3 className="text-sm font-bold text-text-heading font-outfit pr-8">Install AmazeCC</h3>
+      <p className="text-xs text-text-muted">
+        Add AmazeCC to your home screen for the full-screen app: offline support, push notifications, and no browser
+        chrome around it.
       </p>
 
       {canInstall ? (
@@ -84,20 +79,20 @@ export default function PwaInstallCard() {
             const ok = await promptInstall();
             if (ok) setAccepted(true);
           }}
-          className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold px-4 py-2.5 rounded-xl transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 bg-primary hover:brightness-110 text-primary-foreground text-sm font-bold px-4 py-2.5 rounded-xl transition-colors cursor-pointer"
         >
           <Download className="w-4 h-4" /> Install app
         </button>
       ) : (
-        <ol className="space-y-2.5 text-xs font-medium text-zinc-700 dark:text-zinc-300">
+        <ol className="space-y-2.5 text-xs font-medium text-text-primary">
           <li className="flex items-start gap-2.5">
-            <Share className="w-4 h-4 mt-0.5 shrink-0 text-indigo-500" />
+            <Share className="w-4 h-4 mt-0.5 shrink-0 text-primary" />
             <span>
               Tap the <strong>Share</strong> button in Safari's toolbar.
             </span>
           </li>
           <li className="flex items-start gap-2.5">
-            <Plus className="w-4 h-4 mt-0.5 shrink-0 text-indigo-500" />
+            <Plus className="w-4 h-4 mt-0.5 shrink-0 text-primary" />
             <span>
               Choose <strong>Add to Home Screen</strong>, then confirm.
             </span>

@@ -1439,7 +1439,7 @@ export default function NavigationTabs({
         )}
 
         {/* Profile, Theme, and Logout Footer */}
-        <SidebarFooter className="bg-sidebar backdrop-blur-none border-t-2 border-border-ink">
+        <SidebarFooter className="bg-sidebar border-t-2 border-border-ink">
           <AnimatePresence initial={false}>
             {isOpen ? (
               <m.div

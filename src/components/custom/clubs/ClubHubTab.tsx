@@ -65,7 +65,9 @@ const DEMO_CLUBS = [
 
 /** Compare on letters and digits only, so "Fine Arts Club (TFAC)" == "fine arts club". */
 const normalise = (value: string): string =>
-  String(value ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+  String(value ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "");
 
 const isChapter = (type: string): boolean => /chapter/i.test(String(type ?? ""));
 const toneFor = (type: string): string => (isChapter(type) ? "violet" : type ? "indigo" : "sky");
@@ -84,9 +86,7 @@ function matchDetail(name: string, id: string, details: any[]): any | null {
   if (details.length === 0) return null;
   const n = normalise(name);
   const i = normalise(id);
-  const exact = details.find(
-    (d) => (n && normalise(d.club_name) === n) || (i && normalise(d.club_id) === i)
-  );
+  const exact = details.find((d) => (n && normalise(d.club_name) === n) || (i && normalise(d.club_id) === i));
   if (exact) return exact;
   return details.find((d) => getSimilarity(name, d.club_name) > 0.8) ?? null;
 }
@@ -169,8 +169,8 @@ export default function ClubHubTab({
       setClubs(
         withDetails(
           DEMO_CLUBS.map((name, i) => ({ id: String(i + 1), name, type: i >= 5 ? "CHAPTER" : "CLUB" })),
-          []
-        )
+          [],
+        ),
       );
       setVtopUnavailable(false);
       setLoading(false);
@@ -191,9 +191,7 @@ export default function ClubHubTab({
     } else if (details.length > 0) {
       // The public directory stands in. Each row is its own profile, so the
       // match is already done.
-      setClubs(
-        details.map((d: any) => ({ id: d.club_id || "", name: d.club_name || "", type: "", detail: d }))
-      );
+      setClubs(details.map((d: any) => ({ id: d.club_id || "", name: d.club_name || "", type: "", detail: d })));
       setVtopUnavailable(true);
     } else {
       setClubs([]);
@@ -201,7 +199,7 @@ export default function ClubHubTab({
       setError(
         enrolled.status === "rejected"
           ? enrolled.reason?.message || "Couldn't reach VTOP or the club database."
-          : "No clubs are published yet."
+          : "No clubs are published yet.",
       );
     }
 
@@ -319,8 +317,8 @@ export default function ClubHubTab({
       {/* ── HERO STATS ── */}
       {loading ? (
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
-          <Skeleton className="h-32 sm:h-36 rounded-[24px]" />
-          <Skeleton className="h-32 sm:h-36 rounded-[24px]" />
+          <Skeleton className="h-32 sm:h-36 rounded-[14px]" />
+          <Skeleton className="h-32 sm:h-36 rounded-[14px]" />
         </div>
       ) : error ? null : (
         <>
@@ -340,7 +338,7 @@ export default function ClubHubTab({
             />
           </div>
 
-          <p className="px-1 -mt-3 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500 font-medium">
+          <p className="px-1 -mt-3 text-xs leading-relaxed text-text-muted font-medium">
             {vtopUnavailable
               ? "VTOP's club list is unavailable, so this is the club database's own directory — every club, without the CLUB/CHAPTER split. Tap one for its mission, contacts and recruitment."
               : "Profiles are published by each club's representatives. A club with no profile here is still listed — it just hasn't written one."}
@@ -386,7 +384,7 @@ export default function ClubHubTab({
 
           <div className="space-y-3">
             <div className="relative">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" />
               <input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -399,7 +397,7 @@ export default function ClubHubTab({
                   type="button"
                   onClick={() => setSearchQuery("")}
                   aria-label="Clear search"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 hit-expand p-1 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 hit-expand p-1 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -426,28 +424,31 @@ export default function ClubHubTab({
                 club.id && normalise(club.id) !== normalise(club.name)
                   ? club.id
                   : club.detail
-                  ? "Profile published"
-                  : "No profile yet";
+                    ? "Profile published"
+                    : "No profile yet";
 
               return (
                 <button
                   key={`${club.id}-${club.name}`}
                   type="button"
                   onClick={() => setSelectedClub({ ...club, club_name: club.name, ...club.detail })}
-                  className={cn(LIST_ROW, "gap-3 cursor-pointer active:bg-zinc-100 dark:active:bg-zinc-800/60")}
+                  className={cn(
+                    LIST_ROW,
+                    "gap-3 cursor-pointer active:bg-surface-secondary dark:active:bg-zinc-800/60",
+                  )}
                 >
                   {club.detail?.logo_url ? (
                     <img
                       src={club.detail.logo_url}
                       alt=""
                       loading="lazy"
-                      className="w-10 h-10 rounded-2xl object-cover shrink-0 border border-zinc-200/70 dark:border-zinc-800/80"
+                      className="w-10 h-10 rounded-2xl object-cover shrink-0 border-2 border-border-ink"
                     />
                   ) : (
                     <span
                       className={cn(
                         "w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border",
-                        TONE_ICON_TILE[tone] ?? TONE_ICON_TILE.sky
+                        TONE_ICON_TILE[tone] ?? TONE_ICON_TILE.sky,
                       )}
                     >
                       <Icon className="w-4.5 h-4.5" />
@@ -457,12 +458,10 @@ export default function ClubHubTab({
                   <ListRowText title={club.name} subtitle={subtitle} />
 
                   {club.type ? (
-                    <span className={cn(TONE_BADGE[tone] ?? TONE_BADGE.zinc, "shrink-0")}>
-                      {club.type}
-                    </span>
+                    <span className={cn(TONE_BADGE[tone] ?? TONE_BADGE.zinc, "shrink-0")}>{club.type}</span>
                   ) : null}
 
-                  <ChevronRight className="w-4 h-4 text-zinc-400 shrink-0" />
+                  <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
                 </button>
               );
             })}
@@ -479,11 +478,7 @@ export default function ClubHubTab({
         </div>
       )}
 
-      <ClubDetailsModal
-        isOpen={!!selectedClub}
-        onClose={() => setSelectedClub(null)}
-        club={selectedClub}
-      />
+      <ClubDetailsModal isOpen={!!selectedClub} onClose={() => setSelectedClub(null)} club={selectedClub} />
     </PageShell>
   );
 }

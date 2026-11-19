@@ -49,13 +49,11 @@ export default function CommonFreeGridSubpage({
       <SectionHeader icon={CalendarRange} title={subTitle} />
 
       {loading ? (
-        <p className="px-1 text-sm text-zinc-500 dark:text-zinc-400" aria-busy="true">
+        <p className="px-1 text-sm text-text-muted" aria-busy="true">
           Loading peer timetables…
         </p>
       ) : scoped.length === 0 ? (
-        <p className="px-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Nobody in this group has published a timetable yet.
-        </p>
+        <p className="px-1 text-sm text-text-muted">Nobody in this group has published a timetable yet.</p>
       ) : (
         <CommonFreeTimetableGrid ownBusyMap={ownBusyMap} peers={scoped} onOpenPeer={onOpenPeer} />
       )}

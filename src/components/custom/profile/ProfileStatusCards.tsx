@@ -235,7 +235,7 @@ export default function ProfileStatusCards({
             </div>
 
             {isClickable && (
-              <div className="p-1 rounded-lg text-text-muted group-text-primary dark:group-text-primary group-hover:translate-x-0.5 transition-all shrink-0">
+              <div className="p-1 rounded-lg text-text-muted group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0">
                 <ChevronRight className="w-4 h-4" />
               </div>
             )}

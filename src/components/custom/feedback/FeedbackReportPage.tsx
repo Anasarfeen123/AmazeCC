@@ -662,7 +662,7 @@ export default function FeedbackReportPage({
                 className={`${LIST_ROW} cursor-pointer group`}
               >
                 <span
-                  className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center transition-transform group- ${TONE_ICON_TILE.indigo}`}
+                  className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center transition-transform ${TONE_ICON_TILE.indigo}`}
                 >
                   <Send className="w-5 h-5" />
                 </span>
@@ -683,7 +683,7 @@ export default function FeedbackReportPage({
                 className={`${LIST_ROW} cursor-pointer group`}
               >
                 <span
-                  className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center transition-transform group- ${TONE_ICON_TILE.amber}`}
+                  className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center transition-transform ${TONE_ICON_TILE.amber}`}
                 >
                   <MessageSquare className="w-5 h-5" />
                 </span>
@@ -710,7 +710,7 @@ export default function FeedbackReportPage({
                 className={`${LIST_ROW} cursor-pointer group`}
               >
                 <span
-                  className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center transition-transform group- ${TONE_ICON_TILE.emerald}`}
+                  className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center transition-transform ${TONE_ICON_TILE.emerald}`}
                 >
                   <ShieldCheck className="w-5 h-5" />
                 </span>

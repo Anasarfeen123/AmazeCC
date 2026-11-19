@@ -1052,7 +1052,7 @@ export default function FFCSDashboardHeader({
                             <span className="text-muted-foreground">Click to choose slot & faculty option...</span>
                           )}
                         </span>
-                        <Search className="w-4 h-4 text-muted-foreground group-text-primary transition-colors shrink-0" />
+                        <Search className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
                       </button>
                     </div>
 

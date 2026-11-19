@@ -2768,7 +2768,7 @@ export default function FFCSTimetableTab({
                               <span className="text-muted-foreground">-- Search & Choose Course --</span>
                             )}
                           </span>
-                          <Search className="w-4 h-4 text-muted-foreground group-text-primary transition-colors shrink-0 ml-2" />
+                          <Search className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0 ml-2" />
                         </button>
                       </div>
 
@@ -2890,7 +2890,7 @@ export default function FFCSTimetableTab({
                                   <span className="text-muted-foreground">-- Search & Choose Slot --</span>
                                 )}
                               </span>
-                              <Search className="w-4 h-4 text-muted-foreground group-text-primary transition-colors shrink-0 ml-2" />
+                              <Search className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0 ml-2" />
                             </button>
                           </div>
                           <p className="text-xs text-muted-foreground mt-1 ml-1 leading-tight">
@@ -3084,7 +3084,7 @@ export default function FFCSTimetableTab({
                       <button
                         onClick={() => downloadImage(settings.exportFormat === "jpg" ? "png" : "jpg")}
                         disabled={isDownloading || courses.length === 0}
-                        className="hidden items-center bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-text-heading px-3 py-2 rounded-xl text-sm font-medium transition-colors [@media(any-hover:none)]:flex shadow-brutal-sm"
+                        className="hidden items-center bg-primary hover:brightness-110 disabled:opacity-50 text-text-heading px-3 py-2 rounded-xl text-sm font-medium transition-colors [@media(any-hover:none)]:flex shadow-brutal-sm"
                       >
                         {settings.exportFormat === "jpg" ? "PNG" : "JPG"}
                       </button>

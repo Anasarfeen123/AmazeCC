@@ -151,7 +151,7 @@ export function ListShell({ className = "", children }: { className?: string; ch
 }
 
 const ROW_TITLE = "font-bold text-sm text-text-heading truncate font-outfit leading-tight";
-const ROW_SUBTITLE_BASE = "text-[11px] text-text-secondary dark:text-text-muted font-medium mt-0.5";
+const ROW_SUBTITLE_BASE = "text-xs text-text-secondary dark:text-text-muted font-medium mt-0.5";
 const ROW_SUBTITLE = `${ROW_SUBTITLE_BASE} truncate`;
 const ROW_SUBTITLE_WRAP = `${ROW_SUBTITLE_BASE} whitespace-normal break-words`;
 

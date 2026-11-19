@@ -24,9 +24,9 @@ import { useSocialData } from "@/lib/social/useSocialData";
 /** Confirmation instead of `confirm()`, which is blocked in some in-app browsers. */
 function ConfirmRevoke({ name, onYes, onNo }: { name: string; onYes: () => void; onNo: () => void }) {
   return (
-    <div className="p-3 rounded-2xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/40 space-y-2">
-      <p className="text-xs font-bold text-red-700 dark:text-red-300">End the pairing with {name}?</p>
-      <p className="text-[11px] text-red-600/80 dark:text-red-400/80 font-medium leading-relaxed">
+    <div className="p-3 rounded-2xl bg-danger-surface border border-border-ink space-y-2">
+      <p className="text-xs font-bold text-danger-foreground">End the pairing with {name}?</p>
+      <p className="text-xs text-danger-foreground font-medium leading-relaxed">
         Both of you lose access immediately. You can pair again later, but that mints a new grant and the old one stays
         dead.
       </p>
@@ -34,14 +34,14 @@ function ConfirmRevoke({ name, onYes, onNo }: { name: string; onYes: () => void;
         <button
           type="button"
           onClick={onNo}
-          className="flex-1 py-2 rounded-xl bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700 font-bold text-[11px] cursor-pointer"
+          className="flex-1 py-2 rounded-xl bg-surface text-text-primary border-2 border-border-ink font-bold text-xs cursor-pointer"
         >
           Keep pairing
         </button>
         <button
           type="button"
           onClick={onYes}
-          className="flex-1 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-[11px] cursor-pointer"
+          className="flex-1 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs cursor-pointer"
         >
           End pairing
         </button>
@@ -76,7 +76,7 @@ export default function PairsSubpage({ onBack, onAddPeer }: { onBack: () => void
     <button
       type="button"
       onClick={onAddPeer}
-      className="px-3 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition-colors cursor-pointer shrink-0"
+      className="px-3 py-2.5 rounded-xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs transition-colors cursor-pointer shrink-0"
     >
       New pair
     </button>
@@ -87,22 +87,22 @@ export default function PairsSubpage({ onBack, onAddPeer }: { onBack: () => void
       <SectionHeader icon={Link2} title="Active pairings" count={grants.length} />
 
       {error && (
-        <p className="p-3 rounded-2xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/40 text-red-600 dark:text-red-400 text-xs font-bold">
+        <p className="p-3 rounded-2xl bg-danger-surface border border-border-ink text-danger-foreground text-xs font-bold">
           {error}
         </p>
       )}
 
       {grants.length === 0 ? (
         <div className={EMPTY_STATE}>
-          <p className="text-xs font-bold text-zinc-500 dark:text-zinc-400">No pairings yet</p>
-          <p className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium mt-1.5 leading-relaxed">
+          <p className="text-xs font-bold text-text-muted">No pairings yet</p>
+          <p className="text-xs text-text-muted font-medium mt-1.5 leading-relaxed">
             A pairing is what lets two students see each other&apos;s timetable. It is mutual, and either side can end
             it.
           </p>
           <button
             type="button"
             onClick={onAddPeer}
-            className="mt-4 px-4 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition-colors cursor-pointer"
+            className="mt-4 px-4 py-2.5 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs transition-colors cursor-pointer"
           >
             Pair with someone
           </button>
@@ -134,7 +134,7 @@ export default function PairsSubpage({ onBack, onAddPeer }: { onBack: () => void
             ))}
           </div>
 
-          <p className="px-1 -mt-1 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500 font-medium flex items-start gap-1.5">
+          <p className="px-1 -mt-1 text-xs leading-relaxed text-text-muted font-medium flex items-start gap-1.5">
             {busyId ? (
               <>
                 <Loader2 className="w-3 h-3 animate-spin mt-px shrink-0" />

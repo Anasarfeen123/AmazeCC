@@ -366,7 +366,7 @@ export default function ScannerCamera({
           aria-label="Capture page"
           className="relative flex h-18 w-18 cursor-pointer items-center justify-center rounded-full border-4 border-white bg-transparent transition-transform duration-150 active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:cursor-not-allowed disabled:opacity-40 shadow-2xl"
         >
-          <span className="h-14 w-14 rounded-full bg-surface transition-all group-" />
+          <span className="h-14 w-14 rounded-full bg-white transition-all group-active:scale-95" />
         </button>
 
         {/* Gallery / Photos Import */}

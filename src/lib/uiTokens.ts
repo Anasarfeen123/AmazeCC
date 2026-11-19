@@ -107,10 +107,12 @@ export const SEG_IDLE = "border-2 border-transparent text-text-muted hover:text-
  */
 // Brand mapping: every accent hue is sage (teal family), warnings are ochre
 // with ink text, success/danger use the status tokens. Always an ink edge.
+// In dark, success/danger are solid mint/coral fills with ink text: the 16%
+// tints read as the same dark teal and made dark mode look monochrome.
 export const TONE_BADGE: Record<string, string> = {
-  red: "bg-danger-surface text-danger-foreground border-border-ink",
+  red: "bg-danger-surface text-danger-foreground border-border-ink dark:bg-coral dark:text-obsidian",
   amber: "bg-highlight text-highlight-foreground border-border-ink",
-  emerald: "bg-success-surface text-success-foreground border-border-ink",
+  emerald: "bg-success-surface text-success-foreground border-border-ink dark:bg-mint dark:text-obsidian",
   blue: "bg-secondary text-secondary-foreground border-border-ink",
   indigo: "bg-secondary text-secondary-foreground border-border-ink",
   sky: "bg-secondary text-secondary-foreground border-border-ink",
@@ -134,10 +136,10 @@ export const TONE_TEXT: Record<string, string> = {
 export const TONE_ICON_TILE: Record<string, string> = {
   sky: "bg-secondary text-secondary-foreground border-border-ink",
   blue: "bg-secondary text-secondary-foreground border-border-ink",
-  emerald: "bg-success-surface text-success-foreground border-border-ink",
+  emerald: "bg-success-surface text-success-foreground border-border-ink dark:bg-mint dark:text-obsidian",
   amber: "bg-highlight text-highlight-foreground border-border-ink",
   violet: "bg-secondary text-secondary-foreground border-border-ink",
-  red: "bg-danger-surface text-danger-foreground border-border-ink",
+  red: "bg-danger-surface text-danger-foreground border-border-ink dark:bg-coral dark:text-obsidian",
   indigo: "bg-secondary text-secondary-foreground border-border-ink",
   zinc: "bg-surface-secondary text-text-primary border-border-ink",
 };

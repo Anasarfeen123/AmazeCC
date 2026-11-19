@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import FFCSPageView from "../app/ffcs/FFCSPageView";
 
 // The planner tab calls `useRouter().replace(...)`; no app router is mounted in
@@ -23,37 +23,20 @@ function setLayoutMode(mode?: "guided" | "modern") {
 }
 
 describe("FFCSPageView", () => {
-  it("renders AmazeCC brand and Login to AmazeCC, with non-sticky header and no back button", async () => {
+  it("shows the brand top bar with a way into AmazeCC and no back button", async () => {
+    // Brand redesign: the standalone planner always has a sticky teal top bar
+    // that marks it as the separate FFCS planner (it opens in its own tab).
     setLayoutMode("guided");
-    const { container } = render(<FFCSPageView />);
+    render(<FFCSPageView />);
 
-    // The planner tab is a deferred chunk; wait for it to mount so its
-    // layout-mode callback has revealed the nav these assertions walk.
-    // (Importing the tab's module graph takes seconds under vitest, hence
-    // the explicit timeout — same convention as the ffcsTab tests.)
-    await waitFor(() => expect(screen.getAllByRole("link", { name: /AmazeCC/i }).length).toBeGreaterThan(0), {
-      timeout: 30_000,
-    });
-
-    // 1. Should NOT show "Back to AmazeCC Home" or "VTOP Login"
     expect(screen.queryByText(/Back to AmazeCC Home/i)).toBeNull();
     expect(screen.queryByText(/VTOP Login/i)).toBeNull();
-
-    // 2. Should show "AmazeCC" brand link without presenting FFCS as an app
-    const amazeccLinks = screen.getAllByRole("link", { name: /AmazeCC/i });
-    expect(amazeccLinks.length).toBeGreaterThan(0);
-    const homeBrandLink = amazeccLinks.find((el) => el.getAttribute("href") === "/");
-    expect(homeBrandLink).toBeDefined();
     expect(screen.queryByText("App")).toBeNull();
 
-    // 3. Should show "Login to AmazeCC"
-    expect(screen.getByText("Login to AmazeCC")).toBeDefined();
-
-    // 4. Header nav should not be sticky
-    const nav = container.querySelector("nav");
-    expect(nav).toBeDefined();
-    expect(nav?.className).not.toContain("sticky");
-    // Heavy module graph — same convention as the ffcsTab tests.
+    const home = screen.getByRole("link", { name: "AmazeCC home" });
+    expect(home.getAttribute("href")).toBe("/");
+    expect(screen.getByText("FFCS planner")).toBeDefined();
+    expect(screen.getByRole("link", { name: "Sign in to AmazeCC" })).toBeDefined();
   }, 30_000);
 
   it("does not offer a separate FFCS app install action", () => {
@@ -62,41 +45,23 @@ describe("FFCSPageView", () => {
     expect(screen.queryByRole("button", { name: /Install App/i })).toBeNull();
   }, 30_000);
 
-  it("defaults to Modern on mobile when no planner layout has been saved", () => {
+  it("keeps the top bar on phones and the content inside page margins", () => {
     setLayoutMode();
     const originalWidth = window.innerWidth;
     Object.defineProperty(window, "innerWidth", { configurable: true, value: 390 });
     try {
       const { container } = render(<FFCSPageView />);
-      expect(container.querySelector("nav")?.hasAttribute("hidden")).toBe(true);
+      const header = container.querySelector("header");
+      expect(header?.className).toContain("sticky");
+      const main = container.querySelector("main");
+      expect(main?.className).toContain("max-w-[1440px]");
+      expect(main?.className).toContain("px-4");
+      expect(main?.className).toContain("sm:px-8");
     } finally {
       Object.defineProperty(window, "innerWidth", {
         configurable: true,
         value: originalWidth,
       });
     }
-  }, 30_000);
-
-  it("combines the page headers in Modern mode", async () => {
-    setLayoutMode("modern");
-    const { container } = render(<FFCSPageView />);
-
-    // The "AmazeCC home" link and the split wordmark live in the deferred
-    // planner chunk, so wait for it before walking the merged headers.
-    await screen.findByRole("link", { name: "AmazeCC home" }, { timeout: 30_000 });
-
-    const main = container.querySelector("main");
-    expect(main?.className).toContain("w-full");
-    expect(main?.className).not.toContain("max-w-7xl");
-    expect(main?.className).toContain("sm:px-6");
-
-    const topNav = container.querySelector("nav");
-    expect(topNav?.hasAttribute("hidden")).toBe(true);
-    expect(screen.getByRole("link", { name: "AmazeCC home" })).toBeDefined();
-    expect(screen.getByRole("link", { name: "AmazeCC home" }).querySelector("img")?.getAttribute("src")).toContain(
-      "/brand/icon-primary.svg",
-    );
-    expect(screen.getByText("Amaze")).toBeDefined();
-    expect(screen.getByText("CC")).toBeDefined();
   }, 30_000);
 });

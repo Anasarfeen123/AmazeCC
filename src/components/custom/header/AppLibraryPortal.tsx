@@ -9,7 +9,7 @@
 import { memo, useEffect, useMemo, useState } from "react";
 import SelectField from "../shared/primitives/SelectField";
 import { formatSemesterName } from "@/lib/formatSemesterName";
-import { ChevronRight, Home, Moon, Pin, Sun } from "lucide-react";
+import { ChevronRight, ExternalLink, Home, Moon, Pin, Sun } from "lucide-react";
 import { BrandSheet as AppLibrary } from "../shared/primitives/BrandSheet";
 import config from "../../../../config.json";
 import {
@@ -159,6 +159,12 @@ const AppLibraryPortal = memo(
             <div className="flex flex-col min-w-0">
               <span className="truncate text-sm font-semibold leading-tight text-text-heading">{label}</span>
               {opts?.subtitle ? <span className="truncate text-xs text-text-muted">{opts.subtitle}</span> : null}
+              {item.target.kind === "external" ? (
+                <span className="mt-1 inline-flex w-fit items-center gap-1 rounded-[6px] border-2 border-border-ink bg-surface-secondary px-1 font-mono text-xs font-semibold uppercase text-text-muted">
+                  New tab
+                  <ExternalLink className="h-3 w-3" aria-hidden />
+                </span>
+              ) : null}
             </div>
           </button>
 

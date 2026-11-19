@@ -16,6 +16,7 @@ import { useOverlayBack } from "@/lib/overlayStack";
 import { animateThemeCircularExpansion } from "../ThemeToggle";
 import {
   BookOpen,
+  ExternalLink,
   PanelLeftClose,
   Building,
   CalendarCheck,
@@ -71,6 +72,8 @@ type NavItem = {
   isActive: boolean;
   onSelect: () => void;
   isExpandable?: boolean;
+  /** Opens a separate page in a new tab (e.g. the FFCS planner). */
+  isExternal?: boolean;
 };
 
 type Group = {
@@ -568,6 +571,7 @@ export default function NavigationTabs({
       icon: entry.icon as any,
       isActive,
       isExpandable: entry.isExpandable,
+      isExternal: entry.target.kind === "external",
       onSelect: () => {
         if (entry.id === "academics") {
           selectTab("academics");
@@ -1238,8 +1242,16 @@ export default function NavigationTabs({
                               data-sidebar-nav="true"
                               className={SIDEBAR_ITEM_BRAND}
                               rightElement={
-                                item.isExpandable ? <ChevronRight className="h-3.5 w-3.5 shrink-0" /> : undefined
+                                item.isExpandable ? (
+                                  <ChevronRight className="h-3.5 w-3.5 shrink-0" />
+                                ) : item.isExternal ? (
+                                  <span className="inline-flex items-center gap-1 rounded-[6px] border-2 border-current px-1 font-mono text-[12px] font-semibold uppercase leading-4 opacity-80">
+                                    New tab
+                                    <ExternalLink className="h-3 w-3" aria-hidden />
+                                  </span>
+                                ) : undefined
                               }
+                              aria-label={item.isExternal ? `${item.label} (opens in a new tab)` : undefined}
                               onClick={item.onSelect}
                               onKeyDown={(event) => handleNavKeyDown(event, item.onSelect)}
                             />

@@ -8,7 +8,7 @@ import { useAtomValue } from "jotai";
 import { isLoggedInAtom } from "@/store";
 import { prepareSignIn, SIGN_IN_PARAM } from "@/lib/signInReturn";
 import ThemeToggle from "@/components/custom/ThemeToggle";
-import { getAssetPath } from "@/lib/utils";
+import BrandLogo from "@/components/custom/shared/BrandLogo";
 import { useOverlayBackBoundary } from "@/lib/overlayStack";
 
 // The planner is ~440KB of async chunks; the shell (nav + footer) is a few
@@ -26,7 +26,7 @@ const FFCSTimetableTab = dynamic(() => import("@/components/custom/exams/FFCSTim
 export default function FFCSPageView() {
   useOverlayBackBoundary("ffcs-route");
   const [mounted, setMounted] = useState(false);
-  const [plannerLayoutMode, setPlannerLayoutMode] = useState<"guided" | "modern" | "classic">("modern");
+  const [, setPlannerLayoutMode] = useState<"guided" | "modern" | "classic">("modern");
   // The planner tab hydrates this from the stored session on mount, so the
   // header can tell a signed-in student from a guest.
   const isLoggedIn = useAtomValue(isLoggedInAtom);
@@ -36,79 +36,56 @@ export default function FFCSPageView() {
   }, []);
 
   return (
-    <div className="min-h-[100dvh] w-full max-w-full overflow-x-clip bg-slate-50 text-slate-850 dark:bg-[#03060F] dark:text-gray-100 flex flex-col font-sans transition-colors duration-300">
-      {/* Top Navigation Bar - non-sticky so it scrolls with the page */}
-      <nav
-        hidden={plannerLayoutMode === "modern"}
-        className="w-full bg-white/85 dark:bg-[#03060F]/85 border-b border-slate-200/80 dark:border-white/[0.08]"
+    <div className="flex min-h-[100dvh] w-full max-w-full flex-col overflow-x-clip bg-background font-sans text-text-primary">
+      {/* Brand top bar: makes it clear this is the separate FFCS planner site
+          (it opens in its own tab from the app) and gives a way back. */}
+      <header
+        className="brand-sidebar sticky top-0 z-40 border-b-[3px] border-border-ink"
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              className="flex items-center gap-2.5 group transition-transform active:scale-95"
-              title="AmazeCC Home"
-            >
-              <img
-                loading="lazy"
-                decoding="async"
-                src={getAssetPath("/favicon/FFCS.png")}
-                alt="AmazeCC FFCS"
-                className="h-8 w-8 rounded-xl object-contain shadow-xs border border-indigo-500/30 p-0.5 bg-white dark:bg-zinc-900"
-              />
-              <div className="flex items-center gap-2">
-                <span className="text-base sm:text-lg font-black tracking-tight font-outfit text-zinc-900 dark:text-white">
-                  AmazeCC <span className="text-indigo-600 dark:text-indigo-400">FFCS</span>
-                </span>
-              </div>
-            </Link>
-          </div>
-
-          <div className="flex items-center gap-2 sm:gap-2.5">
-            {/* Signed in: a way back to the app. Signed out: sign in, then return here. */}
+        <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-3 px-4 sm:px-8">
+          <Link href="/" className="flex min-w-0 items-center gap-3" title="AmazeCC home" aria-label="AmazeCC home">
+            <BrandLogo size="md" variant="mark" className="sm:hidden" />
+            <BrandLogo size="md" wordClassName="text-cream" className="hidden sm:inline-flex" />
+            <span className="rounded-[6px] border-2 border-obsidian bg-ochre px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-obsidian">
+              FFCS planner
+            </span>
+          </Link>
+          <div className="flex shrink-0 items-center gap-2">
+            {/* Signed in: back to the app. Signed out: sign in, then return here. */}
             <Link
               href={isLoggedIn ? "/" : `/?${SIGN_IN_PARAM}=1`}
               onClick={isLoggedIn ? undefined : () => prepareSignIn("/ffcs/")}
-              title={isLoggedIn ? "Open AmazeCC" : "Login to AmazeCC"}
-              aria-label={isLoggedIn ? "Open AmazeCC" : "Login to AmazeCC"}
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-zinc-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors p-2 sm:px-3 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200/80 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-slate-200/80 dark:border-zinc-800 shadow-2xs active:scale-95"
+              aria-label={isLoggedIn ? "Open AmazeCC" : "Sign in to AmazeCC"}
+              className="inline-flex min-h-10 items-center gap-1.5 rounded-[10px] border-2 border-obsidian bg-cream px-3 font-mono text-xs font-bold uppercase tracking-[0.06em] text-obsidian shadow-brutal-sm brutal-press"
             >
-              {isLoggedIn ? (
-                <LayoutDashboard size={14} className="shrink-0" />
-              ) : (
-                <LogIn size={14} className="shrink-0" />
-              )}
-              <span className="hidden sm:inline">{isLoggedIn ? "Open AmazeCC" : "Login to AmazeCC"}</span>
+              {isLoggedIn ? <LayoutDashboard size={14} aria-hidden /> : <LogIn size={14} aria-hidden />}
+              <span className="hidden sm:inline">{isLoggedIn ? "Open AmazeCC" : "Sign in"}</span>
             </Link>
             {mounted && <ThemeToggle />}
           </div>
         </div>
-      </nav>
+      </header>
 
-      {/* Main Content Area */}
-      <main className="flex-1 w-full px-3 sm:px-6 py-4 sm:py-6 overflow-x-clip">
+      <main className="mx-auto w-full max-w-[1440px] flex-1 overflow-x-clip px-4 py-6 sm:px-8 sm:py-8">
         <FFCSTimetableTab onLayoutModeChange={setPlannerLayoutMode} />
       </main>
 
-      {/* Simple Footer */}
-      <footer className="border-t border-slate-200/80 dark:border-white/[0.08] py-6 text-center text-xs text-slate-500 dark:text-gray-500">
-        <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-4">
-          <p>© {new Date().getFullYear()} AmazeCC. Offline-first FFCS Timetable Planner.</p>
-          <div className="flex items-center gap-4">
-            <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-              Home
-            </Link>
-            <Link href="/friend-finder" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-              Friend Finder
-            </Link>
-            <Link href="/privacy" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-              Privacy
-            </Link>
-            <Link href="/terms" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-              Terms
-            </Link>
-          </div>
+      <footer className="border-t-[3px] border-border-ink bg-surface-secondary">
+        <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-4 px-4 py-6 font-mono text-xs sm:px-8">
+          <p className="text-text-muted">{"AmazeCC FFCS planner // works offline // no sign-in needed"}</p>
+          <nav aria-label="Footer" className="flex flex-wrap gap-4 font-semibold uppercase tracking-[0.06em]">
+            {[
+              ["AmazeCC", "/"],
+              ["Friend finder", "/friend-finder"],
+              ["Privacy", "/privacy"],
+              ["Terms", "/terms"],
+            ].map(([label, href]) => (
+              <Link key={href} href={href} className="text-text-primary underline-offset-4 hover:underline">
+                {label}
+              </Link>
+            ))}
+          </nav>
         </div>
       </footer>
     </div>

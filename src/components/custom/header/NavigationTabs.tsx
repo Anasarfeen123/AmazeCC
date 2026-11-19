@@ -1,6 +1,16 @@
 "use client";
 
-import { memo, useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type ReactNode,
+} from "react";
 import BrandLogo from "../shared/BrandLogo";
 import SidebarThemeSwitch from "../theme/SidebarThemeSwitch";
 import { TOGGLE_SIDEBAR_EVENT } from "@/lib/shortcuts";
@@ -382,9 +392,24 @@ export default function NavigationTabs({
     [setActiveTab],
   );
 
-  const toggleRailPopover = useCallback((groupId: string) => {
+  // The rail popover opens level with the button that opened it (it used to
+  // sit at a fixed top-12, far from buttons lower in the rail; user report),
+  // and is pulled up if it would run past the bottom of the window.
+  const [railPopoverTop, setRailPopoverTop] = useState(48);
+  const toggleRailPopover = useCallback((groupId: string, anchor?: HTMLElement | null) => {
+    if (anchor) {
+      const sidebarTop = sidebarRef.current?.getBoundingClientRect().top ?? 0;
+      setRailPopoverTop(Math.max(8, anchor.getBoundingClientRect().top - sidebarTop - 8));
+    }
     setActiveRailGroup((current) => (current === groupId ? null : groupId));
   }, []);
+  useLayoutEffect(() => {
+    const el = flyoutRef.current;
+    if (!activeRailGroup || !el) return;
+    const sidebarTop = sidebarRef.current?.getBoundingClientRect().top ?? 0;
+    const maxTop = window.innerHeight - sidebarTop - el.offsetHeight - 12;
+    if (railPopoverTop > maxTop) setRailPopoverTop(Math.max(8, maxTop));
+  }, [activeRailGroup, railPopoverTop]);
 
   // Removed old layout items as they are now fully isolated inside AppLibraryPortal
 
@@ -1534,7 +1559,7 @@ export default function NavigationTabs({
                 return (
                   <div key={group.id} className="relative flex justify-center group/rail">
                     <button
-                      onClick={() => toggleRailPopover(group.id)}
+                      onClick={(e) => toggleRailPopover(group.id, e.currentTarget)}
                       className={`flex h-11 w-11 items-center justify-center rounded-[10px] transition-colors duration-150 ${
                         isActive ? railActiveStyles : "text-cream hover:bg-sidebar-accent border-2 border-transparent"
                       } ${navButtonBase}`}
@@ -1619,7 +1644,8 @@ export default function NavigationTabs({
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={{ opacity: 0, scale: 0.95, x: -10 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
-              className="absolute left-[76px] top-12 z-50 w-56 rounded-2xl border border-sidebar-border bg-popover p-2 text-popover-foreground shadow-2xl"
+              style={{ top: railPopoverTop }}
+              className="absolute left-[76px] z-50 w-56 rounded-2xl border border-sidebar-border bg-popover p-2 text-popover-foreground shadow-2xl"
             >
               {activeRailGroup === "account" ? (
                 <div>

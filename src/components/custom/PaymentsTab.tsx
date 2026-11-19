@@ -270,7 +270,9 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
         id: "txn",
         title: "Last transaction",
         headline: `${debit ? "−" : "+"}${fmtAmt(String(Math.abs(safeNum(lastTxn.entry.amount))), lastTxn.symbol)}`,
-        subline: lastTxn.entry.particulars || lastTxn.entry.transactionDate || (debit ? "Debit" : "Credit"),
+        // Particulars are server-provided and can themselves contain amounts.
+        // Keep the summary useful without exposing them beside a covered value.
+        subline: debit ? "Latest wallet debit" : "Latest wallet credit",
         badge: debit ? "Debit" : "Credit",
         tone: debit ? "red" : "emerald",
         onClick: () => setListMode("wallet"),
@@ -622,7 +624,9 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
                                 <span className="text-xs font-bold text-text-muted uppercase block mb-0.5">
                                   {header}
                                 </span>
-                                <span className="font-bold text-text-primary break-words">{row?.[header] || "—"}</span>
+                                <span data-private="fees" className="font-bold text-text-primary break-words">
+                                  {row?.[header] || "—"}
+                                </span>
                               </div>
                             ))}
                           </div>

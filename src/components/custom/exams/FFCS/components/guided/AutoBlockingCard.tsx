@@ -214,7 +214,7 @@ export default function AutoBlockingCard({
       {/* Visual Interactive Vertical Timetable */}
       <div className="flex-1 min-h-[220px] max-h-[360px] overflow-auto rounded-2xl bg-background border border-border-ink p-2 custom-scrollbar">
         <div className="text-xs text-text-muted font-bold mb-1.5 px-1 flex items-center justify-between">
-          <span>INTERACTIVE VERTICAL TIMETABLE — TAP ANY CELL TO TOGGLE BLOCK</span>
+          <span>Tap a cell to block or unblock that slot</span>
           <span className="text-danger-foreground font-mono">{effectiveBlockedSlots.size} slots blocked</span>
         </div>
         <VerticalTimetableGrid

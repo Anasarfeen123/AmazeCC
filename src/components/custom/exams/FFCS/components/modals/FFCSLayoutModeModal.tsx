@@ -28,7 +28,7 @@ const MODE_OPTIONS: readonly ExperienceModeOption<LayoutMode>[] = [
   {
     value: "modern",
     title: "Standard Single Page View",
-    description: "The all-in-one planner with course search, timetable controls, and the interactive weekly grid.",
+    description: "Course search, timetable controls and the weekly grid on one page.",
     badge: "All-in-One",
     Icon: LayoutDashboard,
     iconClass: "bg-secondary text-secondary-foreground border-border-ink",

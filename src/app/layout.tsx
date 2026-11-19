@@ -64,8 +64,7 @@ export const viewport: Viewport = {
 };
 
 const APP_NAME = "AmazeCC";
-const APP_DESCRIPTION =
-  "Elevate your university life with seamless timetable syncing, attendance tracking, and smart grade calculations.";
+const APP_DESCRIPTION = "Attendance, marks, timetable and campus tools for VIT Chennai students, in one free app.";
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,

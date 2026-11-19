@@ -22,7 +22,7 @@ const companionTimeline = [
   },
   {
     time: "11:00 AM",
-    title: "Interactive Skip",
+    title: "Can I skip?",
     desc: "Want to skip a slot? Check the simulator to see if you stay above the 75% limit.",
   },
   {
@@ -57,14 +57,14 @@ const benefits = [
     title: "Offline Support",
     desc: "Your schedule, marks, and attendance details are cached for instant offline lookup.",
   },
-  { title: "Lightning Fast", desc: "Optimized bundle sizes and lightweight state loads make queries instant." },
+  { title: "Fast", desc: "Pages open from what is already on your phone; syncing only fetches what changed." },
 ];
 
 const roadmap = [
   {
     status: "In Progress",
     title: "AI Assistant",
-    desc: "Intelligent chatbot to answer questions about slots and exams.",
+    desc: "Ask questions about your slots and exams in plain words.",
   },
   {
     status: "Planned",
@@ -73,7 +73,7 @@ const roadmap = [
   },
   {
     status: "Planned",
-    title: "Smart Notifications",
+    title: "Reminders",
     desc: "Reminders for class timings and pending library checkouts.",
   },
   { status: "Backlog", title: "Expense Manager", desc: "Log pocket money and food purchases inside hostel tabs." },

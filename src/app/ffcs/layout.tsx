@@ -24,8 +24,7 @@ export const metadata: Metadata = {
     default: "AmazeCC FFCS - Timetable Planner & Auto-Generator",
     template: "%s | AmazeCC FFCS",
   },
-  description:
-    "Offline-first conflict-free timetable planner, smart slot generator, faculty ratings, and class clash resolver for VIT.",
+  description: "Plan your VIT FFCS timetable: pick courses and slots, spot clashes, compare faculty, works offline.",
   manifest: "/ffcs-manifest.json",
   icons: {
     icon: [
@@ -43,8 +42,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "AmazeCC FFCS - Timetable Planner & Auto-Generator",
-    description:
-      "Offline-first conflict-free timetable planner, smart slot generator, faculty ratings, and class clash resolver for VIT.",
+    description: "Plan your VIT FFCS timetable: pick courses and slots, spot clashes, compare faculty, works offline.",
     url: "/ffcs/",
     siteName: "AmazeCC FFCS",
     type: "website",

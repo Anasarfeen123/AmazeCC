@@ -45,7 +45,7 @@ export default function MobilePreflightCard({}: MobilePreflightCardProps) {
           </div>
           <div className="min-w-0">
             <p className="text-xs font-bold text-text-secondary">Faculty Ratings & Swapping</p>
-            <p className="text-xs text-text-muted truncate">Compare faculty scores and swap slots seamlessly</p>
+            <p className="text-xs text-text-muted truncate">Compare faculty and swap slots</p>
           </div>
         </div>
 

@@ -1982,7 +1982,7 @@ export default function ProfilePage({
 
         <div className="flex items-center justify-between py-1">
           <div>
-            <p className="text-sm font-bold text-text-primary">Smart Mess Menu Auto-Filter</p>
+            <p className="text-sm font-bold text-text-primary">Show only my mess menu</p>
             <p className="text-xs text-text-muted">Auto-select meal schedule based on current week of the month</p>
           </div>
           <Switch

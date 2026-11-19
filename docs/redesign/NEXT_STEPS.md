@@ -45,7 +45,7 @@ Hub), Event hub and Club hub with live data (their APIs were unreachable from
 the dev machine), Marks predictor (`CoursePredictorPage`), Course detail
 subpage, QBank, Paper scanner (always dark on purpose), Friend Finder site
 (`/friend-finder`), FFCS planner internals (guided selector, generator,
-dossier). For each: icon wells in content -> remove; one ochre hero per page
+dossier). For each: keep row icons (user 2026-11-20: removing them made pages an "info barrage"; drop only icons that repeat a nearby one); one ochre hero per page
 (`summary-row`); status in words; no emoji; mono labels; 44px targets.
 
 ## P2 — polish ideas the user is likely to want

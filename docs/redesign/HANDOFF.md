@@ -77,7 +77,7 @@ designs"), centred empty hero screens, emoji.
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Themes         | One brand, light + dark only. Accent palettes and "Card look" removed.                                                                                                                                                            |
 | Sidebar        | Solid **teal panel** in both themes; ochre active item, ochre group labels, sage icons (`.brand-sidebar` in `brand.css`).                                                                                                         |
-| Icons          | **Navigation keeps icons + labels** (sidebar, bottom bar, rail). **Content avoids decorative icons**: no icon wells, no icons before facts, no emoji. Universal controls keep theirs (close, back, search, chevron, sync, theme). |
+| Icons          | **Navigation keeps icons + labels** (sidebar, bottom bar, rail). **List rows keep their icon tiles** (user 2026-11-20: without them pages became an "info barrage"); no emoji, and no icon that repeats one next to it. Universal controls keep theirs (close, back, search, chevron, sync, theme). |
 | Shadows        | Hard, zero blur, **3 / 5 / 7 px** (`shadow-brutal-sm/md/lg`). Must be visible in dark.                                                                                                                                            |
 | Badges/buttons | Never tiny or pill-round: 6px radius badges, 10px buttons, 44px tap targets, min 12px text. Stat-card badges hidden on phones.                                                                                                    |
 | Contrast       | Text >= 4.5:1, edges >= 3:1, both themes (`contrast.py`).                                                                                                                                                                         |
@@ -263,7 +263,7 @@ NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next dev --webpack -p 3017   # backg
   `CLICK_TEXTS="Open Campus menu|Payments"` (+ `DEBUG_CLICK=1`); use
   `PRE_W=1440` for sidebar-only triggers. Known: Attendance and Timetable
   Calendar sidebar items both light up on the calendar page.
-  **Next: icon wells in hub lists (Libraries, Curriculum, Grade history),
+  **(2026-11-20: cancelled, user wants row icons kept, see Icons rule.)** Was: icon wells in hub lists (Libraries, Curriculum, Grade history),
   Curriculum progress bar (raw green/orange), R2 leftovers, R6.**
 - **2026-11-19 (late)** — R6 mechanical pass finished (all files). Before
   running `brandify.py` again, note: if it reports 0 rewrites on a file

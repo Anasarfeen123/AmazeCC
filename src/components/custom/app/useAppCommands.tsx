@@ -513,6 +513,7 @@ export function useAppCommands(input: AppCommandInputs) {
           const newVal = !current as any;
           setSettings((prev) => {
             const next = { ...prev, [key]: newVal };
+            if (key === "showProfilePhoto") next.profilePhotoChosen = true;
             return next;
           });
         },
@@ -531,7 +532,7 @@ export function useAppCommands(input: AppCommandInputs) {
         setSettings((prev) => togglePrivacyCategory(prev, "cgpa", !privacyCategories(prev).includes("cgpa"))),
     });
     toggle("Dayscholar Bus Mode", "isDayscholarWithBus", "Settings", "🚌");
-    toggle("Show Profile Photo on Dashboard", "showProfilePhoto", "Settings", "👤");
+    toggle("Show my VTOP photo instead of the logo", "showProfilePhoto", "Settings", "👤");
     result.push({
       id: "setting-hide-all-private",
       label: "Privacy mode",

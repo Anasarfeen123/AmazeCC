@@ -1719,14 +1719,17 @@ export default function ProfilePage({
 
           <div className="flex items-center justify-between py-3">
             <div>
-              <p className="text-sm font-bold text-text-primary">Show Profile Photo</p>
+              <p className="text-sm font-bold text-text-primary">Show my VTOP photo</p>
               <p className="text-xs text-text-muted">
-                Render student avatar in headers, navigation rails, and profile cards
+                Off: the AmazeCC logo shows instead. On: your VTOP photo shows on Home, the sidebar and your profile
               </p>
             </div>
             <Switch
               checked={settings?.showProfilePhoto ?? false}
-              onCheckedChange={(val) => updateSetting("showProfilePhoto", val)}
+              onCheckedChange={(val) => {
+                updateSetting("profilePhotoChosen", true);
+                updateSetting("showProfilePhoto", val);
+              }}
             />
           </div>
 

@@ -12,6 +12,8 @@ export type Settings = {
   targetAttendance?: number;
   showGpa?: boolean;
   showProfilePhoto?: boolean;
+  /** Set once the student flips the photo switch; until then the logo shows. */
+  profilePhotoChosen?: boolean;
   blurGrades?: boolean;
   /** Blur grades, attendance, marks and fees app-wide (screen sharing, showing your phone). */
   privacyMode?: boolean;
@@ -112,7 +114,8 @@ export const defaultSettings: Settings = {
   isDayscholarWithBus: false,
   targetAttendance: 75,
   showGpa: false,
-  showProfilePhoto: true,
+  // Logo by default (user, 2026-11-20: students dislike their VTOP photo).
+  showProfilePhoto: false,
   blurGrades: false,
   privacyMode: false,
   privacyCategories: [],
@@ -173,7 +176,7 @@ export const defaultSettings: Settings = {
  * `setSettings({ ...defaultSettings, ...raw })` gave, now applied on every
  * read instead of only at boot. A corrupt or absent blob degrades to defaults.
  */
-const settingsStorage = {
+export const settingsStorage = {
   getItem(_key: string, initialValue: Settings): Settings {
     try {
       const raw = localStorage.getItem("settings");
@@ -188,6 +191,9 @@ const settingsStorage = {
           merged.privacyCategories = ["cgpa"];
         }
       }
+      // The photo used to be on by default, so a saved `true` usually means
+      // "never chose". Only an explicit choice keeps it.
+      if (!saved.profilePhotoChosen) merged.showProfilePhoto = false;
       merged.defaultSyncMode = normalizeDefaultSyncMode(merged.defaultSyncMode) as Settings["defaultSyncMode"];
       // Legacy pickers stored "manual" for what is now "off".
       if ((merged.autoSyncInterval as string) === "manual") {

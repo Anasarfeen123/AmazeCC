@@ -277,3 +277,15 @@ NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next dev --webpack -p 3017   # backg
   Grades Anonymizer folded into Privacy Mode; honest names). R8 decided
   no. **Next: R3 attendance polish (predictor, OD tracker), R11 manual
   keyboard/zoom walk, R10 bridges, R9 only with the user's OK.**
+- **2026-11-19 (late night)** — R3: predictor "Now 0.0%" bug fixed
+  (`summarisePredictionRows`, tested), course rows show name + status
+  colour, target picker out of the header; OD tracker cleaned. R10: 210
+  standalone legacy classes mapped (91 left, mostly scanner/camera
+  overlays). Legal pages rewritten to match the code (`legal/LegalLayout`;
+  sources listed at the top of `app/privacy/page.tsx`) — **needs the
+  project owner's review before release**. Settings/About: false "nothing
+  leaves your phone" credentials note fixed, avatar initials, duplicate
+  rows removed, brand About hero. Feedback page: vendor name "PostHog"
+  removed from student-facing text.
+  **Next: R11 keyboard/zoom walk, the last 91 legacy classes, R9 only
+  with the user's OK.**

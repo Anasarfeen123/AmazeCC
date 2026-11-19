@@ -706,33 +706,31 @@ html.has-stored-session .opening-screen-fallback {
 }
 .crayon-hide::after,
 .privacy-mode [data-private]::after {
-  /* Default style: a comic "grawlix" tag (#@%!) on a beige speech-bubble
-     chip, like a cartoon censoring a swear word. */
+  /* Default style: plain comic "grawlix" text (#@%!) in the value's ink,
+     like a cartoon censoring a word. Plain text only (user): no chip, no
+     image. Left-aligned and unclipped so short values ("79%") show it all. */
   content: "#@%!";
   position: absolute;
-  inset: 0 -0.15em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) rotate(-3deg);
   white-space: nowrap;
   font-family: var(--font-display);
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
   line-height: 1;
-  color: #001e1d;
-  -webkit-text-fill-color: #001e1d;
-  background: #e9dcc1;
-  border: 2px solid #001e1d;
-  border-radius: 9px 7px 10px 6px;
-  box-shadow: 2px 2px 0 0 var(--shadow-ink);
-  transform: rotate(-2deg);
+  color: var(--crayon-ink, var(--text-heading));
+  -webkit-text-fill-color: var(--crayon-ink, var(--text-heading));
   pointer-events: none;
 }
 /* Alternative style (html.hide-marker): a hand-drawn marker blackout. */
 .hide-marker :is(.crayon-hide, .privacy-mode [data-private])::after,
 .hide-marker.privacy-mode [data-private]::after {
   content: "";
+  left: -0.45em;
+  right: -0.45em;
+  top: -0.3em;
+  bottom: -0.3em;
   inset: -0.3em -0.45em;
   background: var(--crayon-ink, var(--text-heading));
   border: 0;
@@ -781,4 +779,24 @@ html.has-stored-session .opening-screen-fallback {
   .privacy-mode [data-private]::after {
     display: none;
   }
+}
+
+/* Grawlix variants (user: different symbols and colours per value).
+   GrawlixTagger (components/custom/theme) sets data-g="0..4" on each hidden
+   element. Colours are theme tokens with readable contrast. */
+[data-g="1"]::after {
+  content: "$!*?" !important;
+  --crayon-ink: var(--danger-foreground);
+}
+[data-g="2"]::after {
+  content: "&%#@" !important;
+  --crayon-ink: var(--primary);
+}
+[data-g="3"]::after {
+  content: "*#!$" !important;
+  --crayon-ink: var(--success-foreground);
+}
+[data-g="4"]::after {
+  content: "@$%&" !important;
+  --crayon-ink: var(--warning-foreground);
 }

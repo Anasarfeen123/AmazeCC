@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ThemeProvider } from "@amazecontinuityprojects/amazeui";
 import NightThemeSync from "@/components/custom/theme/NightThemeSync";
+import GrawlixTagger from "@/components/custom/theme/GrawlixTagger";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import IconUpdater from "../components/custom/IconUpdater";
 import ServiceWorkerRegistrar from "../components/custom/ServiceWorkerRegistrar";
@@ -134,6 +135,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           value={{ light: "light", dark: "dark", night: "dark" }}
         >
           <NightThemeSync />
+          <GrawlixTagger />
           {children}
         </ThemeProvider>
       </body>

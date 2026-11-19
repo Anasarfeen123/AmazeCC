@@ -58,6 +58,27 @@ function drag(container: HTMLElement, from: [number, number], to: [number, numbe
 const shown = () => screen.getByText(/^\d+%$/)?.textContent ?? "";
 
 describe("carousel swipe", () => {
+  it("tags sensitive supporting text and status independently of the headline", () => {
+    render(
+      <Harness
+        items={[
+          {
+            id: "private",
+            label: "Attendance",
+            value: "75%",
+            sub: "3 of 4 held",
+            badge: "Warning",
+            privacyCategory: "attendance",
+            subPrivacyCategory: "attendance",
+            badgePrivacyCategory: "attendance",
+          },
+        ]}
+      />,
+    );
+    expect(screen.getByText("75%").getAttribute("data-private")).toBe("attendance");
+    expect(screen.getByText("3 of 4 held").getAttribute("data-private")).toBe("attendance");
+    expect(screen.getByText("Warning").getAttribute("data-private")).toBe("attendance");
+  });
   it("advances on a left swipe and goes back on a right swipe", () => {
     const { container } = render(<Harness />);
     expect(shown()).toBe("11%");

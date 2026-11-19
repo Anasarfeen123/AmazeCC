@@ -1533,6 +1533,9 @@ export default function CourseDetailSubpage({
         sub: s.subline,
         // The tile's pill showed the attendance status, not Theory/Lab.
         badge: s.status,
+        privacyCategory: "attendance",
+        subPrivacyCategory: "attendance",
+        badgePrivacyCategory: "attendance",
         dotLabel: `${s.badge} attendance`,
         valueClassName: TONE_TEXT[ATT_TONE[s.status] ?? "red"],
         tone: ATT_TONE[s.status],
@@ -1554,6 +1557,8 @@ export default function CourseDetailSubpage({
         label: s.title,
         value: s.headline,
         sub: s.subline,
+        privacyCategory: "marks",
+        subPrivacyCategory: "marks",
         badge: s.badge,
         dotLabel: typeof s.title === "string" ? s.title : s.id,
         badgeClassName: s.badgeColor,
@@ -1834,13 +1839,16 @@ export default function CourseDetailSubpage({
       <ListRowText
         title={`${badge} Log`}
         subtitle={
-          d.total > 0
-            ? `${d.attended}/${d.total}${item?.slotVenue ? ` · ${item.slotVenue}` : ""}`
-            : "No attendance data"
+          d.total > 0 ? (
+            <span data-private="attendance">{`${d.attended}/${d.total}${item?.slotVenue ? ` · ${item.slotVenue}` : ""}`}</span>
+          ) : (
+            "No attendance data"
+          )
         }
       />
       <div className="flex items-center gap-2 shrink-0">
         <span
+          data-private="attendance"
           className={`text-base font-bold font-outfit tracking-tight leading-none ${TONE_TEXT[ATT_TONE[d.status] ?? "zinc"]}`}
         >
           {d.total > 0 ? `${Number(d.pct.toFixed(1))}%` : "—"}
@@ -1855,7 +1863,7 @@ export default function CourseDetailSubpage({
       <div className={scopeAccent(badge)}>
         <Target className="w-5 h-5" />
       </div>
-      <ListRowText title={`${badge} Predictor`} subtitle={d.marginSubline} />
+      <ListRowText title={`${badge} Predictor`} subtitle={<span data-private="attendance">{d.marginSubline}</span>} />
       <div className="flex items-center gap-2 shrink-0">
         <span className={`text-base font-bold font-outfit tracking-tight leading-none ${TONE_TEXT[d.marginTone]}`}>
           {d.upcomingTotal > 0 ? `${d.upcomingTotal}` : "—"}
@@ -1870,11 +1878,25 @@ export default function CourseDetailSubpage({
       <StatTile
         label="Attendance"
         value={d.total > 0 ? `${Number(d.pct.toFixed(1))}%` : "—"}
-        badge={d.status}
+        badge={<span data-private="attendance">{d.status}</span>}
         tone={ATT_TONE[d.status] ?? "zinc"}
-        sub={d.total > 0 ? `${d.attended}/${d.total} attended` : "No attendance data"}
+        privacyCategory="attendance"
+        sub={
+          d.total > 0 ? (
+            <span data-private="attendance">{`${d.attended}/${d.total} attended`}</span>
+          ) : (
+            "No attendance data"
+          )
+        }
       />
-      <StatTile label="Margin" value={d.marginHeadline} badge={d.status} tone={d.marginTone} sub={d.marginSubline} />
+      <StatTile
+        label="Margin"
+        value={d.marginHeadline}
+        badge={<span data-private="attendance">{d.status}</span>}
+        tone={d.marginTone}
+        privacyCategory="attendance"
+        sub={<span data-private="attendance">{d.marginSubline}</span>}
+      />
     </div>
   );
 
@@ -2254,13 +2276,18 @@ export default function CourseDetailSubpage({
                 <ListRowText
                   title="Marks"
                   subtitle={
-                    isEmbedded
-                      ? `Theory ${formatNumber(ovTheoryTotals.weighted)}/${formatNumber(ovTheoryTotals.weightPercent)} · Lab ${formatNumber(ovLabTotals.weighted)}/${formatNumber(ovLabTotals.weightPercent)}`
-                      : String(courseTotalString)
+                    <span data-private="marks">
+                      {isEmbedded
+                        ? `Theory ${formatNumber(ovTheoryTotals.weighted)}/${formatNumber(ovTheoryTotals.weightPercent)} · Lab ${formatNumber(ovLabTotals.weighted)}/${formatNumber(ovLabTotals.weightPercent)}`
+                        : String(courseTotalString)}
+                    </span>
                   }
                 />
                 <span className="flex items-center gap-2 shrink-0">
-                  <span className="text-base font-bold font-outfit tracking-tight leading-none text-primary">
+                  <span
+                    data-private="marks"
+                    className="text-base font-bold font-outfit tracking-tight leading-none text-primary"
+                  >
                     {isSelectedPastSemester && selectedPastGrade
                       ? `Grade ${selectedPastGrade}`
                       : `${courseStats.projected}%`}
@@ -2297,7 +2324,10 @@ export default function CourseDetailSubpage({
                   subtitle={`${isRelative ? "Relative grading" : "Absolute grading"}${courseGradeHistory.length > 0 ? ` · ${courseGradeHistory.length} record${courseGradeHistory.length === 1 ? "" : "s"}` : ""}`}
                 />
                 <span className="flex items-center gap-2 shrink-0">
-                  <span className="text-base font-bold font-outfit tracking-tight leading-none text-text-heading">
+                  <span
+                    data-private="marks"
+                    className="text-base font-bold font-outfit tracking-tight leading-none text-text-heading"
+                  >
                     {selectedPastGrade ? `Grade ${selectedPastGrade}` : `${courseStats.projected}%`}
                   </span>
                   <ChevronRight className="w-4 h-4 text-text-muted" />

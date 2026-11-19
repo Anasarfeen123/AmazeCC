@@ -60,6 +60,9 @@ export interface InsightSlide {
   blur?: string;
   /** Makes the headline eligible for a category privacy switch. */
   privacyCategory?: PrivacyCategory;
+  /** Optional categories for supporting text and derived status. */
+  subPrivacyCategory?: PrivacyCategory;
+  badgePrivacyCategory?: PrivacyCategory;
   /**
    * Accessible name for this slide's dot. Needed when the visible `label` is
    * identical across slides (e.g. two attendance tiles both labelled
@@ -162,7 +165,12 @@ export function InsightCarousel({
       <div className="flex flex-wrap items-center justify-between gap-1 relative z-10 pointer-events-none">
         <span className={LABEL}>{slide.label}</span>
         {slide.badge ? (
-          <span className={cn(BADGE, slide.badgeClassName ?? TONE_BADGE[tone] ?? TONE_BADGE.zinc)}>{slide.badge}</span>
+          <span
+            data-private={slide.badgePrivacyCategory}
+            className={cn(BADGE, slide.badgeClassName ?? TONE_BADGE[tone] ?? TONE_BADGE.zinc)}
+          >
+            {slide.badge}
+          </span>
         ) : null}
       </div>
 
@@ -182,7 +190,13 @@ export function InsightCarousel({
       </div>
 
       <div className="flex items-center justify-between gap-2 relative z-10">
-        {slide.sub ? <p className={cn(SUBLINE, "pointer-events-none")}>{slide.sub}</p> : <span />}
+        {slide.sub ? (
+          <p data-private={slide.subPrivacyCategory} className={cn(SUBLINE, "pointer-events-none")}>
+            {slide.sub}
+          </p>
+        ) : (
+          <span />
+        )}
         <div className="flex items-center gap-2 shrink-0">
           {footerRight}
           {slides.length > 1 ? (

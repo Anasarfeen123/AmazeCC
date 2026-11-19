@@ -400,6 +400,9 @@ export default function CalendarSubpage({
         value: `${Number(c.pct.toFixed(1))}%`,
         sub: `${c.attended} of ${c.total} held${c.slot ? ` · ${c.slot}` : ""}`,
         badge: c.status,
+        privacyCategory: "attendance",
+        subPrivacyCategory: "attendance",
+        badgePrivacyCategory: "attendance",
         dotLabel: `${c.isLab ? "Lab" : "Theory"} ${c.title}`,
         tone: c.status === "Safe" ? "emerald" : c.status === "Warning" ? "amber" : "red",
         valueClassName: c.isLab ? LAB_VALUE : undefined,
@@ -440,12 +443,16 @@ export default function CalendarSubpage({
         value: overall.total > 0 ? `${Number(overall.percentage.toFixed(1))}%` : "—",
         sub: overall.total > 0 ? `${overall.attended} of ${overall.total} classes` : "No records yet",
         badge: overall.total > 0 ? overall.status : undefined,
+        privacyCategory: "attendance",
+        subPrivacyCategory: "attendance",
+        badgePrivacyCategory: "attendance",
         tone: statusTone,
       },
       {
         id: "days-done",
         label: "Classes done",
         value: logRows.length,
+        privacyCategory: "attendance",
         sub: logRows.length === 1 ? "day with a record" : "days with a record",
         tone: "emerald",
       },
@@ -453,6 +460,7 @@ export default function CalendarSubpage({
         id: "days-missed",
         label: "Days missed",
         value: missedCount,
+        privacyCategory: "attendance",
         sub: missedCount === 1 ? "day with a miss" : "days with a miss",
         tone: missedCount > 0 ? "red" : "emerald",
       },
@@ -725,9 +733,11 @@ export default function CalendarSubpage({
                 // nothing. The slides are sorted worst-first, so the count is
                 // a convenience rather than the information.
                 <span className="hidden sm:inline-flex">
-                  <ToneBadge tone="zinc">
-                    {belowTarget} below {targetAttendance}%
-                  </ToneBadge>
+                  <span data-private="attendance">
+                    <ToneBadge tone="zinc">
+                      {belowTarget} below {targetAttendance}%
+                    </ToneBadge>
+                  </span>
                 </span>
               ) : null
             }

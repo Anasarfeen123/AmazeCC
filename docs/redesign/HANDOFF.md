@@ -308,3 +308,12 @@ NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next dev --webpack -p 3017   # backg
   overlap at the 200%-equivalent 720px viewport. `shot.mjs KEY_WALK=N` and
   `ONLY_ZOOM=1` make both checks repeatable. The specialised dialog follow-up
   remains. **Next: owner review of /privacy and /terms; R9 only with user OK.**
+- **2026-11-19 (sidebar/settings follow-up)** — Privacy controls were condensed
+  to one multi-select disclosure; the Cover style remains a compact picker.
+  Fixed a CSS bug where grawlix variants appended to values even with Privacy
+  mode off. Sidebar attendance now honours Decimal Values; sidebar stat cards
+  stagger in/out during expand/collapse and the profile footer/avatar uses a
+  shared layout transition between the full sidebar and rail. Commits:
+  `99187053`, `3237d906`, `0217361d`, `b694003f`, `1df957c0` (all pushed to
+  `fork/redesign`). **Still next: owner review of /privacy and /terms; R9 only
+  with user OK.**

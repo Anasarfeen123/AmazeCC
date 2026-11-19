@@ -300,3 +300,11 @@ NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next dev --webpack -p 3017   # backg
   (Tab through sidebar, spotlight, sheets) and 200% zoom (set
   `deviceScaleFactor`/CSS zoom in shot.mjs, check overlap at 1440/2 = 720);
   (4) owner review of /privacy and /terms; (5) R9 only with the user's OK.
+- **2026-11-19 (follow-up)** — Comic cover checked and hardened so legacy
+  colour utilities cannot reveal its value. Per-category privacy is complete:
+  master Privacy mode, category toggles, Comic/Marker picker, safe legacy
+  reads and typed value tags. Privacy off now always reveals every value.
+  R11 core keyboard walk completed for the sidebar and spotlight; Home has no
+  overlap at the 200%-equivalent 720px viewport. `shot.mjs KEY_WALK=N` and
+  `ONLY_ZOOM=1` make both checks repeatable. The specialised dialog follow-up
+  remains. **Next: owner review of /privacy and /terms; R9 only with user OK.**

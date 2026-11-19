@@ -6,20 +6,20 @@ the screenshots. Rules and how-to: `HANDOFF.md`. Design rules: `design/`.
 
 Status: ✅ done · 🟡 partly · ⬜ not started. Last updated 2026-11-19 (late).
 
-| #   | Item                                 | Status                    | Size |
-| --- | ------------------------------------ | ------------------------- | ---- |
-| R1  | Landing page                         | ✅                        | M    |
-| R2  | FFCS planner bugs                    | ✅ (planner polish 🟡)    | L    |
-| R3  | Attendance screens                   | 🟡 (calendar, side card)  | M    |
-| R4  | Onboarding steps                     | ✅                        | S    |
-| R5  | Demo data lost on reload             | ✅                        | S    |
-| R6  | Remaining screens (codemod + polish) | 🟡 (all files codemodded) | XL   |
-| R7  | "Night" pitch-black theme            | ✅                        | S    |
-| R8  | Uppercase display titles on cards    | ✅ decided: no            | S    |
-| R9  | Move brand layer into AmazeUI        | ⬜ (needs user OK)        | M    |
-| R10 | Remove bridges, final lint           | ⬜                        | M    |
-| R11 | Accessibility pass                   | 🟡 (probe clean, traps)   | S    |
-| R12 | Screenshot script polish             | ✅                        | S    |
+| #   | Item                                 | Status                                                      | Size |
+| --- | ------------------------------------ | ----------------------------------------------------------- | ---- |
+| R1  | Landing page                         | ✅                                                          | M    |
+| R2  | FFCS planner bugs                    | ✅ (planner polish 🟡)                                      | L    |
+| R3  | Attendance screens                   | 🟡 (calendar, side card)                                    | M    |
+| R4  | Onboarding steps                     | ✅                                                          | S    |
+| R5  | Demo data lost on reload             | ✅                                                          | S    |
+| R6  | Remaining screens (codemod + polish) | 🟡 (all files codemodded)                                   | XL   |
+| R7  | "Night" pitch-black theme            | ✅                                                          | S    |
+| R8  | Uppercase display titles on cards    | ✅ decided: no                                              | S    |
+| R9  | Move brand layer into AmazeUI        | ⬜ (needs user OK)                                          | M    |
+| R10 | Remove bridges, final lint           | ⬜                                                          | M    |
+| R11 | Accessibility pass                   | 🟡 (keyboard/zoom core checked; specialised dialogs remain) | S    |
+| R12 | Screenshot script polish             | ✅                                                          | S    |
 
 Done so far (see `HANDOFF.md` §3 for commits): tokens, logos, primitives,
 app shell, Home, course side card, Modules sheet, spotlight search, sync
@@ -233,6 +233,13 @@ Sheets/dialogs (BottomSheet, BrandSheet) trap focus and restore it
 (brand.css) as well as Framer. Still to do: keyboard walk of the sidebar
 and spotlight by hand; 200% zoom check; the other role="dialog" panels
 (OptionPicker, CommandPalette, FFCS settings) use their own focus code.
+
+**Manual core check, 2026-11-19:** Home sidebar tab order reaches the sidebar
+controls, account settings, theme, then page controls in a sensible order.
+The command palette starts on its Close control and tabs only through palette
+options. The 200% equivalent (720px CSS viewport from a 1440px desktop) has no
+overlap or clipped controls on Home. `shot.mjs` now supports `KEY_WALK=N` and
+`ONLY_ZOOM=1` so this can be repeated. The specialised dialog follow-up remains.
 
 Keyboard order in sidebar, sheets and spotlight; focus trapped in dialogs;
 `aria-current` on all nav; reduced motion on every animated screen; 200%

@@ -271,15 +271,34 @@ if (process.env.A11Y) {
 }
 const SIZES = process.env.ONLY_TABLET
   ? [["tablet", 820, 1180, true]]
-  : process.env.ONLY_DESKTOP
-    ? [["desktop", 1440, 900, false]]
-    : process.env.ONLY_PHONE
-      ? [["phone", 390, 844, true]]
-      : [
-          ["phone", 390, 844, true],
-          ["tablet", 820, 1180, true],
-          ["desktop", 1440, 900, false],
-        ];
+  : process.env.ONLY_ZOOM
+    ? // At a 1440px desktop viewport, browser zoom at 200% leaves a 720px CSS
+      // layout viewport. This makes that accessibility check repeatable without
+      // changing the ordinary desktop screenshots.
+      [["zoom-200", 720, 900, false]]
+    : process.env.ONLY_DESKTOP
+      ? [["desktop", 1440, 900, false]]
+      : process.env.ONLY_PHONE
+        ? [["phone", 390, 844, true]]
+        : [
+            ["phone", 390, 844, true],
+            ["tablet", 820, 1180, true],
+            ["desktop", 1440, 900, false],
+          ];
+if (process.env.KEY_WALK) {
+  await evalJs("document.body.focus()");
+  const stops = [];
+  for (let i = 0; i < Number(process.env.KEY_WALK || 20); i++) {
+    await send("Input.dispatchKeyEvent", { type: "keyDown", key: "Tab", code: "Tab", windowsVirtualKeyCode: 9 });
+    await send("Input.dispatchKeyEvent", { type: "keyUp", key: "Tab", code: "Tab", windowsVirtualKeyCode: 9 });
+    stops.push(
+      await evalJs(
+        `(() => { const e=document.activeElement; return [e?.tagName, e?.getAttribute('aria-label') || e?.getAttribute('title') || e?.textContent?.trim().replace(/\\s+/g, ' ').slice(0, 48) || 'unnamed'].join(': '); })()`,
+      ),
+    );
+  }
+  console.log("KEY_WALK\n" + stops.join("\n"));
+}
 for (const [name, w, h, mobile] of SIZES) {
   await send("Emulation.setDeviceMetricsOverride", { width: w, height: h, deviceScaleFactor: 1, mobile });
   await sleep(2500);

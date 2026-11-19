@@ -1,4 +1,5 @@
 "use client";
+import { plainErrorMessage } from "@/lib/plainError";
 import { useState, useEffect } from "react";
 import { Card, Badge } from "../shared";
 import BottomSheet from "../shared/BottomSheet";
@@ -49,7 +50,7 @@ export default function FeedbackStatusModal({ isOpen, onClose, loginToVTOP }: Pr
         // semesters require per-semester fetch, a dedicated sync op should be added.
         setSemesters(semList);
       } catch (err: any) {
-        setError(err?.message || "Failed to load feedback status");
+        setError(plainErrorMessage(err, "Couldn't load feedback status."));
       } finally {
         setLoading(false);
       }

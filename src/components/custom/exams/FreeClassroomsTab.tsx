@@ -1,5 +1,6 @@
 "use client";
 
+import { plainErrorMessage } from "@/lib/plainError";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Skeleton, cn } from "@amazecontinuityprojects/amazeui";
 import { OptionPicker } from "../shared/primitives";
@@ -387,7 +388,7 @@ export default function FreeClassroomsTab({
         const parsed = await loadCourseCatalog(targetSemester);
         setCourses(parsed);
       } catch (err: any) {
-        setError(err.message || "Failed to load timetable data");
+        setError(plainErrorMessage(err, "Couldn't load timetable data."));
       } finally {
         setLoading(false);
       }

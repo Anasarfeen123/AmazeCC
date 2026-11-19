@@ -1,5 +1,6 @@
 "use client";
 
+import { plainErrorMessage } from "@/lib/plainError";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAtom } from "jotai";
 import { officialOdDataAtom } from "@/store";
@@ -75,7 +76,7 @@ export default function OfficialOdSection({ currSemesterID, allGradesData }: Pro
           if (!fallback) setError("No official OD records found for this semester");
         }
       } catch (err: any) {
-        if (!getOfficialOd(sem)) setError(err?.message || "Failed to load official OD records");
+        if (!getOfficialOd(sem)) setError(plainErrorMessage(err, "Couldn't load official OD records."));
       } finally {
         setLoading(false);
       }

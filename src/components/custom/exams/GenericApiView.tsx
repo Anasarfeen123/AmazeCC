@@ -1,4 +1,5 @@
 "use client";
+import { plainErrorMessage } from "@/lib/plainError";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { api } from "@/lib/sync-engine";
 import { Skeleton } from "@amazecontinuityprojects/amazeui";
@@ -166,7 +167,7 @@ export default function GenericApiView({
           setTypedStorageItem(LS_PREFIX + ck, result);
         }
       } catch (err: any) {
-        setError(err.message || "Network error");
+        setError(plainErrorMessage(err, "Couldn't reach the server."));
       } finally {
         setLoading(false);
       }

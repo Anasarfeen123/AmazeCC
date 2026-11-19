@@ -1,5 +1,6 @@
 "use client";
 
+import { plainErrorMessage } from "@/lib/plainError";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AlertTriangle, Camera, ImageUp, RotateCw, Smartphone, VideoOff, X, Zap, ZapOff } from "lucide-react";
@@ -143,7 +144,7 @@ export default function ScannerCamera({
     try {
       onCapture(captureFrame(video));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not read a frame from the camera.");
+      setError(plainErrorMessage(err, "Could not read a frame from the camera."));
       setBusy(false);
     }
   };
@@ -165,7 +166,7 @@ export default function ScannerCamera({
         onImport(await decodeToRaster(selectedFiles[0]));
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "That image could not be read.");
+      setError(plainErrorMessage(err, "That image could not be read."));
     } finally {
       try {
         e.target.value = "";
@@ -182,7 +183,7 @@ export default function ScannerCamera({
     try {
       onImport(await decodeToRaster(selectedFiles[0]));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "That photo could not be read.");
+      setError(plainErrorMessage(err, "That photo could not be read."));
     } finally {
       try {
         e.target.value = "";

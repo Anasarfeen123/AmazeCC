@@ -1,4 +1,5 @@
 "use client";
+import { plainErrorMessage } from "@/lib/plainError";
 import { useState, useEffect, useCallback } from "react";
 import { api } from "@/lib/sync-engine";
 import { runPageSync } from "@/lib/sync-engine/single-sync";
@@ -210,7 +211,7 @@ export default function CircularsTab({ loginToVTOP, onBack, setActiveTab }: Circ
       });
       if (!res) return;
     } catch (e: any) {
-      setError(e?.message ?? "Could not reach VTOP.");
+      setError(plainErrorMessage(e, "Could not reach VTOP."));
     } finally {
       setLoading(false);
     }
@@ -241,7 +242,7 @@ export default function CircularsTab({ loginToVTOP, onBack, setActiveTab }: Circ
       if (result.success === false) setError(result.error || "Failed to load");
       else ingestCirculars(result);
     } catch (err: any) {
-      setError(err.message);
+      setError(plainErrorMessage(err));
     } finally {
       setLoading(false);
     }

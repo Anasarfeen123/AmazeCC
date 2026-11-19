@@ -1,5 +1,6 @@
 "use client";
 
+import { plainErrorMessage } from "@/lib/plainError";
 import { useState, useEffect, useMemo } from "react";
 import { useSetAtom } from "jotai";
 import { activeTabAtom } from "@/store";
@@ -73,7 +74,7 @@ export default function CommunityFeed({
         setEvents(eventsRes);
       }
     } catch (err: any) {
-      setError(err.message || "An error occurred while fetching feed");
+      setError(plainErrorMessage(err, "Couldn't load the feed."));
     } finally {
       setLoading(false);
     }

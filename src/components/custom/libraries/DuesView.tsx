@@ -1,5 +1,6 @@
 "use client";
 
+import { plainErrorMessage } from "@/lib/plainError";
 import { useCallback, useEffect, useState } from "react";
 import { AlertTriangle, CheckCircle2, Loader2, Receipt, RefreshCcw, TriangleAlert } from "lucide-react";
 import { api } from "@/lib/sync-engine";
@@ -109,7 +110,7 @@ export default function DuesView({ creds, isDemo, refreshKey, onTotals }: DuesVi
         if (res?.bank) storage.cache.set("bank-info", res.bank);
       } catch {}
     } catch (e: any) {
-      setError(e?.message || "Could not load dues");
+      setError(plainErrorMessage(e, "Could not load dues."));
     } finally {
       setLoading(false);
     }
@@ -141,7 +142,7 @@ export default function DuesView({ creds, isDemo, refreshKey, onTotals }: DuesVi
       })();
       if (fresh) setData(fresh);
     } catch (e: any) {
-      setError(e?.message || "Could not load dues");
+      setError(plainErrorMessage(e, "Could not load dues."));
     } finally {
       setLoading(false);
     }

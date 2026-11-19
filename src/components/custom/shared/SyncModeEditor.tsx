@@ -1,5 +1,6 @@
 "use client";
 
+import { plainErrorMessage } from "@/lib/plainError";
 import { useMemo, useState } from "react";
 import { ArrowDown, ArrowUp, Copy, Pencil, Play, Plus, Star, Trash2 } from "lucide-react";
 import BottomSheet from "./BottomSheet";
@@ -192,7 +193,7 @@ export function SyncModeEditorContent({ onChanged, onRun, defaultId, onSetDefaul
       setError(null);
       refresh();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not save mode");
+      setError(plainErrorMessage(e, "Could not save mode."));
     }
   };
 

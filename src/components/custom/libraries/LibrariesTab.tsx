@@ -1,5 +1,6 @@
 "use client";
 
+import { plainErrorMessage } from "@/lib/plainError";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import {
@@ -402,7 +403,7 @@ export default function LibrariesTab({ loginToVTOP, onBack }: LibrariesTabProps)
         setTypedStorageItem("koha_patron_pages", pages || {});
       } catch {}
     } catch (e: any) {
-      setLoginError(e?.message || "Could not reach the library system");
+      setLoginError(plainErrorMessage(e, "Could not reach the library system."));
     } finally {
       setLoginBusy(false);
     }

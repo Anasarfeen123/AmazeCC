@@ -1,4 +1,5 @@
 "use client";
+import { plainErrorMessage } from "@/lib/plainError";
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { downloadCourseMaterialProxy } from "@/lib/courseMaterials";
 import { api } from "@/lib/sync-engine";
@@ -254,7 +255,7 @@ export default function CourseDetailSubpage({
       setTimeout(() => setDownloadSuccess(null), 3500);
     } catch (err: any) {
       console.error("Syllabus download error:", err);
-      setDownloadError(err.message || "Failed to download course syllabus.");
+      setDownloadError(plainErrorMessage(err, "Couldn't download course syllabus."));
     } finally {
       setDownloadingSyllabus(false);
     }
@@ -310,7 +311,7 @@ export default function CourseDetailSubpage({
       setTimeout(() => setDownloadSuccess(null), 3500);
     } catch (err: any) {
       console.error("Course materials download error:", err);
-      setDownloadError(err?.message || "Failed to download course materials.");
+      setDownloadError(plainErrorMessage(err, "Couldn't download course materials."));
     } finally {
       setDownloadingMaterial(null);
     }
@@ -350,7 +351,7 @@ export default function CourseDetailSubpage({
       setTimeout(() => setDownloadSuccess(null), 3500);
     } catch (err: any) {
       console.error("Reference material download error:", err);
-      setDownloadError(err?.message || "Failed to download the reference material.");
+      setDownloadError(plainErrorMessage(err, "Couldn't download the reference material."));
     } finally {
       setDownloadingRef(null);
     }
@@ -402,7 +403,7 @@ export default function CourseDetailSubpage({
       setTimeout(() => setDownloadSuccess(null), 3500);
     } catch (err: any) {
       console.error("Curriculum download error:", err);
-      setDownloadError(err.message || "Failed to download programme curriculum.");
+      setDownloadError(plainErrorMessage(err, "Couldn't download programme curriculum."));
     } finally {
       setDownloadingCurriculum(false);
     }
@@ -994,7 +995,7 @@ export default function CourseDetailSubpage({
       if (Object.keys(merged).length > 0) writeCoursePageViewCache(semSubId, merged);
       setViewDetail(detailData.length > 0 ? detailData : null);
     } catch (err: any) {
-      setError(err.message);
+      setError(plainErrorMessage(err));
     } finally {
       setViewLoading(false);
     }
@@ -1067,7 +1068,7 @@ export default function CourseDetailSubpage({
           setQcmError(d?.error || "No QCM recorded yet for this semester");
         }
       } catch (e: any) {
-        setQcmError(e.message);
+        setQcmError(plainErrorMessage(e));
       } finally {
         setQcmLoading(false);
       }

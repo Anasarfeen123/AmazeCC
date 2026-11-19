@@ -1,4 +1,5 @@
 "use client";
+import { plainErrorMessage } from "@/lib/plainError";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { clearEventHubSession, eventHubRequest, loginToEventHub } from "@/lib/sync-engine";
 import { runPageSync } from "@/lib/sync-engine/single-sync";
@@ -304,7 +305,7 @@ export default function EventHubTab({
       if (!res) return;
       setError("");
     } catch (err: any) {
-      setError(err.message || "An error occurred");
+      setError(plainErrorMessage(err, "Something went wrong. Please try again."));
       clearEventHubSession();
     } finally {
       setLoading(false);
@@ -374,7 +375,7 @@ export default function EventHubTab({
         })) as EventHubPreview;
         setPreviewData(data);
       } catch (err: any) {
-        setPreviewError(err.message || "Failed to load preview");
+        setPreviewError(plainErrorMessage(err, "Couldn't load preview."));
         clearEventHubSession();
       } finally {
         setPreviewLoading(false);
@@ -424,7 +425,7 @@ export default function EventHubTab({
         setRegisteredEvents?.(list);
         setTypedStorageItem("registeredEvents", list);
       } catch (err: any) {
-        if (!cancelled) setRegisteredError(err.message || "An error occurred");
+        if (!cancelled) setRegisteredError(plainErrorMessage(err, "Something went wrong. Please try again."));
         clearEventHubSession();
       } finally {
         if (!cancelled) setLoadingRegistered(false);
@@ -614,11 +615,15 @@ export default function EventHubTab({
         <EmptyPanel
           tone="red"
           icon={<CalendarOff className="w-7 h-7" />}
-          title={/\b404\b|not found/i.test(error) ? "Event Hub isn't available yet" : "Couldn't reach Event Hub"}
+          title={
+            /\b404\b|not found|isn't available/i.test(error)
+              ? "Event Hub isn't available yet"
+              : "Couldn't reach Event Hub"
+          }
           // The live API has no events routes yet (404); say so plainly
           // instead of "HTTP 404". See docs/redesign/BACKEND_GAPS.md.
           description={
-            /\b404\b|not found/i.test(error)
+            /\b404\b|not found|isn't available/i.test(error)
               ? "It needs a server update first. Nothing is wrong on your side. Events are on the official Event Hub portal meanwhile."
               : error
           }

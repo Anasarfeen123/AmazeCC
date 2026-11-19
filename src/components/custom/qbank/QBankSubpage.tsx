@@ -1,3 +1,4 @@
+import { plainErrorMessage } from "@/lib/plainError";
 import { useMemo, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { AlertCircle, BookOpen, ChevronRight, FileText, GraduationCap, RefreshCcw, UploadCloud } from "lucide-react";
@@ -97,7 +98,7 @@ export default function QBankSubpage({
       setQuestions(questionsJson.success ? questionsJson.data : []);
     } catch (err: unknown) {
       console.error(err);
-      setError(err instanceof Error ? err.message : "Failed to load QBank data");
+      setError(plainErrorMessage(err, "Couldn't load QBank data."));
       setPapers([]);
       setQuestions([]);
     }

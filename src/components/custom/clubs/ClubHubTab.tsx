@@ -352,12 +352,16 @@ export default function ClubHubTab({
           tone="red"
           icon={<WifiOff className="w-7 h-7" />}
           title={
-            /\b404\b|not found/i.test(error) ? "Club directory isn't available yet" : "Couldn't load the club directory"
+            /\b404\b|not found|isn't available/i.test(error)
+              ? "Club directory isn't available yet"
+              : "Couldn't load the club directory"
           }
           // The club routes were removed from / never deployed to the live API.
           // See docs/redesign/BACKEND_GAPS.md.
           description={
-            /\b404\b|not found/i.test(error) ? "It needs a server update first. Nothing is wrong on your side." : error
+            /\b404\b|not found|isn't available/i.test(error)
+              ? "It needs a server update first. Nothing is wrong on your side."
+              : error
           }
           action={
             <GhostButton onClick={load}>

@@ -1,4 +1,5 @@
 "use client";
+import { plainErrorMessage } from "@/lib/plainError";
 import { useState, useEffect, useMemo, memo } from "react";
 import { api } from "@/lib/sync-engine";
 import { loadFacultyRoster, getFacultyDirectoryProfile, getFacultyReview } from "@/lib/vitfacService";
@@ -347,7 +348,7 @@ export default function FacultyInfoTab({
           }
         })
         .catch((err) => {
-          if (!cancelled) setError(err.message);
+          if (!cancelled) setError(plainErrorMessage(err));
         })
         .finally(() => {
           if (!cancelled) setLoadingSchools(false);
@@ -429,7 +430,7 @@ export default function FacultyInfoTab({
         setFaculties(data.faculties || []);
       }
     } catch (err: any) {
-      setError(err.message);
+      setError(plainErrorMessage(err));
     } finally {
       setLoadingFaculties(false);
     }

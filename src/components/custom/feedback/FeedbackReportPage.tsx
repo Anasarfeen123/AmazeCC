@@ -1,5 +1,6 @@
 "use client";
 
+import { plainErrorMessage } from "@/lib/plainError";
 import React, { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { useAtom, useSetAtom } from "jotai";
@@ -572,7 +573,7 @@ export default function FeedbackReportPage({
         setSubmitError("Could not send your report. Check your connection and try again.");
       }
     } catch (err: any) {
-      setSubmitError(err?.message || "Could not send your report. Please try again.");
+      setSubmitError(plainErrorMessage(err, "Could not send your report. Please try again."));
     } finally {
       setIsSubmitting(false);
     }

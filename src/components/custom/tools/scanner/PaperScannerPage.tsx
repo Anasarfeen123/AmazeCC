@@ -1,5 +1,6 @@
 "use client";
 
+import { plainErrorMessage } from "@/lib/plainError";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AlertTriangle, Camera, ChevronRight, FileText, ImageUp, Settings, Smartphone, X } from "lucide-react";
 import Button from "@/components/custom/shared/Button";
@@ -139,7 +140,7 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
       } catch (err) {
         if (!alive) return;
         setMetas([]);
-        setListError(err instanceof Error ? err.message : "Saved scans could not be opened.");
+        setListError(plainErrorMessage(err, "Saved scans could not be opened."));
       }
     })();
     return () => {
@@ -201,7 +202,7 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
         setMode({ name: "editor", raster: rasters[0] });
       }
     } catch (err) {
-      setFlowError(err instanceof Error ? err.message : "That image could not be read.");
+      setFlowError(plainErrorMessage(err, "That image could not be read."));
     } finally {
       try {
         e.target.value = "";
@@ -226,7 +227,7 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
         setMode({ name: "editor", raster });
       }
     } catch (err) {
-      setFlowError(err instanceof Error ? err.message : "That photo could not be read.");
+      setFlowError(plainErrorMessage(err, "That photo could not be read."));
     } finally {
       try {
         e.target.value = "";
@@ -310,7 +311,7 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
         setMode({ name: "editor", raster: finalRaster });
         return;
       }
-      setFlowError(err instanceof Error ? err.message : "The scan could not be processed.");
+      setFlowError(plainErrorMessage(err, "The scan could not be processed."));
       setMode({ name: "editor", raster: finalRaster });
     } finally {
       abortRef.current = null;

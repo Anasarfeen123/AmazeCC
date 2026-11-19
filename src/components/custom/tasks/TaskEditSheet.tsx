@@ -1,5 +1,6 @@
 "use client";
 
+import { plainErrorMessage } from "@/lib/plainError";
 import React, { useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import { Clock, Plus, Trash2, Bell, Sparkles, Timer, AlertCircle, Layers } from "lucide-react";
@@ -209,7 +210,7 @@ export default function TaskEditSheet({
       onSave(payload);
       onClose();
     } catch (err: any) {
-      setError(err?.message || "Failed to save task");
+      setError(plainErrorMessage(err, "Couldn't save task."));
     }
   };
 

@@ -13,6 +13,7 @@
  * one row covering both directions, so this is the same for you and your peer.
  */
 
+import { plainErrorMessage } from "@/lib/plainError";
 import { useState } from "react";
 import { Link2, Loader2, ShieldCheck } from "lucide-react";
 import { EMPTY_STATE, LIST_SHELL } from "@/lib/libraries/ui";
@@ -66,7 +67,7 @@ export default function PairsSubpage({ onBack, onAddPeer }: { onBack: () => void
       markDirty();
       setConfirming(null);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Could not end the pairing.");
+      setError(plainErrorMessage(err, "Could not end the pairing."));
     } finally {
       setBusyId(null);
     }

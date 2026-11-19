@@ -1,3 +1,4 @@
+import { plainErrorMessage } from "@/lib/plainError";
 import React, { useState, useEffect } from "react";
 import { FileText, BookOpen, UploadCloud, AlertCircle } from "lucide-react";
 import { LoadingSpinner } from "../shared";
@@ -41,7 +42,7 @@ export default function CourseQBankTab({ courseCode, username }: { courseCode: s
       } catch (err: any) {
         console.error("Failed to fetch QBank data:", err);
         if (isMounted) {
-          setError(err.message || "Failed to load QBank data");
+          setError(plainErrorMessage(err, "Couldn't load QBank data."));
           setPapers([]);
           setQuestions([]);
         }

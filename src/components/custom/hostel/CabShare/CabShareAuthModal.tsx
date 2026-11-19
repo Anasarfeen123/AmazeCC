@@ -1,5 +1,6 @@
 "use client";
 
+import { plainErrorMessage } from "@/lib/plainError";
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import type { CabShareUser } from "@/types/storage";
 import { api } from "@/lib/sync-engine";
@@ -94,7 +95,7 @@ export default function CabShareAuthModal({
       await loadCabShareUser();
     } catch (cause) {
       setStep("error");
-      setError(cause instanceof Error ? cause.message : "Could not connect to Cab Share.");
+      setError(plainErrorMessage(cause, "Could not connect to Cab Share."));
     } finally {
       setLoading(false);
     }
@@ -133,7 +134,7 @@ export default function CabShareAuthModal({
       await loadCabShareUser();
     } catch (cause) {
       setStep("error");
-      setError(cause instanceof Error ? cause.message : "Could not save your phone number.");
+      setError(plainErrorMessage(cause, "Could not save your phone number."));
     } finally {
       setLoading(false);
     }

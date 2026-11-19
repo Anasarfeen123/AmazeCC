@@ -1,5 +1,6 @@
 "use client";
 
+import { plainErrorMessage } from "@/lib/plainError";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, BookOpen, ChevronLeft, ChevronRight, Loader2, Search, X } from "lucide-react";
 import { api } from "@/lib/sync-engine";
@@ -113,7 +114,7 @@ export default function CatalogSearch({ variant, isDemo, onSearched, autoFocus, 
         searchedRef.current?.(Number(data?.total) || 0, term);
       } catch (e: any) {
         if (controller.signal.aborted) return;
-        setError(e?.message || "Could not reach the catalog");
+        setError(plainErrorMessage(e, "Could not reach the catalog."));
         setBooks([]);
         setTotal(0);
       } finally {
@@ -162,7 +163,7 @@ export default function CatalogSearch({ variant, isDemo, onSearched, autoFocus, 
         }
         setDetail(data?.book || (book as BookDetail));
       } catch (e: any) {
-        setDetailError(e?.message || "Could not load details");
+        setDetailError(plainErrorMessage(e, "Could not load details."));
       } finally {
         setDetailLoading(false);
       }

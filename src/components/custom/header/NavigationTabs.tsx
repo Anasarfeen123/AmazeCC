@@ -49,7 +49,7 @@ import {
   ScanLine,
   type LucideIcon,
 } from "lucide-react";
-import { AnimatePresence, m } from "framer-motion";
+import { AnimatePresence, m, type Variants } from "framer-motion";
 import {
   useTheme,
   Sidebar,
@@ -324,6 +324,14 @@ export default function NavigationTabs({
     settings.attendancePercentageOrString === "percentage"
       ? formatAttendancePercentage(attendancePercentage?.percentage) || normalizedOverallAttendance || "-"
       : attendancePercentage?.str || normalizedOverallAttendance || "-";
+  const sidebarStatGridMotion: Variants = {
+    closed: { opacity: 0, y: -8, transition: { staggerChildren: 0.025, staggerDirection: -1 } },
+    open: { opacity: 1, y: 0, transition: { delayChildren: 0.035, staggerChildren: 0.04 } },
+  };
+  const sidebarStatMotion: Variants = {
+    closed: { opacity: 0, y: -5, scale: 0.94 },
+    open: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.15, ease: "easeOut" } },
+  };
 
   const profileName =
     settings.friendlyName ||
@@ -1075,14 +1083,15 @@ export default function NavigationTabs({
                       overflowed ("CREDITS", "79.1%"), so they go 2 x 2. */}
                   <m.div
                     layout="position"
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.16, ease: "easeOut" }}
+                    variants={sidebarStatGridMotion}
+                    initial="closed"
+                    animate="open"
+                    exit="closed"
                     className={`grid gap-1.5 ${shouldDisplayGpa ? "grid-cols-2" : "grid-flow-col auto-cols-fr"}`}
                   >
                     {shouldDisplayGpa && (
-                      <button
+                      <m.button
+                        variants={sidebarStatMotion}
                         onClick={() => {
                           setSettings((prev: any) => {
                             const selected = new Set(
@@ -1113,10 +1122,11 @@ export default function NavigationTabs({
                         >
                           {marksData?.cgpa?.cgpa || "-"}
                         </span>
-                      </button>
+                      </m.button>
                     )}
 
-                    <button
+                    <m.button
+                      variants={sidebarStatMotion}
                       onClick={() => {
                         setSettings((prev: any) => {
                           const next = {
@@ -1154,9 +1164,10 @@ export default function NavigationTabs({
                           </span>
                         );
                       })()}
-                    </button>
+                    </m.button>
 
-                    <button
+                    <m.button
+                      variants={sidebarStatMotion}
                       onClick={() => setGradesDisplayIsOpen(true)}
                       className="flex min-w-0 flex-col items-start gap-0.5 overflow-hidden rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
                       title="Click to view credits & grades details"
@@ -1170,9 +1181,10 @@ export default function NavigationTabs({
                       >
                         {credits}
                       </span>
-                    </button>
+                    </m.button>
 
-                    <button
+                    <m.button
+                      variants={sidebarStatMotion}
                       onClick={() => {
                         selectTab("attendance");
                         setActiveAttendanceSubTab("od");
@@ -1187,7 +1199,7 @@ export default function NavigationTabs({
                         {totalODHours}
                         <span className="font-mono text-xs font-semibold text-text-muted">/40</span>
                       </span>
-                    </button>
+                    </m.button>
                   </m.div>
                 </div>
 
@@ -1497,25 +1509,28 @@ export default function NavigationTabs({
             {isOpen ? (
               <m.div
                 key="footer-expanded"
+                layout
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.18 }}
                 className="shrink-0 space-y-2.5"
               >
-                <SidebarProfile
-                  name={profileName}
-                  degree={(
-                    unifiedIdentity.programme ||
-                    profileData?.program ||
-                    profileData?.branch ||
-                    profileData?.batch ||
-                    ""
-                  ).replace("B.Tech ", "")}
-                  avatarUrl={shouldDisplayProfilePhoto ? unifiedIdentity.photo || profileData?.image : undefined}
-                  initials={initials || "ST"}
-                  onLogout={handleLogOutRequest}
-                />
+                <m.div layoutId="sidebar-profile" transition={{ duration: 0.18, ease: "easeOut" }}>
+                  <SidebarProfile
+                    name={profileName}
+                    degree={(
+                      unifiedIdentity.programme ||
+                      profileData?.program ||
+                      profileData?.branch ||
+                      profileData?.batch ||
+                      ""
+                    ).replace("B.Tech ", "")}
+                    avatarUrl={shouldDisplayProfilePhoto ? unifiedIdentity.photo || profileData?.image : undefined}
+                    initials={initials || "ST"}
+                    onLogout={handleLogOutRequest}
+                  />
+                </m.div>
 
                 <div className="h-px bg-sidebar-accent" />
 
@@ -1524,17 +1539,20 @@ export default function NavigationTabs({
             ) : (
               <m.div
                 key="footer-collapsed"
+                layout
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 className="flex flex-col items-center gap-3 w-full shrink-0"
               >
                 {/* Same order as the open footer: profile, then theme. */}
-                <SidebarProfile
-                  avatarUrl={shouldDisplayProfilePhoto ? unifiedIdentity.photo || profileData?.image : undefined}
-                  initials={initials || "ST"}
-                  onProfileClick={() => selectTab("profile")}
-                />
+                <m.div layoutId="sidebar-profile" transition={{ duration: 0.18, ease: "easeOut" }}>
+                  <SidebarProfile
+                    avatarUrl={shouldDisplayProfilePhoto ? unifiedIdentity.photo || profileData?.image : undefined}
+                    initials={initials || "ST"}
+                    onProfileClick={() => selectTab("profile")}
+                  />
+                </m.div>
                 <SidebarThemeSwitch compact theme={theme} onThemeChange={handleThemeChange} />
               </m.div>
             )}

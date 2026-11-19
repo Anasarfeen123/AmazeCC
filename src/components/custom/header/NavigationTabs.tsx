@@ -565,6 +565,10 @@ export default function NavigationTabs({
     } else if (t.kind === "external") {
       isActive = false;
     }
+    // The same page can be listed twice (under PINNED and in its group).
+    // Highlight only the pinned shortcut so the sidebar shows one current page.
+    const pinKey = entry.pinId ?? entry.id;
+    if (isActive && entry.pinnable && (settings?.pinnedNavTabs ?? []).includes(pinKey)) isActive = false;
     return {
       id: entry.id,
       label: entry.label,

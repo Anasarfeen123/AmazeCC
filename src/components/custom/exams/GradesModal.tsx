@@ -1,5 +1,6 @@
 "use client";
 
+import { gradeTone } from "@/lib/gradeTone";
 import { RefreshCcw } from "lucide-react";
 import NoContentFound from "../NoContentFound";
 import BottomSheet from "../shared/BottomSheet";
@@ -29,25 +30,6 @@ const normalizeGradesCategory = (rawCategory?: string | null) => {
       return category;
   }
 };
-
-/** One colour per grade (brand palette, ink text on all). */
-function gradeTone(grade?: string): string {
-  switch ((grade || "").toUpperCase()) {
-    case "S":
-      return "bg-mint text-obsidian";
-    case "A":
-      return "bg-sage text-obsidian";
-    case "B":
-      return "bg-ochre text-obsidian";
-    case "C":
-      return "bg-[#F4A259] text-obsidian";
-    case "D":
-    case "E":
-      return "bg-coral text-obsidian";
-    default:
-      return "bg-surface-secondary text-text-primary";
-  }
-}
 
 export default function GradesModal({ allGradesData, GradesData, onClose, handleFetchGrades, marksData, attendance }) {
   // Body scroll-lock + system back handled by BottomSheet.

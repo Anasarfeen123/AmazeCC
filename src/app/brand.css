@@ -411,9 +411,12 @@
   background-color: var(--highlight) !important;
   color: var(--highlight-foreground);
 }
-.summary-row
-  > :first-child
-  :not([class*="bg-"]):not(.crayon-hide):not(.crayon-hide *):not([data-private]):not([data-private] *) {
+.summary-row > :first-child :not([class*="bg-"]):not(.crayon-hide):not(.crayon-hide *) {
+  /* [data-private] values are NOT excluded: the attribute is on every
+     maskable value, hidden or not, and excluding it left unhidden numbers in
+     their own colour (ochre on ochre in dark = invisible, e.g. Bus Routes
+     "Routes running"). Hidden values are blanked with
+     -webkit-text-fill-color, which this colour does not affect. */
   color: var(--highlight-foreground) !important;
 }
 

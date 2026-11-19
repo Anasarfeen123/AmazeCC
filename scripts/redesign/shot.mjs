@@ -283,6 +283,8 @@ for (const tok of (process.env.KEYS || "").split(",").filter(Boolean)) {
   }
   await sleep(400);
 }
+// EVAL="js expression": print its value just before the capture.
+if (process.env.EVAL) console.log("EVAL", await evalJs(process.env.EVAL));
 if (process.env.KEYS)
   console.log(
     "FOCUS",

@@ -98,7 +98,7 @@ const BusFinder = ({
           <StatTile
             label="Routes running"
             value={buses.length}
-            badge="Live"
+            badge={buses.length ? "Live" : "None yet"}
             tone="neutral"
             sub="across the campus"
           />

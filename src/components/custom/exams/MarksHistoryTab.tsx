@@ -79,16 +79,21 @@ type Screen = (typeof SCREENS)[number];
 
 /** A bar's hue, keyed on the same grade tones the pills use. */
 const GRADE_BAR: Record<string, string> = {
-  S: "bg-amber-500",
-  A: "bg-emerald-500",
-  B: "bg-primary",
-  C: "bg-cyan-500",
-  D: "bg-primary",
-  E: "bg-red-500",
-  F: "bg-red-600",
+  S: "bg-mint",
+  A: "bg-mint",
+  B: "bg-ochre",
+  C: "bg-ochre",
+  D: "bg-coral",
+  E: "bg-coral",
+  F: "bg-coral",
   N: "bg-border-muted",
-  P: "bg-primary",
+  P: "bg-secondary",
 };
+
+/** Score bars (out of 100): mint 80+, ochre 65+, coral below. */
+function scoreBarTone(pct: number): string {
+  return pct >= 80 ? "bg-mint" : pct >= 65 ? "bg-ochre" : "bg-coral";
+}
 
 export default function MarksHistoryTab({
   data,
@@ -427,7 +432,7 @@ export default function MarksHistoryTab({
   // ── Insights ──────────────────────────────────────────────────────────
   const insights = (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
+      <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
         <StatTile
           label="Terms recorded"
           value={rows.filter((r) => r.courses.length > 0).length}
@@ -440,6 +445,7 @@ export default function MarksHistoryTab({
           value={best ? best.gpa.toFixed(2) : "—"}
           badge={best?.label}
           tone="emerald"
+          privacyCategory="cgpa"
           sub={best ? "highest GPA on record" : "no GPA published yet"}
         />
       </div>
@@ -447,8 +453,7 @@ export default function MarksHistoryTab({
       <div className="space-y-3">
         <SectionHeader icon={Award} title="Grade distribution" count={distribution.reduce((s, r) => s + r.count, 0)} />
         <p className="px-1 -mt-1 text-xs leading-relaxed text-text-muted font-medium">
-          Every graded course across all terms. Ungraded results are left out of the share entirely, so a term you have
-          not been assessed on yet cannot distort it.
+          Every graded course, all terms. Ungraded ones are left out.
         </p>
         {distribution.length === 0 ? (
           <EmptyPanel variant="dashed" title="No letter grades published yet" />
@@ -462,7 +467,7 @@ export default function MarksHistoryTab({
                 <span className="min-w-0 flex-1">
                   <MiniBar pct={d.share} tone={GRADE_BAR[d.grade] ?? "bg-border-muted"} />
                 </span>
-                <span className="shrink-0 text-sm font-bold font-outfit text-text-primary w-10 text-right">
+                <span className="shrink-0 text-sm font-bold font-mono text-text-primary w-10 text-right">
                   {d.count}
                 </span>
                 <span className="shrink-0 text-xs font-bold text-text-muted w-12 text-right">
@@ -477,8 +482,7 @@ export default function MarksHistoryTab({
       <div className="space-y-3">
         <SectionHeader icon={Gauge} title="Theory against lab" count={byType.length} />
         <p className="px-1 -mt-1 text-xs leading-relaxed text-text-muted font-medium">
-          An embedded course is published as two entries under one code, so averaging everything together hides whether
-          it is your labs dragging the number.
+          Average score of your theory and lab courses, side by side.
         </p>
         {byType.length === 0 ? (
           <EmptyPanel variant="dashed" title="No scored courses to compare" />
@@ -488,12 +492,9 @@ export default function MarksHistoryTab({
               <div key={t.type} className={LIST_ROW}>
                 <ListRowText title={t.type} subtitle={`${t.count} course${t.count === 1 ? "" : "s"}`} />
                 <span className="w-20 shrink-0">
-                  <MiniBar
-                    pct={t.avg}
-                    tone={t.avg >= 80 ? "bg-emerald-500" : t.avg >= 65 ? "bg-amber-500" : "bg-red-500"}
-                  />
+                  <MiniBar pct={t.avg} tone={scoreBarTone(t.avg)} />
                 </span>
-                <span className="shrink-0 text-sm font-bold font-outfit text-text-primary w-12 text-right">
+                <span className="shrink-0 text-sm font-bold font-mono text-text-primary w-12 text-right">
                   {t.avg.toFixed(1)}%
                 </span>
               </div>
@@ -509,12 +510,9 @@ export default function MarksHistoryTab({
             <div key={r.id} className={LIST_ROW}>
               <span className="w-24 shrink-0 text-xs font-bold text-text-muted truncate">{r.label}</span>
               <span className="min-w-0 flex-1">
-                <MiniBar
-                  pct={r.avgScore}
-                  tone={r.avgScore >= 80 ? "bg-emerald-500" : r.avgScore >= 65 ? "bg-amber-500" : "bg-red-500"}
-                />
+                <MiniBar pct={r.avgScore} tone={scoreBarTone(r.avgScore)} />
               </span>
-              <span className="shrink-0 text-sm font-bold font-outfit text-text-primary w-12 text-right">
+              <span className="shrink-0 text-sm font-bold font-mono text-text-primary w-12 text-right">
                 {r.scored.length > 0 ? `${r.avgScore.toFixed(1)}%` : "—"}
               </span>
             </div>
@@ -527,7 +525,7 @@ export default function MarksHistoryTab({
   // ── One course's grade, in full ───────────────────────────────────────
   const courseScreen = !course ? null : (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
+      <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
         <StatTile
           label="Overall"
           value={`${numOrDash(course.grandTotal)}%`}
@@ -554,8 +552,7 @@ export default function MarksHistoryTab({
         <div className="space-y-3">
           <SectionHeader icon={Layers} title="Theory and lab" count={segments.length} />
           <p className="px-1 -mt-1 text-xs leading-relaxed text-text-muted font-medium">
-            VTOP records an embedded course as a single blended grade. These are the two halves it blends, each scored
-            out of 100 on its own.
+            VTOP gives one blended grade. These are its two halves, each out of 100.
           </p>
           <div className="grid grid-cols-2 gap-2.5">
             {segments.map((s) => (
@@ -593,7 +590,7 @@ export default function MarksHistoryTab({
                   {s.assessments.map((a, i) => (
                     <div key={`${a.title}-${i}`} className="flex items-center gap-3 py-2.5 px-4">
                       <ListRowText title={a.title} subtitle={`${a.weightagePercent || "-"}% weightage`} />
-                      <span className="shrink-0 text-sm font-bold font-outfit text-text-primary">
+                      <span className="shrink-0 text-sm font-bold font-mono text-text-primary">
                         {a.scoredMark || "-"}
                         <span className="text-xs font-medium text-text-muted ml-0.5">/{a.maxMark || "-"}</span>
                       </span>
@@ -797,7 +794,7 @@ function AssessmentRow({ item }: { item: NonNullable<GradeItem["details"]>[numbe
   return (
     <div className="flex items-center gap-3 py-2.5 px-4">
       <ListRowText title={item.component} subtitle={`${item.weightagePercent ?? "-"}% weightage`} />
-      <span className="shrink-0 text-sm font-bold font-outfit text-text-primary">
+      <span className="shrink-0 text-sm font-bold font-mono text-text-primary">
         {item.scoredMark ?? "-"}
         <span className="text-xs font-medium text-text-muted ml-0.5">/{item.maxMark ?? "-"}</span>
       </span>

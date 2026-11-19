@@ -241,7 +241,7 @@ export default function SyncNotification({
         appendSyncLine("New student account detected — performing full sync…", "loading");
         try {
           await syncEngine.sync("studentProfile");
-          appendSyncLine("Student profile cached locally", "success");
+          appendSyncLine("Student profile saved on this device", "success");
         } catch {
           appendSyncLine("Profile fetch skipped (best effort)", "info");
         }

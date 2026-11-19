@@ -55,7 +55,7 @@ const benefits = [
   },
   {
     title: "Offline Support",
-    desc: "Your schedule, marks, and attendance details are cached for instant offline lookup.",
+    desc: "Your timetable, marks and attendance are saved on your phone, so they open without internet.",
   },
   { title: "Fast", desc: "Pages open from what is already on your phone; syncing only fetches what changed." },
 ];

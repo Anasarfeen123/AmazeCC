@@ -383,7 +383,7 @@ export default function LaundrySchedule({ hostelData, handleHostelDetailsFetch }
               </div>
             </div>
           ) : (
-            <p className="text-center text-xs text-text-muted italic py-4">No schedule data cached.</p>
+            <p className="text-center text-xs text-text-muted italic py-4">No laundry schedule yet. Sync to load it.</p>
           )}
         </div>
 

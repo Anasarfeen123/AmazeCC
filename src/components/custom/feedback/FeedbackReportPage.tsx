@@ -716,7 +716,7 @@ export default function FeedbackReportPage({
                 </span>
                 <ListRowText
                   title="Diagnostics"
-                  subtitle="Telemetry health, distinct ID verification, and DOM session replay"
+                  subtitle="Technical checks for the developers: error tracking and recordings"
                 />
                 <span className="flex items-center gap-2 shrink-0">
                   <ToneBadge tone="emerald">Connected</ToneBadge>

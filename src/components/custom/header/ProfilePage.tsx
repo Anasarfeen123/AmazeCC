@@ -448,7 +448,7 @@ export default function ProfilePage({
   };
 
   const handleResetCache = () => {
-    if (confirm("Are you sure you want to reset all cached data? You will need to log in again.")) {
+    if (confirm("Clear everything saved on this device? You will need to sign in again.")) {
       localStorage.clear();
       window.location.reload();
     }

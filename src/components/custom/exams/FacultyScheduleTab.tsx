@@ -490,7 +490,7 @@ export default function FacultyScheduleTab({
       icon={<GraduationCap className="h-7 w-7" />}
       tone="indigo"
       title="No faculty report yet"
-      description="The FFCS course report could not be loaded. Open the FFCS planner once to cache it, then come back."
+      description="The FFCS course list could not be loaded. Open the FFCS planner once so it saves on this device, then come back."
     />
   ) : (
     <div className="space-y-6">

@@ -708,7 +708,7 @@ export default function LibrariesTab({ loginToVTOP, onBack }: LibrariesTabProps)
           <PatronSections pages={patronPages} />
         ) : (
           <div className={EMPTY_STATE}>
-            <p className="text-xs font-bold text-text-muted">Nothing cached yet — log in to load your record.</p>
+            <p className="text-xs font-bold text-text-muted">Nothing here yet. Sign in to load your library record.</p>
           </div>
         )}
       </div>

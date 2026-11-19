@@ -373,7 +373,7 @@ function Section({
   );
 }
 
-function Empty({ children = "No data is available in the current AmazeCC cache." }: { children?: string }) {
+function Empty({ children = "Nothing to report yet. Sync your data first." }: { children?: string }) {
   return <p className="report-empty">{children}</p>;
 }
 

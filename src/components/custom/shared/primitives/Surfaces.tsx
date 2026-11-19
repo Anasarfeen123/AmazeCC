@@ -134,7 +134,7 @@ export function StatTile({
       <div className="my-auto min-w-0">
         <p
           data-private={privacyCategory ?? "all"}
-          className={`font-display text-[32px] sm:text-[40px] font-bold tracking-tight leading-none truncate block ${valueTone}`}
+          className={`font-display text-[32px] sm:text-[40px] font-bold tracking-tight leading-none break-words block ${valueTone}`}
         >
           {value}
         </p>

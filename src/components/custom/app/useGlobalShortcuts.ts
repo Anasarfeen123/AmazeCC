@@ -2,8 +2,16 @@
 
 import { useEffect, useRef } from "react";
 import { useDashboardNavigator } from "../dashboard/DashboardNavigator";
-import { createSequenceTracker, isTypingTarget, letterOf, NAV_SHORTCUTS, type NavTarget } from "@/lib/shortcuts";
-import { privacyCategories, setHideAllPrivacy, togglePrivacyCategory } from "@/lib/privacyMode";
+import {
+  ACTION_SHORTCUTS,
+  createSequenceTracker,
+  isTypingTarget,
+  letterOf,
+  nextTheme,
+  type NavTarget,
+  TOGGLE_SIDEBAR_EVENT,
+} from "@/lib/shortcuts";
+import { privacyCategories, setPrivacyMode, togglePrivacyCategory } from "@/lib/privacyMode";
 
 export function useGlobalShortcuts({
   theme,
@@ -59,24 +67,21 @@ export function useGlobalShortcuts({
 
       // Alt/Option + letter: the original set, plus two actions.
       if (e.altKey && !e.ctrlKey && !e.metaKey) {
-        const nav = NAV_SHORTCUTS.find((s) => s.alt && s.key === letter);
-        if (nav) {
-          e.preventDefault();
-          go(nav.target);
-        } else if (letter === "b") {
-          e.preventDefault();
+        const act = ACTION_SHORTCUTS.find((s) => s.key === letter);
+        if (!act) return;
+        e.preventDefault();
+        if (act.action === "cgpa") {
           setSettings((prev) => togglePrivacyCategory(prev, "cgpa", !privacyCategories(prev).includes("cgpa")));
-        } else if (letter === "p") {
-          e.preventDefault();
-          setSettings((prev) => setHideAllPrivacy(prev, !prev.privacyMode));
-        } else if (letter === "t") {
-          e.preventDefault();
-          setTheme(theme === "dark" ? "light" : "dark");
+        } else if (act.action === "privacy") {
+          setSettings((prev) => setPrivacyMode(prev, !prev.privacyMode));
+        } else if (act.action === "theme") {
+          setTheme(nextTheme(theme));
+        } else if (act.action === "sidebar") {
+          window.dispatchEvent(new Event(TOGGLE_SIDEBAR_EVENT));
         }
         return;
       }
 
-      // "g" then a letter.
       if (!e.ctrlKey && !e.metaKey && !e.shiftKey && /^[a-z]$/.test(letter)) {
         const hit = sequence.current.feed(letter);
         if (hit === "pending") return;

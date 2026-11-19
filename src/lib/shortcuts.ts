@@ -2,12 +2,14 @@
  * Keyboard shortcuts: one table for the key handler (useGlobalShortcuts) and
  * the help sheet, so the two cannot drift apart.
  *
- * Two ways to jump to a screen:
- *  - "g" then a letter (g a = attendance), like GitHub/Gmail. No modifier, so
- *    it works the same on every keyboard layout and OS.
- *  - Alt/Option + letter for the original set. Matched on `event.code`
- *    (the physical key) because on macOS Option+H types "˙", so matching
- *    `event.key` meant none of these ever fired on a Mac.
+ * One consistent scheme (user: make the shortcuts consistent):
+ *  - Go to a screen: "g" then a letter (g a = attendance), like GitHub/Gmail.
+ *    No modifier, so it works the same on every keyboard layout and OS.
+ *  - Actions: Alt/Option + letter (ACTION_SHORTCUTS). Matched on
+ *    `event.code` (the physical key) because on macOS Option+P types "π".
+ *  - Search: Ctrl/Cmd + K or "/". Help: "?".
+ * Alt + letter used to also navigate for 7 of the 11 screens, and two of
+ * those letters collided with actions; navigation is now "g" only.
  */
 export type NavTarget =
   | { tab: string }
@@ -19,23 +21,39 @@ export interface NavShortcut {
   key: string;
   desc: string;
   target: NavTarget;
-  /** Also bound to Alt/Option + key (the pre-existing shortcuts). */
-  alt?: boolean;
 }
 
 export const NAV_SHORTCUTS: readonly NavShortcut[] = [
-  { key: "h", desc: "Home", target: { tab: "home" }, alt: true },
-  { key: "a", desc: "Attendance & timetable", target: { tab: "attendance" }, alt: true },
+  { key: "h", desc: "Home", target: { tab: "home" } },
+  { key: "a", desc: "Attendance & timetable", target: { tab: "attendance" } },
   { key: "c", desc: "Academics (courses & marks)", target: { tab: "academics" } },
-  { key: "g", desc: "Grades", target: { tab: "academics", academicsSub: "grades" }, alt: true },
-  { key: "o", desc: "On-duty (OD) hours", target: { tab: "attendance", attendanceSub: "od" }, alt: true },
-  { key: "e", desc: "Event Hub", target: { tab: "events" }, alt: true },
-  { key: "l", desc: "Library", target: { tab: "libraries" }, alt: true },
+  { key: "g", desc: "Grades", target: { tab: "academics", academicsSub: "grades" } },
+  { key: "o", desc: "On-duty (OD) hours", target: { tab: "attendance", attendanceSub: "od" } },
+  { key: "e", desc: "Event Hub", target: { tab: "events" } },
+  { key: "l", desc: "Library", target: { tab: "libraries" } },
   { key: "p", desc: "Payments", target: { tab: "payments" } },
   { key: "t", desc: "Tools & tasks", target: { tab: "tools" } },
   { key: "f", desc: "Free classrooms", target: { tab: "free-class" } },
-  { key: "s", desc: "Settings", target: { tab: "profile", profileSub: "settings" }, alt: true },
+  { key: "s", desc: "Settings", target: { tab: "profile", profileSub: "settings" } },
 ];
+
+export type ShortcutAction = "privacy" | "theme" | "cgpa" | "sidebar";
+
+/** Window event the sidebar listens for (it owns the collapse/Modules state). */
+export const TOGGLE_SIDEBAR_EVENT = "amazecc:toggle-sidebar";
+
+/** Alt/Option + key actions. Keys must not be reused by anything else. */
+export const ACTION_SHORTCUTS: readonly { key: string; desc: string; action: ShortcutAction }[] = [
+  { key: "p", desc: "Privacy mode on / off", action: "privacy" },
+  { key: "b", desc: "Hide or show CGPA", action: "cgpa" },
+  { key: "t", desc: "Theme: light, dark, night", action: "theme" },
+  { key: "s", desc: "Collapse or expand the sidebar (opens Modules on phones)", action: "sidebar" },
+];
+
+/** Next theme in the Alt+T cycle. */
+export function nextTheme(theme?: string): "light" | "dark" | "night" {
+  return theme === "light" ? "dark" : theme === "dark" ? "night" : "light";
+}
 
 /** How long after "g" the second key still counts. */
 export const SEQUENCE_TIMEOUT_MS = 1500;
@@ -60,7 +78,10 @@ export function isTypingTarget(el: Element | null): boolean {
 
 export function isMacPlatform(): boolean {
   if (typeof navigator === "undefined") return false;
-  const p = (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData?.platform || navigator.platform || "";
+  const p =
+    (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData?.platform ||
+    navigator.platform ||
+    "";
   return /mac|iphone|ipad/i.test(p);
 }
 

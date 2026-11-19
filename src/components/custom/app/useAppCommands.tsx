@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useTheme } from "next-themes";
-import { privacyCategories, setHideAllPrivacy, togglePrivacyCategory } from "@/lib/privacyMode";
+import { privacyCategories, setPrivacyMode, togglePrivacyCategory } from "@/lib/privacyMode";
 import config from "../../../../config.json";
 import LibrarySearchPalette from "../palette/LibrarySearchPalette";
 import EventSearchPalette from "../palette/EventSearchPalette";
@@ -538,7 +538,7 @@ export function useAppCommands(input: AppCommandInputs) {
       description: privacyCategories(settings).length ? "Currently on — tap to reveal" : "Currently off — tap to cover",
       icon: "🔒",
       category: "Settings",
-      onSelect: () => setSettings((prev) => setHideAllPrivacy(prev, !prev.privacyMode)),
+      onSelect: () => setSettings((prev) => setPrivacyMode(prev, !prev.privacyMode)),
     });
     toggle("Hide Home Page Search Bar", "hideHomeSearchBar", "Settings", "🔍");
 

@@ -54,3 +54,16 @@ describe("privacy mode", () => {
     expect(feesOnly.privacyCategories).not.toContain("cgpa");
   });
 });
+
+import { setPrivacyMode } from "../lib/privacyMode";
+
+describe("privacy master switch", () => {
+  it("turns on with CGPA only when nothing is chosen, and keeps choices when off", () => {
+    const on = setPrivacyMode({ ...defaultSettings, privacyCategories: [] }, true);
+    expect(on.privacyMode).toBe(true);
+    expect(on.privacyCategories).toEqual(["cgpa"]);
+    const off = setPrivacyMode({ ...on, privacyCategories: ["cgpa", "fees"] }, false);
+    expect(off.privacyMode).toBe(false);
+    expect(off.privacyCategories).toEqual(["cgpa", "fees"]);
+  });
+});

@@ -54,3 +54,18 @@ describe("isTypingTarget", () => {
     expect(isTypingTarget(document.createElement("button"))).toBe(false);
   });
 });
+
+import { ACTION_SHORTCUTS, nextTheme } from "../lib/shortcuts";
+
+describe("action shortcuts", () => {
+  it("cycles the theme light -> dark -> night -> light", () => {
+    expect(nextTheme("light")).toBe("dark");
+    expect(nextTheme("dark")).toBe("night");
+    expect(nextTheme("night")).toBe("light");
+  });
+
+  it("uses each Alt key once", () => {
+    const keys = ACTION_SHORTCUTS.map((a) => a.key);
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+});

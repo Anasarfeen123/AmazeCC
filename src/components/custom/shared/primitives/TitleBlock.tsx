@@ -18,7 +18,7 @@ import type { ReactNode } from "react";
 const EYEBROW =
   "inline-flex items-center rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 mb-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-secondary-foreground leading-none";
 const TITLE =
-  "font-display text-[28px] sm:text-[36px] font-bold uppercase text-text-heading tracking-tight leading-[1.05] line-clamp-2 break-words";
+  "font-display text-[28px] sm:text-[36px] font-bold uppercase text-text-heading tracking-tight leading-[1.05] break-words";
 const SUBTITLE = "font-mono text-xs text-text-muted mt-2";
 const GROUP = "flex flex-col items-start min-w-0 text-left";
 

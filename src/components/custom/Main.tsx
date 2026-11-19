@@ -64,7 +64,7 @@ import { clearSignInReturn, peekSignInReturn, VTOP_LOGIN_EVENT } from "@/lib/sig
 import { credentialManager } from "@/lib/sync-engine/credential-manager";
 import { hasStoredVtopCredentials } from "./app/readBootstrapSnapshot";
 import ConnectionBanner from "./shared/ConnectionBanner";
-import { isMacPlatform, NAV_SHORTCUTS } from "@/lib/shortcuts";
+import { ACTION_SHORTCUTS, isMacPlatform, NAV_SHORTCUTS } from "@/lib/shortcuts";
 
 interface MainProps {
   initialIntent?: "login" | "demo";
@@ -580,18 +580,17 @@ function GlobalShortcutsModal({ onClose }: { onClose: () => void }) {
       items: NAV_SHORTCUTS.map((s) => ({
         keys: ["g", s.key.toUpperCase()],
         joiner: "then",
-        desc: s.alt ? `${s.desc}  ·  also ${alt}+${s.key.toUpperCase()}` : s.desc,
+        desc: s.desc,
       })),
     },
     {
       title: "Actions",
       items: [
-        { keys: [mod, "K"], desc: "Command palette" },
-        { keys: ["/"], desc: "Command palette" },
-        { keys: [alt, "B"], desc: "Hide or show CGPA" },
-        { keys: [alt, "P"], desc: "Privacy mode (blur grades, attendance, fees)" },
-        { keys: [alt, "T"], desc: "Switch light / dark theme" },
+        { keys: [mod, "K"], desc: "Search everything" },
+        { keys: ["/"], desc: "Search everything" },
+        ...ACTION_SHORTCUTS.map((a) => ({ keys: [alt, a.key.toUpperCase()], desc: a.desc })),
         { keys: ["?"], desc: "This list" },
+        { keys: ["Esc"], desc: "Close this list" },
       ],
     },
   ];

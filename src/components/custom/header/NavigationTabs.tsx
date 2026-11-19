@@ -3,6 +3,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import BrandLogo from "../shared/BrandLogo";
 import SidebarThemeSwitch from "../theme/SidebarThemeSwitch";
+import { TOGGLE_SIDEBAR_EVENT } from "@/lib/shortcuts";
 import { useAtomValue } from "jotai";
 import { unifiedIdentityAtom, unifiedAcademicsAtom } from "@/store";
 import type { UnifiedUserIdentity } from "@/types";
@@ -353,6 +354,17 @@ export default function NavigationTabs({
     },
     [setSettings, isTabletViewport],
   );
+
+  // Alt/Option+S (lib/shortcuts): collapse/expand the sidebar on wide
+  // screens; on phones, where there is no sidebar, open or close Modules.
+  useEffect(() => {
+    const onToggle = () => {
+      if (window.matchMedia("(min-width: 768px)").matches) persistSidebarState(isOpen);
+      else setIsAppLibraryOpen((v) => !v);
+    };
+    window.addEventListener(TOGGLE_SIDEBAR_EVENT, onToggle);
+    return () => window.removeEventListener(TOGGLE_SIDEBAR_EVENT, onToggle);
+  }, [persistSidebarState, isOpen]);
 
   const handleReloadClick = useCallback(async () => {
     setIsSpinning(true);

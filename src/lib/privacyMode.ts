@@ -73,3 +73,22 @@ export function setHideAllPrivacy(settings: Settings, on: boolean): Settings {
     blurGrades: false,
   };
 }
+
+/**
+ * The Privacy Mode master switch (Settings, command palette, Alt/Option+P).
+ * On: the categories the user chose, or CGPA when none are chosen. Off: hides
+ * nothing but keeps the choice for next time. (Was "hide all", which the user
+ * found far too much: "the main thing to censor is CGPA".)
+ */
+export function setPrivacyMode(settings: Settings, on: boolean): Settings {
+  const saved = Array.isArray(settings.privacyCategories)
+    ? settings.privacyCategories.filter((c): c is PrivacyCategory => PRIVACY_CATEGORIES.includes(c as PrivacyCategory))
+    : [];
+  return {
+    ...settings,
+    privacyMode: on,
+    privacyCategories: saved.length ? saved : [...DEFAULT_PRIVACY_CATEGORIES],
+    CGPAHidden: false,
+    blurGrades: false,
+  };
+}

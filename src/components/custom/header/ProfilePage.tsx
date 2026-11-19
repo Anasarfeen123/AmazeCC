@@ -79,7 +79,7 @@ import {
   PRIVACY_CATEGORIES,
   PRIVACY_CATEGORY_DETAILS,
   privacyCategories,
-  setHideAllPrivacy,
+  setPrivacyMode,
   togglePrivacyCategory,
 } from "@/lib/privacyMode";
 
@@ -1633,14 +1633,13 @@ export default function ProfilePage({
             <div>
               <p className="text-sm font-bold text-text-primary">Privacy mode</p>
               <p className="text-xs text-text-muted">
-                Covers supported values in the selected categories. Some details may still be visible on other screens.
-                Shortcut: Alt/Option + P
+                Hides your CGPA by default; choose more under Private values. Shortcut: Alt/Option + P
               </p>
             </div>
             <Switch
               label="Privacy mode"
               checked={selectedPrivacyCategories.length > 0}
-              onCheckedChange={(val) => setSettings((prev: any) => setHideAllPrivacy(prev, val))}
+              onCheckedChange={(val) => setSettings((prev: any) => setPrivacyMode(prev, val))}
             />
           </div>
 

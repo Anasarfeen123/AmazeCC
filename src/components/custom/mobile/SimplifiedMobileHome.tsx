@@ -1354,7 +1354,7 @@ export default function SimplifiedMobileHome({
               </p>
               <h1
                 data-private="identity"
-                className="font-display text-[28px] sm:text-[36px] font-bold text-text-heading tracking-tight leading-none truncate max-w-full"
+                className="font-display text-[28px] sm:text-[36px] font-bold text-text-heading tracking-tight leading-tight break-words max-w-full"
               >
                 {profileName}
               </h1>

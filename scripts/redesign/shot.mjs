@@ -269,22 +269,25 @@ if (process.env.A11Y) {
   })()`);
   console.log("A11Y\n" + (res || "clean"));
 }
-const SIZES = process.env.ONLY_TABLET
-  ? [["tablet", 820, 1180, true]]
-  : process.env.ONLY_ZOOM
-    ? // At a 1440px desktop viewport, browser zoom at 200% leaves a 720px CSS
-      // layout viewport. This makes that accessibility check repeatable without
-      // changing the ordinary desktop screenshots.
-      [["zoom-200", 720, 900, false]]
-    : process.env.ONLY_DESKTOP
-      ? [["desktop", 1440, 900, false]]
-      : process.env.ONLY_PHONE
-        ? [["phone", 390, 844, true]]
-        : [
-            ["phone", 390, 844, true],
-            ["tablet", 820, 1180, true],
-            ["desktop", 1440, 900, false],
-          ];
+// ONLY_W=720: a single custom width (720 = a 1440 window at 200% zoom).
+const SIZES = process.env.ONLY_W
+  ? [[`w${process.env.ONLY_W}`, Number(process.env.ONLY_W), 900, Number(process.env.ONLY_W) < 800]]
+  : process.env.ONLY_TABLET
+    ? [["tablet", 820, 1180, true]]
+    : process.env.ONLY_ZOOM
+      ? // At a 1440px desktop viewport, browser zoom at 200% leaves a 720px CSS
+        // layout viewport. This makes that accessibility check repeatable without
+        // changing the ordinary desktop screenshots.
+        [["zoom-200", 720, 900, false]]
+      : process.env.ONLY_DESKTOP
+        ? [["desktop", 1440, 900, false]]
+        : process.env.ONLY_PHONE
+          ? [["phone", 390, 844, true]]
+          : [
+              ["phone", 390, 844, true],
+              ["tablet", 820, 1180, true],
+              ["desktop", 1440, 900, false],
+            ];
 if (process.env.KEY_WALK) {
   await evalJs("document.body.focus()");
   const stops = [];

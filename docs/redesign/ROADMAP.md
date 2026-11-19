@@ -132,8 +132,7 @@ Done when:
 
 - [x] Desktop left column is not empty (step list 01–05 with Now/Done)
 - [x] Step progress is a clear bar and "STEP 2 OF 5", not tiny dots
-- [ ] Selected tiles use sage fill + ink edge + small shadow; toggles use `Switch`
-      (the "College bus user?" No/Yes pill and the profile tiles still need it)
+- [x] Selected tiles use sage fill + ink edge + small shadow; toggles use `Switch`
 - [x] One primary button per step; no icon wells in step headers
 - [ ] Walked through end to end in light and dark
 

@@ -245,3 +245,16 @@ NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next dev --webpack -p 3017   # backg
   grade) restyled. R4 mostly done (step list, progress bar, headers).
   **Next: R4 toggles/tiles, then more dark-mode colour on remaining screens
   (R6), R2 leftovers.**
+- **2026-11-19 (night)** — Dark-mode colour pass. Patterns to reuse:
+  `summary-row` on a page's two-card summary grid makes the first card the
+  ochre hero (brand.css); old solid blue/indigo/violet/purple fills become
+  the primary fill in dark (brand.css override + `brandify.py` rules);
+  status text inside sage/ochre/primary fills takes the fill's ink. Done:
+  R4 (Switch toggles, ink tiles), grades sheet (visible bars, legend),
+  Academics course list (score blocks by band, type badges), Super Calendar
+  (solid holiday cells), sidebar header fit. `shot.mjs` now has
+  `CLICK_TEXTS="Open Campus menu|Payments"` (+ `DEBUG_CLICK=1`); use
+  `PRE_W=1440` for sidebar-only triggers. Known: Attendance and Timetable
+  Calendar sidebar items both light up on the calendar page.
+  **Next: icon wells in hub lists (Libraries, Curriculum, Grade history),
+  Curriculum progress bar (raw green/orange), R2 leftovers, R6.**

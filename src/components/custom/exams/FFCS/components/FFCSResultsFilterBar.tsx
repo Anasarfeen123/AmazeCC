@@ -60,11 +60,11 @@ export default function FFCSResultsFilterBar({
           onClick={() => onChange({ ...filters, sameBuilding: !filters.sameBuilding })}
           aria-pressed={filters.sameBuilding}
           title="Only plans whose courses share one building"
-          className={`flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-full border transition-colors cursor-pointer ${
+          className={`flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-[10px] border transition-colors cursor-pointer ${
             filters.sameBuilding
-              ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-500"
+              ? "bg-success-surface border-border-ink text-success-foreground"
               : "bg-surface border-border-strong text-muted-foreground hover:text-text-heading"
-          }`}
+          } min-h-9`}
         >
           <Building2 className="w-3 h-3" /> Same Building
         </button>
@@ -73,11 +73,11 @@ export default function FFCSResultsFilterBar({
           onClick={() => onChange({ ...filters, groupBySlot: !filters.groupBySlot })}
           aria-pressed={filters.groupBySlot}
           title="One row per distinct slot layout"
-          className={`flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-full border transition-colors cursor-pointer ${
+          className={`flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-[10px] border transition-colors cursor-pointer ${
             filters.groupBySlot
-              ? "bg-indigo-500/15 border-indigo-500/30 text-indigo-400"
+              ? "bg-secondary border-border-ink text-secondary-foreground"
               : "bg-surface border-border-strong text-muted-foreground hover:text-text-heading"
-          }`}
+          } min-h-9`}
         >
           <Layers className="w-3 h-3" /> Group by slot
         </button>
@@ -89,7 +89,7 @@ export default function FFCSResultsFilterBar({
             value={filters.facultyQuery}
             onChange={(event) => onChange({ ...filters, facultyQuery: event.target.value })}
             placeholder="Filter by faculty or code…"
-            className="w-full min-w-0 h-8 pl-1 pr-2 rounded-lg bg-surface border border-border-strong text-xs text-text-heading placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+            className="w-full min-w-0 h-8 pl-1 pr-2 rounded-lg bg-surface border border-border-strong text-xs text-text-heading placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-border-ink"
           />
           {filters.facultyQuery && (
             <button
@@ -103,8 +103,8 @@ export default function FFCSResultsFilterBar({
           )}
         </label>
       </div>
-      <div className="flex items-center justify-between gap-2 text-[11px] font-semibold">
-        <span className={cut ? "text-amber-500" : "text-muted-foreground"} aria-live="polite">
+      <div className="flex items-center justify-between gap-2 text-xs font-semibold">
+        <span className={cut ? "text-warning-foreground" : "text-muted-foreground"} aria-live="polite">
           {cut
             ? `${visibleCount.toLocaleString()} of ${totalCount.toLocaleString()} plans match`
             : `${totalCount.toLocaleString()} plan${totalCount === 1 ? "" : "s"}`}
@@ -113,7 +113,7 @@ export default function FFCSResultsFilterBar({
           <button
             type="button"
             onClick={() => onChange({ ...DEFAULT_RESULT_FILTERS })}
-            className="text-indigo-400 hover:text-indigo-300 font-bold transition-colors cursor-pointer"
+            className="text-primary hover:text-primary font-bold transition-colors cursor-pointer"
           >
             Clear filters
           </button>

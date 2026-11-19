@@ -168,14 +168,14 @@ const COURSE_MENU_ACTIONS: Array<{
     label: "Manually Add Course",
     description: "Search the catalog, choose a slot, and add it to this plan.",
     Icon: Search,
-    iconClass: "bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 border-blue-500/20",
+    iconClass: "bg-secondary dark:bg-secondary text-secondary-foreground border-border-ink",
   },
   {
     value: "target-courses",
     label: "Target Courses",
     description: "Choose required courses and lock preferred slots.",
     Icon: Lock,
-    iconClass: "bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 border-purple-500/20",
+    iconClass: "bg-secondary dark:bg-secondary text-secondary-foreground border-border-ink",
     tourTarget: "ffcs-add-course",
   },
   {
@@ -183,7 +183,7 @@ const COURSE_MENU_ACTIONS: Array<{
     label: "Auto-Generate",
     description: "Build timetable combinations from your course targets.",
     Icon: Wand2,
-    iconClass: "bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/20",
+    iconClass: "bg-warning-surface text-warning-foreground border-border-ink",
     tourTarget: "ffcs-generate",
   },
   {
@@ -191,7 +191,7 @@ const COURSE_MENU_ACTIONS: Array<{
     label: "Paste VTOP",
     description: "Import courses from your VTOP registration page.",
     Icon: ClipboardPaste,
-    iconClass: "bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+    iconClass: "bg-success-surface text-success-foreground border-border-ink",
   },
   {
     value: "advanced-linker",
@@ -540,7 +540,7 @@ export default function FFCSDashboardHeader({
               sub: `${courses.length} course${courses.length === 1 ? "" : "s"} enrolled`,
               badge: `${timetables.length} plan${timetables.length === 1 ? "" : "s"}`,
               tone: "blue",
-              className: "transition-all hover:border-blue-500/40",
+              className: "transition-all hover:border-border-ink",
             },
           ]
         : []),
@@ -565,7 +565,7 @@ export default function FFCSDashboardHeader({
               sub: `${daysWithClassesCount} class days · free half-days`,
               tone: freeHalfDaysCount >= 4 ? "emerald" : "blue",
               className:
-                "cursor-pointer hover:border-emerald-500/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500",
+                "cursor-pointer hover:border-border-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500",
             },
           ]
         : []),
@@ -696,7 +696,7 @@ export default function FFCSDashboardHeader({
               type="button"
               onClick={onOpenTimetableModal}
               aria-label={`Active Timetable: ${activeTimetable?.name || "Timetable 1"}. ${courses.length} course${courses.length === 1 ? "" : "s"} enrolled. Switch timetable.`}
-              className="min-w-0 text-left rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              className="min-w-0 text-left rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-ink"
             >
               {statTile}
             </button>
@@ -727,11 +727,8 @@ export default function FFCSDashboardHeader({
 
       {/* ── ZONE 3: SELECTABLE DASHBOARD WIDGETS ── */}
       <div className="space-y-2 pt-1">
-        <h3
-          id="ffcs-widgets-heading"
-          className="px-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground"
-        >
-          Dashboard Widgets
+        <h3 id="ffcs-widgets-heading" className="px-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+          Show on this page
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(220px,0.8fr)_minmax(0,2fr)] gap-3 items-start">
           <nav aria-label="Planner menu" className="space-y-3">
@@ -739,7 +736,7 @@ export default function FFCSDashboardHeader({
               <section aria-labelledby="ffcs-add-course-heading" className="space-y-2">
                 <h3
                   id="ffcs-add-course-heading"
-                  className="px-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground"
+                  className="px-1 text-xs font-bold uppercase tracking-wider text-muted-foreground"
                 >
                   Add Courses
                 </h3>
@@ -750,7 +747,7 @@ export default function FFCSDashboardHeader({
                       type="button"
                       onClick={courseMenuActions[value]}
                       data-tour-id={tourTarget}
-                      className="w-full flex items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500"
+                      className="w-full flex items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-ink"
                     >
                       <span
                         className={`w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 ${iconClass}`}
@@ -759,7 +756,7 @@ export default function FFCSDashboardHeader({
                       </span>
                       <ListRowText title={label} titleTag="span" subtitle={description} />
                       {value === "target-courses" && courseLocksCount > 0 && (
-                        <span className="min-w-5 h-5 px-1 rounded-full bg-purple-600 text-white text-[10px] font-black flex items-center justify-center shrink-0">
+                        <span className="min-w-5 h-5 px-1 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shrink-0">
                           {courseLocksCount}
                         </span>
                       )}
@@ -773,15 +770,15 @@ export default function FFCSDashboardHeader({
                   type="button"
                   aria-pressed={enabledWidgets.includes("add-courses")}
                   onClick={() => toggleWidget("add-courses")}
-                  className={`w-full flex items-center gap-3 px-3 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500 ${
-                    enabledWidgets.includes("add-courses") ? "bg-blue-500/10" : "hover:bg-surface-secondary/60"
+                  className={`w-full flex items-center gap-3 px-3 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-ink ${
+                    enabledWidgets.includes("add-courses") ? "bg-secondary" : "hover:bg-surface-secondary/60"
                   }`}
                 >
-                  <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 border-blue-500/20">
+                  <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-secondary dark:bg-secondary text-secondary-foreground border-border-ink">
                     <PlusCircle className="w-4 h-4" />
                   </span>
                   <ListRowText title="Add Courses" titleTag="span" subtitle="Show or hide the course-add widget." />
-                  {enabledWidgets.includes("add-courses") && <Check className="w-4 h-4 text-blue-500 shrink-0" />}
+                  {enabledWidgets.includes("add-courses") && <Check className="w-4 h-4 text-primary shrink-0" />}
                 </button>
               </ListShell>
             )}
@@ -789,9 +786,9 @@ export default function FFCSDashboardHeader({
             <section aria-labelledby="ffcs-utility-heading" className="space-y-2">
               <h3
                 id="ffcs-utility-heading"
-                className="px-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground"
+                className="px-1 text-xs font-bold uppercase tracking-wider text-muted-foreground"
               >
-                Planner & Social
+                More tools
               </h3>
               <ListShell>
                 {UTILITY_TABS.map(({ value, label, description, Icon, iconClass }) => {
@@ -802,8 +799,8 @@ export default function FFCSDashboardHeader({
                       type="button"
                       aria-pressed={isMobileViewport ? mobileWidget === value : isEnabled}
                       onClick={() => openWidget(value)}
-                      className={`w-full flex items-center gap-3 px-3 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500 ${
-                        isEnabled ? "bg-indigo-500/10" : "hover:bg-surface-secondary/60"
+                      className={`w-full flex items-center gap-3 px-3 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-ink ${
+                        isEnabled ? "bg-secondary" : "hover:bg-surface-secondary/60"
                       }`}
                     >
                       <span
@@ -817,7 +814,7 @@ export default function FFCSDashboardHeader({
                           className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${mobileWidget === value ? "rotate-180" : ""}`}
                         />
                       ) : isEnabled ? (
-                        <Check className="w-4 h-4 text-indigo-500 shrink-0" />
+                        <Check className="w-4 h-4 text-primary shrink-0" />
                       ) : null}
                     </button>
                   );
@@ -831,9 +828,9 @@ export default function FFCSDashboardHeader({
                   type="button"
                   aria-pressed={isMobileViewport && mobileWidget === "selected-course"}
                   onClick={() => openWidget("selected-course")}
-                  className="w-full flex items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500"
+                  className="w-full flex items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-ink"
                 >
-                  <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border-indigo-500/20">
+                  <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-secondary dark:bg-secondary text-secondary-foreground border-border-ink">
                     <PlusCircle className="w-4 h-4" />
                   </span>
                   <ListRowText title="Configure Selected Course" titleTag="span" subtitle={selectedCourseCode} />
@@ -852,7 +849,7 @@ export default function FFCSDashboardHeader({
             >
               <h3
                 id="ffcs-view-course-heading"
-                className="px-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground"
+                className="px-1 text-xs font-bold uppercase tracking-wider text-muted-foreground"
               >
                 Views & Course Lists
               </h3>
@@ -860,9 +857,9 @@ export default function FFCSDashboardHeader({
                 <button
                   type="button"
                   onClick={onOpenLayoutPicker}
-                  className="w-full flex items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500"
+                  className="w-full flex items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-ink"
                 >
-                  <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border-indigo-500/20">
+                  <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-secondary dark:bg-secondary text-secondary-foreground border-border-ink">
                     <PanelsTopLeft className="w-4 h-4" />
                   </span>
                   <ListRowText
@@ -874,7 +871,7 @@ export default function FFCSDashboardHeader({
                 <button
                   type="button"
                   onClick={onOpenCourseListPicker}
-                  className="w-full flex items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500"
+                  className="w-full flex items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-ink"
                 >
                   <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-teal-500/10 dark:bg-teal-500/20 text-teal-600 dark:text-teal-400 border-teal-500/20">
                     <ListFilter className="w-4 h-4" />
@@ -894,7 +891,7 @@ export default function FFCSDashboardHeader({
               >
                 <h3
                   id="ffcs-settings-heading"
-                  className="px-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground"
+                  className="px-1 text-xs font-bold uppercase tracking-wider text-muted-foreground"
                 >
                   Planner Settings
                 </h3>
@@ -902,9 +899,9 @@ export default function FFCSDashboardHeader({
                   <button
                     type="button"
                     onClick={onOpenPlannerSettings}
-                    className="w-full flex items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500"
+                    className="w-full flex items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-ink"
                   >
-                    <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/20">
+                    <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-warning-surface text-warning-foreground border-border-ink">
                       <Settings2 className="w-4 h-4" />
                     </span>
                     <ListRowText
@@ -917,9 +914,9 @@ export default function FFCSDashboardHeader({
                     <button
                       type="button"
                       onClick={onOpenHelp}
-                      className="w-full flex items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500"
+                      className="w-full flex items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-ink"
                     >
-                      <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border-indigo-500/20">
+                      <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-secondary dark:bg-secondary text-secondary-foreground border-border-ink">
                         <CircleHelp className="w-4 h-4" />
                       </span>
                       <ListRowText
@@ -946,18 +943,18 @@ export default function FFCSDashboardHeader({
               {selectedCourseCode && (!isMobileViewport || mobileWidget === "selected-course") && (
                 <section
                   aria-label="Configure Selected Course widget"
-                  className="min-w-0 rounded-2xl border border-indigo-500/30 dark:border-indigo-500/40 card-surface p-4 sm:p-5 shadow-xs space-y-4 animate-fadeIn"
+                  className="min-w-0 rounded-2xl border border-border-ink dark:border-border-ink card-surface p-4 sm:p-5 shadow-xs space-y-4 animate-fadeIn"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3 min-w-0">
-                      <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border-indigo-500/20">
+                      <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-secondary dark:bg-secondary text-secondary-foreground border-border-ink">
                         <PlusCircle className="w-4 h-4" />
                       </span>
                       <div className="min-w-0">
-                        <p className="text-[10px] font-bold uppercase tracking-wider text-indigo-500 dark:text-indigo-400">
+                        <p className="text-xs font-bold uppercase tracking-wider text-primary">
                           Configure Selected Course
                         </p>
-                        <h3 className="text-sm font-extrabold text-text-heading truncate">
+                        <h3 className="text-sm font-bold text-text-heading truncate">
                           {selectedCourseCode} · {selectedCourse?.title}
                         </h3>
                       </div>
@@ -1015,13 +1012,13 @@ export default function FFCSDashboardHeader({
                     </div>
 
                     <div className="space-y-1.5">
-                      <span className="block text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                      <span className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">
                         Slot & Faculty Choice
                       </span>
                       <button
                         type="button"
                         onClick={onOpenSlotSearch}
-                        className="w-full min-h-[48px] bg-surface border border-border-strong hover:border-indigo-500/50 rounded-xl px-3 py-2.5 text-left text-text-heading hover:bg-surface-secondary/50 transition-colors flex items-center justify-between gap-2 group"
+                        className="w-full min-h-[48px] bg-surface border border-border-strong hover:border-border-ink rounded-xl px-3 py-2.5 text-left text-text-heading hover:bg-surface-secondary/50 transition-colors flex items-center justify-between gap-2 group"
                       >
                         <span className="truncate text-sm font-medium flex items-center gap-2 min-w-0">
                           {selectedSlotIndex !== "-1" && availableSlots[Number(selectedSlotIndex)] ? (
@@ -1055,19 +1052,19 @@ export default function FFCSDashboardHeader({
                             <span className="text-muted-foreground">Click to choose slot & faculty option...</span>
                           )}
                         </span>
-                        <Search className="w-4 h-4 text-muted-foreground group-hover:text-indigo-500 transition-colors shrink-0" />
+                        <Search className="w-4 h-4 text-muted-foreground group-text-primary transition-colors shrink-0" />
                       </button>
                     </div>
 
                     {availableSlots.length > 0 && (
                       <div className="space-y-2">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                             Recommended faculty, slots & timetable fit
                           </span>
-                          <span className="text-[10px] text-muted-foreground">{availableSlots.length} offerings</span>
+                          <span className="text-xs text-muted-foreground">{availableSlots.length} offerings</span>
                         </div>
-                        <p className="text-[10px] text-muted-foreground">
+                        <p className="text-xs text-muted-foreground">
                           Conflict-free options come first, with higher-rated faculty ranked ahead. Search to browse
                           every offering.
                         </p>
@@ -1088,7 +1085,7 @@ export default function FFCSDashboardHeader({
                           })}
                         </div>
                         {availableSlots.length > 5 && (
-                          <p className="text-[10px] text-muted-foreground">
+                          <p className="text-xs text-muted-foreground">
                             Open the slot picker to compare all {availableSlots.length} options.
                           </p>
                         )}
@@ -1098,7 +1095,7 @@ export default function FFCSDashboardHeader({
                     <button
                       type="submit"
                       disabled={!selectedCourseCode || selectedSlotIndex === "-1"}
-                      className="w-full min-h-[44px] bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2"
+                      className="w-full min-h-[44px] bg-primary hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground font-bold py-2.5 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2"
                     >
                       <PlusCircle className="w-4 h-4" />
                       <span>Add Course to Timetable</span>
@@ -1113,7 +1110,7 @@ export default function FFCSDashboardHeader({
                   className="min-w-0 rounded-2xl border border-border-strong dark:border-border card-surface p-4 sm:p-5 shadow-xs space-y-4"
                 >
                   <div className="flex items-start gap-3">
-                    <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 border-blue-500/20">
+                    <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-secondary dark:bg-secondary text-secondary-foreground border-border-ink">
                       <PlusCircle className="w-4 h-4" />
                     </span>
                     <div>
@@ -1131,7 +1128,7 @@ export default function FFCSDashboardHeader({
                         onClick={courseMenuActions[value]}
                         data-tour-id={tourTarget}
                         title={description}
-                        className="min-h-[68px] flex items-center gap-3 p-3 text-left rounded-xl border border-border-strong/70 bg-surface hover:bg-surface-secondary/60 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                        className="min-h-[68px] flex items-center gap-3 p-3 text-left rounded-xl border border-border-strong/70 bg-surface hover:bg-surface-secondary/60 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-ink"
                       >
                         <span
                           className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 ${iconClass}`}
@@ -1140,12 +1137,10 @@ export default function FFCSDashboardHeader({
                         </span>
                         <span className="min-w-0">
                           <span className="block text-xs font-bold text-text-heading">{label}</span>
-                          <span className="block text-[10px] leading-snug text-muted-foreground mt-0.5">
-                            {description}
-                          </span>
+                          <span className="block text-xs leading-snug text-muted-foreground mt-0.5">{description}</span>
                         </span>
                         {value === "target-courses" && courseLocksCount > 0 && (
-                          <span className="min-w-5 h-5 px-1 rounded-full bg-purple-600 text-white text-[10px] font-black flex items-center justify-center shrink-0">
+                          <span className="min-w-5 h-5 px-1 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shrink-0">
                             {courseLocksCount}
                           </span>
                         )}
@@ -1166,11 +1161,11 @@ export default function FFCSDashboardHeader({
                     <button
                       type="button"
                       onClick={onOpenTimetableModal}
-                      className="flex-1 min-h-[44px] bg-surface border border-border-strong hover:border-indigo-500/50 rounded-xl px-4 py-2.5 text-sm text-text-heading hover:bg-surface-secondary transition-all flex items-center justify-between gap-2 shadow-2xs group cursor-pointer"
+                      className="flex-1 min-h-[44px] bg-surface border border-border-strong hover:border-border-ink rounded-xl px-4 py-2.5 text-sm text-text-heading hover:bg-surface-secondary transition-all flex items-center justify-between gap-2 shadow-2xs group cursor-pointer"
                       title="Switch or manage saved timetables"
                     >
                       <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-2.5 h-2.5 rounded-full bg-indigo-500 shrink-0" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-primary shrink-0" />
                         <span className="truncate font-bold">{activeTimetable?.name || "Select Timetable"}</span>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
@@ -1185,7 +1180,7 @@ export default function FFCSDashboardHeader({
                     <button
                       type="button"
                       onClick={onCreateNewTimetable}
-                      className="min-h-[44px] bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-95 cursor-pointer shrink-0"
+                      className="min-h-[44px] bg-primary hover:brightness-110 text-primary-foreground font-bold px-4 py-2 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer shrink-0"
                       title="Create a new blank timetable"
                     >
                       <Plus className="w-4 h-4" />
@@ -1218,7 +1213,7 @@ export default function FFCSDashboardHeader({
                     <button
                       type="button"
                       onClick={() => onDeleteTimetable(activeTimetable.id)}
-                      className="min-h-[44px] flex items-center justify-center gap-1.5 py-2 px-3 text-xs text-red-500 hover:text-red-400 bg-red-500/10 hover:bg-red-500/15 border border-red-500/20 rounded-xl transition-all font-semibold cursor-pointer shadow-2xs"
+                      className="min-h-[44px] flex items-center justify-center gap-1.5 py-2 px-3 text-xs text-danger-foreground hover:text-danger-foreground bg-danger-surface hover:bg-danger-surface border border-border-ink rounded-xl transition-all font-semibold cursor-pointer shadow-2xs"
                       title="Delete current timetable"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -1238,7 +1233,7 @@ export default function FFCSDashboardHeader({
                       className="min-h-[44px] flex items-center justify-center gap-1.5 py-2 px-3 text-xs text-text-heading bg-surface hover:bg-surface-secondary border border-border-strong/70 rounded-xl transition-all font-semibold cursor-pointer shadow-2xs"
                       title="Restore timetables from backup JSON"
                     >
-                      <Upload className="w-3.5 h-3.5 text-emerald-500" />
+                      <Upload className="w-3.5 h-3.5 text-success-foreground" />
                       <span>Restore JSON</span>
                     </button>
                   </div>
@@ -1255,13 +1250,13 @@ export default function FFCSDashboardHeader({
                           if (e.key === "Escape") setIsRenaming(false);
                         }}
                         placeholder="Enter new timetable name..."
-                        className="flex-1 min-h-[44px] bg-surface border border-indigo-500/50 rounded-xl px-3 text-sm text-text-heading focus:outline-none"
+                        className="flex-1 min-h-[44px] bg-surface border border-border-ink rounded-xl px-3 text-sm text-text-heading focus:outline-none"
                         autoFocus
                       />
                       <button
                         type="button"
                         onClick={handleConfirmRename}
-                        className="min-h-[44px] px-3 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 rounded-xl flex items-center justify-center cursor-pointer transition-colors"
+                        className="min-h-[44px] px-3 bg-success-surface hover:bg-emerald-500/25 border border-border-ink text-success-foreground rounded-xl flex items-center justify-center cursor-pointer transition-colors"
                         title="Confirm rename"
                       >
                         <Check className="w-4 h-4" />
@@ -1295,7 +1290,7 @@ export default function FFCSDashboardHeader({
                         <button
                           type="button"
                           onClick={onOpenSocialMatrix}
-                          className="text-xs font-black text-pink-500 bg-pink-500/10 hover:bg-pink-500/20 px-2.5 py-0.5 rounded-full border border-pink-500/20 transition-colors cursor-pointer"
+                          className="text-xs font-bold text-pink-500 bg-pink-500/10 hover:bg-pink-500/20 px-2.5 py-0.5 rounded-[6px] border border-pink-500/20 transition-colors cursor-pointer"
                         >
                           Score: {dynamicSocialScore}%
                         </button>
@@ -1398,7 +1393,7 @@ export default function FFCSDashboardHeader({
                         <CalendarDays className="w-4 h-4" />
                         <span>Faculty Schedules</span>
                         {facultyGroupsCount > 0 && (
-                          <span className="text-[10px] font-black bg-cyan-500/20 px-1.5 py-0.5 rounded-md">
+                          <span className="text-xs font-bold bg-cyan-500/20 px-1.5 py-0.5 rounded-md">
                             {facultyGroupsCount}
                           </span>
                         )}
@@ -1413,18 +1408,18 @@ export default function FFCSDashboardHeader({
                         href="https://vitfac.pages.dev"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-semibold py-2.5 px-3.5 rounded-xl border border-emerald-500/20 transition-all flex items-center justify-between gap-2 shadow-2xs group"
+                        className="w-full bg-success-surface hover:bg-success-surface text-success-foreground text-xs font-semibold py-2.5 px-3.5 rounded-xl border border-border-ink transition-all flex items-center justify-between gap-2 shadow-2xs group"
                         title="Leave or view reviews on vitfac.pages.dev"
                       >
                         <div className="flex items-center gap-2 min-w-0">
-                          <span className="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-500 flex items-center justify-center shrink-0 font-black text-xs">
+                          <span className="w-6 h-6 rounded-lg bg-success-surface text-success-foreground flex items-center justify-center shrink-0 font-bold text-xs">
                             ★
                           </span>
                           <span className="truncate">Reviewed your profs? Help others on vitfac.pages.dev</span>
                         </div>
                         <ExternalLink className="w-4 h-4 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity" />
                       </a>
-                      <p className="text-[10.5px] text-muted-foreground/70 px-1 pt-1 leading-tight">
+                      <p className="text-xs text-muted-foreground/70 px-1 pt-1 leading-tight">
                         Disclaimer: Ratings are sourced from community platform vitfac.pages.dev.
                       </p>
                     </div>

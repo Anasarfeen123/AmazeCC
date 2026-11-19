@@ -64,11 +64,11 @@ export default function SelectedCoursesList({
               type="button"
               onClick={() => onFacultyClick(course)}
               title={facultyInfo?.title}
-              className="flex items-center gap-1.5 text-sm text-text-heading/80 hover:text-blue-500 transition-colors cursor-pointer max-w-full min-w-0"
+              className="flex items-center gap-1.5 text-sm text-text-heading/80 text-primary transition-colors cursor-pointer max-w-full min-w-0"
             >
               <span className="truncate">{course.faculty}</span>
               {facultyInfo && (
-                <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-1.5 py-0.5 rounded-md bg-surface-secondary/70 border border-border-strong/70 text-muted-foreground shrink-0">
+                <span className="inline-flex items-center gap-1 text-xs font-semibold px-1.5 py-0.5 rounded-md bg-surface-secondary/70 border border-border-strong/70 text-muted-foreground shrink-0">
                   <Users className="w-3.5 h-3.5 text-muted-foreground/60 shrink-0" />
                   <span>{facultyInfo.display}</span>
                 </span>
@@ -96,7 +96,7 @@ export default function SelectedCoursesList({
     course.batches.map((batch) => (
       <span
         key={batch}
-        className={`${compact ? "text-[10px] px-1.5" : "text-xs px-2"} font-bold py-0.5 rounded-md border ${getBatchColorClass(batch)}`}
+        className={`${compact ? "text-xs px-1.5" : "text-xs px-2"} font-bold py-0.5 rounded-md border ${getBatchColorClass(batch)}`}
       >
         {batch}
       </span>
@@ -118,7 +118,7 @@ export default function SelectedCoursesList({
         title={ranked ? "Edit faculty priority" : "Set faculty priority"}
         aria-label={ranked ? `Edit faculty priority for ${course.code}` : `Set faculty priority for ${course.code}`}
         className={`relative transition-colors ${
-          ranked ? "text-indigo-400 hover:text-indigo-300" : "text-muted-foreground hover:text-indigo-400"
+          ranked ? "text-primary hover:text-primary" : "text-muted-foreground text-primary"
         }`}
       >
         <ListOrdered className="w-4 h-4" />
@@ -134,7 +134,7 @@ export default function SelectedCoursesList({
       <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
         <h2 className="text-xl font-bold text-text-heading flex flex-wrap items-center gap-2 w-full sm:w-auto">
           {title}
-          <span className="bg-blue-500/20 text-blue-400 text-xs py-1 px-2.5 rounded-full border border-blue-500/20 whitespace-nowrap">
+          <span className="bg-secondary text-secondary-foreground text-xs py-1 px-2.5 rounded-[10px] border border-border-ink whitespace-nowrap min-h-9">
             Total Credits: {totalCredits}
           </span>
         </h2>
@@ -142,7 +142,7 @@ export default function SelectedCoursesList({
           <button
             type="button"
             onClick={onClear}
-            className="text-red-400 hover:bg-red-500/10 px-3 py-1.5 rounded-lg transition-colors text-sm font-medium flex items-center gap-2 print:hidden whitespace-nowrap ml-auto"
+            className="text-danger-foreground hover:bg-danger-surface px-3 py-1.5 rounded-lg transition-colors text-sm font-medium flex items-center gap-2 print:hidden whitespace-nowrap ml-auto"
           >
             <Trash2 className="w-4 h-4" /> Clear All
           </button>
@@ -165,7 +165,7 @@ export default function SelectedCoursesList({
                       {course.code}
                     </div>
                     <CourseTypeChips typesInput={course.type} size="sm" compactText />
-                    <span className="text-[10px] text-muted-foreground font-semibold bg-surface-secondary/70 px-1.5 py-0.5 rounded border border-border-strong/50">
+                    <span className="text-xs text-muted-foreground font-semibold bg-surface-secondary/70 px-1.5 py-0.5 rounded border border-border-strong/50">
                       {course.credits} cr
                     </span>
                     {renderBatches(course, true)}
@@ -180,7 +180,7 @@ export default function SelectedCoursesList({
                     <button
                       type="button"
                       onClick={() => onRemove(course.ids)}
-                      className="text-muted-foreground hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors relative hit-expand touch-press active:scale-[0.95]"
+                      className="text-muted-foreground hover:text-danger-foreground p-1.5 rounded-lg hover:bg-danger-surface transition-colors relative hit-expand touch-press"
                       title="Remove Course"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -196,13 +196,13 @@ export default function SelectedCoursesList({
                   {course.slots.map((slot) => (
                     <span
                       key={slot}
-                      className="bg-accent/50 border border-border-strong text-text-heading/80 text-[10px] px-1.5 py-0.5 rounded-md"
+                      className="bg-accent/50 border border-border-strong text-text-heading/80 text-xs px-1.5 py-0.5 rounded-md"
                     >
                       {slot}
                     </span>
                   ))}
                 </div>
-                <div className="text-[11px] text-muted-foreground font-medium truncate shrink-0 max-w-[140px]">
+                <div className="text-xs text-muted-foreground font-medium truncate shrink-0 max-w-[140px]">
                   📍 {course.venue}
                 </div>
               </div>
@@ -254,7 +254,7 @@ export default function SelectedCoursesList({
                       {course.slots.map((slot) => (
                         <span
                           key={slot}
-                          className="bg-accent/50 border border-border-strong text-text-heading/80 text-[10px] px-1.5 py-0.5 rounded-md"
+                          className="bg-accent/50 border border-border-strong text-text-heading/80 text-xs px-1.5 py-0.5 rounded-md"
                         >
                           {slot}
                         </span>
@@ -271,7 +271,7 @@ export default function SelectedCoursesList({
                           <button
                             type="button"
                             onClick={() => onRemove(course.ids)}
-                            className="text-muted-foreground hover:text-red-400 transition-colors p-2"
+                            className="text-muted-foreground hover:text-danger-foreground transition-colors p-2"
                             title="Remove Course"
                           >
                             <Trash2 className="w-4 h-4" />

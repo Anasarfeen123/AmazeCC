@@ -49,28 +49,28 @@ export const UTILITY_TABS: Array<{
     label: "Timetable Actions",
     description: "Switch plans, rename, duplicate, or back up.",
     Icon: CalendarDays,
-    iconClass: "bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border-indigo-500/20",
+    iconClass: "bg-secondary dark:bg-secondary text-secondary-foreground border-border-ink",
   },
   {
     value: "social",
     label: "Social & Friends",
     description: "Compare schedules and manage friend groups.",
     Icon: Users,
-    iconClass: "bg-rose-500/10 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400 border-rose-500/20",
+    iconClass: "bg-danger-surface text-danger-foreground border-border-ink",
   },
   {
     value: "faculty",
     label: "Faculty & Reviews",
     description: "Explore faculty schedules and reviews.",
     Icon: GraduationCap,
-    iconClass: "bg-violet-500/10 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400 border-violet-500/20",
+    iconClass: "bg-secondary dark:bg-secondary text-secondary-foreground border-border-ink",
   },
   {
     value: "export",
     label: "Export Dossier",
     description: "Download, print, or share your timetable.",
     Icon: FileDown,
-    iconClass: "bg-sky-500/10 dark:bg-sky-500/20 text-sky-600 dark:text-sky-400 border-sky-500/20",
+    iconClass: "bg-secondary dark:bg-secondary text-secondary-foreground border-border-ink",
   },
 ];
 
@@ -100,7 +100,9 @@ export function MobileWidgetSheet({
       title={title}
       subtitle={subtitle}
       icon={<Icon className="w-5 h-5" />}
-      accent={widgetInfo?.iconClass ?? "bg-indigo-500/10 text-indigo-600 border-indigo-500/20 dark:text-indigo-400"}
+      accent={
+        widgetInfo?.iconClass ?? "bg-secondary text-secondary-foreground border-border-ink text-secondary-foreground"
+      }
     >
       {children}
     </BottomSheet>
@@ -155,10 +157,10 @@ export function ClashDetails({
       title="Clashing Courses"
       subtitle="Review conflicting course and faculty choices"
       icon={<AlertTriangle className="w-5 h-5" />}
-      accent="bg-red-500/10 text-red-600 border-red-500/20 dark:text-red-400"
+      accent="bg-danger-surface text-danger-foreground border-border-ink dark:text-danger-foreground"
     >
       {courseClashes.length === 0 && blockedSlotClashes.length === 0 ? (
-        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 text-sm font-semibold text-emerald-700 dark:text-emerald-400">
+        <div className="rounded-xl border border-border-ink bg-success-surface p-4 text-sm font-semibold text-success-foreground">
           This timetable has no course or blocked-slot clashes.
         </div>
       ) : (
@@ -166,9 +168,9 @@ export function ClashDetails({
           {courseClashes.map(({ courseA, courseB, periodA, periodB }) => (
             <section
               key={`${courseA.id}-${courseB.id}`}
-              className="rounded-xl border border-red-500/20 bg-red-500/[0.03] p-3"
+              className="rounded-xl border border-border-ink bg-danger-surface p-3"
             >
-              <p className="mb-3 flex items-center gap-1.5 text-xs font-bold text-red-700 dark:text-red-400">
+              <p className="mb-3 flex items-center gap-1.5 text-xs font-bold text-danger-foreground">
                 <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
                 {DAY_LABELS[periodA.day] ?? periodA.day}: {periodA.start}–{periodA.end}
               </p>
@@ -180,11 +182,9 @@ export function ClashDetails({
                   >
                     <FacultyAvatar employeeId={course.employeeId} name={course.faculty} size="sm" />
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-xs font-extrabold text-text-heading">{course.code}</p>
-                      <p className="truncate text-[11px] text-muted-foreground">
-                        {course.faculty || "Faculty not listed"}
-                      </p>
-                      <p className="truncate text-[10px] font-semibold text-muted-foreground">
+                      <p className="truncate text-xs font-bold text-text-heading">{course.code}</p>
+                      <p className="truncate text-xs text-muted-foreground">{course.faculty || "Faculty not listed"}</p>
+                      <p className="truncate text-xs font-semibold text-muted-foreground">
                         {course.slots.join(" + ") || "No slot"}
                       </p>
                     </div>
@@ -192,7 +192,7 @@ export function ClashDetails({
                       type="button"
                       onClick={() => onRemoveCourse(course.id)}
                       aria-label={`Remove ${course.code} — ${course.faculty || "faculty not listed"}`}
-                      className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-red-500/20 text-red-600 transition-colors hover:bg-red-500/10 dark:text-red-400"
+                      className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border-ink text-danger-foreground transition-colors hover:bg-danger-surface dark:text-danger-foreground"
                       title={`Remove ${course.code} and its faculty choice`}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -201,7 +201,7 @@ export function ClashDetails({
                 ))}
               </div>
               {periodA.start !== periodB.start || periodA.end !== periodB.end ? (
-                <p className="mt-2 text-[10px] text-muted-foreground">
+                <p className="mt-2 text-xs text-muted-foreground">
                   {courseB.code} period: {periodB.start}–{periodB.end}
                 </p>
               ) : null}
@@ -210,14 +210,14 @@ export function ClashDetails({
           {blockedSlotClashes.map(({ course, slot }) => (
             <section
               key={`${course.id}-${slot}`}
-              className="flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/[0.03] p-3"
+              className="flex items-center gap-2 rounded-xl border border-border-ink bg-amber-500/[0.03] p-3"
             >
               <FacultyAvatar employeeId={course.employeeId} name={course.faculty} size="sm" />
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-extrabold text-text-heading">
+                <p className="text-xs font-bold text-text-heading">
                   {course.code} · blocked slot {slot}
                 </p>
-                <p className="truncate text-[11px] text-muted-foreground">
+                <p className="truncate text-xs text-muted-foreground">
                   {course.faculty || "Faculty not listed"} · {course.slots.join(" + ")}
                 </p>
               </div>
@@ -225,7 +225,7 @@ export function ClashDetails({
                 type="button"
                 onClick={() => onRemoveCourse(course.id)}
                 aria-label={`Remove ${course.code} — ${course.faculty || "faculty not listed"}`}
-                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-red-500/20 text-red-600 transition-colors hover:bg-red-500/10 dark:text-red-400"
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border-ink text-danger-foreground transition-colors hover:bg-danger-surface dark:text-danger-foreground"
                 title={`Remove ${course.code} and its faculty choice`}
               >
                 <Trash2 className="h-4 w-4" />
@@ -389,7 +389,7 @@ export function WeeklyRhythmDetails({ courses, onClose }: { courses: AddedCourse
       title="Weekly Rhythm"
       subtitle="Schedule, gaps, half-days, and faculty signals"
       icon={<Clock3 className="w-5 h-5" />}
-      accent="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:text-emerald-400"
+      accent="bg-success-surface text-success-foreground border-border-ink dark:text-success-foreground"
     >
       <div className="space-y-4">
         {vitfacEnabled && (
@@ -404,26 +404,26 @@ export function WeeklyRhythmDetails({ courses, onClose }: { courses: AddedCourse
               ].map(({ label, entry, tone }) => (
                 <div
                   key={label}
-                  className={`rounded-xl border p-3 ${tone === "emerald" ? "border-emerald-500/20 bg-emerald-500/5" : "border-amber-500/20 bg-amber-500/5"}`}
+                  className={`rounded-xl border p-3 ${tone === "emerald" ? "border-border-ink bg-success-surface" : "border-border-ink bg-warning-surface"}`}
                 >
-                  <p className="text-[10px] uppercase font-bold tracking-wide text-muted-foreground">{label}</p>
+                  <p className="text-xs uppercase font-bold tracking-wide text-muted-foreground">{label}</p>
                   {entry ? (
                     <>
                       <div className="mt-1 flex items-center gap-2">
                         <FacultyAvatar employeeId={entry.course.employeeId} name={entry.course.faculty} size="md" />
                         <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-extrabold text-text-heading">{entry.course.faculty}</p>
+                          <p className="truncate text-sm font-bold text-text-heading">{entry.course.faculty}</p>
                           <span
-                            className={`text-xs font-black ${tone === "emerald" ? "text-emerald-700 dark:text-emerald-400" : "text-amber-700 dark:text-amber-400"}`}
+                            className={`text-xs font-bold ${tone === "emerald" ? "text-success-foreground" : "text-warning-foreground"}`}
                           >
                             {entry.review.wPct}% W
                           </span>
                         </div>
                       </div>
-                      <p className="text-[10px] leading-relaxed text-muted-foreground mt-1">
+                      <p className="text-xs leading-relaxed text-muted-foreground mt-1">
                         {facultyQualitySummary(entry)}
                       </p>
-                      <p className="text-[10px] text-muted-foreground mt-1">
+                      <p className="text-xs text-muted-foreground mt-1">
                         {entry.review.reviews} student review{entry.review.reviews === 1 ? "" : "s"}
                       </p>
                     </>
@@ -445,22 +445,22 @@ export function WeeklyRhythmDetails({ courses, onClose }: { courses: AddedCourse
               <div key={day.id} className="rounded-xl border border-border-strong bg-surface p-3">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-sm font-bold text-text-heading">{day.label}</span>
-                  <span className="text-[11px] text-muted-foreground">{(day.gapMinutes / 60).toFixed(1)}h gaps</span>
+                  <span className="text-xs text-muted-foreground">{(day.gapMinutes / 60).toFixed(1)}h gaps</span>
                 </div>
-                <div className="flex flex-wrap gap-1.5 mt-2 text-[10px]">
+                <div className="flex flex-wrap gap-1.5 mt-2 text-xs">
                   <span
-                    className={`inline-flex items-center gap-1 rounded-lg px-2 py-1 ${day.morningOccupied ? "bg-amber-500/10 text-amber-700 dark:text-amber-400" : "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"}`}
+                    className={`inline-flex items-center gap-1 rounded-lg px-2 py-1 ${day.morningOccupied ? "bg-warning-surface text-warning-foreground" : "bg-success-surface text-success-foreground"}`}
                   >
                     <Sun className="w-3 h-3" /> {day.morningOccupied ? "Morning classes" : "Free morning"}
                   </span>
                   <span
-                    className={`inline-flex items-center gap-1 rounded-lg px-2 py-1 ${day.eveningOccupied ? "bg-indigo-500/10 text-indigo-700 dark:text-indigo-400" : "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"}`}
+                    className={`inline-flex items-center gap-1 rounded-lg px-2 py-1 ${day.eveningOccupied ? "bg-secondary text-secondary-foreground" : "bg-success-surface text-success-foreground"}`}
                   >
                     <Moon className="w-3 h-3" /> {day.eveningOccupied ? "Evening classes" : "Free evening"}
                   </span>
                 </div>
                 {day.classes.length > 0 && (
-                  <p className="text-[11px] text-muted-foreground mt-2">
+                  <p className="text-xs text-muted-foreground mt-2">
                     {day.classes[0].start}–{day.classes[day.classes.length - 1].end} · {day.classes.length} class period
                     {day.classes.length === 1 ? "" : "s"}
                   </p>
@@ -476,7 +476,7 @@ export function WeeklyRhythmDetails({ courses, onClose }: { courses: AddedCourse
               {freeLabels.map((label) => (
                 <span
                   key={label}
-                  className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-400"
+                  className="rounded-lg border border-border-ink bg-success-surface px-2.5 py-1 text-xs font-semibold text-success-foreground"
                 >
                   {label}
                 </span>
@@ -508,8 +508,8 @@ export function WeeklyRhythmDetails({ courses, onClose }: { courses: AddedCourse
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {stats.map((stat) => (
             <div key={stat.label} className="rounded-xl border border-border-strong bg-surface p-3">
-              <p className="text-[10px] uppercase font-bold tracking-wide text-muted-foreground">{stat.label}</p>
-              <p className="text-sm font-extrabold text-text-heading mt-1">{stat.value}</p>
+              <p className="text-xs uppercase font-bold tracking-wide text-muted-foreground">{stat.label}</p>
+              <p className="text-sm font-bold text-text-heading mt-1">{stat.value}</p>
             </div>
           ))}
         </div>
@@ -544,10 +544,10 @@ export function CourseOptionQuality({
       type="button"
       aria-pressed={selected}
       onClick={onSelect}
-      className={`w-full rounded-xl border bg-surface p-2.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
+      className={`w-full rounded-xl border bg-surface p-2.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-ink ${
         selected
-          ? "border-indigo-500/60 bg-indigo-500/5 ring-1 ring-indigo-500/20"
-          : "border-border-strong/70 hover:border-indigo-500/40 hover:bg-surface-secondary/40"
+          ? "border-border-ink bg-secondary ring-1 ring-border-ink"
+          : "border-border-strong/70 hover:border-border-ink hover:bg-surface-secondary/40"
       }`}
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -556,9 +556,9 @@ export function CourseOptionQuality({
           <span className="text-xs font-semibold text-text-heading truncate">{faculty || "Faculty not listed"}</span>
         </div>
         <span className="flex items-center gap-2">
-          <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400">{slots || "No slot"}</span>
+          <span className="text-xs font-bold text-primary">{slots || "No slot"}</span>
           <span
-            className={`text-[9px] font-bold uppercase tracking-wide ${selected ? "text-indigo-600 dark:text-indigo-400" : "text-muted-foreground"}`}
+            className={`text-xs font-bold uppercase tracking-wide ${selected ? "text-primary" : "text-muted-foreground"}`}
           >
             {selected ? "Selected" : "Select"}
           </span>
@@ -566,57 +566,55 @@ export function CourseOptionQuality({
       </div>
       <div className="flex flex-wrap items-center gap-1.5 mt-2">
         {!vitfacEnabled ? null : loading ? (
-          <span className="text-[10px] text-muted-foreground">Loading Vitfac…</span>
+          <span className="text-xs text-muted-foreground">Loading Vitfac…</span>
         ) : review && review.reviews > 0 ? (
           <>
-            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 dark:text-emerald-400">
+            <span className="inline-flex items-center gap-1 text-xs font-bold text-success-foreground">
               <Star className="w-3 h-3" />
               {review.wPct}% W · {review.reviews} reviews
             </span>
             {review.metrics && (
               <>
                 {typeof review.metrics.lecture === "number" && (
-                  <span className="text-[10px] text-muted-foreground">
+                  <span className="text-xs text-muted-foreground">
                     <BookOpen className="w-3 h-3 inline" /> {review.metrics.lecture.toFixed(1)}/5
                   </span>
                 )}
                 {typeof review.metrics.da === "number" && (
-                  <span className="text-[10px] text-muted-foreground">
+                  <span className="text-xs text-muted-foreground">
                     <FileText className="w-3 h-3 inline" /> DA {review.metrics.da.toFixed(1)}/5
                   </span>
                 )}
                 {typeof review.metrics.vibe === "number" && (
-                  <span className="text-[10px] text-muted-foreground">
+                  <span className="text-xs text-muted-foreground">
                     <Smile className="w-3 h-3 inline" /> {review.metrics.vibe.toFixed(1)}/5
                   </span>
                 )}
               </>
             )}
             {typeof review.metrics?.da === "number" && (
-              <span className="text-[10px] font-semibold text-purple-700 dark:text-purple-400">
-                DA marks {review.metrics.da.toFixed(1)}/5
-              </span>
+              <span className="text-xs font-semibold text-primary">DA marks {review.metrics.da.toFixed(1)}/5</span>
             )}
             {lore.map((item) => (
-              <span key={item.text} className="text-[10px] text-emerald-700 dark:text-emerald-400">
+              <span key={item.text} className="text-xs text-success-foreground">
                 {item.text}
               </span>
             ))}
             {cautionLore.map((item) => (
-              <span key={item.text} className="text-[10px] text-amber-700 dark:text-amber-400">
+              <span key={item.text} className="text-xs text-warning-foreground">
                 {item.text}
               </span>
             ))}
           </>
         ) : (
-          <span className="text-[10px] text-muted-foreground">No Vitfac review data</span>
+          <span className="text-xs text-muted-foreground">No Vitfac review data</span>
         )}
         {clashes.length ? (
-          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-red-600 dark:text-red-400">
+          <span className="inline-flex items-center gap-1 text-xs font-bold text-danger-foreground">
             <AlertTriangle className="w-3 h-3" /> Clash with {clashes.join(", ")}
           </span>
         ) : (
-          <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400">No timetable clashes</span>
+          <span className="text-xs font-semibold text-success-foreground">No timetable clashes</span>
         )}
       </div>
       <span className="sr-only">{courseCode}</span>

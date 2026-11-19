@@ -61,7 +61,7 @@ export function FFCSShortcutsModal({ isOpen, onClose }: { isOpen: boolean; onClo
           contentClassName="flex flex-col gap-3"
         >
           <h3 className="font-bold text-base text-text-heading flex items-center gap-2">
-            <Keyboard className="w-5 h-5 text-indigo-500" /> Keyboard Shortcuts
+            <Keyboard className="w-5 h-5 text-primary" /> Keyboard Shortcuts
           </h3>
           <p className="text-xs text-muted-foreground mb-2">
             Boost your timetable drafting speed with these global hotkeys:
@@ -74,7 +74,7 @@ export function FFCSShortcutsModal({ isOpen, onClose }: { isOpen: boolean; onClo
                   {shortcut.keys.map((k, kidx) => (
                     <kbd
                       key={kidx}
-                      className="px-2 py-1 bg-surface-secondary border border-border-strong rounded-md font-mono text-[10px] font-bold text-text-heading shadow-xs"
+                      className="px-2 py-1 bg-surface-secondary border border-border-strong rounded-md font-mono text-xs font-bold text-text-heading shadow-xs"
                     >
                       {k}
                     </kbd>

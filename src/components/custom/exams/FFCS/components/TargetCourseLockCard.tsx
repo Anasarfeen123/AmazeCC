@@ -61,10 +61,10 @@ export function TargetCourseLockCard({
     ? "border-border-strong/50 bg-surface-secondary/20 opacity-60"
     : tone === "neutral"
       ? isSelected
-        ? "border-zinc-500/50 bg-zinc-500/[0.08] shadow-sm dark:border-zinc-400/40 dark:bg-zinc-400/[0.08]"
-        : "border-zinc-200/80 bg-zinc-500/[0.025] hover:border-zinc-300 hover:bg-zinc-500/[0.06] dark:border-zinc-800 dark:bg-zinc-500/[0.04] dark:hover:border-zinc-700 dark:hover:bg-zinc-500/[0.08]"
+        ? "border-border-muted bg-surface-secondary0/[0.08] shadow-sm /[0.08]"
+        : "border-border-ink bg-surface-secondary0/[0.025] hover:border-border-ink hover:bg-surface-secondary0/[0.06] /[0.04] /[0.08]"
       : isSelected
-        ? "border-purple-500/50 bg-surface-secondary/30 shadow-sm"
+        ? "border-border-ink bg-surface-secondary/30 shadow-sm"
         : "border-transparent bg-transparent hover:border-border-strong hover:bg-surface-secondary/50";
   const uniqueSlots = Array.from(new Set(offerings.flatMap((offering) => splitSlots(offering.SLOT)))).sort();
 
@@ -120,7 +120,7 @@ export function TargetCourseLockCard({
       <label className={`flex items-start gap-3 ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}>
         <input
           type="checkbox"
-          className="mt-1 rounded bg-surface border-border-strong text-purple-500 focus:ring-purple-500/30 disabled:opacity-50"
+          className="mt-1 rounded bg-surface border-border-strong text-primary focus:ring-border-ink disabled:opacity-50"
           checked={isSelected}
           disabled={disabled}
           onChange={(event) => {
@@ -154,10 +154,10 @@ export function TargetCourseLockCard({
                         ? `In your curriculum — counts toward ${category}`
                         : "Not in your curriculum — shares a code start with a course that is (open-elective candidate)"
                     }
-                    className={`rounded-md border px-1.5 py-0.5 text-[10px] font-bold ${
+                    className={`rounded-md border px-1.5 py-0.5 text-xs font-bold ${
                       curriculumListed
-                        ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-500"
-                        : "border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                        ? "border-border-ink bg-success-surface text-success-foreground"
+                        : "border-border-ink bg-warning-surface text-warning-foreground"
                     }`}
                   >
                     {category}
@@ -189,12 +189,12 @@ export function TargetCourseLockCard({
 
       {isSelected && uniqueSlots.length > 1 && selection && (
         <div className="mt-2 space-y-2 pl-8">
-          <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+          <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
             Filter Slots (Optional)
           </div>
           {clusters.length > 0 && (
             <div className="space-y-1">
-              <div className="text-[10px] font-bold uppercase text-text-heading/70">Quick Select Slot Bundles</div>
+              <div className="text-xs font-bold uppercase text-text-heading/70">Quick Select Slot Bundles</div>
               <div className="flex flex-wrap gap-1.5">
                 {clusters.map(([cluster, value]) => {
                   const selected =
@@ -209,11 +209,11 @@ export function TargetCourseLockCard({
                         event.stopPropagation();
                         toggleSlots(value.slots);
                       }}
-                      className={`flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-bold transition-colors ${selected ? "bg-purple-500 text-white shadow-sm ring-1 ring-purple-300" : "bg-surface-secondary text-text-heading/70 hover:bg-surface-secondary/80"}`}
+                      className={`flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-bold transition-colors ${selected ? "bg-primary text-primary-foreground shadow-sm ring-1 ring-border-ink" : "bg-surface-secondary text-text-heading/70 hover:bg-surface-secondary/80"}`}
                       title={`Toggle ${cluster} bundle (${value.slots.join(", ")})`}
                     >
                       <span>{label}</span>
-                      <span className="text-[10px] font-normal opacity-80">({value.slots.join(", ")})</span>
+                      <span className="text-xs font-normal opacity-80">({value.slots.join(", ")})</span>
                     </button>
                   );
                 })}
@@ -230,7 +230,7 @@ export function TargetCourseLockCard({
                         event.stopPropagation();
                         toggleSlots(letterSlots);
                       }}
-                      className={`rounded px-2 py-1 text-xs font-bold transition-colors ${selected ? "bg-indigo-600 text-white shadow-sm" : "bg-surface-secondary/60 text-muted-foreground hover:bg-surface-secondary"}`}
+                      className={`rounded px-2 py-1 text-xs font-bold transition-colors ${selected ? "bg-primary text-primary-foreground shadow-sm" : "bg-surface-secondary/60 text-muted-foreground hover:bg-surface-secondary"}`}
                       title={`Toggle all ${letter} series (${letterSlots.join(", ")})`}
                     >
                       All {letter} Series
@@ -253,11 +253,11 @@ export function TargetCourseLockCard({
               return (
                 <label
                   key={slot}
-                  className={`flex cursor-pointer items-center gap-2 rounded-md border p-1.5 px-3 transition-colors ${checked ? "border-purple-500/30 bg-purple-500/10 text-purple-600" : "border-border-strong/50 text-muted-foreground hover:bg-surface-secondary/50"}`}
+                  className={`flex cursor-pointer items-center gap-2 rounded-md border p-1.5 px-3 transition-colors ${checked ? "border-border-ink bg-secondary text-secondary-foreground" : "border-border-strong/50 text-muted-foreground hover:bg-surface-secondary/50"}`}
                 >
                   <input
                     type="checkbox"
-                    className="h-3.5 w-3.5 rounded border-border-strong text-purple-500 focus:ring-purple-500/30"
+                    className="h-3.5 w-3.5 rounded border-border-strong text-primary focus:ring-border-ink"
                     checked={checked}
                     onChange={(event) => {
                       const nextSlots = event.target.checked
@@ -268,7 +268,7 @@ export function TargetCourseLockCard({
                   />
                   <span className="text-xs font-bold">{slot}</span>
                   <span
-                    className="inline-flex shrink-0 items-center gap-1 rounded border border-border-strong/70 bg-surface-secondary/70 px-1 py-0.2 text-[10px] font-semibold text-muted-foreground"
+                    className="inline-flex shrink-0 items-center gap-1 rounded border border-border-strong/70 bg-surface-secondary/70 px-1 py-0.2 text-xs font-semibold text-muted-foreground"
                     title={`${facultyCount} ${facultyCount === 1 ? "faculty" : "faculties"} teaching this slot`}
                   >
                     <Users className="h-2.5 w-2.5 shrink-0 text-muted-foreground/60" />

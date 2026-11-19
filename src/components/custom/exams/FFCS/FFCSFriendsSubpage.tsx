@@ -82,19 +82,19 @@ const HUB_ROWS = [
     label: "Your friends",
     subtitle: "Compare timetables and find common free slots",
     Icon: Users,
-    iconBg: "bg-indigo-500/10 text-indigo-500 border-indigo-500/20",
+    iconBg: "bg-secondary text-secondary-foreground border-border-ink",
   },
   {
     id: "groups" as const,
     label: "Groups",
     subtitle: "Bands of friends the generator can score together",
     Icon: UsersRound,
-    iconBg: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+    iconBg: "bg-success-surface text-success-foreground border-border-ink",
   },
 ] as const;
 
 const ROW_TAPPABLE =
-  "cursor-pointer active:bg-zinc-100/70 dark:active:bg-zinc-800/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500";
+  "cursor-pointer active:bg-surface-secondary dark:active:bg-zinc-800/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-ink";
 
 export interface FFCSFriendsSubpageProps {
   onClose: () => void;
@@ -290,11 +290,11 @@ export default function FFCSFriendsSubpage({
                   <ListRowText title={row.label} subtitle={row.subtitle} titleTag="h3" />
                   <div className="flex items-center gap-2 shrink-0">
                     {count !== null ? (
-                      <span className="text-sm font-black font-outfit tracking-tight leading-none text-zinc-700 dark:text-zinc-200">
+                      <span className="text-sm font-bold font-outfit tracking-tight leading-none text-text-primary">
                         {count}
                       </span>
                     ) : null}
-                    <ChevronRight className="w-4 h-4 text-zinc-400" />
+                    <ChevronRight className="w-4 h-4 text-text-muted" />
                   </div>
                 </button>
               );
@@ -330,14 +330,14 @@ export default function FFCSFriendsSubpage({
                   type="button"
                   disabled={!linkInput.trim() || isResolving}
                   onClick={() => void handleAddFromLink()}
-                  className="shrink-0 bg-pink-500 hover:bg-pink-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold px-5 py-3 rounded-xl text-sm transition-colors shadow-lg shadow-pink-500/20 flex items-center justify-center gap-2"
+                  className="shrink-0 bg-pink-500 hover:bg-pink-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold px-5 py-3 rounded-xl text-sm transition-colors shadow-brutal-sm flex items-center justify-center gap-2"
                 >
                   {isResolving ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserPlus className="w-4 h-4" />}
                   {isResolving ? "Adding…" : "Add friend"}
                 </button>
               </div>
               {addError ? (
-                <p role="alert" className="text-xs font-medium text-red-500 flex items-start gap-1.5">
+                <p role="alert" className="text-xs font-medium text-danger-foreground flex items-start gap-1.5">
                   <AlertTriangle className="w-3.5 h-3.5 mt-px shrink-0" />
                   {addError}
                 </p>
@@ -346,7 +346,7 @@ export default function FFCSFriendsSubpage({
 
             <div className="flex items-center gap-3">
               <span className="h-px flex-1 bg-border-muted dark:bg-border/70" />
-              <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">or</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">or</span>
               <span className="h-px flex-1 bg-border-muted dark:bg-border/70" />
             </div>
 
@@ -408,7 +408,7 @@ export default function FFCSFriendsSubpage({
                         }
                       }}
                       title="View Timetable"
-                      className="p-2 hover:bg-blue-500/10 text-muted-foreground hover:text-blue-500 rounded-lg transition-colors"
+                      className="p-2 hover:bg-secondary text-muted-foreground text-primary rounded-lg transition-colors"
                     >
                       <Eye className="w-4 h-4" />
                     </button>
@@ -416,7 +416,7 @@ export default function FFCSFriendsSubpage({
                       type="button"
                       onClick={() => removeFriend(f.id)}
                       title="Remove Friend"
-                      className="p-2 hover:bg-red-500/10 text-muted-foreground hover:text-red-500 rounded-lg transition-colors"
+                      className="p-2 hover:bg-danger-surface text-muted-foreground hover:text-danger-foreground rounded-lg transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -430,14 +430,14 @@ export default function FFCSFriendsSubpage({
           <div className="space-y-6">
             <div className="card-surface border border-border-strong rounded-2xl p-4 flex flex-col gap-3">
               <h3 className="text-sm font-bold text-text-heading flex items-center gap-2">
-                <UsersRound className="w-4 h-4 text-emerald-500" /> Create a group
+                <UsersRound className="w-4 h-4 text-success-foreground" /> Create a group
               </h3>
               <input
                 type="text"
                 placeholder="Group name (e.g., Gaming Squad)"
                 value={newGroupName}
                 onChange={(e) => setNewGroupName(e.target.value)}
-                className="w-full bg-surface border border-border-strong rounded-xl px-4 py-2.5 text-base sm:text-sm text-text-heading focus:outline-none focus:border-emerald-500/50 transition-colors"
+                className="w-full bg-surface border border-border-strong rounded-xl px-4 py-2.5 text-base sm:text-sm text-text-heading focus:outline-none focus:border-border-ink transition-colors"
               />
               <div className="max-h-40 overflow-y-auto custom-scrollbar border border-border-strong rounded-xl bg-surface p-2">
                 {friends.length === 0 ? (
@@ -455,7 +455,7 @@ export default function FFCSFriendsSubpage({
                           if (e.target.checked) setNewGroupFriends((prev) => [...prev, f.id]);
                           else setNewGroupFriends((prev) => prev.filter((id) => id !== f.id));
                         }}
-                        className="rounded border-border-strong text-emerald-500 focus:ring-emerald-500/30"
+                        className="rounded border-border-strong text-success-foreground focus:ring-emerald-500/30"
                       />
                       <span className="text-sm text-text-heading">{f.name}</span>
                     </label>
@@ -494,7 +494,7 @@ export default function FFCSFriendsSubpage({
                         type="button"
                         onClick={() => setFriendGroups((prev) => prev.filter((gr) => gr.id !== g.id))}
                         title="Delete Group"
-                        className="p-2 hover:bg-red-500/10 text-muted-foreground hover:text-red-500 rounded-lg transition-colors shrink-0"
+                        className="p-2 hover:bg-danger-surface text-muted-foreground hover:text-danger-foreground rounded-lg transition-colors shrink-0"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -506,7 +506,7 @@ export default function FFCSFriendsSubpage({
                         return (
                           <span
                             key={fid}
-                            className="text-[10px] bg-surface-secondary/60 border border-border-muted dark:border-border/70 px-1.5 py-0.5 rounded-full text-muted-foreground"
+                            className="text-xs bg-surface-secondary/60 border border-border-muted dark:border-border/70 px-1.5 py-0.5 rounded-[6px] text-muted-foreground"
                           >
                             {f.name}
                           </span>
@@ -573,7 +573,7 @@ export default function FFCSFriendsSubpage({
             <button
               type="button"
               onClick={handleSaveFriend}
-              className="bg-pink-500 hover:bg-pink-600 text-white px-5 py-2 rounded-lg text-sm font-bold transition-colors shadow-lg shadow-pink-500/20"
+              className="bg-pink-500 hover:bg-pink-600 text-white px-5 py-2 rounded-lg text-sm font-bold transition-colors shadow-brutal-sm"
             >
               Save Friend
             </button>

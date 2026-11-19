@@ -67,7 +67,7 @@ export function GeneratorTargetCoursesWidget({
   return (
     <section
       aria-label="Autogenerator target courses"
-      className="w-full min-w-0 overflow-hidden rounded-2xl border border-indigo-500/20 bg-surface shadow-sm"
+      className="w-full min-w-0 overflow-hidden rounded-2xl border border-border-ink bg-surface shadow-sm"
     >
       <header className="hidden border-b border-border-strong/60 bg-indigo-500/[0.035] px-4 py-4 sm:px-5 lg:block">
         <SectionHeader
@@ -76,7 +76,7 @@ export function GeneratorTargetCoursesWidget({
           count={targets.length}
           className="mb-2"
           right={
-            <span className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2 py-1 text-[10px] font-semibold text-indigo-600 dark:text-indigo-300">
+            <span className="rounded-[10px] border border-border-ink bg-secondary px-2 py-1 text-xs font-semibold text-secondary-foreground min-h-9">
               Current semester
             </span>
           }
@@ -92,14 +92,14 @@ export function GeneratorTargetCoursesWidget({
             {targets.map((target) => (
               <div
                 key={target.code}
-                className="flex items-center gap-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-sm font-medium text-purple-500"
+                className="flex items-center gap-2 rounded-lg border border-border-ink bg-secondary px-3 py-1.5 text-sm font-medium text-secondary-foreground"
               >
                 <span>{target.code}</span>
                 <button
                   type="button"
                   aria-label={`Remove ${target.code} from generator targets`}
                   onClick={() => onSelectionChange({ code: target.code, title: target.title }, null)}
-                  className="rounded-full p-0.5 transition-colors hover:bg-purple-500/20"
+                  className="rounded-full p-0.5 transition-colors hover:bg-secondary"
                 >
                   <X className="h-3.5 w-3.5" />
                 </button>

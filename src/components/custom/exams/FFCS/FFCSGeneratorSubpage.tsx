@@ -1320,7 +1320,7 @@ export function FFCSGeneratorSubpage({
         value: generatorTargets.length,
         sub: generatorTargets.length === 1 ? "course selected" : "courses selected",
         tone: "indigo",
-        icon: <Target className="h-4 w-4 text-indigo-500" />,
+        icon: <Target className="h-4 w-4 text-primary" />,
         onClick: () => selectGeneratorSection("courses"),
         ariaLabel: `Target courses: ${generatorTargets.length}. Edit target courses.`,
         focusRingClass: "focus-visible:ring-indigo-500",
@@ -1331,7 +1331,7 @@ export function FFCSGeneratorSubpage({
         value: blockedSlots.size,
         sub: "Excluded from results",
         tone: "amber",
-        icon: <X className="h-4 w-4 text-amber-500" />,
+        icon: <X className="h-4 w-4 text-warning-foreground" />,
         onClick: () => selectGeneratorSection("schedule"),
         ariaLabel: `Blocked slots: ${blockedSlots.size}. Edit schedule.`,
         focusRingClass: "focus-visible:ring-amber-500",
@@ -1398,7 +1398,7 @@ export function FFCSGeneratorSubpage({
         onClick: () => setSelectedGapDetails(generatorPreviewTimetable.metrics?.gapDetails || null),
         ariaLabel: `Total Gaps: ${formatHours(generatorPreviewTimetable.metrics?.gaps ?? 0)} hours. View gap details.`,
         focusRingClass: "focus-visible:ring-amber-500",
-        className: "cursor-pointer hover:border-amber-500/40",
+        className: "cursor-pointer hover:border-border-ink",
       },
       {
         id: "block-dashes",
@@ -1431,7 +1431,7 @@ export function FFCSGeneratorSubpage({
     <span className="inline-flex items-center gap-2.5 flex-wrap">
       <span>Preview: {generatorPreviewTimetable.name}</span>
       {generatorPreviewTimetable.variants && generatorPreviewTimetable.variants.length > 1 && (
-        <span className="text-xs bg-amber-500/10 text-amber-500 px-2.5 py-0.5 rounded-full border border-amber-500/20 font-medium tracking-normal align-middle">
+        <span className="text-xs bg-warning-surface text-warning-foreground px-2.5 py-0.5 rounded-[6px] border border-border-ink font-medium tracking-normal align-middle">
           {generatorPreviewTimetable.variants.length} Faculty Variants
         </span>
       )}
@@ -1523,7 +1523,7 @@ export function FFCSGeneratorSubpage({
         }}
         aria-label="Discard all generated timetables"
         title="Discard all"
-        className="min-h-10 min-w-10 sm:min-w-0 flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-2 text-xs font-bold text-muted-foreground hover:text-red-500 rounded-xl transition-colors cursor-pointer"
+        className="min-h-10 min-w-10 sm:min-w-0 flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-2 text-xs font-bold text-muted-foreground hover:text-danger-foreground rounded-xl transition-colors cursor-pointer"
       >
         <Trash2 className="w-4 h-4" />
         <span className="hidden sm:inline">Discard All</span>
@@ -1546,7 +1546,7 @@ export function FFCSGeneratorSubpage({
         <button
           type="button"
           onClick={() => setIsReviewing(true)}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 text-xs sm:text-sm font-bold transition-all cursor-pointer"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border-ink bg-warning-surface hover:bg-warning-surface text-warning-foreground text-xs sm:text-sm font-bold transition-all cursor-pointer"
         >
           Results ({stagedTimetables.length})
         </button>
@@ -1555,7 +1555,7 @@ export function FFCSGeneratorSubpage({
         <button
           type="button"
           onClick={generation.cancel}
-          className="flex items-center gap-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 text-xs sm:text-sm font-bold py-2 px-3 rounded-xl border border-red-500/20 transition-all cursor-pointer"
+          className="flex items-center gap-1.5 bg-danger-surface hover:bg-danger-surface text-danger-foreground text-xs sm:text-sm font-bold py-2 px-3 rounded-xl border border-border-ink transition-all cursor-pointer"
         >
           <X className="w-3.5 h-3.5" /> Stop
         </button>
@@ -1564,7 +1564,7 @@ export function FFCSGeneratorSubpage({
         type="button"
         onClick={generateTimetables}
         disabled={isGenerating || generatorTargets.length === 0}
-        className={`flex min-h-11 items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs sm:text-sm font-bold py-2 px-4 rounded-xl transition-all cursor-pointer ${generatorViewMode === "modern" ? "hidden lg:flex bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-600/20 active:scale-95 font-outfit" : "bg-amber-500 hover:bg-amber-600 shadow-md hover:shadow-amber-500/25"}`}
+        className={`flex min-h-11 items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground text-xs sm:text-sm font-bold py-2 px-4 rounded-xl transition-all cursor-pointer ${generatorViewMode === "modern" ? "hidden lg:flex bg-primary hover:brightness-110 shadow-brutal-sm border-2 border-border-ink font-outfit" : "bg-amber-500 hover:bg-amber-600 shadow-brutal-sm border-2 border-border-ink "}`}
       >
         {isGenerating ? (
           <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -1594,10 +1594,10 @@ export function FFCSGeneratorSubpage({
         >
           {isGenerating && (
             <div
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-medium"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border-ink bg-warning-surface text-warning-foreground text-xs font-medium"
               aria-live="polite"
             >
-              <div className="w-3.5 h-3.5 border-2 border-amber-500/30 border-t-amber-500 rounded-full animate-spin shrink-0" />
+              <div className="w-3.5 h-3.5 border-2 border-border-ink border-t-amber-500 rounded-full animate-spin shrink-0" />
               <span>
                 {generation.progress
                   ? `${generation.progress.found} conflict-free weeks found, ${generation.progress.accepted} usable…`
@@ -1608,7 +1608,7 @@ export function FFCSGeneratorSubpage({
 
           {(error || successMsg) && (
             <div
-              className={`z-10 flex items-center justify-between gap-2 rounded-xl border px-4 py-3 text-sm font-medium ${error ? "border-red-500/20 bg-red-500/10 text-red-500" : "border-green-500/20 bg-green-500/10 text-green-500"}`}
+              className={`z-10 flex items-center justify-between gap-2 rounded-xl border px-4 py-3 text-sm font-medium ${error ? "border-border-ink bg-danger-surface text-danger-foreground" : "border-border-ink bg-success-surface text-success-foreground"}`}
             >
               <div className="flex items-center gap-2">
                 {error ? <AlertTriangle className="w-4 h-4 shrink-0" /> : <Info className="w-4 h-4 shrink-0" />}
@@ -1618,7 +1618,7 @@ export function FFCSGeneratorSubpage({
                 <button
                   type="button"
                   onClick={() => setError(null)}
-                  className="text-red-500 hover:text-red-700 p-1 cursor-pointer"
+                  className="text-danger-foreground hover:text-danger-foreground p-1 cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -1627,7 +1627,7 @@ export function FFCSGeneratorSubpage({
                 <button
                   type="button"
                   onClick={() => setSuccessMsg(null)}
-                  className="text-green-500 hover:text-green-700 p-1 cursor-pointer"
+                  className="text-success-foreground hover:text-success-foreground p-1 cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -1658,7 +1658,7 @@ export function FFCSGeneratorSubpage({
                       <div className="sticky top-4 overflow-hidden rounded-2xl border border-border-strong bg-surface shadow-sm">
                         <div className="border-b border-border-strong px-4 py-3">
                           <h2 className="text-sm font-bold text-text-heading">Timetable options</h2>
-                          <p className="mt-0.5 text-[11px] text-muted-foreground">
+                          <p className="mt-0.5 text-xs text-muted-foreground">
                             Choose a shape to compare its weekly rhythm.
                           </p>
                         </div>
@@ -1693,19 +1693,19 @@ export function FFCSGeneratorSubpage({
                                 }}
                                 className={`w-full rounded-xl border p-3 text-left transition-colors ${
                                   isCurrent
-                                    ? "border-indigo-500/60 bg-indigo-500/10"
-                                    : "border-border-strong/60 bg-surface-secondary/20 hover:border-indigo-500/40"
+                                    ? "border-border-ink bg-secondary"
+                                    : "border-border-strong/60 bg-surface-secondary/20 hover:border-border-ink"
                                 }`}
                               >
                                 <div className="flex items-center justify-between gap-2">
                                   <span className="text-xs font-bold text-text-heading">{option.name}</span>
                                   {option.rankingScore !== undefined && (
-                                    <span className="text-[10px] font-semibold text-indigo-600 dark:text-indigo-300">
+                                    <span className="text-xs font-semibold text-primary">
                                       {option.rankingScore.toFixed(0)} pts
                                     </span>
                                   )}
                                 </div>
-                                <div className="mt-2 flex flex-wrap gap-1.5 text-[10px]">
+                                <div className="mt-2 flex flex-wrap gap-1.5 text-xs">
                                   <span className="rounded-md bg-surface px-1.5 py-1 text-text-secondary">
                                     {optionMetrics.halfDays} free half-days
                                   </span>
@@ -1722,7 +1722,7 @@ export function FFCSGeneratorSubpage({
                                     </span>
                                   )}
                                   {option.facultySummary?.averageWPct != null && (
-                                    <span className="rounded-md bg-indigo-500/10 px-1.5 py-1 text-indigo-700 dark:text-indigo-300">
+                                    <span className="rounded-md bg-secondary px-1.5 py-1 text-secondary-foreground">
                                       {option.facultySummary.averageWPct.toFixed(0)}% W ·{" "}
                                       {option.facultySummary.ratedFacultyCount}/
                                       {option.facultySummary.totalFacultyCount} rated
@@ -1759,7 +1759,7 @@ export function FFCSGeneratorSubpage({
                   />
 
                   {generatorPreviewTimetable.rankingScore !== undefined && (
-                    <section className="rounded-2xl border border-indigo-500/20 bg-indigo-500/5 p-4 md:p-5 space-y-4">
+                    <section className="rounded-2xl border border-border-ink bg-secondary p-4 md:p-5 space-y-4">
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <div>
                           <h2 className="font-bold text-text-heading">Why this timetable ranks here</h2>
@@ -1769,7 +1769,7 @@ export function FFCSGeneratorSubpage({
                             review coverage.
                           </p>
                         </div>
-                        <span className="rounded-lg border border-indigo-500/20 bg-indigo-500/10 px-3 py-1.5 text-sm font-bold text-indigo-600 dark:text-indigo-300">
+                        <span className="rounded-lg border border-border-ink bg-secondary px-3 py-1.5 text-sm font-bold text-secondary-foreground">
                           {generatorPreviewTimetable.facultySummary?.averageWPct == null
                             ? "No faculty reviews"
                             : `Avg ${generatorPreviewTimetable.facultySummary.averageWPct.toFixed(1)}% W`}
@@ -1778,7 +1778,7 @@ export function FFCSGeneratorSubpage({
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                         {Object.entries(generatorPreviewTimetable.rankingBreakdown ?? {}).map(([key, points]) => (
                           <div key={key} className="rounded-xl bg-surface/80 border border-border-strong/60 px-3 py-2">
-                            <span className="block text-[10px] uppercase tracking-wide text-muted-foreground">
+                            <span className="block text-xs uppercase tracking-wide text-muted-foreground">
                               {key in RANKING_FACTOR_META ? RANKING_FACTOR_META[key as RankingFactor].label : key}
                             </span>
                             <span className="font-bold text-text-heading">{points.toFixed(1)} pts</span>
@@ -1843,16 +1843,14 @@ export function FFCSGeneratorSubpage({
                                     {entry.rating.reviews} reviews
                                   </span>
                                 ) : (
-                                  <span className="text-amber-600 dark:text-amber-400">
-                                    Unrated · no faculty score applied
-                                  </span>
+                                  <span className="text-warning-foreground">Unrated · no faculty score applied</span>
                                 )}
                               </div>
                             ))}
                           </div>
                         </>
                       )}
-                      <p className="text-[11px] text-muted-foreground">
+                      <p className="text-xs text-muted-foreground">
                         Ranking priority:{" "}
                         {enabledFactors.length
                           ? enabledFactors.map((factor) => RANKING_FACTOR_META[factor].label).join(" → ")
@@ -1878,7 +1876,7 @@ export function FFCSGeneratorSubpage({
                         <div className="flex flex-wrap items-center justify-between gap-4 mb-4 min-w-[600px]">
                           <h2 className="text-xl font-bold text-text-heading flex flex-wrap items-center gap-2 w-full sm:w-auto">
                             Selected Courses
-                            <span className="bg-blue-500/20 text-blue-400 text-xs py-1 px-2.5 rounded-full border border-blue-500/20 whitespace-nowrap font-normal">
+                            <span className="bg-secondary text-secondary-foreground text-xs py-1 px-2.5 rounded-[10px] border border-border-ink whitespace-nowrap font-normal min-h-9">
                               Total Credits:{" "}
                               {getGroupedCourses(generatorPreviewTimetable.courses).reduce(
                                 (sum, c) => sum + parseFloat(c.credits || "0"),
@@ -2018,14 +2016,14 @@ export function FFCSGeneratorSubpage({
                                               setSlotSwapRow({ code: c.code, title: c.title, ids: c.ids ?? [c.id] })
                                             }
                                             title={facultyCountTitle}
-                                            className="flex items-center gap-1.5 text-sm text-text-heading/80 hover:text-amber-500 transition-colors cursor-pointer max-w-full"
+                                            className="flex items-center gap-1.5 text-sm text-text-heading/80 hover:text-warning-foreground transition-colors cursor-pointer max-w-full"
                                           >
                                             <span className="truncate">{c.faculty}</span>
                                             <span
-                                              className="inline-flex items-center gap-1 text-[11px] font-semibold px-1.5 py-0.5 rounded-md bg-surface-secondary/70 border border-border-strong/70 text-muted-foreground group-hover:text-amber-500 group-hover:border-amber-500/40 transition-colors shrink-0"
+                                              className="inline-flex items-center gap-1 text-xs font-semibold px-1.5 py-0.5 rounded-md bg-surface-secondary/70 border border-border-strong/70 text-muted-foreground group-hover:text-warning-foreground group-hover:border-border-ink transition-colors shrink-0"
                                               title={facultyCountTitle}
                                             >
-                                              <Users className="w-3.5 h-3.5 text-muted-foreground/60 group-hover:text-amber-500 shrink-0" />
+                                              <Users className="w-3.5 h-3.5 text-muted-foreground/60 group-hover:text-warning-foreground shrink-0" />
                                               <span>{facultyCountDisplay}</span>
                                             </span>
                                           </button>
@@ -2049,7 +2047,7 @@ export function FFCSGeneratorSubpage({
                                         {c.slots.map((s: string) => (
                                           <span
                                             key={s}
-                                            className="bg-accent/50 border border-border-strong text-text-heading/80 text-[10px] px-1.5 py-0.5 rounded-md"
+                                            className="bg-accent/50 border border-border-strong text-text-heading/80 text-xs px-1.5 py-0.5 rounded-md"
                                           >
                                             {s}
                                           </span>
@@ -2092,17 +2090,17 @@ export function FFCSGeneratorSubpage({
                             {selectedDashDetails.map((dash, i) => (
                               <div
                                 key={i}
-                                className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 flex flex-col gap-2"
+                                className="bg-danger-surface border border-border-ink rounded-xl p-3 flex flex-col gap-2"
                               >
-                                <div className="flex justify-between items-center border-b border-red-500/10 pb-2 mb-1">
-                                  <span className="font-bold text-red-400 text-sm">{dash.day}</span>
-                                  <span className="text-xs font-semibold bg-red-500/20 text-red-300 px-2 py-0.5 rounded-full">
+                                <div className="flex justify-between items-center border-b border-border-ink pb-2 mb-1">
+                                  <span className="font-bold text-danger-foreground text-sm">{dash.day}</span>
+                                  <span className="text-xs font-semibold bg-danger-surface text-danger-foreground px-2 py-0.5 rounded-[6px]">
                                     {dash.fromTime} - {dash.toTime}
                                   </span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                   <div className="flex-1 flex flex-col overflow-hidden">
-                                    <span className="text-[10px] text-red-500/70 font-bold uppercase tracking-wider">
+                                    <span className="text-xs text-danger-foreground font-bold uppercase tracking-wider">
                                       From {dash.fromBlock}
                                     </span>
                                     <span
@@ -2112,9 +2110,9 @@ export function FFCSGeneratorSubpage({
                                       {dash.fromClass}
                                     </span>
                                   </div>
-                                  <div className="text-red-500/50"></div>
+                                  <div className="text-danger-foreground"></div>
                                   <div className="flex-1 flex flex-col text-right overflow-hidden">
-                                    <span className="text-[10px] text-red-500/70 font-bold uppercase tracking-wider">
+                                    <span className="text-xs text-danger-foreground font-bold uppercase tracking-wider">
                                       To {dash.toBlock}
                                     </span>
                                     <span
@@ -2148,8 +2146,8 @@ export function FFCSGeneratorSubpage({
                       <div>
                         <p className="text-sm text-muted-foreground mb-4">
                           We have highlighted the empty gap slots in{" "}
-                          <span className="text-yellow-500 font-bold">yellow</span> on the unified schedule grid behind
-                          this modal!
+                          <span className="text-warning-foreground font-bold">yellow</span> on the unified schedule grid
+                          behind this modal!
                         </p>
                         {selectedGapDetails.length === 0 ? (
                           <p className="text-muted-foreground text-center py-4">No gaps in this timetable. Perfect!</p>
@@ -2168,38 +2166,35 @@ export function FFCSGeneratorSubpage({
                                 return (
                                   <div
                                     key={day}
-                                    className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl overflow-hidden"
+                                    className="bg-warning-surface border border-border-ink rounded-xl overflow-hidden"
                                   >
-                                    <div className="px-4 py-2.5 bg-yellow-500/5 border-b border-yellow-500/20 flex items-center justify-between">
-                                      <span className="font-bold text-yellow-500 uppercase">{dayName}</span>
-                                      <span className="text-xs font-bold bg-yellow-500/20 text-yellow-500 px-2 py-0.5 rounded-full">
+                                    <div className="px-4 py-2.5 bg-warning-surface border-b border-border-ink flex items-center justify-between">
+                                      <span className="font-bold text-warning-foreground uppercase">{dayName}</span>
+                                      <span className="text-xs font-bold bg-warning-surface text-warning-foreground px-2 py-0.5 rounded-[6px]">
                                         {gaps.length} gap{gaps.length > 1 ? "s" : ""} · {dayTotalMins} min total
                                       </span>
                                     </div>
                                     <div className="p-3 flex flex-col gap-2">
                                       {gaps.map((gap, i) => (
-                                        <div
-                                          key={i}
-                                          className="bg-surface/50 rounded-lg p-3 border border-yellow-500/10"
-                                        >
+                                        <div key={i} className="bg-surface/50 rounded-lg p-3 border border-border-ink">
                                           <div className="flex items-center justify-between mb-2">
-                                            <span className="text-xs font-bold text-yellow-500/80 bg-yellow-500/10 px-2 py-0.5 rounded-full">
+                                            <span className="text-xs font-bold text-warning-foreground bg-warning-surface px-2 py-0.5 rounded-[6px]">
                                               {gap.durationMins} min gap
                                             </span>
-                                            <span className="text-[10px] text-muted-foreground font-medium">
+                                            <span className="text-xs text-muted-foreground font-medium">
                                               {gap.fromTime} – {gap.toTime}
                                             </span>
                                           </div>
                                           <div className="flex items-center gap-2 text-xs">
                                             <div className="flex-1 truncate">
-                                              <span className="text-muted-foreground block text-[10px]">From</span>
+                                              <span className="text-muted-foreground block text-xs">From</span>
                                               <span className="text-text-heading font-medium" title={gap.fromClass}>
                                                 {gap.fromClass}
                                               </span>
                                             </div>
-                                            <div className="text-yellow-500 shrink-0">→</div>
+                                            <div className="text-warning-foreground shrink-0">→</div>
                                             <div className="flex-1 truncate text-right">
-                                              <span className="text-muted-foreground block text-[10px]">To</span>
+                                              <span className="text-muted-foreground block text-xs">To</span>
                                               <span className="text-text-heading font-medium" title={gap.toClass}>
                                                 {gap.toClass}
                                               </span>
@@ -2313,7 +2308,7 @@ export function FFCSGeneratorSubpage({
                     </p>
                     <button
                       onClick={() => setResultFilters(DEFAULT_RESULT_FILTERS)}
-                      className="mt-3 px-4 py-2 text-xs font-bold text-indigo-400 hover:text-indigo-300 rounded-xl border border-indigo-500/30 transition-colors"
+                      className="mt-3 px-4 py-2 text-xs font-bold text-primary hover:text-primary rounded-xl border border-border-ink transition-colors"
                     >
                       Clear filters
                     </button>
@@ -2347,13 +2342,13 @@ export function FFCSGeneratorSubpage({
 
                 {/* Floating Compare Bar */}
                 {selectedTimetablesToCompare.length > 0 && (
-                  <div className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+2.5rem)] left-1/2 -translate-x-1/2 z-[250] bg-surface border-2 border-purple-500 rounded-full px-6 py-3 shadow-2xl flex items-center gap-4 animate-in slide-in-from-bottom-10 fade-in duration-300">
+                  <div className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+2.5rem)] left-1/2 -translate-x-1/2 z-[250] bg-surface border-2 border-border-ink rounded-[10px] px-6 py-3 shadow-2xl flex items-center gap-4 animate-in slide-in- fade-in duration-300 min-h-9">
                     <span className="text-sm font-semibold text-text-heading">
                       {selectedTimetablesToCompare.length} selected to compare (Max 3)
                     </span>
                     <button
                       onClick={() => setIsCompareModalOpen(true)}
-                      className="bg-purple-500 hover:bg-purple-600 text-white px-5 py-2 rounded-full text-sm font-bold transition-colors shadow-[0_0_15px_rgba(168,85,247,0.4)] flex items-center gap-2"
+                      className="bg-primary hover:brightness-110 text-primary-foreground px-5 py-2 rounded-[10px] text-sm font-bold transition-colors flex items-center gap-2 min-h-9"
                     >
                       Compare Options
                     </button>
@@ -2385,25 +2380,22 @@ export function FFCSGeneratorSubpage({
                             // Per-tone tile + active tint, same recipe as the
                             // target-course menu entries below.
                             const tileClass = {
-                              indigo:
-                                "bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border-indigo-500/20",
-                              violet:
-                                "bg-violet-500/10 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400 border-violet-500/20",
+                              indigo: "bg-secondary dark:bg-secondary text-secondary-foreground border-border-ink",
+                              violet: "bg-secondary dark:bg-secondary text-secondary-foreground border-border-ink",
                               cyan: "bg-cyan-500/10 dark:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border-cyan-500/20",
-                              amber:
-                                "bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/20",
+                              amber: "bg-warning-surface text-warning-foreground border-border-ink",
                               pink: "bg-pink-500/10 dark:bg-pink-500/20 text-pink-600 dark:text-pink-400 border-pink-500/20",
                             }[tone];
                             const activeClass = {
-                              indigo: "bg-indigo-500/10 text-indigo-700 dark:text-indigo-300",
-                              violet: "bg-violet-500/10 text-violet-700 dark:text-violet-300",
+                              indigo: "bg-secondary text-secondary-foreground",
+                              violet: "bg-secondary text-secondary-foreground",
                               cyan: "bg-cyan-500/10 text-cyan-700 dark:text-cyan-300",
-                              amber: "bg-amber-500/10 text-amber-700 dark:text-amber-300",
+                              amber: "bg-warning-surface text-warning-foreground",
                               pink: "bg-pink-500/10 text-pink-700 dark:text-pink-300",
                             }[tone];
                             const activeTickClass = {
-                              indigo: "bg-indigo-500",
-                              violet: "bg-violet-500",
+                              indigo: "bg-primary",
+                              violet: "bg-primary",
                               cyan: "bg-cyan-500",
                               amber: "bg-amber-500",
                               pink: "bg-pink-500",
@@ -2434,7 +2426,7 @@ export function FFCSGeneratorSubpage({
                                   selectGeneratorSection(next.id);
                                   document.getElementById(`generator-tab-${next.id}`)?.focus();
                                 }}
-                                className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500 ${isActive ? `${activeClass} text-text-heading` : "text-text-secondary hover:bg-surface-secondary/60 hover:text-text-heading"}`}
+                                className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-ink ${isActive ? `${activeClass} text-text-heading` : "text-text-secondary hover:bg-surface-secondary/60 hover:text-text-heading"}`}
                               >
                                 <span
                                   className={`w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 ${tileClass}`}
@@ -2462,7 +2454,7 @@ export function FFCSGeneratorSubpage({
                     <section aria-labelledby="generator-views-heading" className="space-y-2">
                       <h3
                         id="generator-views-heading"
-                        className="px-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground"
+                        className="px-1 text-xs font-bold uppercase tracking-wider text-muted-foreground"
                       >
                         Views
                       </h3>
@@ -2470,9 +2462,9 @@ export function FFCSGeneratorSubpage({
                         <button
                           type="button"
                           onClick={() => setIsViewModeModalOpen(true)}
-                          className="w-full flex items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500"
+                          className="w-full flex items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-ink"
                         >
-                          <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border-indigo-500/20">
+                          <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-secondary dark:bg-secondary text-secondary-foreground border-border-ink">
                             <PanelsTopLeft className="w-4 h-4" />
                           </span>
                           <ListRowText title="Switch Generator View" titleTag="span" subtitle={generatorViewLabel} />
@@ -2484,7 +2476,7 @@ export function FFCSGeneratorSubpage({
                       <section aria-labelledby="generator-focused-courses-heading" className="space-y-2">
                         <h3
                           id="generator-focused-courses-heading"
-                          className="px-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground"
+                          className="px-1 text-xs font-bold uppercase tracking-wider text-muted-foreground"
                         >
                           Focused courses
                         </h3>
@@ -2497,17 +2489,17 @@ export function FFCSGeneratorSubpage({
                               aria-current={activeLockerCode === t.code ? "page" : undefined}
                               aria-controls="generator-active-panel"
                               onClick={() => selectGeneratorCourse(t.code)}
-                              className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500 ${activeLockerCode === t.code ? "bg-amber-500/10 text-amber-600 dark:text-amber-400" : "text-text-secondary hover:text-text-heading"}`}
+                              className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-ink ${activeLockerCode === t.code ? "bg-warning-surface text-warning-foreground" : "text-text-secondary hover:text-text-heading"}`}
                             >
-                              <span className="w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/20 text-[10px] font-bold">
+                              <span className="w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 bg-warning-surface text-warning-foreground border-border-ink text-xs font-bold">
                                 {t.code.slice(0, 2)}
                               </span>
                               <span className="min-w-0 flex-1">
                                 <span className="block truncate text-xs font-semibold">{t.code}</span>
-                                <span className="block truncate text-[10px] text-muted-foreground" title={t.title}>
+                                <span className="block truncate text-xs text-muted-foreground" title={t.title}>
                                   {t.title}
                                 </span>
-                                <span className="hidden truncate text-[10px] text-muted-foreground/70 lg:block">
+                                <span className="hidden truncate text-xs text-muted-foreground/70 lg:block">
                                   {t.offerings?.length
                                     ? `${t.offerings.length} offering${t.offerings.length === 1 ? "" : "s"}`
                                     : "any faculty/slot"}
@@ -2515,7 +2507,7 @@ export function FFCSGeneratorSubpage({
                               </span>
                               {facultyPriority[t.code]?.length ? (
                                 <span
-                                  className="hidden h-5 shrink-0 items-center gap-1 rounded bg-indigo-500/15 px-1.5 text-[10px] font-bold text-indigo-500 lg:flex"
+                                  className="hidden h-5 shrink-0 items-center gap-1 rounded bg-secondary px-1.5 text-xs font-bold text-secondary-foreground lg:flex"
                                   title={`Faculty priority set: ${facultyPriority[t.code].join(" > ")}`}
                                 >
                                   <ListOrdered className="h-3 w-3" />
@@ -2540,7 +2532,7 @@ export function FFCSGeneratorSubpage({
                   <section aria-labelledby="generator-classic-views-heading" className="col-span-full space-y-2">
                     <h3
                       id="generator-classic-views-heading"
-                      className="px-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground"
+                      className="px-1 text-xs font-bold uppercase tracking-wider text-muted-foreground"
                     >
                       Views
                     </h3>
@@ -2548,9 +2540,9 @@ export function FFCSGeneratorSubpage({
                       <button
                         type="button"
                         onClick={() => setIsViewModeModalOpen(true)}
-                        className="w-full flex items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500"
+                        className="w-full flex items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-surface-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-ink"
                       >
-                        <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/20">
+                        <span className="w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 bg-warning-surface text-warning-foreground border-border-ink">
                           <PanelsTopLeft className="w-4 h-4" />
                         </span>
                         <ListRowText title="Switch Generator View" titleTag="span" subtitle={generatorViewLabel} />
@@ -2605,7 +2597,7 @@ export function FFCSGeneratorSubpage({
                                 }
                                 className={`flex min-h-11 items-center gap-1.5 rounded-xl border px-3 text-xs font-semibold transition-colors ${
                                   facultyPriority[lkCourse.code]?.length
-                                    ? "border-indigo-500/40 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20"
+                                    ? "border-border-ink bg-secondary text-secondary-foreground hover:bg-secondary"
                                     : "border-border-strong text-text-secondary hover:text-text-heading hover:bg-surface-secondary/60"
                                 }`}
                                 title="Rank this course's faculties, best first — generation searches them in this order"
@@ -2684,7 +2676,7 @@ export function FFCSGeneratorSubpage({
                         <div className="flex justify-between items-start mb-4">
                           <div>
                             <h3 className="font-semibold text-lg mb-2 text-text-heading flex items-center gap-2">
-                              <span className="bg-amber-500/10 text-amber-500 w-7 h-7 rounded-full flex items-center justify-center text-sm">
+                              <span className="bg-warning-surface text-warning-foreground w-7 h-7 rounded-full flex items-center justify-center text-sm">
                                 1
                               </span>
                               Target Courses
@@ -2697,21 +2689,21 @@ export function FFCSGeneratorSubpage({
 
                         {generatorTargets.length > 0 && (
                           <div className="mb-4 space-y-2">
-                            <div className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+                            <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                               Locked target courses
                             </div>
                             <div className="flex flex-col gap-2">
                               {generatorTargets.map((t) => (
                                 <div
                                   key={t.code}
-                                  className="flex items-center justify-between gap-2 rounded-xl border border-amber-500/30 bg-amber-500/5 px-3 py-2"
+                                  className="flex items-center justify-between gap-2 rounded-xl border border-border-ink bg-warning-surface px-3 py-2"
                                 >
                                   <div className="min-w-0">
                                     <div className="text-sm font-bold text-text-heading truncate">{t.code}</div>
-                                    <div className="text-[11px] text-muted-foreground truncate">{t.title}</div>
+                                    <div className="text-xs text-muted-foreground truncate">{t.title}</div>
                                   </div>
                                   <div className="flex items-center gap-2 shrink-0">
-                                    <span className="text-[10px] font-semibold text-amber-600 dark:text-amber-400">
+                                    <span className="text-xs font-semibold text-warning-foreground">
                                       {t.offerings?.length
                                         ? `${t.offerings.length} offering${t.offerings.length === 1 ? "" : "s"}`
                                         : "any"}
@@ -2719,14 +2711,14 @@ export function FFCSGeneratorSubpage({
                                     <button
                                       type="button"
                                       onClick={() => setActiveLockerCode(t.code)}
-                                      className="text-xs font-semibold text-amber-600 hover:text-amber-700 dark:text-amber-400 hover:underline"
+                                      className="text-xs font-semibold text-warning-foreground hover:text-warning-foreground hover:underline"
                                     >
                                       Edit
                                     </button>
                                     <button
                                       type="button"
                                       onClick={() => removeGeneratorTarget(t.code)}
-                                      className="text-xs text-muted-foreground hover:text-red-500"
+                                      className="text-xs text-muted-foreground hover:text-danger-foreground"
                                       aria-label={`Remove ${t.code}`}
                                     >
                                       ✕
@@ -2746,7 +2738,7 @@ export function FFCSGeneratorSubpage({
                         />
 
                         <div className="flex flex-wrap items-center gap-1.5 mb-3">
-                          <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mr-1">
+                          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground mr-1">
                             Group by
                           </span>
                           {(
@@ -2766,7 +2758,7 @@ export function FFCSGeneratorSubpage({
                               {opt.label}
                             </button>
                           ))}
-                          <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground ml-2 mr-1">
+                          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-2 mr-1">
                             Sort
                           </span>
                           {(
@@ -2782,7 +2774,7 @@ export function FFCSGeneratorSubpage({
                               type="button"
                               aria-pressed={generatorCourseSortBy === opt.id}
                               onClick={() => setGeneratorCourseSortBy(opt.id)}
-                              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors ${generatorCourseSortBy === opt.id ? "bg-indigo-500 text-white shadow-sm" : "bg-surface-secondary hover:bg-surface-secondary/80 text-text-heading/70"}`}
+                              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors ${generatorCourseSortBy === opt.id ? "bg-primary text-primary-foreground shadow-sm" : "bg-surface-secondary hover:bg-surface-secondary/80 text-text-heading/70"}`}
                             >
                               {opt.label}
                             </button>
@@ -2799,7 +2791,7 @@ export function FFCSGeneratorSubpage({
                           {generatorCourseGroups.map((group) => (
                             <div key={group.label ?? "all"} className="flex flex-col gap-2">
                               {group.label && (
-                                <div className="sticky top-0 z-10 bg-surface-secondary/95 backdrop-blur px-2 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                                <div className="sticky top-0 z-10 bg-surface-secondary/95 px-2 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider text-muted-foreground">
                                   {group.label}
                                 </div>
                               )}
@@ -2810,7 +2802,7 @@ export function FFCSGeneratorSubpage({
                                 return (
                                   <div
                                     key={c.code}
-                                    className={`rounded-xl border transition-colors ${isSelected ? "bg-amber-500/5 border-amber-500/50 shadow-sm" : "bg-surface border-border-strong hover:border-amber-500/30 hover:bg-surface-secondary/40"}`}
+                                    className={`rounded-xl border transition-colors ${isSelected ? "bg-warning-surface border-border-ink shadow-sm" : "bg-surface border-border-strong hover:border-border-ink hover:bg-surface-secondary/40"}`}
                                   >
                                     <label
                                       className="flex items-center gap-3 p-3 cursor-pointer"
@@ -2854,7 +2846,7 @@ export function FFCSGeneratorSubpage({
                                         }}
                                       />
                                       <span
-                                        className={`shrink-0 w-5 h-5 rounded border flex items-center justify-center transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-amber-500/40 ${isSelected ? "bg-amber-500 border-amber-500 text-white" : "bg-surface border-border-strong text-transparent"}`}
+                                        className={`shrink-0 w-5 h-5 rounded border flex items-center justify-center transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-amber-500/40 ${isSelected ? "bg-amber-500 border-border-ink text-white" : "bg-surface border-border-strong text-transparent"}`}
                                       >
                                         <Check className="w-3.5 h-3.5" strokeWidth={3} />
                                       </span>
@@ -2866,7 +2858,7 @@ export function FFCSGeneratorSubpage({
                                         <span className="text-xs text-muted-foreground line-clamp-1">{c.title}</span>
                                       </span>
                                       {isSelected && (
-                                        <span className="text-[11px] font-semibold text-amber-600 dark:text-amber-400 shrink-0 hidden sm:inline">
+                                        <span className="text-xs font-semibold text-warning-foreground shrink-0 hidden sm:inline">
                                           {activeLockerCode === c.code ? "Editing…" : "Open ›"}
                                         </span>
                                       )}
@@ -2877,12 +2869,12 @@ export function FFCSGeneratorSubpage({
                                         <button
                                           type="button"
                                           onClick={() => setActiveLockerCode(c.code)}
-                                          className="text-xs font-semibold text-amber-600 hover:text-amber-700 dark:text-amber-400 hover:underline"
+                                          className="text-xs font-semibold text-warning-foreground hover:text-warning-foreground hover:underline"
                                         >
                                           Edit faculty &amp; slots
                                         </button>
                                         {sel.offerings && sel.offerings.length > 0 && (
-                                          <span className="text-xs text-amber-500 font-medium">
+                                          <span className="text-xs text-warning-foreground font-medium">
                                             Filtering by {sel.offerings.length} offering
                                             {sel.offerings.length === 1 ? "" : "s"}
                                           </span>
@@ -2900,12 +2892,12 @@ export function FFCSGeneratorSubpage({
                             </div>
                           )}
                         </div>
-                        <div className="mt-4 flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5 text-sm bg-amber-500/10 text-amber-600 dark:text-amber-400 py-2.5 px-4 rounded-xl w-fit max-w-full min-w-0 border border-amber-500/20 leading-relaxed">
+                        <div className="mt-4 flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5 text-sm bg-warning-surface text-warning-foreground py-2.5 px-4 rounded-xl w-fit max-w-full min-w-0 border border-border-ink leading-relaxed">
                           <span className="font-bold whitespace-nowrap shrink-0">
                             Selected: {generatorTargets.length} target courses
                           </span>
                           {seededFromLocks && (
-                            <span className="text-amber-600/80 dark:text-amber-400/80 font-normal min-w-0 break-words">
+                            <span className="text-warning-foreground font-normal min-w-0 break-words">
                               {" — from your locked Target Courses; changes here don't write back"}
                             </span>
                           )}
@@ -2959,7 +2951,7 @@ export function FFCSGeneratorSubpage({
                       </>
                     ) : (
                       <h3 className="font-semibold text-lg mb-4 text-text-heading flex items-center gap-2">
-                        <span className="bg-blue-500/10 text-blue-500 w-7 h-7 rounded-full flex items-center justify-center text-sm">
+                        <span className="bg-secondary text-secondary-foreground w-7 h-7 rounded-full flex items-center justify-center text-sm">
                           2
                         </span>
                         Preferences
@@ -3068,7 +3060,7 @@ export function FFCSGeneratorSubpage({
 
                       <section
                         id="generator-ranking"
-                        className={`scroll-mt-24 space-y-4 rounded-xl border p-4 ${generatorViewMode === "modern" ? "border-violet-500/20 bg-violet-500/[0.04]" : "border-border-strong/70 bg-surface-secondary/20"} ${showGeneratorSection("ranking") ? "" : "hidden"}`}
+                        className={`scroll-mt-24 space-y-4 rounded-xl border p-4 ${generatorViewMode === "modern" ? "border-border-ink bg-violet-500/[0.04]" : "border-border-strong/70 bg-surface-secondary/20"} ${showGeneratorSection("ranking") ? "" : "hidden"}`}
                       >
                         <div>
                           <h4 className="text-sm font-semibold text-text-heading">What matters most</h4>
@@ -3080,7 +3072,7 @@ export function FFCSGeneratorSubpage({
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
                           <div>
-                            <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground mb-1.5">
+                            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-1.5">
                               Ranking factors
                             </p>
                             <ListShell>
@@ -3098,7 +3090,7 @@ export function FFCSGeneratorSubpage({
                                   >
                                     <span
                                       aria-hidden
-                                      className={`w-6 shrink-0 text-center text-xs font-bold ${enabled ? "text-indigo-500" : "text-muted-foreground"}`}
+                                      className={`w-6 shrink-0 text-center text-xs font-bold ${enabled ? "text-primary" : "text-muted-foreground"}`}
                                     >
                                       {rank ?? "–"}
                                     </span>
@@ -3139,10 +3131,10 @@ export function FFCSGeneratorSubpage({
                           </div>
 
                           <div className={enabledFactors.includes("faculty") ? "" : "opacity-60"}>
-                            <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                               Faculty score priorities
                             </p>
-                            <p className="mt-0.5 mb-1.5 text-[11px] text-muted-foreground">
+                            <p className="mt-0.5 mb-1.5 text-xs text-muted-foreground">
                               Sub-list for Faculty quality: which Vitfac metric weighs most. Only used while that factor
                               is on.
                             </p>
@@ -3161,7 +3153,7 @@ export function FFCSGeneratorSubpage({
                                   >
                                     <span
                                       aria-hidden
-                                      className={`w-6 shrink-0 text-center text-xs font-bold ${enabled ? "text-violet-500" : "text-muted-foreground"}`}
+                                      className={`w-6 shrink-0 text-center text-xs font-bold ${enabled ? "text-primary" : "text-muted-foreground"}`}
                                     >
                                       {rank ?? "–"}
                                     </span>
@@ -3254,7 +3246,7 @@ export function FFCSGeneratorSubpage({
                           className="flex w-full items-center justify-between gap-2 rounded-lg border border-border-strong/50 bg-surface px-3 py-2 text-left"
                         >
                           <span className="text-xs font-semibold text-text-heading">Day-specific class end times</span>
-                          <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                             {dayLimitCount === 0 ? "Off" : `${dayLimitCount} of ${DAYS_OF_WEEK.length} days`}
                             <ChevronDown
                               className={`h-4 w-4 shrink-0 transition-transform ${dayLimitsOpen ? "rotate-180" : ""}`}
@@ -3390,17 +3382,17 @@ export function FFCSGeneratorSubpage({
                             </p>
                           </div>
                           <div className="flex shrink-0 flex-wrap items-center gap-1.5">
-                            <span className="rounded-md bg-emerald-500/10 px-2 py-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
+                            <span className="rounded-md bg-success-surface px-2 py-1 text-xs font-bold text-success-foreground">
                               {scheduleSlotCounts.free} free
                             </span>
-                            <span className="rounded-md bg-red-500/10 px-2 py-1 text-[11px] font-bold text-red-600 dark:text-red-400">
+                            <span className="rounded-md bg-danger-surface px-2 py-1 text-xs font-bold text-danger-foreground">
                               {scheduleSlotCounts.blocked} blocked
                             </span>
-                            <span className="rounded-md bg-amber-500/10 px-2 py-1 text-[11px] font-bold text-amber-600 dark:text-amber-400">
+                            <span className="rounded-md bg-warning-surface px-2 py-1 text-xs font-bold text-warning-foreground">
                               {scheduleSlotCounts.limited} by limits
                             </span>
                             {scheduleSlotCounts.extramural > 0 && (
-                              <span className="rounded-md bg-violet-500/10 px-2 py-1 text-[11px] font-bold text-violet-600 dark:text-violet-400">
+                              <span className="rounded-md bg-secondary px-2 py-1 text-xs font-bold text-secondary-foreground">
                                 {scheduleSlotCounts.extramural} extramural
                               </span>
                             )}
@@ -3409,7 +3401,7 @@ export function FFCSGeneratorSubpage({
                                 type="button"
                                 aria-label="Reset blocked slots"
                                 onClick={() => [...blockedSlots].forEach((slot) => toggleBlockSlot(slot))}
-                                className="rounded-md border border-border-strong px-2 py-1 text-[11px] font-semibold text-text-secondary hover:text-text-heading"
+                                className="rounded-md border border-border-strong px-2 py-1 text-xs font-semibold text-text-secondary hover:text-text-heading"
                               >
                                 Reset
                               </button>
@@ -3467,7 +3459,7 @@ export function FFCSGeneratorSubpage({
                               onChange={(e) => setGeneratorSyncFriendsClasses(e.target.checked)}
                               className="peer sr-only"
                             />
-                            <div className="w-10 h-6 bg-surface-secondary rounded-full peer peer-checked:after:translate-x-4 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
+                            <div className="w-10 h-6 bg-surface-secondary rounded-full peer peer-checked:after:translate-x-4 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface after:border-border-ink after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
                           </div>
                           <div className="flex flex-col">
                             <span className="text-sm font-bold text-text-heading">Auto-Sync Shared Classes</span>
@@ -3526,7 +3518,7 @@ export function FFCSGeneratorSubpage({
                       type="button"
                       onClick={() => setIsRunSummaryOpen(true)}
                       disabled={isGenerating || generatorTargets.length === 0}
-                      className={`w-full sm:w-auto min-w-[260px] min-h-12 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-white py-3.5 px-6 sm:px-8 rounded-2xl transition-all cursor-pointer ${generatorViewMode === "modern" ? "bg-indigo-600 hover:bg-indigo-700 text-sm sm:text-base font-black font-outfit tracking-wide shadow-xl shadow-indigo-600/20 active:scale-[0.98]" : "bg-amber-500 hover:bg-amber-600 text-base font-bold shadow-lg hover:shadow-amber-500/25"}`}
+                      className={`w-full sm:w-auto min-w-[260px] min-h-12 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground py-3.5 px-6 sm:px-8 rounded-2xl transition-all cursor-pointer ${generatorViewMode === "modern" ? "bg-primary hover:brightness-110 text-sm sm:text-base font-bold font-outfit tracking-wide shadow-brutal-sm border-2 border-border-ink " : "bg-amber-500 hover:bg-amber-600 text-base font-bold shadow-brutal-sm border-2 border-border-ink "}`}
                     >
                       {isGenerating ? (
                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -3541,12 +3533,12 @@ export function FFCSGeneratorSubpage({
             )}
           </div>
           {generatorViewMode === "modern" && !isReviewing && !isCompareModalOpen && !generatorPreviewTimetable && (
-            <div className="ffcs-bottom-bar fixed inset-x-0 bottom-0 z-[240] px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] bg-surface/95 backdrop-blur-xl border-t border-border-strong/70 shadow-[0_-12px_28px_-16px_rgba(15,23,42,0.4)] lg:hidden">
+            <div className="ffcs-bottom-bar fixed inset-x-0 bottom-0 z-[240] px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] bg-surface/95 border-t border-border-strong/70 shadow-[0_-12px_28px_-16px_rgba(15,23,42,0.4)] lg:hidden">
               <button
                 type="button"
                 onClick={() => setIsRunSummaryOpen(true)}
                 disabled={isGenerating || generatorTargets.length === 0}
-                className="mx-auto flex min-h-12 w-full max-w-xl items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-black tracking-wide text-white shadow-xl shadow-indigo-600/20 transition-all hover:bg-indigo-700 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 font-outfit"
+                className="mx-auto flex min-h-12 w-full max-w-xl items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold tracking-wide text-primary-foreground shadow-brutal-sm border-2 border-border-ink transition-all hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 font-outfit"
               >
                 {isGenerating ? (
                   <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -3590,7 +3582,7 @@ export function FFCSGeneratorSubpage({
                   }
                   className={`flex w-full items-center justify-center gap-1.5 rounded-xl border px-3 py-2.5 text-xs font-semibold transition-colors ${
                     facultyPriority[lkCourse.code]?.length
-                      ? "border-indigo-500/40 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
+                      ? "border-border-ink bg-secondary text-secondary-foreground"
                       : "border-border-strong text-text-secondary"
                   }`}
                   title="Rank this course's faculties, best first — generation searches them in this order"
@@ -3627,7 +3619,7 @@ export function FFCSGeneratorSubpage({
             contentClassName="flex flex-col gap-3"
           >
             <h3 className="font-bold text-lg text-text-heading flex items-center gap-2">
-              <Search className="w-5 h-5 text-amber-500" /> Select Variant
+              <Search className="w-5 h-5 text-warning-foreground" /> Select Variant
             </h3>
 
             <div>
@@ -3635,7 +3627,7 @@ export function FFCSGeneratorSubpage({
                 placeholder="Search by faculty name..."
                 value={variantSearchQuery}
                 onChange={(e) => setVariantSearchQuery(e.target.value)}
-                className="bg-surface-secondary/50 border-border-strong pl-10 pr-4 py-3 focus:border-amber-500/50 placeholder:text-muted-foreground"
+                className="bg-surface-secondary/50 border-border-strong pl-10 pr-4 py-3 focus:border-border-ink placeholder:text-muted-foreground"
                 autoFocus
               />
             </div>
@@ -3679,14 +3671,14 @@ export function FFCSGeneratorSubpage({
                         setIsVariantSearchOpen(false);
                       }}
                       className={`w-full text-left px-4 py-3 my-0.5 rounded-xl transition-colors flex flex-col gap-2 
-                        ${isSelected ? "bg-amber-500/10 border border-amber-500/20 shadow-sm" : "border border-transparent hover:bg-surface-secondary/80"}`}
+                        ${isSelected ? "bg-warning-surface border border-border-ink shadow-sm" : "border border-transparent hover:bg-surface-secondary/80"}`}
                     >
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-sm text-text-heading">
                           Variant {generatorPreviewTimetable.variants!.findIndex((x) => x.id === v.id) + 1}
                         </span>
                         {isSelected && (
-                          <span className="text-xs font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md">
+                          <span className="text-xs font-bold text-warning-foreground bg-warning-surface px-2 py-0.5 rounded-md">
                             Selected
                           </span>
                         )}

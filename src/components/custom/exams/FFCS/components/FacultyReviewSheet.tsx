@@ -161,7 +161,7 @@ export default function FacultyReviewSheet({
 
       {loading && !prof ? (
         <div className="py-12 flex flex-col items-center justify-center gap-2 text-muted-foreground">
-          <Loader2 className="w-6 h-6 animate-spin text-amber-500" />
+          <Loader2 className="w-6 h-6 animate-spin text-warning-foreground" />
           <span className="text-xs">Loading faculty reviews…</span>
         </div>
       ) : !prof || reviewsCount === 0 ? (
@@ -175,7 +175,7 @@ export default function FacultyReviewSheet({
             href={profileUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-xs text-amber-500 font-bold hover:underline mt-4"
+            className="inline-flex items-center gap-1 text-xs text-warning-foreground font-bold hover:underline mt-4"
           >
             Be the first to review on vitfac <ExternalLink className="w-3 h-3" />
           </a>
@@ -185,10 +185,10 @@ export default function FacultyReviewSheet({
           {/* Subject Filter Bar (matching vitfac subject toggle) */}
           {availableCourses.length > 0 && (
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+              <div className="flex items-center justify-between text-xs font-bold text-muted-foreground uppercase tracking-wider">
                 <span>Filter by Course</span>
                 {selectedCourseStat && (
-                  <span className="text-amber-500 font-semibold lowercase">
+                  <span className="text-warning-foreground font-semibold lowercase">
                     showing {selectedCourseStat.code} stats
                   </span>
                 )}
@@ -235,8 +235,12 @@ export default function FacultyReviewSheet({
             <div className="flex items-baseline justify-between">
               <div className="flex items-center gap-2">
                 <span
-                  className={`text-3xl font-black font-outfit ${
-                    wPct >= 70 ? "text-emerald-500" : wPct >= 40 ? "text-amber-500" : "text-red-500"
+                  className={`text-3xl font-bold font-outfit ${
+                    wPct >= 70
+                      ? "text-success-foreground"
+                      : wPct >= 40
+                        ? "text-warning-foreground"
+                        : "text-danger-foreground"
                   }`}
                 >
                   {wPct}%
@@ -244,17 +248,17 @@ export default function FacultyReviewSheet({
                 <span className="text-sm font-bold text-text-heading">Win Rate</span>
               </div>
               <div className="flex items-center gap-3 text-xs font-bold">
-                <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                <span className="text-success-foreground flex items-center gap-1">
                   <ThumbsUp className="w-3.5 h-3.5" /> {wCount} W
                 </span>
-                <span className="text-red-500 flex items-center gap-1">
+                <span className="text-danger-foreground flex items-center gap-1">
                   <ThumbsDown className="w-3.5 h-3.5" /> {lCount} L
                 </span>
               </div>
             </div>
 
             {/* Progress split bar */}
-            <div className="w-full h-2.5 rounded-full bg-red-500/20 overflow-hidden flex">
+            <div className="w-full h-2.5 rounded-full bg-danger-surface overflow-hidden flex">
               <div className="h-full bg-emerald-500 transition-all duration-500" style={{ width: `${wPct}%` }} />
             </div>
           </div>
@@ -262,47 +266,47 @@ export default function FacultyReviewSheet({
           {/* 3 Metric Gauges */}
           <div className="grid grid-cols-3 gap-2.5">
             <div className="bg-surface rounded-xl border border-border-strong p-3 text-center">
-              <BookOpen className="w-4 h-4 mx-auto mb-1 text-blue-500" />
-              <div className="text-base font-black text-text-heading">
+              <BookOpen className="w-4 h-4 mx-auto mb-1 text-primary" />
+              <div className="text-base font-bold text-text-heading">
                 {lecture ? lecture.toFixed(1) : "—"}
-                <span className="text-[10px] font-normal text-muted-foreground">/5</span>
+                <span className="text-xs font-normal text-muted-foreground">/5</span>
               </div>
-              <div className="text-[10px] font-bold text-muted-foreground uppercase mt-0.5">Lecture</div>
+              <div className="text-xs font-bold text-muted-foreground uppercase mt-0.5">Lecture</div>
             </div>
 
             <div className="bg-surface rounded-xl border border-border-strong p-3 text-center">
-              <FileText className="w-4 h-4 mx-auto mb-1 text-purple-500" />
-              <div className="text-base font-black text-text-heading">
+              <FileText className="w-4 h-4 mx-auto mb-1 text-primary" />
+              <div className="text-base font-bold text-text-heading">
                 {da ? da.toFixed(1) : "—"}
-                <span className="text-[10px] font-normal text-muted-foreground">/5</span>
+                <span className="text-xs font-normal text-muted-foreground">/5</span>
               </div>
-              <div className="text-[10px] font-bold text-muted-foreground uppercase mt-0.5">DA Marks</div>
+              <div className="text-xs font-bold text-muted-foreground uppercase mt-0.5">DA Marks</div>
             </div>
 
             <div className="bg-surface rounded-xl border border-border-strong p-3 text-center">
-              <Smile className="w-4 h-4 mx-auto mb-1 text-amber-500" />
-              <div className="text-base font-black text-text-heading">
+              <Smile className="w-4 h-4 mx-auto mb-1 text-warning-foreground" />
+              <div className="text-base font-bold text-text-heading">
                 {vibe ? vibe.toFixed(1) : "—"}
-                <span className="text-[10px] font-normal text-muted-foreground">/5</span>
+                <span className="text-xs font-normal text-muted-foreground">/5</span>
               </div>
-              <div className="text-[10px] font-bold text-muted-foreground uppercase mt-0.5">Vibe</div>
+              <div className="text-xs font-bold text-muted-foreground uppercase mt-0.5">Vibe</div>
             </div>
           </div>
 
           {/* Green Flags */}
           {greenLore.length > 0 && (
             <div className="space-y-1.5">
-              <div className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+              <div className="text-xs font-bold uppercase tracking-wider text-success-foreground flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5" /> Green Flags
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {greenLore.map((item, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs font-medium"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-success-surface border border-border-ink text-success-foreground text-xs font-medium"
                   >
                     <span>{item.text}</span>
-                    <span className="bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-1 rounded text-[10px] font-bold">
+                    <span className="bg-success-surface text-success-foreground px-1 rounded text-xs font-bold">
                       +{item.count}
                     </span>
                   </span>
@@ -314,17 +318,19 @@ export default function FacultyReviewSheet({
           {/* Red Flags */}
           {redLore.length > 0 && (
             <div className="space-y-1.5">
-              <div className="text-xs font-bold uppercase tracking-wider text-red-500 flex items-center gap-1.5">
+              <div className="text-xs font-bold uppercase tracking-wider text-danger-foreground flex items-center gap-1.5">
                 <AlertTriangle className="w-3.5 h-3.5" /> Red Flags
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {redLore.map((item, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-300 text-xs font-medium"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-danger-surface border border-border-ink text-danger-foreground text-xs font-medium"
                   >
                     <span>{item.text}</span>
-                    <span className="bg-red-500/20 text-red-500 px-1 rounded text-[10px] font-bold">+{item.count}</span>
+                    <span className="bg-danger-surface text-danger-foreground px-1 rounded text-xs font-bold">
+                      +{item.count}
+                    </span>
                   </span>
                 ))}
               </div>
@@ -334,14 +340,14 @@ export default function FacultyReviewSheet({
           {/* Courses Taught */}
           {prof.courses && prof.courses.length > 0 && (
             <div className="space-y-1.5 pt-2 border-t border-border-strong/40">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Known Courses</div>
+              <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Known Courses</div>
               <div className="flex flex-wrap gap-1">
                 {prof.courses.map((c) => (
                   <span
                     key={c}
-                    className={`px-2 py-0.5 rounded text-[11px] font-mono font-medium border ${
+                    className={`px-2 py-0.5 rounded text-xs font-mono font-medium border ${
                       courseCode && c.toUpperCase().includes(courseCode.toUpperCase())
-                        ? "bg-amber-500/20 border-amber-500/40 text-amber-500 font-bold"
+                        ? "bg-warning-surface border-border-ink text-warning-foreground font-bold"
                         : "bg-surface-secondary/40 border-border-strong text-muted-foreground"
                     }`}
                   >
@@ -360,19 +366,19 @@ export default function FacultyReviewSheet({
           href={profileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 text-xs font-bold transition-all shadow-xs"
+          className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-success-surface hover:bg-success-surface text-success-foreground border border-border-ink text-xs font-bold transition-all shadow-xs"
         >
           <ExternalLink className="w-3.5 h-3.5" />
           <span>Leave a Review for this Faculty on vitfac.pages.dev</span>
         </a>
-        <div className="text-[10px] text-muted-foreground/70 text-center leading-relaxed">
+        <div className="text-xs text-muted-foreground/70 text-center leading-relaxed">
           <p>
             Disclaimer: Ratings and reviews are sourced from a third-party platform (
             <a
               href="https://vitfac.pages.dev"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-emerald-600 dark:text-emerald-400 hover:underline font-semibold"
+              className="text-success-foreground hover:underline font-semibold"
             >
               vitfac.pages.dev
             </a>

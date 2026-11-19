@@ -24,7 +24,7 @@ export function CourseTypeChips({ typesInput, size = "md", compactText = false }
   }
 
   const padding = size === "sm" ? "px-1.5" : "px-2";
-  const textSize = size === "sm" && !compactText ? "text-[9px]" : "text-[10px]";
+  const textSize = size === "sm" && !compactText ? "text-xs" : "text-xs";
 
   return (
     <span className="flex flex-wrap gap-1">

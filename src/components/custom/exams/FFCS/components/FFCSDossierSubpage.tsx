@@ -260,13 +260,13 @@ export default function FFCSDossierSubpage({
   };
 
   // Base theme classes
-  const themeBg = isLightMode ? "bg-slate-50 text-slate-900" : "bg-[#090d16] text-slate-100";
-  const cardBg = isLightMode ? "bg-white border-slate-200 shadow-xs" : "bg-slate-900/85 border-white/10 shadow-xl";
+  const themeBg = isLightMode ? "bg-surface-secondary text-text-heading" : "bg-[#090d16] text-slate-100";
+  const cardBg = isLightMode ? "bg-surface border-border-ink shadow-xs" : "bg-slate-900/85 border-white/10 shadow-xl";
   const subcardBg = isLightMode
-    ? "bg-slate-50 border-slate-200 text-slate-800"
-    : "bg-slate-800/60 border-white/8 text-slate-200";
-  const textHeading = isLightMode ? "text-slate-900 font-extrabold" : "text-white font-extrabold";
-  const textMuted = isLightMode ? "text-slate-600" : "text-slate-400";
+    ? "bg-surface-secondary border-border-ink text-text-primary"
+    : "bg-slate-800/60 border-white/8 text-text-muted";
+  const textHeading = isLightMode ? "text-text-heading font-bold" : "text-white font-bold";
+  const textMuted = isLightMode ? "text-text-muted" : "text-text-muted";
 
   return (
     <div data-prevent-swipe="true" className={`min-h-screen w-full transition-colors duration-200 ${themeBg}`}>
@@ -341,18 +341,18 @@ export default function FFCSDossierSubpage({
 
       {/* Floating In-App Toolbar */}
       <div
-        className={`sticky top-0 z-50 dossier-no-print backdrop-blur-md px-4 md:px-8 pb-3.5 pt-[calc(env(safe-area-inset-top,0px)+0.875rem)] border-b flex flex-wrap items-center justify-between gap-3 shadow-md ${
-          isLightMode ? "bg-white/90 border-slate-200" : "bg-[#0f172a]/90 border-white/10"
+        className={`sticky top-0 z-50 dossier-no-print px-4 md:px-8 pb-3.5 pt-[calc(env(safe-area-inset-top,0px)+0.875rem)] border-b flex flex-wrap items-center justify-between gap-3 shadow-md ${
+          isLightMode ? "bg-white/90 border-border-ink" : "bg-[#0f172a]/90 border-white/10"
         }`}
       >
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={onClose}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all active:scale-95 cursor-pointer ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               isLightMode
-                ? "bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200"
-                : "bg-slate-800 hover:bg-slate-700 text-slate-200 border border-white/10"
+                ? "bg-surface-secondary hover:bg-surface-tertiary text-text-primary border border-border-ink"
+                : "bg-slate-800 hover:bg-slate-700 text-text-muted border border-white/10"
             }`}
           >
             <ArrowLeft className="w-3.5 h-3.5" />
@@ -360,7 +360,7 @@ export default function FFCSDossierSubpage({
           </button>
           <div className="hidden sm:block h-4 w-[1px] bg-slate-400/30" />
           <div className="flex items-center gap-2">
-            <span className="text-xs font-black px-2 py-0.5 rounded-md bg-blue-600 text-white tracking-wider uppercase">
+            <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-primary text-primary-foreground tracking-wider uppercase">
               FFCS Dossier
             </span>
             <span className={`text-sm font-bold truncate max-w-[200px] md:max-w-md ${textHeading}`}>
@@ -373,7 +373,7 @@ export default function FFCSDossierSubpage({
           {/* View mode toggle */}
           <div
             className={`flex items-center p-0.5 rounded-xl border ${
-              isLightMode ? "bg-slate-100 border-slate-200" : "bg-slate-800/80 border-white/10"
+              isLightMode ? "bg-surface-secondary border-border-ink" : "bg-slate-800/80 border-white/10"
             }`}
           >
             <button
@@ -381,10 +381,10 @@ export default function FFCSDossierSubpage({
               onClick={() => setViewMode("horizontal")}
               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 viewMode === "horizontal"
-                  ? "bg-blue-600 text-white shadow-xs"
+                  ? "bg-primary text-primary-foreground shadow-xs"
                   : isLightMode
-                    ? "text-slate-600 hover:text-slate-900"
-                    : "text-slate-400 hover:text-white"
+                    ? "text-text-muted hover:text-text-heading"
+                    : "text-text-muted hover:text-white"
               }`}
             >
               <LayoutGrid className="w-3.5 h-3.5" />
@@ -395,10 +395,10 @@ export default function FFCSDossierSubpage({
               onClick={() => setViewMode("vertical")}
               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 viewMode === "vertical"
-                  ? "bg-blue-600 text-white shadow-xs"
+                  ? "bg-primary text-primary-foreground shadow-xs"
                   : isLightMode
-                    ? "text-slate-600 hover:text-slate-900"
-                    : "text-slate-400 hover:text-white"
+                    ? "text-text-muted hover:text-text-heading"
+                    : "text-text-muted hover:text-white"
               }`}
             >
               <Smartphone className="w-3.5 h-3.5" />
@@ -412,19 +412,19 @@ export default function FFCSDossierSubpage({
             onClick={() => setIsLightMode(!isLightMode)}
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
               isLightMode
-                ? "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300"
-                : "bg-slate-800 hover:bg-slate-700 text-slate-200 border-white/15"
+                ? "bg-surface-secondary hover:bg-surface-tertiary text-text-primary border-border-ink"
+                : "bg-slate-800 hover:bg-slate-700 text-text-muted border-white/15"
             }`}
             title="Toggle between Ink-Saver Light Mode and Dark Mode"
           >
             {isLightMode ? (
               <>
-                <Moon className="w-3.5 h-3.5 text-indigo-600" />
+                <Moon className="w-3.5 h-3.5 text-primary" />
                 <span className="hidden sm:inline">Dark Theme</span>
               </>
             ) : (
               <>
-                <Sun className="w-3.5 h-3.5 text-amber-400" />
+                <Sun className="w-3.5 h-3.5 text-warning-foreground" />
                 <span className="hidden sm:inline">Ink-Saver Light</span>
               </>
             )}
@@ -435,7 +435,7 @@ export default function FFCSDossierSubpage({
             type="button"
             onClick={handleDownloadPdf}
             disabled={isGeneratingPdf}
-            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-black bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white shadow-md shadow-indigo-500/20 active:scale-95 transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-bold bg-primary hover:brightness-110 disabled:opacity-60 text-primary-foreground shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer"
             title="Download a standalone HTML dossier"
           >
             {isGeneratingPdf ? (
@@ -456,10 +456,10 @@ export default function FFCSDossierSubpage({
             type="button"
             onClick={handleDownloadPrintPdf}
             disabled={isGeneratingPdf}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer disabled:opacity-60 active:scale-95 ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer disabled:opacity-60 ${
               isLightMode
-                ? "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300"
-                : "bg-slate-800 hover:bg-slate-700 text-slate-200 border-white/15"
+                ? "bg-surface-secondary hover:bg-surface-tertiary text-text-primary border-border-ink"
+                : "bg-slate-800 hover:bg-slate-700 text-text-muted border-white/15"
             }`}
             title="Download a monochrome, form-style A4 dossier PDF in the background"
           >
@@ -473,8 +473,8 @@ export default function FFCSDossierSubpage({
             onClick={handlePrint}
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
               isLightMode
-                ? "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300"
-                : "bg-slate-800 hover:bg-slate-700 text-slate-200 border-white/15"
+                ? "bg-surface-secondary hover:bg-surface-tertiary text-text-primary border-border-ink"
+                : "bg-slate-800 hover:bg-slate-700 text-text-muted border-white/15"
             }`}
             title="Open browser print dialog for paper printing"
           >
@@ -501,7 +501,7 @@ export default function FFCSDossierSubpage({
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[10px] font-black px-2.5 py-1 rounded-md uppercase tracking-wider">
+                <span className="text-white text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">
                   Official Registration Dossier
                 </span>
                 <span className={`text-xs font-semibold ${textMuted}`}>
@@ -522,26 +522,22 @@ export default function FFCSDossierSubpage({
               <div
                 className={`px-4 py-2.5 rounded-xl border text-right ${
                   isLightMode
-                    ? "bg-blue-50/80 border-blue-200 text-blue-900"
-                    : "bg-blue-500/10 border-blue-500/20 text-blue-200"
+                    ? "bg-blue-50/80 border-blue-200 text-secondary-foreground"
+                    : "bg-secondary border-border-ink text-secondary-foreground"
                 }`}
               >
-                <div className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                  Total Credits
-                </div>
-                <div className="text-xl md:text-2xl font-black">{totalCredits}</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-primary">Total Credits</div>
+                <div className="text-xl md:text-2xl font-bold">{totalCredits}</div>
               </div>
               <div
                 className={`px-4 py-2.5 rounded-xl border text-right ${
                   isLightMode
                     ? "bg-purple-50/80 border-purple-200 text-purple-900"
-                    : "bg-purple-500/10 border-purple-500/20 text-purple-200"
+                    : "bg-secondary border-border-ink text-purple-200"
                 }`}
               >
-                <div className="text-[10px] font-black uppercase tracking-wider text-purple-600 dark:text-purple-400">
-                  Courses
-                </div>
-                <div className="text-xl md:text-2xl font-black">{groupedCourses.length}</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-primary">Courses</div>
+                <div className="text-xl md:text-2xl font-bold">{groupedCourses.length}</div>
               </div>
             </div>
           </div>
@@ -551,7 +547,7 @@ export default function FFCSDossierSubpage({
         <div className={`dossier-card rounded-2xl border p-4 md:p-6 ${cardBg}`}>
           <div className="flex items-center justify-between mb-4 pb-3 border-b border-inherit">
             <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-blue-500" />
+              <Clock className="w-4 h-4 text-primary" />
               <h2 className={`text-base font-bold dossier-heading-text ${textHeading}`}>Weekly Academic Schedule</h2>
             </div>
             <span className={`text-xs ${textMuted}`}>Official VIT Chennai Slot Matrix</span>
@@ -581,7 +577,7 @@ export default function FFCSDossierSubpage({
         <div className={`dossier-card rounded-2xl border p-4 md:p-6 ${cardBg}`}>
           <div className="flex items-center justify-between mb-4 pb-3 border-b border-inherit">
             <div className="flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-indigo-500" />
+              <BookOpen className="w-4 h-4 text-primary" />
               <h2 className={`text-base font-bold dossier-heading-text ${textHeading}`}>Enrolled Courses Summary</h2>
             </div>
             <span className={`text-xs ${textMuted}`}>{groupedCourses.length} Registered Offerings</span>
@@ -590,7 +586,9 @@ export default function FFCSDossierSubpage({
           <div className="overflow-x-auto">
             <table className="w-full text-xs text-left border-collapse">
               <thead>
-                <tr className={isLightMode ? "bg-slate-100 text-slate-700" : "bg-slate-800/60 text-slate-300"}>
+                <tr
+                  className={isLightMode ? "bg-surface-secondary text-text-primary" : "bg-slate-800/60 text-text-muted"}
+                >
                   <th className="py-2.5 px-3 font-bold w-12 text-center">#</th>
                   <th className="py-2.5 px-3 font-bold">Course</th>
                   <th className="py-2.5 px-3 font-bold">Type</th>
@@ -609,10 +607,10 @@ export default function FFCSDossierSubpage({
                       className={
                         i % 2 === 0
                           ? isLightMode
-                            ? "bg-white"
+                            ? "bg-surface"
                             : "bg-slate-900/30"
                           : isLightMode
-                            ? "bg-slate-50/80"
+                            ? "bg-surface-secondary"
                             : "bg-slate-900/60"
                       }
                     >
@@ -629,24 +627,20 @@ export default function FFCSDossierSubpage({
                             {c.code}
                           </span>
                           <div>
-                            <div className={`font-bold ${isLightMode ? "text-slate-900" : "text-white"}`}>
+                            <div className={`font-bold ${isLightMode ? "text-text-heading" : "text-white"}`}>
                               {c.title}
                             </div>
                             {c.batches && c.batches.length > 0 && (
-                              <div className="text-[10px] text-blue-500 font-semibold">
-                                Batch: {c.batches.join(", ")}
-                              </div>
+                              <div className="text-xs text-primary font-semibold">Batch: {c.batches.join(", ")}</div>
                             )}
                           </div>
                         </div>
                       </td>
                       <td className="py-3 px-3">
-                        <span className="font-semibold text-blue-600 dark:text-blue-400">
-                          {typeLabels[c.type] || c.type}
-                        </span>
+                        <span className="font-semibold text-primary">{typeLabels[c.type] || c.type}</span>
                       </td>
                       <td
-                        className={`py-3 px-3 text-center font-black ${isLightMode ? "text-slate-900" : "text-white"}`}
+                        className={`py-3 px-3 text-center font-bold ${isLightMode ? "text-text-heading" : "text-white"}`}
                       >
                         {c.credits}
                       </td>
@@ -655,10 +649,10 @@ export default function FFCSDossierSubpage({
                           {c.allSlots.map((s) => (
                             <span
                               key={s}
-                              className={`px-1.5 py-0.5 rounded text-[10px] font-bold border ${
+                              className={`px-1.5 py-0.5 rounded text-xs font-bold border ${
                                 isLightMode
-                                  ? "bg-slate-100 text-slate-800 border-slate-300"
-                                  : "bg-slate-800 text-slate-200 border-white/10"
+                                  ? "bg-surface-secondary text-text-primary border-border-ink"
+                                  : "bg-slate-800 text-text-muted border-white/10"
                               }`}
                             >
                               {s}
@@ -666,10 +660,12 @@ export default function FFCSDossierSubpage({
                           ))}
                         </div>
                       </td>
-                      <td className={`py-3 px-3 font-semibold ${isLightMode ? "text-slate-800" : "text-slate-200"}`}>
+                      <td
+                        className={`py-3 px-3 font-semibold ${isLightMode ? "text-text-primary" : "text-text-muted"}`}
+                      >
                         {c.venue || "TBA"}
                       </td>
-                      <td className={`py-3 px-3 font-medium ${isLightMode ? "text-slate-800" : "text-slate-300"}`}>
+                      <td className={`py-3 px-3 font-medium ${isLightMode ? "text-text-primary" : "text-text-muted"}`}>
                         {c.faculty}
                       </td>
                     </tr>
@@ -686,7 +682,7 @@ export default function FFCSDossierSubpage({
           <div className={`dossier-card rounded-2xl border p-4 md:p-6 ${cardBg}`}>
             <div className="flex items-center justify-between mb-4 pb-3 border-b border-inherit">
               <div className="flex items-center gap-2">
-                <Award className="w-4 h-4 text-amber-500" />
+                <Award className="w-4 h-4 text-warning-foreground" />
                 <h2 className={`text-base font-bold dossier-heading-text ${textHeading}`}>
                   Faculty Intelligence &amp; Sentiment Report
                 </h2>
@@ -704,15 +700,15 @@ export default function FFCSDossierSubpage({
 
                 const badgeColor = isGreen
                   ? isLightMode
-                    ? "bg-emerald-50 text-emerald-800 border-emerald-300"
-                    : "bg-emerald-500/15 text-emerald-300 border-emerald-500/30"
+                    ? "bg-success-surface text-emerald-800 border-border-ink"
+                    : "bg-success-surface text-success-foreground border-border-ink"
                   : isAmber
                     ? isLightMode
-                      ? "bg-amber-50 text-amber-800 border-amber-300"
-                      : "bg-amber-500/15 text-amber-300 border-amber-500/30"
+                      ? "bg-warning-surface text-amber-800 border-border-ink"
+                      : "bg-warning-surface text-warning-foreground border-border-ink"
                     : isLightMode
-                      ? "bg-rose-50 text-rose-800 border-rose-300"
-                      : "bg-rose-500/15 text-rose-300 border-rose-500/30";
+                      ? "bg-danger-surface text-rose-800 border-border-ink"
+                      : "bg-danger-surface text-danger-foreground border-border-ink";
 
                 const initials = f.name
                   .split(" ")
@@ -729,18 +725,18 @@ export default function FFCSDossierSubpage({
                     <div>
                       <div className="flex items-start justify-between gap-2 mb-3">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs">
+                          <div className="w-8 h-8 rounded-full text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
                             {initials || "FAC"}
                           </div>
                           <div>
                             <h3
                               className={`text-xs font-bold leading-tight ${
-                                isLightMode ? "text-slate-900" : "text-white"
+                                isLightMode ? "text-text-heading" : "text-white"
                               }`}
                             >
                               {f.name}
                             </h3>
-                            <div className={`text-[10.5px] mt-0.5 ${textMuted}`}>
+                            <div className={`text-xs mt-0.5 ${textMuted}`}>
                               {f.employeeId ? `ID: ${f.employeeId} • ` : ""}
                               {f.courses.map((x) => x.code).join(", ")}
                             </div>
@@ -748,17 +744,15 @@ export default function FFCSDossierSubpage({
                         </div>
 
                         {hasReviews ? (
-                          <span
-                            className={`text-[10px] font-black px-2 py-0.5 rounded-md border shrink-0 ${badgeColor}`}
-                          >
+                          <span className={`text-xs font-bold px-2 py-0.5 rounded-md border shrink-0 ${badgeColor}`}>
                             ★ {wPct}% W ({rev.reviews})
                           </span>
                         ) : (
                           <span
-                            className={`text-[10px] font-semibold px-2 py-0.5 rounded border shrink-0 ${
+                            className={`text-xs font-semibold px-2 py-0.5 rounded border shrink-0 ${
                               isLightMode
-                                ? "bg-slate-100 text-slate-600 border-slate-300"
-                                : "bg-slate-800 text-slate-400 border-white/10"
+                                ? "bg-surface-secondary text-text-muted border-border-ink"
+                                : "bg-slate-800 text-text-muted border-white/10"
                             }`}
                           >
                             Unreviewed
@@ -771,31 +765,27 @@ export default function FFCSDossierSubpage({
                         <div className="grid grid-cols-3 gap-2 my-2.5 text-center">
                           <div
                             className={`p-1.5 rounded-lg border ${
-                              isLightMode ? "bg-white border-slate-200" : "bg-slate-900/50 border-white/5"
+                              isLightMode ? "bg-surface border-border-ink" : "bg-slate-900/50 border-white/5"
                             }`}
                           >
-                            <div className="text-[10px] font-bold uppercase text-slate-500">🎓 Teaching</div>
-                            <div className="text-xs font-black text-blue-600 dark:text-blue-400">
-                              {rev.metrics.lecture.toFixed(1)}/5
-                            </div>
+                            <div className="text-xs font-bold uppercase text-text-muted">🎓 Teaching</div>
+                            <div className="text-xs font-bold text-primary">{rev.metrics.lecture.toFixed(1)}/5</div>
                           </div>
                           <div
                             className={`p-1.5 rounded-lg border ${
-                              isLightMode ? "bg-white border-slate-200" : "bg-slate-900/50 border-white/5"
+                              isLightMode ? "bg-surface border-border-ink" : "bg-slate-900/50 border-white/5"
                             }`}
                           >
-                            <div className="text-[10px] font-bold uppercase text-slate-500">📝 DA Score</div>
-                            <div className="text-xs font-black text-purple-600 dark:text-purple-400">
-                              {rev.metrics.da.toFixed(1)}/5
-                            </div>
+                            <div className="text-xs font-bold uppercase text-text-muted">📝 DA Score</div>
+                            <div className="text-xs font-bold text-primary">{rev.metrics.da.toFixed(1)}/5</div>
                           </div>
                           <div
                             className={`p-1.5 rounded-lg border ${
-                              isLightMode ? "bg-white border-slate-200" : "bg-slate-900/50 border-white/5"
+                              isLightMode ? "bg-surface border-border-ink" : "bg-slate-900/50 border-white/5"
                             }`}
                           >
-                            <div className="text-[10px] font-bold uppercase text-slate-500">✨ Vibe</div>
-                            <div className="text-xs font-black text-emerald-600 dark:text-emerald-400">
+                            <div className="text-xs font-bold uppercase text-text-muted">✨ Vibe</div>
+                            <div className="text-xs font-bold text-success-foreground">
                               {rev.metrics.vibe.toFixed(1)}/5
                             </div>
                           </div>
@@ -810,8 +800,8 @@ export default function FFCSDossierSubpage({
                               key={item.text}
                               className={`text-[9.5px] font-semibold px-1.5 py-0.5 rounded border ${
                                 isLightMode
-                                  ? "bg-emerald-50 text-emerald-800 border-emerald-200"
-                                  : "bg-emerald-500/10 text-emerald-300 border-emerald-500/20"
+                                  ? "bg-success-surface text-emerald-800 border-border-ink"
+                                  : "bg-success-surface text-success-foreground border-border-ink"
                               }`}
                             >
                               ✓ {item.text}
@@ -822,8 +812,8 @@ export default function FFCSDossierSubpage({
                               key={item.text}
                               className={`text-[9.5px] font-semibold px-1.5 py-0.5 rounded border ${
                                 isLightMode
-                                  ? "bg-rose-50 text-rose-800 border-rose-200"
-                                  : "bg-rose-500/10 text-rose-300 border-rose-500/20"
+                                  ? "bg-danger-surface text-rose-800 border-border-ink"
+                                  : "bg-danger-surface text-danger-foreground border-border-ink"
                               }`}
                             >
                               ⚠ {item.text}
@@ -839,7 +829,7 @@ export default function FFCSDossierSubpage({
                           href={f.profileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[10.5px] font-bold text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1"
+                          className="text-xs font-bold text-primary hover:underline inline-flex items-center gap-1"
                         >
                           <span>Vitfac Profile</span>
                           <ExternalLink className="w-3 h-3" />
@@ -858,11 +848,11 @@ export default function FFCSDossierSubpage({
           <div className="flex items-center justify-between mb-4 pb-3 border-b border-inherit">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                <ShieldCheck className="w-4 h-4 text-success-foreground" />
                 <h2 className={`text-base font-bold dossier-heading-text ${textHeading}`}>
                   Emergency Drop-In Slot Replacements
                 </h2>
-                <span className="text-[10px] font-black px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 uppercase">
+                <span className="text-xs font-bold px-2 py-0.5 rounded bg-success-surface text-success-foreground border border-border-ink uppercase">
                   Zero Clash Risk
                 </span>
               </div>
@@ -886,12 +876,12 @@ export default function FFCSDossierSubpage({
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                     <div className="flex items-center gap-2">
                       <span
-                        className="text-white text-xs font-black px-2.5 py-1 rounded-md"
+                        className="text-white text-xs font-bold px-2.5 py-1 rounded-md"
                         style={{ backgroundColor: colorHex }}
                       >
                         {half.code}
                       </span>
-                      <span className={`text-sm font-bold ${isLightMode ? "text-slate-900" : "text-white"}`}>
+                      <span className={`text-sm font-bold ${isLightMode ? "text-text-heading" : "text-white"}`}>
                         {half.title}
                       </span>
                       <span className={`text-xs ${textMuted}`}>({half.type || "Theory"})</span>
@@ -901,15 +891,15 @@ export default function FFCSDossierSubpage({
                       <span
                         className={`font-mono font-bold px-2 py-0.5 rounded border ${
                           isLightMode
-                            ? "bg-blue-50 text-blue-800 border-blue-200"
-                            : "bg-blue-500/15 text-blue-300 border-blue-500/30"
+                            ? "bg-blue-50 text-secondary-foreground border-blue-200"
+                            : "bg-secondary text-secondary-foreground border-border-ink"
                         }`}
                       >
                         Slots: {half.slots.join("+")}
                       </span>
                       <span className={textMuted}>
                         Current:{" "}
-                        <strong className={isLightMode ? "text-slate-900" : "text-white"}>{currentTeacher}</strong>
+                        <strong className={isLightMode ? "text-text-heading" : "text-white"}>{currentTeacher}</strong>
                       </span>
                     </div>
                   </div>
@@ -926,28 +916,30 @@ export default function FFCSDossierSubpage({
                           <div
                             key={alt.faculty + (alt.employeeId || "")}
                             className={`p-2.5 rounded-lg border flex items-center justify-between gap-2 ${
-                              isLightMode ? "bg-white border-slate-200" : "bg-slate-900/50 border-white/5"
+                              isLightMode ? "bg-surface border-border-ink" : "bg-slate-900/50 border-white/5"
                             }`}
                           >
                             <div className="flex items-center gap-2">
                               <div>
-                                <div className={`text-xs font-bold ${isLightMode ? "text-slate-900" : "text-white"}`}>
+                                <div
+                                  className={`text-xs font-bold ${isLightMode ? "text-text-heading" : "text-white"}`}
+                                >
                                   {alt.faculty}
                                 </div>
-                                <div className={`text-[10px] ${textMuted}`}>
+                                <div className={`text-xs ${textMuted}`}>
                                   Room: {alt.venue || "TBA"} {alt.employeeId ? `• ID: ${alt.employeeId}` : ""}
                                 </div>
                               </div>
                               {rev && rev.reviews > 0 && (
                                 <span
-                                  className={`text-[9.5px] font-black px-1.5 py-0.5 rounded border shrink-0 ${
+                                  className={`text-[9.5px] font-bold px-1.5 py-0.5 rounded border shrink-0 ${
                                     rev.wPct >= 70
                                       ? isLightMode
-                                        ? "bg-emerald-50 text-emerald-800 border-emerald-300"
-                                        : "bg-emerald-500/15 text-emerald-300 border-emerald-500/30"
+                                        ? "bg-success-surface text-emerald-800 border-border-ink"
+                                        : "bg-success-surface text-success-foreground border-border-ink"
                                       : isLightMode
-                                        ? "bg-amber-50 text-amber-800 border-amber-300"
-                                        : "bg-amber-500/15 text-amber-300 border-amber-500/30"
+                                        ? "bg-warning-surface text-amber-800 border-border-ink"
+                                        : "bg-warning-surface text-warning-foreground border-border-ink"
                                   }`}
                                 >
                                   ★ {rev.wPct}% ({rev.reviews})
@@ -955,7 +947,7 @@ export default function FFCSDossierSubpage({
                               )}
                             </div>
 
-                            <span className="text-[9.5px] font-black px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shrink-0 uppercase">
+                            <span className="text-[9.5px] font-bold px-2 py-0.5 rounded bg-success-surface text-success-foreground border border-border-ink shrink-0 uppercase">
                               ✓ 0 Clash
                             </span>
                           </div>
@@ -970,7 +962,7 @@ export default function FFCSDossierSubpage({
         </div>
 
         {/* Footer / Legal Disclaimer */}
-        <div className="pt-4 border-t border-inherit flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+        <div className="pt-4 border-t border-inherit flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-text-muted">
           <span>Generated via AmazeCC FFCS Engine • VIT Chennai</span>
           {vitfacEnabled && <span>Faculty sentiment &amp; ratings sourced via Vitfac (vitfac.pages.dev)</span>}
         </div>

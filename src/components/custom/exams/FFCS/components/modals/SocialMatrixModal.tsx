@@ -27,8 +27,6 @@ export function SocialMatrixModal({
   stagedTimetables,
   activeTimetableId,
 }: SocialMatrixModalProps) {
-
-
   /*
     A sheet now, so the chrome — grabber, one X, swipe-down, Escape and system
     back — belongs to it and the header keeps only the title. The z pair is
@@ -113,7 +111,7 @@ export function SocialMatrixModal({
                       <td className="py-3 px-4 text-left font-medium border-r border-border-strong whitespace-nowrap sticky left-0 bg-surface/95 z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
                         {mt.name || (mt.id === activeTimetableId ? "Active Timetable" : `Option ${rIdx + 1}`)}
                         {mt.id === activeTimetableId && (
-                          <span className="ml-2 text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded uppercase font-bold tracking-wider">
+                          <span className="ml-2 text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded uppercase font-bold tracking-wider">
                             Active
                           </span>
                         )}
@@ -128,17 +126,17 @@ export function SocialMatrixModal({
                           let colorClass = "text-muted-foreground";
                           let bgClass = "";
                           if (pct >= 80) {
-                            colorClass = "text-emerald-700 dark:text-emerald-400 font-bold";
-                            bgClass = "bg-emerald-500/10";
+                            colorClass = "text-success-foreground font-bold";
+                            bgClass = "bg-success-surface";
                           } else if (pct >= 60) {
-                            colorClass = "text-yellow-700 dark:text-yellow-400 font-bold";
-                            bgClass = "bg-yellow-500/10";
+                            colorClass = "text-warning-foreground font-bold";
+                            bgClass = "bg-warning-surface";
                           } else if (pct >= 40) {
-                            colorClass = "text-orange-700 dark:text-orange-400 font-medium";
+                            colorClass = "text-warning-foreground font-medium";
                             bgClass = "bg-orange-500/10";
                           } else if (pct > 0) {
-                            colorClass = "text-red-700 dark:text-red-400";
-                            bgClass = "bg-red-500/10";
+                            colorClass = "text-danger-foreground";
+                            bgClass = "bg-danger-surface";
                           }
 
                           return (
@@ -149,7 +147,7 @@ export function SocialMatrixModal({
                               <span className={colorClass}>{pct}%</span>
                               {/* Tooltip for breakdown */}
                               <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-foreground text-background text-xs p-3 rounded-lg shadow-xl pointer-events-none z-50">
-                                <div className="font-bold border-b border-background/20 pb-2 mb-2 text-center uppercase tracking-wider text-[10px]">
+                                <div className="font-bold border-b border-background/20 pb-2 mb-2 text-center uppercase tracking-wider text-xs">
                                   Score Breakdown
                                 </div>
                                 <div className="flex justify-between items-center mb-1">

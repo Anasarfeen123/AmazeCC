@@ -1382,22 +1382,22 @@ export default function FFCSGuidedSelector({
 
   const renderSetupTimetableCard = (isLandscape = false) => (
     <div
-      className={`p-5 sm:p-6 rounded-[28px] sm:rounded-[32px] bg-zinc-900/80 border border-zinc-800/80 backdrop-blur-xl shadow-2xl space-y-4 text-left flex flex-col ${
+      className={`p-5 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-4 text-left flex flex-col ${
         isLandscape ? "h-[74vh] max-h-[640px] w-full" : "min-h-[380px] max-h-[620px]"
       }`}
     >
-      <div className="flex items-center justify-between pb-2 border-b border-zinc-800 shrink-0">
+      <div className="flex items-center justify-between pb-2 border-b border-border-ink shrink-0">
         <div>
-          <h3 className="text-sm font-black text-white uppercase tracking-wider font-outfit">
+          <h3 className="text-sm font-bold text-text-heading uppercase tracking-wider font-outfit">
             Select Target Timetable
           </h3>
-          <p className="text-xs text-zinc-400">Choose which timetable you want to edit and save courses into.</p>
+          <p className="text-xs text-text-muted">Choose which timetable you want to edit and save courses into.</p>
         </div>
         {onCreateNewTimetable && (
           <button
             type="button"
             onClick={onCreateNewTimetable}
-            className="flex items-center gap-1.5 text-xs font-bold text-indigo-400 hover:text-indigo-300 py-1.5 px-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 transition-all active:scale-95 cursor-pointer shrink-0"
+            className="flex items-center gap-1.5 text-xs font-bold text-secondary-foreground hover:text-primary py-1.5 px-3 rounded-xl bg-secondary border border-border-ink transition-all cursor-pointer shrink-0"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>New Timetable</span>
@@ -1419,14 +1419,16 @@ export default function FFCSGuidedSelector({
               })}
               className={`w-full p-3.5 sm:p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between gap-3 group ${
                 isSelected
-                  ? "bg-indigo-600/15 border-indigo-500 text-white shadow-md ring-1 ring-indigo-500/40"
-                  : "bg-zinc-950/40 border-zinc-800/80 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-800/30"
+                  ? "bg-secondary border-border-ink text-white shadow-md ring-1 ring-border-ink"
+                  : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink hover:bg-surface-secondary"
               }`}
             >
               <div className="flex items-center gap-3 min-w-0 flex-1">
                 <div
                   className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                    isSelected ? "bg-indigo-600 text-white" : "bg-zinc-900 border border-zinc-800 text-zinc-400"
+                    isSelected
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-surface border border-border-ink text-text-muted"
                   }`}
                 >
                   <CalendarDays className="w-5 h-5" />
@@ -1439,20 +1441,22 @@ export default function FFCSGuidedSelector({
                         type="text"
                         value={editingTtName}
                         onChange={(e) => setEditingTtName(e.target.value)}
-                        className="bg-zinc-900 border border-indigo-500 rounded-lg px-2.5 py-1 text-base sm:text-sm font-bold text-white focus:outline-none w-full max-w-xs"
+                        className="bg-surface border border-border-ink rounded-lg px-2.5 py-1 text-base sm:text-sm font-bold text-white focus:outline-none w-full max-w-xs"
                         autoFocus
                       />
                       <button
                         type="button"
                         onClick={() => handleSaveRename(tt.id)}
-                        className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 cursor-pointer relative hit-expand touch-press"
+                        className="p-1.5 rounded-lg bg-success-surface text-success-foreground hover:bg-emerald-500/30 cursor-pointer relative hit-expand touch-press"
                       >
                         <Check className="w-4 h-4" />
                       </button>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <h4 className="font-extrabold text-sm sm:text-base text-white truncate font-outfit">{tt.name}</h4>
+                      <h4 className="font-bold text-sm sm:text-base text-text-heading truncate font-outfit">
+                        {tt.name}
+                      </h4>
                       <button
                         type="button"
                         onClick={(e) => {
@@ -1460,14 +1464,14 @@ export default function FFCSGuidedSelector({
                           setEditingTtId(tt.id);
                           setEditingTtName(tt.name);
                         }}
-                        className="p-1.5 rounded-md text-zinc-500 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer relative hit-expand touch-press"
+                        className="p-1.5 rounded-md text-text-muted hover:text-text-heading hover:bg-surface-secondary transition-colors cursor-pointer relative hit-expand touch-press"
                         title="Rename Timetable"
                       >
                         <Pencil className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   )}
-                  <p className="text-xs text-zinc-400 mt-0.5">
+                  <p className="text-xs text-text-muted mt-0.5">
                     {tt.courses.length} course{tt.courses.length === 1 ? "" : "s"} scheduled
                   </p>
                 </div>
@@ -1481,7 +1485,7 @@ export default function FFCSGuidedSelector({
                       e.stopPropagation();
                       onDeleteTimetable(tt.id);
                     }}
-                    className="p-2 rounded-xl border border-red-500/20 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-colors cursor-pointer relative hit-expand touch-press"
+                    className="p-2 rounded-xl border border-border-ink bg-danger-surface hover:bg-danger-surface text-danger-foreground hover:text-danger-foreground transition-colors cursor-pointer relative hit-expand touch-press"
                     title="Delete Timetable"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -1491,8 +1495,8 @@ export default function FFCSGuidedSelector({
                 <span
                   className={`text-xs font-bold px-2.5 sm:px-3 py-1.5 rounded-xl border ${
                     isSelected
-                      ? "bg-indigo-600 text-white border-indigo-500"
-                      : "bg-zinc-900 border-zinc-800 text-zinc-400"
+                      ? "bg-primary text-primary-foreground border-border-ink"
+                      : "bg-surface border-border-ink text-text-muted"
                   }`}
                 >
                   {isSelected ? "Selected ✓" : "Choose"}
@@ -1518,7 +1522,7 @@ export default function FFCSGuidedSelector({
 
     return (
       <div
-        className={`p-4 sm:p-6 rounded-[28px] sm:rounded-[32px] bg-zinc-900/80 border border-zinc-800/80 backdrop-blur-xl shadow-2xl space-y-3 sm:space-y-4 text-left flex flex-col ${
+        className={`p-4 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-3 sm:space-y-4 text-left flex flex-col ${
           isLandscape ? "h-[74vh] max-h-[640px] w-full" : "h-[56vh] sm:h-[62vh] min-h-[420px] max-h-[640px]"
         }`}
       >
@@ -1534,16 +1538,18 @@ export default function FFCSGuidedSelector({
               { value: "file", label: "Excel/CSV", icon: <FileSpreadsheet className="w-3.5 h-3.5" /> },
             ]}
           />
-          <span className="text-xs font-bold text-purple-400 bg-purple-500/10 px-3 py-1.5 rounded-xl border border-purple-500/20">
+          <span className="text-xs font-bold text-secondary-foreground bg-secondary px-3 py-1.5 rounded-xl border border-border-ink">
             {effectiveCourseLocks.length} Locked
           </span>
         </div>
 
         {planMode === "auto" && (
-          <div className="flex items-center justify-between p-2.5 rounded-2xl bg-purple-500/10 border border-purple-500/25 shrink-0 text-xs">
+          <div className="flex items-center justify-between p-2.5 rounded-2xl bg-secondary border border-border-ink shrink-0 text-xs">
             <div className="flex items-center gap-2 min-w-0">
-              <BookOpen className="w-4 h-4 text-purple-400 shrink-0" />
-              <span className="text-zinc-300 font-medium truncate">Don't want to constrain slots or professors?</span>
+              <BookOpen className="w-4 h-4 text-primary shrink-0" />
+              <span className="text-text-secondary font-medium truncate">
+                Don't want to constrain slots or professors?
+              </span>
             </div>
             <button
               type="button"
@@ -1551,7 +1557,7 @@ export default function FFCSGuidedSelector({
                 setCourseStrategy("one_by_one");
                 setGuidedPhase("auto_courses");
               }}
-              className="font-bold text-purple-400 hover:text-purple-300 hover:underline shrink-0 text-xs cursor-pointer"
+              className="font-bold text-primary hover:text-primary hover:underline shrink-0 text-xs cursor-pointer"
             >
               Pick Normally from Catalog →
             </button>
@@ -1560,13 +1566,13 @@ export default function FFCSGuidedSelector({
 
         {locksMode === "search" && (
           <div className="relative shrink-0">
-            <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-text-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={locksSearchQuery}
               onChange={(e) => setLocksSearchQuery(e.target.value)}
               placeholder="Search mandatory course code or title..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-800 bg-zinc-950/60 text-base sm:text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all placeholder:text-zinc-600"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border-ink bg-background text-base sm:text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-border-ink transition-all placeholder:text-text-muted"
             />
           </div>
         )}
@@ -1602,14 +1608,14 @@ export default function FFCSGuidedSelector({
                   key={c.code}
                   className={`p-3 sm:p-3.5 rounded-2xl border transition-all ${
                     isSelected
-                      ? "bg-purple-950/25 border-purple-500/50 text-white shadow-sm"
-                      : "bg-zinc-950/40 border-zinc-800/80 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-800/30"
+                      ? "bg-purple-950/25 border-border-ink text-white shadow-sm"
+                      : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink hover:bg-surface-secondary"
                   }`}
                 >
                   <label className="flex items-start gap-3 cursor-pointer">
                     <input
                       type="checkbox"
-                      className="mt-1 rounded border-zinc-700 text-purple-600 focus:ring-purple-500 bg-zinc-900 w-4 h-4"
+                      className="mt-1 rounded border-border-ink text-primary focus:ring-border-ink bg-surface w-4 h-4"
                       checked={isSelected}
                       onChange={(e) => {
                         if (e.target.checked) {
@@ -1625,7 +1631,7 @@ export default function FFCSGuidedSelector({
                     <div className="flex flex-col flex-1 min-w-0">
                       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1">
                         <div className="flex flex-col gap-1 min-w-0">
-                          <span className="font-black text-sm sm:text-base text-white font-outfit">{c.code}</span>
+                          <span className="font-bold text-sm sm:text-base text-text-heading font-outfit">{c.code}</span>
                           <div className="flex items-center gap-1 flex-wrap">
                             {renderCourseTypeChips(c.types || [], "sm")}
                           </div>
@@ -1635,21 +1641,21 @@ export default function FFCSGuidedSelector({
                             c.batches.map((b) => (
                               <span
                                 key={b}
-                                className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${getBatchColorClass(b)}`}
+                                className={`text-xs font-bold px-2 py-0.5 rounded-md border ${getBatchColorClass(b)}`}
                               >
                                 {b}
                               </span>
                             ))}
                         </div>
                       </div>
-                      <span className="text-xs text-zinc-400 line-clamp-1 mt-0.5">{c.title}</span>
+                      <span className="text-xs text-text-muted line-clamp-1 mt-0.5">{c.title}</span>
                     </div>
                   </label>
 
                   {/* Slot Bundles and Granular Constraints */}
                   {isSelected && sel && courseOpts.length > 0 && (
-                    <div className="pl-7 mt-2 pt-2 border-t border-purple-500/20 space-y-2">
-                      <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+                    <div className="pl-7 mt-2 pt-2 border-t border-border-ink space-y-2">
+                      <div className="text-xs font-bold text-text-muted uppercase tracking-wider">
                         Slot Bundles (Optional Constraints)
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -1685,10 +1691,10 @@ export default function FFCSGuidedSelector({
                                   }),
                                 );
                               }}
-                              className={`text-[10.5px] font-bold px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
+                              className={`text-xs font-bold px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
                                 allChecked
-                                  ? "bg-purple-600 text-white border-purple-500 shadow-xs"
-                                  : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                                  ? "bg-primary text-primary-foreground border-border-ink shadow-xs"
+                                  : "bg-surface border-border-ink text-text-secondary hover:border-border-ink"
                               }`}
                             >
                               {bundle}
@@ -1709,8 +1715,8 @@ export default function FFCSGuidedSelector({
                           ).sort();
 
                           return (
-                            <div className="space-y-1 pt-1 border-t border-purple-500/10">
-                              <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+                            <div className="space-y-1 pt-1 border-t border-border-ink">
+                              <div className="text-xs font-bold text-text-muted uppercase tracking-wider">
                                 Preferred Faculty (Optional)
                               </div>
                               <div className="flex flex-wrap gap-1.5">
@@ -1721,14 +1727,14 @@ export default function FFCSGuidedSelector({
                                       key={facName}
                                       type="button"
                                       onClick={() => handleToggleLockFaculty(c.code, facName)}
-                                      className={`text-[10.5px] font-bold px-2.5 py-1 rounded-lg border transition-all cursor-pointer flex items-center gap-1 ${
+                                      className={`text-xs font-bold px-2.5 py-1 rounded-lg border transition-all cursor-pointer flex items-center gap-1 ${
                                         isFacSelected
-                                          ? "bg-purple-600 text-white border-purple-500 shadow-xs"
-                                          : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                                          ? "bg-primary text-primary-foreground border-border-ink shadow-xs"
+                                          : "bg-surface border-border-ink text-text-secondary hover:border-border-ink"
                                       }`}
                                     >
                                       <span>{facName}</span>
-                                      {isFacSelected && <Check className="w-3 h-3 text-white" />}
+                                      {isFacSelected && <Check className="w-3 h-3 text-text-heading" />}
                                     </button>
                                   );
                                 })}
@@ -1742,10 +1748,10 @@ export default function FFCSGuidedSelector({
                                         selected: sel.allowedFaculty ?? [],
                                       })
                                     }
-                                    className={`text-[10.5px] font-bold px-2.5 py-1 rounded-lg border transition-all cursor-pointer flex items-center gap-1 ${
+                                    className={`text-xs font-bold px-2.5 py-1 rounded-lg border transition-all cursor-pointer flex items-center gap-1 ${
                                       facultyPriority[c.code]?.length
-                                        ? "bg-indigo-600 text-white border-indigo-500 shadow-xs"
-                                        : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                                        ? "bg-primary text-primary-foreground border-border-ink shadow-xs"
+                                        : "bg-surface border-border-ink text-text-secondary hover:border-border-ink"
                                     }`}
                                     title="Rank the selected faculties, best first — generation searches them in this order"
                                   >
@@ -1776,27 +1782,29 @@ export default function FFCSGuidedSelector({
   const renderAutoCoursesCard = (isLandscape = false) => {
     return (
       <div
-        className={`p-4 sm:p-6 rounded-[28px] sm:rounded-[32px] bg-zinc-900/80 border border-zinc-800/80 backdrop-blur-xl shadow-2xl space-y-3 sm:space-y-4 text-left flex flex-col ${
+        className={`p-4 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-3 sm:space-y-4 text-left flex flex-col ${
           isLandscape ? "h-[74vh] max-h-[640px] w-full" : "h-[56vh] sm:h-[62vh] min-h-[420px] max-h-[640px]"
         }`}
       >
         <div className="flex items-center justify-between gap-2 shrink-0">
           <div>
-            <h3 className="text-sm font-black text-white uppercase tracking-wider font-outfit">
+            <h3 className="text-sm font-bold text-text-heading uppercase tracking-wider font-outfit">
               1. Select Target Courses
             </h3>
-            <p className="text-xs text-zinc-400">Choose all courses you want the solver to build into your schedule.</p>
+            <p className="text-xs text-text-muted">
+              Choose all courses you want the solver to build into your schedule.
+            </p>
           </div>
-          <span className="text-xs font-bold text-amber-400 bg-amber-500/10 px-3 py-1.5 rounded-xl border border-amber-500/20 shrink-0">
+          <span className="text-xs font-bold text-warning-foreground bg-warning-surface px-3 py-1.5 rounded-xl border border-border-ink shrink-0">
             {effectiveCourseLocks.length} Selected
           </span>
         </div>
 
         {/* Integration Switcher: Jump between Auto Generator and Manual Builder */}
-        <div className="flex items-center justify-between p-2.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/25 shrink-0 text-xs">
+        <div className="flex items-center justify-between p-2.5 rounded-2xl bg-secondary border border-border-ink shrink-0 text-xs">
           <div className="flex items-center gap-2 min-w-0">
-            <Compass className="w-4 h-4 text-indigo-400 shrink-0" />
-            <span className="text-zinc-300 font-medium truncate">Prefer manual timetable creation?</span>
+            <Compass className="w-4 h-4 text-primary shrink-0" />
+            <span className="text-text-secondary font-medium truncate">Prefer manual timetable creation?</span>
           </div>
           <button
             type="button"
@@ -1805,7 +1813,7 @@ export default function FFCSGuidedSelector({
               setGuidedPhase("builder");
               setCurrentStep(1);
             }}
-            className="font-bold text-indigo-400 hover:text-indigo-300 hover:underline shrink-0 text-xs cursor-pointer"
+            className="font-bold text-primary hover:text-primary hover:underline shrink-0 text-xs cursor-pointer"
           >
             Manual Course Selector →
           </button>
@@ -1831,10 +1839,10 @@ export default function FFCSGuidedSelector({
                 key={opt.id}
                 type="button"
                 onClick={() => setTypeFilter(opt.id)}
-                className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer touch-press active:scale-[0.97] ${
+                className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer touch-press ${
                   typeFilter === opt.id
-                    ? "bg-indigo-600 text-white shadow-xs"
-                    : "bg-zinc-950/40 text-zinc-400 border border-zinc-800 hover:text-white hover:border-zinc-700"
+                    ? "bg-primary text-primary-foreground shadow-xs"
+                    : "bg-surface-secondary text-text-muted border border-border-ink hover:text-text-heading hover:border-border-ink"
                 }`}
               >
                 {opt.label}
@@ -1846,7 +1854,7 @@ export default function FFCSGuidedSelector({
             <button
               type="button"
               onClick={onOpenPasteRegistered}
-              className="text-[11px] text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1 transition-colors cursor-pointer shrink-0 touch-press active:scale-[0.97]"
+              className="text-xs text-primary hover:text-primary font-bold flex items-center gap-1 transition-colors cursor-pointer shrink-0 touch-press"
             >
               <ClipboardPaste className="w-3.5 h-3.5" />
               <span>Paste VTOP</span>
@@ -1878,43 +1886,43 @@ export default function FFCSGuidedSelector({
                 })}
                 className={`p-3 sm:p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col gap-2 group ${
                   isSelected
-                    ? "bg-indigo-600/15 border-indigo-500 text-white shadow-md ring-1 ring-indigo-500/40"
-                    : "bg-zinc-950/40 border-zinc-800/80 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-800/30"
+                    ? "bg-secondary border-border-ink text-white shadow-md ring-1 ring-border-ink"
+                    : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink hover:bg-surface-secondary"
                 }`}
               >
                 <div className="flex items-center justify-between gap-3 w-full">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <span className="font-extrabold text-sm sm:text-base text-white group-hover:text-indigo-400 transition-colors font-outfit">
+                      <span className="font-bold text-sm sm:text-base text-text-heading group-hover:text-primary transition-colors font-outfit">
                         {c.code}
                       </span>
                     </div>
                     <div className="flex items-center gap-1 my-1 flex-wrap">
                       {isCourseEmbedded(c.code) && (
-                        <span className="text-[10px] font-black uppercase tracking-wider text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 rounded-md">
+                        <span className="text-xs font-bold uppercase tracking-wider text-secondary-foreground bg-secondary border border-border-ink px-2 py-0.5 rounded-md">
                           Theory + Lab
                         </span>
                       )}
                       {renderCourseTypeChips(c.types || [], "sm")}
                     </div>
-                    <p className="text-xs text-zinc-400 font-medium truncate">{c.title}</p>
+                    <p className="text-xs text-text-muted font-medium truncate">{c.title}</p>
 
                     {isSelected && sel && (
                       <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
                         <span
-                          className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${
+                          className={`text-xs font-bold px-2 py-0.5 rounded-md border ${
                             hasCustomSlots
-                              ? "bg-indigo-500/20 border-indigo-500/40 text-indigo-300"
-                              : "bg-zinc-900 border-zinc-800 text-zinc-400"
+                              ? "bg-secondary border-border-ink text-secondary-foreground"
+                              : "bg-surface border-border-ink text-text-muted"
                           }`}
                         >
                           {hasCustomSlots ? `${sel.allowedSlots.length} slots locked` : "Any Slot"}
                         </span>
                         <span
-                          className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${
+                          className={`text-xs font-bold px-2 py-0.5 rounded-md border ${
                             hasCustomFac
-                              ? "bg-indigo-500/20 border-indigo-500/40 text-indigo-300"
-                              : "bg-zinc-900 border-zinc-800 text-zinc-400"
+                              ? "bg-secondary border-border-ink text-secondary-foreground"
+                              : "bg-surface border-border-ink text-text-muted"
                           }`}
                         >
                           {hasCustomFac ? `${sel.allowedFaculty.length} faculty locked` : "Any Faculty"}
@@ -1933,8 +1941,8 @@ export default function FFCSGuidedSelector({
                         }}
                         className={`p-1.5 px-2.5 rounded-xl border transition-colors cursor-pointer shrink-0 flex items-center gap-1 text-xs font-bold ${
                           isExpanded
-                            ? "bg-indigo-600 text-white border-indigo-500 shadow-xs"
-                            : "bg-zinc-900 hover:bg-zinc-800 border-zinc-800 text-zinc-300 hover:text-white"
+                            ? "bg-primary text-primary-foreground border-border-ink shadow-xs"
+                            : "bg-surface hover:bg-surface-secondary border-border-ink text-text-secondary hover:text-text-heading"
                         }`}
                         title={`Customize slots & faculty for ${c.code}`}
                       >
@@ -1953,7 +1961,7 @@ export default function FFCSGuidedSelector({
                         setGuidedPhase("builder");
                         setCurrentStep(2);
                       }}
-                      className="p-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer shrink-0"
+                      className="p-1.5 rounded-xl bg-surface hover:bg-surface-secondary border border-border-ink text-text-muted hover:text-text-heading transition-colors cursor-pointer shrink-0"
                       title={`Explore slots & faculty for ${c.code} in manual course selector`}
                     >
                       <Eye className="w-3.5 h-3.5" />
@@ -1962,8 +1970,8 @@ export default function FFCSGuidedSelector({
                     <span
                       className={`text-xs font-bold px-3 py-1.5 rounded-xl border transition-all ${
                         isSelected
-                          ? "bg-indigo-600 text-white border-indigo-500 shadow-xs"
-                          : "bg-zinc-900 border-zinc-800 text-zinc-400"
+                          ? "bg-primary text-primary-foreground border-border-ink shadow-xs"
+                          : "bg-surface border-border-ink text-text-muted"
                       }`}
                     >
                       {isSelected ? "Included ✓" : "Add +"}
@@ -1980,17 +1988,17 @@ export default function FFCSGuidedSelector({
                     return (
                       <div
                         onClick={(e) => e.stopPropagation()}
-                        className="mt-2 pt-2.5 border-t border-indigo-500/25 space-y-2.5 cursor-default text-left"
+                        className="mt-2 pt-2.5 border-t border-border-ink space-y-2.5 cursor-default text-left"
                       >
                         <div className="flex items-center justify-between text-xs">
-                          <span className="font-extrabold text-white text-[11px] font-outfit uppercase tracking-wider">
+                          <span className="font-bold text-text-heading text-xs font-outfit uppercase tracking-wider">
                             Options for {c.code}
                           </span>
                           <div className="flex items-center gap-2">
                             <button
                               type="button"
                               onClick={() => handleResetCourseLocks(c.code)}
-                              className="text-[10px] text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                              className="text-xs text-text-muted hover:text-text-heading transition-colors cursor-pointer"
                             >
                               Reset to Any
                             </button>
@@ -2000,7 +2008,7 @@ export default function FFCSGuidedSelector({
                                 setActiveConfigCourseCode(c.code);
                                 setGuidedPhase("auto_slots_faculty");
                               }}
-                              className="text-[10px] text-indigo-400 hover:text-indigo-300 font-bold transition-colors cursor-pointer flex items-center gap-0.5"
+                              className="text-xs text-primary hover:text-primary font-bold transition-colors cursor-pointer flex items-center gap-0.5"
                             >
                               <span>Dedicated Screen ↗</span>
                             </button>
@@ -2010,7 +2018,7 @@ export default function FFCSGuidedSelector({
                         {/* Quick Slot Bundles */}
                         {availableClusters.length > 0 && (
                           <div className="space-y-1">
-                            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">
+                            <span className="text-xs font-bold text-text-muted uppercase tracking-wider block">
                               Slot Bundles
                             </span>
                             <div className="flex flex-wrap gap-1">
@@ -2023,10 +2031,10 @@ export default function FFCSGuidedSelector({
                                     key={clusterKey}
                                     type="button"
                                     onClick={() => handleToggleLockBundle(c.code, clusterSlots)}
-                                    className={`text-[10.5px] font-bold px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
+                                    className={`text-xs font-bold px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
                                       allSelected
-                                        ? "bg-indigo-600 text-white border-indigo-500 shadow-xs"
-                                        : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                                        ? "bg-primary text-primary-foreground border-border-ink shadow-xs"
+                                        : "bg-surface border-border-ink text-text-secondary hover:border-border-ink"
                                     }`}
                                   >
                                     {clusterKey.endsWith("1") || clusterKey.endsWith("2")
@@ -2042,7 +2050,7 @@ export default function FFCSGuidedSelector({
                         {/* Individual Slots */}
                         {uniqueSlots.length > 0 && (
                           <div className="space-y-1">
-                            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">
+                            <span className="text-xs font-bold text-text-muted uppercase tracking-wider block">
                               Individual Slots
                             </span>
                             <div className="flex flex-wrap gap-1">
@@ -2053,14 +2061,14 @@ export default function FFCSGuidedSelector({
                                     key={slot}
                                     type="button"
                                     onClick={() => handleToggleLockSlot(c.code, slot)}
-                                    className={`text-[10px] font-bold px-2 py-0.5 rounded-md border transition-all cursor-pointer flex items-center gap-1 ${
+                                    className={`text-xs font-bold px-2 py-0.5 rounded-md border transition-all cursor-pointer flex items-center gap-1 ${
                                       checked
-                                        ? "bg-indigo-600/30 border-indigo-500 text-white"
-                                        : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-zinc-200"
+                                        ? "bg-secondary border-border-ink text-white"
+                                        : "bg-surface border-border-ink text-text-muted hover:text-text-secondary"
                                     }`}
                                   >
                                     <span>{slot}</span>
-                                    {checked && <Check className="w-2.5 h-2.5 text-indigo-400" />}
+                                    {checked && <Check className="w-2.5 h-2.5 text-primary" />}
                                   </button>
                                 );
                               })}
@@ -2071,7 +2079,7 @@ export default function FFCSGuidedSelector({
                         {/* Preferred Faculty */}
                         {faculties.length > 0 && (
                           <div className="space-y-1">
-                            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">
+                            <span className="text-xs font-bold text-text-muted uppercase tracking-wider block">
                               Preferred Faculty
                             </span>
                             <div className="flex flex-wrap gap-1">
@@ -2082,14 +2090,14 @@ export default function FFCSGuidedSelector({
                                     key={fac.name}
                                     type="button"
                                     onClick={() => handleToggleLockFaculty(c.code, fac.name)}
-                                    className={`text-[10.5px] font-bold px-2.5 py-1 rounded-lg border transition-all cursor-pointer flex items-center gap-1 ${
+                                    className={`text-xs font-bold px-2.5 py-1 rounded-lg border transition-all cursor-pointer flex items-center gap-1 ${
                                       isFacSelected
-                                        ? "bg-indigo-600 text-white border-indigo-500 shadow-xs"
-                                        : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                                        ? "bg-primary text-primary-foreground border-border-ink shadow-xs"
+                                        : "bg-surface border-border-ink text-text-secondary hover:border-border-ink"
                                     }`}
                                   >
                                     <span>{fac.name}</span>
-                                    {isFacSelected && <Check className="w-3 h-3 text-white" />}
+                                    {isFacSelected && <Check className="w-3 h-3 text-text-heading" />}
                                   </button>
                                 );
                               })}
@@ -2103,10 +2111,10 @@ export default function FFCSGuidedSelector({
                                       selected: sel.allowedFaculty ?? [],
                                     })
                                   }
-                                  className={`text-[10.5px] font-bold px-2.5 py-1 rounded-lg border transition-all cursor-pointer flex items-center gap-1 ${
+                                  className={`text-xs font-bold px-2.5 py-1 rounded-lg border transition-all cursor-pointer flex items-center gap-1 ${
                                     facultyPriority[c.code]?.length
-                                      ? "bg-indigo-600 text-white border-indigo-500 shadow-xs"
-                                      : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                                      ? "bg-primary text-primary-foreground border-border-ink shadow-xs"
+                                      : "bg-surface border-border-ink text-text-secondary hover:border-border-ink"
                                   }`}
                                   title="Rank the selected faculties, best first — generation searches them in this order"
                                 >
@@ -2136,19 +2144,19 @@ export default function FFCSGuidedSelector({
     if (effectiveCourseLocks.length === 0) {
       return (
         <div
-          className={`p-5 sm:p-6 rounded-[28px] sm:rounded-[32px] bg-zinc-900/80 border border-zinc-800/80 backdrop-blur-xl shadow-2xl space-y-4 text-center flex flex-col justify-center items-center ${
+          className={`p-5 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-4 text-center flex flex-col justify-center items-center ${
             isLandscape ? "h-[74vh] max-h-[640px] w-full" : "min-h-[380px] max-h-[620px]"
           }`}
         >
-          <BookOpen className="w-10 h-10 text-zinc-600 mb-2" />
-          <h3 className="text-base font-bold text-white">No Courses Selected</h3>
-          <p className="text-xs text-zinc-400 max-w-xs">
+          <BookOpen className="w-10 h-10 text-text-muted mb-2" />
+          <h3 className="text-base font-bold text-text-heading">No Courses Selected</h3>
+          <p className="text-xs text-text-muted max-w-xs">
             Please choose courses to include in your timetable first before setting slot and faculty preferences.
           </p>
           <button
             type="button"
             onClick={() => setGuidedPhase(courseStrategy === "lock_advance" ? "setup_locks" : "auto_courses")}
-            className="py-2 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all cursor-pointer"
+            className="py-2 px-4 rounded-xl bg-primary hover:brightness-110 text-primary-foreground text-xs font-bold transition-all cursor-pointer"
           >
             Go to Course Selection
           </button>
@@ -2174,22 +2182,22 @@ export default function FFCSGuidedSelector({
 
     return (
       <div
-        className={`p-4 sm:p-6 rounded-[28px] sm:rounded-[32px] bg-zinc-900/80 border border-zinc-800/80 backdrop-blur-xl shadow-2xl space-y-4 text-left flex flex-col justify-between ${
+        className={`p-4 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-4 text-left flex flex-col justify-between ${
           isLandscape ? "h-[74vh] max-h-[640px] w-full" : "min-h-[460px] max-h-[680px]"
         }`}
       >
         {/* Course Tabs Strip */}
-        <div className="shrink-0 space-y-2 pb-2 border-b border-zinc-800">
+        <div className="shrink-0 space-y-2 pb-2 border-b border-border-ink">
           <div className="flex items-center justify-between gap-2">
             <div>
-              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+              <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
                 Select Course to Configure:
               </span>
             </div>
             <button
               type="button"
               onClick={() => handleResetCourseLocks(currentCode)}
-              className="text-[11px] font-bold text-zinc-400 hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
+              className="text-xs font-bold text-text-muted hover:text-text-heading flex items-center gap-1 transition-colors cursor-pointer"
               title="Reset this course to allow all slots and all faculty"
             >
               <RotateCcw className="w-3 h-3" />
@@ -2213,11 +2221,11 @@ export default function FFCSGuidedSelector({
                   }}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
                     isCurrent
-                      ? "bg-indigo-600 text-white shadow-md ring-1 ring-indigo-400"
-                      : "bg-zinc-950/60 border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-700"
+                      ? "bg-primary text-primary-foreground shadow-brutal-sm border-2 border-border-ink ring-1 ring-border-ink"
+                      : "bg-background border border-border-ink text-text-secondary hover:text-text-heading hover:border-border-ink"
                   }`}
                 >
-                  <span className="font-black">{lock.code}</span>
+                  <span className="font-bold">{lock.code}</span>
                   {(hasSlots || hasFac) && (
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" title="Custom constraints configured" />
                   )}
@@ -2230,26 +2238,26 @@ export default function FFCSGuidedSelector({
         {/* Scrollable Main Area for Selected Course */}
         <div className="flex-1 overflow-y-auto space-y-4 pr-1 custom-scrollbar min-h-0">
           {/* Course Details Header Card */}
-          <div className="p-3.5 rounded-2xl bg-zinc-950/50 border border-zinc-800/80 flex flex-wrap items-center justify-between gap-2">
+          <div className="p-3.5 rounded-2xl bg-surface-secondary border border-border-ink flex flex-wrap items-center justify-between gap-2">
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <span className="text-base font-black text-white font-outfit">{currentCode}</span>
+                <span className="text-base font-bold text-text-heading font-outfit">{currentCode}</span>
                 {isCourseEmbedded(currentCode) && (
-                  <span className="text-[10px] font-black uppercase tracking-wider text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 rounded-md">
+                  <span className="text-xs font-bold uppercase tracking-wider text-secondary-foreground bg-secondary border border-border-ink px-2 py-0.5 rounded-md">
                     Theory + Lab
                   </span>
                 )}
               </div>
-              <p className="text-xs text-zinc-400 truncate mt-0.5">{currentLock.title}</p>
+              <p className="text-xs text-text-muted truncate mt-0.5">{currentLock.title}</p>
             </div>
 
-            <div className="flex items-center gap-2 text-[11px] font-semibold text-zinc-400 flex-wrap">
-              <span className="px-2.5 py-1 rounded-xl bg-zinc-900 border border-zinc-800">
+            <div className="flex items-center gap-2 text-xs font-semibold text-text-muted flex-wrap">
+              <span className="px-2.5 py-1 rounded-xl bg-surface border border-border-ink">
                 {currentLock.allowedSlots && currentLock.allowedSlots.length > 0
                   ? `${currentLock.allowedSlots.length} Slots Selected`
                   : "Any Slot (All Allowed)"}
               </span>
-              <span className="px-2.5 py-1 rounded-xl bg-zinc-900 border border-zinc-800">
+              <span className="px-2.5 py-1 rounded-xl bg-surface border border-border-ink">
                 {currentLock.allowedFaculty && currentLock.allowedFaculty.length > 0
                   ? `${currentLock.allowedFaculty.length} Faculty Selected`
                   : "Any Faculty (All Allowed)"}
@@ -2261,8 +2269,10 @@ export default function FFCSGuidedSelector({
           <div className="space-y-2.5">
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="text-xs font-black text-white uppercase tracking-wider font-outfit">1. Allowed Slots</h4>
-                <p className="text-[11px] text-zinc-400">
+                <h4 className="text-xs font-bold text-text-heading uppercase tracking-wider font-outfit">
+                  1. Allowed Slots
+                </h4>
+                <p className="text-xs text-text-muted">
                   Select specific slot bundles or individual slots. Leave empty to allow any slot.
                 </p>
               </div>
@@ -2274,7 +2284,7 @@ export default function FFCSGuidedSelector({
                       prev.map((p) => (p.code === currentCode ? { ...p, allowedSlots: [] } : p)),
                     )
                   }
-                  className="text-[10px] font-bold text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer"
+                  className="text-xs font-bold text-primary hover:text-primary transition-colors cursor-pointer"
                 >
                   Clear Slots (Allow Any)
                 </button>
@@ -2284,9 +2294,7 @@ export default function FFCSGuidedSelector({
             {/* Slot Bundles */}
             {availableClusters.length > 0 && (
               <div className="space-y-1.5">
-                <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
-                  Quick Select Bundles
-                </span>
+                <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Quick Select Bundles</span>
                 <div className="flex flex-wrap gap-1.5">
                   {availableClusters.map((clusterKey) => {
                     const clusterSlots = clusterMap.get(clusterKey)?.slots || [];
@@ -2297,17 +2305,17 @@ export default function FFCSGuidedSelector({
                         key={clusterKey}
                         type="button"
                         onClick={() => handleToggleLockBundle(currentCode, clusterSlots)}
-                        className={`text-[11px] font-bold px-2.5 py-1 rounded-xl border transition-all cursor-pointer flex items-center gap-1 ${
+                        className={`text-xs font-bold px-2.5 py-1 rounded-xl border transition-all cursor-pointer flex items-center gap-1 ${
                           allSelected
-                            ? "bg-indigo-600 text-white border-indigo-500 shadow-xs"
-                            : "bg-zinc-950/60 border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                            ? "bg-primary text-primary-foreground border-border-ink shadow-xs"
+                            : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
                         }`}
                         title={`Toggle ${clusterKey} bundle (${clusterSlots.join(", ")})`}
                       >
                         <span>
                           {clusterKey.endsWith("1") || clusterKey.endsWith("2") ? `${clusterKey} Slots` : clusterKey}
                         </span>
-                        <span className="text-[10px] opacity-75 font-normal">({clusterSlots.join(", ")})</span>
+                        <span className="text-xs opacity-75 font-normal">({clusterSlots.join(", ")})</span>
                       </button>
                     );
                   })}
@@ -2329,10 +2337,10 @@ export default function FFCSGuidedSelector({
                           key={`broad-${letter}`}
                           type="button"
                           onClick={() => handleToggleLockBundle(currentCode, seriesSlots)}
-                          className={`text-[11px] font-bold px-2.5 py-1 rounded-xl border transition-all cursor-pointer ${
+                          className={`text-xs font-bold px-2.5 py-1 rounded-xl border transition-all cursor-pointer ${
                             allSelected
-                              ? "bg-purple-600 text-white border-purple-500 shadow-xs"
-                              : "bg-zinc-950/40 border-zinc-800/80 text-zinc-400 hover:text-zinc-200 hover:border-zinc-700"
+                              ? "bg-primary text-primary-foreground border-border-ink shadow-xs"
+                              : "bg-surface-secondary border-border-ink text-text-muted hover:text-text-secondary hover:border-border-ink"
                           }`}
                           title={`Toggle all ${letter} series slots (${seriesSlots.join(", ")})`}
                         >
@@ -2347,7 +2355,7 @@ export default function FFCSGuidedSelector({
             {/* Individual Slot Chips */}
             {uniqueSlots.length > 0 && (
               <div className="space-y-1.5 pt-1">
-                <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Individual Slots</span>
+                <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Individual Slots</span>
                 <div className="flex flex-wrap gap-1.5">
                   {uniqueSlots.map((slot) => {
                     const checked = isSlotChecked(slot);
@@ -2364,17 +2372,17 @@ export default function FFCSGuidedSelector({
                         onClick={() => handleToggleLockSlot(currentCode, slot)}
                         className={`text-xs font-bold px-3 py-1 rounded-xl border transition-all cursor-pointer flex items-center gap-1.5 ${
                           checked
-                            ? "bg-indigo-600/25 border-indigo-500 text-white shadow-xs ring-1 ring-indigo-500/30"
-                            : "bg-zinc-950/60 border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                            ? "bg-secondary border-border-ink text-white shadow-xs ring-1 ring-border-ink"
+                            : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
                         }`}
                       >
                         <span className="font-mono">{slot}</span>
                         {facultyCount > 0 && (
-                          <span className="text-[10px] font-normal text-zinc-400">
+                          <span className="text-xs font-normal text-text-muted">
                             {facultyCount} prof{facultyCount > 1 ? "s" : ""}
                           </span>
                         )}
-                        {checked && <Check className="w-3 h-3 text-indigo-400 shrink-0" />}
+                        {checked && <Check className="w-3 h-3 text-primary shrink-0" />}
                       </button>
                     );
                   })}
@@ -2384,13 +2392,13 @@ export default function FFCSGuidedSelector({
           </div>
 
           {/* Section 2: Preferred Faculty Configuration */}
-          <div className="space-y-2.5 pt-2 border-t border-zinc-800/80">
+          <div className="space-y-2.5 pt-2 border-t border-border-ink">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5">
               <div>
-                <h4 className="text-xs font-black text-white uppercase tracking-wider font-outfit">
+                <h4 className="text-xs font-bold text-text-heading uppercase tracking-wider font-outfit">
                   2. Preferred Faculty
                 </h4>
-                <p className="text-[11px] text-zinc-400">
+                <p className="text-xs text-text-muted">
                   Select preferred professors. If none are selected, all faculty will be considered.
                 </p>
               </div>
@@ -2406,10 +2414,10 @@ export default function FFCSGuidedSelector({
                       selected: currentLock.allowedFaculty ?? [],
                     })
                   }
-                  className={`text-[10px] font-bold transition-colors cursor-pointer flex items-center gap-1 ${
+                  className={`text-xs font-bold transition-colors cursor-pointer flex items-center gap-1 ${
                     facultyPriority[currentCode]?.length
-                      ? "text-indigo-400 hover:text-indigo-300"
-                      : "text-zinc-400 hover:text-white"
+                      ? "text-primary hover:text-primary"
+                      : "text-text-muted hover:text-text-heading"
                   }`}
                   title="Rank this course's faculties, best first — generation searches them in this order"
                 >
@@ -2426,7 +2434,7 @@ export default function FFCSGuidedSelector({
                         prev.map((p) => (p.code === currentCode ? { ...p, allowedFaculty: [] } : p)),
                       )
                     }
-                    className="text-[10px] font-bold text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer"
+                    className="text-xs font-bold text-primary hover:text-primary transition-colors cursor-pointer"
                   >
                     Clear Faculty (Allow Any)
                   </button>
@@ -2437,13 +2445,13 @@ export default function FFCSGuidedSelector({
             {/* Faculty Search Input */}
             {faculties.length > 4 && (
               <div className="relative">
-                <Search className="w-3.5 h-3.5 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Search className="w-3.5 h-3.5 text-text-muted absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={facultySearchQuery}
                   onChange={(e) => setFacultySearchQuery(e.target.value)}
                   placeholder="Search faculty name..."
-                  className="w-full bg-zinc-950/60 border border-zinc-800 rounded-xl pl-9 pr-3 py-1.5 text-base sm:text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                  className="w-full bg-background border border-border-ink rounded-xl pl-9 pr-3 py-1.5 text-base sm:text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-border-ink transition-colors"
                 />
               </div>
             )}
@@ -2451,7 +2459,7 @@ export default function FFCSGuidedSelector({
             {/* Faculty List */}
             <div className="space-y-1.5">
               {filteredFaculties.length === 0 ? (
-                <div className="p-3 rounded-xl bg-zinc-950/40 text-center text-xs text-zinc-500">
+                <div className="p-3 rounded-xl bg-surface-secondary text-center text-xs text-text-muted">
                   No faculties matching &quot;{facultySearchQuery}&quot;
                 </div>
               ) : (
@@ -2464,14 +2472,16 @@ export default function FFCSGuidedSelector({
                       {...clickable(() => handleToggleLockFaculty(currentCode, fac.name))}
                       className={`p-2.5 sm:p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-2.5 ${
                         checked
-                          ? "bg-indigo-600/15 border-indigo-500 text-white shadow-xs ring-1 ring-indigo-500/30"
-                          : "bg-zinc-950/40 border-zinc-800/80 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-800/30"
+                          ? "bg-secondary border-border-ink text-white shadow-xs ring-1 ring-border-ink"
+                          : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink hover:bg-surface-secondary"
                       }`}
                     >
                       <div className="flex items-center gap-2.5 min-w-0 flex-1">
                         <div
                           className={`w-4 h-4 rounded-md border flex items-center justify-center shrink-0 transition-colors ${
-                            checked ? "bg-indigo-600 border-indigo-500 text-white" : "border-zinc-700 bg-zinc-900"
+                            checked
+                              ? "bg-primary border-border-ink text-primary-foreground"
+                              : "border-border-ink bg-surface"
                           }`}
                         >
                           {checked && <Check className="w-3 h-3" />}
@@ -2479,14 +2489,14 @@ export default function FFCSGuidedSelector({
 
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-1.5 flex-wrap">
-                            <span className="font-extrabold text-xs sm:text-sm text-white truncate font-outfit">
+                            <span className="font-bold text-xs sm:text-sm text-text-heading truncate font-outfit">
                               {fac.name}
                             </span>
                             {fac.employeeId && (
-                              <span className="text-[10px] text-zinc-500 font-mono">#{fac.employeeId}</span>
+                              <span className="text-xs text-text-muted font-mono">#{fac.employeeId}</span>
                             )}
                           </div>
-                          <div className="flex items-center gap-2 text-[10.5px] text-zinc-400 mt-0.5 flex-wrap">
+                          <div className="flex items-center gap-2 text-xs text-text-muted mt-0.5 flex-wrap">
                             <span>Slots: {fac.slots.join(", ")}</span>
                             {fac.venues.length > 0 && <span>• Venue: {fac.venues.join(", ")}</span>}
                           </div>
@@ -2501,7 +2511,7 @@ export default function FFCSGuidedSelector({
                               e.stopPropagation();
                               onOpenFacultySchedule(fac.name);
                             }}
-                            className="p-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                            className="p-1.5 rounded-xl bg-surface hover:bg-surface-secondary border border-border-ink text-text-muted hover:text-text-heading transition-colors cursor-pointer"
                             title={`View ${fac.name}'s semester schedule`}
                           >
                             <Calendar className="w-3.5 h-3.5" />
@@ -2518,10 +2528,10 @@ export default function FFCSGuidedSelector({
                                 courseCode: currentCode,
                               });
                             }}
-                            className="p-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                            className="p-1.5 rounded-xl bg-surface hover:bg-surface-secondary border border-border-ink text-text-muted hover:text-text-heading transition-colors cursor-pointer"
                             title={`View ratings and reviews for ${fac.name}`}
                           >
-                            <Star className="w-3.5 h-3.5 text-amber-400" />
+                            <Star className="w-3.5 h-3.5 text-warning-foreground" />
                           </button>
                         )}
                       </div>
@@ -2539,30 +2549,30 @@ export default function FFCSGuidedSelector({
   const renderAutoHalfDaysCard = (isLandscape = false) => {
     return (
       <div
-        className={`p-4 sm:p-6 rounded-[28px] sm:rounded-[32px] bg-zinc-900/80 border border-zinc-800/80 backdrop-blur-xl shadow-2xl space-y-4 text-left flex flex-col justify-between ${
+        className={`p-4 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-4 text-left flex flex-col justify-between ${
           isLandscape ? "h-[74vh] max-h-[640px] w-full" : "min-h-[460px] max-h-[680px]"
         } overflow-y-auto custom-scrollbar`}
       >
         <div className="space-y-4">
           <div>
-            <h3 className="text-sm font-black text-white uppercase tracking-wider font-outfit">
+            <h3 className="text-sm font-bold text-text-heading uppercase tracking-wider font-outfit">
               5. Free Half-Days &amp; Limits
             </h3>
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-text-muted">
               Set target free mornings/afternoons, daily pacing rules, and the maximum timetables to generate.
             </p>
           </div>
 
           {/* Section 1: Target Free Half-Days */}
-          <div className="p-3.5 rounded-2xl bg-zinc-950/50 border border-zinc-800 space-y-2">
+          <div className="p-3.5 rounded-2xl bg-surface-secondary border border-border-ink space-y-2">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-xs font-black text-white uppercase tracking-wider font-outfit block">
+                <span className="text-xs font-bold text-text-heading uppercase tracking-wider font-outfit block">
                   Minimum Free Half-Days
                 </span>
-                <span className="text-[11px] text-zinc-400">Mornings or afternoons with 0 scheduled classes.</span>
+                <span className="text-xs text-text-muted">Mornings or afternoons with 0 scheduled classes.</span>
               </div>
-              <span className="text-sm font-black text-emerald-400 font-outfit">
+              <span className="text-sm font-bold text-success-foreground font-outfit">
                 {autoMinHalfDays === 0 ? "Flexible (0)" : `${autoMinHalfDays}+ Half-Days`}
               </span>
             </div>
@@ -2575,10 +2585,10 @@ export default function FFCSGuidedSelector({
                     key={num}
                     type="button"
                     onClick={() => setAutoMinHalfDays(num)}
-                    className={`py-2 rounded-xl text-xs font-black transition-all cursor-pointer text-center ${
+                    className={`py-2 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${
                       isSelected
                         ? "bg-emerald-600 text-white shadow-md ring-1 ring-emerald-400"
-                        : "bg-zinc-900 border border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                        : "bg-surface border border-border-ink text-text-secondary hover:border-border-ink"
                     }`}
                   >
                     {num === 0 ? "0" : `${num}`}
@@ -2589,17 +2599,15 @@ export default function FFCSGuidedSelector({
           </div>
 
           {/* Section 2: Generation Limit (Result Cap) */}
-          <div className="p-3.5 rounded-2xl bg-zinc-950/50 border border-zinc-800 space-y-2.5">
+          <div className="p-3.5 rounded-2xl bg-surface-secondary border border-border-ink space-y-2.5">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-xs font-black text-white uppercase tracking-wider font-outfit block">
+                <span className="text-xs font-bold text-text-heading uppercase tracking-wider font-outfit block">
                   Maximum Timetables to Generate
                 </span>
-                <span className="text-[11px] text-zinc-400">
-                  Caps search depth to balance solve speed with variety.
-                </span>
+                <span className="text-xs text-text-muted">Caps search depth to balance solve speed with variety.</span>
               </div>
-              <span className="text-xs font-black text-indigo-400 font-mono">
+              <span className="text-xs font-bold text-primary font-mono">
                 {autoNoLimit ? "Unlimited" : `${autoResultCap.toLocaleString()} Timetables`}
               </span>
             </div>
@@ -2619,8 +2627,8 @@ export default function FFCSGuidedSelector({
                       }}
                       className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                         isSelected
-                          ? "bg-indigo-600 text-white border-indigo-500 shadow-xs"
-                          : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700"
+                          ? "bg-primary text-primary-foreground border-border-ink shadow-xs"
+                          : "bg-surface border-border-ink text-text-muted hover:text-text-heading hover:border-border-ink"
                       }`}
                     >
                       {cap >= 1_000 ? `${cap / 1_000}K` : cap}
@@ -2633,31 +2641,31 @@ export default function FFCSGuidedSelector({
                 onClick={() => setAutoNoLimit(!autoNoLimit)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                   autoNoLimit
-                    ? "bg-indigo-600 text-white border-indigo-500 shadow-xs"
-                    : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700"
+                    ? "bg-primary text-primary-foreground border-border-ink shadow-xs"
+                    : "bg-surface border-border-ink text-text-muted hover:text-text-heading hover:border-border-ink"
                 }`}
               >
                 Unlimited ✨
               </button>
             </div>
             {autoNoLimit && (
-              <p className="mt-2 text-[10px] text-zinc-400">
+              <p className="mt-2 text-xs text-text-muted">
                 No ceiling — the search keeps every conflict-free option it finds. A very wide selection can take a
                 while.
               </p>
             )}
           </div>
 
-          <div className="space-y-2 rounded-2xl border border-zinc-800 bg-zinc-950/40 p-3.5 text-left">
+          <div className="space-y-2 rounded-2xl border border-border-ink bg-surface-secondary p-3.5 text-left">
             <div>
-              <span className="block text-xs font-black text-white uppercase tracking-wider font-outfit">
+              <span className="block text-xs font-bold text-text-heading uppercase tracking-wider font-outfit">
                 Lab Scheduling
               </span>
-              <span className="text-[10px] text-zinc-400">
+              <span className="text-xs text-text-muted">
                 These rules only apply to different lab classes; slots within one lab class stay together.
               </span>
             </div>
-            <label className="flex items-start gap-2 text-xs text-zinc-200">
+            <label className="flex items-start gap-2 text-xs text-text-secondary">
               <input
                 type="checkbox"
                 checked={autoSeparateLabDays}
@@ -2666,12 +2674,12 @@ export default function FFCSGuidedSelector({
               />
               <span>
                 <span className="block font-bold">At most one lab class per day</span>
-                <span className="block text-[10px] text-zinc-400">
+                <span className="block text-xs text-text-muted">
                   Multiple slots within one lab class still count as one class.
                 </span>
               </span>
             </label>
-            <label className="flex items-start gap-2 text-xs text-zinc-200">
+            <label className="flex items-start gap-2 text-xs text-text-secondary">
               <input
                 type="checkbox"
                 checked={autoAvoidConsecutiveLabs}
@@ -2680,13 +2688,13 @@ export default function FFCSGuidedSelector({
               />
               <span>
                 <span className="block font-bold">Avoid consecutive lab slots</span>
-                <span className="block text-[10px] text-zinc-400">
+                <span className="block text-xs text-text-muted">
                   Includes slots across lunch unless lunch is treated as a break below.
                 </span>
               </span>
             </label>
             {autoAvoidConsecutiveLabs && (
-              <label className="ml-5 flex items-start gap-2 text-xs text-zinc-200">
+              <label className="ml-5 flex items-start gap-2 text-xs text-text-secondary">
                 <input
                   type="checkbox"
                   checked={autoLunchBreakSeparatesLabs}
@@ -2695,7 +2703,7 @@ export default function FFCSGuidedSelector({
                 />
                 <span>
                   <span className="block font-bold">Treat lunch as a break</span>
-                  <span className="block text-[10px] text-zinc-400">
+                  <span className="block text-xs text-text-muted">
                     Uses the lunch break in the timetable schema, not specific slot names.
                   </span>
                 </span>
@@ -2705,9 +2713,7 @@ export default function FFCSGuidedSelector({
 
           {/* Section 3: Pacing Style */}
           <div className="space-y-1.5">
-            <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
-              Daily Class Pacing Style
-            </span>
+            <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Daily Class Pacing Style</span>
             <div className="grid grid-cols-2 gap-2">
               {[
                 { id: "compact", label: "Compact & Packed", desc: "Minimizes idle gaps between classes" },
@@ -2721,20 +2727,20 @@ export default function FFCSGuidedSelector({
                   onClick={() => setAutoPreference(opt.id as any)}
                   className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
                     autoPreference === opt.id
-                      ? "bg-indigo-600/20 border-indigo-500 text-white shadow-md ring-1 ring-indigo-500/40"
-                      : "bg-zinc-950/40 border-zinc-800/80 text-zinc-300 hover:border-zinc-700"
+                      ? "bg-secondary border-border-ink text-white shadow-md ring-1 ring-border-ink"
+                      : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-0.5">
-                    <span className="font-extrabold text-xs text-white font-outfit">{opt.label}</span>
-                    {autoPreference === opt.id && <Check className="w-3 h-3 text-indigo-400" />}
+                    <span className="font-bold text-xs text-text-heading font-outfit">{opt.label}</span>
+                    {autoPreference === opt.id && <Check className="w-3 h-3 text-primary" />}
                   </div>
-                  <p className="text-[10.5px] text-zinc-400 leading-snug">{opt.desc}</p>
+                  <p className="text-xs text-text-muted leading-snug">{opt.desc}</p>
                 </button>
               ))}
             </div>
             {(autoPreference === "morning" || autoPreference === "evening") && (
-              <label className="flex items-start gap-2.5 rounded-xl border border-zinc-800 bg-zinc-950/40 p-3 text-xs text-zinc-200">
+              <label className="flex items-start gap-2.5 rounded-xl border border-border-ink bg-surface-secondary p-3 text-xs text-text-secondary">
                 <input
                   type="checkbox"
                   checked={autoStrictTheoryPreference}
@@ -2743,7 +2749,7 @@ export default function FFCSGuidedSelector({
                 />
                 <span>
                   <span className="block font-bold">Strictly {autoPreference} theory only</span>
-                  <span className="mt-0.5 block text-[10px] leading-snug text-zinc-400">
+                  <span className="mt-0.5 block text-xs leading-snug text-text-muted">
                     Turn off to allow some {autoPreference === "morning" ? "evening" : "morning"} theory classes, while
                     ranking schedules with more preferred-time theory higher. Labs are not restricted.
                   </span>
@@ -2760,43 +2766,43 @@ export default function FFCSGuidedSelector({
     if (generation.isGenerating) {
       return (
         <div
-          className={`p-6 sm:p-8 rounded-[28px] sm:rounded-[32px] bg-zinc-900/90 border border-indigo-500/30 backdrop-blur-xl shadow-2xl space-y-6 text-center flex flex-col items-center justify-center ${
+          className={`p-6 sm:p-8 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-6 text-center flex flex-col items-center justify-center ${
             isLandscape ? "h-[74vh] max-h-[640px] w-full" : "min-h-[440px] max-h-[660px]"
           }`}
         >
           <div className="relative">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400 mx-auto shadow-xl">
-              <Loader2 className="w-8 h-8 sm:w-10 sm:h-10 animate-spin text-indigo-400" />
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-[14px] bg-secondary border border-border-ink flex items-center justify-center text-secondary-foreground mx-auto shadow-xl">
+              <Loader2 className="w-8 h-8 sm:w-10 sm:h-10 animate-spin text-primary" />
             </div>
-            <div className="absolute -inset-1 rounded-3xl bg-indigo-500/10 blur-xl -z-10 animate-pulse" />
+            <div className="absolute -inset-1 rounded-[14px] bg-secondary blur-xl -z-10 animate-pulse" />
           </div>
 
           <div className="space-y-1.5 max-w-sm">
-            <h3 className="text-lg sm:text-xl font-black text-white font-outfit tracking-tight">
+            <h3 className="text-lg sm:text-xl font-bold text-text-heading font-outfit tracking-tight">
               Generating Timetables...
             </h3>
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-text-muted">
               Exploring conflict-free combinations, applying blocked slots, and ranking by your pacing profile.
             </p>
           </div>
 
           {/* Live Metrics Dashboard */}
           <div className="grid grid-cols-3 gap-2.5 w-full max-w-md">
-            <div className="p-3 rounded-2xl bg-zinc-950/70 border border-zinc-800/80">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Nodes Explored</span>
-              <span className="text-base sm:text-lg font-black text-white font-mono">
+            <div className="p-3 rounded-2xl bg-background border border-border-ink">
+              <span className="text-xs font-bold text-text-muted uppercase tracking-wider block">Nodes Explored</span>
+              <span className="text-base sm:text-lg font-bold text-text-heading font-mono">
                 {generation.progress?.nodes?.toLocaleString() ?? 0}
               </span>
             </div>
-            <div className="p-3 rounded-2xl bg-zinc-950/70 border border-indigo-500/20 bg-indigo-950/20">
-              <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider block">Found</span>
-              <span className="text-base sm:text-lg font-black text-indigo-300 font-mono">
+            <div className="p-3 rounded-2xl bg-background border border-border-ink bg-indigo-950/20">
+              <span className="text-xs font-bold text-primary uppercase tracking-wider block">Found</span>
+              <span className="text-base sm:text-lg font-bold text-primary font-mono">
                 {generation.progress?.found?.toLocaleString() ?? 0}
               </span>
             </div>
-            <div className="p-3 rounded-2xl bg-zinc-950/70 border border-emerald-500/20 bg-emerald-950/20">
-              <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider block">Accepted</span>
-              <span className="text-base sm:text-lg font-black text-emerald-300 font-mono">
+            <div className="p-3 rounded-2xl bg-background border border-border-ink bg-emerald-950/20">
+              <span className="text-xs font-bold text-success-foreground uppercase tracking-wider block">Accepted</span>
+              <span className="text-base sm:text-lg font-bold text-success-foreground font-mono">
                 {generation.progress?.accepted?.toLocaleString() ?? 0}
               </span>
             </div>
@@ -2806,7 +2812,7 @@ export default function FFCSGuidedSelector({
           <button
             type="button"
             onClick={() => generation.cancel()}
-            className="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-rose-400 hover:text-rose-300 font-bold text-xs transition-all active:scale-95 cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-surface hover:bg-surface-secondary border border-border-ink text-danger-foreground hover:text-danger-foreground font-bold text-xs transition-all cursor-pointer"
           >
             Cancel Generation
           </button>
@@ -2816,77 +2822,79 @@ export default function FFCSGuidedSelector({
 
     return (
       <div
-        className={`p-5 sm:p-6 rounded-[28px] sm:rounded-[32px] bg-zinc-900/80 border border-zinc-800/80 backdrop-blur-xl shadow-2xl space-y-4 text-left flex flex-col justify-between ${
+        className={`p-5 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-4 text-left flex flex-col justify-between ${
           isLandscape ? "h-[74vh] max-h-[640px] w-full" : "min-h-[440px] max-h-[660px]"
         } overflow-y-auto custom-scrollbar`}
       >
         <div className="space-y-4">
           <div>
-            <h3 className="text-sm font-black text-white uppercase tracking-wider font-outfit">
+            <h3 className="text-sm font-bold text-text-heading uppercase tracking-wider font-outfit">
               6. Generation Blueprint
             </h3>
-            <p className="text-xs text-zinc-400">Review your parameters before launching the solver.</p>
+            <p className="text-xs text-text-muted">Review your parameters before launching the solver.</p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-zinc-950/60 border border-zinc-800 space-y-3">
+          <div className="p-4 rounded-2xl bg-background border border-border-ink space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-zinc-400">Target Timetable</span>
-              <span className="text-xs font-extrabold text-white">{activeTimetable.name}</span>
+              <span className="text-xs font-bold text-text-muted">Target Timetable</span>
+              <span className="text-xs font-bold text-text-heading">{activeTimetable.name}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-zinc-400">Courses to Solve</span>
-              <span className="text-xs font-extrabold text-indigo-400">{effectiveCourseLocks.length} Courses</span>
+              <span className="text-xs font-bold text-text-muted">Courses to Solve</span>
+              <span className="text-xs font-bold text-primary">{effectiveCourseLocks.length} Courses</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-zinc-400">Class Hours</span>
-              <span className="text-xs font-mono font-bold text-white">
+              <span className="text-xs font-bold text-text-muted">Class Hours</span>
+              <span className="text-xs font-mono font-bold text-text-heading">
                 {autoMinStartTime} – {autoMaxEndTime}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-zinc-400">Blocked Slots</span>
-              <span className="text-xs font-mono font-bold text-rose-400">
+              <span className="text-xs font-bold text-text-muted">Blocked Slots</span>
+              <span className="text-xs font-mono font-bold text-danger-foreground">
                 {effectiveBlockedSlots.size} Slots Blocked
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-zinc-400">Min Half-Days</span>
-              <span className="text-xs font-extrabold text-emerald-400">
+              <span className="text-xs font-bold text-text-muted">Min Half-Days</span>
+              <span className="text-xs font-bold text-success-foreground">
                 {autoMinHalfDays === 0 ? "Flexible (0)" : `${autoMinHalfDays}+`}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-zinc-400">Max Timetables</span>
-              <span className="text-xs font-extrabold text-indigo-300">
+              <span className="text-xs font-bold text-text-muted">Max Timetables</span>
+              <span className="text-xs font-bold text-primary">
                 {autoNoLimit ? "Unlimited" : autoResultCap.toLocaleString()}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-zinc-400">Pacing Style</span>
-              <span className="text-xs font-extrabold text-white capitalize">{autoPreference}</span>
+              <span className="text-xs font-bold text-text-muted">Pacing Style</span>
+              <span className="text-xs font-bold text-text-heading capitalize">{autoPreference}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-zinc-400">Ranking Profile</span>
-              <span className="text-xs font-extrabold text-white">{autoRankingMode ?? "None"}</span>
+              <span className="text-xs font-bold text-text-muted">Ranking Profile</span>
+              <span className="text-xs font-bold text-text-heading">{autoRankingMode ?? "None"}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-zinc-400">Sort Order</span>
-              <span className="text-xs font-extrabold text-white">
+              <span className="text-xs font-bold text-text-muted">Sort Order</span>
+              <span className="text-xs font-bold text-text-heading">
                 {AUTO_SORT_OPTIONS.find((option) => option.value === autoSortBy)?.label ?? autoSortBy}
               </span>
             </div>
           </div>
 
-          <section className="p-4 rounded-2xl bg-zinc-950/60 border border-indigo-500/20 space-y-4">
+          <section className="p-4 rounded-2xl bg-background border border-border-ink space-y-4">
             <div>
-              <h4 className="text-xs font-black text-white uppercase tracking-wider">Ranking &amp; Faculty Reviews</h4>
-              <p className="text-[11px] text-zinc-400 mt-1">
+              <h4 className="text-xs font-bold text-text-heading uppercase tracking-wider">
+                Ranking &amp; Faculty Reviews
+              </h4>
+              <p className="text-xs text-text-muted mt-1">
                 Customize this run without changing your saved Planner Settings.
               </p>
             </div>
 
             <div className="space-y-2">
-              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Ranking Profile</span>
+              <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Ranking Profile</span>
               <div className="flex flex-wrap gap-1.5">
                 {[
                   { value: null, label: "No profile" },
@@ -2900,10 +2908,10 @@ export default function FFCSGuidedSelector({
                     type="button"
                     aria-pressed={autoRankingMode === option.value}
                     onClick={() => setAutoRankingMode(option.value)}
-                    className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold border transition-colors ${
+                    className={`px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-colors ${
                       autoRankingMode === option.value
-                        ? "bg-indigo-600 border-indigo-500 text-white"
-                        : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white"
+                        ? "bg-primary border-border-ink text-primary-foreground"
+                        : "bg-surface border-border-ink text-text-muted hover:text-text-heading"
                     }`}
                   >
                     {option.label}
@@ -2913,7 +2921,7 @@ export default function FFCSGuidedSelector({
             </div>
 
             <div className="space-y-2">
-              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Sort Order</span>
+              <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Sort Order</span>
               <div className="flex flex-wrap gap-1.5">
                 {AUTO_SORT_OPTIONS.map((option) => (
                   <button
@@ -2921,10 +2929,10 @@ export default function FFCSGuidedSelector({
                     type="button"
                     aria-pressed={autoSortBy === option.value}
                     onClick={() => setAutoSortBy(option.value)}
-                    className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold border transition-colors ${
+                    className={`px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-colors ${
                       autoSortBy === option.value
-                        ? "bg-indigo-600 border-indigo-500 text-white"
-                        : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white"
+                        ? "bg-primary border-border-ink text-primary-foreground"
+                        : "bg-surface border-border-ink text-text-muted hover:text-text-heading"
                     }`}
                   >
                     {option.label}
@@ -2935,18 +2943,18 @@ export default function FFCSGuidedSelector({
 
             <div className="space-y-2">
               <div>
-                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+                <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
                   Combined Ranking Priority
                 </span>
-                <p className="text-[10px] text-zinc-500">Move the most important factor to the top.</p>
+                <p className="text-xs text-text-muted">Move the most important factor to the top.</p>
               </div>
               <div className="space-y-1.5">
                 {autoRankingPriorityOrder.map((priority, index) => (
                   <div
                     key={priority}
-                    className="flex items-center justify-between gap-2 rounded-xl bg-zinc-900/80 px-3 py-1.5 text-xs"
+                    className="flex items-center justify-between gap-2 rounded-xl bg-surface px-3 py-1.5 text-xs"
                   >
-                    <span className="font-medium text-zinc-200">
+                    <span className="font-medium text-text-secondary">
                       {index + 1}. {AUTO_RANKING_PRIORITY_LABELS[priority]}
                     </span>
                     <span className="flex">
@@ -2955,7 +2963,7 @@ export default function FFCSGuidedSelector({
                         aria-label={`Move ${AUTO_RANKING_PRIORITY_LABELS[priority]} up`}
                         disabled={index === 0}
                         onClick={() => moveAutoRankingPriority(index, -1)}
-                        className="rounded p-1 text-zinc-400 hover:text-white disabled:opacity-30"
+                        className="rounded p-1 text-text-muted hover:text-text-heading disabled:opacity-30"
                       >
                         <ChevronUp className="h-4 w-4" />
                       </button>
@@ -2964,7 +2972,7 @@ export default function FFCSGuidedSelector({
                         aria-label={`Move ${AUTO_RANKING_PRIORITY_LABELS[priority]} down`}
                         disabled={index === autoRankingPriorityOrder.length - 1}
                         onClick={() => moveAutoRankingPriority(index, 1)}
-                        className="rounded p-1 text-zinc-400 hover:text-white disabled:opacity-30"
+                        className="rounded p-1 text-text-muted hover:text-text-heading disabled:opacity-30"
                       >
                         <ChevronDown className="h-4 w-4" />
                       </button>
@@ -2977,10 +2985,10 @@ export default function FFCSGuidedSelector({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <div>
-                  <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+                  <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
                     Faculty Score Priorities
                   </span>
-                  <p className="text-[10px] text-zinc-500">0 ignores a score; maximum weight is 5.</p>
+                  <p className="text-xs text-text-muted">0 ignores a score; maximum weight is 5.</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   {(
@@ -2991,7 +2999,7 @@ export default function FFCSGuidedSelector({
                       ["vibe", "Vibe"],
                     ] as const
                   ).map(([key, label]) => (
-                    <label key={key} className="flex items-center justify-between gap-2 text-[11px] text-zinc-300">
+                    <label key={key} className="flex items-center justify-between gap-2 text-xs text-text-secondary">
                       <span>{label}</span>
                       <input
                         aria-label={`${label} importance`}
@@ -3001,7 +3009,7 @@ export default function FFCSGuidedSelector({
                         step={1}
                         value={autoFacultyMetricWeights[key]}
                         onChange={(event) => updateAutoFacultyWeight(key, event.target.value)}
-                        className="w-16 rounded-lg border border-zinc-700 bg-zinc-900 px-2 py-1 text-right text-white"
+                        className="w-16 rounded-lg border border-border-ink bg-surface px-2 py-1 text-right text-white"
                       />
                     </label>
                   ))}
@@ -3010,10 +3018,10 @@ export default function FFCSGuidedSelector({
 
               <div className="space-y-2">
                 <div>
-                  <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+                  <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
                     Minimum Faculty Scores
                   </span>
-                  <p className="text-[10px] text-zinc-500">0 disables a filter; unrated faculty are not rejected.</p>
+                  <p className="text-xs text-text-muted">0 disables a filter; unrated faculty are not rejected.</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   {(
@@ -3024,7 +3032,7 @@ export default function FFCSGuidedSelector({
                       ["minVibe", "Vibe / 5", 5, 0.5],
                     ] as const
                   ).map(([key, label, max, step]) => (
-                    <label key={key} className="flex items-center justify-between gap-2 text-[11px] text-zinc-300">
+                    <label key={key} className="flex items-center justify-between gap-2 text-xs text-text-secondary">
                       <span>{label}</span>
                       <input
                         aria-label={`Minimum ${label}`}
@@ -3034,7 +3042,7 @@ export default function FFCSGuidedSelector({
                         step={step}
                         value={autoFacultyScoreFilters[key]}
                         onChange={(event) => updateAutoFacultyFilter(key, event.target.value)}
-                        className="w-16 rounded-lg border border-zinc-700 bg-zinc-900 px-2 py-1 text-right text-white"
+                        className="w-16 rounded-lg border border-border-ink bg-surface px-2 py-1 text-right text-white"
                       />
                     </label>
                   ))}
@@ -3045,12 +3053,12 @@ export default function FFCSGuidedSelector({
 
           {effectiveCourseLocks.length > 0 && (
             <div className="space-y-1.5">
-              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Courses:</span>
+              <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Courses:</span>
               <div className="flex flex-wrap gap-1.5">
                 {effectiveCourseLocks.map((l) => (
                   <span
                     key={l.code}
-                    className="text-xs font-black px-2.5 py-1 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-outfit"
+                    className="text-xs font-bold px-2.5 py-1 rounded-xl bg-secondary border border-border-ink text-secondary-foreground font-outfit"
                   >
                     {l.code}
                   </span>
@@ -3060,8 +3068,8 @@ export default function FFCSGuidedSelector({
           )}
 
           {generationError && (
-            <div className="p-3.5 rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-bold flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 shrink-0 text-rose-400" />
+            <div className="p-3.5 rounded-2xl bg-danger-surface border border-border-ink text-danger-foreground text-xs font-bold flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 shrink-0 text-danger-foreground" />
               <span>{generationError}</span>
             </div>
           )}
@@ -3092,26 +3100,26 @@ export default function FFCSGuidedSelector({
 
     return (
       <div
-        className={`p-4 sm:p-6 rounded-[28px] sm:rounded-[32px] bg-zinc-900/90 border border-zinc-800/80 backdrop-blur-xl shadow-2xl space-y-3.5 text-left flex flex-col ${
+        className={`p-4 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-3.5 text-left flex flex-col ${
           isLandscape ? "h-[74vh] max-h-[640px] w-full" : "h-[60vh] sm:h-[66vh] min-h-[460px] max-h-[680px]"
         } overflow-y-auto custom-scrollbar`}
       >
         {/* Top: Variant Carousel Navigator & Grid View Shortcut */}
-        <div className="flex items-center justify-between p-3 rounded-2xl bg-zinc-950/60 border border-zinc-800 shrink-0 gap-2">
+        <div className="flex items-center justify-between p-3 rounded-2xl bg-background border border-border-ink shrink-0 gap-2">
           <button
             type="button"
             disabled={selectedVariantIndex <= 0}
             onClick={() => setSelectedVariantIndex((prev) => Math.max(0, prev - 1))}
-            className="p-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
+            className="p-1.5 rounded-xl bg-surface border border-border-ink text-text-secondary hover:text-text-heading disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
 
           <div className="text-center min-w-0">
-            <span className="font-extrabold text-xs sm:text-sm text-white font-outfit truncate block">
+            <span className="font-bold text-xs sm:text-sm text-text-heading font-outfit truncate block">
               Recommendation {selectedVariantIndex + 1} of {autoResultsList.length}
             </span>
-            <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-wider">
+            <span className="text-xs text-primary font-bold uppercase tracking-wider">
               {selectedVariantIndex === 0 ? "★ Top Recommended" : "Alternative Option"}
             </span>
           </div>
@@ -3120,20 +3128,20 @@ export default function FFCSGuidedSelector({
             <button
               type="button"
               onClick={() => setGuidedPhase("auto_timetable_view")}
-              className="px-2.5 py-1.5 rounded-xl bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 text-indigo-300 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+              className="px-2.5 py-1.5 rounded-xl bg-secondary hover:bg-secondary border border-border-ink text-secondary-foreground text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
               title="View Vertical Timetable Grid"
             >
-              <LayoutGrid className="w-3.5 h-3.5 text-indigo-400" />
+              <LayoutGrid className="w-3.5 h-3.5 text-primary" />
               <span className="hidden sm:inline">Grid View</span>
             </button>
 
             <button
               type="button"
               onClick={() => setGuidedPhase("manual_timetable_view")}
-              className="px-2.5 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+              className="px-2.5 py-1.5 rounded-xl bg-surface hover:bg-surface-secondary border border-border-ink text-text-secondary hover:text-text-heading text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
               title="Browse My Timetables"
             >
-              <Calendar className="w-3.5 h-3.5 text-zinc-400" />
+              <Calendar className="w-3.5 h-3.5 text-text-muted" />
               <span className="hidden sm:inline">My Timetables ({effectiveTimetables.length})</span>
             </button>
 
@@ -3141,7 +3149,7 @@ export default function FFCSGuidedSelector({
               type="button"
               disabled={selectedVariantIndex >= autoResultsList.length - 1}
               onClick={() => setSelectedVariantIndex((prev) => Math.min(autoResultsList.length - 1, prev + 1))}
-              className="p-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
+              className="p-1.5 rounded-xl bg-surface border border-border-ink text-text-secondary hover:text-text-heading disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -3150,8 +3158,8 @@ export default function FFCSGuidedSelector({
 
         {/* Drop-ladder notice: which courses these results are missing */}
         {generationNotice && (
-          <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold flex items-start gap-2 shrink-0">
-            <AlertTriangle className="w-4 h-4 shrink-0 text-amber-400 mt-0.5" />
+          <div className="p-3 rounded-2xl bg-warning-surface border border-border-ink text-warning-foreground text-xs font-bold flex items-start gap-2 shrink-0">
+            <AlertTriangle className="w-4 h-4 shrink-0 text-warning-foreground mt-0.5" />
             <span>{generationNotice}</span>
           </div>
         )}
@@ -3166,41 +3174,41 @@ export default function FFCSGuidedSelector({
 
         {/* Metrics Strip */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs shrink-0">
-          <div className="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800">
-            <span className="text-[10px] font-bold text-zinc-500 block">Free Half-Days</span>
-            <span className="font-black text-emerald-400 text-sm font-outfit">{metrics.halfDays}</span>
+          <div className="p-2.5 rounded-xl bg-background border border-border-ink">
+            <span className="text-xs font-bold text-text-muted block">Free Half-Days</span>
+            <span className="font-bold text-success-foreground text-sm font-outfit">{metrics.halfDays}</span>
           </div>
-          <div className="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800">
-            <span className="text-[10px] font-bold text-zinc-500 block">Total Gaps</span>
-            <span className="font-black text-white text-sm font-outfit">{gapHours.toFixed(1)}h</span>
+          <div className="p-2.5 rounded-xl bg-background border border-border-ink">
+            <span className="text-xs font-bold text-text-muted block">Total Gaps</span>
+            <span className="font-bold text-text-heading text-sm font-outfit">{gapHours.toFixed(1)}h</span>
           </div>
-          <div className="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800">
-            <span className="text-[10px] font-bold text-zinc-500 block">Avg Faculty Score</span>
-            <span className="font-black text-amber-400 text-sm font-outfit">
+          <div className="p-2.5 rounded-xl bg-background border border-border-ink">
+            <span className="text-xs font-bold text-text-muted block">Avg Faculty Score</span>
+            <span className="font-bold text-warning-foreground text-sm font-outfit">
               {avgFacultyScore !== null ? `★ ${avgFacultyScore.toFixed(0)}%` : "—"}
             </span>
           </div>
-          <div className="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-800">
-            <span className="text-[10px] font-bold text-zinc-500 block">Total Credits</span>
-            <span className="font-black text-indigo-400 text-sm font-outfit">{totalCredits}</span>
+          <div className="p-2.5 rounded-xl bg-background border border-border-ink">
+            <span className="text-xs font-bold text-text-muted block">Total Credits</span>
+            <span className="font-bold text-primary text-sm font-outfit">{totalCredits}</span>
           </div>
         </div>
 
         {currentVariant.rankingScore !== undefined && (
-          <section className="rounded-2xl border border-indigo-500/20 bg-indigo-500/5 p-3.5 space-y-2 shrink-0">
+          <section className="rounded-2xl border border-border-ink bg-secondary p-3.5 space-y-2 shrink-0">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-300">Combined ranking</span>
-                <p className="text-xs text-zinc-400">
+                <span className="text-xs font-bold uppercase tracking-wider text-primary">Combined ranking</span>
+                <p className="text-xs text-text-muted">
                   {currentVariant.rankingScore.toFixed(1)}/100 · unrated faculty lower review coverage
                 </p>
               </div>
-              <span className="text-xs font-bold text-white">
+              <span className="text-xs font-bold text-text-heading">
                 {currentVariant.facultySummary?.ratedFacultyCount ?? 0} reviewed /{" "}
                 {currentVariant.facultySummary?.unratedFacultyCount ?? 0} unrated
               </span>
             </div>
-            <div className="flex flex-wrap gap-x-3 gap-y-1 text-[10px] text-zinc-400">
+            <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-text-muted">
               <span>W % {currentVariant.facultySummary?.averageWPct?.toFixed(1) ?? "—"}</span>
               <span>Lecture {currentVariant.facultySummary?.averageLecture?.toFixed(1) ?? "—"}/5</span>
               <span>DA {currentVariant.facultySummary?.averageDa?.toFixed(1) ?? "—"}/5</span>
@@ -3210,7 +3218,7 @@ export default function FFCSGuidedSelector({
               {Object.entries(currentVariant.rankingBreakdown ?? {}).map(([key, points]) => (
                 <span
                   key={key}
-                  className="rounded-md border border-zinc-700 bg-zinc-950/60 px-2 py-1 text-[10px] text-zinc-300"
+                  className="rounded-md border border-border-ink bg-background px-2 py-1 text-xs text-text-secondary"
                 >
                   {key}: {points.toFixed(1)} pts
                 </span>
@@ -3221,39 +3229,39 @@ export default function FFCSGuidedSelector({
 
         {/* Course Roster with Faculty Review, Schedule & Replacement */}
         <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar">
-          <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">
+          <span className="text-xs font-bold text-text-muted uppercase tracking-wider block">
             Scheduled Courses &amp; Faculties:
           </span>
           {currentVariant.courses.map((course) => (
             <div
               key={course.id || course.code}
-              className="p-3.5 rounded-2xl bg-zinc-950/60 border border-zinc-800 space-y-2"
+              className="p-3.5 rounded-2xl bg-background border border-border-ink space-y-2"
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-extrabold text-sm text-white font-outfit">{course.code}</span>
-                    <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-md bg-zinc-900 border border-zinc-700 text-zinc-200">
+                    <span className="font-bold text-sm text-text-heading font-outfit">{course.code}</span>
+                    <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-md bg-surface border border-border-ink text-text-secondary">
                       {course.slots.join("+")}
                     </span>
                   </div>
                   <div className="flex items-center gap-1 my-1 flex-wrap">
                     {renderCourseTypeChips(course.type, "sm")}
                   </div>
-                  <p className="text-xs text-zinc-400 truncate">{course.title}</p>
+                  <p className="text-xs text-text-muted truncate">{course.title}</p>
                 </div>
 
                 <div className="text-right shrink-0">
-                  <span className="text-[10px] font-bold text-zinc-500 block">{course.venue}</span>
-                  <span className="text-xs font-black text-indigo-400">{course.credits} Cr</span>
+                  <span className="text-xs font-bold text-text-muted block">{course.venue}</span>
+                  <span className="text-xs font-bold text-primary">{course.credits} Cr</span>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-zinc-800/60 gap-2 flex-wrap">
+              <div className="flex items-center justify-between pt-2 border-t border-border-ink gap-2 flex-wrap">
                 <div className="flex items-center gap-2 min-w-0 flex-wrap">
                   <FacultyAvatar employeeId={course.employeeId} name={course.faculty} size="sm" tone="indigo" />
                   <div className="flex items-center gap-2 min-w-0 flex-wrap">
-                    <span className="text-xs font-extrabold text-white truncate max-w-[140px] sm:max-w-[180px]">
+                    <span className="text-xs font-bold text-text-heading truncate max-w-[140px] sm:max-w-[180px]">
                       {course.faculty}
                     </span>
                     <FacultyScoresForCourse
@@ -3270,7 +3278,7 @@ export default function FFCSGuidedSelector({
                     <button
                       type="button"
                       onClick={() => onOpenFacultySchedule(course.faculty)}
-                      className="px-2 py-1 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 text-[10.5px] font-bold border border-cyan-500/20 flex items-center gap-1 cursor-pointer"
+                      className="px-2 py-1 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 text-xs font-bold border border-cyan-500/20 flex items-center gap-1 cursor-pointer"
                       title="View Faculty Schedule for Semester"
                     >
                       <CalendarDays className="w-3 h-3 text-cyan-400" />
@@ -3289,10 +3297,10 @@ export default function FFCSGuidedSelector({
                           courseCode: course.code,
                         })
                       }
-                      className="px-2 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-[10.5px] font-bold border border-amber-500/20 flex items-center gap-1 cursor-pointer"
+                      className="px-2 py-1 rounded-lg bg-warning-surface hover:bg-warning-surface text-warning-foreground text-xs font-bold border border-border-ink flex items-center gap-1 cursor-pointer"
                       title="View Vitfac Review"
                     >
-                      <Star className="w-3 h-3 text-amber-400" />
+                      <Star className="w-3 h-3 text-warning-foreground" />
                       <span>Review</span>
                     </button>
                   )}
@@ -3300,10 +3308,10 @@ export default function FFCSGuidedSelector({
                   <button
                     type="button"
                     onClick={() => setSwapCourseRow({ course })}
-                    className="px-2 py-1 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 text-[10.5px] font-bold border border-indigo-500/20 flex items-center gap-1 cursor-pointer"
+                    className="px-2 py-1 rounded-lg bg-secondary hover:bg-secondary text-secondary-foreground text-xs font-bold border border-border-ink flex items-center gap-1 cursor-pointer"
                     title="Swap Faculty for this Slot"
                   >
-                    <RotateCcw className="w-3 h-3 text-indigo-400" />
+                    <RotateCcw className="w-3 h-3 text-primary" />
                     <span>Swap</span>
                   </button>
                 </div>
@@ -3334,19 +3342,19 @@ export default function FFCSGuidedSelector({
 
     return (
       <div
-        className={`p-4 sm:p-5 rounded-[28px] sm:rounded-[32px] bg-zinc-900/90 border border-zinc-800/80 backdrop-blur-xl shadow-2xl space-y-3 text-left flex flex-col justify-between ${
+        className={`p-4 sm:p-5 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-3 text-left flex flex-col justify-between ${
           isLandscape ? "h-[74vh] max-h-[640px] w-full" : "h-[62vh] sm:h-[68vh] min-h-[480px] max-h-[720px]"
         }`}
       >
         {/* Header Strip with Multi-Timetable Navigation & Metrics */}
-        <div className="flex items-center justify-between p-2.5 rounded-2xl bg-zinc-950/60 border border-zinc-800 shrink-0 gap-2 flex-wrap">
+        <div className="flex items-center justify-between p-2.5 rounded-2xl bg-background border border-border-ink shrink-0 gap-2 flex-wrap">
           <div className="flex items-center gap-2">
             <button
               type="button"
               aria-label="Previous Timetable"
               disabled={browsingTimetableIndex <= 0}
               onClick={() => navigateBrowsingTimetable(browsingTimetableIndex - 1, "backward")}
-              className="p-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed transition-all"
+              className="p-1.5 rounded-xl bg-surface border border-border-ink text-text-secondary hover:text-text-heading disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed transition-all"
               title="Previous Timetable"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -3354,22 +3362,22 @@ export default function FFCSGuidedSelector({
 
             <div className="text-left min-w-0">
               <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="font-extrabold text-xs sm:text-sm text-white font-outfit truncate max-w-[140px] sm:max-w-[200px]">
+                <span className="font-bold text-xs sm:text-sm text-text-heading font-outfit truncate max-w-[140px] sm:max-w-[200px]">
                   {currentTt.name}
                 </span>
-                <span className="text-[10px] text-zinc-400 font-mono">
+                <span className="text-xs text-text-muted font-mono">
                   ({browsingTimetableIndex + 1}/{effectiveTimetables.length})
                 </span>
               </div>
               {isCurrentActive ? (
-                <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider block">
+                <span className="text-xs text-success-foreground font-bold uppercase tracking-wider block">
                   ● Mounted Active Timetable
                 </span>
               ) : (
                 <button
                   type="button"
                   onClick={() => onSelectTimetable && onSelectTimetable(currentTt.id)}
-                  className="text-[10px] text-indigo-400 hover:text-indigo-300 font-bold uppercase tracking-wider block cursor-pointer underline"
+                  className="text-xs text-primary hover:text-primary font-bold uppercase tracking-wider block cursor-pointer underline"
                 >
                   Set as Active Schedule
                 </button>
@@ -3381,7 +3389,7 @@ export default function FFCSGuidedSelector({
               aria-label="Next Timetable"
               disabled={browsingTimetableIndex >= effectiveTimetables.length - 1}
               onClick={() => navigateBrowsingTimetable(browsingTimetableIndex + 1, "forward")}
-              className="p-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed transition-all"
+              className="p-1.5 rounded-xl bg-surface border border-border-ink text-text-secondary hover:text-text-heading disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed transition-all"
               title="Next Timetable"
             >
               <ChevronRight className="w-4 h-4" />
@@ -3389,13 +3397,13 @@ export default function FFCSGuidedSelector({
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="px-2 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-bold">
+            <span className="px-2 py-1 rounded-lg bg-success-surface border border-border-ink text-success-foreground text-xs font-bold">
               {metrics.halfDays} Half-Days
             </span>
-            <span className="px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-[11px] font-bold">
+            <span className="px-2.5 py-1 rounded-lg bg-secondary border border-border-ink text-secondary-foreground text-xs font-bold">
               {browsingCourses.length} Course{browsingCourses.length === 1 ? "" : "s"}
             </span>
-            <span className="px-2.5 py-1 rounded-lg bg-zinc-800/80 border border-zinc-700/60 text-zinc-300 text-[11px] font-bold">
+            <span className="px-2.5 py-1 rounded-lg bg-surface-secondary border border-border-ink text-text-secondary text-xs font-bold">
               {totalCredits} Credits
             </span>
             <button
@@ -3409,9 +3417,9 @@ export default function FFCSGuidedSelector({
                 setGuidedPhase("builder");
                 setCurrentStep(1);
               }}
-              className="px-2.5 py-1.5 rounded-xl bg-indigo-600/15 hover:bg-indigo-600/25 border border-indigo-500/30 text-indigo-300 hover:text-white text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+              className="px-2.5 py-1.5 rounded-xl bg-secondary hover:bg-secondary border border-border-ink text-secondary-foreground hover:text-text-heading text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
             >
-              <Plus className="w-3.5 h-3.5 text-indigo-400" />
+              <Plus className="w-3.5 h-3.5 text-primary" />
               <span>+ Add Course</span>
             </button>
           </div>
@@ -3422,7 +3430,7 @@ export default function FFCSGuidedSelector({
           <div
             role="tablist"
             aria-label="Select saved timetable"
-            className="flex items-center gap-1.5 overflow-x-auto snap-x snap-mandatory py-1 px-1 custom-scrollbar shrink-0 border-b border-zinc-800/50 pb-2"
+            className="flex items-center gap-1.5 overflow-x-auto snap-x snap-mandatory py-1 px-1 custom-scrollbar shrink-0 border-b border-border-ink pb-2"
           >
             {effectiveTimetables.map((tt, idx) => {
               const isSelected = idx === browsingTimetableIndex;
@@ -3435,14 +3443,14 @@ export default function FFCSGuidedSelector({
                   onClick={() => navigateBrowsingTimetable(idx, idx >= browsingTimetableIndex ? "forward" : "backward")}
                   className={`snap-center px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 border ${
                     isSelected
-                      ? "bg-indigo-600/25 border-indigo-500/50 text-white shadow-sm ring-1 ring-indigo-500/30"
-                      : "bg-zinc-950/60 border-zinc-800/80 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900"
+                      ? "bg-secondary border-border-ink text-white shadow-sm ring-1 ring-border-ink"
+                      : "bg-background border-border-ink text-text-muted hover:text-text-secondary hover:bg-surface"
                   }`}
                 >
                   <span className="truncate max-w-[120px]">{tt.name}</span>
                   <span
-                    className={`px-1.5 py-0.2 rounded-md text-[10px] font-mono ${
-                      isSelected ? "bg-indigo-500/30 text-indigo-200" : "bg-zinc-800 text-zinc-400"
+                    className={`px-1.5 py-0.2 rounded-md text-xs font-mono ${
+                      isSelected ? "bg-secondary text-secondary-foreground" : "bg-surface-secondary text-text-muted"
                     }`}
                   >
                     {tt.courses?.length || 0}
@@ -3462,7 +3470,7 @@ export default function FFCSGuidedSelector({
         {/* Embedded Interactive Vertical Timetable Grid with View Transition Class */}
         <div
           key={currentTt.id}
-          className={`flex-1 min-h-[260px] overflow-auto rounded-2xl bg-zinc-950/70 border border-zinc-800/80 p-2 custom-scrollbar transition-all duration-300 animate-in fade-in ${
+          className={`flex-1 min-h-[260px] overflow-auto rounded-2xl bg-background border border-border-ink p-2 custom-scrollbar transition-all duration-300 animate-in fade-in ${
             browserTransitionDirection === "forward" ? "slide-in-from-right-2" : "slide-in-from-left-2"
           }`}
         >
@@ -3483,20 +3491,20 @@ export default function FFCSGuidedSelector({
             {browsingCourses.map((c) => (
               <div
                 key={c.id}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-zinc-950/80 border border-zinc-800 text-[11px] shrink-0"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-background border border-border-ink text-xs shrink-0"
               >
                 <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: c.color || "#6366f1" }} />
-                <span className="font-black text-white">{c.code}</span>
-                <span className="text-zinc-400 font-medium truncate max-w-[100px]">{c.slots.join("+")}</span>
-                <span className="text-zinc-500 text-[10px]">({c.faculty})</span>
+                <span className="font-bold text-text-heading">{c.code}</span>
+                <span className="text-text-muted font-medium truncate max-w-[100px]">{c.slots.join("+")}</span>
+                <span className="text-text-muted text-xs">({c.faculty})</span>
               </div>
             ))}
           </div>
         ) : (
-          <div className="py-2 px-3 rounded-xl bg-zinc-950/50 border border-dashed border-zinc-800/80 text-center shrink-0">
-            <span className="text-xs text-zinc-400 font-medium">
-              No courses placed in <strong className="text-white">{currentTt.name}</strong> yet. Click{" "}
-              <strong className="text-indigo-400">+ Add Course</strong> to begin.
+          <div className="py-2 px-3 rounded-xl bg-surface-secondary border border-dashed border-border-ink text-center shrink-0">
+            <span className="text-xs text-text-muted font-medium">
+              No courses placed in <strong className="text-text-heading">{currentTt.name}</strong> yet. Click{" "}
+              <strong className="text-primary">+ Add Course</strong> to begin.
             </span>
           </div>
         )}
@@ -3507,15 +3515,17 @@ export default function FFCSGuidedSelector({
   // ── BUILDER SCREENS (MANUAL COURSE SELECTOR) ──
   const renderCourseListCard = (isLandscape = false) => (
     <div
-      className={`p-4 sm:p-6 rounded-[28px] sm:rounded-[32px] bg-zinc-900/80 border border-zinc-800/80 backdrop-blur-xl shadow-2xl space-y-3 sm:space-y-4 text-left flex flex-col ${
+      className={`p-4 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-3 sm:space-y-4 text-left flex flex-col ${
         isLandscape ? "h-[74vh] max-h-[640px] w-full" : "h-[52vh] sm:h-[58vh] min-h-[380px] max-h-[620px]"
       }`}
     >
       {/* Integration Switcher: Jump between Manual Builder and Auto Generator */}
-      <div className="flex items-center justify-between p-2.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/25 shrink-0 text-xs">
+      <div className="flex items-center justify-between p-2.5 rounded-2xl bg-secondary border border-border-ink shrink-0 text-xs">
         <div className="flex items-center gap-2 min-w-0">
-          <Wand2 className="w-4 h-4 text-indigo-400 shrink-0" />
-          <span className="text-zinc-300 font-medium truncate">Want algorithm to solve combinations for you?</span>
+          <Wand2 className="w-4 h-4 text-primary shrink-0" />
+          <span className="text-text-secondary font-medium truncate">
+            Want algorithm to solve combinations for you?
+          </span>
         </div>
         <button
           type="button"
@@ -3523,43 +3533,43 @@ export default function FFCSGuidedSelector({
             setPlanMode("auto");
             setGuidedPhase("auto_courses");
           }}
-          className="font-bold text-indigo-400 hover:text-indigo-300 hover:underline shrink-0 text-xs cursor-pointer"
+          className="font-bold text-primary hover:text-primary hover:underline shrink-0 text-xs cursor-pointer"
         >
           Auto-Generate Timetable ✨
         </button>
       </div>
 
       <div className="relative shrink-0">
-        <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+        <Search className="w-4 h-4 text-text-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search code (e.g. BCSE101), title, or batch..."
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-800 bg-zinc-950/60 text-base sm:text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-zinc-600"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border-ink bg-background text-base sm:text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-border-ink transition-all placeholder:text-text-muted"
         />
       </div>
 
       {effectiveCourseLocks.length > 0 && (
-        <div className="flex items-center justify-between p-2 sm:p-2.5 rounded-2xl bg-purple-500/10 border border-purple-500/25 shrink-0 gap-2">
+        <div className="flex items-center justify-between p-2 sm:p-2.5 rounded-2xl bg-secondary border border-border-ink shrink-0 gap-2">
           <div className="flex items-center gap-2 min-w-0">
-            <div className="w-6 h-6 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
+            <div className="w-6 h-6 rounded-lg bg-secondary flex items-center justify-center text-secondary-foreground shrink-0">
               <Lock className="w-3.5 h-3.5" />
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-bold text-white flex items-center gap-1.5 truncate">
+              <p className="text-xs font-bold text-text-heading flex items-center gap-1.5 truncate">
                 <span>{lockedOnlyFilter ? "Locked Courses Only" : "Any Courses (All)"}</span>
-                <span className="text-[10px] font-black px-1.5 py-0.2 rounded-md bg-purple-500/25 text-purple-300 shrink-0">
+                <span className="text-xs font-bold px-1.5 py-0.2 rounded-md bg-secondary text-secondary-foreground shrink-0">
                   {effectiveCourseLocks.length} locked
                 </span>
               </p>
-              <p className="text-[10px] text-zinc-400 truncate">
+              <p className="text-xs text-text-muted truncate">
                 {lockedOnlyFilter ? "Filtered to target courses selected earlier" : "Showing full university catalogue"}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <span className="text-[10px] font-bold text-zinc-400 hidden sm:inline">
+            <span className="text-xs font-bold text-text-muted hidden sm:inline">
               {lockedOnlyFilter ? "Locked" : "Any"}
             </span>
             <Switch
@@ -3585,10 +3595,10 @@ export default function FFCSGuidedSelector({
               key={opt.id}
               type="button"
               onClick={() => setTypeFilter(opt.id)}
-              className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer touch-press active:scale-[0.97] ${
+              className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer touch-press ${
                 typeFilter === opt.id
-                  ? "bg-indigo-600 text-white shadow-xs"
-                  : "bg-zinc-950/40 text-zinc-400 border border-zinc-800 hover:text-white hover:border-zinc-700"
+                  ? "bg-primary text-primary-foreground shadow-xs"
+                  : "bg-surface-secondary text-text-muted border border-border-ink hover:text-text-heading hover:border-border-ink"
               }`}
             >
               {opt.label}
@@ -3599,7 +3609,7 @@ export default function FFCSGuidedSelector({
         <button
           type="button"
           onClick={onOpenPasteRegistered}
-          className="text-[11px] text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1 transition-colors cursor-pointer shrink-0 touch-press active:scale-[0.97]"
+          className="text-xs text-primary hover:text-primary font-bold flex items-center gap-1 transition-colors cursor-pointer shrink-0 touch-press"
         >
           <ClipboardPaste className="w-3.5 h-3.5" />
           <span>Paste VTOP</span>
@@ -3608,14 +3618,14 @@ export default function FFCSGuidedSelector({
 
       <div className="flex-1 overflow-y-auto momentum-scroll space-y-2 pr-1 custom-scrollbar">
         {filteredCourses.length === 0 ? (
-          <div className="p-8 rounded-2xl bg-zinc-950/40 border border-zinc-800 text-center space-y-2">
-            <Search className="w-8 h-8 text-zinc-600 mx-auto" />
-            <p className="text-sm font-bold text-zinc-400">No courses match your filter</p>
+          <div className="p-8 rounded-2xl bg-surface-secondary border border-border-ink text-center space-y-2">
+            <Search className="w-8 h-8 text-text-muted mx-auto" />
+            <p className="text-sm font-bold text-text-muted">No courses match your filter</p>
             {lockedOnlyFilter && effectiveCourseLocks.length > 0 && (
               <button
                 type="button"
                 onClick={() => setLockedOnlyFilter(false)}
-                className="mt-2 text-xs font-semibold text-indigo-400 hover:text-indigo-300 hover:underline cursor-pointer"
+                className="mt-2 text-xs font-semibold text-primary hover:text-primary hover:underline cursor-pointer"
               >
                 Show all catalogue courses instead
               </button>
@@ -3633,36 +3643,36 @@ export default function FFCSGuidedSelector({
                 onClick={() => handleSelectCourse(c.code)}
                 className={`w-full p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between gap-3 group ${
                   isSelected
-                    ? "bg-indigo-600/15 border-indigo-500 text-white ring-1 ring-indigo-500/30"
+                    ? "bg-secondary border-border-ink text-white ring-1 ring-border-ink"
                     : inTimetable
-                      ? "bg-zinc-950/40 border-emerald-500/30 text-zinc-300 hover:border-emerald-500/50"
-                      : "bg-zinc-950/40 border-zinc-800/80 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-800/40"
+                      ? "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink"
+                      : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink hover:bg-surface-secondary"
                 }`}
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span className="font-extrabold text-xs sm:text-sm text-white group-hover:text-indigo-400 transition-colors font-outfit">
+                    <span className="font-bold text-xs sm:text-sm text-text-heading group-hover:text-primary transition-colors font-outfit">
                       {c.code}
                     </span>
                     {inTimetable && (
-                      <span className="text-[10px] font-black text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="text-xs font-bold text-success-foreground bg-success-surface border border-border-ink px-2 py-0.5 rounded-[6px] flex items-center gap-1">
                         <Check className="w-2.5 h-2.5" /> Added
                       </span>
                     )}
                   </div>
                   <div className="flex items-center gap-1 mb-1.5 flex-wrap">
                     {isCourseEmbedded(c.code) && (
-                      <span className="text-[10px] font-black uppercase tracking-wider text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 rounded-md">
+                      <span className="text-xs font-bold uppercase tracking-wider text-secondary-foreground bg-secondary border border-border-ink px-2 py-0.5 rounded-md">
                         Theory + Lab
                       </span>
                     )}
                     {renderCourseTypeChips(c.types || [], "sm")}
                   </div>
-                  <p className="text-xs text-zinc-400 font-medium truncate">{c.title}</p>
+                  <p className="text-xs text-text-muted font-medium truncate">{c.title}</p>
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
-                  <ChevronRight className="w-4 h-4 text-zinc-500 group-hover:text-white transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-text-muted group-hover:text-text-heading transition-colors" />
                 </div>
               </button>
             );
@@ -3674,17 +3684,17 @@ export default function FFCSGuidedSelector({
 
   const renderSlotOfferingsCard = (isLandscape = false) => (
     <div
-      className={`p-4 sm:p-6 rounded-[28px] sm:rounded-[32px] bg-zinc-900/80 border border-zinc-800/80 backdrop-blur-xl shadow-2xl space-y-3 sm:space-y-4 text-left flex flex-col ${
+      className={`p-4 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-3 sm:space-y-4 text-left flex flex-col ${
         isLandscape ? "h-[74vh] max-h-[640px] w-full" : "h-[52vh] sm:h-[58vh] min-h-[380px] max-h-[620px]"
       }`}
     >
-      <div className="p-3 rounded-2xl bg-zinc-950/60 border border-zinc-800 flex items-center justify-between gap-3 shrink-0">
+      <div className="p-3 rounded-2xl bg-background border border-border-ink flex items-center justify-between gap-3 shrink-0">
         <div className="min-w-0">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-extrabold text-sm text-white font-outfit">{selectedCourseCode}</span>
+              <span className="font-bold text-sm text-text-heading font-outfit">{selectedCourseCode}</span>
               {isReplacingSlot && (
-                <span className="text-[10px] font-black text-amber-400 bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 rounded-full flex items-center gap-1">
+                <span className="text-xs font-bold text-warning-foreground bg-warning-surface border border-border-ink px-2 py-0.5 rounded-[6px] flex items-center gap-1">
                   <RotateCcw className="w-2.5 h-2.5" /> In TT: {existingCourseInTimetable?.slots.join("+")}
                 </span>
               )}
@@ -3695,10 +3705,10 @@ export default function FFCSGuidedSelector({
               </div>
             )}
           </div>
-          <p className="text-xs text-zinc-400 truncate mt-1">{selectedCourseMeta?.title}</p>
+          <p className="text-xs text-text-muted truncate mt-1">{selectedCourseMeta?.title}</p>
         </div>
 
-        <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-zinc-300 shrink-0">
+        <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-text-secondary shrink-0">
           <span className="hidden sm:inline">Group Embedded</span>
           <Switch
             checked={isGroupingEnabled}
@@ -3721,8 +3731,8 @@ export default function FFCSGuidedSelector({
             onClick={() => setSlotFilter(opt.id)}
             className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               slotFilter === opt.id
-                ? "bg-indigo-600 text-white shadow-xs"
-                : "bg-zinc-950/40 text-zinc-400 border border-zinc-800 hover:text-white"
+                ? "bg-primary text-primary-foreground shadow-xs"
+                : "bg-surface-secondary text-text-muted border border-border-ink hover:text-text-heading"
             }`}
           >
             {opt.label}
@@ -3745,30 +3755,30 @@ export default function FFCSGuidedSelector({
               onClick={() => handleSelectOffering(originalIndex)}
               className={`w-full p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-3 group relative ${
                 isSelected
-                  ? "bg-indigo-600/15 border-indigo-500 text-white shadow-md ring-1 ring-indigo-500/30"
+                  ? "bg-secondary border-border-ink text-white shadow-md ring-1 ring-border-ink"
                   : clash
-                    ? "bg-zinc-950/40 border-rose-500/30 text-zinc-300 hover:border-rose-500/50"
-                    : "bg-zinc-950/40 border-zinc-800/80 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-800/40"
+                    ? "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink"
+                    : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink hover:bg-surface-secondary"
               }`}
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="font-mono font-bold text-xs px-2.5 py-1 rounded-xl bg-zinc-900 border border-zinc-800 text-white">
+                  <span className="font-mono font-bold text-xs px-2.5 py-1 rounded-xl bg-surface border border-border-ink text-white">
                     {offering.SLOT}
                   </span>
                   {isCurrentSlot ? (
-                    <span className="text-[10px] font-black text-blue-400 bg-blue-500/15 border border-blue-500/30 px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <span className="text-xs font-bold text-secondary-foreground bg-secondary border border-border-ink px-2 py-0.5 rounded-[6px] flex items-center gap-1">
                       Current Slot
                     </span>
                   ) : clash ? (
                     <span
-                      className="text-[10px] font-black text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded-full flex items-center gap-1"
+                      className="text-xs font-bold text-danger-foreground bg-danger-surface border border-border-ink px-2 py-0.5 rounded-[6px] flex items-center gap-1"
                       title={clash}
                     >
                       <AlertTriangle className="w-2.5 h-2.5" /> Clashes
                     </span>
                   ) : (
-                    <span className="text-[10px] font-black text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <span className="text-xs font-bold text-success-foreground bg-success-surface border border-border-ink px-2 py-0.5 rounded-[6px] flex items-center gap-1">
                       <Check className="w-2.5 h-2.5" /> {isReplacingSlot ? "Replaceable" : "Conflict-free"}
                     </span>
                   )}
@@ -3777,14 +3787,14 @@ export default function FFCSGuidedSelector({
                 <div className="flex items-center gap-2.5">
                   <FacultyAvatar employeeId={offering.ERP_ID} name={offering.FACULTY} size="sm" tone="indigo" />
                   <div className="min-w-0">
-                    <p className="font-bold text-xs sm:text-sm text-white group-hover:text-indigo-400 transition-colors truncate">
+                    <p className="font-bold text-xs sm:text-sm text-text-heading group-hover:text-primary transition-colors truncate">
                       {offering.FACULTY}
                     </p>
-                    <p className="text-[11px] text-zinc-400 flex items-center gap-1.5 mt-0.5">
+                    <p className="text-xs text-text-muted flex items-center gap-1.5 mt-0.5">
                       <span>{offering.ROOM || "TBA"}</span>
                       {offering.ERP_ID && (
                         <>
-                          <span className="text-zinc-600">·</span>
+                          <span className="text-text-muted">·</span>
                           <span>ERP {offering.ERP_ID}</span>
                         </>
                       )}
@@ -3801,18 +3811,18 @@ export default function FFCSGuidedSelector({
 
   const renderReviewCard = (isLandscape = false) => (
     <div
-      className={`p-4 sm:p-6 rounded-[28px] sm:rounded-[32px] bg-zinc-900/90 border border-zinc-800/80 backdrop-blur-xl shadow-2xl space-y-4 text-left flex flex-col ${
+      className={`p-4 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-4 text-left flex flex-col ${
         isLandscape ? "h-[74vh] max-h-[640px] w-full" : "min-h-[460px] max-h-[72vh] sm:max-h-[640px]"
       } overflow-y-auto custom-scrollbar`}
     >
-      <div className="p-3.5 sm:p-4 rounded-2xl bg-zinc-950/60 border border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="p-3.5 sm:p-4 rounded-2xl bg-background border border-border-ink flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <span className="text-[10px] font-black uppercase tracking-wider text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-md border border-indigo-500/20">
+            <span className="text-xs font-bold uppercase tracking-wider text-secondary-foreground bg-secondary px-2 py-0.5 rounded-md border border-border-ink">
               Target: {activeTimetable.name}
             </span>
           </div>
-          <h2 className="text-base sm:text-lg font-black text-white font-outfit truncate">
+          <h2 className="text-base sm:text-lg font-bold text-text-heading font-outfit truncate">
             {selectedCourseMeta?.code} · {selectedCourseMeta?.title}
           </h2>
           {selectedCourseMeta && (
@@ -3822,7 +3832,7 @@ export default function FFCSGuidedSelector({
           )}
         </div>
         <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
-          <span className="text-xs font-black px-3 py-1.5 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-400">
+          <span className="text-xs font-bold px-3 py-1.5 rounded-xl bg-secondary border border-border-ink text-secondary-foreground">
             {selectedOffering?.CREDITS || "0"} Credits
           </span>
         </div>
@@ -3836,8 +3846,8 @@ export default function FFCSGuidedSelector({
           );
           if (clash) {
             return (
-              <div className="p-3.5 rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-400 text-xs font-bold flex items-center gap-2.5 shadow-xs">
-                <AlertTriangle className="w-4 h-4 shrink-0 text-rose-400" />
+              <div className="p-3.5 rounded-2xl bg-danger-surface border border-border-ink text-danger-foreground text-xs font-bold flex items-center gap-2.5 shadow-xs">
+                <AlertTriangle className="w-4 h-4 shrink-0 text-danger-foreground" />
                 <span>
                   <strong>Warning:</strong> {clash}
                 </span>
@@ -3846,26 +3856,26 @@ export default function FFCSGuidedSelector({
           }
           if (isReplacingSlot && existingCourseInTimetable) {
             return (
-              <div className="p-3.5 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold flex items-center justify-between gap-3 shadow-xs">
+              <div className="p-3.5 rounded-2xl bg-warning-surface border border-border-ink text-warning-foreground text-xs font-bold flex items-center justify-between gap-3 shadow-xs">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <RotateCcw className="w-4 h-4 shrink-0 text-amber-400" />
+                  <RotateCcw className="w-4 h-4 shrink-0 text-warning-foreground" />
                   <div className="min-w-0">
-                    <span className="block text-white font-extrabold truncate">Replacing Active Slot</span>
-                    <span className="text-[11px] text-amber-200/80 font-normal">
+                    <span className="block text-text-heading font-bold truncate">Replacing Active Slot</span>
+                    <span className="text-xs text-amber-200/80 font-normal">
                       Replaces current slot {existingCourseInTimetable.slots.join("+")} (
                       {existingCourseInTimetable.faculty}) with {selectedOffering.SLOT}
                     </span>
                   </div>
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 shrink-0">
+                <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-warning-surface text-warning-foreground shrink-0">
                   Replacement
                 </span>
               </div>
             );
           }
           return (
-            <div className="p-3.5 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center gap-2.5 shadow-xs">
-              <Check className="w-4 h-4 shrink-0 text-emerald-400" />
+            <div className="p-3.5 rounded-2xl bg-success-surface border border-border-ink text-success-foreground text-xs font-bold flex items-center gap-2.5 shadow-xs">
+              <Check className="w-4 h-4 shrink-0 text-success-foreground" />
               <span>
                 <strong>Conflict-free:</strong> Fits cleanly into your schedule without any slot overlap!
               </span>
@@ -3875,9 +3885,9 @@ export default function FFCSGuidedSelector({
 
       {selectedOffering && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div className="p-3.5 rounded-2xl bg-zinc-950/60 border border-zinc-800 space-y-2">
-            <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-zinc-500">
-              <Users className="w-3 h-3 text-zinc-400" />
+          <div className="p-3.5 rounded-2xl bg-background border border-border-ink space-y-2">
+            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-text-muted">
+              <Users className="w-3 h-3 text-text-muted" />
               <span>Instructor &amp; Venue</span>
             </div>
             <div className="flex items-center gap-2.5">
@@ -3888,15 +3898,15 @@ export default function FFCSGuidedSelector({
                 tone="indigo"
               />
               <div className="min-w-0">
-                <p className="font-extrabold text-white text-xs sm:text-sm truncate font-outfit">
+                <p className="font-bold text-text-heading text-xs sm:text-sm truncate font-outfit">
                   {selectedOffering.FACULTY}
                 </p>
-                <p className="text-[11px] text-zinc-400 flex items-center gap-1.5 mt-0.5">
-                  <MapPin className="w-3 h-3 text-zinc-500 shrink-0" />
+                <p className="text-xs text-text-muted flex items-center gap-1.5 mt-0.5">
+                  <MapPin className="w-3 h-3 text-text-muted shrink-0" />
                   <span>{selectedOffering.ROOM || "TBA"}</span>
                   {selectedOffering.ERP_ID && (
                     <>
-                      <span className="text-zinc-600">·</span>
+                      <span className="text-text-muted">·</span>
                       <span>ERP {selectedOffering.ERP_ID}</span>
                     </>
                   )}
@@ -3908,7 +3918,7 @@ export default function FFCSGuidedSelector({
               <button
                 type="button"
                 onClick={() => onOpenFacultySchedule(selectedOffering.FACULTY)}
-                className="w-full mt-2.5 py-2 px-3 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/25 text-cyan-300 text-xs font-bold transition-all active:scale-95 cursor-pointer flex items-center justify-center gap-2"
+                className="w-full mt-2.5 py-2 px-3 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/25 text-cyan-300 text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2"
                 title={`View ${selectedOffering.FACULTY}'s full semester timetable schedule`}
               >
                 <CalendarDays className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
@@ -3918,16 +3928,16 @@ export default function FFCSGuidedSelector({
             )}
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-zinc-950/60 border border-zinc-800 space-y-2">
-            <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-zinc-500">
-              <Clock className="w-3 h-3 text-zinc-400" />
+          <div className="p-3.5 rounded-2xl bg-background border border-border-ink space-y-2">
+            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-text-muted">
+              <Clock className="w-3 h-3 text-text-muted" />
               <span>Allocated Slots</span>
             </div>
             <div className="flex items-center gap-1.5 flex-wrap">
               {splitSlots(selectedOffering.SLOT).map((s) => (
                 <span
                   key={s}
-                  className="px-2.5 py-1 rounded-xl bg-zinc-900 border border-zinc-700/80 font-mono font-bold text-white text-xs shadow-2xs"
+                  className="px-2.5 py-1 rounded-xl bg-surface border border-border-ink font-mono font-bold text-white text-xs shadow-2xs"
                 >
                   {s}
                 </span>
@@ -3940,8 +3950,8 @@ export default function FFCSGuidedSelector({
       {vitfacEnabled && selectedOffering && selectedCourseMeta && (
         <div className="space-y-2 pt-1">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
-              <Star className="w-3 h-3 text-amber-400" />
+            <span className="text-xs font-bold uppercase tracking-wider text-text-muted flex items-center gap-1.5">
+              <Star className="w-3 h-3 text-warning-foreground" />
               <span>Faculty Reputation &amp; Vitfac Lore</span>
             </span>
           </div>
@@ -3971,7 +3981,7 @@ export default function FFCSGuidedSelector({
               onToggleFullScreen?.(true);
               setHasLaunchedHero(true);
             }}
-            className="w-full py-3.5 px-5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer font-outfit tracking-wide"
+            className="w-full py-3.5 px-5 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-sm shadow-brutal-sm border-2 border-border-ink flex items-center justify-center gap-2 transition-all cursor-pointer font-outfit tracking-wide"
           >
             <Maximize2 className="w-4 h-4" />
             <span>Enter Full Screen & Start</span>
@@ -3983,7 +3993,7 @@ export default function FFCSGuidedSelector({
             onClick={() => {
               setHasLaunchedHero(true);
             }}
-            className="w-full py-2.5 px-4 rounded-xl bg-zinc-900/60 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+            className="w-full py-2.5 px-4 rounded-xl bg-surface hover:bg-surface-secondary border border-border-ink text-text-secondary hover:text-text-heading font-semibold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
           >
             <span>Continue in Window</span>
           </button>
@@ -3993,7 +4003,7 @@ export default function FFCSGuidedSelector({
               type="button"
               data-testid="switch-to-single-page-btn"
               onClick={onSwitchToSinglePageView}
-              className="w-full py-2 px-3 text-xs text-zinc-400 hover:text-zinc-200 font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer mt-1"
+              className="w-full py-2 px-3 text-xs text-text-muted hover:text-text-secondary font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer mt-1"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Single Page View</span>
@@ -4008,7 +4018,7 @@ export default function FFCSGuidedSelector({
         <button
           type="button"
           onClick={() => setGuidedPhase("setup_timetable")}
-          className="flex-1 py-3.5 px-5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs sm:text-sm shadow-xl shadow-indigo-600/20 transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
+          className="flex-1 py-3.5 px-5 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
         >
           <span>Continue to Timetable Selection</span>
           <ArrowRight className="w-4 h-4 shrink-0" />
@@ -4022,7 +4032,7 @@ export default function FFCSGuidedSelector({
           <button
             type="button"
             onClick={() => setGuidedPhase("setup_strategy")}
-            className="flex-1 py-3.5 px-5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs sm:text-sm shadow-xl shadow-indigo-600/20 transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
+            className="flex-1 py-3.5 px-5 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
           >
             <span>Continue to Course Strategy</span>
             <ArrowRight className="w-4 h-4 shrink-0" />
@@ -4048,7 +4058,7 @@ export default function FFCSGuidedSelector({
                 }
               }
             }}
-            className="flex-1 py-3.5 px-5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs sm:text-sm shadow-xl shadow-indigo-600/20 transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
+            className="flex-1 py-3.5 px-5 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
           >
             <span>
               {courseStrategy === "lock_advance"
@@ -4083,7 +4093,7 @@ export default function FFCSGuidedSelector({
                 setCurrentStep(1);
               }
             }}
-            className="flex-1 py-3.5 px-5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs sm:text-sm shadow-xl shadow-indigo-600/20 transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
+            className="flex-1 py-3.5 px-5 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
           >
             <span>
               {planMode === "auto"
@@ -4113,7 +4123,7 @@ export default function FFCSGuidedSelector({
                 setGuidedPhase("auto_slots_faculty");
               }
             }}
-            className="flex-1 py-3.5 px-5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-black text-xs sm:text-sm shadow-xl shadow-indigo-600/20 transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
+            className="flex-1 py-3.5 px-5 rounded-2xl bg-primary hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
           >
             <span>Configure Slots &amp; Faculty ({effectiveCourseLocks.length})</span>
             <ArrowRight className="w-4 h-4 shrink-0" />
@@ -4128,7 +4138,7 @@ export default function FFCSGuidedSelector({
           <button
             type="button"
             onClick={() => setGuidedPhase("auto_timings")}
-            className="flex-1 py-3.5 px-5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs sm:text-sm shadow-xl shadow-indigo-600/20 transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
+            className="flex-1 py-3.5 px-5 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
           >
             <span>Continue to Class Timings</span>
             <ArrowRight className="w-4 h-4 shrink-0" />
@@ -4146,7 +4156,7 @@ export default function FFCSGuidedSelector({
               autoBlockOutsideSlots(autoMinStartTime, autoMaxEndTime);
               setGuidedPhase("auto_blocking");
             }}
-            className="flex-1 py-3.5 px-5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs sm:text-sm shadow-xl shadow-indigo-600/20 transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
+            className="flex-1 py-3.5 px-5 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
           >
             <span>Continue to Day &amp; Slot Blocking</span>
             <ArrowRight className="w-4 h-4 shrink-0" />
@@ -4161,7 +4171,7 @@ export default function FFCSGuidedSelector({
           <button
             type="button"
             onClick={() => setGuidedPhase("auto_half_days")}
-            className="flex-1 py-3.5 px-5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs sm:text-sm shadow-xl shadow-indigo-600/20 transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
+            className="flex-1 py-3.5 px-5 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
           >
             <span>Continue to Half-Days &amp; Limits</span>
             <ArrowRight className="w-4 h-4 shrink-0" />
@@ -4179,7 +4189,7 @@ export default function FFCSGuidedSelector({
               if (friends && friends.length > 0) setGuidedPhase("auto_social");
               else setGuidedPhase("auto_summary");
             }}
-            className="flex-1 py-3.5 px-5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs sm:text-sm shadow-xl shadow-indigo-600/20 transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
+            className="flex-1 py-3.5 px-5 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
           >
             <span>{friends && friends.length > 0 ? "Continue to Friends Sync" : "Review Generation Blueprint"}</span>
             <ArrowRight className="w-4 h-4 shrink-0" />
@@ -4194,7 +4204,7 @@ export default function FFCSGuidedSelector({
           <button
             type="button"
             onClick={() => setGuidedPhase("auto_summary")}
-            className="flex-1 py-3.5 px-5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs sm:text-sm shadow-xl shadow-indigo-600/20 transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
+            className="flex-1 py-3.5 px-5 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
           >
             <span>Review Generation Blueprint</span>
             <ArrowRight className="w-4 h-4 shrink-0" />
@@ -4210,7 +4220,7 @@ export default function FFCSGuidedSelector({
             type="button"
             disabled={generation.isGenerating || effectiveCourseLocks.length === 0}
             onClick={handleRunAutoGeneration}
-            className="flex-1 py-3.5 px-5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-black text-xs sm:text-sm shadow-xl shadow-indigo-600/30 transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
+            className="flex-1 py-3.5 px-5 rounded-2xl bg-primary hover:brightness-110 disabled:opacity-50 text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate"
           >
             {generation.isGenerating ? (
               <>
@@ -4235,7 +4245,7 @@ export default function FFCSGuidedSelector({
           <button
             type="button"
             onClick={() => setGuidedPhase("auto_half_days")}
-            className="whitespace-nowrap py-3 sm:py-3.5 px-3.5 sm:px-4 rounded-2xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-indigo-400 font-black text-xs shadow-lg transition-all active:scale-95 cursor-pointer font-outfit flex items-center justify-center gap-1.5 shrink-0"
+            className="whitespace-nowrap py-3 sm:py-3.5 px-3.5 sm:px-4 rounded-2xl bg-surface hover:bg-surface-secondary border border-border-ink text-primary font-bold text-xs shadow-lg transition-all cursor-pointer font-outfit flex items-center justify-center gap-1.5 shrink-0"
             title="Adjust Generation Settings"
           >
             <Sliders className="w-4 h-4 shrink-0" />
@@ -4246,20 +4256,20 @@ export default function FFCSGuidedSelector({
             <button
               type="button"
               onClick={() => setGuidedPhase("auto_timetable_view")}
-              className="whitespace-nowrap py-3 sm:py-3.5 px-3.5 rounded-2xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white font-black text-xs shadow-lg transition-all active:scale-95 cursor-pointer font-outfit flex items-center justify-center gap-1.5 shrink-0"
+              className="whitespace-nowrap py-3 sm:py-3.5 px-3.5 rounded-2xl bg-surface hover:bg-surface-secondary border border-border-ink text-text-secondary hover:text-text-heading font-bold text-xs shadow-lg transition-all cursor-pointer font-outfit flex items-center justify-center gap-1.5 shrink-0"
               title="Switch to Timetable Grid View"
             >
-              <LayoutGrid className="w-4 h-4 text-indigo-400 shrink-0" />
+              <LayoutGrid className="w-4 h-4 text-primary shrink-0" />
               <span className="whitespace-nowrap">Grid View</span>
             </button>
           ) : (
             <button
               type="button"
               onClick={() => setGuidedPhase("auto_results")}
-              className="whitespace-nowrap py-3 sm:py-3.5 px-3.5 rounded-2xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white font-black text-xs shadow-lg transition-all active:scale-95 cursor-pointer font-outfit flex items-center justify-center gap-1.5 shrink-0"
+              className="whitespace-nowrap py-3 sm:py-3.5 px-3.5 rounded-2xl bg-surface hover:bg-surface-secondary border border-border-ink text-text-secondary hover:text-text-heading font-bold text-xs shadow-lg transition-all cursor-pointer font-outfit flex items-center justify-center gap-1.5 shrink-0"
               title="Switch to Faculty List View"
             >
-              <FileSpreadsheet className="w-4 h-4 text-zinc-400 shrink-0" />
+              <FileSpreadsheet className="w-4 h-4 text-text-muted shrink-0" />
               <span className="whitespace-nowrap">List View</span>
             </button>
           )}
@@ -4267,10 +4277,10 @@ export default function FFCSGuidedSelector({
           <button
             type="button"
             onClick={() => setGuidedPhase("manual_timetable_view")}
-            className="whitespace-nowrap py-3 sm:py-3.5 px-3.5 rounded-2xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white font-black text-xs shadow-lg transition-all active:scale-95 cursor-pointer font-outfit flex items-center justify-center gap-1.5 shrink-0"
+            className="whitespace-nowrap py-3 sm:py-3.5 px-3.5 rounded-2xl bg-surface hover:bg-surface-secondary border border-border-ink text-text-secondary hover:text-text-heading font-bold text-xs shadow-lg transition-all cursor-pointer font-outfit flex items-center justify-center gap-1.5 shrink-0"
             title="Browse My Timetables"
           >
-            <Calendar className="w-4 h-4 text-zinc-400 shrink-0" />
+            <Calendar className="w-4 h-4 text-text-muted shrink-0" />
             <span className="whitespace-nowrap">My Timetables</span>
           </button>
 
@@ -4278,7 +4288,7 @@ export default function FFCSGuidedSelector({
             type="button"
             disabled={!currentVariant}
             onClick={() => currentVariant && handleApplyVariant(currentVariant)}
-            className="flex-1 min-w-[260px] lg:whitespace-nowrap py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs sm:text-sm shadow-xl shadow-emerald-600/20 transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 shrink-0"
+            className="flex-1 min-w-[260px] lg:whitespace-nowrap py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-brutal-sm transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 shrink-0"
           >
             <Check className="w-4 h-4 shrink-0" />
             <span className="lg:whitespace-nowrap">Apply This Recommendation to {activeTimetable.name} 🚀</span>
@@ -4295,25 +4305,25 @@ export default function FFCSGuidedSelector({
             type="button"
             onClick={handlePrevStep}
             aria-label="Previous Step"
-            className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-800 text-white flex items-center justify-center shadow-lg transition-all active:scale-90 hover:scale-105 cursor-pointer shrink-0"
+            className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-surface hover:bg-surface-secondary border border-border-ink text-white flex items-center justify-center shadow-lg transition-all active:scale-90 cursor-pointer shrink-0"
             title="Back to Review"
           >
             <ChevronLeft className="w-5 h-5 shrink-0" />
           </button>
 
           {effectiveTimetables.length > 1 && (
-            <div className="flex items-center gap-1 bg-zinc-950/60 border border-zinc-800 rounded-2xl p-1 shrink-0">
+            <div className="flex items-center gap-1 bg-background border border-border-ink rounded-2xl p-1 shrink-0">
               <button
                 type="button"
                 disabled={browsingTimetableIndex <= 0}
                 onClick={() => navigateBrowsingTimetable(browsingTimetableIndex - 1, "backward")}
                 aria-label="Previous Timetable"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed transition-all flex items-center justify-center"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-surface hover:bg-surface-secondary border border-border-ink text-text-secondary hover:text-text-heading disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed transition-all flex items-center justify-center"
                 title="Previous Timetable"
               >
                 <ArrowLeft className="w-4 h-4 shrink-0" />
               </button>
-              <span className="text-[11px] font-mono font-bold text-zinc-300 px-1.5 whitespace-nowrap">
+              <span className="text-xs font-mono font-bold text-text-secondary px-1.5 whitespace-nowrap">
                 {browsingTimetableIndex + 1}/{effectiveTimetables.length}
               </span>
               <button
@@ -4321,7 +4331,7 @@ export default function FFCSGuidedSelector({
                 disabled={browsingTimetableIndex >= effectiveTimetables.length - 1}
                 onClick={() => navigateBrowsingTimetable(browsingTimetableIndex + 1, "forward")}
                 aria-label="Next Timetable"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed transition-all flex items-center justify-center"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-surface hover:bg-surface-secondary border border-border-ink text-text-secondary hover:text-text-heading disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed transition-all flex items-center justify-center"
                 title="Next Timetable"
               >
                 <ArrowRight className="w-4 h-4 shrink-0" />
@@ -4340,7 +4350,7 @@ export default function FFCSGuidedSelector({
               setGuidedPhase("builder");
               setCurrentStep(1);
             }}
-            className="flex-1 min-w-[170px] whitespace-nowrap py-3 sm:py-3.5 px-3.5 sm:px-4 rounded-2xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-indigo-400 hover:text-indigo-300 font-black text-xs sm:text-sm shadow-xl transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 shrink-0"
+            className="flex-1 min-w-[170px] whitespace-nowrap py-3 sm:py-3.5 px-3.5 sm:px-4 rounded-2xl bg-surface hover:bg-surface-secondary border border-border-ink text-primary hover:text-primary font-bold text-xs sm:text-sm shadow-xl transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 shrink-0"
           >
             <Plus className="w-4 h-4 shrink-0" />
             <span className="whitespace-nowrap">Add Another Course</span>
@@ -4351,7 +4361,7 @@ export default function FFCSGuidedSelector({
             onClick={() => {
               if (onViewTimetable) onViewTimetable();
             }}
-            className="flex-1 min-w-[160px] whitespace-nowrap py-3 sm:py-3.5 px-4 sm:px-5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs sm:text-sm shadow-xl shadow-indigo-600/20 transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 shrink-0"
+            className="flex-1 min-w-[160px] whitespace-nowrap py-3 sm:py-3.5 px-4 sm:px-5 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 shrink-0"
           >
             <Check className="w-4 h-4 shrink-0" />
             <span className="whitespace-nowrap">Done / View Grid</span>
@@ -4368,12 +4378,12 @@ export default function FFCSGuidedSelector({
             type="button"
             onClick={() => selectedCourseCode && setCurrentStep(2)}
             disabled={!selectedCourseCode}
-            className={`flex-1 py-3.5 px-5 rounded-2xl text-white font-black text-xs sm:text-sm shadow-xl transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate ${
+            className={`flex-1 py-3.5 px-5 rounded-2xl text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate ${
               selectedCourseCode
                 ? isReplacingSlot
-                  ? "bg-amber-600 hover:bg-amber-700 shadow-amber-600/20"
-                  : "bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/20"
-                : "bg-zinc-800/80 text-zinc-500 cursor-not-allowed border border-zinc-800"
+                  ? "bg-amber-600 hover:bg-amber-700 "
+                  : "bg-primary hover:brightness-110 "
+                : "bg-surface-secondary text-text-muted cursor-not-allowed border border-border-ink"
             }`}
           >
             <span className="truncate">
@@ -4392,12 +4402,12 @@ export default function FFCSGuidedSelector({
             type="button"
             onClick={() => selectedOffering && setCurrentStep(3)}
             disabled={!selectedOffering}
-            className={`flex-1 py-3.5 px-5 rounded-2xl text-white font-black text-xs sm:text-sm shadow-xl transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate ${
+            className={`flex-1 py-3.5 px-5 rounded-2xl text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 truncate ${
               selectedOffering
                 ? isReplacingSlot
-                  ? "bg-amber-600 hover:bg-amber-700 shadow-amber-600/20"
-                  : "bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/20"
-                : "bg-zinc-800/80 text-zinc-500 cursor-not-allowed border border-zinc-800"
+                  ? "bg-amber-600 hover:bg-amber-700 "
+                  : "bg-primary hover:brightness-110 "
+                : "bg-surface-secondary text-text-muted cursor-not-allowed border border-border-ink"
             }`}
           >
             <span className="truncate">
@@ -4416,13 +4426,13 @@ export default function FFCSGuidedSelector({
             <button
               type="button"
               onClick={handleAddAnother}
-              className="whitespace-nowrap py-3 sm:py-3.5 px-4 rounded-2xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-indigo-400 font-black text-xs shadow-lg transition-all active:scale-95 cursor-pointer font-outfit flex items-center justify-center gap-1.5 shrink-0"
+              className="whitespace-nowrap py-3 sm:py-3.5 px-4 rounded-2xl bg-surface hover:bg-surface-secondary border border-border-ink text-primary font-bold text-xs shadow-lg transition-all cursor-pointer font-outfit flex items-center justify-center gap-1.5 shrink-0"
               title={
                 isReplacingSlot ? "Replace slot and pick another course" : "Add to timetable and pick another course"
               }
             >
               {isReplacingSlot ? (
-                <RotateCcw className="w-4 h-4 text-amber-400 shrink-0" />
+                <RotateCcw className="w-4 h-4 text-warning-foreground shrink-0" />
               ) : (
                 <PlusCircle className="w-4 h-4 shrink-0" />
               )}
@@ -4432,10 +4442,8 @@ export default function FFCSGuidedSelector({
             <button
               type="button"
               onClick={handleConfirmAdd}
-              className={`flex-1 min-w-[200px] lg:whitespace-nowrap py-3.5 px-4 sm:px-5 rounded-2xl text-white font-black text-xs sm:text-sm shadow-xl transition-all active:scale-95 cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 shrink-0 ${
-                isReplacingSlot
-                  ? "bg-amber-600 hover:bg-amber-700 shadow-amber-600/20"
-                  : "bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/20"
+              className={`flex-1 min-w-[200px] lg:whitespace-nowrap py-3.5 px-4 sm:px-5 rounded-2xl text-primary-foreground font-bold text-xs sm:text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 shrink-0 ${
+                isReplacingSlot ? "bg-amber-600 hover:bg-amber-700 " : "bg-primary hover:brightness-110 "
               }`}
             >
               {isReplacingSlot ? <RotateCcw className="w-4 h-4 shrink-0" /> : <Check className="w-4 h-4 shrink-0" />}
@@ -4516,13 +4524,13 @@ export default function FFCSGuidedSelector({
       return (
         <header className="relative z-20 w-full max-w-md sm:max-w-2xl mx-auto flex items-center justify-between shrink-0 pt-1">
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-extrabold tracking-wider uppercase bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm whitespace-nowrap">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+            <span className="text-xs font-bold tracking-wider uppercase bg-secondary text-secondary-foreground border border-border-ink px-3 py-1 rounded-[10px] flex items-center gap-1.5 shadow-sm whitespace-nowrap min-h-9">
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
               <span>FFCS Mobile Generator</span>
             </span>
             {activeTimetable?.name && (
-              <span className="text-[11px] font-semibold text-zinc-400 bg-zinc-900/60 border border-zinc-800 px-2.5 py-1 rounded-full hidden sm:inline-flex items-center gap-1">
-                <CalendarDays className="w-3 h-3 text-indigo-400" />
+              <span className="text-xs font-semibold text-text-muted bg-surface border border-border-ink px-2.5 py-1 rounded-[10px] hidden sm:inline-flex items-center gap-1 min-h-9">
+                <CalendarDays className="w-3 h-3 text-primary" />
                 <span>{activeTimetable.name}</span>
               </span>
             )}
@@ -4533,10 +4541,10 @@ export default function FFCSGuidedSelector({
               <button
                 type="button"
                 onClick={onSwitchToSinglePageView}
-                className="h-8 px-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800/80 flex items-center gap-1.5 whitespace-nowrap shrink-0 text-xs font-semibold transition-colors cursor-pointer"
+                className="h-8 px-2.5 rounded-xl bg-surface border border-border-ink text-text-secondary hover:text-text-heading hover:bg-surface-secondary flex items-center gap-1.5 whitespace-nowrap shrink-0 text-xs font-semibold transition-colors cursor-pointer"
                 title="Switch to Single Page View"
               >
-                <ArrowLeft className="w-3.5 h-3.5 text-blue-400" />
+                <ArrowLeft className="w-3.5 h-3.5 text-primary" />
                 <span aria-hidden="true">Single page</span>
                 <span className="sr-only">Single Page View (Plan)</span>
               </button>
@@ -4544,7 +4552,7 @@ export default function FFCSGuidedSelector({
             <button
               type="button"
               onClick={handleToggleFullScreen}
-              className="w-8 h-8 rounded-xl bg-zinc-900/60 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-xl bg-surface border border-border-ink text-text-muted hover:text-text-heading flex items-center justify-center transition-colors cursor-pointer"
               title={fullScreenMode ? "Exit Fullscreen" : "Enter Fullscreen"}
             >
               {fullScreenMode ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
@@ -4559,7 +4567,7 @@ export default function FFCSGuidedSelector({
         <button
           type="button"
           onClick={handlePrevStep}
-          className="flex items-center gap-1.5 text-xs font-bold text-zinc-400 hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-xl bg-zinc-900/60 border border-zinc-800 backdrop-blur-md active:scale-95"
+          className="flex items-center gap-1.5 text-xs font-bold text-text-muted hover:text-text-heading transition-colors cursor-pointer py-1.5 px-3 rounded-xl bg-surface border border-border-ink"
         >
           <ChevronLeft className="w-4 h-4" />
           <span>{guidedPhase === "setup_mode" ? "Timetable" : "Back"}</span>
@@ -4577,10 +4585,10 @@ export default function FFCSGuidedSelector({
                 onClick={() => handlePillClick(p)}
                 className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
                   currentPill === p
-                    ? "w-7 bg-indigo-500 shadow-xs shadow-indigo-500/50"
+                    ? "w-7 bg-primary shadow-xs "
                     : currentIdx > idx
                       ? "w-2.5 bg-indigo-400/50 hover:bg-indigo-400"
-                      : "w-2 bg-zinc-800"
+                      : "w-2 bg-surface-secondary"
                 }`}
                 title={`Step ${stepNum}`}
               />
@@ -4593,10 +4601,10 @@ export default function FFCSGuidedSelector({
             <button
               type="button"
               onClick={onSwitchToSinglePageView}
-              className="h-8 px-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800/80 flex items-center gap-1.5 whitespace-nowrap shrink-0 text-xs font-semibold transition-colors cursor-pointer"
+              className="h-8 px-2.5 rounded-xl bg-surface border border-border-ink text-text-secondary hover:text-text-heading hover:bg-surface-secondary flex items-center gap-1.5 whitespace-nowrap shrink-0 text-xs font-semibold transition-colors cursor-pointer"
               title="Switch to Single Page View"
             >
-              <ArrowLeft className="w-3.5 h-3.5 text-blue-400" />
+              <ArrowLeft className="w-3.5 h-3.5 text-primary" />
               <span aria-hidden="true">Single page</span>
               <span className="sr-only">Single Page View (Plan)</span>
             </button>
@@ -4604,7 +4612,7 @@ export default function FFCSGuidedSelector({
           <button
             type="button"
             onClick={handleToggleFullScreen}
-            className="w-8 h-8 rounded-xl bg-zinc-900/60 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-xl bg-surface border border-border-ink text-text-muted hover:text-text-heading flex items-center justify-center transition-colors cursor-pointer"
             title={fullScreenMode ? "Exit Fullscreen" : "Enter Fullscreen"}
           >
             {fullScreenMode ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
@@ -4619,29 +4627,29 @@ export default function FFCSGuidedSelector({
       data-testid="guided-hero-container"
       className={
         fullScreenMode
-          ? "fixed inset-0 z-50 h-[100dvh] w-full bg-zinc-950 text-zinc-100 flex flex-col justify-between overflow-y-auto overscroll-y-contain touch-pan-y sm:overflow-hidden select-none px-4 sm:px-8 py-4 sm:py-6 animate-in fade-in duration-300"
-          : "relative w-full rounded-[32px] bg-zinc-950 text-zinc-100 flex flex-col justify-between overflow-hidden select-none px-4 sm:px-6 py-5 shadow-2xl border border-zinc-800 min-h-[580px]"
+          ? "fixed inset-0 z-50 h-[100dvh] w-full bg-background text-text-primary flex flex-col justify-between overflow-y-auto overscroll-y-contain touch-pan-y sm:overflow-hidden select-none px-4 sm:px-8 py-4 sm:py-6 animate-in fade-in duration-300"
+          : "relative w-full rounded-[14px] bg-background text-text-primary flex flex-col justify-between overflow-hidden select-none px-4 sm:px-6 py-5 shadow-2xl border border-border-ink min-h-[580px]"
       }
     >
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-indigo-600/10 blur-[150px]" />
-        <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-violet-600/10 blur-[150px]" />
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-secondary blur-[150px]" />
+        <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-secondary blur-[150px]" />
       </div>
 
       {addedJustNow && (
         <div className="relative z-30 w-full max-w-md sm:max-w-2xl mx-auto mb-2">
           <div
-            className={`p-3 rounded-2xl border text-xs font-bold flex items-center justify-between shadow-xl backdrop-blur-xl animate-in fade-in duration-200 ${
+            className={`p-3 rounded-2xl border text-xs font-bold flex items-center justify-between shadow-xl animate-in fade-in duration-200 ${
               addedJustNow.isReplacement
-                ? "bg-amber-500/15 border-amber-500/30 text-amber-300"
-                : "bg-emerald-500/15 border-emerald-500/30 text-emerald-400"
+                ? "bg-warning-surface border-border-ink text-warning-foreground"
+                : "bg-success-surface border-border-ink text-success-foreground"
             }`}
           >
             <span className="flex items-center gap-2">
               {addedJustNow.isReplacement ? (
-                <RotateCcw className="w-4 h-4 shrink-0 text-amber-400" />
+                <RotateCcw className="w-4 h-4 shrink-0 text-warning-foreground" />
               ) : (
-                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+                <CheckCircle2 className="w-4 h-4 shrink-0 text-success-foreground" />
               )}
               <span>
                 {addedJustNow.isReplacement ? (
@@ -4660,7 +4668,7 @@ export default function FFCSGuidedSelector({
                 type="button"
                 onClick={onViewTimetable}
                 className={`underline font-bold ml-2 cursor-pointer ${
-                  addedJustNow.isReplacement ? "hover:text-amber-200" : "hover:text-emerald-300"
+                  addedJustNow.isReplacement ? "hover:text-amber-200" : "hover:text-success-foreground"
                 }`}
               >
                 View Grid →
@@ -4679,7 +4687,7 @@ export default function FFCSGuidedSelector({
               <button
                 type="button"
                 onClick={handlePrevStep}
-                className="flex items-center gap-1.5 text-xs font-bold text-zinc-400 hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-xl bg-zinc-900/60 border border-zinc-800 backdrop-blur-md active:scale-95"
+                className="flex items-center gap-1.5 text-xs font-bold text-text-muted hover:text-text-heading transition-colors cursor-pointer py-1.5 px-3 rounded-xl bg-surface border border-border-ink"
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>{guidedPhase === "setup_mode" ? "Timetable" : "Back"}</span>
@@ -4697,10 +4705,10 @@ export default function FFCSGuidedSelector({
                       onClick={() => handlePillClick(p)}
                       className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
                         currentPill === p
-                          ? "w-7 bg-indigo-500 shadow-xs shadow-indigo-500/50"
+                          ? "w-7 bg-primary shadow-xs "
                           : currentIdx > idx
                             ? "w-2.5 bg-indigo-400/50 hover:bg-indigo-400"
-                            : "w-2 bg-zinc-800"
+                            : "w-2 bg-surface-secondary"
                       }`}
                       title={`Step ${stepNum}`}
                     />
@@ -4713,10 +4721,10 @@ export default function FFCSGuidedSelector({
                   <button
                     type="button"
                     onClick={onSwitchToSinglePageView}
-                    className="h-8 px-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800/80 flex items-center gap-1.5 whitespace-nowrap shrink-0 text-xs font-semibold transition-colors cursor-pointer"
+                    className="h-8 px-2.5 rounded-xl bg-surface border border-border-ink text-text-secondary hover:text-text-heading hover:bg-surface-secondary flex items-center gap-1.5 whitespace-nowrap shrink-0 text-xs font-semibold transition-colors cursor-pointer"
                     title="Switch to Single Page View"
                   >
-                    <ArrowLeft className="w-3.5 h-3.5 text-blue-400" />
+                    <ArrowLeft className="w-3.5 h-3.5 text-primary" />
                     <span aria-hidden="true">Single page</span>
                     <span className="sr-only">Single Page View (Plan)</span>
                   </button>
@@ -4724,7 +4732,7 @@ export default function FFCSGuidedSelector({
                 <button
                   type="button"
                   onClick={handleToggleFullScreen}
-                  className="w-8 h-8 rounded-xl bg-zinc-900/60 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                  className="w-8 h-8 rounded-xl bg-surface border border-border-ink text-text-muted hover:text-text-heading flex items-center justify-center transition-colors cursor-pointer"
                   title={fullScreenMode ? "Exit Fullscreen" : "Enter Fullscreen"}
                 >
                   {fullScreenMode ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
@@ -4942,7 +4950,7 @@ export default function FFCSGuidedSelector({
                     description={
                       <>
                         Browse the university catalogue or filter by your pre-locked courses for{" "}
-                        <strong className="text-white">{activeTimetable.name}</strong>.
+                        <strong className="text-text-heading">{activeTimetable.name}</strong>.
                       </>
                     }
                   />
@@ -4963,8 +4971,8 @@ export default function FFCSGuidedSelector({
                     description={
                       <>
                         Choose your preferred instructor and slot timing for{" "}
-                        <strong className="text-white">{selectedCourseCode}</strong> into{" "}
-                        <strong className="text-white">{activeTimetable.name}</strong>.
+                        <strong className="text-text-heading">{selectedCourseCode}</strong> into{" "}
+                        <strong className="text-text-heading">{activeTimetable.name}</strong>.
                       </>
                     }
                   />
@@ -4975,33 +4983,34 @@ export default function FFCSGuidedSelector({
                   <div
                     className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg shrink-0 ${
                       isReplacingSlot
-                        ? "bg-amber-500/10 border border-amber-500/20 text-amber-400"
-                        : "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400"
+                        ? "bg-warning-surface border border-border-ink text-warning-foreground"
+                        : "bg-success-surface border border-border-ink text-success-foreground"
                     }`}
                   >
                     {isReplacingSlot ? <RotateCcw className="w-6 h-6" /> : <CheckCircle2 className="w-6 h-6" />}
                   </div>
                   <div>
                     <span
-                      className={`text-[10px] font-black uppercase tracking-wider font-outfit ${isReplacingSlot ? "text-amber-400" : "text-emerald-400"}`}
+                      className={`text-xs font-bold uppercase tracking-wider font-outfit ${isReplacingSlot ? "text-warning-foreground" : "text-success-foreground"}`}
                     >
                       Phase {getPillsList().indexOf("builder_review") + 1} of {getPillsList().length} ·{" "}
                       {isReplacingSlot ? "Replace Slot" : "Review & Place"}
                     </span>
-                    <h1 className="text-2xl lg:text-3xl font-black text-white font-outfit tracking-tight">
+                    <h1 className="text-2xl lg:text-3xl font-bold text-text-heading font-outfit tracking-tight">
                       {isReplacingSlot ? "Replace Slot" : "Review & Place"}
                     </h1>
                   </div>
-                  <p className="text-xs text-zinc-400 font-medium leading-relaxed">
+                  <p className="text-xs text-text-muted font-medium leading-relaxed">
                     {isReplacingSlot ? (
                       <>
-                        This course is currently in <strong className="text-white">{activeTimetable.name}</strong>.
-                        Confirm to replace the existing slot.
+                        This course is currently in{" "}
+                        <strong className="text-text-heading">{activeTimetable.name}</strong>. Confirm to replace the
+                        existing slot.
                       </>
                     ) : (
                       <>
-                        Confirm placement into <strong className="text-white">{activeTimetable.name}</strong> with
-                        community ratings and clash detection.
+                        Confirm placement into <strong className="text-text-heading">{activeTimetable.name}</strong>{" "}
+                        with community ratings and clash detection.
                       </>
                     )}
                   </p>
@@ -5335,24 +5344,26 @@ export default function FFCSGuidedSelector({
                       <div
                         className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg ${
                           isReplacingSlot
-                            ? "bg-amber-500/10 border border-amber-500/20 text-amber-400"
-                            : "bg-indigo-500/10 border border-indigo-500/20 text-indigo-400"
+                            ? "bg-warning-surface border border-border-ink text-warning-foreground"
+                            : "bg-secondary border border-border-ink text-secondary-foreground"
                         }`}
                       >
                         {isReplacingSlot ? <RotateCcw className="w-6 h-6" /> : <CheckCircle2 className="w-6 h-6" />}
                       </div>
-                      <h1 className="text-2xl sm:text-3xl font-black text-white font-outfit tracking-tight">
+                      <h1 className="text-2xl sm:text-3xl font-bold text-text-heading font-outfit tracking-tight">
                         {isReplacingSlot ? "Replace Course Slot" : "Review & Place"}
                       </h1>
-                      <p className="text-xs text-zinc-400 font-medium max-w-xs sm:max-w-md">
+                      <p className="text-xs text-text-muted font-medium max-w-xs sm:max-w-md">
                         {isReplacingSlot ? (
                           <>
-                            This course is currently in <strong className="text-white">{activeTimetable.name}</strong>.
-                            Confirm to replace the existing slot.
+                            This course is currently in{" "}
+                            <strong className="text-text-heading">{activeTimetable.name}</strong>. Confirm to replace
+                            the existing slot.
                           </>
                         ) : (
                           <>
-                            Confirm placement into <strong className="text-white">{activeTimetable.name}</strong>.
+                            Confirm placement into <strong className="text-text-heading">{activeTimetable.name}</strong>
+                            .
                           </>
                         )}
                       </p>
@@ -5364,17 +5375,17 @@ export default function FFCSGuidedSelector({
                 {guidedPhase === "manual_timetable_view" && (
                   <div className="w-full flex-1 flex flex-col justify-center space-y-3 sm:space-y-4 text-center min-h-0 animate-in fade-in duration-200">
                     <div className="flex flex-col items-center gap-2 shrink-0">
-                      <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 shadow-lg">
+                      <div className="w-12 h-12 rounded-2xl bg-secondary border border-border-ink flex items-center justify-center text-secondary-foreground shadow-lg">
                         <LayoutGrid className="w-6 h-6" />
                       </div>
-                      <span className="text-[10px] font-black uppercase tracking-wider text-indigo-400 font-outfit">
+                      <span className="text-xs font-bold uppercase tracking-wider text-primary font-outfit">
                         Phase {getPillsList().indexOf("manual_timetable_view") + 1} of {getPillsList().length} ·
                         Timetable Browser
                       </span>
-                      <h1 className="text-2xl sm:text-3xl font-black text-white font-outfit tracking-tight">
+                      <h1 className="text-2xl sm:text-3xl font-bold text-text-heading font-outfit tracking-tight">
                         {(effectiveTimetables[browsingTimetableIndex] || activeTimetable)?.name || "Timetable"}
                       </h1>
-                      <p className="text-xs text-zinc-400 font-medium max-w-xs sm:max-w-md">
+                      <p className="text-xs text-text-muted font-medium max-w-xs sm:max-w-md">
                         Browse and cycle through all your saved timetables, review slot allocations, and inspect metrics
                         directly inside the hero.
                       </p>

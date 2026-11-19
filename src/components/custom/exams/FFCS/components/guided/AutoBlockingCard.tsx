@@ -83,17 +83,17 @@ export default function AutoBlockingCard({
 
   return (
     <div
-      className={`p-4 sm:p-5 rounded-[28px] sm:rounded-[32px] bg-zinc-900/80 border border-zinc-800/80 backdrop-blur-xl shadow-2xl space-y-3 text-left flex flex-col justify-between ${
+      className={`p-4 sm:p-5 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-3 text-left flex flex-col justify-between ${
         isLandscape ? "h-[74vh] max-h-[640px] w-full" : "min-h-[480px] max-h-[700px]"
       }`}
     >
       <div className="shrink-0 space-y-2">
         <div className="flex items-center justify-between gap-2">
           <div>
-            <h3 className="text-sm font-black text-white uppercase tracking-wider font-outfit">
+            <h3 className="text-sm font-bold text-text-heading uppercase tracking-wider font-outfit">
               4. Slot &amp; Day Blocking
             </h3>
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-text-muted">
               Rule out whole days or specific periods. Tap any slot in the vertical timetable below to block theory or
               lab independently.
             </p>
@@ -102,7 +102,7 @@ export default function AutoBlockingCard({
             <button
               type="button"
               onClick={handleClearAllBlocks}
-              className="text-[11px] font-bold text-rose-400 hover:text-rose-300 transition-colors cursor-pointer shrink-0 flex items-center gap-1"
+              className="text-xs font-bold text-danger-foreground hover:text-danger-foreground transition-colors cursor-pointer shrink-0 flex items-center gap-1"
             >
               <RotateCcw className="w-3 h-3" />
               <span>Clear All ({effectiveBlockedSlots.size})</span>
@@ -124,13 +124,13 @@ export default function AutoBlockingCard({
                 onClick={() => setBlockingActiveDay(d.id)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
                   isSelected
-                    ? "bg-indigo-600 text-white shadow-md ring-1 ring-indigo-400"
-                    : "bg-zinc-950/60 border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-700"
+                    ? "bg-primary text-primary-foreground shadow-brutal-sm border-2 border-border-ink ring-1 ring-border-ink"
+                    : "bg-background border border-border-ink text-text-secondary hover:text-text-heading hover:border-border-ink"
                 }`}
               >
                 <span>{d.name}</span>
                 {blockedInDay > 0 && (
-                  <span className="px-1.5 py-0.2 rounded-md bg-rose-500/30 text-rose-300 text-[10px] font-mono">
+                  <span className="px-1.5 py-0.2 rounded-md bg-rose-500/30 text-danger-foreground text-xs font-mono">
                     {blockedInDay}
                   </span>
                 )}
@@ -144,10 +144,10 @@ export default function AutoBlockingCard({
           <button
             type="button"
             onClick={() => handleToggleDayBlock(blockingActiveDay, "morning_theory")}
-            className={`text-[11px] font-bold px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
+            className={`text-xs font-bold px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
               morningTheoryBlocked
-                ? "bg-rose-600 text-white border-rose-500 shadow-xs"
-                : "bg-zinc-950/60 border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                ? "bg-rose-600 text-white border-border-ink shadow-xs"
+                : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
             }`}
           >
             {morningTheoryBlocked ? "Unblock Morning Theory ✓" : "Block Morning Theory (08:00 - 13:25)"}
@@ -156,10 +156,10 @@ export default function AutoBlockingCard({
           <button
             type="button"
             onClick={() => handleToggleDayBlock(blockingActiveDay, "morning_lab")}
-            className={`text-[11px] font-bold px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
+            className={`text-xs font-bold px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
               morningLabBlocked
-                ? "bg-rose-600 text-white border-rose-500 shadow-xs"
-                : "bg-zinc-950/60 border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                ? "bg-rose-600 text-white border-border-ink shadow-xs"
+                : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
             }`}
           >
             {morningLabBlocked ? "Unblock Morning Lab ✓" : "Block Morning Lab (08:00 - 13:20)"}
@@ -168,10 +168,10 @@ export default function AutoBlockingCard({
           <button
             type="button"
             onClick={() => handleToggleDayBlock(blockingActiveDay, "evening_theory")}
-            className={`text-[11px] font-bold px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
+            className={`text-xs font-bold px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
               eveningTheoryBlocked
-                ? "bg-rose-600 text-white border-rose-500 shadow-xs"
-                : "bg-zinc-950/60 border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                ? "bg-rose-600 text-white border-border-ink shadow-xs"
+                : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
             }`}
           >
             {eveningTheoryBlocked ? "Unblock Afternoon Theory ✓" : "Block Afternoon Theory (14:00 - 19:30)"}
@@ -180,10 +180,10 @@ export default function AutoBlockingCard({
           <button
             type="button"
             onClick={() => handleToggleDayBlock(blockingActiveDay, "evening_lab")}
-            className={`text-[11px] font-bold px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
+            className={`text-xs font-bold px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
               eveningLabBlocked
-                ? "bg-rose-600 text-white border-rose-500 shadow-xs"
-                : "bg-zinc-950/60 border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                ? "bg-rose-600 text-white border-border-ink shadow-xs"
+                : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
             }`}
           >
             {eveningLabBlocked ? "Unblock Afternoon Lab ✓" : "Block Afternoon Lab (14:00 - 19:30)"}
@@ -192,10 +192,10 @@ export default function AutoBlockingCard({
           <button
             type="button"
             onClick={() => handleToggleDayBlock(blockingActiveDay, "all")}
-            className={`text-[11px] font-bold px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
+            className={`text-xs font-bold px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
               dayAllBlocked
-                ? "bg-rose-600 text-white border-rose-500 shadow-xs"
-                : "bg-zinc-950/60 border-zinc-800 text-zinc-300 hover:border-zinc-700"
+                ? "bg-rose-600 text-white border-border-ink shadow-xs"
+                : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
             }`}
           >
             {dayAllBlocked ? "Unblock Full Day ✓" : "Block Entire Day"}
@@ -204,7 +204,7 @@ export default function AutoBlockingCard({
           <button
             type="button"
             onClick={() => handleClearDayBlocks(blockingActiveDay)}
-            className="text-[11px] font-bold px-2.5 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition-all cursor-pointer"
+            className="text-xs font-bold px-2.5 py-1.5 rounded-xl bg-surface border border-border-ink text-text-muted hover:text-text-heading transition-all cursor-pointer"
           >
             Reset Day
           </button>
@@ -212,10 +212,10 @@ export default function AutoBlockingCard({
       </div>
 
       {/* Visual Interactive Vertical Timetable */}
-      <div className="flex-1 min-h-[220px] max-h-[360px] overflow-auto rounded-2xl bg-zinc-950/70 border border-zinc-800/80 p-2 custom-scrollbar">
-        <div className="text-[10px] text-zinc-500 font-bold mb-1.5 px-1 flex items-center justify-between">
+      <div className="flex-1 min-h-[220px] max-h-[360px] overflow-auto rounded-2xl bg-background border border-border-ink p-2 custom-scrollbar">
+        <div className="text-xs text-text-muted font-bold mb-1.5 px-1 flex items-center justify-between">
           <span>INTERACTIVE VERTICAL TIMETABLE — TAP ANY CELL TO TOGGLE BLOCK</span>
-          <span className="text-rose-400 font-mono">{effectiveBlockedSlots.size} slots blocked</span>
+          <span className="text-danger-foreground font-mono">{effectiveBlockedSlots.size} slots blocked</span>
         </div>
         <VerticalTimetableGrid
           courses={[]}

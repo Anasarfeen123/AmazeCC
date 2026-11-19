@@ -28,7 +28,7 @@ describe("TargetCourseLockCard curriculum badge", () => {
 
     const badge = screen.getByText("Programme Core Courses");
     expect(badge.getAttribute("title")).toBe("In your curriculum — counts toward Programme Core Courses");
-    expect(badge.className).toContain("text-emerald-500");
+    expect(badge.className).toContain("text-success-foreground");
   });
 
   it("wears the open-elective look for a shared-start candidate", () => {
@@ -45,9 +45,9 @@ describe("TargetCourseLockCard curriculum badge", () => {
 
     const badge = screen.getByText("NC Open Elective");
     expect(badge.getAttribute("title")).toContain("Not in your curriculum");
-    expect(badge.className).toContain("text-amber-600");
+    expect(badge.className).toContain("text-warning-foreground");
     // The candidate must never borrow the curriculum colour.
-    expect(badge.className).not.toContain("text-emerald-500");
+    expect(badge.className).not.toContain("text-success-foreground");
   });
 
   it("defaults to the curriculum look when a host only passes the category", () => {

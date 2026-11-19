@@ -109,7 +109,7 @@ export function CourseListImportSection({ onImport }: CourseListImportSectionPro
       </label>
 
       {importedCount !== null && (
-        <p className="text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-2" aria-live="polite">
+        <p className="text-xs text-success-foreground flex items-center gap-2" aria-live="polite">
           <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
           Imported {importedCount} course{importedCount === 1 ? "" : "s"}. Same codes were replaced; the rest of your
           list is untouched.
@@ -137,7 +137,7 @@ function FieldLegend() {
             <span
               key={field}
               title={required ? "Required — a row without it is dropped" : "Optional — safe to leave out"}
-              className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md border text-[10px] font-bold ${
+              className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md border text-xs font-bold ${
                 required
                   ? "bg-teal-500/10 text-teal-600 dark:text-teal-400 border-teal-500/30"
                   : "bg-surface-secondary text-muted-foreground border-border-strong/50"
@@ -149,7 +149,7 @@ function FieldLegend() {
           );
         })}
       </div>
-      <p className="text-[11px] text-muted-foreground">
+      <p className="text-xs text-muted-foreground">
         A row with no course code or no slot is dropped; everything else has a default.
       </p>
     </div>
@@ -165,7 +165,7 @@ function ImportPreview({ result, onImport }: { result: FileImport; onImport: () 
     <div className="flex flex-col gap-2">
       <p className="text-xs text-muted-foreground" aria-live="polite">
         {result.error ? (
-          <span className="text-red-500">{result.error}</span>
+          <span className="text-danger-foreground">{result.error}</span>
         ) : (
           <>
             <span className="text-text-heading">{result.courses.length}</span> course
@@ -176,7 +176,7 @@ function ImportPreview({ result, onImport }: { result: FileImport; onImport: () 
       </p>
 
       {(result.ignoredHeaders.length > 0 || missingRequired.length > 0) && (
-        <div className="flex flex-col gap-1 text-xs text-amber-500 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2">
+        <div className="flex flex-col gap-1 text-xs text-warning-foreground bg-warning-surface border border-border-ink rounded-lg px-3 py-2">
           {missingRequired.length > 0 && (
             <span className="flex items-start gap-2">
               <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
@@ -225,7 +225,7 @@ function ImportPreview({ result, onImport }: { result: FileImport; onImport: () 
             </table>
           </div>
           {result.rows.length > shown.length && (
-            <p className="text-[11px] text-muted-foreground px-2.5 py-1.5 border-t border-border-strong/50 bg-surface-secondary/30">
+            <p className="text-xs text-muted-foreground px-2.5 py-1.5 border-t border-border-strong/50 bg-surface-secondary/30">
               …and {result.rows.length - shown.length} more
             </p>
           )}

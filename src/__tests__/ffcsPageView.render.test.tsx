@@ -94,7 +94,7 @@ describe("FFCSPageView", () => {
     expect(topNav?.hasAttribute("hidden")).toBe(true);
     expect(screen.getByRole("link", { name: "AmazeCC home" })).toBeDefined();
     expect(screen.getByRole("link", { name: "AmazeCC home" }).querySelector("img")?.getAttribute("src")).toContain(
-      "/favicon/favicon.svg",
+      "/brand/icon-primary.svg",
     );
     expect(screen.getByText("Amaze")).toBeDefined();
     expect(screen.getByText("CC")).toBeDefined();

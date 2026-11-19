@@ -42,7 +42,7 @@ export interface CourseCatalogFiltersProps {
   curriculumSyncing?: boolean;
 }
 
-const CHIP_BASE = "text-[10px] font-bold px-2 py-1 rounded-full border transition-colors cursor-pointer";
+const CHIP_BASE = "text-xs font-bold px-2 py-1 rounded-[10px] border transition-colors cursor-pointer min-h-9";
 
 const chipClass = (active: boolean, activeClass: string): string =>
   active
@@ -78,7 +78,7 @@ export function CourseCatalogFilters({
       aria-pressed={slots.includes(token)}
       onClick={() => toggleSlot(token)}
       title={`Courses running in ${token}`}
-      className={chipClass(slots.includes(token), "bg-indigo-500/15 border-indigo-500/40 text-indigo-500")}
+      className={chipClass(slots.includes(token), "bg-secondary border-border-ink text-secondary-foreground")}
     >
       {token}
     </button>
@@ -91,11 +91,11 @@ export function CourseCatalogFilters({
           type="button"
           aria-expanded={slotsOpen}
           onClick={() => setSlotsOpen((open) => !open)}
-          className={`flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-full border transition-colors cursor-pointer ${
+          className={`flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-[10px] border transition-colors cursor-pointer ${
             slots.length > 0
-              ? "bg-indigo-500/15 border-indigo-500/40 text-indigo-500"
+              ? "bg-secondary border-border-ink text-secondary-foreground"
               : "bg-surface border-border-strong text-muted-foreground hover:text-text-heading"
-          }`}
+          } min-h-9`}
         >
           <Layers className="w-3 h-3" />
           {slots.length > 0 ? `Slots · ${slots.length}` : "Filter by slot"}
@@ -105,7 +105,7 @@ export function CourseCatalogFilters({
           <button
             type="button"
             onClick={() => onSlotsChange([])}
-            className="text-[10px] font-bold text-indigo-500 hover:underline cursor-pointer"
+            className="text-xs font-bold text-primary hover:underline cursor-pointer"
           >
             Clear slots
           </button>
@@ -116,7 +116,7 @@ export function CourseCatalogFilters({
             type="button"
             onClick={onSyncCurriculum}
             disabled={curriculumSyncing}
-            className="ml-auto flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 disabled:opacity-60 cursor-pointer disabled:cursor-wait"
+            className="ml-auto flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-[10px] border border-border-ink bg-success-surface text-success-foreground disabled:opacity-60 cursor-pointer disabled:cursor-wait min-h-9"
           >
             <RefreshCw className={`w-3 h-3 ${curriculumSyncing ? "animate-spin" : ""}`} />
             {curriculumSyncing ? "Syncing…" : "Sync curriculum"}
@@ -125,8 +125,8 @@ export function CourseCatalogFilters({
 
         {curriculum && (
           <label className="ml-auto flex items-center gap-2 cursor-pointer select-none">
-            <GraduationCap className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-            <span className="text-[11px] font-semibold text-muted-foreground">My Curriculum</span>
+            <GraduationCap className="w-3.5 h-3.5 text-success-foreground shrink-0" />
+            <span className="text-xs font-semibold text-muted-foreground">My Curriculum</span>
             <Switch
               checked={curriculumOnly}
               onCheckedChange={onCurriculumOnlyChange}
@@ -143,13 +143,13 @@ export function CourseCatalogFilters({
             <>
               {chips.theory.length > 0 && (
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Theory</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Theory</span>
                   <div className="flex flex-wrap gap-1.5">{chips.theory.map(slotChip)}</div>
                 </div>
               )}
               {chips.lab.length > 0 && (
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Lab</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Lab</span>
                   <div className="flex flex-wrap gap-1.5">{chips.lab.map(slotChip)}</div>
                 </div>
               )}
@@ -161,17 +161,15 @@ export function CourseCatalogFilters({
       )}
 
       {curriculum && curriculumOnly && curriculum.categories.length > 0 && (
-        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.06] p-2.5 flex flex-wrap items-center gap-1.5">
-          <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mr-1">
-            Category
-          </span>
+        <div className="rounded-xl border border-border-ink bg-emerald-500/[0.06] p-2.5 flex flex-wrap items-center gap-1.5">
+          <span className="text-xs font-bold uppercase tracking-wider text-success-foreground mr-1">Category</span>
           <button
             type="button"
             aria-pressed={categories.length === 0}
             onClick={() => onCategoriesChange([])}
             className={chipClass(
               categories.length === 0,
-              "bg-emerald-500/15 border-emerald-500/40 text-emerald-600 dark:text-emerald-400",
+              "bg-success-surface border-border-ink text-success-foreground",
             )}
           >
             All
@@ -185,7 +183,7 @@ export function CourseCatalogFilters({
               title={`Only ${name} courses`}
               className={chipClass(
                 categories.includes(name),
-                "bg-emerald-500/15 border-emerald-500/40 text-emerald-600 dark:text-emerald-400",
+                "bg-success-surface border-border-ink text-success-foreground",
               )}
             >
               {name}

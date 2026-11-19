@@ -489,14 +489,15 @@ describe("FFCSTimetableTab", () => {
     expect(screen.queryByText("Auto · showing the modern grid on this screen")).toBeNull();
   }, 30_000);
 
-  it("moves planner view, course list, and settings actions to the wide-screen header", () => {
+  it("keeps planner view, course list, and settings in the header's More menu", () => {
     render(<FFCSTimetableTab />);
 
-    for (const label of ["Switch Planner View", "Switch Course List", "Planner Settings"]) {
-      const headerButton = screen
-        .getAllByRole("button", { name: label })
-        .find((button) => button.parentElement?.className.includes("hidden xl:flex"));
-      expect(headerButton).toBeDefined();
+    // Brand redesign: the header shows Share + theme + a labelled More menu
+    // (it used to be nine unlabelled icon buttons).
+    fireEvent.click(screen.getByRole("button", { name: "More" }));
+    const menu = within(screen.getByRole("menu", { name: "Planner options" }));
+    for (const label of ["Planner view", "Course list", "Settings"]) {
+      expect(menu.getByRole("menuitem", { name: label })).toBeDefined();
     }
     const plannerMenu = within(screen.getByRole("navigation", { name: "Planner menu" }));
     expect(plannerMenu.getByRole("region", { name: "Views & Course Lists" }).className).toContain("xl:hidden");
@@ -506,7 +507,7 @@ describe("FFCSTimetableTab", () => {
   it("opens FFCS share options and shares the FFCS link in the modern promotion order", async () => {
     render(<FFCSTimetableTab />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Share this plan" }));
+    fireEvent.click(screen.getByRole("button", { name: "Share" }));
 
     expect(screen.getByRole("heading", { name: "Share AmazeCC FFCS" })).toBeDefined();
     expect(screen.getByText("Share as link")).toBeDefined();
@@ -544,7 +545,7 @@ describe("FFCSTimetableTab", () => {
     storage.setItem("profile", JSON.stringify({ name: "Arjun K", image: "data:image/png;base64,avatar" }));
 
     render(<FFCSTimetableTab />);
-    fireEvent.click(screen.getByRole("button", { name: "Share this plan" }));
+    fireEvent.click(screen.getByRole("button", { name: "Share" }));
 
     // Signed in: the account row replaces the sign-in promo entirely.
     expect(screen.getByText("Arjun Kumar")).toBeDefined();
@@ -668,7 +669,7 @@ describe("FFCSTimetableTab", () => {
     expect(screen.getByRole("button", { name: /Auto-Generate/ })).toBeDefined();
     expect(screen.getByRole("button", { name: /Paste VTOP/ })).toBeDefined();
     expect(screen.getByRole("button", { name: /Advanced Linker/ })).toBeDefined();
-    expect(targetCourses.firstElementChild?.className).toContain("text-purple-600");
+    expect(targetCourses.firstElementChild?.className).toContain("text-secondary-foreground");
   }, 30_000);
 
   it("opens planner settings from the planner menu", async () => {

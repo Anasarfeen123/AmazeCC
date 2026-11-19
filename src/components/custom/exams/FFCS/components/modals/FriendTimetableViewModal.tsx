@@ -50,11 +50,11 @@ export function FriendTimetableViewModal({ data, setData, theoryPeriods, labPeri
           title={`${data.name}'s Timetable`}
           subtitle={data.timetables.length > 1 ? `${data.currentIndex + 1} of ${data.timetables.length}` : undefined}
           icon={<Eye className="w-5 h-5" />}
-          accent="bg-blue-500/10 border-blue-500/20 text-blue-500"
+          accent="bg-secondary border-border-ink text-secondary-foreground"
           closeLabel={`Close ${data.name}'s timetable`}
           trailing={
             data.timetables.length > 1 ? (
-              <div className="flex items-center gap-2 bg-zinc-200/60 dark:bg-zinc-700/50 rounded-lg p-1">
+              <div className="flex items-center gap-2 bg-surface-tertiary rounded-lg p-1">
                 <button
                   onClick={() =>
                     setData((prev) =>

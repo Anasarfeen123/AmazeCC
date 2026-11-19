@@ -21,9 +21,9 @@ const MODE_OPTIONS: readonly ExperienceModeOption<GeneratorViewMode>[] = [
     description: "Sectioned left menu, responsive KPI strip, and a readiness summary beside the form.",
     badge: "Dashboard",
     Icon: LayoutDashboard,
-    iconClass: "bg-indigo-500/10 text-indigo-500 border-indigo-500/20",
-    selectedClass: "bg-indigo-500/5",
-    activeColor: "bg-indigo-600 hover:bg-indigo-500",
+    iconClass: "bg-secondary text-secondary-foreground border-border-ink",
+    selectedClass: "bg-secondary",
+    activeColor: "bg-indigo-600 hover:bg-primary",
   },
   {
     value: "classic",
@@ -31,8 +31,8 @@ const MODE_OPTIONS: readonly ExperienceModeOption<GeneratorViewMode>[] = [
     description: "The familiar two-column generator with every control visible on one long page.",
     badge: "Classic",
     Icon: Layers,
-    iconClass: "bg-amber-500/10 text-amber-600 border-amber-500/20",
-    selectedClass: "bg-amber-500/5",
+    iconClass: "bg-warning-surface text-warning-foreground border-border-ink",
+    selectedClass: "bg-warning-surface",
     activeColor: "bg-amber-600 hover:bg-amber-500",
   },
 ];

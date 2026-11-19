@@ -168,17 +168,17 @@ export function FacultyScheduleModal({
                     tone="blue"
                   />
                 ) : (
-                  <div className="p-2 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-500 shrink-0">
+                  <div className="p-2 rounded-2xl bg-secondary border border-border-ink text-secondary-foreground shrink-0">
                     <CalendarDays className="w-5 h-5" />
                   </div>
                 )}
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h2 className="text-base font-black text-text-heading truncate">
+                    <h2 className="text-base font-bold text-text-heading truncate">
                       {selected ? `${selected.canonical}'s Schedule` : "Faculty Schedule"}
                     </h2>
                     {selected && selectedEmpId && (
-                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-surface-secondary border border-border-strong text-text-muted shrink-0">
+                      <span className="text-xs font-mono font-bold px-1.5 py-0.5 rounded-md bg-surface-secondary border border-border-strong text-text-muted shrink-0">
                         #{selectedEmpId}
                       </span>
                     )}
@@ -203,7 +203,7 @@ export function FacultyScheduleModal({
                   </p>
                   {selected &&
                   (directoryProfile?.designation || directoryProfile?.email || directoryProfile?.intercom) ? (
-                    <p className="text-[11px] text-muted-foreground truncate">
+                    <p className="text-xs text-muted-foreground truncate">
                       {directoryProfile?.designation ? `${directoryProfile.designation} · ` : ""}
                       {directoryProfile?.email
                         ? directoryProfile.email
@@ -216,7 +216,7 @@ export function FacultyScheduleModal({
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="ml-1.5 inline-flex items-center gap-0.5 text-blue-500 hover:underline"
+                          className="ml-1.5 inline-flex items-center gap-0.5 text-primary hover:underline"
                         >
                           directory <ExternalLink className="w-3 h-3" />
                         </a>
@@ -243,13 +243,13 @@ export function FacultyScheduleModal({
 
                 {selected.names.length > 1 && (
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                       Also listed as
                     </span>
                     {selected.names.map((name) => (
                       <span
                         key={name}
-                        className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-surface-secondary text-text-heading border border-border-strong"
+                        className="text-xs font-bold px-2 py-0.5 rounded-md bg-surface-secondary text-text-heading border border-border-strong"
                       >
                         {name}
                       </span>
@@ -326,9 +326,9 @@ export function FacultyScheduleModal({
                                   type="button"
                                   onClick={() => setSelectedSwapOffering(offering)}
                                   title={countTitle}
-                                  className="relative hit-expand inline-flex items-center gap-1 text-[11px] font-semibold px-1.5 py-0.5 rounded-md bg-surface-secondary/70 border border-border-strong/70 text-muted-foreground hover:text-amber-500 hover:border-amber-500/40 transition-colors shrink-0 cursor-pointer"
+                                  className="relative hit-expand inline-flex items-center gap-1 text-xs font-semibold px-1.5 py-0.5 rounded-md bg-surface-secondary/70 border border-border-strong/70 text-muted-foreground hover:text-warning-foreground hover:border-border-ink transition-colors shrink-0 cursor-pointer"
                                 >
-                                  <Users className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-amber-500 shrink-0" />
+                                  <Users className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-warning-foreground shrink-0" />
                                   <span>{count}</span>
                                 </button>
                               </div>
@@ -353,7 +353,7 @@ export function FacultyScheduleModal({
                     onChange={(event) => setQuery(event.target.value)}
                     placeholder="Search faculty by name…"
                     aria-label="Search faculty"
-                    className="w-full bg-surface border border-border-strong rounded-xl pl-11 pr-4 py-2.5 text-sm text-text-heading focus:outline-none focus:border-blue-500/50 transition-colors"
+                    className="w-full bg-surface border border-border-strong rounded-xl pl-11 pr-4 py-2.5 text-sm text-text-heading focus:outline-none focus:border-border-ink transition-colors"
                   />
                 </div>
 
@@ -374,7 +374,7 @@ export function FacultyScheduleModal({
                         <button
                           type="button"
                           onClick={() => setQuery("")}
-                          className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-black text-white transition-colors hover:bg-indigo-700 cursor-pointer"
+                          className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition-colors hover:brightness-110 cursor-pointer"
                         >
                           Clear search
                         </button>
@@ -436,7 +436,7 @@ export function FacultyScheduleModal({
                   </div>
                 )}
 
-                <div className="flex items-center justify-between text-[11px] text-muted-foreground flex-wrap gap-2">
+                <div className="flex items-center justify-between text-xs text-muted-foreground flex-wrap gap-2">
                   <span>
                     Schedules come from the FFCS course report. A faculty member appears here only if they teach a class
                     in it.
@@ -446,7 +446,7 @@ export function FacultyScheduleModal({
                       href="https://vitfac.pages.dev"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-semibold hover:underline"
+                      className="inline-flex items-center gap-1 text-success-foreground font-semibold hover:underline"
                     >
                       <span>Leave a review on vitfac</span>
                       <ExternalLink className="w-3 h-3" />
@@ -475,7 +475,7 @@ export function FacultyScheduleModal({
                     venue: selectedSwapOffering.ROOM || selectedSwapOffering.VENUE || "TBA",
                     faculty: selectedSwapOffering.FACULTY,
                     employeeId: selectedSwapOffering.ERP_ID,
-                    color: "bg-blue-500",
+                    color: "bg-primary",
                   },
                 ]}
                 masterCourses={allMasterCourses}

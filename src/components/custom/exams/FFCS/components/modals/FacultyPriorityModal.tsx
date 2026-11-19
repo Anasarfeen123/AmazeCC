@@ -140,15 +140,15 @@ export default function FacultyPriorityModal({
       title="Faculty priority"
       subtitle={`Choose the order you'd prefer faculties in ${courseCode} — generation searches and ranks plans in this order.`}
       icon={<ListOrdered className="w-5 h-5" />}
-      accent="bg-indigo-500/10 border-indigo-500/20 text-indigo-500"
+      accent="bg-secondary border-border-ink text-secondary-foreground"
     >
       <p className="text-xs text-muted-foreground leading-relaxed -mt-1">
         {courseTitle}
-        <span className="block mt-1 text-[11px]">
+        <span className="block mt-1 text-xs">
           #1 is searched first. Faculties you remove rank below every name you keep.
         </span>
         {selectedKeys && (
-          <span className="mt-1.5 block rounded-lg border border-indigo-500/20 bg-indigo-500/5 px-2 py-1.5 text-[11px] text-indigo-500 dark:text-indigo-400">
+          <span className="mt-1.5 block rounded-lg border border-border-ink bg-secondary px-2 py-1.5 text-xs text-secondary-foreground">
             Ranked among the {pool.length} {pool.length === 1 ? "faculty" : "faculties"} you selected for {courseCode} —
             generation only considers these for this course.
           </span>
@@ -162,9 +162,9 @@ export default function FacultyPriorityModal({
             className="flex items-center gap-2.5 p-2.5 rounded-xl border border-border-strong bg-surface-secondary/50"
           >
             <span
-              className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black shrink-0 border ${
+              className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 border ${
                 index === 0
-                  ? "bg-indigo-500/15 border-indigo-500/30 text-indigo-400"
+                  ? "bg-secondary border-border-ink text-secondary-foreground"
                   : "bg-surface-secondary border-border-strong text-muted-foreground"
               }`}
               aria-hidden="true"
@@ -172,7 +172,7 @@ export default function FacultyPriorityModal({
               {index + 1}
             </span>
             <span className="flex-1 min-w-0 text-sm text-text-heading font-semibold truncate">{name}</span>
-            <span className="text-[10px] font-bold text-muted-foreground bg-surface-secondary border border-border-strong/60 px-1.5 py-0.5 rounded-md shrink-0 whitespace-nowrap">
+            <span className="text-xs font-bold text-muted-foreground bg-surface-secondary border border-border-strong/60 px-1.5 py-0.5 rounded-md shrink-0 whitespace-nowrap">
               {countOf(name)} offering{countOf(name) === 1 ? "" : "s"}
             </span>
             <span className="flex items-center shrink-0">
@@ -181,7 +181,7 @@ export default function FacultyPriorityModal({
                 onClick={() => move(index, -1)}
                 disabled={index === 0}
                 aria-label={`Move ${name} up`}
-                className="p-1.5 rounded-lg text-muted-foreground hover:text-indigo-400 hover:bg-indigo-500/10 disabled:opacity-30 transition-colors"
+                className="p-1.5 rounded-lg text-muted-foreground text-primary hover:bg-secondary disabled:opacity-30 transition-colors"
               >
                 <ArrowUp className="w-4 h-4" />
               </button>
@@ -190,7 +190,7 @@ export default function FacultyPriorityModal({
                 onClick={() => move(index, 1)}
                 disabled={index === ordered.length - 1}
                 aria-label={`Move ${name} down`}
-                className="p-1.5 rounded-lg text-muted-foreground hover:text-indigo-400 hover:bg-indigo-500/10 disabled:opacity-30 transition-colors"
+                className="p-1.5 rounded-lg text-muted-foreground text-primary hover:bg-secondary disabled:opacity-30 transition-colors"
               >
                 <ArrowDown className="w-4 h-4" />
               </button>
@@ -198,7 +198,7 @@ export default function FacultyPriorityModal({
                 type="button"
                 onClick={() => remove(name)}
                 aria-label={`Remove ${name} from the ranking`}
-                className="p-1.5 rounded-lg text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                className="p-1.5 rounded-lg text-muted-foreground hover:text-danger-foreground hover:bg-danger-surface transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -218,7 +218,7 @@ export default function FacultyPriorityModal({
             value={pending}
             onChange={(event) => setPending(event.target.value)}
             aria-label="Add a faculty to the ranking"
-            className="flex-1 min-w-0 h-10 px-3 rounded-xl bg-surface-secondary border border-border-strong text-sm text-text-heading focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+            className="flex-1 min-w-0 h-10 px-3 rounded-xl bg-surface-secondary border border-border-strong text-sm text-text-heading focus:outline-none focus:ring-2 focus:ring-border-ink"
           >
             <option value="">Add a faculty…</option>
             {remaining.map((option) => (
@@ -231,7 +231,7 @@ export default function FacultyPriorityModal({
             type="button"
             onClick={add}
             disabled={!pending}
-            className="h-10 px-3.5 rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-sm font-bold flex items-center gap-1.5 disabled:opacity-40 hover:bg-indigo-500/25 transition-colors shrink-0"
+            className="h-10 px-3.5 rounded-xl bg-secondary border border-border-ink text-secondary-foreground text-sm font-bold flex items-center gap-1.5 disabled:opacity-40 hover:bg-indigo-500/25 transition-colors shrink-0"
           >
             <Plus className="w-4 h-4" /> Add
           </button>
@@ -249,7 +249,7 @@ export default function FacultyPriorityModal({
         <button
           type="button"
           onClick={handleSave}
-          className="px-4 h-10 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold transition-colors"
+          className="px-4 h-10 rounded-xl bg-primary hover:brightness-110 text-primary-foreground text-sm font-bold transition-colors"
         >
           Save order
         </button>

@@ -55,7 +55,8 @@ const DAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
  * One colour per course code, assigned on first appearance and then memoised in
  * `colorMap` so every row of the same course shares a fill. The other two
  * timetables assign by array position, which reshuffles when a course is
- * removed.
+ * removed. These are colour *keys*; the display colour comes from
+ * `courseColorClass()` (src/lib/courseColors.ts).
  */
 const ATT_COLORS = [
   "bg-blue-600",
@@ -205,12 +206,10 @@ export default function TimetableVtop({ attendance }: { attendance?: (Normalized
   return (
     <div className="flex w-full flex-col gap-4">
       {/* Top Header */}
-      <div className="flex flex-col justify-between gap-3 border-b border-gray-150 pb-3 sm:flex-row sm:items-center dark:border-gray-800">
+      <div className="flex flex-col justify-between gap-3 border-b border-border-muted pb-3 sm:flex-row sm:items-center">
         <div>
-          <h2 className="font-outfit text-lg font-black text-gray-900 dark:text-gray-100">Class Schedule</h2>
-          <p className="text-[11px] text-gray-400 dark:text-gray-500">
-            View course slots, venues, and export the full grid.
-          </p>
+          <h2 className="font-outfit text-lg font-bold text-text-heading">Class Schedule</h2>
+          <p className="text-xs text-text-muted">View course slots, venues, and export the full grid.</p>
         </div>
 
         <div className="flex items-center gap-1.5">
@@ -225,7 +224,7 @@ export default function TimetableVtop({ attendance }: { attendance?: (Normalized
           <button
             onClick={handlePrint}
             disabled={isDownloading}
-            className="cursor-pointer rounded-lg bg-indigo-600 p-2 text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
+            className="cursor-pointer rounded-lg bg-primary p-2 text-primary-foreground transition-colors hover:brightness-110 disabled:opacity-50"
             title="Print / PDF"
           >
             <Printer className="h-4 w-4" />
@@ -250,7 +249,7 @@ export default function TimetableVtop({ attendance }: { attendance?: (Normalized
             under it, the table above, so this reads on a phone without the
             sideways scroll the old fixed-width table forced. */}
         {uniqueAddedCourses.length > 0 && (
-          <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800/80 dark:bg-[#03070e]">
+          <div className="overflow-hidden rounded-2xl border border-border-ink bg-surface shadow-sm dark:bg-[#03070e]">
             <div className="p-4">
               <SelectedCoursesList courses={uniqueAddedCourses} title="Course Reference" />
             </div>

@@ -18,6 +18,7 @@
  */
 
 import { useMemo } from "react";
+import { courseColorClass } from "@/lib/courseColors";
 import { BookOpen, Clock, Coins, EyeOff, MapPin, User } from "lucide-react";
 import { cn, type AddedCourse } from "@amazecontinuityprojects/amazeui";
 import type { NormalizedCourse } from "@/types/course";
@@ -139,7 +140,7 @@ export default function SlotDetailSheet({
       icon={<Clock className="h-4.5 w-4.5" />}
       accent={
         course
-          ? cn(courseColor, "border-transparent text-gray-900 dark:text-gray-100")
+          ? cn(courseColorClass(courseColor), "border-obsidian")
           : TONE_BADGE[cell.kind === "gap" ? "amber" : cell.blocked ? "red" : "zinc"]
       }
       closeLabel="Close slot detail"
@@ -176,7 +177,10 @@ export default function SlotDetailSheet({
             <div className="rounded-2xl border border-zinc-200/70 p-3.5 dark:border-zinc-800">
               <div className="flex items-start gap-2">
                 <span
-                  className={cn("shrink-0 rounded-md px-1.5 py-0.5 text-[10px] font-black text-white", courseColor)}
+                  className={cn(
+                    "shrink-0 rounded-[6px] border-2 border-obsidian px-1.5 py-0.5 font-mono text-xs font-bold",
+                    courseColorClass(courseColor),
+                  )}
                 >
                   {course.code}
                 </span>
@@ -241,8 +245,8 @@ export default function SlotDetailSheet({
                 <div className="flex items-start gap-2">
                   <span
                     className={cn(
-                      "shrink-0 rounded-md px-1.5 py-0.5 text-[10px] font-black text-white",
-                      s.course.color,
+                      "shrink-0 rounded-[6px] border-2 border-obsidian px-1.5 py-0.5 font-mono text-xs font-bold",
+                      courseColorClass(s.course.color),
                     )}
                   >
                     {s.course.code}

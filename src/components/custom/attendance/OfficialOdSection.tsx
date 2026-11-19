@@ -97,17 +97,15 @@ export default function OfficialOdSection({ currSemesterID, allGradesData }: Pro
   };
 
   return (
-    <div className="bg-white  dark:bg-black border border-gray-200  dark:border-gray-800 rounded-2xl overflow-hidden shadow-sm">
-      <div className="p-5 border-b border-gray-100  dark:border-gray-800 flex flex-col gap-4">
+    <div className="bg-surface border border-border-ink rounded-2xl overflow-hidden shadow-sm">
+      <div className="p-5 border-b border-border-ink flex flex-col gap-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-w-0">
           <div className="min-w-0">
-            <h2 className="text-lg font-bold text-gray-900  dark:text-gray-100 flex items-center gap-2">
-              <ScrollText size={18} className="text-blue-600 dark:text-blue-400" />
+            <h2 className="text-lg font-bold text-text-heading flex items-center gap-2">
+              <ScrollText size={18} className="text-primary" />
               Official OD Records
             </h2>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              Straight from VTOP — why each On-Duty was granted.
-            </p>
+            <p className="text-xs text-text-muted mt-1">Straight from VTOP — why each On-Duty was granted.</p>
           </div>
           <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
             {data && (
@@ -119,7 +117,7 @@ export default function OfficialOdSection({ currSemesterID, allGradesData }: Pro
               onClick={refresh}
               disabled={loading}
               title="Refresh from VTOP"
-              className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+              className="p-2 rounded-full bg-surface-secondary text-text-muted hover:bg-surface-hover transition-colors disabled:opacity-50"
             >
               <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
             </button>
@@ -149,13 +147,13 @@ export default function OfficialOdSection({ currSemesterID, allGradesData }: Pro
           </div>
         )}
         {error && (
-          <div className="flex items-center gap-3 p-4 text-red-600  dark:text-red-500">
+          <div className="flex items-center gap-3 p-4 text-danger-foreground">
             <XCircle className="w-5 h-5 shrink-0" />
             <p className="text-sm font-medium">{error}</p>
           </div>
         )}
         {!loading && !error && data && data.records.length === 0 && (
-          <div className="flex flex-col items-center py-8 text-gray-400  dark:text-gray-500">
+          <div className="flex flex-col items-center py-8 text-text-muted">
             <Inbox className="w-10 h-10 mb-3" />
             <p className="text-sm font-medium">No official OD records for this semester</p>
           </div>
@@ -163,23 +161,20 @@ export default function OfficialOdSection({ currSemesterID, allGradesData }: Pro
         {!loading && !error && data && data.records.length > 0 && (
           <div className="space-y-3">
             {data.records.map((r) => (
-              <div
-                key={r.slNo}
-                className="p-3 sm:p-4 rounded-xl bg-gray-50/70  dark:bg-gray-900/60 border border-gray-100  dark:border-gray-800"
-              >
+              <div key={r.slNo} className="p-3 sm:p-4 rounded-xl bg-surface-secondary border border-border-ink">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-bold text-gray-900  dark:text-gray-100">{r.reason}</p>
-                    <p className="text-xs text-gray-600  dark:text-gray-300 mt-1 flex items-start gap-1.5">
-                      <FileText size={12} className="mt-0.5 shrink-0 text-gray-400" />
+                    <p className="text-sm font-bold text-text-heading">{r.reason}</p>
+                    <p className="text-xs text-text-muted mt-1 flex items-start gap-1.5">
+                      <FileText size={12} className="mt-0.5 shrink-0 text-text-muted" />
                       <span className="break-words">{r.remarks || "—"}</span>
                     </p>
                   </div>
-                  <span className="shrink-0 text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded  dark:bg-blue-900/30 dark:text-blue-400">
+                  <span className="shrink-0 rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-secondary-foreground">
                     #{r.slNo}
                   </span>
                 </div>
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2.5 text-[11px] text-gray-500 dark:text-gray-400">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2.5 text-xs text-text-muted">
                   <span className="inline-flex items-center gap-1 font-medium">
                     <CalendarClock size={12} />
                     {r.date}
@@ -189,9 +184,7 @@ export default function OfficialOdSection({ currSemesterID, allGradesData }: Pro
                 </div>
               </div>
             ))}
-            {data.note && (
-              <p className="text-[11px] text-gray-400 dark:text-gray-500 leading-relaxed pt-1">{data.note}</p>
-            )}
+            {data.note && <p className="text-xs text-text-muted leading-relaxed pt-1">{data.note}</p>}
           </div>
         )}
       </div>

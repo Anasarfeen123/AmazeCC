@@ -287,8 +287,8 @@ export default function ODTrackerSubpage({
       headline: `${validODsCount} hrs`,
       subline: "Counted from your timetable",
       badge: "Valid",
-      badgeColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
-      headlineColor: "text-emerald-600 dark:text-emerald-400",
+      badgeColor: "bg-success-surface text-success-foreground border-border-ink",
+      headlineColor: "text-success-foreground",
     });
 
     slides.push({
@@ -297,8 +297,8 @@ export default function ODTrackerSubpage({
       headline: `${wastedODsCount} hrs`,
       subline: "OD credited while you were present",
       badge: "Wasted",
-      badgeColor: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20",
-      headlineColor: "text-red-500 dark:text-red-400",
+      badgeColor: "bg-danger-surface text-danger-foreground border-border-ink",
+      headlineColor: "text-danger-foreground",
     });
 
     slides.push({
@@ -307,8 +307,8 @@ export default function ODTrackerSubpage({
       headline: `${recoveredODsCount} hrs`,
       subline: "Credited back as present since",
       badge: "Back",
-      badgeColor: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20",
-      headlineColor: "text-indigo-600 dark:text-indigo-400",
+      badgeColor: "bg-secondary text-secondary-foreground border-border-ink",
+      headlineColor: "text-primary",
     });
 
     return slides;
@@ -347,16 +347,16 @@ export default function ODTrackerSubpage({
       {/* ── HERO STATS ── */}
       <div className="grid grid-cols-2 gap-3 sm:gap-4">
         <div className={cn(TILE, "min-h-32 sm:min-h-36")}>
-          <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-outfit">
+          <span className="text-xs sm:text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
             Total OD
           </span>
           <div className="my-auto">
-            <span className="text-3xl sm:text-4xl font-black font-outfit tracking-tight leading-none block text-emerald-600 dark:text-emerald-400">
+            <span className="text-3xl sm:text-4xl font-bold font-outfit tracking-tight leading-none block text-success-foreground">
               {totalODHours}
-              <span className="text-base sm:text-lg font-extrabold text-zinc-400 dark:text-zinc-500 ml-1">hrs</span>
+              <span className="text-base sm:text-lg font-bold text-text-muted ml-1">hrs</span>
             </span>
           </div>
-          <p className="text-[10.5px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-medium truncate">
+          <p className="text-xs sm:text-xs text-text-muted font-medium truncate">
             Across {masterODHistory.length} {masterODHistory.length === 1 ? "day" : "days"} on duty
           </p>
         </div>
@@ -365,7 +365,7 @@ export default function ODTrackerSubpage({
       </div>
 
       {/* ── WASTED-OD EXPLAINER ── */}
-      <p className="px-1 -mt-3 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500 font-medium">
+      <p className="px-1 -mt-3 text-xs leading-relaxed text-text-muted font-medium">
         Wasted ODs were credited even though you were present in class — detected when VTOP flips a session from present
         to on-duty after the fact.
       </p>
@@ -415,7 +415,7 @@ export default function ODTrackerSubpage({
                     onClick={() => setExpandedKey(isExpanded ? null : key)}
                     className={`${LIST_ROW} cursor-pointer`}
                   >
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-border-muted bg-surface-secondary text-zinc-500 dark:text-zinc-400">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-border-muted bg-surface-secondary text-text-muted">
                       <Calendar className="h-4.5 w-4.5" />
                     </span>
                     <ListRowText
@@ -423,29 +423,29 @@ export default function ODTrackerSubpage({
                       subtitle={`${d.courses.length} ${d.courses.length === 1 ? "session" : "sessions"}${d.daySpan ? ` · ${d.daySpan}` : ""}${d.officialWhy && d.officialWhy.length > 0 ? ` · ${d.officialWhy[0].reason}` : ""}`}
                     />
                     <span
-                      className={`shrink-0 text-sm font-black font-outfit tracking-tight leading-none w-12 text-right ${
+                      className={`shrink-0 text-sm font-bold font-outfit tracking-tight leading-none w-12 text-right ${
                         status === "valid"
-                          ? "text-emerald-600 dark:text-emerald-400"
+                          ? "text-success-foreground"
                           : status === "partial"
-                            ? "text-amber-600 dark:text-amber-400"
-                            : "text-red-500 dark:text-red-400"
+                            ? "text-warning-foreground"
+                            : "text-danger-foreground"
                       }`}
                     >
                       {d.totalHours}h
                     </span>
                     {status !== "valid" && (
                       <span
-                        className={`shrink-0 text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded-md border ${
+                        className={`shrink-0 text-xs font-bold uppercase px-1.5 py-0.5 rounded-md border ${
                           status === "partial"
-                            ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
-                            : "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20"
+                            ? "bg-warning-surface text-warning-foreground border-border-ink"
+                            : "bg-danger-surface text-danger-foreground border-border-ink"
                         }`}
                       >
                         {status === "partial" ? "Partial" : "Wasted"}
                       </span>
                     )}
                     <ChevronRight
-                      className={`h-4 w-4 text-zinc-400 shrink-0 transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
+                      className={`h-4 w-4 text-text-muted shrink-0 transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
                     />
                   </button>
 
@@ -459,15 +459,15 @@ export default function ODTrackerSubpage({
                         transition={{ duration: 0.22, ease: "easeInOut" }}
                         className="overflow-hidden"
                       >
-                        <div className="px-4 pb-4 pt-1 space-y-2 border-t border-zinc-100 dark:border-zinc-800/80">
+                        <div className="px-4 pb-4 pt-1 space-y-2 border-t border-border-ink">
                           {d.officialWhy && d.officialWhy.length > 0 && (
                             <div className="space-y-1.5 pt-2.5">
                               {d.officialWhy.map((o, oi) => (
                                 <p
                                   key={oi}
-                                  className="text-[11px] text-indigo-700 dark:text-indigo-300 leading-snug flex items-start gap-1.5 font-medium"
+                                  className="text-xs text-primary leading-snug flex items-start gap-1.5 font-medium"
                                 >
-                                  <FileText size={12} className="mt-0.5 shrink-0 text-indigo-400" />
+                                  <FileText size={12} className="mt-0.5 shrink-0 text-primary" />
                                   <span>
                                     <span className="font-bold">{o.reason}</span>
                                     {o.remarks ? ` — ${o.remarks}` : ""}
@@ -486,11 +486,11 @@ export default function ODTrackerSubpage({
                                 <div key={bi} className="space-y-1.5">
                                   {showBlockHeader && (
                                     <div className="flex items-center justify-between gap-2 pt-1">
-                                      <span className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-600 dark:text-indigo-400">
+                                      <span className="flex items-center gap-1.5 text-xs font-bold text-primary">
                                         <Clock size={12} className="shrink-0" />
                                         {formatRange(block.startMin as number, block.endMin as number)}
                                       </span>
-                                      <span className="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded-md bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+                                      <span className="text-xs font-bold uppercase px-1.5 py-0.5 rounded-md bg-secondary text-secondary-foreground border border-border-ink">
                                         {block.hours} {block.hours === 1 ? "hr" : "hrs"}
                                       </span>
                                     </div>
@@ -499,30 +499,30 @@ export default function ODTrackerSubpage({
                                     <div key={idx} className="flex items-center justify-between gap-3 min-w-0 py-1">
                                       <div className="min-w-0 flex-1 flex items-center gap-2">
                                         <p
-                                          className={`text-[13px] font-semibold truncate ${c.isWasted ? "text-zinc-400 dark:text-zinc-500 line-through" : "text-zinc-800 dark:text-zinc-100"}`}
+                                          className={`text-[13px] font-semibold truncate ${c.isWasted ? "text-text-muted line-through" : "text-text-primary"}`}
                                         >
                                           {c.title}
                                         </p>
                                         {c.timeString ? (
-                                          <span className="text-[10px] px-1.5 py-0.5 rounded-md font-semibold bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400 shrink-0">
+                                          <span className="text-xs px-1.5 py-0.5 rounded-md font-semibold bg-surface-secondary text-text-muted shrink-0">
                                             {c.timeString}
                                           </span>
                                         ) : (
-                                          <span className="text-[10px] px-1.5 py-0.5 rounded-md font-semibold bg-zinc-100/60 text-zinc-400 dark:bg-zinc-800/60 dark:text-zinc-500 shrink-0">
+                                          <span className="text-xs px-1.5 py-0.5 rounded-md font-semibold bg-surface-secondary text-text-muted shrink-0">
                                             Time N/A
                                           </span>
                                         )}
                                       </div>
-                                      <span className="text-[10.5px] text-zinc-400 dark:text-zinc-500 font-bold uppercase tracking-wider shrink-0">
+                                      <span className="text-xs text-text-muted font-bold uppercase tracking-wider shrink-0">
                                         {c.type} · {c.hours}h
                                       </span>
                                       {c.isWasted && (
-                                        <span className="shrink-0 text-[10px] font-bold bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                        <span className="shrink-0 text-xs font-bold bg-danger-surface text-danger-foreground border border-border-ink px-2 py-0.5 rounded-md flex items-center gap-1">
                                           <ShieldAlert size={11} /> Wasted
                                         </span>
                                       )}
                                       {c.isRecovered && (
-                                        <span className="shrink-0 text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                        <span className="shrink-0 text-xs font-bold bg-success-surface text-success-foreground border border-border-ink px-2 py-0.5 rounded-md flex items-center gap-1">
                                           <CheckCircle2 size={11} /> Recovered
                                         </span>
                                       )}

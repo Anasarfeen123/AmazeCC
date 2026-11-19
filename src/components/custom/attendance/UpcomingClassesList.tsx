@@ -26,7 +26,7 @@ export default function UpcomingClassesList({
   const CLASS_WEIGHT = isLab ? 2 : 1;
 
   if (!classes || classes.length === 0) {
-    return <p className="text-gray-500  dark:text-gray-400 text-xs text-center py-4">No upcoming classes 🎉</p>;
+    return <p className="text-text-muted text-xs text-center py-4">No upcoming classes 🎉</p>;
   }
 
   const lockDates = useMemo(() => {
@@ -79,21 +79,21 @@ export default function UpcomingClassesList({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3 text-sm font-medium bg-gray-50  dark:bg-gray-900/50 p-4 rounded-xl border border-gray-100  dark:border-gray-800">
+      <div className="flex flex-wrap items-center justify-between gap-3 text-sm font-medium bg-surface-secondary p-4 rounded-xl border border-border-ink">
         <div className="flex gap-4">
-          <span className="text-emerald-600 dark:text-emerald-400">
+          <span className="text-success-foreground">
             Attending: <strong>{attending}</strong>
           </span>
-          <span className="text-red-500 dark:text-red-400">
+          <span className="text-danger-foreground">
             Skipping: <strong>{missed}</strong>
           </span>
         </div>
         <div
-          className={`px-3 py-1 rounded-full border ${
+          className={`px-3 py-1 rounded-[10px] border ${
             predictedPercent >= thresholdPct
-              ? "bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800/50"
-              : "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800/50"
-          }`}
+              ? "bg-emerald-100 text-success-foreground border-border-ink dark:text-success-foreground dark:border-emerald-800/50"
+              : "bg-red-100 text-danger-foreground border-border-ink dark:text-danger-foreground dark:border-red-800/50"
+          } min-h-9`}
         >
           Predicted: {predictedPercent}%
         </div>
@@ -114,22 +114,20 @@ export default function UpcomingClassesList({
             <div
               key={i}
               {...clickable(() => toggleAttendance(time))}
-              className={`flex flex-col items-center justify-center rounded-lg border p-2 text-center cursor-pointer select-none transition-all duration-150 hover:scale-[1.03] active:scale-[0.97] ${
+              className={`flex flex-col items-center justify-center rounded-lg border p-2 text-center cursor-pointer select-none transition-all duration-150 ${
                 isSkipped
-                  ? "bg-red-50/50 border-red-200 text-red-700 dark:bg-red-950/20 dark:border-red-900/40 dark:text-red-400"
+                  ? "bg-red-50/50 border-border-ink text-danger-foreground dark:text-danger-foreground"
                   : isIgnored
-                    ? "bg-gray-100 border-gray-200 text-gray-400 dark:text-gray-500 dark:bg-gray-900 dark:border-gray-800 opacity-50"
-                    : "bg-white border-gray-200 dark:bg-black dark:border-gray-800/80 text-gray-800 dark:text-gray-300 hover:border-blue-400 dark:hover:border-blue-500"
+                    ? "bg-surface-secondary border-border-ink text-text-muted opacity-50"
+                    : "bg-surface border-border-ink text-text-primary hover:border-border-ink dark:hover:border-border-ink"
               }`}
             >
-              <span
-                className={`font-bold text-xs ${isSkipped ? "text-red-700 dark:text-red-400" : "text-gray-800 dark:text-gray-200"}`}
-              >
+              <span className={`font-bold text-xs ${isSkipped ? "text-danger-foreground" : "text-text-primary"}`}>
                 {dateStr}
               </span>
               <span
-                className={`text-[9px] uppercase font-bold tracking-wider mt-0.5 opacity-60 ${
-                  isSkipped ? "text-red-500 dark:text-red-400" : "text-gray-500 dark:text-gray-400"
+                className={`text-xs uppercase font-bold tracking-wider mt-0.5 opacity-60 ${
+                  isSkipped ? "text-danger-foreground" : "text-text-muted"
                 }`}
               >
                 {weekday}

@@ -112,7 +112,7 @@ const CALENDAR_OPTIONS = (Object.keys(CALENDAR_TYPES) as CalendarTypeKey[]).map(
  * requirements — collapsing them into one number is the thing this carousel
  * exists to stop.
  */
-const LAB_VALUE = "text-emerald-600 dark:text-emerald-400";
+const LAB_VALUE = "text-success-foreground";
 
 /** A row in the Upcoming list — one date, and everything happening on it. */
 type UpcomingItem = {
@@ -752,10 +752,10 @@ export default function CalendarSubpage({
                 type="button"
                 onClick={() => openDay(today)}
                 title="Open today"
-                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors cursor-pointer shrink-0"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-surface-secondary text-text-muted hover:bg-surface-hover transition-colors cursor-pointer shrink-0"
               >
                 <ToneDot tone={todayTone(today)} size="md" />
-                <span className="text-[11px] font-bold">{todaySummary(today, dayCardsMap)}</span>
+                <span className="text-xs font-bold">{todaySummary(today, dayCardsMap)}</span>
                 <ChevronRight className="w-3 h-3" />
               </button>
             ) : null
@@ -766,9 +766,7 @@ export default function CalendarSubpage({
             shrink-0, and a native select is ~256px, which on a 360px phone
             leaves the month name about sixty pixels. */}
         <div className="mt-3 flex items-center gap-2">
-          <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-            Programme
-          </span>
+          <span className="shrink-0 text-xs font-bold uppercase tracking-wider text-text-muted">Programme</span>
           <div className="min-w-0 flex-1">
             <SelectField value={type} onChange={handleTypeChange} options={CALENDAR_OPTIONS} />
           </div>
@@ -807,7 +805,7 @@ export default function CalendarSubpage({
                 key={item.id}
                 type="button"
                 onClick={() => openDay(item.day)}
-                className="flex w-full items-start gap-3 py-3 px-4 text-left transition-colors hover:bg-zinc-50/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-emerald-500/50 dark:hover:bg-white/[0.03]"
+                className="flex w-full items-start gap-3 py-3 px-4 text-left transition-colors hover:bg-surface-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-emerald-500/50"
               >
                 {/* A dot, not a pill, and on the title's line rather than the
                     row's centre. The pill was the widest thing on the row and
@@ -828,7 +826,7 @@ export default function CalendarSubpage({
                                 disappearing: the dot carries it at a glance, the
                                 word makes it unambiguous. On an exam day this is the
                                 series name, so the title can be the subjects. */}
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                            <span className="text-xs font-bold uppercase tracking-wider text-text-muted">
                               {item.kindText}
                             </span>
                             <ToneBadge tone={item.tone}>{relativeDayLabel(item.when)}</ToneBadge>
@@ -842,18 +840,16 @@ export default function CalendarSubpage({
                   {item.lines.length > 0 && (
                     <ul className="mt-1.5 space-y-1">
                       {item.lines.map((line, i) => (
-                        <li key={i} className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+                        <li key={i} className="flex items-center gap-2 text-xs text-text-muted">
                           <AvatarDot src={line.avatarUrl} name={profileName} />
                           <span className="truncate">{line.title}</span>
                         </li>
                       ))}
                     </ul>
                   )}
-                  {item.stats && (
-                    <p className="mt-1 text-[11px] font-medium text-zinc-400 dark:text-zinc-500">{item.stats}</p>
-                  )}
+                  {item.stats && <p className="mt-1 text-xs font-medium text-text-muted">{item.stats}</p>}
                 </div>
-                <ChevronRight className="w-4 h-4 shrink-0 text-zinc-300 dark:text-zinc-600 mt-0.5" />
+                <ChevronRight className="w-4 h-4 shrink-0 text-text-muted mt-0.5" />
               </button>
             ))}
           </ListShell>
@@ -955,7 +951,7 @@ function LogRow({ row, onClick }: { row: AttendanceLogRow; onClick: () => void }
     <button
       type="button"
       onClick={onClick}
-      className="w-full flex items-start gap-3 py-3 px-4 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/40 active:bg-zinc-100/70 dark:active:bg-zinc-800/60 cursor-pointer"
+      className="w-full flex items-start gap-3 py-3 px-4 text-left transition-colors hover:bg-surface-hover active:bg-surface-secondary dark:active:bg-zinc-800/60 cursor-pointer"
     >
       <ToneDot tone={row.tone} size="md" className="mt-[7px]" />
       <div className="min-w-0 flex-1">
@@ -967,13 +963,11 @@ function LogRow({ row, onClick }: { row: AttendanceLogRow; onClick: () => void }
             // Same treatment as the Upcoming rows: the dot carries the status in
             // colour and the word confirms it, so the date — the thing you are
             // scanning for — keeps the width.
-            <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-              {row.label}
-            </span>
+            <span className="text-xs font-bold uppercase tracking-wider text-text-muted">{row.label}</span>
           }
         />
       </div>
-      <ChevronRight className="w-4 h-4 shrink-0 text-zinc-400 mt-0.5" />
+      <ChevronRight className="w-4 h-4 shrink-0 text-text-muted mt-0.5" />
     </button>
   );
 }

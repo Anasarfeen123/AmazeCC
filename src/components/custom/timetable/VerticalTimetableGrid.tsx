@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { courseColorClass } from "@/lib/courseColors";
 import { AnimatePresence } from "framer-motion";
 import { cn, type AddedCourse, type GapDetail, type TimetablePeriod } from "@amazecontinuityprojects/amazeui";
 import type { NormalizedCourse } from "@/types/course";
@@ -293,7 +294,9 @@ export default function VerticalTimetableGrid({
         cell.kind !== "blocked" &&
           cell.partiallyBlocked &&
           "border-amber-500/40 bg-[repeating-linear-gradient(45deg,transparent,transparent_2px,rgba(245,158,11,0.15)_2px,rgba(245,158,11,0.15)_4px)] bg-amber-950/20 text-amber-200 shadow-inner",
-        cell.kind === "course" && cell.course && cn(cell.course.color, "shadow-md text-gray-900 dark:text-gray-100"),
+        cell.kind === "course" &&
+          cell.course &&
+          cn(courseColorClass(cell.course.color), "border-2 border-obsidian shadow-brutal-sm"),
         cell.kind === "gap" &&
           "animate-pulse border-yellow-500/60 bg-yellow-500/20 text-yellow-600 dark:text-yellow-200",
         cell.kind === "empty" &&

@@ -1,3 +1,4 @@
+import { COURSE_COLOR_KEYS, courseColorHex } from "./courseColors";
 
 export const DAYS = [
   { id: "mon", name: "Monday" },
@@ -28,26 +29,11 @@ export const COLORS = [
   "bg-magenta-500",
 ];
 
-export const COLOR_HEX_MAP: Record<string, string> = {
-  "bg-blue-600": "#2563eb",
-  "bg-purple-600": "#9333ea",
-  "bg-emerald-500": "#10b981",
-  "bg-red-600": "#dc2626",
-  "bg-amber-500": "#f59e0b",
-  "bg-pink-500": "#ec4899",
-  "bg-indigo-600": "#4f46e5",
-  "bg-teal-500": "#14b8a6",
-  "bg-orange-500": "#f97316",
-  "bg-cyan-600": "#0891b2",
-  "bg-fuchsia-500": "#d946ef",
-  "bg-lime-500": "#84cc16",
-  "bg-rose-600": "#e11d48",
-  "bg-violet-600": "#7c3aed",
-  "bg-sky-500": "#0ea5e9",
-  "bg-yellow-500": "#eab308",
-  "bg-green-600": "#16a34a",
-  "bg-magenta-500": "#d63384",
-};
+// Display hex per stored course colour key: the brand course palette
+// (src/lib/courseColors.ts). Keys are unchanged so saved plans keep working.
+export const COLOR_HEX_MAP: Record<string, string> = Object.fromEntries(
+  COURSE_COLOR_KEYS.map((k) => [k, courseColorHex(k)]),
+);
 
 export const typeLabels: Record<string, string> = {
   SS: "Soft Skills",

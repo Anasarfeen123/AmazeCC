@@ -15,8 +15,10 @@ import {
 } from "@/lib/calendarDay";
 
 /** The squircle the Theory and Lab log grids already use. */
+/* Capped height, not aspect-square: on a wide desktop card square cells grew
+   to ~120px and the month became mostly empty space. */
 const CELL =
-  "relative aspect-square rounded-xl flex flex-col items-center justify-center gap-1 transition-colors duration-150 cursor-pointer";
+  "relative h-12 sm:h-14 lg:h-16 rounded-[10px] border-2 border-transparent flex flex-col items-center justify-center gap-1 transition-colors duration-150 cursor-pointer";
 
 /**
  * Day-type tint.
@@ -29,9 +31,9 @@ const CELL =
  */
 const TINT: Record<CalendarDayModel["dayType"], string> = {
   instructional: "",
-  semiholiday: "bg-amber-500/10 dark:bg-amber-500/10",
+  semiholiday: "bg-warning-surface",
   nonInstructional: "",
-  holiday: "bg-red-500/10 dark:bg-red-500/10",
+  holiday: "bg-danger-surface",
   other: "",
 };
 
@@ -43,7 +45,8 @@ const DAY_TYPE_TEXT: Record<CalendarDayModel["dayType"], string> = {
   other: "Not in the calendar",
 };
 
-const RING = "ring-2 ring-inset ring-indigo-500 dark:ring-indigo-400";
+/** Selected day: ink tile (same as the Home week strip); today: a primary ring. */
+const RING = "!bg-text-primary !text-background [&_span]:!text-background shadow-brutal-sm";
 
 /**
  * The month grid.
@@ -79,16 +82,11 @@ export default function MonthGrid({
 }) {
   const today = todayKey();
   const month = months[activeIndex];
-  const blanks = useMemo(
-    () => (month ? leadingBlanks(month.year, month.monthIndex) : 0),
-    [month]
-  );
+  const blanks = useMemo(() => (month ? leadingBlanks(month.year, month.monthIndex) : 0), [month]);
 
   if (!month) {
     return (
-      <div className={cn("p-8 text-center text-xs font-bold text-zinc-400", className)}>
-        No calendar loaded.
-      </div>
+      <div className={cn("p-8 text-center text-xs font-bold text-text-muted", className)}>No calendar loaded.</div>
     );
   }
 
@@ -112,10 +110,7 @@ export default function MonthGrid({
           className="w-full grid grid-cols-7 gap-1 text-center"
         >
           {WEEKDAY_SHORT.map((day) => (
-            <div
-              key={day}
-              className="text-[9px] font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-500 py-1"
-            >
+            <div key={day} className="text-xs font-bold uppercase tracking-wider text-text-muted py-1">
               {day.slice(0, 2)}
             </div>
           ))}
@@ -128,9 +123,7 @@ export default function MonthGrid({
             const isToday = day.dateKey === today;
             const isSelected = day.dateKey === selectedDateKey;
             const markers = dayMarkers(day);
-            const eventCount = day.events.filter(
-              (e) => e.kind !== "class" && e.kind !== "working"
-            ).length;
+            const eventCount = day.events.filter((e) => e.kind !== "class" && e.kind !== "working").length;
 
             return (
               <button
@@ -148,20 +141,20 @@ export default function MonthGrid({
                   CELL,
                   TINT[day.dayType],
                   isSelected && RING,
-                  isToday && !isSelected && "ring-1 ring-inset ring-zinc-400 dark:ring-zinc-600",
-                  "hover:bg-zinc-100 dark:hover:bg-zinc-800/60 active:scale-95"
+                  isToday && !isSelected && "ring-2 ring-inset ring-primary",
+                  "hover:bg-surface-hover",
                 )}
               >
                 <span
                   className={cn(
-                    "text-xs font-black font-outfit leading-none",
+                    "text-xs font-bold font-outfit leading-none",
                     day.dayType === "holiday"
-                      ? "text-red-600 dark:text-red-400"
+                      ? "text-danger-foreground"
                       : day.dayType === "semiholiday"
-                        ? "text-amber-600 dark:text-amber-400"
+                        ? "text-warning-foreground"
                         : day.dayType === "nonInstructional"
-                          ? "text-sky-600 dark:text-sky-400"
-                          : "text-zinc-900 dark:text-white"
+                          ? "text-primary"
+                          : "text-text-heading",
                   )}
                 >
                   {day.date}

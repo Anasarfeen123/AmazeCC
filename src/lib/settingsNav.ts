@@ -27,6 +27,8 @@ export const HUB = "hub";
  */
 export const DRILLDOWN_PARENT: Readonly<Record<string, string>> = {
   storage: "advanced",
+  // Sync modes are part of Sync (they were a second hub entry beside it).
+  "sync-modes": "sync",
 };
 
 /**

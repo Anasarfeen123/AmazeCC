@@ -70,7 +70,7 @@ import AcknowledgementCards from "../profile/AcknowledgementCards";
 import { useIsMobile } from "../shared";
 import BottomSheet from "../shared/BottomSheet";
 import { effectiveCellDensity } from "../timetable/useTimetableViewMode";
-import SyncModeEditor, { SyncModeEditorContent } from "../shared/SyncModeEditor";
+import { SyncModeEditorContent } from "../shared/SyncModeEditor";
 import SyncCadenceGuide from "../shared/SyncCadenceGuide";
 import { listModes, loadCustomModes, resolveMode, type SyncMode } from "@/lib/sync-engine/sync-modes";
 import { clearApiCache } from "../exams/GenericApiView";
@@ -116,10 +116,10 @@ export const SECTIONS: SectionConfig[] = [
   {
     id: "profile",
     label: "Student Profile",
-    subtitle: "Personal information, mentors, residential status, and records",
+    subtitle: "Your details from VTOP: personal info, proctor and records",
     icon: User,
-    iconBg: "bg-secondary dark:bg-secondary",
-    iconColor: "text-primary",
+    iconBg: "bg-secondary",
+    iconColor: "text-secondary-foreground",
   },
   {
     id: "credentials",
@@ -131,24 +131,24 @@ export const SECTIONS: SectionConfig[] = [
   },
   {
     id: "preferences",
-    label: "Appearance & Theme",
-    subtitle: "Light or dark, dashboard layout and privacy",
+    label: "Appearance & Privacy",
+    subtitle: "Theme, timetable layout, what Home shows, privacy blur, app icon",
     icon: Palette,
-    iconBg: "bg-secondary dark:bg-secondary",
-    iconColor: "text-primary",
+    iconBg: "bg-secondary",
+    iconColor: "text-secondary-foreground",
   },
   {
     id: "academic",
-    label: "Academic & Schedule",
-    subtitle: "Active term semesters, target attendance, and residential status",
+    label: "Academic & Campus Life",
+    subtitle: "Semester, attendance goal, hostel or day scholar, focus timer",
     icon: GraduationCap,
-    iconBg: "bg-secondary dark:bg-secondary",
-    iconColor: "text-primary",
+    iconBg: "bg-secondary",
+    iconColor: "text-secondary-foreground",
   },
   {
     id: "sync",
-    label: "Data Sync & Cache",
-    subtitle: "Auto-refresh intervals, low data mode, and background sync modules",
+    label: "Sync",
+    subtitle: "When and what AmazeCC pulls from VTOP, sync modes, data saver",
     icon: RefreshCcw,
     iconBg: "bg-success-surface",
     iconColor: "text-success-foreground",
@@ -158,32 +158,32 @@ export const SECTIONS: SectionConfig[] = [
     label: "Sync Modes",
     subtitle: "Quick, balanced and full sweeps plus your own custom modes",
     icon: Sliders,
-    iconBg: "bg-secondary dark:bg-secondary",
-    iconColor: "text-primary",
+    iconBg: "bg-secondary",
+    iconColor: "text-secondary-foreground",
   },
   {
     id: "navigation",
-    label: "Mobile & Navigation",
-    subtitle: "Pinned bottom bar tabs and push notifications",
+    label: "Navigation & Notifications",
+    subtitle: "Bottom bar shortcuts, push notifications, install the app",
     icon: Grid,
-    iconBg: "bg-secondary dark:bg-secondary",
-    iconColor: "text-primary",
+    iconBg: "bg-secondary",
+    iconColor: "text-secondary-foreground",
   },
   {
     id: "advanced",
-    label: "Advanced & System",
-    subtitle: "Local storage database, custom API endpoints, backup, and restore",
+    label: "Advanced",
+    subtitle: "API server, backup and restore, stored data on this device",
     icon: Shield,
     iconBg: "bg-danger-surface",
     iconColor: "text-danger-foreground",
   },
   {
     id: "about",
-    label: "About & Community",
-    subtitle: "Version history, changelog, hall of fame, and useful campus links",
+    label: "About",
+    subtitle: "What's new, the team, hall of fame, campus links",
     icon: Info,
-    iconBg: "bg-cyan-500/10 dark:bg-cyan-500/20",
-    iconColor: "text-cyan-600 dark:text-cyan-400",
+    iconBg: "bg-secondary",
+    iconColor: "text-secondary-foreground",
   },
 ];
 
@@ -359,7 +359,6 @@ export default function ProfilePage({
   const [lmsPassword, setLmsPassword] = useState("");
   const [showLmsPassword, setShowLmsPassword] = useState(false);
   const [lmsSaved, setLmsSaved] = useState(false);
-  const [modeEditorOpen, setModeEditorOpen] = useState(false);
   const [customSyncModes, setCustomSyncModes] = useState<SyncMode[]>(() => loadCustomModes());
 
   // `resolvedTheme` is the theme actually rendered — `theme` is undefined until
@@ -784,9 +783,8 @@ export default function ProfilePage({
   }, [profileData]);
 
   // Unified available sections
-  const availableSections = useMemo(() => {
-    return SECTIONS;
-  }, []);
+  // Sync modes live inside Sync (a drill-down), not as a second hub entry.
+  const availableSections = useMemo(() => SECTIONS.filter((s) => s.id !== "sync-modes"), []);
 
   const filteredSections = useMemo(() => {
     if (!searchQuery.trim()) return availableSections;
@@ -808,7 +806,7 @@ export default function ProfilePage({
   const sectionSummary = useMemo((): Record<SectionId, { value: string; tone?: "emerald" | "amber" | "red" }> => {
     const sync = settings?.autoSyncInterval || "off";
     return {
-      profile: { value: unifiedIdentity.programme || profileData?.branch || "—" },
+      profile: { value: unifiedIdentity.programme || profileData?.branch || "" },
       credentials: isLoggedIn ? { value: "Active", tone: "emerald" } : { value: "Signed out", tone: "red" },
       preferences: {
         // A pinned "System" is worth showing as such rather than as the theme
@@ -824,7 +822,9 @@ export default function ProfilePage({
       },
       academic: { value: semesterLabel(currSemesterID) },
       sync: {
-        value: sync === "off" ? "Manual" : sync === "15m" ? "15 min" : sync === "30m" ? "30 min" : "1 hour",
+        value: `${(resolveMode(settings?.defaultSyncMode || "quarterly", customSyncModes)?.label ?? "Quarterly").replace(/ Sync$/, "")} · ${
+          sync === "off" ? "manual" : sync === "15m" ? "15 min" : sync === "30m" ? "30 min" : "hourly"
+        }`,
       },
       "sync-modes": {
         value: `${resolveMode(settings?.defaultSyncMode || "quarterly", customSyncModes)?.label ?? "Quarterly Sync"}${customSyncModes.length > 0 ? ` · ${customSyncModes.length} custom` : ""}`,
@@ -977,7 +977,9 @@ export default function ProfilePage({
 
           {profileImages?.proctor && (
             <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 sm:p-6 space-y-4 shadow-2xs">
-              <h3 className="text-sm font-bold text-text-heading font-outfit">Faculty Mentors & Leadership</h3>
+              <h3 className="font-display text-base font-bold uppercase text-text-heading">
+                Faculty Mentors & Leadership
+              </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
                   {
@@ -1055,7 +1057,7 @@ export default function ProfilePage({
         ].some(Boolean) && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-bold text-text-heading font-outfit">Personal Information</h3>
+              <h3 className="font-display text-base font-bold uppercase text-text-heading">Personal Information</h3>
               <p className="text-xs text-text-muted">Official profile records retrieved from university portal</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 text-xs">
@@ -1101,7 +1103,7 @@ export default function ProfilePage({
         {(profileData?.currentAddress || profileData?.permanentAddress) && (
           <div className="space-y-4 border-t border-border-ink pt-5">
             <div>
-              <h3 className="text-sm font-bold text-text-heading font-outfit">Address Records</h3>
+              <h3 className="font-display text-base font-bold uppercase text-text-heading">Address Records</h3>
               <p className="text-xs text-text-muted">Registered residential and communication addresses</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1483,7 +1485,7 @@ export default function ProfilePage({
     <div className="space-y-6">
       {/* Theme & Layout Card */}
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-5 shadow-2xs">
-        <h3 className="text-sm font-bold text-text-heading font-outfit">Theme & Display Mode</h3>
+        <h3 className="font-display text-base font-bold uppercase text-text-heading">Theme & timetable</h3>
 
         {/* Theme Mode Switcher */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
@@ -1533,7 +1535,7 @@ export default function ProfilePage({
             value={(settings?.timetableViewMode as string) || "auto"}
             onChange={(val) => updateSetting("timetableViewMode", val)}
             options={[
-              { value: "auto", label: "✨ Auto (Recommended)" },
+              { value: "auto", label: "Auto (recommended)" },
               { value: "vertical", label: "Vertical Heatmap (Days × Times)" },
               { value: "horizontal", label: "Full Grid (Days × Periods)" },
             ]}
@@ -1573,7 +1575,7 @@ export default function ProfilePage({
             value={settings?.tasksInlineOnHome !== false ? "inline" : "separate"}
             onChange={(val) => updateSetting("tasksInlineOnHome", val === "inline")}
             options={[
-              { value: "inline", label: "✨ Unified (Inline 3rd line on classes)" },
+              { value: "inline", label: "Inline (3rd line on each class)" },
               { value: "separate", label: "Clean classes (Section below timetable)" },
             ]}
             className="shrink-0"
@@ -1583,7 +1585,7 @@ export default function ProfilePage({
 
       {/* Privacy & Visibility Toggles Card */}
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-4 shadow-2xs">
-        <h3 className="text-sm font-bold text-text-heading font-outfit">Privacy & Visibility</h3>
+        <h3 className="font-display text-base font-bold uppercase text-text-heading">Home, privacy & sound</h3>
 
         <div className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
           <div className="flex items-center justify-between py-3">
@@ -1602,20 +1604,7 @@ export default function ProfilePage({
 
           <div className="flex items-center justify-between py-3">
             <div>
-              <p className="text-sm font-bold text-text-primary">Grades Anonymizer Mode</p>
-              <p className="text-xs text-text-muted">
-                Blur CGPA, GPA, and course grades to protect privacy in public (hover to reveal)
-              </p>
-            </div>
-            <Switch
-              checked={settings?.blurGrades ?? false}
-              onCheckedChange={(val) => updateSetting("blurGrades", val)}
-            />
-          </div>
-
-          <div className="flex items-center justify-between py-3">
-            <div>
-              <p className="text-sm font-bold text-text-primary">Show GPA on Dashboard</p>
+              <p className="text-sm font-bold text-text-primary">Show GPA on Home</p>
               <p className="text-xs text-text-muted">
                 Display cumulative CGPA score cards on the home page and sidebar
               </p>
@@ -1653,7 +1642,7 @@ export default function ProfilePage({
 
       {/* App Icon Card */}
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-4 shadow-2xs">
-        <h3 className="text-sm font-bold text-text-heading font-outfit">Application Icon</h3>
+        <h3 className="font-display text-base font-bold uppercase text-text-heading">Application Icon</h3>
         <p className="text-xs text-text-muted">Choose which icon is displayed across header brandings</p>
 
         <div className="flex gap-4 pt-1">
@@ -1700,7 +1689,7 @@ export default function ProfilePage({
   const renderAcademicContent = () => (
     <div className="space-y-6">
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-5 shadow-2xs">
-        <h3 className="text-sm font-bold text-text-heading font-outfit">Semester & Terms</h3>
+        <h3 className="font-display text-base font-bold uppercase text-text-heading">Semester & Terms</h3>
 
         {/* Active Semester Selector */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
@@ -1784,7 +1773,7 @@ export default function ProfilePage({
       {/* Pomodoro Focus & Study Defaults */}
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-4 shadow-2xs">
         <div>
-          <h3 className="text-sm font-bold text-text-heading font-outfit">Pomodoro Focus &amp; Study Settings</h3>
+          <h3 className="font-display text-base font-bold uppercase text-text-heading">Focus timer</h3>
           <p className="text-xs text-text-muted">
             Customize default work interval, break lengths, and rounds for study sessions
           </p>
@@ -1840,7 +1829,7 @@ export default function ProfilePage({
 
       {/* Residential & Hostel Card */}
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-4 shadow-2xs">
-        <h3 className="text-sm font-bold text-text-heading font-outfit">Residential Status & Mess</h3>
+        <h3 className="font-display text-base font-bold uppercase text-text-heading">Residential Status & Mess</h3>
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>
@@ -1909,7 +1898,7 @@ export default function ProfilePage({
 
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-5 shadow-2xs">
         <div>
-          <h3 className="text-sm font-bold text-text-heading font-outfit">Default Sync Mode</h3>
+          <h3 className="font-display text-base font-bold uppercase text-text-heading">Default Sync Mode</h3>
           <p className="text-xs text-text-muted mt-0.5">
             Used by the reload button, the sync sheet and the command palette. The starred mode below is the current
             default — picking here, starring a row, or tapping a mode in the sync sheet all change it.
@@ -1941,7 +1930,7 @@ export default function ProfilePage({
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-5 shadow-2xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-ink pb-4">
           <div>
-            <h3 className="text-sm font-bold text-text-heading font-outfit">Data Synchronization Policies</h3>
+            <h3 className="font-display text-base font-bold uppercase text-text-heading">What to sync</h3>
             <p className="text-xs text-text-muted mt-0.5">
               Choose which modules refresh automatically to conserve data and API limits
             </p>
@@ -1949,15 +1938,15 @@ export default function ProfilePage({
           <div className="flex gap-2 shrink-0">
             <button
               onClick={() => handleToggleAllSync(true)}
-              className="px-3 py-1.5 text-xs font-bold rounded-xl bg-secondary text-secondary-foreground border-2 border-border-ink hover:brightness-95 transition-colors cursor-pointer"
+              className="min-h-9 rounded-[8px] border-2 border-border-ink px-3 font-mono text-xs font-bold uppercase tracking-[0.06em] shadow-brutal-sm brutal-press cursor-pointer bg-secondary text-secondary-foreground"
             >
-              Enable All
+              Turn all on
             </button>
             <button
               onClick={() => handleToggleAllSync(false)}
-              className="px-3 py-1.5 text-xs font-bold rounded-xl bg-surface-secondary text-text-muted hover:bg-surface-tertiary transition-colors cursor-pointer"
+              className="min-h-9 rounded-[8px] border-2 border-border-ink px-3 font-mono text-xs font-bold uppercase tracking-[0.06em] shadow-brutal-sm brutal-press cursor-pointer bg-surface text-text-primary"
             >
-              Disable All
+              Turn all off
             </button>
           </div>
         </div>
@@ -1984,46 +1973,23 @@ export default function ProfilePage({
           />
         </div>
 
-        {/* Default Sync Mode */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
-          <div>
-            <p className="text-sm font-bold text-text-primary">Default Sync Mode</p>
-            <p className="text-xs text-text-muted">
-              Daily for attendance-only, Weekly for /ffcs, Monthly for the full monthly set, Quarterly for everything,
-              or one of your custom modes. Manual sync always refreshes the daily tier; deeper tiers fire only when due.
-            </p>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <SelectField
-              value={settings?.defaultSyncMode || "quarterly"}
-              onChange={(val) => updateSetting("defaultSyncMode", val)}
-              options={listModes(customSyncModes).map((m) => ({
-                value: m.id,
-                label: m.builtIn ? m.label : `${m.label} (custom)`,
-              }))}
-              className="shrink-0"
-            />
-            <button
-              onClick={() => {
-                setCustomSyncModes(loadCustomModes());
-                setModeEditorOpen(true);
-              }}
-              className="px-3 py-1.5 text-xs font-bold rounded-xl bg-secondary text-secondary-foreground border-2 border-border-ink hover:brightness-95 transition-colors cursor-pointer whitespace-nowrap"
-            >
-              Manage
-            </button>
-          </div>
-        </div>
-        {modeEditorOpen && (
-          <SyncModeEditor
-            open={modeEditorOpen}
-            onClose={() => setModeEditorOpen(false)}
-            onChanged={setCustomSyncModes}
-            defaultId={settings?.defaultSyncMode || "quarterly"}
-            onSetDefault={(id) => updateSetting("defaultSyncMode", id)}
-            onRun={onRunSyncMode}
-          />
-        )}
+        {/* Sync mode: chosen and managed on the Sync modes page (one place). */}
+        <button
+          type="button"
+          onClick={() => setScreen("sync-modes")}
+          className="flex w-full items-center justify-between gap-3 rounded-[12px] border-2 border-border-ink bg-surface-secondary p-3.5 text-left shadow-brutal-sm brutal-press"
+        >
+          <span>
+            <span className="block text-sm font-bold text-text-primary">Sync mode</span>
+            <span className="block text-xs text-text-muted">
+              What a sync pulls: daily, weekly, monthly, quarterly or your own mode.
+            </span>
+          </span>
+          <span className="flex shrink-0 items-center gap-2 font-mono text-xs font-bold uppercase text-text-primary">
+            {resolveMode(settings?.defaultSyncMode || "quarterly", customSyncModes)?.label ?? "Quarterly Sync"}
+            <ChevronRight className="h-4 w-4" aria-hidden />
+          </span>
+        </button>
 
         {/* Sync Toggles List */}
         <div className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
@@ -2040,10 +2006,8 @@ export default function ProfilePage({
 
           <div className="flex items-center justify-between py-3">
             <div>
-              <p className="text-sm font-bold text-text-primary">Sync Additional Bulk Data</p>
-              <p className="text-xs text-text-muted">
-                Master switch for background records: EXC, minor/honour and course completions
-              </p>
+              <p className="text-sm font-bold text-text-primary">Sync extra records</p>
+              <p className="text-xs text-text-muted">Turns the three below on or off together</p>
             </div>
             <Switch
               checked={settings?.syncAdditionalData ?? true}
@@ -2051,44 +2015,59 @@ export default function ProfilePage({
             />
           </div>
 
-          <div className="flex items-center justify-between py-3">
+          <div
+            className={`flex items-center justify-between py-3 pl-5 border-l-2 border-border-ink ml-1 ${
+              (settings?.syncAdditionalData ?? true) ? "" : "opacity-50"
+            }`}
+          >
             <div>
               <p className="text-sm font-bold text-text-primary">Sync Extra-Curricular (EXC) Registration</p>
               <p className="text-xs text-text-muted">Clubs, chapters, and co-curricular credit allocations</p>
             </div>
             <Switch
               checked={settings?.syncExcRegistration ?? true}
+              disabled={!(settings?.syncAdditionalData ?? true)}
               onCheckedChange={(val) => updateSetting("syncExcRegistration", val)}
             />
           </div>
 
-          <div className="flex items-center justify-between py-3">
+          <div
+            className={`flex items-center justify-between py-3 pl-5 border-l-2 border-border-ink ml-1 ${
+              (settings?.syncAdditionalData ?? true) ? "" : "opacity-50"
+            }`}
+          >
             <div>
               <p className="text-sm font-bold text-text-primary">Sync Minor & Honour Registrations</p>
               <p className="text-xs text-text-muted">Minor degrees and honour program course completions</p>
             </div>
             <Switch
               checked={settings?.syncMinorHonour ?? true}
+              disabled={!(settings?.syncAdditionalData ?? true)}
               onCheckedChange={(val) => updateSetting("syncMinorHonour", val)}
             />
           </div>
 
-          <div className="flex items-center justify-between py-3">
+          <div
+            className={`flex items-center justify-between py-3 pl-5 border-l-2 border-border-ink ml-1 ${
+              (settings?.syncAdditionalData ?? true) ? "" : "opacity-50"
+            }`}
+          >
             <div>
               <p className="text-sm font-bold text-text-primary">Sync Course Completion Records</p>
               <p className="text-xs text-text-muted">Completed coursework and credit eligibility records</p>
             </div>
             <Switch
               checked={settings?.syncCourseCompletion ?? true}
+              disabled={!(settings?.syncAdditionalData ?? true)}
               onCheckedChange={(val) => updateSetting("syncCourseCompletion", val)}
             />
           </div>
 
           <div className="flex items-center justify-between py-3">
             <div>
-              <p className="text-sm font-bold text-text-primary">Reload All Data on Global Refresh</p>
+              <p className="text-sm font-bold text-text-primary">Full reload on Sync</p>
               <p className="text-xs text-text-muted">
-                Refresh button triggers a full multi-module sweep instead of attendance only
+                Ignores the sync mode: every Sync pulls everything, past semesters included. Slow; for fixing bad data.
               </p>
             </div>
             <Switch checked={reloadAllData} onCheckedChange={setReloadAllData} />
@@ -2115,7 +2094,7 @@ export default function ProfilePage({
   const renderNavigationContent = () => (
     <div className="space-y-6">
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-5 shadow-2xs">
-        <h3 className="text-sm font-bold text-text-heading font-outfit">Mobile Bottom Navigation Bar</h3>
+        <h3 className="font-display text-base font-bold uppercase text-text-heading">Bottom bar shortcuts</h3>
         <p className="text-xs text-text-muted">
           Pin up to 4 custom shortcuts to your bottom navigation bar for quick access. Home is always present.
         </p>
@@ -2164,7 +2143,7 @@ export default function ProfilePage({
 
       {/* Push Notifications Card */}
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-4 shadow-2xs">
-        <h3 className="text-sm font-bold text-text-heading font-outfit">Push Notifications</h3>
+        <h3 className="font-display text-base font-bold uppercase text-text-heading">Push Notifications</h3>
         <p className="text-xs text-text-muted">
           Receive exam reminders, attendance alerts, and moodle deadline notifications
         </p>

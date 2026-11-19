@@ -39,9 +39,9 @@ describe("ProfilePage navigation settings", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /Mobile & Navigation/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Navigation & Notifications/ }));
 
-    expect(screen.getByText("Mobile Bottom Navigation Bar")).toBeTruthy();
+    expect(screen.getByText("Bottom bar shortcuts")).toBeTruthy();
     expect(screen.queryByText("Compact Mobile Header")).toBeNull();
     expect(screen.queryByRole("switch")).toBeNull();
   });

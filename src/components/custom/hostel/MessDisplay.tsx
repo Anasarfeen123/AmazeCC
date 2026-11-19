@@ -118,19 +118,19 @@ const getSmartMenuText = (rawText: string, weekNum: number): string => {
 export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: any) {
   if (!hostelData?.hostelInfo?.isHosteller) {
     return (
-      <div className="flex flex-col items-center justify-center p-12 text-center text-zinc-500 dark:text-zinc-400 card-surface border border-zinc-200/50 dark:border-zinc-800/80 rounded-[24px] space-y-4 shadow-sm">
-        <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+      <div className="flex flex-col items-center justify-center p-12 text-center text-text-muted card-surface border-2 border-border-ink rounded-[14px] space-y-4 shadow-sm">
+        <div className="w-14 h-14 rounded-2xl bg-secondary text-secondary-foreground flex items-center justify-center">
           <Utensils size={28} />
         </div>
         <div>
-          <h3 className="text-base font-bold text-zinc-900 dark:text-white font-outfit">Hostel Mess Information</h3>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 font-medium max-w-sm">
+          <h3 className="text-base font-bold text-text-heading font-outfit">Hostel Mess Information</h3>
+          <p className="text-xs text-text-muted mt-1 font-medium max-w-sm">
             You are currently not registered as a Hosteller in VTOP records.
           </p>
         </div>
         <button
           onClick={handleHostelDetailsFetch}
-          className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-xs active:scale-95"
+          className="px-4 py-2 rounded-xl bg-primary hover:brightness-110 text-primary-foreground text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-xs"
         >
           <RefreshCcw className="w-4 h-4" /> Reload Hostel Data
         </button>
@@ -233,34 +233,34 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
       Icon: Sun,
       time: "7:30 AM - 9:00 AM",
       key: "Breakfast",
-      accentColor: "text-amber-500 dark:text-amber-400",
+      accentColor: "text-warning-foreground",
     },
     {
       name: "Lunch",
       Icon: Utensils,
       time: "12:30 PM - 2:00 PM",
       key: "Lunch",
-      accentColor: "text-indigo-500 dark:text-indigo-400",
+      accentColor: "text-primary",
     },
     {
       name: "Snacks",
       Icon: Coffee,
       time: "4:30 PM - 5:30 PM",
       key: "Snacks",
-      accentColor: "text-emerald-500 dark:text-emerald-400",
+      accentColor: "text-success-foreground",
     },
     {
       name: "Dinner",
       Icon: Moon,
       time: "7:30 PM - 9:00 PM",
       key: "Dinner",
-      accentColor: "text-purple-500 dark:text-purple-400",
+      accentColor: "text-primary",
     },
   ];
 
   const renderMenuContent = (rawText: string) => {
     if (!rawText || rawText.trim() === "" || rawText === "No items listed.") {
-      return <p className="text-xs text-zinc-400 dark:text-zinc-500 font-medium py-3 text-center">No items listed.</p>;
+      return <p className="text-xs text-text-muted font-medium py-3 text-center">No items listed.</p>;
     }
 
     // Clean leading line numbers like "1. ", "2) ", etc. from every line
@@ -274,7 +274,7 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
         {cleanedLines.map((line, idx) => (
           <li
             key={idx}
-            className="flex items-start gap-2 text-xs font-medium text-zinc-800 dark:text-zinc-200 leading-relaxed"
+            className="flex items-start gap-2 text-xs font-medium text-text-primary leading-relaxed"
           >
             <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-indigo-500/60 mt-1.5" />
             <span className="flex-1">{line}</span>
@@ -287,24 +287,24 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
   return (
     <div className="space-y-6 relative">
       {/* Header Bar */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-4 border-b border-zinc-200/80 dark:border-zinc-800/80">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-4 border-b border-border-ink">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 mb-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-bold uppercase tracking-wider bg-secondary text-secondary-foreground border border-border-ink mb-2 min-h-9">
             <Utensils size={11} /> Mess Menu
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white leading-tight font-outfit">
+          <h1 className="text-2xl sm:text-3xl font-bold text-text-heading leading-tight font-outfit">
             Hostel Mess Schedule
           </h1>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 font-medium flex items-center gap-1.5">
+          <p className="text-xs text-text-muted mt-0.5 font-medium flex items-center gap-1.5">
             <span>{currentMonth} Schedule</span>
             <span>•</span>
             {smartMode ? (
-              <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold">
+              <span className="inline-flex items-center gap-1 text-success-foreground font-bold">
                 <CalendarCheck size={11} /> Smart Week {currentWeekNum} Active
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 text-zinc-600 dark:text-zinc-300 font-bold">
-                <Sparkles size={11} className="text-indigo-500" /> Standard Menu View
+              <span className="inline-flex items-center gap-1 text-text-muted font-bold">
+                <Sparkles size={11} className="text-primary" /> Standard Menu View
               </span>
             )}
           </p>
@@ -313,15 +313,15 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
         {/* Unified Controls Cluster */}
         <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
           {/* Gender Segmented Control */}
-          <div className="flex p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl border border-zinc-200/60 dark:border-zinc-800">
+          <div className="flex p-1 bg-surface-secondary rounded-xl border-2 border-border-ink">
             {["Male", "Female"].map((g) => (
               <button
                 key={g}
                 onClick={() => setGender(g)}
                 className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   gender === g
-                    ? "bg-white dark:bg-zinc-800 text-indigo-600 dark:text-white shadow-xs"
-                    : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
+                    ? "bg-surface text-primary shadow-xs"
+                    : "text-text-muted hover:text-text-heading "
                 }`}
               >
                 {g === "Male" ? "Mens" : "Womens"}
@@ -330,7 +330,7 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
           </div>
 
           {/* Mess Type Control */}
-          <div className="flex p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl border border-zinc-200/60 dark:border-zinc-800">
+          <div className="flex p-1 bg-surface-secondary rounded-xl border-2 border-border-ink">
             {[
               { id: "Veg", label: "Veg" },
               { id: "Non Veg", label: "Non-Veg" },
@@ -341,8 +341,8 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
                 onClick={() => setType(t.id)}
                 className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   type === t.id
-                    ? "bg-white dark:bg-zinc-800 text-indigo-600 dark:text-white shadow-xs"
-                    : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
+                    ? "bg-surface text-primary shadow-xs"
+                    : "text-text-muted hover:text-text-heading "
                 }`}
               >
                 {t.label}
@@ -364,12 +364,12 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
               onClick={() => setActiveDay(fullDayName)}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
                 isSelected
-                  ? "bg-indigo-600 text-white dark:bg-indigo-500 shadow-xs"
-                  : "bg-white/70 dark:bg-zinc-900/60 text-zinc-700 dark:text-zinc-300 border border-zinc-200/50 dark:border-zinc-800/80 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                  ? "bg-primary text-primary-foreground shadow-xs"
+                  : "bg-surface text-text-primary border-2 border-border-ink hover:bg-surface-hover"
               }`}
             >
               {isActualToday && (
-                <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white" : "bg-emerald-500"}`} />
+                <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-surface" : "bg-emerald-500"}`} />
               )}
               <span>{short}</span>
             </button>
@@ -381,11 +381,11 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
       {todayMenu ? (
         <div className="space-y-4">
           <div className="flex items-center justify-between px-1">
-            <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 font-outfit">
+            <span className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
               {activeDay} Menu ({gender} • {type})
             </span>
             {activeDay === today && currentActiveMealName && (
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
+              <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-success-surface text-success-foreground border border-border-ink flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 Active: {currentActiveMealName}
               </span>
@@ -395,7 +395,7 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
           {isMobile ? (
             /* Mobile Tab Switcher & Single Active Meal View */
             <div className="space-y-4">
-              <div className="flex bg-zinc-100 dark:bg-zinc-800 p-1 rounded-xl w-full border border-zinc-200/60 dark:border-zinc-800">
+              <div className="flex bg-surface-secondary p-1 rounded-xl w-full border-2 border-border-ink">
                 {mealsList.map((meal) => {
                   const isActive = activeMealMobile === meal.name;
                   const isCurrentNow = activeDay === today && currentActiveMealName === meal.name;
@@ -406,11 +406,11 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
                       onClick={() => setActiveMealMobile(meal.name)}
                       className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer ${
                         isActive
-                          ? "bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-xs"
-                          : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
+                          ? "bg-surface text-primary shadow-xs"
+                          : "text-text-muted hover:text-text-heading "
                       }`}
                     >
-                      <MealIcon size={13} className={isActive ? meal.accentColor : "text-zinc-400"} />
+                      <MealIcon size={13} className={isActive ? meal.accentColor : "text-text-muted"} />
                       <span>{meal.name}</span>
                       {isCurrentNow && <span className="w-1 h-1 rounded-full bg-emerald-500" />}
                     </button>
@@ -429,23 +429,23 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
 
                 return (
                   <div
-                    className={`card-surface border ${isCurrentNow ? "border-indigo-500/50 dark:border-indigo-500/40" : "border-zinc-200/50 dark:border-zinc-800/80"} rounded-2xl p-5 shadow-xs space-y-4`}
+                    className={`card-surface border ${isCurrentNow ? "border-border-ink dark:border-border-ink" : "border-border-ink"} rounded-2xl p-5 shadow-xs space-y-4`}
                   >
-                    <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
+                    <div className="flex items-center justify-between border-b border-border-ink pb-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0">
+                        <div className="w-9 h-9 rounded-xl bg-surface-secondary flex items-center justify-center shrink-0">
                           <MealIcon size={18} className={meal.accentColor} />
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
-                            <h3 className="font-bold text-zinc-900 dark:text-white text-sm font-outfit">{meal.name}</h3>
+                            <h3 className="font-bold text-text-heading text-sm font-outfit">{meal.name}</h3>
                             {isCurrentNow && (
-                              <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                              <span className="text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-success-surface text-success-foreground border border-border-ink">
                                 Serving Now
                               </span>
                             )}
                           </div>
-                          <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium flex items-center gap-1 mt-0.5">
+                          <p className="text-xs text-text-muted font-medium flex items-center gap-1 mt-0.5">
                             <Clock size={10} /> {meal.time}
                           </p>
                         </div>
@@ -471,25 +471,25 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
                     key={meal.name}
                     className={`card-surface border ${
                       isCurrentNow
-                        ? "border-indigo-500/50 dark:border-indigo-500/40 ring-1 ring-indigo-500/20"
-                        : "border-zinc-200/50 dark:border-zinc-800/80"
-                    } rounded-2xl p-4.5 shadow-xs hover:border-zinc-300 dark:hover:border-zinc-700 transition-all flex flex-col justify-between text-left`}
+                        ? "border-border-ink dark:border-border-ink ring-1 ring-border-ink"
+                        : "border-border-ink"
+                    } rounded-2xl p-4.5 shadow-xs hover:border-border-ink transition-all flex flex-col justify-between text-left`}
                   >
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
+                      <div className="flex items-center justify-between border-b border-border-ink pb-2.5">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0">
+                          <div className="w-8 h-8 rounded-xl bg-surface-secondary flex items-center justify-center shrink-0">
                             <MealIcon size={16} className={meal.accentColor} />
                           </div>
                           <div>
-                            <h3 className="font-bold text-zinc-900 dark:text-white text-xs font-outfit">{meal.name}</h3>
-                            <p className="text-[9.5px] text-zinc-500 dark:text-zinc-400 font-medium flex items-center gap-1 mt-0.5">
+                            <h3 className="font-bold text-text-heading text-xs font-outfit">{meal.name}</h3>
+                            <p className="text-[9.5px] text-text-muted font-medium flex items-center gap-1 mt-0.5">
                               <Clock size={9} /> {meal.time}
                             </p>
                           </div>
                         </div>
                         {isCurrentNow && (
-                          <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shrink-0">
+                          <span className="text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-success-surface text-success-foreground border border-border-ink shrink-0">
                             Active
                           </span>
                         )}
@@ -504,8 +504,8 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
           )}
         </div>
       ) : (
-        <div className="p-8 text-center card-surface border border-zinc-200/50 dark:border-zinc-800/80 rounded-2xl">
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
+        <div className="p-8 text-center card-surface border-2 border-border-ink rounded-2xl">
+          <p className="text-xs text-text-muted font-medium">
             No menu found for {activeDay}. Please click reload if data is outdated.
           </p>
         </div>

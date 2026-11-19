@@ -356,6 +356,72 @@
   color: var(--primary-foreground);
 }
 
+/* Old solid accent fills in dark. The bridge maps blue/indigo/violet/purple
+   500-700 to the deep teal scale, which disappears on the obsidian page (the
+   grades bars, primary buttons and selected tabs in ~60 unconverted files).
+   In dark they become the primary fill (ochre) with its ink, so they read
+   and match converted screens. Opacity tints (bg-blue-500/10) are untouched. */
+.dark
+  :is(
+    .bg-blue-500,
+    .dark\:bg-blue-500,
+    .bg-blue-600,
+    .dark\:bg-blue-600,
+    .bg-blue-700,
+    .dark\:bg-blue-700,
+    .bg-indigo-500,
+    .dark\:bg-indigo-500,
+    .bg-indigo-600,
+    .dark\:bg-indigo-600,
+    .bg-indigo-700,
+    .dark\:bg-indigo-700,
+    .bg-violet-500,
+    .dark\:bg-violet-500,
+    .bg-violet-600,
+    .dark\:bg-violet-600,
+    .bg-violet-700,
+    .dark\:bg-violet-700,
+    .bg-purple-500,
+    .dark\:bg-purple-500,
+    .bg-purple-600,
+    .dark\:bg-purple-600,
+    .bg-purple-700,
+    .dark\:bg-purple-700
+  ) {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+.dark
+  :is(
+    .bg-blue-500,
+    .dark\:bg-blue-500,
+    .bg-blue-600,
+    .dark\:bg-blue-600,
+    .bg-blue-700,
+    .dark\:bg-blue-700,
+    .bg-indigo-500,
+    .dark\:bg-indigo-500,
+    .bg-indigo-600,
+    .dark\:bg-indigo-600,
+    .bg-indigo-700,
+    .dark\:bg-indigo-700,
+    .bg-violet-500,
+    .dark\:bg-violet-500,
+    .bg-violet-600,
+    .dark\:bg-violet-600,
+    .bg-violet-700,
+    .dark\:bg-violet-700,
+    .bg-purple-500,
+    .dark\:bg-purple-500,
+    .bg-purple-600,
+    .dark\:bg-purple-600,
+    .bg-purple-700,
+    .dark\:bg-purple-700
+  )
+  :is(.text-white, .text-text-heading, .text-text-primary, .text-primary) {
+  color: var(--primary-foreground);
+}
+
 /* ── 3. Brand utilities ─────────────────────────────────────────────── */
 
 @layer base {

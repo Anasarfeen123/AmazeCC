@@ -10,7 +10,7 @@ export default function MoodleDisplay({ moodleData, handleFetchMoodle, setMoodle
 
   if (!moodleData || moodleData.length === 0) {
     return (
-      <div className="text-xl mb-4 text-center text-gray-900  dark:text-gray-100">
+      <div className="text-xl mb-4 text-center text-text-heading">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
           {/* Mobile View: Inline Center */}
           <h1 className="md:hidden font-bold">
@@ -63,7 +63,7 @@ export default function MoodleDisplay({ moodleData, handleFetchMoodle, setMoodle
     <div className="mt-6 p-4">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
         {/* Mobile View: Inline Center */}
-        <h1 className="md:hidden text-xl font-bold text-center text-gray-900  dark:text-gray-100">
+        <h1 className="md:hidden text-xl font-bold text-center text-text-heading">
           Moodle Upcoming Exams / Assignments
           <FetchButton
             onClick={() => handleFetchMoodle()}
@@ -74,7 +74,7 @@ export default function MoodleDisplay({ moodleData, handleFetchMoodle, setMoodle
         </h1>
 
         {/* Desktop View: Left Aligned Heading + Right Aligned Button */}
-        <h1 className="hidden md:block text-2xl lg:text-3xl font-bold text-left text-gray-900  dark:text-gray-100">
+        <h1 className="hidden md:block text-2xl lg:text-3xl font-bold text-left text-text-heading">
           Moodle Upcoming Exams / Assignments
         </h1>
         <div className="hidden md:flex items-center justify-end">
@@ -100,36 +100,36 @@ export default function MoodleDisplay({ moodleData, handleFetchMoodle, setMoodle
             >
               <a href={item.url} target="_blank" rel="noopener noreferrer">
                 <div className="flex items-center justify-between">
-                  <h2 className="font-semibold text-gray-900  dark:text-gray-200">
+                  <h2 className="font-semibold text-text-heading">
                     {displayCourse} - {assignmentName}
                   </h2>
 
                   {item.done ? (
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                    <CheckCircle className="w-5 h-5 text-success-foreground flex-shrink-0" />
                   ) : isOverdue ? (
-                    <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                    <AlertCircle className="w-5 h-5 text-danger-foreground flex-shrink-0" />
                   ) : (
-                    <Clock className="w-5 h-5 text-yellow-500 flex-shrink-0" />
+                    <Clock className="w-5 h-5 text-warning-foreground flex-shrink-0" />
                   )}
                 </div>
 
-                <p className="mt-2 text-sm text-gray-700  dark:text-gray-300">
+                <p className="mt-2 text-sm text-text-primary">
                   <strong>Teacher:</strong> {item.teachers?.[0] ?? "Unknown"}
                 </p>
-                <p className="mt-2 text-sm text-gray-700  dark:text-gray-300">
+                <p className="mt-2 text-sm text-text-primary">
                   <strong>Due:</strong> {item.due}
                 </p>
               </a>
 
               <div className="mt-3 flex items-center justify-between">
                 <span
-                  className={`px-3 py-1 rounded-full text-xs ${
+                  className={`px-3 py-1 rounded-[10px] text-xs ${
                     item.done
                       ? "bg-green-200 text-green-800"
                       : isOverdue
                         ? "bg-red-200 text-red-800"
                         : "bg-yellow-200 text-yellow-800"
-                  }`}
+                  } min-h-9`}
                 >
                   {item.done ? "Completed" : isOverdue ? "Overdue" : "Pending"}
                 </span>
@@ -137,14 +137,14 @@ export default function MoodleDisplay({ moodleData, handleFetchMoodle, setMoodle
                 {!item.hidden ? (
                   <button
                     onClick={() => setHiddenState(item.url, true)}
-                    className="text-xs text-gray-500 hover:text-red-600"
+                    className="text-xs text-text-muted hover:text-danger-foreground"
                   >
                     Not yours? Hide it
                   </button>
                 ) : (
                   <button
                     onClick={() => setHiddenState(item.url, false)}
-                    className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800"
+                    className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary"
                   >
                     <Undo2 size={14} />
                     Unhide
@@ -156,18 +156,18 @@ export default function MoodleDisplay({ moodleData, handleFetchMoodle, setMoodle
         })}
       </div>
       {hiddenCount > 0 && (
-        <div className="mt-6 flex items-center justify-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <div className="mt-6 flex items-center justify-center gap-3 text-sm text-text-primary">
           <span>{hiddenCount} hidden assignments</span>
           <button
             onClick={() => setShowHidden(!showHidden)}
-            className="inline-flex items-center gap-1 px-3 py-1 rounded-md bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 transition"
+            className="inline-flex items-center gap-1 px-3 py-1 rounded-md bg-surface-tertiary hover:bg-surface-tertiary transition"
           >
             {showHidden ? <EyeOff size={14} /> : <Eye size={14} />}
             {showHidden ? "Hide hidden" : "Show hidden"}
           </button>
         </div>
       )}
-      <div className="mt-6 flex items-center justify-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+      <div className="mt-6 flex items-center justify-center gap-3 text-sm text-text-primary">
         <button
           onClick={LogOutMoodle}
           className="w-full max-w-md px-4 py-2 rounded-lg font-medium flex items-center justify-center bg-red-600 hover:bg-red-700 text-white transition-colors"
@@ -195,11 +195,11 @@ export function MoodleUserPassForm({ handleFetchMoodle, IDs }) {
 
   return (
     <div className="flex flex-col items-center justify-center gap-6 p-6 text-center">
-      <h2 className="text-xl font-semibold text-gray-800  dark:text-gray-100">Enter Moodle Credentials</h2>
+      <h2 className="text-xl font-semibold text-text-primary">Enter Moodle Credentials</h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-sm gap-4">
         <div className="flex flex-col text-left">
-          <label className="text-sm font-medium text-gray-700  dark:text-gray-200 mb-1">
+          <label className="text-sm font-medium text-text-primary mb-1">
             Username (Registration No.)
           </label>
           <input
@@ -213,7 +213,7 @@ export function MoodleUserPassForm({ handleFetchMoodle, IDs }) {
         </div>
 
         <div className="flex flex-col text-left">
-          <label className="text-sm font-medium text-gray-700  dark:text-gray-200 mb-1">Password</label>
+          <label className="text-sm font-medium text-text-primary mb-1">Password</label>
           <input
             type="password"
             className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 
@@ -227,9 +227,7 @@ export function MoodleUserPassForm({ handleFetchMoodle, IDs }) {
 
         <button
           type="submit"
-          className="px-6 py-2 rounded-md font-medium text-white bg-blue-600 hover:bg-blue-700 
-                        dark:bg-blue-500 dark:hover:bg-blue-600
-                        transition-colors duration-150"
+          className="min-h-11 rounded-[10px] border-2 border-border-ink bg-primary px-6 font-mono text-sm font-bold uppercase tracking-[0.06em] text-primary-foreground shadow-brutal-sm brutal-press"
         >
           Continue
         </button>

@@ -43,6 +43,15 @@ RULES = [
     (rf"\bhover:bg-(?:zinc|gray|slate)-(?:50|100|200){OP} dark:hover:bg-(?:zinc|gray|slate)-(?:700|800|900){OP}", "hover:bg-surface-hover"),
     (rf"\bbg-(?:indigo|blue|sky|violet|purple)-(?:50|100){OP} dark:bg-(?:indigo|blue|sky|violet|purple)-(?:900|950){OP}", "bg-secondary"),
     (rf"\bbg-(?:indigo|blue|sky|violet|purple)-500/(?:5|10|15|20)\b", "bg-secondary"),
+    # Solid accent fills. The bridge maps blue/indigo 500-700 to dark teal,
+    # which vanishes on the dark page (found on the grades bars). Make them the
+    # primary fill (teal light / ochre dark); the fill-ink rule fixes the text.
+    (r"\btext-white (bg-(?:indigo|blue|violet|purple)-(?:500|600|700))(?![\w/-])", r"\1"),
+    (r"\b(?:dark:)?(?:hover:)?bg-(?:indigo|blue|violet|purple)-(?:400|500|600|700|800)(?![\w/-])\s+(?:dark:(?:hover:)?bg-(?:indigo|blue|violet|purple)-\d{3}(?![\w/-])\s*)+", "bg-primary "),
+    (r"\bhover:bg-(?:indigo|blue|violet|purple)-(?:600|700|800)(?![\w/-])", "hover:brightness-110"),
+    (r"\bdark:(?:hover:)?bg-(?:indigo|blue|violet|purple)-(?:400|500|600|700)(?![\w/-])", ""),
+    (r"\bbg-(?:indigo|blue|violet|purple)-(?:500|600|700)(?![\w/-])", "bg-primary"),
+    (r"\bbg-sky-(?:400|500)(?![\w/-])(?:\s+dark:bg-sky-\d{3}(?![\w/-]))?", "bg-sage"),
     # ── border pairs → 2px ink edge ──────────────────────────────────
     (rf"\bborder border-(?:zinc|gray|slate)-(?:100|200|300){OP} dark:border-(?:zinc|gray|slate)-(?:700|800|900){OP}", "border-2 border-border-ink"),
     (rf"\bborder-(?:zinc|gray|slate)-(?:100|200|300){OP} dark:border-(?:zinc|gray|slate)-(?:700|800|900){OP}", "border-border-ink"),

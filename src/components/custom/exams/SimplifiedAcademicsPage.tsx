@@ -581,56 +581,56 @@ export default function SimplifiedAcademicsPage({
     const grandWeightage = calculateGrandWeightage(course, decimalValues);
 
     // Stat styling based on performance percentage
-    let statColor = "text-zinc-400";
+    let statColor = "text-text-muted";
+    // Score block fill by band (ink text on every fill; same in both themes).
     if (course.grade) {
-      statColor = "text-indigo-500 dark:text-indigo-400";
+      statColor = "bg-secondary text-secondary-foreground";
     } else if (grandWeightage.percentage !== null) {
-      if (grandWeightage.percentage >= 80) statColor = "text-emerald-600 dark:text-emerald-400";
-      else if (grandWeightage.percentage >= 65) statColor = "text-amber-600 dark:text-amber-400";
-      else statColor = "text-red-600 dark:text-red-400";
+      if (grandWeightage.percentage >= 80) statColor = "bg-mint text-obsidian";
+      else if (grandWeightage.percentage >= 65) statColor = "bg-ochre text-obsidian";
+      else statColor = "bg-coral text-obsidian";
+    } else {
+      statColor = "bg-surface-secondary text-text-primary";
     }
 
     return (
       <div
         key={course.courseCode}
         {...clickable(() => handleCourseClick(course.courseCode))}
-        className={`${TILE_INTERACTIVE_ROW} hover:border-indigo-500/40 dark:hover:border-indigo-500/40 duration-200 group select-none`}
+        className={`${TILE_INTERACTIVE_ROW} duration-200 group select-none`}
       >
         {/* Left Column: Clean Icon + Course Code, Title & Subtitle */}
         <div className="flex items-center gap-3 min-w-0 flex-1">
-          {/* Clean minimal icon */}
-          <div
-            className={`w-10 h-10 sm:w-11 sm:h-11 rounded-2xl flex items-center justify-center shrink-0 border ${
-              isEmbedded
-                ? "bg-purple-500/10 border-purple-500/20 text-purple-600 dark:text-purple-400"
-                : course.lab
-                  ? "bg-teal-500/10 border-teal-500/20 text-teal-600 dark:text-teal-400"
-                  : "bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400"
-            }`}
-          >
-            <BookOpen className="w-5 h-5" />
-          </div>
-
           {/* Course Details */}
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <span className="text-xs sm:text-sm font-black text-zinc-900 dark:text-white font-outfit tracking-tight">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded-[6px] border-2 border-border-ink bg-surface-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-text-primary">
                 {displayCode}
+              </span>
+              <span
+                className={`rounded-[6px] border-2 border-border-ink px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-obsidian ${
+                  isEmbedded ? "bg-ochre" : course.lab ? "bg-mint" : "bg-sage"
+                }`}
+              >
+                {isEmbedded ? "Embedded" : course.lab ? "Lab" : "Theory"}
               </span>
             </div>
 
             {/* Course Title */}
-            <p className="text-xs text-zinc-700 dark:text-zinc-200 font-bold truncate mt-0.5 font-outfit">
-              {displayTitle}
-            </p>
+            <p className="mt-1.5 truncate font-display text-base font-bold text-text-heading">{displayTitle}</p>
 
             {/* Subtitle containing course type, credits and slot */}
-            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium truncate mt-0.5">
-              {courseTypeLabel}
-              {(norm.credits ?? course.credits) > 0 ? ` • ${norm.credits ?? course.credits} Credits` : ""}
-              {norm.slotDisplay || main?.slotName || main?.slot
-                ? ` • ${norm.slotDisplay || main.slotName || main.slot}`
-                : ""}
+            <p className="mt-0.5 truncate font-mono text-xs text-text-muted">
+              {[
+                // The badge already says Theory/Lab; keep the detail only for embedded.
+                isEmbedded ? courseTypeLabel : "",
+                (norm.credits ?? course.credits) > 0 ? `${norm.credits ?? course.credits} credits` : "",
+                norm.slotDisplay || main?.slotName || main?.slot
+                  ? `Slot ${norm.slotDisplay || main.slotName || main.slot}`
+                  : "",
+              ]
+                .filter(Boolean)
+                .join(" // ")}
             </p>
           </div>
         </div>
@@ -639,38 +639,37 @@ export default function SimplifiedAcademicsPage({
         <div className="flex items-center gap-2.5 shrink-0 text-right">
           <div>
             {course.grade ? (
-              <div className="flex flex-col items-end">
-                <span className="text-base sm:text-lg font-black text-indigo-500 dark:text-indigo-400 font-outfit">
-                  Grade {course.grade}
-                </span>
-                <span className="text-[9px] text-zinc-400 font-medium">Final Grade</span>
+              <div
+                className={`flex min-w-[92px] flex-col items-end rounded-[10px] border-2 border-border-ink px-3 py-1.5 shadow-brutal-sm ${statColor}`}
+              >
+                <span className="font-display text-xl font-bold leading-none">{course.grade}</span>
+                <span className="mt-1 font-mono text-xs font-bold uppercase opacity-80">Final grade</span>
               </div>
             ) : grandWeightage.hasAssessments ? (
-              <div className="flex flex-col items-end">
-                <span
-                  data-private
-                  className={`text-base sm:text-lg font-black font-outfit tracking-tight leading-none ${statColor}`}
-                >
+              <div
+                className={`flex min-w-[92px] flex-col items-end rounded-[10px] border-2 border-border-ink px-3 py-1.5 shadow-brutal-sm ${statColor}`}
+              >
+                <span data-private className="font-display text-xl font-bold leading-none tabular-nums">
                   {grandWeightage.maxWeight > 0
                     ? `${grandWeightage.displayScore} / ${grandWeightage.displayMax}`
                     : `${grandWeightage.displayScore}`}
                 </span>
-                <span className="text-[9px] font-bold text-zinc-400 mt-0.5">
+                <span className="mt-1 font-mono text-xs font-bold uppercase opacity-80">
                   {grandWeightage.percentage !== null
-                    ? `${formatUpToTwoDecimals(grandWeightage.percentage, decimalValues)}% Score`
+                    ? `${formatUpToTwoDecimals(grandWeightage.percentage, decimalValues)}%`
                     : "Weightage"}
                 </span>
               </div>
             ) : (
-              <div className="flex flex-col items-end">
-                <span className="text-xs font-bold text-zinc-400 dark:text-zinc-500">Pending</span>
-                <span className="text-[9px] text-zinc-500">No marks yet</span>
+              <div className="flex min-w-[92px] flex-col items-end rounded-[10px] border-2 border-dashed border-border px-3 py-1.5">
+                <span className="font-mono text-xs font-bold uppercase text-text-primary">Pending</span>
+                <span className="mt-1 font-mono text-xs text-text-muted">No marks yet</span>
               </div>
             )}
           </div>
 
           {/* Navigation indicator */}
-          <div className="p-1 rounded-lg text-zinc-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all">
+          <div className="p-1 rounded-lg text-text-muted group-text-primary dark:group-text-primary group-hover:translate-x-0.5 transition-all">
             <ChevronRight className="w-4 h-4" />
           </div>
         </div>
@@ -705,13 +704,13 @@ export default function SimplifiedAcademicsPage({
       >
         {/* Search */}
         <div className="relative w-full">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search past course code or name..."
-            className={`${SEARCH_FIELD} pl-9 pr-4 text-xs sm:text-sm shadow-2xs focus:ring-2 focus:ring-indigo-500`}
+            className={`${SEARCH_FIELD} pl-9 pr-4 text-xs sm:text-sm shadow-2xs focus:ring-2 focus:ring-border-ink`}
           />
         </div>
 
@@ -727,18 +726,12 @@ export default function SimplifiedAcademicsPage({
                   {/* Semester Header Strip */}
                   <div className="flex items-center justify-between px-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs sm:text-sm font-black text-zinc-900 dark:text-white font-outfit">
+                      <span className="text-xs sm:text-sm font-bold text-text-heading font-outfit">
                         {sem.semesterName}
                       </span>
-                      <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500">
-                        ({filteredSemCourses.length} courses)
-                      </span>
+                      <span className="text-xs font-bold text-text-muted">({filteredSemCourses.length} courses)</span>
                     </div>
-                    {sem.gpa && (
-                      <span className="text-xs font-black text-indigo-600 dark:text-indigo-400 font-outfit">
-                        GPA: {sem.gpa}
-                      </span>
-                    )}
+                    {sem.gpa && <span className="text-xs font-bold text-primary font-outfit">GPA: {sem.gpa}</span>}
                   </div>
 
                   {/* Course Pills */}
@@ -749,13 +742,13 @@ export default function SimplifiedAcademicsPage({
           ) : (
             <EmptyPanel
               variant="dashed"
-              icon={<History className="w-8 h-8 text-zinc-400 mx-auto" />}
+              icon={<History className="w-8 h-8 text-text-muted mx-auto" />}
               title="No archived course records found for earlier semesters."
               action={
                 setActiveSubTab ? (
                   <button
                     onClick={() => setActiveSubTab("grades")}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-primary hover:brightness-110 text-primary-foreground text-xs font-bold transition-colors cursor-pointer"
                   >
                     <GraduationCap className="w-4 h-4" />
                     <span>View Grade History</span>
@@ -785,13 +778,13 @@ export default function SimplifiedAcademicsPage({
       <div className="space-y-3">
         {/* Search Input */}
         <div className="relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search course code or name..."
-            className={`${SEARCH_FIELD} pl-9 pr-4 text-xs sm:text-sm shadow-2xs focus:ring-2 focus:ring-indigo-500`}
+            className={`${SEARCH_FIELD} pl-9 pr-4 text-xs sm:text-sm shadow-2xs focus:ring-2 focus:ring-border-ink`}
           />
         </div>
 
@@ -815,36 +808,36 @@ export default function SimplifiedAcademicsPage({
         ) : (
           <EmptyPanel
             variant="dashed"
-            icon={<BookOpen className="w-8 h-8 text-zinc-400 mx-auto" />}
+            icon={<BookOpen className="w-8 h-8 text-text-muted mx-auto" />}
             title="No courses found matching your search."
           />
         )}
       </div>
 
       {/* ── ACADEMIC EXPLORER NAVIGATION CARDS (CURRICULUM & GRADE HISTORY & MARKS PREDICTOR) ── */}
-      <div className="pt-3 border-t border-zinc-200/80 dark:border-zinc-800/80 space-y-2.5">
+      <div className="pt-3 border-t border-border-ink space-y-2.5">
         {/* Marks Predictor Featured Hero Card */}
         <button
           onClick={() => setActiveSubTab?.("marks-predictor")}
-          className="w-full p-4 rounded-[24px] border border-indigo-500/30 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 hover:from-indigo-500/15 hover:to-pink-500/15 shadow-2xs hover:shadow-xs flex items-center justify-between gap-3 group transition-all duration-200 cursor-pointer text-left"
+          className="w-full p-4 rounded-[14px] border border-border-ink hover: hover: shadow-2xs hover:shadow-xs flex items-center justify-between gap-3 group transition-all duration-200 cursor-pointer text-left"
         >
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+            <div className="w-10 h-10 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center shrink-0 shadow-xs">
               <Sparkles className="w-5 h-5" />
             </div>
             <div className="min-w-0">
-              <p className="text-xs sm:text-sm font-black font-outfit text-zinc-900 dark:text-white truncate flex items-center gap-2">
+              <p className="text-xs sm:text-sm font-bold font-outfit text-text-heading truncate flex items-center gap-2">
                 <span>Marks Predictor & Simulator</span>
-                <span className="px-1.5 py-0.2 rounded-md bg-indigo-600 text-white text-[9px] font-black uppercase">
+                <span className="px-1.5 py-0.2 rounded-md bg-primary text-primary-foreground text-xs font-bold uppercase">
                   New
                 </span>
               </p>
-              <p className="text-[10px] text-zinc-500 dark:text-zinc-400 truncate">
+              <p className="text-xs text-text-muted truncate">
                 Simulate what-if scores, calculate points lost & solve FAT targets
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-1 text-xs font-black text-indigo-600 dark:text-indigo-400 font-outfit group-hover:translate-x-0.5 transition-transform shrink-0">
+          <div className="flex items-center gap-1 text-xs font-bold text-primary font-outfit group-hover:translate-x-0.5 transition-transform shrink-0">
             <span>Predictor</span>
             <ChevronRight className="w-4 h-4" />
           </div>
@@ -854,22 +847,18 @@ export default function SimplifiedAcademicsPage({
           {/* Degree Curriculum Card */}
           <button
             onClick={() => setActiveSubTab?.("curriculum")}
-            className={`${TILE_INTERACTIVE_ROW} w-full p-4 hover:border-indigo-500/40 dark:hover:border-indigo-500/40 group duration-200`}
+            className={`${TILE_INTERACTIVE_ROW} w-full p-4 hover:border-border-ink dark:hover:border-border-ink group duration-200`}
           >
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-2xl bg-secondary border border-border-ink text-secondary-foreground flex items-center justify-center shrink-0">
                 <BookOpen className="w-5 h-5" />
               </div>
               <div className="min-w-0">
-                <p className="text-xs sm:text-sm font-black font-outfit text-zinc-900 dark:text-white truncate">
-                  Degree Curriculum
-                </p>
-                <p className="text-[10px] text-zinc-500 dark:text-zinc-400 truncate">
-                  Program credits, baskets & distribution
-                </p>
+                <p className="text-xs sm:text-sm font-bold font-outfit text-text-heading truncate">Degree Curriculum</p>
+                <p className="text-xs text-text-muted truncate">Program credits, baskets & distribution</p>
               </div>
             </div>
-            <div className="flex items-center gap-1 text-xs font-black text-indigo-600 dark:text-indigo-400 font-outfit group-hover:translate-x-0.5 transition-transform shrink-0">
+            <div className="flex items-center gap-1 text-xs font-bold text-primary font-outfit group-hover:translate-x-0.5 transition-transform shrink-0">
               <span>Curriculum</span>
               <ChevronRight className="w-4 h-4" />
             </div>
@@ -878,20 +867,18 @@ export default function SimplifiedAcademicsPage({
           {/* Grade History Card */}
           <button
             onClick={() => setActiveSubTab?.("grades")}
-            className={`${TILE_INTERACTIVE_ROW} w-full p-4 hover:border-purple-500/40 dark:hover:border-purple-500/40 group duration-200`}
+            className={`${TILE_INTERACTIVE_ROW} w-full p-4 hover:border-border-ink dark:hover:border-border-ink group duration-200`}
           >
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-10 h-10 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-2xl bg-secondary border border-border-ink text-secondary-foreground flex items-center justify-center shrink-0">
                 <GraduationCap className="w-5 h-5" />
               </div>
               <div className="min-w-0">
-                <p className="text-xs sm:text-sm font-black font-outfit text-zinc-900 dark:text-white truncate">
-                  Grade History
-                </p>
-                <p className="text-[10px] text-zinc-500 dark:text-zinc-400 truncate">Cumulative GPA & past semesters</p>
+                <p className="text-xs sm:text-sm font-bold font-outfit text-text-heading truncate">Grade History</p>
+                <p className="text-xs text-text-muted truncate">Cumulative GPA & past semesters</p>
               </div>
             </div>
-            <div className="flex items-center gap-1 text-xs font-black text-purple-600 dark:text-purple-400 font-outfit group-hover:translate-x-0.5 transition-transform shrink-0">
+            <div className="flex items-center gap-1 text-xs font-bold text-primary font-outfit group-hover:translate-x-0.5 transition-transform shrink-0">
               <span>Grades</span>
               <ChevronRight className="w-4 h-4" />
             </div>
@@ -909,17 +896,17 @@ export default function SimplifiedAcademicsPage({
               setShowPastSemestersView(true);
             }
           }}
-          className={`${TILE_INTERACTIVE_ROW} w-full p-3.5 sm:p-4 hover:border-blue-500/40 dark:hover:border-blue-500/40 group duration-200`}
+          className={`${TILE_INTERACTIVE_ROW} w-full p-3.5 sm:p-4 hover:border-border-ink dark:hover:border-border-ink group duration-200`}
         >
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-2xl bg-secondary border border-border-ink text-secondary-foreground flex items-center justify-center shrink-0">
               <History className="w-5 h-5" />
             </div>
             <div className="min-w-0">
-              <p className="text-xs sm:text-sm font-black font-outfit text-zinc-900 dark:text-white truncate">
+              <p className="text-xs sm:text-sm font-bold font-outfit text-text-heading truncate">
                 Looking for previous semesters?
               </p>
-              <p className="text-[10px] text-zinc-500 dark:text-zinc-400 truncate">
+              <p className="text-xs text-text-muted truncate">
                 {pastSemesters.length > 0
                   ? `View archived courses and grades from ${pastSemesters.length} earlier semesters`
                   : "View archived courses, GPA & grades from previous semesters"}
@@ -927,7 +914,7 @@ export default function SimplifiedAcademicsPage({
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs font-black text-blue-600 dark:text-blue-400 font-outfit group-hover:translate-x-0.5 transition-transform shrink-0">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-primary font-outfit group-hover:translate-x-0.5 transition-transform shrink-0">
             <span>{pastSemesters.length > 0 ? "View History" : "Grade History"}</span>
             <ChevronRight className="w-4 h-4" />
           </div>

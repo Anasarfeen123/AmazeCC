@@ -105,11 +105,11 @@ function AssessmentStatRow({
       <ToneDot tone={tone} />
       <ListRowText title={asm.title} titleTooltip={asm.title} subtitle={parts.join(" · ")} />
       <span className="flex items-center gap-2 shrink-0">
-        {freeze.frozen ? <Lock className="w-3 h-3 text-zinc-400" aria-label="Weightage frozen" /> : null}
+        {freeze.frozen ? <Lock className="w-3 h-3 text-text-muted" aria-label="Weightage frozen" /> : null}
         <ToneBadge tone={stateBadge.tone} size="sm">
           {stateBadge.text}
         </ToneBadge>
-        <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:translate-x-0.5 transition-transform" />
+        <ChevronRight className="w-4 h-4 text-text-muted group-hover:translate-x-0.5 transition-transform" />
       </span>
     </button>
   );
@@ -485,12 +485,12 @@ function CoursePredictorPageInner({ course, marksStats, actionsSlotRef }: Course
         <div className="flex items-center justify-between gap-2 min-w-0 px-1">
           <div className="flex items-center gap-2 min-w-0">
             <span className={`w-2.5 h-2.5 rounded-full ${dotClass} shrink-0`} />
-            <h4 className="text-xs font-black text-text-heading dark:text-white font-outfit uppercase tracking-wider truncate">
+            <h4 className="text-xs font-bold text-text-heading font-outfit uppercase tracking-wider truncate">
               {label} ({rows.length})
             </h4>
           </div>
-          <div className="text-[10px] font-bold text-text-secondary shrink-0">
-            <strong className="text-text-heading dark:text-zinc-200">{stats.scoredWeight.toFixed(1)}</strong>
+          <div className="text-xs font-bold text-text-secondary shrink-0">
+            <strong className="text-text-heading">{stats.scoredWeight.toFixed(1)}</strong>
             {" / "}
             {stats.totalWeightConfigured} wt
           </div>
@@ -522,14 +522,14 @@ function CoursePredictorPageInner({ course, marksStats, actionsSlotRef }: Course
               title={`Add an assessment — ${remaining} weightage points still open`}
               className="w-full flex items-center gap-3 py-3 px-4 text-left cursor-pointer min-w-0 group"
             >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-dashed border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-dashed border-border-ink bg-warning-surface text-warning-foreground">
                 <Plus className="h-4.5 w-4.5" />
               </span>
               <ListRowText
                 title="Add assessment"
                 titleTooltip="Add an assessment"
                 subtitle={
-                  <span className="text-amber-600 dark:text-amber-400 font-semibold">
+                  <span className="text-warning-foreground font-semibold">
                     {remaining} weightage points not yet released on VTOP, so grade prediction is limited
                   </span>
                 }
@@ -538,7 +538,7 @@ function CoursePredictorPageInner({ course, marksStats, actionsSlotRef }: Course
                 <ToneBadge tone="amber" size="sm">
                   +{remaining} wt
                 </ToneBadge>
-                <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:translate-x-0.5 transition-transform" />
+                <ChevronRight className="w-4 h-4 text-text-muted group-hover:translate-x-0.5 transition-transform" />
               </span>
             </button>
           ) : null}
@@ -590,8 +590,8 @@ function CoursePredictorPageInner({ course, marksStats, actionsSlotRef }: Course
           {prediction.passIssues.map((issue) => (
             <p
               key={issue.code}
-              className={`flex items-start gap-2 text-[11px] leading-relaxed font-medium ${
-                issue.certain ? "text-red-700 dark:text-red-400" : "text-amber-700 dark:text-amber-400"
+              className={`flex items-start gap-2 text-xs leading-relaxed font-medium ${
+                issue.certain ? "text-danger-foreground" : "text-warning-foreground"
               }`}
             >
               <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5" aria-hidden="true" />
@@ -613,11 +613,11 @@ function CoursePredictorPageInner({ course, marksStats, actionsSlotRef }: Course
         <div className="h-3 w-full rounded-xl bg-surface-tertiary dark:bg-surface-secondary overflow-hidden flex">
           <div
             style={{ width: `${scoredPercent}%` }}
-            className="h-full bg-indigo-600 dark:bg-indigo-500 transition-all duration-300"
+            className="h-full bg-primary transition-all duration-300"
           />
           <div
             style={{ width: `${pendingPercent}%` }}
-            className="h-full bg-sky-400 dark:bg-sky-500 transition-all duration-300"
+            className="h-full bg-sage transition-all duration-300"
           />
           <div
             style={{ width: `${lostPercent}%` }}
@@ -662,7 +662,7 @@ function CoursePredictorPageInner({ course, marksStats, actionsSlotRef }: Course
             </GhostButton>
           }
         />
-        <p className="px-1 -mt-1 text-[11px] leading-relaxed text-text-secondary dark:text-text-muted font-medium">
+        <p className="px-1 -mt-1 text-xs leading-relaxed text-text-secondary dark:text-text-muted font-medium">
           Tap a test to set what you expect — the predicted grade follows the engine&apos;s class band live. The FAT
           waits in the target card below; a locked row means faculty posted that mark.
         </p>
@@ -672,7 +672,7 @@ function CoursePredictorPageInner({ course, marksStats, actionsSlotRef }: Course
             type="button"
             onClick={() => setShowSimulate((v) => !v)}
             aria-expanded={showSimulate}
-            className="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-surface dark:bg-surface-secondary text-zinc-600 dark:text-zinc-300 text-[11px] font-black border border-border-strong cursor-pointer shadow-3xs whitespace-nowrap transition-colors hover:text-text-heading"
+            className="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-surface dark:bg-surface-secondary text-text-muted text-xs font-bold border border-border-strong cursor-pointer shadow-3xs whitespace-nowrap transition-colors hover:text-text-heading"
           >
             Simulate…
             <ChevronDown className={`w-3 h-3 transition-transform ${showSimulate ? "rotate-180" : ""}`} />
@@ -681,17 +681,17 @@ function CoursePredictorPageInner({ course, marksStats, actionsSlotRef }: Course
             [
               {
                 pct: 100,
-                tone: "text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 border-emerald-500/20",
+                tone: "text-success-foreground hover:bg-success-surface border-border-ink",
               },
-              { pct: 90, tone: "text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/10 border-indigo-500/20" },
+              { pct: 90, tone: "text-primary hover:bg-secondary border-border-ink" },
               { pct: 80, tone: "text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/10 border-cyan-500/20" },
-              { pct: 50, tone: "text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 border-amber-500/20" },
+              { pct: 50, tone: "text-warning-foreground hover:bg-warning-surface border-border-ink" },
             ].map(({ pct, tone }) => (
               <button
                 key={pct}
                 type="button"
                 onClick={() => handleBatchSimulate(pct)}
-                className={`shrink-0 px-2.5 py-1.5 rounded-xl bg-surface dark:bg-surface-secondary ${tone} text-[11px] font-black border cursor-pointer shadow-3xs whitespace-nowrap transition-colors hover:text-current`}
+                className={`shrink-0 px-2.5 py-1.5 rounded-xl bg-surface dark:bg-surface-secondary ${tone} text-xs font-bold border cursor-pointer shadow-3xs whitespace-nowrap transition-colors hover:text-current`}
               >
                 All {pct}%
               </button>
@@ -699,7 +699,7 @@ function CoursePredictorPageInner({ course, marksStats, actionsSlotRef }: Course
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start">
-          {renderHalf("blue", "Theory", "theory", theoryStats, "bg-indigo-500", theoryRemaining)}
+          {renderHalf("blue", "Theory", "theory", theoryStats, "bg-primary", theoryRemaining)}
           {renderHalf("emerald", "Lab", "lab", labStats, "bg-emerald-500", labRemaining)}
         </div>
       </div>
@@ -723,7 +723,7 @@ function CoursePredictorPageInner({ course, marksStats, actionsSlotRef }: Course
       <div className="space-y-3" data-tour-id="predictor-ladder">
         <SectionHeader icon={Gauge} title="Grade insights" right={<ToneBadge tone="blue">Beta</ToneBadge>} />
         {!prediction.isCurved && (
-          <div className="rounded-3xl border border-border-strong dark:border-border card-surface flex items-center gap-3.5 px-4 py-3.5">
+          <div className="rounded-[14px] border border-border-strong dark:border-border card-surface flex items-center gap-3.5 px-4 py-3.5">
             <span
               className={`h-11 w-11 shrink-0 rounded-2xl border flex items-center justify-center ${TONE_ICON_TILE.emerald}`}
             >
@@ -733,7 +733,7 @@ function CoursePredictorPageInner({ course, marksStats, actionsSlotRef }: Course
               <h4 className="text-sm font-bold text-text-heading font-outfit tracking-tight">
                 Absolute grading enforced
               </h4>
-              <p className="text-[11px] text-text-secondary dark:text-text-muted font-medium mt-0.5">
+              <p className="text-xs text-text-secondary dark:text-text-muted font-medium mt-0.5">
                 Your grade comes from fixed percentage boundaries, not from how the class performed.
               </p>
             </div>
@@ -754,14 +754,14 @@ function CoursePredictorPageInner({ course, marksStats, actionsSlotRef }: Course
           />
           {/* Not dimmed while awaiting class data: the curve editor lives in
               this card and must not read as disabled. The badge says it. */}
-          <div className="rounded-[24px] border border-border-strong dark:border-border card-surface px-4 py-3.5 space-y-2.5">
+          <div className="rounded-[14px] border border-border-strong dark:border-border card-surface px-4 py-3.5 space-y-2.5">
             {/* The marks page's in-card stats line: dose · μ · σ above the bar —
                 or the reader's own numbers, when they have set them. Shown on
                 every curve-eligible course, so a course still short of
                 classmates says how short, and offers the manual curve. */}
             {curveEligible && (
               <div className="space-y-1.5">
-                <p className="flex items-center gap-2 text-[11px] font-medium text-text-secondary dark:text-text-muted flex-wrap">
+                <p className="flex items-center gap-2 text-xs font-medium text-text-secondary dark:text-text-muted flex-wrap">
                   <ToneDot
                     tone={
                       !prediction.isCurved
@@ -813,7 +813,7 @@ function CoursePredictorPageInner({ course, marksStats, actionsSlotRef }: Course
               standingGrade={standingGrade}
               currentPct={hasEnteredMarks ? currentStandingPct : null}
             />
-            <p className="text-[11px] leading-relaxed text-text-secondary dark:text-text-muted font-medium">
+            <p className="text-xs leading-relaxed text-text-secondary dark:text-text-muted font-medium">
               {hasEnteredMarks ? (
                 <>
                   Your marks, scaled to 100 — earned over the tests you have given a mark to; empty ones don&apos;t
@@ -834,10 +834,10 @@ function CoursePredictorPageInner({ course, marksStats, actionsSlotRef }: Course
             {/* Req: the honesty line — every number in this box is an
                 estimate the reader typed, not a result the university
                 posted. */}
-            <p className="flex items-start gap-2 text-[11px] leading-relaxed font-medium text-amber-700 dark:text-amber-400">
+            <p className="flex items-start gap-2 text-xs leading-relaxed font-medium text-warning-foreground">
               <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5" aria-hidden="true" />
               <span>
-                <strong className="font-black">Just a prediction.</strong> These grades come from marks you entered —
+                <strong className="font-bold">Just a prediction.</strong> These grades come from marks you entered —
                 estimates within the grade boundaries, not a result. Your actual grade can land outside these numbers.
               </span>
             </p>

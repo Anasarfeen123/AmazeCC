@@ -178,12 +178,12 @@ export default function PomodoroTimer({
       {/* Phase Label & Round Dots */}
       <div className="flex flex-col items-center gap-1.5">
         <span
-          className={`text-xs font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
+          className={`text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-[6px] border ${
             phase === "focus"
-              ? "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20"
+              ? "bg-secondary text-secondary-foreground border-border-ink"
               : phase === "break"
-              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
-              : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+              ? "bg-success-surface text-success-foreground border-border-ink"
+              : "bg-warning-surface text-warning-foreground border-border-ink"
           }`}
         >
           {phase === "completed"
@@ -202,10 +202,10 @@ export default function PomodoroTimer({
                 compact ? "w-1.5 h-1.5" : "w-2.5 h-2.5"
               } ${
                 i + 1 < currentRound || phase === "completed"
-                  ? "bg-indigo-600 dark:bg-indigo-400"
+                  ? "bg-primary "
                   : i + 1 === currentRound
-                  ? "bg-indigo-500 ring-2 ring-indigo-500/30 animate-pulse"
-                  : "bg-zinc-200 dark:bg-zinc-700"
+                  ? "bg-primary ring-2 ring-border-ink animate-pulse"
+                  : "bg-surface-tertiary "
               }`}
             />
           ))}
@@ -249,13 +249,13 @@ export default function PomodoroTimer({
         {/* Time Text Inside Ring */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span
-            className={`font-black font-outfit tracking-tighter ${
+            className={`font-bold font-outfit tracking-tighter ${
               compact ? "text-2xl" : "text-4xl sm:text-5xl"
-            } text-zinc-900 dark:text-white`}
+            } text-text-heading`}
           >
             {formatTime(timeLeft)}
           </span>
-          <span className="text-[11px] font-bold text-zinc-400 mt-0.5">
+          <span className="text-xs font-bold text-text-muted mt-0.5">
             Round {Math.min(currentRound, totalRounds)} of {totalRounds}
           </span>
         </div>
@@ -266,7 +266,7 @@ export default function PomodoroTimer({
         <button
           type="button"
           onClick={handleReset}
-          className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all cursor-pointer shadow-2xs"
+          className="p-2.5 rounded-xl border-2 border-border-ink bg-surface text-text-muted hover:bg-surface-hover transition-all cursor-pointer shadow-2xs"
           title="Reset timer"
         >
           <RotateCcw className="w-4 h-4" />
@@ -275,10 +275,10 @@ export default function PomodoroTimer({
         <button
           type="button"
           onClick={toggleRun}
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black text-white shadow-xs transition-all active:scale-[0.98] cursor-pointer ${
+          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold text-primary-foreground shadow-xs transition-all cursor-pointer ${
             isRunning
-              ? "bg-zinc-800 hover:bg-zinc-900 dark:bg-zinc-700"
-              : "bg-indigo-600 hover:bg-indigo-700"
+              ? "bg-zinc-800 hover:bg-zinc-900 "
+              : "bg-primary hover:brightness-110"
           }`}
         >
           {isRunning ? (
@@ -298,7 +298,7 @@ export default function PomodoroTimer({
           type="button"
           onClick={handleSkip}
           disabled={phase === "completed"}
-          className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all cursor-pointer shadow-2xs disabled:opacity-40"
+          className="p-2.5 rounded-xl border-2 border-border-ink bg-surface text-text-muted hover:bg-surface-hover transition-all cursor-pointer shadow-2xs disabled:opacity-40"
           title="Skip phase"
         >
           <SkipForward className="w-4 h-4" />

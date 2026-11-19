@@ -9,7 +9,7 @@ import { normalizeCourse } from "@/lib/courseNormalizer";
 export default function vitolDisplay({ vitolData, handleFetchVitol, setVitolData }) {
   if (!vitolData || vitolData.length === 0) {
     return (
-      <div className="text-xl mb-4 text-center text-gray-900  dark:text-gray-100">
+      <div className="text-xl mb-4 text-center text-text-heading">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
           {/* Mobile View: Inline Center */}
           <h1 className="md:hidden font-bold">
@@ -44,7 +44,7 @@ export default function vitolDisplay({ vitolData, handleFetchVitol, setVitolData
     <div className="mt-6 p-4">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
         {/* Mobile View: Inline Center */}
-        <h1 className="md:hidden text-xl font-bold text-center text-gray-900  dark:text-gray-100">
+        <h1 className="md:hidden text-xl font-bold text-center text-text-heading">
           Vitol Upcoming Exams / Assignments
           <FetchButton
             onClick={() => handleFetchVitol()}
@@ -55,7 +55,7 @@ export default function vitolDisplay({ vitolData, handleFetchVitol, setVitolData
         </h1>
 
         {/* Desktop View: Left Aligned Heading + Right Aligned Button */}
-        <h1 className="hidden md:block text-2xl lg:text-3xl font-bold text-left text-gray-900  dark:text-gray-100">
+        <h1 className="hidden md:block text-2xl lg:text-3xl font-bold text-left text-text-heading">
           Vitol Upcoming Exams / Assignments
         </h1>
         <div className="hidden md:flex items-center justify-end">
@@ -81,32 +81,32 @@ export default function vitolDisplay({ vitolData, handleFetchVitol, setVitolData
             >
               <a href={item.url} target="_blank" rel="noopener noreferrer">
                 <div className="flex items-center justify-between">
-                  <h2 className="font-semibold text-gray-900  dark:text-gray-200">
+                  <h2 className="font-semibold text-text-heading">
                     {displayCourse} - {assignmentName}
                   </h2>
 
                   {item.done ? (
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                    <CheckCircle className="w-5 h-5 text-success-foreground flex-shrink-0" />
                   ) : isOverdue ? (
-                    <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                    <AlertCircle className="w-5 h-5 text-danger-foreground flex-shrink-0" />
                   ) : (
-                    <Clock className="w-5 h-5 text-yellow-500 flex-shrink-0" />
+                    <Clock className="w-5 h-5 text-warning-foreground flex-shrink-0" />
                   )}
                 </div>
-                <p className="mt-2 text-sm text-gray-700  dark:text-gray-300">
+                <p className="mt-2 text-sm text-text-primary">
                   <strong>Start(ed):</strong> {item.opens}
                 </p>
               </a>
 
               <div className="mt-3 flex items-center justify-between">
                 <span
-                  className={`px-3 py-1 rounded-full text-xs ${
+                  className={`px-3 py-1 rounded-[10px] text-xs ${
                     item.done
                       ? "bg-green-200 text-green-800"
                       : isOverdue
                         ? "bg-red-200 text-red-800"
                         : "bg-yellow-200 text-yellow-800"
-                  }`}
+                  } min-h-9`}
                 >
                   {item.done ? "Completed" : isOverdue ? "Overdue" : "Pending"}
                 </span>
@@ -136,11 +136,11 @@ export function VitolUserPassForm({ handleFetchVitol }) {
 
   return (
     <div className="flex flex-col items-center justify-center gap-6 p-6 text-center">
-      <h2 className="text-xl font-semibold text-gray-800  dark:text-gray-100">Enter Vitol Credentials</h2>
+      <h2 className="text-xl font-semibold text-text-primary">Enter Vitol Credentials</h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-sm gap-4">
         <div className="flex flex-col text-left">
-          <label className="text-sm font-medium text-gray-700  dark:text-gray-200 mb-1">Vitol Site</label>
+          <label className="text-sm font-medium text-text-primary mb-1">Vitol Site</label>
           <SelectField
             value={vitolSite}
             onChange={(val) => setVitolSite(val)}
@@ -156,7 +156,7 @@ export function VitolUserPassForm({ handleFetchVitol }) {
         </div>
 
         <div className="flex flex-col text-left">
-          <label className="text-sm font-medium text-gray-700  dark:text-gray-200 mb-1">
+          <label className="text-sm font-medium text-text-primary mb-1">
             Username (Registration No.)
           </label>
           <input
@@ -170,7 +170,7 @@ export function VitolUserPassForm({ handleFetchVitol }) {
         </div>
 
         <div className="flex flex-col text-left">
-          <label className="text-sm font-medium text-gray-700  dark:text-gray-200 mb-1">Password</label>
+          <label className="text-sm font-medium text-text-primary mb-1">Password</label>
           <input
             type="password"
             className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 
@@ -184,9 +184,7 @@ export function VitolUserPassForm({ handleFetchVitol }) {
 
         <button
           type="submit"
-          className="px-6 py-2 rounded-md font-medium text-white bg-blue-600 hover:bg-blue-700 
-                        dark:bg-blue-500 dark:hover:bg-blue-600
-                        transition-colors duration-150"
+          className="min-h-11 rounded-[10px] border-2 border-border-ink bg-primary px-6 font-mono text-sm font-bold uppercase tracking-[0.06em] text-primary-foreground shadow-brutal-sm brutal-press"
         >
           Continue
         </button>

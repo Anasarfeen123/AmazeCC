@@ -2896,7 +2896,7 @@ export default function FFCSTimetableTab({
                       <button
                         type="submit"
                         disabled={!selectedCourseCode || selectedSlotIndex === "-1"}
-                        className="w-full hover: hover: disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-2xl shadow-md transition-all duration-300 flex items-center justify-center gap-2 mt-2 cursor-pointer"
+                        className="w-full disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-2xl shadow-md transition-all duration-300 flex items-center justify-center gap-2 mt-2 cursor-pointer"
                       >
                         <PlusCircle className="w-4 h-4" /> Add to Timetable
                       </button>
@@ -4333,7 +4333,7 @@ export default function FFCSTimetableTab({
                   <Link
                     href="/"
                     onClick={() => setIsShareSheetOpen(false)}
-                    className="flex items-center gap-3 rounded-2xl border border-border-ink p-4 transition-colors hover: hover:"
+                    className="flex items-center gap-3 rounded-2xl border border-border-ink p-4 transition-colors "
                   >
                     <span className="w-10 h-10 rounded-2xl border border-border-ink bg-surface flex items-center justify-center text-primary shrink-0">
                       <LogIn className="w-4 h-4" />

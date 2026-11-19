@@ -99,7 +99,7 @@ export default function PushPromptModal({ UserID }: { UserID: string }) {
           <button
             onClick={handleClose}
             aria-label="Dismiss notification prompt"
-            className="absolute top-4 right-4 p-1 text-text-muted text-text-muted bg-surface-secondary hover:bg-surface-hover rounded-full transition-colors cursor-pointer"
+            className="absolute top-4 right-4 p-1 text-text-muted bg-surface-secondary hover:bg-surface-hover rounded-full transition-colors cursor-pointer"
           >
             <X size={14} />
           </button>

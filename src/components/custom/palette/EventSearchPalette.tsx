@@ -383,7 +383,7 @@ export default function EventSearchPalette() {
       {/* Search header */}
       <div className="flex items-center gap-3 px-5 py-3.5 border-b border-border-ink /[0.03]">
         <div className="p-1.5 rounded-xl shadow-sm">
-          <Search className="w-4 h-4 text-fuchsia-600  dark:text-fuchsia-400" />
+          <Search className="w-4 h-4 text-fuchsia-600 dark:text-fuchsia-400" />
         </div>
         <input
           ref={inputRef}
@@ -460,7 +460,7 @@ export default function EventSearchPalette() {
               setPreviewError(null);
               setTimeout(() => inputRef.current?.focus(), 0);
             }}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-fuchsia-600  dark:text-fuchsia-400 hover:text-fuchsia-700 dark:hover:text-fuchsia-300 transition-colors group"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-fuchsia-600 dark:text-fuchsia-400 hover:text-fuchsia-700 dark:hover:text-fuchsia-300 transition-colors group"
           >
             <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
             Back to results
@@ -701,7 +701,7 @@ export default function EventSearchPalette() {
               {query ? (
                 <CalendarDays className="w-10 h-10 text-text-muted" />
               ) : (
-                <Sparkles className="w-10 h-10 text-fuchsia-500  dark:text-fuchsia-400" />
+                <Sparkles className="w-10 h-10 text-fuchsia-500 dark:text-fuchsia-400" />
               )}
             </div>
             <p className="text-sm font-semibold text-text-primary mt-2">
@@ -720,7 +720,7 @@ export default function EventSearchPalette() {
 
       {showEnlarged && posterSrc && (
         <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70  p-4"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 p-4"
           onClick={() => setShowEnlarged(false)}
           onKeyDown={(e) => {
             if (e.key === "Escape") {

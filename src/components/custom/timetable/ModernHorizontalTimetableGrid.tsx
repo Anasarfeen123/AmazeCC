@@ -98,7 +98,7 @@ export default function ModernHorizontalTimetableGrid({
                   return (
                     <th
                       key={pIdx}
-                      className="p-1 border-x border-border-ink border-b border-border-ink text-center bg-warning-surface w-10 min-w-[36px] max-w-[42px] select-none align-middle"
+                      className="p-1 border-x border-border-ink border-b text-center bg-warning-surface w-10 min-w-[36px] max-w-[42px] select-none align-middle"
                       title="Lunch Break: 1:20 PM - 2:00 PM"
                     >
                       <div className="flex flex-col items-center justify-center leading-tight py-1 select-none">

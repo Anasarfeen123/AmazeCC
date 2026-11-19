@@ -1557,7 +1557,7 @@ export default function SyncNotification({
                 <div className="pt-1.5 w-full">
                   <button
                     onClick={handleCancelSync}
-                    className="group relative w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-border-ink bg-danger-surface hover:brightness-95 hover:brightness-95 dark:hover:bg-rose-950/70 text-danger-foreground font-bold text-xs uppercase tracking-wider transition-all duration-200 active:scale-[0.985] cursor-pointer ring-1 ring-rose-500/40 dark:ring-rose-400/50"
+                    className="group relative w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-border-ink bg-danger-surface hover:brightness-95 dark:hover:bg-rose-950/70 text-danger-foreground font-bold text-xs uppercase tracking-wider transition-all duration-200 active:scale-[0.985] cursor-pointer ring-1 ring-rose-500/40 dark:ring-rose-400/50"
                   >
                     <X size={15} className="stroke-[2.7] text-danger-foreground" />
                     <span className="">Cancel Sync</span>

@@ -815,7 +815,7 @@ export default function SimplifiedAcademicsPage({
         {/* Marks Predictor Featured Hero Card */}
         <button
           onClick={() => setActiveSubTab?.("marks-predictor")}
-          className="w-full p-4 rounded-[14px] border border-border-ink hover: hover: shadow-2xs hover:shadow-xs flex items-center justify-between gap-3 group transition-all duration-200 cursor-pointer text-left"
+          className="w-full p-4 rounded-[14px] border border-border-ink shadow-2xs hover:shadow-xs flex items-center justify-between gap-3 group transition-all duration-200 cursor-pointer text-left"
         >
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-10 h-10 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center shrink-0 shadow-xs">

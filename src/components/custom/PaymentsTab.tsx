@@ -490,7 +490,10 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
                     />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 min-w-0">
-                        <p className="font-bold text-sm text-text-heading truncate font-outfit leading-tight">
+                        <p
+                          data-private="fees"
+                          className="font-bold text-sm text-text-heading truncate font-outfit leading-tight"
+                        >
                           {entry.particulars || (isDebit ? "Debit transaction" : "Credit deposit")}
                         </p>
                         {isRefunded && (

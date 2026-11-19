@@ -42,7 +42,7 @@ import {
   UserX,
   X,
 } from "lucide-react";
-import { activeTabAtom, credentialsAtom, demoModeAtom, isLoggedInAtom } from "@/store";
+import { activeRegNumberAtom, activeTabAtom, credentialsAtom, demoModeAtom, isLoggedInAtom } from "@/store";
 import { getTypedStorageItem, setTypedStorageItem, removeTypedStorageItem } from "@/lib/storage";
 import {
   callClassmates,
@@ -706,9 +706,32 @@ export default function FriendFinderTab({
   const [openedFromHome, setOpenedFromHome] = useState(false);
   const launchSourceRead = useRef(false);
 
-  const [state, setState] = useState<ClassmatesState | null>(() => {
+  const [rawState, setState] = useState<ClassmatesState | null>(() => {
     return vtopSemester ? getCachedFriendFinderState(vtopSemester) : null;
   });
+
+  // Only classmates from your own batch by default (user: a 2nd year was
+  // shown 1st-year "classmates"). The batch is the two-digit year a VIT
+  // registration number starts with (25BCE... = 2025). People with no
+  // registration number are kept: their year is unknown, not different.
+  const activeReg = useAtomValue(activeRegNumberAtom);
+  const vtopUsername = useAtomValue(credentialsAtom)?.VtopUsername;
+  const myRegNo = (activeReg || vtopUsername || "").toUpperCase();
+  const myBatch = /^\d{2}[A-Z]/.test(myRegNo) ? myRegNo.slice(0, 2) : "";
+  const [includeOtherBatches, setIncludeOtherBatches] = useState(false);
+  const state = useMemo<ClassmatesState | null>(() => {
+    if (!rawState || !myBatch || includeOtherBatches) return rawState;
+    const sameBatch = (reg?: string) => !reg || !/^\d{2}[A-Z]/i.test(reg) || reg.slice(0, 2) === myBatch;
+    return {
+      ...rawState,
+      overlaps: (rawState.overlaps ?? []).filter((o) => sameBatch(o.regNo)),
+      sections: (rawState.sections ?? []).map((sec) => ({
+        ...sec,
+        people: (sec.people ?? []).filter((p) => sameBatch(p.regNo)),
+        registerNos: sec.registerNos?.filter((r) => sameBatch(r)),
+      })),
+    };
+  }, [rawState, myBatch, includeOtherBatches]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -1960,6 +1983,20 @@ export default function FriendFinderTab({
             onChange={(val) => setGrouping(val as "classes" | "friends")}
           />
         </div>
+
+        {myBatch && (
+          <label className="flex items-center justify-between gap-3 rounded-[10px] border-2 border-border-ink bg-surface-secondary px-3 py-2">
+            <span className="text-sm text-text-primary">
+              <span className="font-bold">Only my batch (20{myBatch})</span>
+              <span className="block text-xs text-text-muted">Turn off to include students from other years</span>
+            </span>
+            <Switch
+              label="Only my batch"
+              checked={!includeOtherBatches}
+              onCheckedChange={(on) => setIncludeOtherBatches(!on)}
+            />
+          </label>
+        )}
 
         {!me.discoverable ? (
           <div className={`${TILE_CARD} text-center space-y-3`}>

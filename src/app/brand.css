@@ -220,10 +220,12 @@
      the fills, not the page colour. Checked by scripts/redesign/contrast.py. */
   --background: #001e1d;
   --foreground: #f7f1e6;
-  --surface: #002b29;
-  --surface-raised: #003330;
-  --surface-secondary: #003a37;
-  --surface-tertiary: #00443f;
+  /* Cards one clear step above the page (was #002b29, nearly the page
+     colour), like light's white cards on cream. */
+  --surface: #003431;
+  --surface-raised: #003c39;
+  --surface-secondary: #00423e;
+  --surface-tertiary: #004b46;
   --surface-hover: #003532;
 
   --text-heading: #f7f1e6;
@@ -295,10 +297,10 @@
 .dark.night {
   --background: #000000;
   --foreground: #f7f1e6;
-  --surface: #0d1010;
-  --surface-raised: #121616;
-  --surface-secondary: #161c1c;
-  --surface-tertiary: #1c2323;
+  --surface: #0f1615;
+  --surface-raised: #141d1c;
+  --surface-secondary: #1a2524;
+  --surface-tertiary: #202d2c;
   --surface-hover: #141a1a;
 
   --text-muted: #9cbdb4;
@@ -723,4 +725,15 @@
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* Dark/Night depth and detail (user, 2026-11-20: dark felt less playful and
+   detailed than light). A faint dot grid on the page, and the second summary
+   card gets a light sage tint so the stat row is not one flat colour. */
+.dark .dashboard-content {
+  background-image: radial-gradient(color-mix(in oklab, var(--border-ink) 30%, transparent) 1px, transparent 1.3px);
+  background-size: 22px 22px;
+}
+.dark .summary-row > :nth-child(2) {
+  background-color: color-mix(in oklab, var(--secondary) 16%, var(--surface)) !important;
 }

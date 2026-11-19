@@ -103,7 +103,7 @@ function StorageRowBlock({ row, onDelete }: { row: StorageRow; onDelete: (key: s
             title={row.key}
             titleTooltip={row.key}
             subtitle={singleLine(row.pretty)}
-            className={row.sensitive && !revealed ? "blur-[3px] select-none" : ""}
+            className={row.sensitive && !revealed ? "crayon-hide" : ""}
           />
           {row.bytes > 90 && (
             <ChevronUp

@@ -750,7 +750,7 @@ export default function CurriculumPage({
         badge: s.badge,
         badgeClassName: s.badgeClass,
         valueClassName: s.tone,
-        blur: s.id === "cgpa" && isCgpaBlurred ? "blur-[5px]" : undefined,
+        blur: s.id === "cgpa" && isCgpaBlurred ? "crayon-hide" : undefined,
         onClick: s.onClick,
       })),
     [slides, isCgpaBlurred],
@@ -1267,7 +1267,7 @@ export default function CurriculumPage({
       ? { tone: "emerald", surface: "bg-emerald-600", badge: "On track" }
       : { tone: "amber", surface: "bg-amber-600", badge: "Short" };
 
-  const blurGrades = isCgpaBlurred ? "blur-[5px] select-none" : "";
+  const blurGrades = isCgpaBlurred ? "crayon-hide" : "";
 
   const plannerList = (
     <div className="space-y-6">

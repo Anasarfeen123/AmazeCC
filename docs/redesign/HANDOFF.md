@@ -289,3 +289,14 @@ NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next dev --webpack -p 3017   # backg
   removed from student-facing text.
   **Next: R11 keyboard/zoom walk, the last 91 legacy classes, R9 only
   with the user's OK.**
+- **2026-11-19 (end of session)** — Done: sidebar stats go 2x2 with CGPA
+  shown; R10 complete (11 old classes left, scanner only); hidden values use
+  a text comic "#@%!" cover instead of blur (see `PRIVACY_MODE.md`). Last
+  check before commit: comic cover screenshot was still running; verify the
+  look on Home + sidebar (light/dark) with
+  `PRE_JS='const s=JSON.parse(localStorage.settings||"{}");s.showGpa=true;s.CGPAHidden=true;s.privacyMode=true;localStorage.settings=JSON.stringify(s)' PRE_W=1440 ONLY_DESKTOP=1 node scripts/redesign/shot.mjs out / light`.
+  **Next, in order:** (1) check/tune the comic cover; (2) per-category
+  privacy (`docs/redesign/PRIVACY_MODE.md`); (3) R11 manual keyboard walk
+  (Tab through sidebar, spotlight, sheets) and 200% zoom (set
+  `deviceScaleFactor`/CSS zoom in shot.mjs, check overlap at 1440/2 = 720);
+  (4) owner review of /privacy and /terms; (5) R9 only with the user's OK.

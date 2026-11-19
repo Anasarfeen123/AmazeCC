@@ -55,7 +55,7 @@ export interface InsightSlide {
   valueClassName?: string;
   /** Overrides the tone-derived badge colour. */
   badgeClassName?: string;
-  /** Blur class applied in place, e.g. `blur-[5px]` for the CGPA privacy toggle. */
+  /** Hide class applied in place, e.g. `crayon-hide` for the CGPA privacy toggle. */
   blur?: string;
   /**
    * Accessible name for this slide's dot. Needed when the visible `label` is
@@ -171,7 +171,7 @@ export function InsightCarousel({
             HEADLINE[headlineSize],
             valueTone,
             slide.valueClassName,
-            slide.blur && `select-none ${slide.blur}`,
+            slide.blur,
           )}
         >
           {slide.value}

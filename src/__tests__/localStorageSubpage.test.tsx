@@ -141,11 +141,11 @@ describe("local storage subpage", () => {
     // `flex-1` is `ListRowText`'s outer wrapper; `min-w-0` alone also matches
     // the title line inside it, which is not what carries the class.
     const usernameText = screen.getByText("username").closest("div.flex-1") as HTMLElement;
-    expect(usernameText.className).toContain("blur");
+    expect(usernameText.className).toContain("crayon-hide");
 
-    // A non-sensitive key is not covered, or the blur means nothing.
+    // A non-sensitive key is not covered, or the cover means nothing.
     const settingsText = screen.getByText("settings").closest("div.flex-1") as HTMLElement;
-    expect(settingsText.className).not.toContain("blur");
+    expect(settingsText.className).not.toContain("crayon-hide");
   });
 
   it("summarises total size and how many keys are sensitive", () => {

@@ -866,7 +866,7 @@ export default function SimplifiedMobileHome({
                   : s.id === "od"
                     ? "emerald"
                     : "amber",
-        blur: s.id === "cgpa" && (settings?.CGPAHidden || settings?.blurGrades) ? "blur-[5px]" : undefined,
+        blur: s.id === "cgpa" && (settings?.CGPAHidden || settings?.blurGrades) ? "crayon-hide" : undefined,
         onClick: s.onClick,
       })),
     [insightSlides, settings?.CGPAHidden, settings?.blurGrades],
@@ -1380,12 +1380,14 @@ export default function SimplifiedMobileHome({
               >
                 <StatTile
                   label={tile.label}
-                  value={tile.value}
+                  // The hide goes on the number only; on the card it scribbled
+                  // over the whole tile.
+                  value={tile.blur ? <span className={tile.blur}>{tile.value}</span> : tile.value}
                   sub={tile.sub}
                   badge={tile.badge}
                   tone={tile.tone}
                   variant={tile.id === "attendance" ? "highlight" : "default"}
-                  className={cn(tile.onClick && "brutal-press group", tile.blur)}
+                  className={cn(tile.onClick && "brutal-press group")}
                 />
               </div>
             ))}

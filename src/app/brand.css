@@ -411,7 +411,9 @@
   background-color: var(--highlight) !important;
   color: var(--highlight-foreground);
 }
-.summary-row > :first-child :not([class*="bg-"]) {
+.summary-row
+  > :first-child
+  :not([class*="bg-"]):not(.crayon-hide):not(.crayon-hide *):not([data-private]):not([data-private] *) {
   color: var(--highlight-foreground) !important;
 }
 

@@ -1087,7 +1087,7 @@ export default function NavigationTabs({
                         </span>
                         <span
                           data-private
-                          className={`font-display text-base font-bold leading-none text-text-heading transition-all duration-300 ${settings.CGPAHidden ? "blur-[4.5px] select-none" : ""}`}
+                          className={`font-display text-base font-bold leading-none text-text-heading transition-all duration-300 ${settings.CGPAHidden ? "crayon-hide" : ""}`}
                         >
                           {marksData?.cgpa?.cgpa || "-"}
                         </span>

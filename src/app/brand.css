@@ -987,3 +987,12 @@
     animation: none !important;
   }
 }
+
+/* Phones: everything a little smaller (user, 2026-11-21: "elements in
+   mobile are too big"). Sizes are rem-based, so one root change scales
+   text, spacing and controls together. 15px keeps h-11 controls at 41px. */
+@media (max-width: 639px) {
+  html {
+    font-size: 15px;
+  }
+}

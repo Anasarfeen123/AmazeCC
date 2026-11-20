@@ -5,7 +5,7 @@ import { useCallback, useRef, useState } from "react";
 /**
  * The AmazeCC logo, one component for every place it appears.
  *
- * Mark: the full-colour book-"A" app tile (`/brand/icon-primary.svg`).
+ * Mark: the full-colour book-"A" app tile, edge to edge (`/brand/icon-app.svg`; icon-primary.svg has a transparent border that made it look small).
  * Wordmark: "Amaze" in Space Mono bold with "CC" set in an ochre block, like a
  * stamped tag; it echoes the orange CC of the official lockup and reads on
  * paper, teal and obsidian alike (ink on ochre ≥ 10:1).
@@ -93,11 +93,11 @@ export function BrandLogo({
   const mark = (
     <span className="relative inline-flex shrink-0" onClick={egg.tap}>
       <img
-        src={markSrc ?? getAssetPath("/brand/icon-primary.svg")}
+        src={markSrc ?? getAssetPath("/brand/icon-app.svg")}
         alt=""
         aria-hidden="true"
         decoding="async"
-        className={`brand-logo-mark ${MARK[size]} shrink-0 object-contain ${egg.wobble ? "logo-wobble" : ""}`}
+        className={`brand-logo-mark ${MARK[size]} shrink-0 rounded-[22%] object-contain shadow-brutal-sm ${egg.wobble ? "logo-wobble" : ""}`}
       />
       {egg.line && (
         <span

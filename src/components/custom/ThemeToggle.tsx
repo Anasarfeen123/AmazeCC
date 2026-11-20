@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, MoonStar } from "lucide-react";
+import { nextTheme } from "@/lib/shortcuts";
 
 /**
  * Light <-> dark switch: a soft cross-fade (CSS in globals.css, view
@@ -76,11 +77,14 @@ export default function ThemeToggle({ className = "", showLabel = false }: Theme
 
   // next-themes only knows the saved theme in the browser. Keep the first
   // client render identical to the server render, then show the actual theme.
-  const isDark = mounted && (theme === "dark" || theme === "night");
+  // Cycles light -> dark -> night (user: Night on every page, not only the app).
+  const current = mounted ? (theme === "night" ? "night" : theme === "dark" ? "dark" : "light") : "light";
+  const target = nextTheme(current);
+  const targetLabel = target === "night" ? "Night" : target === "dark" ? "Dark" : "Light";
+  const Icon = target === "night" ? MoonStar : target === "dark" ? Moon : Sun;
 
   const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const targetTheme = isDark ? "light" : "dark";
-    animateThemeCircularExpansion(e, targetTheme, setTheme);
+    animateThemeCircularExpansion(e, target, setTheme);
   };
 
   return (
@@ -88,8 +92,8 @@ export default function ThemeToggle({ className = "", showLabel = false }: Theme
       onClick={handleToggle}
       disabled={!mounted}
       className={`relative inline-flex min-h-11 min-w-11 items-center justify-center p-2 rounded-[10px] border-2 border-border-ink bg-surface text-text-primary shadow-brutal-sm brutal-press cursor-pointer select-none group ${className}`}
-      title={`Switch to ${isDark ? "Light" : "Dark"} mode`}
-      aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
+      title={`Switch to ${targetLabel} mode`}
+      aria-label={`Switch to ${targetLabel.toLowerCase()} mode`}
     >
       <div className="relative flex items-center justify-center gap-2 px-0.5">
         <motion.div
@@ -99,17 +103,11 @@ export default function ThemeToggle({ className = "", showLabel = false }: Theme
           transition={{ duration: 0.18, ease: "easeOut" }}
           className="flex items-center justify-center"
         >
-          {isDark ? (
-            <Sun className="h-4.5 w-4.5 stroke-[2.2] text-primary" aria-hidden />
-          ) : (
-            <Moon className="h-4.5 w-4.5 stroke-[2.2] text-primary" aria-hidden />
-          )}
+          <Icon className="h-4.5 w-4.5 stroke-[2.2] text-primary" aria-hidden />
         </motion.div>
 
         {showLabel && (
-          <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] pr-1">
-            {isDark ? "Light Mode" : "Dark Mode"}
-          </span>
+          <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] pr-1">{targetLabel} Mode</span>
         )}
       </div>
     </motion.button>

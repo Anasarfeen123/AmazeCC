@@ -6,16 +6,16 @@
  * with other surfaces (sidebar, command palette).
  */
 
+import { moduleTone, type ToneName } from "@/lib/uiTokens";
 import { memo, useEffect, useMemo, useState } from "react";
 import SelectField from "../shared/primitives/SelectField";
 import { formatSemesterName } from "@/lib/formatSemesterName";
-import { ChevronRight, ExternalLink, Home, Moon, MoonStar, Pin, Sun } from "lucide-react";
+import { ChevronRight, ExternalLink, Home, Moon, MoonStar, Sun } from "lucide-react";
 import { BrandSheet as AppLibrary } from "../shared/primitives/BrandSheet";
 import config from "../../../../config.json";
 import {
   activateEntry,
   getModuleRegistry,
-  getPinId,
   quickPinTabs,
   type ModuleEntry,
   type NavContext,
@@ -135,63 +135,42 @@ const AppLibraryPortal = memo(
       });
     }, [librarySearchQuery, searchItems]);
 
+    // Launcher tile (phone home-screen style): colour icon + short label.
+    // Colours come from MODULE_TONE so a module looks the same everywhere.
+    // Pinning lives in the "Bottom bar shortcuts" section below, not on
+    // every tile (it used to be a pin button per card).
+    const GROUP_FALLBACK: Record<string, ToneName> = {
+      Study: "ochre",
+      Campus: "apricot",
+      Tools: "sea",
+      Account: "neutral",
+    };
     const renderItemCard = (item: ModuleEntry, opts?: { cleanPrefix?: string; subtitle?: string; tint?: string }) => {
       const Icon = item.icon || Home;
-      const isPanelTrigger = item.target.kind === "panel";
-      const pinId = getPinId(item);
-      const pinned = settings?.pinnedNavTabs ?? [];
-      const isPinned = pinId ? pinned.includes(pinId) : false;
-      const atLimit = !isPinned && pinned.length >= 4;
       const label = opts?.cleanPrefix ? item.label.replace(opts.cleanPrefix, "") : item.label;
-
+      const tone = moduleTone(item.pinId ?? item.id, GROUP_FALLBACK[item.group as string] ?? "teal");
+      const external = item.target.kind === "external";
       return (
-        <div
+        <button
           key={item.id}
-          className="group/item relative flex min-h-16 w-full items-center justify-between gap-2 rounded-[10px] border-2 border-border-ink bg-surface p-2.5 transition-colors hover:bg-surface-secondary"
+          type="button"
+          onClick={() => runEntry(item)}
+          className="group/tile flex min-w-0 flex-col items-center gap-1.5 rounded-[12px] px-0.5 py-1 text-center cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2"
+          aria-label={external ? `${label} (opens in a new tab)` : label}
         >
-          <button
-            onClick={() => runEntry(item)}
-            className="flex flex-1 min-w-0 min-h-11 items-center gap-3 text-left cursor-pointer rounded-[8px]"
+          <span
+            className={`relative flex h-14 w-14 items-center justify-center rounded-[16px] border-2 shadow-brutal-sm transition-transform duration-150 group-hover/tile:-translate-y-0.5 group-active/tile:translate-y-0.5 ${tone}`}
           >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] border-2 border-border-ink bg-secondary text-secondary-foreground">
-              <Icon className="h-5 w-5 stroke-[2.2]" aria-hidden />
-            </div>
-            <div className="flex flex-col min-w-0">
-              <span className="truncate text-sm font-semibold leading-tight text-text-heading">{label}</span>
-              {opts?.subtitle ? <span className="truncate text-xs text-text-muted">{opts.subtitle}</span> : null}
-              {item.target.kind === "external" ? (
-                <span className="mt-1 inline-flex w-fit items-center gap-1 rounded-[6px] border-2 border-border-ink bg-surface-secondary px-1 font-mono text-xs font-semibold uppercase text-text-muted">
-                  New tab
-                  <ExternalLink className="h-3 w-3" aria-hidden />
-                </span>
-              ) : null}
-            </div>
-          </button>
-
-          {pinId && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                togglePin(pinId);
-              }}
-              disabled={atLimit}
-              className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] border-2 transition-colors cursor-pointer ${
-                isPinned
-                  ? "bg-highlight border-border-ink text-highlight-foreground"
-                  : atLimit
-                    ? "border-transparent text-text-disabled cursor-not-allowed"
-                    : "border-transparent text-text-muted hover:text-text-primary hover:border-border-ink"
-              }`}
-              title={isPinned ? "Unpin from bottom bar" : "Pin to bottom bar"}
-              aria-label={isPinned ? `Unpin ${label}` : `Pin ${label}`}
-              aria-pressed={isPinned}
-            >
-              <Pin className={`h-4 w-4 ${isPinned ? "fill-current" : ""}`} aria-hidden />
-            </button>
-          )}
-
-          {isPanelTrigger && !pinId && <ChevronRight className="h-4 w-4 shrink-0 text-text-muted" aria-hidden />}
-        </div>
+            <Icon className="h-6 w-6 stroke-[2.2]" aria-hidden />
+            {external ? (
+              <ExternalLink
+                className="absolute -right-1 -top-1 h-4 w-4 rounded-full border-2 border-border-ink bg-surface p-0.5 text-text-muted"
+                aria-hidden
+              />
+            ) : null}
+          </span>
+          <span className="line-clamp-2 w-full text-[11px] font-semibold leading-tight text-text-heading">{label}</span>
+        </button>
       );
     };
 
@@ -206,8 +185,8 @@ const AppLibraryPortal = memo(
         onSearchChange={setLibrarySearchQuery}
       >
         {!librarySearchQuery && (
-          <div className="flex items-center gap-1.5 px-1 pb-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-text-muted">Active Sem:</span>
+          <div className="mb-4 flex items-center justify-between gap-3 rounded-[12px] border-2 border-border-ink bg-surface px-3 py-2 shadow-brutal-sm">
+            <span className="font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-muted">Semester</span>
             <div className="relative flex items-center">
               <SelectField
                 value={settings.currSemesterID || config.semesterIDs[config.semesterIDs.length - 2]}
@@ -222,7 +201,7 @@ const AppLibraryPortal = memo(
                 role="group"
                 aria-label="Current semester"
                 size="auto"
-                className="w-full [&>button:first-child]:border-none [&>button:first-child]:bg-transparent [&>button:first-child]:pr-5 [&>button:first-child]:text-info [&>button:first-child]:hover:underline"
+                className="w-full [&>button:first-child]:border-none [&>button:first-child]:bg-transparent [&>button:first-child]:pr-5 [&>button:first-child]:font-bold [&>button:first-child]:text-text-heading"
               />
             </div>
           </div>
@@ -235,8 +214,8 @@ const AppLibraryPortal = memo(
             </div>
           ) : (
             <div className="space-y-2">
-              <h3 className="px-1 text-xs font-bold uppercase tracking-widest text-text-muted">Search Results</h3>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <h3 className="px-1 font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-muted">Results</h3>
+              <div className="grid grid-cols-4 gap-x-1 gap-y-4 sm:grid-cols-6">
                 {filteredSearchItems.map((item) => renderItemCard(item))}
               </div>
             </div>
@@ -267,15 +246,20 @@ const AppLibraryPortal = memo(
             flush();
 
             return (
-              <div key={group.name} className="space-y-3">
-                <h3 className="px-1 text-xs font-bold uppercase tracking-widest text-text-muted">{group.name}</h3>
+              <div key={group.name} className="space-y-3 pb-2">
+                <h3 className="flex items-center gap-2 px-1 font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-muted">
+                  {group.name}
+                  <span className="h-0.5 flex-1 rounded-full bg-border-muted" aria-hidden />
+                </h3>
                 <div className="space-y-3">
                   {segments.map((seg, idx) => {
                     if (seg.type === "academics") {
                       return (
                         <div key={`${group.name}-academics-${idx}`} className="space-y-2">
-                          <h4 className="px-1 text-xs font-bold uppercase tracking-wider text-text-muted">Academics</h4>
-                          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                          <h4 className="px-1 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-text-muted">
+                            Academics
+                          </h4>
+                          <div className="grid grid-cols-4 gap-x-1 gap-y-4 sm:grid-cols-6">
                             {academicsItems.map((sub) =>
                               renderItemCard(sub, {
                                 tint: "bg-secondary text-secondary-foreground",
@@ -289,10 +273,10 @@ const AppLibraryPortal = memo(
                     if (seg.type === "hostel") {
                       return (
                         <div key={`${group.name}-hostel-${idx}`} className="space-y-2">
-                          <h4 className="px-1 text-xs font-bold uppercase tracking-wider text-text-muted">
-                            Hostel Hub
+                          <h4 className="px-1 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-text-muted">
+                            Hostel
                           </h4>
-                          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                          <div className="grid grid-cols-4 gap-x-1 gap-y-4 sm:grid-cols-6">
                             {hostelItems.map((sub) =>
                               renderItemCard(sub, {
                                 cleanPrefix: "Hostel ",
@@ -305,7 +289,10 @@ const AppLibraryPortal = memo(
                       );
                     }
                     return (
-                      <div key={`${group.name}-items-${idx}`} className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                      <div
+                        key={`${group.name}-items-${idx}`}
+                        className="grid grid-cols-4 gap-x-1 gap-y-4 sm:grid-cols-6"
+                      >
                         {seg.items.map((item) =>
                           renderItemCard(item, {
                             tint:
@@ -333,16 +320,17 @@ const AppLibraryPortal = memo(
           })
         )}
 
-        <div className="shrink-0 space-y-3 border-t-2 border-border-ink bg-surface-secondary px-5 py-4 mt-4">
-          <div className="flex items-center justify-between">
-            <h4 className="px-0.5 text-xs font-bold uppercase tracking-widest text-text-muted font-outfit">
-              Quick Pin tabs (Max 4)
-            </h4>
-            <span className="text-xs font-bold text-primary uppercase">
-              {(settings?.pinnedNavTabs ?? []).length}/4 selected
+        <details className="group/pins shrink-0 border-t-2 border-border-ink bg-surface-secondary px-5 py-3 mt-4">
+          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+            <span className="font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-heading">
+              Bottom bar shortcuts
             </span>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
+            <span className="flex items-center gap-2 font-mono text-xs font-bold uppercase text-text-muted">
+              {(settings?.pinnedNavTabs ?? []).length}/4
+              <ChevronRight className="h-4 w-4 transition-transform group-open/pins:rotate-90" aria-hidden />
+            </span>
+          </summary>
+          <div className="flex flex-wrap gap-1.5 pt-2 pb-1">
             {quickPinTabs.map((tab) => {
               const pinned = settings?.pinnedNavTabs ?? [];
               const isPinned = pinned.includes(tab.id);
@@ -367,15 +355,13 @@ const AppLibraryPortal = memo(
               );
             })}
           </div>
-        </div>
+        </details>
 
         <div
           className="shrink-0 space-y-2 border-t-2 border-border-ink bg-surface-secondary px-5 py-4"
           style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)" }}
         >
-          <h4 className="px-0.5 text-xs font-bold uppercase tracking-widest text-text-muted font-outfit">
-            Interface Theme
-          </h4>
+          <h4 className="px-0.5 text-xs font-bold uppercase tracking-widest text-text-muted font-outfit">Theme</h4>
           <div className="flex w-full gap-1 rounded-[10px] border-2 border-border-ink bg-surface p-1">
             {["light", "dark", "night"].map((t) => (
               <button

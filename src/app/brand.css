@@ -238,7 +238,7 @@
   /* Same colour as the border, like light mode (ink border + ink shadow), so
      cards read as solid cut-outs. The old near-black (#000807) vanished on
      the dark page and made dark look flat next to light (user, 2026-11-20). */
-  --shadow-ink: #3f8f84;
+  --shadow-ink: #0e4a44; /* deep teal: visible offset, not glowing (user: too bright) */
   --border-muted: color-mix(in oklab, #3f8f84 45%, transparent);
   --border-strong: #3f8f84;
 
@@ -307,7 +307,7 @@
   --border-ink: #4fb3a5;
   --border-strong: #4fb3a5;
   --border-muted: color-mix(in oklab, #4fb3a5 40%, transparent);
-  --shadow-ink: #4fb3a5; /* = border, see dark */
+  --shadow-ink: #174f49; /* deep teal on black (user: too bright) */
 
   --success-surface: color-mix(in oklab, #7fd6a5 16%, #0f1615);
   --warning-surface: color-mix(in oklab, #f9bc60 18%, #0f1615);
@@ -1012,4 +1012,53 @@
   html[data-ui-size="large"] {
     font-size: 17px;
   }
+}
+
+/* Icon tiles in colour (uiTokens TONE_ICON_TILE). User: icons were all the
+   same sage. Each tone is a brand colour; light = soft tint + deep icon,
+   dark/night = deeper tint + the bright colour as the icon. */
+.icon-tone {
+  --tone: #abd1c6;
+}
+.icon-tone-sky {
+  --tone: #8fb8de;
+}
+.icon-tone-sea {
+  --tone: #7fc4c9;
+}
+.icon-tone-violet {
+  --tone: #b8a6d9;
+}
+.icon-tone-teal {
+  --tone: #4fb3a5;
+}
+.icon-tone-mint {
+  --tone: #9ed9b5;
+}
+.icon-tone-ochre {
+  --tone: #f9bc60;
+}
+.icon-tone-coral {
+  --tone: #e16162;
+}
+.icon-tone-rose {
+  --tone: #f2a7b5;
+}
+.icon-tone-apricot {
+  --tone: #f4a259;
+}
+.icon-tone-neutral {
+  --tone: #8fb5aa;
+}
+.icon-tone {
+  background-color: color-mix(in oklab, var(--tone) 42%, var(--surface));
+  color: color-mix(in oklab, var(--tone) 38%, #001e1d);
+  border-color: var(--border-ink);
+}
+.dark .icon-tone {
+  background-color: color-mix(in oklab, var(--tone) 20%, var(--surface));
+  color: var(--tone);
+}
+.dark.night .icon-tone {
+  background-color: color-mix(in oklab, var(--tone) 16%, var(--surface));
 }

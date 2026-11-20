@@ -1,5 +1,6 @@
 "use client";
 
+import { moduleTone } from "@/lib/uiTokens";
 import { useState } from "react";
 import { navigateToFFCSPlanner } from "@/lib/ffcsNavigation";
 import {
@@ -33,7 +34,7 @@ export default function ToolsHub({ setActiveToolsSubTab }: ToolsHubProps) {
       subtitle: "Homework, tests, week scheduling, pomodoro & LMS sync",
       category: "academic",
       icon: CheckSquare,
-      iconColor: "text-success-foreground bg-success-surface border-border-ink",
+      iconColor: moduleTone("tasks"),
     },
     {
       id: "attendance-predictor",
@@ -42,7 +43,7 @@ export default function ToolsHub({ setActiveToolsSubTab }: ToolsHubProps) {
       subtitle: "Simulate attendance percentages and safe bunk margins",
       category: "academic",
       icon: CalendarCheck,
-      iconColor: "text-secondary-foreground bg-secondary dark:bg-secondary border-border-ink",
+      iconColor: moduleTone("attendance-predictor"),
     },
     {
       id: "qbank",
@@ -50,7 +51,7 @@ export default function ToolsHub({ setActiveToolsSubTab }: ToolsHubProps) {
       subtitle: "Previous years CAT & FAT question papers",
       category: "academic",
       icon: Database,
-      iconColor: "text-danger-foreground bg-danger-surface border-border-ink",
+      iconColor: moduleTone("qbank"),
     },
     {
       id: "faculty-info",
@@ -58,7 +59,7 @@ export default function ToolsHub({ setActiveToolsSubTab }: ToolsHubProps) {
       subtitle: "Directory, cabins & direct contact details",
       category: "academic",
       icon: UserCheck,
-      iconColor: "text-secondary-foreground bg-secondary dark:bg-secondary border-border-ink",
+      iconColor: moduleTone("faculty-info"),
     },
     {
       id: "marks-predictor",
@@ -66,7 +67,7 @@ export default function ToolsHub({ setActiveToolsSubTab }: ToolsHubProps) {
       subtitle: "Simulate test marks, weightage lost & FAT targets",
       category: "academic",
       icon: Sparkles,
-      iconColor: "text-secondary-foreground bg-secondary dark:bg-secondary border-border-ink",
+      iconColor: moduleTone("marks-predictor"),
     },
     {
       id: "social",
@@ -74,7 +75,7 @@ export default function ToolsHub({ setActiveToolsSubTab }: ToolsHubProps) {
       subtitle: "Share schedules & find common free slots",
       category: "social",
       icon: Users,
-      iconColor: "text-secondary-foreground bg-secondary dark:bg-secondary border-border-ink",
+      iconColor: moduleTone("social"),
     },
     {
       id: "cabshare",
@@ -82,7 +83,7 @@ export default function ToolsHub({ setActiveToolsSubTab }: ToolsHubProps) {
       subtitle: "Find travel partners & split cab fares",
       category: "campus",
       icon: Car,
-      iconColor: "text-success-foreground bg-success-surface border-border-ink",
+      iconColor: moduleTone("cabshare"),
     },
     {
       id: "free-class",
@@ -90,7 +91,7 @@ export default function ToolsHub({ setActiveToolsSubTab }: ToolsHubProps) {
       subtitle: "Find empty classrooms & quiet study spots",
       category: "campus",
       icon: DoorOpen,
-      iconColor: "text-teal-600 dark:text-teal-400 bg-teal-500/10 dark:bg-teal-500/20 border-teal-500/20",
+      iconColor: moduleTone("free-class"),
     },
     {
       id: "ffcs",
@@ -98,7 +99,7 @@ export default function ToolsHub({ setActiveToolsSubTab }: ToolsHubProps) {
       subtitle: "Draft schedule & resolve slot clashes",
       category: "academic",
       icon: Compass,
-      iconColor: "text-secondary-foreground bg-secondary dark:bg-secondary border-border-ink",
+      iconColor: moduleTone("ffcs"),
     },
   ];
 

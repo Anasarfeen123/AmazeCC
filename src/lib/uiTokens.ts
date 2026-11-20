@@ -133,15 +133,90 @@ export const TONE_TEXT: Record<string, string> = {
   zinc: "text-text-muted",
 };
 
+/**
+ * Icon tiles, one brand colour per tone (classes in brand.css "Icon tiles in
+ * colour"). Light: soft tint + deep icon; dark/night: deeper tint + bright
+ * icon. Before 2026-11-21 sky/blue/violet/indigo were all the same sage.
+ */
+export type ToneName = "sky" | "sea" | "violet" | "teal" | "mint" | "ochre" | "coral" | "rose" | "apricot" | "neutral";
+
+/** Icon-tile classes for a brand tone (see brand.css "Icon tiles in colour"). */
+export function toneClass(tone: ToneName): string {
+  return `icon-tone icon-tone-${tone}`;
+}
+
+/**
+ * One colour per module, shared by every list that shows the module (Tools
+ * hub, Modules sheet, Settings hub), so a module looks the same everywhere and
+ * neighbouring rows are not all one colour (user, 2026-11-21).
+ */
+export const MODULE_TONE: Record<string, ToneName> = {
+  home: "ochre",
+  attendance: "mint",
+  "attendance-calendar": "ochre",
+  timetable: "ochre",
+  academics: "teal",
+  "academics-courses": "teal",
+  "academics-grades": "mint",
+  "academics-schedule": "coral",
+  "academics-curriculum": "violet",
+  payments: "ochre",
+  libraries: "rose",
+  transport: "apricot",
+  events: "coral",
+  clubs: "violet",
+  "free-class": "teal",
+  "faculty-schedule": "sky",
+  "friend-finder": "sea",
+  hostel: "sky",
+  "hostel-overview": "sky",
+  "hostel-mess": "apricot",
+  "hostel-laundry": "sea",
+  "hostel-leave": "mint",
+  "hostel-counselling": "violet",
+  "tools-overview": "sea",
+  "tools-qbank": "rose",
+  "tools-faculty": "violet",
+  "tools-social": "sea",
+  "tools-cabshare": "apricot",
+  "tools-tasks": "sky",
+  "tools-marks-predictor": "ochre",
+  "tool-od-hours": "coral",
+  "attendance-circulars": "neutral",
+  "acad-circulars": "neutral",
+  ffcs: "violet",
+  "paper-scanner": "neutral",
+  "student-report": "sky",
+  tools: "sea",
+  tasks: "sky",
+  "attendance-predictor": "mint",
+  qbank: "rose",
+  "faculty-info": "violet",
+  "marks-predictor": "ochre",
+  social: "sea",
+  cabshare: "apricot",
+  "od-hours": "coral",
+  circulars: "neutral",
+  profile: "neutral",
+  settings: "neutral",
+  about: "neutral",
+};
+
+export function moduleTone(id: string, fallback: ToneName = "teal"): string {
+  return toneClass(MODULE_TONE[id] ?? fallback);
+}
+
 export const TONE_ICON_TILE: Record<string, string> = {
-  sky: "bg-secondary text-secondary-foreground border-border-ink",
-  blue: "bg-secondary text-secondary-foreground border-border-ink",
-  emerald: "bg-success-surface text-success-foreground border-border-ink dark:bg-mint dark:text-obsidian",
-  amber: "bg-highlight text-highlight-foreground border-border-ink",
-  violet: "bg-secondary text-secondary-foreground border-border-ink",
-  red: "bg-danger-surface text-danger-foreground border-border-ink dark:bg-coral dark:text-obsidian",
-  indigo: "bg-secondary text-secondary-foreground border-border-ink",
-  zinc: "bg-surface-secondary text-text-primary border-border-ink",
+  sky: "icon-tone icon-tone-sky",
+  blue: "icon-tone icon-tone-sea",
+  emerald: "icon-tone icon-tone-mint",
+  amber: "icon-tone icon-tone-ochre",
+  violet: "icon-tone icon-tone-violet",
+  red: "icon-tone icon-tone-coral",
+  indigo: "icon-tone icon-tone-teal",
+  zinc: "icon-tone icon-tone-neutral",
+  rose: "icon-tone icon-tone-rose",
+  apricot: "icon-tone icon-tone-apricot",
 };
 
 export const EMPTY_STATE = "p-8 rounded-[14px] border-2 border-dashed border-border-ink text-center";

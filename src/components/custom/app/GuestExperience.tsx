@@ -4,7 +4,8 @@ import BrandLogo from "../shared/BrandLogo";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { ArrowRight, Heart, Moon, Sun } from "lucide-react";
+import { ArrowRight, Heart, Moon, MoonStar, Sun } from "lucide-react";
+import { nextTheme } from "@/lib/shortcuts";
 import { CycleWord } from "../landing/LandingMotion";
 
 /**
@@ -31,12 +32,15 @@ interface GuestExperienceProps {
 }
 
 export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperienceProps) {
-  const { resolvedTheme, setTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
   // Theme is only known in the browser; until mount, render the dark variant
   // the server rendered so hydration matches.
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  const isDark = mounted && resolvedTheme ? resolvedTheme !== "light" : true;
+  // The header switch cycles light -> dark -> night, like the app.
+  const currentTheme = !mounted ? "dark" : theme === "night" ? "night" : resolvedTheme === "light" ? "light" : "dark";
+  const targetTheme = nextTheme(currentTheme);
+  const targetLabel = targetTheme === "night" ? "Night" : targetTheme === "dark" ? "Dark" : "Light";
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -87,13 +91,19 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
           </a>
           <button
             type="button"
-            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-            title={isDark ? "Light mode" : "Dark mode"}
-            onClick={() => setTheme(isDark ? "light" : "dark")}
+            aria-label={`Switch to ${targetLabel.toLowerCase()} mode`}
+            title={`${targetLabel} mode`}
+            onClick={() => setTheme(targetTheme)}
             className="inline-flex h-10 w-10 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-primary shadow-brutal-sm brutal-press"
           >
-            <span key={isDark ? "sun" : "moon"} className="landing-pop">
-              {isDark ? <Sun size={16} aria-hidden /> : <Moon size={16} aria-hidden />}
+            <span key={targetTheme} className="landing-pop">
+              {targetTheme === "night" ? (
+                <MoonStar size={16} aria-hidden />
+              ) : targetTheme === "dark" ? (
+                <Moon size={16} aria-hidden />
+              ) : (
+                <Sun size={16} aria-hidden />
+              )}
             </span>
           </button>
           <button

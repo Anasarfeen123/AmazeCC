@@ -42,7 +42,14 @@ import {
   UserX,
   X,
 } from "lucide-react";
-import { activeRegNumberAtom, activeTabAtom, credentialsAtom, demoModeAtom, isLoggedInAtom } from "@/store";
+import {
+  activeRegNumberAtom,
+  activeTabAtom,
+  credentialsAtom,
+  demoModeAtom,
+  isLoggedInAtom,
+  unifiedIdentityAtom,
+} from "@/store";
 import { getTypedStorageItem, setTypedStorageItem, removeTypedStorageItem } from "@/lib/storage";
 import {
   callClassmates,
@@ -716,7 +723,29 @@ export default function FriendFinderTab({
   // registration number are kept: their year is unknown, not different.
   const activeReg = useAtomValue(activeRegNumberAtom);
   const vtopUsername = useAtomValue(credentialsAtom)?.VtopUsername;
-  const myRegNo = (activeReg || vtopUsername || "").toUpperCase();
+  // The registration number comes from the synced identity first: the VTOP
+  // login lives in the encrypted vault, and activeRegNumberAtom is only set
+  // by some flows (with a real account both were empty, so the batch filter
+  // never switched on and 26B freshers showed up; seen 2026-11-20).
+  const identityReg = useAtomValue(unifiedIdentityAtom)?.regNumber;
+  // getActiveRegNumber() also reads the session, payments, profile and
+  // attendance caches, so it finds the number when the atoms are empty.
+  // First candidate that really is a VIT registration number (25BCE1234):
+  // with a real account the identity "regNumber" held a non-reg value, so
+  // taking the first non-empty one left the batch unknown.
+  const myRegNo = useMemo(
+    () =>
+      [identityReg, activeReg, vtopUsername, getActiveRegNumber()]
+        .map((v) =>
+          String(v ?? "")
+            .trim()
+            .toUpperCase(),
+        )
+        .find((v) => /^\d{2}[A-Z]{3}\d{4}$/.test(v)) ?? "",
+    // rawState: re-read once classmates load, after the caches are filled
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [identityReg, activeReg, vtopUsername, rawState],
+  );
   const myBatch = /^\d{2}[A-Z]/.test(myRegNo) ? myRegNo.slice(0, 2) : "";
   const [includeOtherBatches, setIncludeOtherBatches] = useState(false);
   const state = useMemo<ClassmatesState | null>(() => {

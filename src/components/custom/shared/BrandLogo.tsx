@@ -1,5 +1,9 @@
 "use client";
 
+import { useCallback, useRef, useState } from "react";
+import { useSetAtom } from "jotai";
+import { isGameOpenAtom } from "@/store/uiAtoms";
+
 /**
  * The AmazeCC logo, one component for every place it appears.
  *
@@ -37,6 +41,37 @@ const TAG: Record<Size, string> = {
   xl: "text-base",
 };
 
+/**
+ * Easter egg: tap the logo 7 times quickly and it wobbles and says something
+ * silly; do it again and the brick-breaker opens. Taps on the logo still do
+ * whatever the surrounding link does.
+ */
+const LOGO_LINES = ["ok you found it", "stop poking me", "go attend a class", "75% or bust", "that tickles"];
+function useLogoEgg() {
+  const setGameOpen = useSetAtom(isGameOpenAtom);
+  const [wobble, setWobble] = useState(false);
+  const [line, setLine] = useState("");
+  const taps = useRef<number[]>([]);
+  const found = useRef(0);
+  const tap = useCallback(() => {
+    const now = Date.now();
+    taps.current = [...taps.current.filter((t) => now - t < 3000), now];
+    if (taps.current.length < 7) return;
+    taps.current = [];
+    found.current += 1;
+    if (found.current >= 2) {
+      found.current = 0;
+      setGameOpen(true);
+      return;
+    }
+    setWobble(true);
+    setLine(LOGO_LINES[Math.floor(Math.random() * LOGO_LINES.length)]);
+    window.setTimeout(() => setWobble(false), 700);
+    window.setTimeout(() => setLine(""), 2200);
+  }, [setGameOpen]);
+  return { tap, wobble, line };
+}
+
 export function BrandLogo({
   variant = "lockup",
   size = "md",
@@ -54,14 +89,25 @@ export function BrandLogo({
   /** Colour for "Amaze" when the default heading ink is wrong (e.g. on teal). */
   wordClassName?: string;
 }) {
+  const egg = useLogoEgg();
   const mark = (
-    <img
-      src={markSrc ?? getAssetPath("/brand/icon-primary.svg")}
-      alt=""
-      aria-hidden="true"
-      decoding="async"
-      className={`brand-logo-mark ${MARK[size]} shrink-0 object-contain`}
-    />
+    <span className="relative inline-flex shrink-0" onClick={egg.tap}>
+      <img
+        src={markSrc ?? getAssetPath("/brand/icon-primary.svg")}
+        alt=""
+        aria-hidden="true"
+        decoding="async"
+        className={`brand-logo-mark ${MARK[size]} shrink-0 object-contain ${egg.wobble ? "logo-wobble" : ""}`}
+      />
+      {egg.line && (
+        <span
+          role="status"
+          className="pointer-events-none absolute left-full top-1/2 z-50 ml-2 -translate-y-1/2 whitespace-nowrap rounded-[8px] border-2 border-border-ink bg-ochre px-2 py-1 font-mono text-xs font-bold text-obsidian shadow-brutal-sm"
+        >
+          {egg.line}
+        </span>
+      )}
+    </span>
   );
   if (variant === "mark") {
     return (

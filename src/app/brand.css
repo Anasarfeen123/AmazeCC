@@ -751,3 +751,31 @@
 .dark .summary-row > :nth-child(2) {
   background-color: color-mix(in oklab, var(--secondary) 16%, var(--surface)) !important;
 }
+
+/* Logo easter egg (BrandLogo): a quick wobble after 7 taps. */
+@keyframes logo-wobble {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20% {
+    transform: rotate(-14deg) scale(1.08);
+  }
+  40% {
+    transform: rotate(12deg) scale(1.08);
+  }
+  60% {
+    transform: rotate(-8deg);
+  }
+  80% {
+    transform: rotate(5deg);
+  }
+}
+.logo-wobble {
+  animation: logo-wobble 0.7s ease-in-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .logo-wobble {
+    animation: none;
+  }
+}

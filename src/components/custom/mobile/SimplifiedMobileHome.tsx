@@ -228,6 +228,8 @@ function LabFatExamSlot({
 
 function TimeBasedGreeting() {
   const hour = useNowHour();
+  // Easter egg: up between 1 and 4 am.
+  if (hour >= 1 && hour < 5) return <>Shouldn&apos;t you be asleep</>;
   if (hour < 12) return <>Good morning</>;
   if (hour < 17) return <>Good afternoon</>;
   return <>Good evening</>;

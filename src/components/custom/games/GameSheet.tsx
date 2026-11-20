@@ -1,19 +1,26 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAtom } from "jotai";
-import { BrandSheet } from "@/components/custom/shared/primitives/BrandSheet";
+import { X } from "lucide-react";
 import { isGameOpenAtom } from "@/store/uiAtoms";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 import BrickBreak from "./BrickBreak";
 import { OPEN_GAME_EVENT } from "@/components/custom/shared/BrandLogo";
 
 /**
- * The offline brick-breaker in a bottom sheet. Opened from the offline banner ("Play while
- * you wait"), the command palette ("Break some bricks") and the Konami code.
- * Mounted once in Main; the game only runs while the sheet is open.
+ * The offline brick-breaker, in its own pop-up: a bottom sheet on phones and
+ * a centred window from tablet width up. (It used BrandSheet, which is
+ * phone-only (md:hidden), so on a laptop the game opened invisibly; user:
+ * "i cant play the game".)
+ *
+ * Opened from the offline banner, the command palette, the Konami code and
+ * the logo easter egg. The game only runs while this is open.
  */
 export default function GameSheet() {
   const [open, setOpen] = useAtom(isGameOpenAtom);
+  const panelRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(panelRef, open);
 
   // Easter egg: the Konami code (up up down down left right left right b a)
   // opens the game from anywhere. Ignored while typing in a field.
@@ -50,21 +57,43 @@ export default function GameSheet() {
       window.removeEventListener(OPEN_GAME_EVENT, onOpen);
     };
   }, [setOpen]);
+
+  if (!open) return null;
+  const close = () => setOpen(false);
+
   return (
-    <BrandSheet
-      open={open}
-      onClose={() => setOpen(false)}
-      title="Bunk Runner"
-      subtitle="Jump the books, grab the stars"
-    >
-      {open && (
-        <div className="space-y-3 p-1">
-          <BrickBreak onClose={() => setOpen(false)} />
-          <p className="text-xs text-text-muted">
-            Drag to steer, tap to launch. Arrow keys and Space work too. Esc closes.
-          </p>
+    <div className="fixed inset-0 z-[300] flex items-end justify-center md:items-center md:p-6" role="presentation">
+      <div
+        className="absolute inset-0 bg-[color-mix(in_oklab,var(--shadow-ink)_55%,transparent)]"
+        onClick={close}
+        aria-hidden
+      />
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Break some bricks"
+        className="relative w-full max-w-lg rounded-t-[20px] border-x-[3px] border-t-[3px] border-border-ink bg-background p-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] md:rounded-[20px] md:border-[3px] md:shadow-brutal-lg"
+      >
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <div>
+            <h2 className="font-display text-xl font-bold uppercase text-text-heading">Bored?</h2>
+            <p className="font-mono text-xs text-text-muted">Break some bricks</p>
+          </div>
+          <button
+            type="button"
+            onClick={close}
+            aria-label="Close game"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-heading shadow-brutal-sm cursor-pointer"
+          >
+            <X className="h-5 w-5" />
+          </button>
         </div>
-      )}
-    </BrandSheet>
+        <BrickBreak onClose={close} />
+        <p className="mt-2 text-xs text-text-muted">
+          Drag or move to steer, tap to launch. Arrow keys and Space work too. Esc closes.
+        </p>
+      </div>
+    </div>
   );
 }

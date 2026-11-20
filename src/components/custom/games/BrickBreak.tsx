@@ -185,6 +185,9 @@ export default function BrickBreak({ onClose }: { onClose?: () => void }) {
       fills: palette.current.fills,
     };
     setHud((h) => ({ ...h, best: readBest() }));
+    // Keys go to the game, not to the pop-up's close button (Space on a
+    // focused button would close it).
+    const focusTimer = window.setTimeout(() => canvas.focus({ preventScroll: true }), 80);
     buildLevel(1);
     resetBall();
 
@@ -344,7 +347,10 @@ export default function BrickBreak({ onClose }: { onClose?: () => void }) {
       raf = requestAnimationFrame(step);
     };
     raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.clearTimeout(focusTimer);
+    };
   }, [buildLevel]);
 
   const steerTo = (clientX: number) => {
@@ -366,6 +372,7 @@ export default function BrickBreak({ onClose }: { onClose?: () => void }) {
       </div>
       <canvas
         ref={canvasRef}
+        tabIndex={0}
         onPointerDown={(e) => {
           steerTo(e.clientX);
           launch();
@@ -373,7 +380,7 @@ export default function BrickBreak({ onClose }: { onClose?: () => void }) {
         onPointerMove={(e) => steerTo(e.clientX)}
         role="img"
         aria-label="Brick breaker. Move to steer the paddle, tap or press Space to launch."
-        className="block w-full touch-none select-none rounded-[12px] border-2 border-border-ink shadow-brutal-sm"
+        className="block w-full touch-none select-none rounded-[12px] outline-none focus-visible:ring-2 focus-visible:ring-ochre border-2 border-border-ink shadow-brutal-sm"
         style={{ aspectRatio: `${W} / ${H}` }}
       />
       <p className="min-h-4 text-center font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">

@@ -547,7 +547,7 @@ export default function AmazeOnboardingFlow({
           >
             <img
               loading="lazy"
-              src={getAssetPath("/brand/icon-primary.svg")}
+              src={getAssetPath("/brand/icon-app.svg")}
               alt="AmazeCC"
               decoding="async"
               className="w-7 h-7 rounded-xl object-contain border border-border-ink p-0.5 bg-surface shrink-0"

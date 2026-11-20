@@ -951,7 +951,7 @@ export default function StudentReportPage() {
           {snapshot && (
             <article>
               <header className="report-cover">
-                <img className="report-logo" src={getAssetPath("/brand/icon-primary.svg")} alt="AmazeCC" />
+                <img className="report-logo" src={getAssetPath("/brand/icon-app.svg")} alt="AmazeCC" />
                 <div className="report-cover-copy">
                   <p className="report-cover-eyebrow">AmazeCC · Academic portfolio</p>
                   <h1>Student Academic Report</h1>

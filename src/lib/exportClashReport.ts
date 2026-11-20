@@ -20,7 +20,8 @@
  */
 import type { jsPDF } from "jspdf";
 import type { AddedCourse } from "@/lib/ffcsTypes";
-import { COLOR_HEX_MAP, typeLabels } from "@/lib/ffcsConstants";
+import { typeLabels } from "@/lib/ffcsConstants";
+import { courseColorHex } from "@/lib/courseColors";
 import { getTimetableSchema } from "@/lib/campusSchema";
 import { DAYS_OF_WEEK, periodsForSlot, splitSlots, type CampusSchema } from "@/lib/slots";
 import { courseClashPairs, courseClashPairCount, formatMinutesOfDay, type CourseClash } from "./ffcsClashPairs";
@@ -65,6 +66,9 @@ const CLASH_COLUMN = 7; // index of CLASHES WITH within the row
  * into TITLE because a curriculum is read by course name first.
  */
 export const CURRICULUM_COLUMNS = [13, 22, 12, 18, 42, 22, 42] as const;
+const CURRICULUM_TABLE_W = CURRICULUM_COLUMNS.reduce((a, b) => a + b, 0);
+/** Tables are as wide as their columns (171mm), so rows line up with headers. */
+const CLASH_TABLE_W = CLASH_REPORT_COLUMNS.reduce((a, b) => a + b, 0);
 export const CURRICULUM_HEADERS = ["DAY", "TIME", "TYPE", "COURSE", "TITLE", "VENUE", "FACULTY"] as const;
 
 /** One class session of the week: a course meeting on a day at a clock window. */
@@ -175,21 +179,39 @@ type Palette = {
 
 /** A report is a printed document; the light palette is the only one it needs. */
 const THEME: Palette = {
-  band: "#e8eef7",
+  // AmazeCC brand on paper: ink text, teal accent, cream bands, warm rules.
+  band: "#f7f1e6",
   surface: "#ffffff",
-  panel: "#f8fafc",
-  border: "#cbd5e1",
-  text: "#0f172a",
-  muted: "#64748b",
-  accent: "#2563eb",
-  accent2: "#7c3aed",
-  soft: "#eff6ff",
-  clash: "#b91c1c",
+  panel: "#faf7f0",
+  border: "#d9d1c2",
+  text: "#001e1d",
+  muted: "#4a5f5c",
+  accent: "#004643",
+  accent2: "#7a4f00",
+  soft: "#f7f1e6",
+  clash: "#b3261e",
 };
 
 function rgb(hex: string): [number, number, number] {
   const value = hex.replace("#", "");
   return [parseInt(value.slice(0, 2), 16), parseInt(value.slice(2, 4), 16), parseInt(value.slice(4, 6), 16)];
+}
+
+/** A course colour made readable as text on paper: mixed towards ink. */
+function readableOn(hex: string, light = true): string {
+  const h = hex.replace("#", "");
+  const full =
+    h.length === 3
+      ? h
+          .split("")
+          .map((c) => c + c)
+          .join("")
+      : h.padEnd(6, "0");
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16));
+  const target = light ? [0, 30, 29] : [247, 241, 230];
+  const t = light ? 0.45 : 0.35;
+  const mix = [r, g, b].map((v, i) => Math.round(v + (target[i] - v) * t));
+  return "#" + mix.map((v) => v.toString(16).padStart(2, "0")).join("");
 }
 
 function color(pdf: jsPDF, method: "setTextColor" | "setDrawColor" | "setFillColor", hex: string) {
@@ -390,7 +412,7 @@ export async function renderClashReportPdf(params: ClashReportParams): Promise<A
       const rowHeight = Math.max(lineCount === 1 ? 9.5 : 0, chunkLines * 3.25 + 3);
       color(pdf, "setFillColor", index % 2 === 0 ? THEME.surface : THEME.panel);
       color(pdf, "setDrawColor", THEME.border);
-      pdf.rect(CONTENT_X, y, CONTENT_W, rowHeight, "FD");
+      pdf.rect(CONTENT_X, y, CLASH_TABLE_W, rowHeight, "FD");
       let cellX = CONTENT_X;
       wrapped.forEach((lines, i) => {
         const slice = lines.slice(lineOffset, lineOffset + chunkLines);
@@ -399,7 +421,7 @@ export async function renderClashReportPdf(params: ClashReportParams): Promise<A
             pdf,
             "setTextColor",
             i === 0
-              ? COLOR_HEX_MAP[item.color] || THEME.accent
+              ? readableOn(courseColorHex(item.color))
               : i === CLASH_COLUMN
                 ? clashCell === "-"
                   ? THEME.muted
@@ -429,6 +451,8 @@ export async function renderClashReportPdf(params: ClashReportParams): Promise<A
   // section a student copies from — one row per class block, day-major.
   const sessions = buildCurriculumSessions(courses, schema);
   if (sessions.length > 0) {
+    // A gap before the next section: its title used to sit on the last row.
+    y += 8;
     if (y + 40 > CONTENT_BOTTOM) newPage();
     y = drawSectionTitle(
       pdf,
@@ -488,7 +512,7 @@ export async function renderClashReportPdf(params: ClashReportParams): Promise<A
         const dayBand = session.dayOrder % 2 === 0;
         color(pdf, "setFillColor", dayBand ? THEME.surface : THEME.panel);
         color(pdf, "setDrawColor", THEME.border);
-        pdf.rect(CONTENT_X, y, CONTENT_W, rowHeight, "FD");
+        pdf.rect(CONTENT_X, y, CURRICULUM_TABLE_W, rowHeight, "FD");
         let cellX = CONTENT_X;
         wrapped.forEach((lines, i) => {
           const slice = lines.slice(lineOffset, lineOffset + chunkLines);
@@ -499,7 +523,7 @@ export async function renderClashReportPdf(params: ClashReportParams): Promise<A
               i === 0
                 ? THEME.accent
                 : i === 3
-                  ? COLOR_HEX_MAP[colorByCode.get(session.code) || ""] || THEME.accent
+                  ? readableOn(courseColorHex(colorByCode.get(session.code) || ""))
                   : THEME.text,
             );
             pdf.setFont("helvetica", i === 0 || i === 3 ? "bold" : "normal");

@@ -1,6 +1,7 @@
 import type { jsPDF } from "jspdf";
 import type { AddedCourse } from "@/lib/ffcsTypes";
-import { COLOR_HEX_MAP, typeLabels } from "@/lib/ffcsConstants";
+import { typeLabels } from "@/lib/ffcsConstants";
+import { courseColorHex } from "@/lib/courseColors";
 import { expandCourseHalves, sameSlotFacultyAlternatives } from "@/lib/ffcsGenerate";
 import { ensureLunchPeriod } from "@/lib/slots";
 import type { ModernPrintableReportParams } from "./exportTimetable";
@@ -39,31 +40,49 @@ type Palette = {
 };
 
 function palette(light: boolean): Palette {
+  // AmazeCC brand: ink/teal/cream on paper; the app's dark teal for the dark copy.
   return light
     ? {
-        band: "#e8eef7",
+        band: "#f7f1e6",
         surface: "#ffffff",
-        panel: "#f8fafc",
-        border: "#cbd5e1",
-        text: "#0f172a",
-        muted: "#64748b",
-        accent: "#2563eb",
-        accent2: "#7c3aed",
-        soft: "#eff6ff",
-        empty: "#f8fafc",
+        panel: "#faf7f0",
+        border: "#d9d1c2",
+        text: "#001e1d",
+        muted: "#4a5f5c",
+        accent: "#004643",
+        accent2: "#7a4f00",
+        soft: "#f7f1e6",
+        empty: "#faf7f0",
       }
     : {
-        band: "#090d16",
-        surface: "#0f172a",
-        panel: "#172033",
-        border: "#334155",
-        text: "#f8fafc",
-        muted: "#94a3b8",
-        accent: "#60a5fa",
-        accent2: "#a78bfa",
-        soft: "#172554",
-        empty: "#111827",
+        band: "#001e1d",
+        surface: "#003431",
+        panel: "#003c39",
+        border: "#3f8f84",
+        text: "#f7f1e6",
+        muted: "#8fb5aa",
+        accent: "#f9bc60",
+        accent2: "#abd1c6",
+        soft: "#00423e",
+        empty: "#003431",
       };
+}
+
+/** A course colour made readable as text on paper: mixed towards ink. */
+function readableOn(hex: string, light = true): string {
+  const h = hex.replace("#", "");
+  const full =
+    h.length === 3
+      ? h
+          .split("")
+          .map((c) => c + c)
+          .join("")
+      : h.padEnd(6, "0");
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16));
+  const target = light ? [0, 30, 29] : [247, 241, 230];
+  const t = light ? 0.45 : 0.35;
+  const mix = [r, g, b].map((v, i) => Math.round(v + (target[i] - v) * t));
+  return "#" + mix.map((v) => v.toString(16).padStart(2, "0")).join("");
 }
 
 function rgb(hex: string): [number, number, number] {
@@ -147,12 +166,12 @@ function makeGridHtml(params: ModernPrintableReportParams, theme: Palette): stri
     if (theoryPeriods[index]?.lunch)
       return dayIndex > 0
         ? ""
-        : `<td rowspan="${days.length}" style="border:1px solid #f59e0b;background:#f59e0b22;padding:3px;font-size:8px;color:#b45309;vertical-align:middle;text-align:center;font-weight:bold;writing-mode:vertical-rl">LUNCH&nbsp;&nbsp;1:20-2:00</td>`;
+        : `<td rowspan="${days.length}" style="border:1px solid #f9bc60;background:#f9bc6022;padding:3px;font-size:8px;color:#7a4f00;vertical-align:middle;text-align:center;font-weight:bold;writing-mode:vertical-rl">LUNCH&nbsp;&nbsp;1:20-2:00</td>`;
     const half = (slot?: string) => {
       if (!slot) return "";
       const course = params.courses.find((item) => item.slots.includes(slot));
       if (!course) return escapeHtml(slot);
-      const colorHex = COLOR_HEX_MAP[course.color] || "#2563eb";
+      const colorHex = readableOn(courseColorHex(course.color));
       return `<div style="border:1px solid ${colorHex}77;background:${colorHex}22;margin:1px;padding:2px;border-radius:3px;font-weight:bold">${escapeHtml(course.code)} / ${escapeHtml(slot)}<br><span style="font-weight:normal">${escapeHtml(course.venue || "TBA")}</span></div>`;
     };
     return `<td style="border:1px solid ${theme.border};background:${theme.empty};height:44px;padding:2px;font-size:8px;color:${theme.text};vertical-align:middle;text-align:center">${half(theory)}${half(lab)}</td>`;
@@ -160,7 +179,7 @@ function makeGridHtml(params: ModernPrintableReportParams, theme: Palette): stri
   const lunchIndex = theoryPeriods.findIndex((period) => period?.lunch);
   const header = Array.from({ length: periods }, (_, i) =>
     theoryPeriods[i]?.lunch
-      ? `<th style="background:#f59e0b22;border:1px solid #f59e0b55;padding:5px 2px;font-size:8px;color:#b45309">LUNCH<br>1:20-2:00</th>`
+      ? `<th style="background:#f9bc6022;border:1px solid #f9bc6055;padding:5px 2px;font-size:8px;color:#7a4f00">LUNCH<br>1:20-2:00</th>`
       : `<th style="background:${theme.panel};border:1px solid ${theme.border};padding:5px 2px;font-size:9px;color:${theme.accent}">P${lunchIndex >= 0 && i > lunchIndex ? i : i + 1}<br>${theoryPeriods[i]?.start || ""}</th>`,
   ).join("");
   const rows = days
@@ -220,8 +239,8 @@ function drawVectorGrid(pdf: jsPDF, params: ModernPrintableReportParams, theme: 
   pdf.text("DAY", CONTENT_X + dayW / 2, y + 6.1, { align: "center" });
   for (let col = 0; col < periodCount; col++) {
     const x = CONTENT_X + dayW + col * colW;
-    pdf.setFillColor(...rgb(theoryPeriods[col]?.lunch ? "#fef3c7" : theme.panel));
-    pdf.setDrawColor(...rgb(theoryPeriods[col]?.lunch ? "#f59e0b" : theme.border));
+    pdf.setFillColor(...rgb(theoryPeriods[col]?.lunch ? "#fff1d6" : theme.panel));
+    pdf.setDrawColor(...rgb(theoryPeriods[col]?.lunch ? "#f9bc60" : theme.border));
     pdf.rect(x, y, colW, headerH, "FD");
     const period = theoryPeriods[col] || labPeriods[col];
     if (theoryPeriods[col]?.lunch) {
@@ -286,7 +305,11 @@ function drawVectorGrid(pdf: jsPDF, params: ModernPrintableReportParams, theme: 
         halves.slice(0, 2).forEach((half, halfIndex) => {
           const halfHeight = rowH / halves.length;
           const centerY = rowY + halfIndex * halfHeight + halfHeight / 2;
-          color(pdf, "setTextColor", half.course ? COLOR_HEX_MAP[half.course.color] || theme.accent : theme.muted);
+          color(
+            pdf,
+            "setTextColor",
+            half.course ? readableOn(courseColorHex(half.course.color), theme.text !== "#f7f1e6") : theme.muted,
+          );
           pdf.setFont("helvetica", half.course ? "bold" : "normal");
           const codeSize = Math.min(5, Math.max(4.7, colW * 0.34));
           pdf.setFontSize(codeSize);
@@ -450,12 +473,22 @@ export async function renderPortraitDossierPdf(
       const rowHeight = Math.max(lineCount === 1 ? 9.5 : 0, chunkLines * 3.25 + 3);
       color(pdf, "setFillColor", index % 2 === 0 ? theme.surface : theme.panel);
       color(pdf, "setDrawColor", theme.border);
-      pdf.rect(CONTENT_X, y, CONTENT_W, rowHeight, "FD");
+      pdf.rect(
+        CONTENT_X,
+        y,
+        columns.reduce((a, b) => a + b, 0),
+        rowHeight,
+        "FD",
+      );
       let cellX = CONTENT_X;
       wrapped.forEach((lines, i) => {
         const slice = lines.slice(lineOffset, lineOffset + chunkLines);
         if (slice.length) {
-          color(pdf, "setTextColor", i === 0 ? COLOR_HEX_MAP[item.color] || theme.accent : theme.text);
+          color(
+            pdf,
+            "setTextColor",
+            i === 0 ? readableOn(courseColorHex(item.color), theme.text !== "#f7f1e6") : theme.text,
+          );
           pdf.setFont("helvetica", i === 0 ? "bold" : "normal");
           pdf.setFontSize(5.8);
           pdf.text(slice, cellX + 1.2, y + 3.8, { lineHeightFactor: 1.1 });

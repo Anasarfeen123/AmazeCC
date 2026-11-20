@@ -10,7 +10,7 @@ import {
 } from "./exportTimetableHtml";
 
 export { generateExamScheduleHtml, type ExamScheduleExportParams };
-import { COLOR_HEX_MAP } from "@/lib/ffcsConstants";
+import { courseColorHex } from "@/lib/courseColors";
 import {
   getFacultyReview,
   getVitfacProfileUrl,
@@ -121,32 +121,32 @@ export function generateModernTimetableHtml(params: ModernTimetableExportParams)
   const tableHtml = params.includeCourseList === false ? "" : renderCourseTableHtml(groupedCourses);
 
   return `
-    <div style="width: ${containerWidth}px; background: #090d16; color: #f8fafc; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 32px; box-sizing: border-box; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);">
+    <div style="width: ${containerWidth}px; background: #001e1d; color: #faf7f0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 32px; box-sizing: border-box; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);">
       <!-- Header -->
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 18px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
         <div>
           <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-            <span style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: #ffffff; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; letter-spacing: 1px; text-transform: uppercase;">
+            <span style="background: linear-gradient(135deg, #3f8f84, #f9bc60); color: #ffffff; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; letter-spacing: 1px; text-transform: uppercase;">
               AmazeCC FFCS
             </span>
-            <span style="font-size: 11px; font-weight: 700; color: #94a3b8;">
-              ${viewMode === "vertical" ? "📱 Mobile Vertical Heatmap" : "🖥️ Horizontal University Grid"}
+            <span style="font-size: 11px; font-weight: 700; color: #8fb5aa;">
+              ${viewMode === "vertical" ? "Vertical timetable" : "Weekly grid"}
             </span>
           </div>
           <h1 style="margin: 0; font-size: 26px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px;">
             ${escapeHtml(timetableName)}
           </h1>
-          <p style="margin: 4px 0 0; font-size: 12px; color: #64748b;">
+          <p style="margin: 4px 0 0; font-size: 12px; color: #4a5f5c;">
             Exported on ${escapeHtml(dateStr)} • Built for VITians
           </p>
         </div>
         <div style="display: flex; gap: 8px; align-items: center;">
-          <div style="background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 10px; padding: 8px 14px; text-align: right;">
-            <div style="font-size: 10px; font-weight: 700; color: #93c5fd; text-transform: uppercase;">Total Credits</div>
+          <div style="background: rgba(63, 143, 132, 0.12); border: 1px solid rgba(63, 143, 132, 0.3); border-radius: 10px; padding: 8px 14px; text-align: right;">
+            <div style="font-size: 10px; font-weight: 700; color: #abd1c6; text-transform: uppercase;">Total Credits</div>
             <div style="font-size: 18px; font-weight: 900; color: #ffffff;">${calculatedCredits}</div>
           </div>
-          <div style="background: rgba(139, 92, 246, 0.12); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 10px; padding: 8px 14px; text-align: right;">
-            <div style="font-size: 10px; font-weight: 700; color: #c4b5fd; text-transform: uppercase;">Courses</div>
+          <div style="background: rgba(249, 188, 96, 0.12); border: 1px solid rgba(249, 188, 96, 0.3); border-radius: 10px; padding: 8px 14px; text-align: right;">
+            <div style="font-size: 10px; font-weight: 700; color: #f9bc60; text-transform: uppercase;">Courses</div>
             <div style="font-size: 18px; font-weight: 900; color: #ffffff;">${groupedCourses.length}</div>
           </div>
         </div>
@@ -159,7 +159,7 @@ export function generateModernTimetableHtml(params: ModernTimetableExportParams)
       ${tableHtml}
 
       <!-- Footer Note -->
-      <div style="margin-top: 20px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: #64748b;">
+      <div style="margin-top: 20px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: #4a5f5c;">
         <span>Generated with AmazeCC FFCS Planner • All times reflect official VIT Chennai schema</span>
         ${isVitfacIntegrationEnabled() ? `<span>Faculty sentiment data powered by Vitfac</span>` : ""}
       </div>
@@ -174,7 +174,7 @@ export async function downloadModernTimetableImage(params: ModernTimetableExport
   const cleanName = params.timetableName.replace(/[^a-zA-Z0-9_-]/g, "_");
   await downloadHtmlImage(generateModernTimetableHtml(params), `${cleanName}_${params.viewMode.toUpperCase()}_FFCS`, {
     format: params.format || "jpg",
-    backgroundColor: params.themeBgColor || "#090d16",
+    backgroundColor: params.themeBgColor || "#001e1d",
   });
 }
 
@@ -193,25 +193,25 @@ export async function downloadModernCourseListImage(params: ModernCourseListImag
         <article style="display:grid;grid-template-columns:1.2fr 2fr 1fr;gap:16px;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.1);align-items:start">
           <div>
             <strong style="display:block;color:#fff;font-size:18px">${escapeHtml(course.code)}</strong>
-            <span style="display:inline-block;margin-top:6px;color:#c4b5fd;font-size:12px">${escapeHtml(course.type || "Course")}</span>
+            <span style="display:inline-block;margin-top:6px;color:#f9bc60;font-size:12px">${escapeHtml(course.type || "Course")}</span>
           </div>
           <div>
-            <strong style="display:block;color:#e2e8f0;font-size:15px">${escapeHtml(course.title || "Untitled course")}</strong>
-            <span style="display:block;margin-top:6px;color:#94a3b8;font-size:13px">${escapeHtml(course.faculty || "Faculty unstated")}</span>
+            <strong style="display:block;color:#e6dfd1;font-size:15px">${escapeHtml(course.title || "Untitled course")}</strong>
+            <span style="display:block;margin-top:6px;color:#8fb5aa;font-size:13px">${escapeHtml(course.faculty || "Faculty unstated")}</span>
           </div>
           <div style="text-align:right">
-            <strong style="color:#93c5fd;font-size:14px">${escapeHtml(course.slots.join(" + "))}</strong>
-            <span style="display:block;margin-top:6px;color:#94a3b8;font-size:12px">${escapeHtml(course.venue || "Venue unstated")}</span>
+            <strong style="color:#abd1c6;font-size:14px">${escapeHtml(course.slots.join(" + "))}</strong>
+            <span style="display:block;margin-top:6px;color:#8fb5aa;font-size:12px">${escapeHtml(course.venue || "Venue unstated")}</span>
           </div>
         </article>`,
     )
     .join("");
   const html = `
-    <div style="width:1000px;padding:36px;background:#090d16;color:#f8fafc;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;box-sizing:border-box;border-radius:20px">
+    <div style="width:1000px;padding:36px;background:#001e1d;color:#faf7f0;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;box-sizing:border-box;border-radius:20px">
       <header style="padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.14)">
-        <span style="color:#93c5fd;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase">AmazeCC FFCS · Selected courses</span>
+        <span style="color:#abd1c6;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase">AmazeCC FFCS · Selected courses</span>
         <h1 style="margin:10px 0 0;color:#fff;font-size:28px">${escapeHtml(params.timetableName)}</h1>
-        <p style="margin:6px 0 0;color:#94a3b8;font-size:14px">${params.courses.length} course${params.courses.length === 1 ? "" : "s"}</p>
+        <p style="margin:6px 0 0;color:#8fb5aa;font-size:14px">${params.courses.length} course${params.courses.length === 1 ? "" : "s"}</p>
       </header>
       <section style="margin-top:8px">${rows}</section>
     </div>`;
@@ -219,7 +219,7 @@ export async function downloadModernCourseListImage(params: ModernCourseListImag
   const cleanName = params.timetableName.replace(/[^a-zA-Z0-9_-]/g, "_");
   await downloadHtmlImage(html, `${cleanName}_COURSES`, {
     format: params.format || "jpg",
-    backgroundColor: params.themeBgColor || "#090d16",
+    backgroundColor: params.themeBgColor || "#001e1d",
   });
 }
 
@@ -338,26 +338,26 @@ function renderDetailedFacultyReviewsDossierHtml(
   const faculties = Array.from(facMap.values());
   if (faculties.length === 0) return "";
 
-  const cardBg = isLight ? "#ffffff" : "rgba(15, 23, 42, 0.88)";
-  const cardBorder = isLight ? "#cbd5e1" : "rgba(255,255,255,0.1)";
-  const headerBorder = isLight ? "#e2e8f0" : "rgba(255,255,255,0.08)";
-  const headingTitleColor = isLight ? "#0f172a" : "#ffffff";
-  const headingSubColor = isLight ? "#64748b" : "#94a3b8";
-  const instructorBadgeBg = isLight ? "rgba(59,130,246,0.1)" : "rgba(59,130,246,0.15)";
-  const instructorBadgeBorder = isLight ? "rgba(59,130,246,0.3)" : "rgba(59,130,246,0.3)";
-  const instructorBadgeColor = isLight ? "#1d4ed8" : "#93c5fd";
-  const subcardBg = isLight ? "#f8fafc" : "rgba(30, 41, 59, 0.5)";
-  const subcardBorder = isLight ? "#e2e8f0" : "rgba(255, 255, 255, 0.08)";
-  const facNameColor = isLight ? "#0f172a" : "#f8fafc";
-  const facMetaColor = isLight ? "#475569" : "#94a3b8";
-  const unreviewedBg = isLight ? "#f1f5f9" : "rgba(255,255,255,0.05)";
-  const unreviewedBorder = isLight ? "#cbd5e1" : "rgba(255,255,255,0.1)";
-  const unreviewedColor = isLight ? "#64748b" : "#94a3b8";
-  const metricSubcardBg = isLight ? "#ffffff" : "rgba(30, 41, 59, 0.5)";
-  const metricSubcardBorder = isLight ? "#e2e8f0" : "rgba(255, 255, 255, 0.08)";
-  const metricLabelColor = isLight ? "#64748b" : "#94a3b8";
-  const linkDivider = isLight ? "#e2e8f0" : "rgba(255,255,255,0.06)";
-  const linkColor = isLight ? "#0284c7" : "#38bdf8";
+  const cardBg = isLight ? "#ffffff" : "rgba(0, 30, 29, 0.88)";
+  const cardBorder = isLight ? "#d9d1c2" : "rgba(255,255,255,0.1)";
+  const headerBorder = isLight ? "#e6dfd1" : "rgba(255,255,255,0.08)";
+  const headingTitleColor = isLight ? "#001e1d" : "#ffffff";
+  const headingSubColor = isLight ? "#4a5f5c" : "#8fb5aa";
+  const instructorBadgeBg = isLight ? "rgba(63,143,132,0.1)" : "rgba(63,143,132,0.15)";
+  const instructorBadgeBorder = isLight ? "rgba(63,143,132,0.3)" : "rgba(63,143,132,0.3)";
+  const instructorBadgeColor = isLight ? "#00332f" : "#abd1c6";
+  const subcardBg = isLight ? "#faf7f0" : "rgba(0, 52, 49, 0.5)";
+  const subcardBorder = isLight ? "#e6dfd1" : "rgba(255, 255, 255, 0.08)";
+  const facNameColor = isLight ? "#001e1d" : "#faf7f0";
+  const facMetaColor = isLight ? "#3d5551" : "#8fb5aa";
+  const unreviewedBg = isLight ? "#f3eee4" : "rgba(255,255,255,0.05)";
+  const unreviewedBorder = isLight ? "#d9d1c2" : "rgba(255,255,255,0.1)";
+  const unreviewedColor = isLight ? "#4a5f5c" : "#8fb5aa";
+  const metricSubcardBg = isLight ? "#ffffff" : "rgba(0, 52, 49, 0.5)";
+  const metricSubcardBorder = isLight ? "#e6dfd1" : "rgba(255, 255, 255, 0.08)";
+  const metricLabelColor = isLight ? "#4a5f5c" : "#8fb5aa";
+  const linkDivider = isLight ? "#e6dfd1" : "rgba(255,255,255,0.06)";
+  const linkColor = isLight ? "#00636a" : "#7fc4c9";
 
   const cardsHtml = faculties
     .map((f) => {
@@ -403,22 +403,22 @@ function renderDetailedFacultyReviewsDossierHtml(
         `;
 
         if (rev.metrics) {
-          const lecColor = isLight ? "#0284c7" : "#38bdf8";
-          const daColor = isLight ? "#7c3aed" : "#a78bfa";
+          const lecColor = isLight ? "#00636a" : "#7fc4c9";
+          const daColor = isLight ? "#7a4f00" : "#f9bc60";
           const vibeColor = isLight ? "#059669" : "#34d399";
           metricsHtml = `
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 10px 0;">
               <div style="background: ${metricSubcardBg}; border: 1px solid ${metricSubcardBorder}; border-radius: 6px; padding: 6px 8px; text-align: center;">
-                <div style="font-size: 9px; color: ${metricLabelColor}; font-weight: 700; text-transform: uppercase;">🎓 Teaching</div>
-                <div style="font-size: 13px; font-weight: 900; color: ${lecColor};">${rev.metrics.lecture.toFixed(1)}<span style="font-size: 9px; color: #64748b;">/5</span></div>
+                <div style="font-size: 9px; color: ${metricLabelColor}; font-weight: 700; text-transform: uppercase;">Teaching</div>
+                <div style="font-size: 13px; font-weight: 900; color: ${lecColor};">${rev.metrics.lecture.toFixed(1)}<span style="font-size: 9px; color: #4a5f5c;">/5</span></div>
               </div>
               <div style="background: ${metricSubcardBg}; border: 1px solid ${metricSubcardBorder}; border-radius: 6px; padding: 6px 8px; text-align: center;">
                 <div style="font-size: 9px; color: ${metricLabelColor}; font-weight: 700; text-transform: uppercase;">📝 DA Score</div>
-                <div style="font-size: 13px; font-weight: 900; color: ${daColor};">${rev.metrics.da.toFixed(1)}<span style="font-size: 9px; color: #64748b;">/5</span></div>
+                <div style="font-size: 13px; font-weight: 900; color: ${daColor};">${rev.metrics.da.toFixed(1)}<span style="font-size: 9px; color: #4a5f5c;">/5</span></div>
               </div>
               <div style="background: ${metricSubcardBg}; border: 1px solid ${metricSubcardBorder}; border-radius: 6px; padding: 6px 8px; text-align: center;">
-                <div style="font-size: 9px; color: ${metricLabelColor}; font-weight: 700; text-transform: uppercase;">✨ Vibe / Leniency</div>
-                <div style="font-size: 13px; font-weight: 900; color: ${vibeColor};">${rev.metrics.vibe.toFixed(1)}<span style="font-size: 9px; color: #64748b;">/5</span></div>
+                <div style="font-size: 9px; color: ${metricLabelColor}; font-weight: 700; text-transform: uppercase;">Vibe / Leniency</div>
+                <div style="font-size: 13px; font-weight: 900; color: ${vibeColor};">${rev.metrics.vibe.toFixed(1)}<span style="font-size: 9px; color: #4a5f5c;">/5</span></div>
               </div>
             </div>
           `;
@@ -474,7 +474,7 @@ function renderDetailedFacultyReviewsDossierHtml(
           <div>
             <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px;">
               <div style="display: flex; align-items: center; gap: 10px;">
-                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: #ffffff; font-weight: 900; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 8px rgba(59,130,246,0.3); overflow: hidden;">
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #3f8f84, #f9bc60); color: #ffffff; font-weight: 900; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 8px rgba(63,143,132,0.3); overflow: hidden;">
                   ${facultyImage ? `<img src="${facultyImage}" alt="${escapeHtml(f.name)}" width="36" height="36" style="width:36px;height:36px;object-fit:cover;border-radius:50%;" />` : escapeHtml(initials || "FAC")}
                 </div>
                 <div>
@@ -513,7 +513,7 @@ function renderDetailedFacultyReviewsDossierHtml(
     <div style="background: ${cardBg}; border: 1px solid ${cardBorder}; border-radius: 16px; margin-top: 24px; padding: 22px 24px; page-break-inside: avoid; break-inside: avoid;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid ${headerBorder};">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 15px; font-weight: 900; color: ${headingTitleColor};">⭐ FACULTY INTELLIGENCE &amp; SENTIMENT REPORT</span>
+          <span style="font-size: 15px; font-weight: 900; color: ${headingTitleColor};">FACULTY REVIEWS</span>
           <span style="font-size: 11px; color: ${headingSubColor};">(Vitfac Student Ratings &amp; Metrics)</span>
         </div>
         <div style="font-size: 11px; font-weight: 700; color: ${instructorBadgeColor}; background: ${instructorBadgeBg}; border: 1px solid ${instructorBadgeBorder}; padding: 3px 8px; border-radius: 6px;">
@@ -536,24 +536,24 @@ function renderDropInReplacementsDossierHtml(
   isLight = false,
   facultyImages?: FacultyImageMap,
 ): string {
-  const cardBg = isLight ? "#ffffff" : "rgba(15, 23, 42, 0.88)";
-  const cardBorder = isLight ? "#cbd5e1" : "rgba(255, 255, 255, 0.1)";
-  const headerBorder = isLight ? "#e2e8f0" : "rgba(255, 255, 255, 0.08)";
-  const titleColor = isLight ? "#0f172a" : "#ffffff";
-  const subColor = isLight ? "#64748b" : "#94a3b8";
-  const subcardBg = isLight ? "#f8fafc" : "rgba(30, 41, 59, 0.5)";
-  const subcardBorder = isLight ? "#e2e8f0" : "rgba(255, 255, 255, 0.08)";
-  const courseTitleColor = isLight ? "#0f172a" : "#f8fafc";
-  const typeColor = isLight ? "#64748b" : "#94a3b8";
-  const slotBadgeBg = isLight ? "rgba(59, 130, 246, 0.1)" : "rgba(59, 130, 246, 0.15)";
-  const slotBadgeBorder = isLight ? "rgba(59, 130, 246, 0.3)" : "rgba(59, 130, 246, 0.3)";
-  const slotBadgeColor = isLight ? "#1d4ed8" : "#93c5fd";
-  const currentFacColor = isLight ? "#0f172a" : "#f1f5f9";
+  const cardBg = isLight ? "#ffffff" : "rgba(0, 30, 29, 0.88)";
+  const cardBorder = isLight ? "#d9d1c2" : "rgba(255, 255, 255, 0.1)";
+  const headerBorder = isLight ? "#e6dfd1" : "rgba(255, 255, 255, 0.08)";
+  const titleColor = isLight ? "#001e1d" : "#ffffff";
+  const subColor = isLight ? "#4a5f5c" : "#8fb5aa";
+  const subcardBg = isLight ? "#faf7f0" : "rgba(0, 52, 49, 0.5)";
+  const subcardBorder = isLight ? "#e6dfd1" : "rgba(255, 255, 255, 0.08)";
+  const courseTitleColor = isLight ? "#001e1d" : "#faf7f0";
+  const typeColor = isLight ? "#4a5f5c" : "#8fb5aa";
+  const slotBadgeBg = isLight ? "rgba(63, 143, 132, 0.1)" : "rgba(63, 143, 132, 0.15)";
+  const slotBadgeBorder = isLight ? "rgba(63, 143, 132, 0.3)" : "rgba(63, 143, 132, 0.3)";
+  const slotBadgeColor = isLight ? "#00332f" : "#abd1c6";
+  const currentFacColor = isLight ? "#001e1d" : "#f3eee4";
   const altRowBg = isLight ? "#ffffff" : "rgba(255,255,255,0.03)";
-  const altRowBorder = isLight ? "#e2e8f0" : "rgba(255,255,255,0.06)";
-  const altFacColor = isLight ? "#0f172a" : "#f8fafc";
-  const altEmpColor = isLight ? "#64748b" : "#94a3b8";
-  const altVenueColor = isLight ? "#0284c7" : "#38bdf8";
+  const altRowBorder = isLight ? "#e6dfd1" : "rgba(255,255,255,0.06)";
+  const altFacColor = isLight ? "#001e1d" : "#faf7f0";
+  const altEmpColor = isLight ? "#4a5f5c" : "#8fb5aa";
+  const altVenueColor = isLight ? "#00636a" : "#7fc4c9";
 
   if (!masterCourses || masterCourses.length === 0) {
     return `
@@ -581,12 +581,12 @@ function renderDropInReplacementsDossierHtml(
 
       const slotStr = half.slots.join("+");
       const currentFac = half.faculty ? half.faculty.split("/")[0]?.trim() : "TBA";
-      const colorHex = COLOR_HEX_MAP[half.color] || "#2563eb";
+      const colorHex = courseColorHex(half.color);
 
       let altsHtml = "";
       if (alts.length === 0) {
         altsHtml = `
-          <div style="font-size: 11.5px; color: #64748b; font-style: italic; padding: 6px 4px;">
+          <div style="font-size: 11.5px; color: #4a5f5c; font-style: italic; padding: 6px 4px;">
             Unique slot allocation · No identical-slot alternative faculties found in catalog
           </div>
         `;
@@ -625,7 +625,7 @@ function renderDropInReplacementsDossierHtml(
             return `
               <div style="display: flex; align-items: center; justify-content: space-between; background: ${altRowBg}; border: 1px solid ${altRowBorder}; border-radius: 8px; padding: 8px 12px; margin-top: 5px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <span style="width:24px;height:24px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#3b82f6,#8b5cf6);color:#fff;font-size:9px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <span style="width:24px;height:24px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#3f8f84,#f9bc60);color:#fff;font-size:9px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
                     ${facultyImage ? `<img src="${facultyImage}" alt="${escapeHtml(alt.FACULTY)}" width="24" height="24" style="width:24px;height:24px;object-fit:cover;border-radius:50%;" />` : escapeHtml(initials || "FAC")}
                   </span>
                   <span style="font-weight: 800; font-size: 12.5px; color: ${altFacColor};">${escapeHtml(
@@ -782,18 +782,18 @@ export function generateModernDossierInnerHtml(
     day: "numeric",
   });
 
-  const cardBg = isLight ? "#ffffff" : "rgba(15, 23, 42, 0.88)";
-  const cardBorder = isLight ? "#cbd5e1" : "rgba(255, 255, 255, 0.1)";
-  const titleColor = isLight ? "#0f172a" : "#ffffff";
-  const subColor = isLight ? "#64748b" : "#94a3b8";
-  const creditsBg = isLight ? "rgba(59, 130, 246, 0.08)" : "rgba(59, 130, 246, 0.12)";
-  const creditsBorder = isLight ? "rgba(59, 130, 246, 0.25)" : "rgba(59, 130, 246, 0.3)";
-  const creditsLabel = isLight ? "#1d4ed8" : "#93c5fd";
-  const coursesBg = isLight ? "rgba(139, 92, 246, 0.08)" : "rgba(139, 92, 246, 0.12)";
-  const coursesBorder = isLight ? "rgba(139, 92, 246, 0.25)" : "rgba(139, 92, 246, 0.3)";
-  const coursesLabel = isLight ? "#6d28d9" : "#c4b5fd";
-  const footerBorder = isLight ? "#e2e8f0" : "rgba(255, 255, 255, 0.08)";
-  const footerColor = isLight ? "#64748b" : "#64748b";
+  const cardBg = isLight ? "#ffffff" : "rgba(0, 30, 29, 0.88)";
+  const cardBorder = isLight ? "#d9d1c2" : "rgba(255, 255, 255, 0.1)";
+  const titleColor = isLight ? "#001e1d" : "#ffffff";
+  const subColor = isLight ? "#4a5f5c" : "#8fb5aa";
+  const creditsBg = isLight ? "rgba(63, 143, 132, 0.08)" : "rgba(63, 143, 132, 0.12)";
+  const creditsBorder = isLight ? "rgba(63, 143, 132, 0.25)" : "rgba(63, 143, 132, 0.3)";
+  const creditsLabel = isLight ? "#00332f" : "#abd1c6";
+  const coursesBg = isLight ? "rgba(249, 188, 96, 0.08)" : "rgba(249, 188, 96, 0.12)";
+  const coursesBorder = isLight ? "rgba(249, 188, 96, 0.25)" : "rgba(249, 188, 96, 0.3)";
+  const coursesLabel = isLight ? "#6d28d9" : "#f9bc60";
+  const footerBorder = isLight ? "#e6dfd1" : "rgba(255, 255, 255, 0.08)";
+  const footerColor = isLight ? "#4a5f5c" : "#4a5f5c";
 
   const gridHtml =
     viewMode === "vertical"
@@ -805,16 +805,16 @@ export function generateModernDossierInnerHtml(
   const dropInsHtml = renderDropInReplacementsDossierHtml(courses, masterCourses, isLight, facultyImages);
 
   return `
-    <div style="width: 100%; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: ${isLight ? "#0f172a" : "#f8fafc"};">
+    <div style="width: 100%; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: ${isLight ? "#001e1d" : "#faf7f0"};">
       <!-- Executive Header Banner -->
       <div style="background: ${cardBg}; border: 1px solid ${cardBorder}; border-radius: 16px; padding: 24px 28px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
         <div>
           <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-            <span style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: #ffffff; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; letter-spacing: 1px; text-transform: uppercase;">
+            <span style="background: linear-gradient(135deg, #3f8f84, #f9bc60); color: #ffffff; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; letter-spacing: 1px; text-transform: uppercase;">
               Official Registration Dossier
             </span>
             <span style="font-size: 11px; font-weight: 700; color: ${subColor};">
-              ${viewMode === "vertical" ? "📱 Mobile Vertical Heatmap" : "🖥️ Horizontal University Grid"}
+              ${viewMode === "vertical" ? "Vertical timetable" : "Weekly grid"}
             </span>
           </div>
           <h1 style="margin: 0; font-size: 28px; font-weight: 900; color: ${titleColor}; letter-spacing: -0.5px;">
@@ -876,9 +876,9 @@ export function generateModernPrintableHtml(params: ModernPrintableReportParams)
   const containerWidth = viewMode === "vertical" ? 1280 : 1540;
   const innerHtml = generateModernDossierInnerHtml(params, isLight);
   const portraitPrint = pageOrientation === "portrait";
-  const pageBand = isLight ? "#e8eef7" : "#090d16";
-  const pageSurface = isLight ? "#ffffff" : "#0c1222";
-  const pageBorder = isLight ? "#cbd5e1" : "rgba(255,255,255,0.12)";
+  const pageBand = isLight ? "#f7f1e6" : "#001e1d";
+  const pageSurface = isLight ? "#ffffff" : "#002624";
+  const pageBorder = isLight ? "#d9d1c2" : "rgba(255,255,255,0.12)";
 
   return `
     <!DOCTYPE html>
@@ -891,8 +891,8 @@ export function generateModernPrintableHtml(params: ModernPrintableReportParams)
         body {
           margin: 0;
           padding: 72px 24px 48px;
-          background: ${isLight ? "#f8fafc" : "#090d16"};
-          color: ${isLight ? "#0f172a" : "#f8fafc"};
+          background: ${isLight ? "#faf7f0" : "#001e1d"};
+          color: ${isLight ? "#001e1d" : "#faf7f0"};
           font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
           min-height: 100vh;
           display: flex;
@@ -908,7 +908,7 @@ export function generateModernPrintableHtml(params: ModernPrintableReportParams)
           background: ${pageBand};
         }
 
-        body.portrait-print.light-theme { background: #e8eef7 !important; }
+        body.portrait-print.light-theme { background: #f7f1e6 !important; }
 
         body.portrait-print .report-container {
           max-width: 100%;
@@ -917,7 +917,7 @@ export function generateModernPrintableHtml(params: ModernPrintableReportParams)
           background: ${pageSurface};
           border: 1px solid ${pageBorder};
           border-radius: 3mm;
-          box-shadow: 0 1.5mm 5mm rgba(15, 23, 42, 0.12);
+          box-shadow: 0 1.5mm 5mm rgba(0, 30, 29, 0.12);
           -webkit-box-decoration-break: clone;
           box-decoration-break: clone;
         }
@@ -929,8 +929,8 @@ export function generateModernPrintableHtml(params: ModernPrintableReportParams)
 
         /* Light Theme (Ink-Saver for Paper Print & Screen) */
         body.light-theme {
-          background: #f8fafc !important;
-          color: #0f172a !important;
+          background: #faf7f0 !important;
+          color: #001e1d !important;
         }
 
         /* Floating Toolbar */
@@ -939,7 +939,7 @@ export function generateModernPrintableHtml(params: ModernPrintableReportParams)
           top: 0;
           left: 0;
           right: 0;
-          background: rgba(15, 23, 42, 0.92);
+          background: rgba(0, 30, 29, 0.92);
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
           border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -960,7 +960,7 @@ export function generateModernPrintableHtml(params: ModernPrintableReportParams)
           body {
             padding: 0 !important;
             background: #ffffff !important;
-            color: #0f172a !important;
+            color: #001e1d !important;
             /* Paper takes one ink: the colored dossier prints monochrome. */
             filter: grayscale(1);
           }
@@ -977,10 +977,10 @@ export function generateModernPrintableHtml(params: ModernPrintableReportParams)
             display: block !important;
             min-height: auto !important;
             background: ${pageBand} !important;
-            color: ${isLight ? "#0f172a" : "#f8fafc"} !important;
+            color: ${isLight ? "#001e1d" : "#faf7f0"} !important;
           }
 
-          body.portrait-print.light-theme { background: #e8eef7 !important; }
+          body.portrait-print.light-theme { background: #f7f1e6 !important; }
 
           body.portrait-print .report-container {
             max-width: none !important;
@@ -1144,25 +1144,25 @@ export function generateModernPrintableHtml(params: ModernPrintableReportParams)
     <body class="${[isLight ? "light-theme" : "", portraitPrint ? "portrait-print" : ""].filter(Boolean).join(" ")}">
       <div class="print-toolbar">
         <div style="display: flex; align-items: center; gap: 12px;">
-          <span style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: #ffffff; font-size: 10px; font-weight: 900; padding: 4px 9px; border-radius: 6px; letter-spacing: 1px; text-transform: uppercase;">
+          <span style="background: linear-gradient(135deg, #3f8f84, #f9bc60); color: #ffffff; font-size: 10px; font-weight: 900; padding: 4px 9px; border-radius: 6px; letter-spacing: 1px; text-transform: uppercase;">
             AmazeCC FFCS
           </span>
           <span style="font-weight: 800; font-size: 15px; color: #ffffff;">
             ${escapeHtml(timetableName)}
           </span>
-          <span style="font-size: 12px; color: #94a3b8;">
+          <span style="font-size: 12px; color: #8fb5aa;">
             • Detailed Dossier &amp; Registration Guide
           </span>
         </div>
         <div style="display: flex; align-items: center; gap: 10px;">
           <button onclick="toggleTheme()" id="theme-toggle-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #ffffff; padding: 8px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;">
-            ${isLight ? "🌙 Dark Mode" : "☀️ Ink-Saver Light"}
+            ${isLight ? "Dark mode" : "Light (saves ink)"}
           </button>
-          <button onclick="window.print()" style="background: linear-gradient(135deg, #3b82f6, #6366f1); border: none; color: #ffffff; padding: 8px 18px; border-radius: 9px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(59,130,246,0.35);">
+          <button onclick="window.print()" style="background: linear-gradient(135deg, #3f8f84, #004643); border: none; color: #ffffff; padding: 8px 18px; border-radius: 9px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(63,143,132,0.35);">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
             Print / Save PDF
           </button>
-          <button onclick="window.close()" style="background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #94a3b8; padding: 8px 12px; border-radius: 9px; font-size: 12px; cursor: pointer;">
+          <button onclick="window.close()" style="background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #8fb5aa; padding: 8px 12px; border-radius: 9px; font-size: 12px; cursor: pointer;">
             ✕
           </button>
         </div>
@@ -1179,7 +1179,7 @@ export function generateModernPrintableHtml(params: ModernPrintableReportParams)
           var isLight = b.classList.contains('light-theme');
           var btn = document.getElementById('theme-toggle-btn');
           if (btn) {
-            btn.innerHTML = isLight ? '🌙 Dark Mode' : '☀️ Ink-Saver Light';
+            btn.innerHTML = isLight ? 'Dark mode' : 'Light (saves ink)';
           }
         }
         ${autoPrint ? "window.addEventListener('load', function() { setTimeout(function() { window.print(); }, 400); });" : ""}
@@ -1202,9 +1202,9 @@ export function generateModernDossierHtml(
   const isLight =
     params.theme === "light" ||
     (!params.theme && (!params.themeHtmlClass?.includes("dark") || Boolean(params.themeHtmlClass?.includes("light"))));
-  const pageBand = isLight ? "#e8eef7" : "#090d16";
-  const surface = isLight ? "#ffffff" : "#0c1222";
-  const border = isLight ? "#cbd5e1" : "rgba(255,255,255,0.12)";
+  const pageBand = isLight ? "#f7f1e6" : "#001e1d";
+  const surface = isLight ? "#ffffff" : "#002624";
+  const border = isLight ? "#d9d1c2" : "rgba(255,255,255,0.12)";
   const content = generateModernDossierInnerHtml({ ...params, viewMode: "horizontal" }, isLight, facultyImages);
 
   return `<!doctype html>
@@ -1222,7 +1222,7 @@ export function generateModernDossierHtml(
       min-height: 100vh;
       padding: clamp(12px, 3vw, 36px);
       background: ${pageBand};
-      color: ${isLight ? "#0f172a" : "#f8fafc"};
+      color: ${isLight ? "#001e1d" : "#faf7f0"};
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
     .dossier-shell {
@@ -1232,7 +1232,7 @@ export function generateModernDossierHtml(
       border: 1px solid ${border};
       border-radius: clamp(12px, 2vw, 24px);
       background: ${surface};
-      box-shadow: 0 12px 40px rgba(15, 23, 42, 0.16);
+      box-shadow: 0 12px 40px rgba(0, 30, 29, 0.16);
     }
     .dossier-content { width: 100%; min-width: 0; }
     .pdf-timetable-grid, .pdf-course-section { max-width: 100%; }
@@ -1434,7 +1434,7 @@ export async function compileDossierPdfInline(params: {
     sliceCanvas.height = sliceHeightPx;
     const ctx = sliceCanvas.getContext("2d");
     if (ctx) {
-      ctx.fillStyle = isLight ? "#ffffff" : "#090d16";
+      ctx.fillStyle = isLight ? "#ffffff" : "#001e1d";
       ctx.fillRect(0, 0, totalCanvasWidth, sliceHeightPx);
       ctx.drawImage(img, 0, sourceY, totalCanvasWidth, sliceHeightPx, 0, 0, totalCanvasWidth, sliceHeightPx);
       const sliceDataUrl = sliceCanvas.toDataURL("image/jpeg", 0.95);
@@ -1529,7 +1529,7 @@ export async function downloadModernTimetablePdf(
   const dossierInnerHtml = generateModernDossierInnerHtml(params, isLight);
   const dataUrl = await renderHtmlToImage(dossierInnerHtml, {
     format: "png",
-    backgroundColor: isLight ? "#ffffff" : "#090d16",
+    backgroundColor: isLight ? "#ffffff" : "#001e1d",
     quality: 0.98,
     pixelRatio: 2,
     // Allow browser layout and fonts to settle
@@ -1538,7 +1538,7 @@ export async function downloadModernTimetablePdf(
       width: "1400px",
       minWidth: "1400px",
       maxWidth: "1400px",
-      background: isLight ? "#ffffff" : "#090d16",
+      background: isLight ? "#ffffff" : "#001e1d",
       padding: "28px",
       boxSizing: "border-box",
     },
@@ -1773,11 +1773,11 @@ export function openTimetablePrintablePage(
 
   const isDarkMode = tClass.includes("dark");
   const bgGrad = isDarkMode
-    ? "linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)"
-    : "linear-gradient(135deg, #f8fafc 0%, #e0e7ff 30%, #fce7f3 70%, #f8fafc 100%)";
+    ? "linear-gradient(135deg, #001e1d 0%, #1e1b4b 50%, #001e1d 100%)"
+    : "linear-gradient(135deg, #faf7f0 0%, #e0e7ff 30%, #fce7f3 70%, #faf7f0 100%)";
   const cardBg = isDarkMode ? "#1e293bcc" : "rgba(255,255,255,0.85)";
-  const cardBorder = isDarkMode ? "1px solid rgba(99,102,241,0.25)" : "1px solid rgba(99,102,241,0.15)";
-  const accentGrad = "linear-gradient(135deg, #6366f1, #a855f7, #ec4899)";
+  const cardBorder = isDarkMode ? "1px solid rgba(0,70,67,0.25)" : "1px solid rgba(0,70,67,0.15)";
+  const accentGrad = "linear-gradient(135deg, #004643, #a855f7, #ec4899)";
 
   const fullHtml = `
     <!DOCTYPE html>
@@ -1796,7 +1796,7 @@ export function openTimetablePrintablePage(
           @page { size: landscape; margin: 0; }
           .print-toolbar {
             position: fixed; top: 0; left: 0; right: 0;
-            background: linear-gradient(135deg, #1e293b, #1e1b4b);
+            background: linear-gradient(135deg, #0b2a28, #1e1b4b);
             color: white; padding: 14px 32px;
             display: flex; align-items: center;
             justify-content: space-between;
@@ -1810,11 +1810,11 @@ export function openTimetablePrintablePage(
             font-weight: 600; cursor: pointer; display: flex;
             align-items: center; gap: 8px;
             transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 16px rgba(99,102,241,0.4);
+            box-shadow: 0 4px 16px rgba(0,70,67,0.4);
           }
           .print-toolbar button:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 24px rgba(99,102,241,0.6);
+            box-shadow: 0 6px 24px rgba(0,70,67,0.6);
           }
           .print-toolbar .hint { font-size: 13px; color: #a5b4fc; }
           .print-wrapper {
@@ -1829,7 +1829,7 @@ export function openTimetablePrintablePage(
             border-radius: 24px;
             border: ${cardBorder};
             padding: 48px 40px 40px;
-            box-shadow: 0 8px 64px rgba(0,0,0,0.12), 0 2px 8px rgba(99,102,241,0.08);
+            box-shadow: 0 8px 64px rgba(0,0,0,0.12), 0 2px 8px rgba(0,70,67,0.08);
             overflow-x: auto; overflow-y: visible;
             color: ${tTextColor};
           }
@@ -1840,13 +1840,13 @@ export function openTimetablePrintablePage(
               border-radius: 0; box-shadow: none;
               padding: 48px 56px;
               max-width: none;
-              background: ${isDarkMode ? "#0f172a" : "#ffffff"};
+              background: ${isDarkMode ? "#001e1d" : "#ffffff"};
               border: none;
               backdrop-filter: none;
               -webkit-backdrop-filter: none;
             }
             body {
-              background: ${isDarkMode ? "#0f172a" : "#ffffff"};
+              background: ${isDarkMode ? "#001e1d" : "#ffffff"};
               /* Paper takes one ink: the colored dossier prints monochrome. */
               filter: grayscale(1);
             }

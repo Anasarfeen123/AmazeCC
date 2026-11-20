@@ -128,7 +128,7 @@ describe("Modern Timetable Export", () => {
 
     expect(html).toContain("Draft Timetable");
     expect(html).toContain("BCSE202");
-    expect(html).toContain("Vertical Heatmap");
+    expect(html).toContain("Vertical timetable");
     expect(html).toContain("Vitfac");
     expect(html).toContain("Dr. Ramesh");
     expect(html).toContain("TIME");
@@ -155,7 +155,7 @@ describe("Modern Timetable Export", () => {
     expect(html).toContain(`width: ${expectedWidth}`);
     // Check that Wednesday's th has the exact same width as Monday and Friday
     expect(html).toContain(
-      `<th style="padding: 10px 8px; font-size: 12px; font-weight: 800; color: #93c5fd; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255,255,255,0.08); text-align: center; text-transform: uppercase; letter-spacing: 0.5px; width: ${expectedWidth}; box-sizing: border-box;">\n      WED\n    </th>`,
+      `<th style="padding: 10px 8px; font-size: 12px; font-weight: 800; color: #abd1c6; background: rgba(0, 52, 49, 0.7); border: 1px solid rgba(255,255,255,0.08); text-align: center; text-transform: uppercase; letter-spacing: 0.5px; width: ${expectedWidth}; box-sizing: border-box;">\n      WED\n    </th>`,
     );
   });
 
@@ -216,14 +216,14 @@ describe("Modern Timetable Export", () => {
     expect(html).toContain("19-Nov-2025");
     expect(html).toContain("09:15 AM - 12:30 PM");
     expect(html).toContain("SJT 401");
-    expect(html).toContain("FN · Report: 08:45 AM");
-    expect(html).toContain("Loc: R3C4 · No: 42");
+    expect(html).toContain("FN · 08:45 AM");
+    expect(html).toContain("R3C4 · #42");
 
     // Check second exam
     expect(html).toContain("BCSE302L");
     expect(html).toContain("Operating Systems");
     expect(html).toContain("TT 202");
-    expect(html).toContain("Loc: R9C2 · No: 18"); // Seat calculation for seat 18
+    expect(html).toContain("R9C2 · #18"); // Seat calculation for seat 18
   });
 
   it("generates exam schedule HTML with all exams rendered as tables when layout is table", () => {
@@ -304,10 +304,10 @@ describe("Modern Timetable Export", () => {
     expect(html).toContain("Analog Electronics");
     expect(html).toContain("A1+TA1");
     expect(html).toContain("14-Nov-2026");
-    expect(html).toContain("09:30 AM - 12:30 PM");
-    expect(html).toContain("FN1 · Report: 09:15 AM");
+    expect(html).toContain("9:30 AM–12:30 PM");
+    expect(html).toContain("FN1 · 09:15 AM");
     expect(html).toContain("AB1-811");
-    expect(html).toContain("Loc: R5C6 · No: 46");
+    expect(html).toContain("R5C6 · #46");
 
     // Candidate guidelines
     expect(html).toContain("Important Exam Guidelines &amp; Student Notes");
@@ -679,9 +679,9 @@ describe("Modern Timetable Export", () => {
     expect(htmlCards).toContain("TBA");
 
     // Allocated seats and venues in CAT1 & CAT2 display accurately
-    expect(htmlCards).toContain("Loc: R5C6 · No: 46");
+    expect(htmlCards).toContain("R5C6 · #46");
     expect(htmlCards).toContain("AB1-811");
-    expect(htmlCards).toContain("Loc: R8C7 · No: 69");
+    expect(htmlCards).toContain("R8C7 · #69");
     expect(htmlCards).toContain("AB1-701");
 
     // Chronological order: CAT1 (Aug) appears before CAT2 (Sep) which appears before FAT (Nov)
@@ -714,7 +714,7 @@ describe("Modern Timetable Export", () => {
     });
 
     expect(html).toContain("Final Grid");
-    expect(html).toContain("Horizontal University Grid");
+    expect(html).toContain("Weekly grid");
     expect(html).toContain("BCSE202");
     expect(html).toContain("DAY");
     expect(html).toContain("LUNCH");
@@ -730,7 +730,7 @@ describe("Modern Timetable Export", () => {
       includeCourseList: false,
     });
 
-    expect(html).toContain("Horizontal University Grid");
+    expect(html).toContain("Weekly grid");
     expect(html).not.toContain("Faculty &amp; Vitfac Review");
     expect(html).not.toContain("Data Structures");
   });
@@ -754,7 +754,7 @@ describe("Modern Timetable Export", () => {
     expect(html).toContain("print-toolbar");
     expect(html).toContain("Print / Save PDF");
     expect(html).toContain("toggleTheme");
-    expect(html).toContain("Ink-Saver Light");
+    expect(html).toContain("Light (saves ink)");
 
     // Check schedule grid & lunch column
     expect(html).toContain("LUNCH");
@@ -765,7 +765,7 @@ describe("Modern Timetable Export", () => {
     expect(html).toContain("Data Structures");
 
     // Check Faculty Intelligence & Sentiment Dossier
-    expect(html).toContain("FACULTY INTELLIGENCE &amp; SENTIMENT REPORT");
+    expect(html).toContain("FACULTY REVIEWS");
     expect(html).toContain("Dr. Ramesh");
     expect(html).toContain("10090");
 
@@ -788,8 +788,8 @@ describe("Modern Timetable Export", () => {
 
     expect(html).toContain('<meta name="viewport"');
     expect(html).toContain('class="dark-theme"');
-    expect(html).toContain("background: #090d16");
-    expect(html).toContain("Horizontal University Grid");
+    expect(html).toContain("background: #001e1d");
+    expect(html).toContain("Weekly grid");
     expect(html).toContain("lunch-column");
     expect(html).toContain("pdf-course-table");
     expect(html).toContain("viewport");
@@ -797,7 +797,7 @@ describe("Modern Timetable Export", () => {
     expect(html).not.toContain("print-toolbar");
     expect(html).not.toContain("@page");
     expect(html).not.toContain("<script");
-    expect(html).toContain("FACULTY INTELLIGENCE &amp; SENTIMENT REPORT");
+    expect(html).toContain("FACULTY REVIEWS");
     expect(html).toContain("0 Clash Risk");
   });
 
@@ -836,7 +836,7 @@ describe("Modern Timetable Export", () => {
     expect(createObjectURL).toHaveBeenCalledOnce();
     const blob = createObjectURL.mock.calls[0][0] as Blob;
     expect(blob.type).toBe("text/html;charset=utf-8");
-    expect(await blob.text()).toContain("Horizontal University Grid");
+    expect(await blob.text()).toContain("Weekly grid");
     expect(clickSpy).toHaveBeenCalledOnce();
     expect(downloadedFile).toBe("Print_Dossier_LIGHT_FFCS_Dossier.html");
   });
@@ -954,7 +954,7 @@ describe("Modern Timetable Export", () => {
 
     // Light Mode tokens
     expect(lightHtml).toContain("background: #ffffff");
-    expect(lightHtml).toContain("color: #0f172a");
+    expect(lightHtml).toContain("color: #001e1d");
     expect(lightHtml).toContain("Winter 2026 Light");
 
     // Dark Mode tokens

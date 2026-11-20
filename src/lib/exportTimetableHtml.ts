@@ -1,10 +1,19 @@
 import type { AddedCourse, TimetablePeriod } from "@/lib/ffcsTypes";
 import { buildVerticalGrid } from "@/lib/buildBands";
-import { COLOR_HEX_MAP, typeLabels } from "@/lib/ffcsConstants";
+import { typeLabels } from "@/lib/ffcsConstants";
+import { courseColorHex } from "@/lib/courseColors";
 import { getFacultyReview, isVitfacIntegrationEnabled } from "./vitfacService";
 import { ensureLunchPeriod, hasSlot } from "./slots";
 import { buildExamRows, seatLabel, seriesTone } from "./examSchedule";
 import { formatSemesterName } from "@/lib/formatSemesterName";
+
+/** Text colour for a badge filled with a course colour: ink on light fills, cream on dark. */
+function badgeTextOn(hex: string): string {
+  const h = hex.replace("#", "").slice(0, 6);
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
+  const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return lum > 0.45 ? "#001e1d" : "#f7f1e6";
+}
 
 /**
  * The HTML-string half of the export module, split out of `exportTimetable`:
@@ -30,27 +39,27 @@ export function renderVerticalGridHtml(
     days: daysList,
   });
 
-  const borderColor = isLight ? "#cbd5e1" : "rgba(255,255,255,0.08)";
-  const cellBorderColor = isLight ? "#e2e8f0" : "rgba(255,255,255,0.06)";
-  const thBg = isLight ? "#f1f5f9" : "rgba(30, 41, 59, 0.7)";
-  const thColor = isLight ? "#1e293b" : "#93c5fd";
-  const timeColBg = isLight ? "#f8fafc" : "rgba(15, 23, 42, 0.6)";
-  const timeStartColor = isLight ? "#0f172a" : "#f1f5f9";
-  const timeEndColor = isLight ? "#64748b" : "#64748b";
+  const borderColor = isLight ? "#d9d1c2" : "rgba(255,255,255,0.08)";
+  const cellBorderColor = isLight ? "#e6dfd1" : "rgba(255,255,255,0.06)";
+  const thBg = isLight ? "#f3eee4" : "rgba(0, 52, 49, 0.7)";
+  const thColor = isLight ? "#0b2a28" : "#abd1c6";
+  const timeColBg = isLight ? "#faf7f0" : "rgba(0, 30, 29, 0.6)";
+  const timeStartColor = isLight ? "#001e1d" : "#f3eee4";
+  const timeEndColor = isLight ? "#4a5f5c" : "#4a5f5c";
   const lunchBg = isLight ? "rgba(245, 158, 11, 0.14)" : "rgba(245, 158, 11, 0.12)";
   const lunchBorder = isLight ? "rgba(245, 158, 11, 0.45)" : "rgba(245, 158, 11, 0.3)";
   const lunchText = isLight ? "#b45309" : "#fbbf24";
-  const emptyCellBg = isLight ? "#ffffff" : "rgba(15, 23, 42, 0.3)";
-  const emptyBorder = isLight ? "1px dashed #cbd5e1" : "1px dashed rgba(255,255,255,0.04)";
-  const emptyDash = isLight ? "#94a3b8" : "#334155";
+  const emptyCellBg = isLight ? "#ffffff" : "rgba(0, 30, 29, 0.3)";
+  const emptyBorder = isLight ? "1px dashed #d9d1c2" : "1px dashed rgba(255,255,255,0.04)";
+  const emptyDash = isLight ? "#8fb5aa" : "#2c4a46";
   const slotPillBg = isLight ? "rgba(0,0,0,0.07)" : "rgba(0,0,0,0.35)";
-  const slotPillColor = isLight ? "#334155" : "#cbd5e1";
-  const titleColor = isLight ? "#0f172a" : "#f8fafc";
+  const slotPillColor = isLight ? "#2c4a46" : "#d9d1c2";
+  const titleColor = isLight ? "#001e1d" : "#faf7f0";
   const metaBorder = isLight ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)";
-  const venueColor = isLight ? "#475569" : "#cbd5e1";
-  const facColor = isLight ? "#64748b" : "#94a3b8";
-  const wrapperBg = isLight ? "#ffffff" : "#0c1222";
-  const wrapperBorder = isLight ? "#cbd5e1" : "rgba(255,255,255,0.1)";
+  const venueColor = isLight ? "#3d5551" : "#d9d1c2";
+  const facColor = isLight ? "#4a5f5c" : "#8fb5aa";
+  const wrapperBg = isLight ? "#ffffff" : "#002624";
+  const wrapperBorder = isLight ? "#d9d1c2" : "rgba(255,255,255,0.1)";
 
   const dayColWidth = `calc((100% - 110px) / ${daysList.length})`;
 
@@ -77,7 +86,7 @@ export function renderVerticalGridHtml(
         return `
         <tr style="height: 34px;">
           <td colspan="${daysList.length + 1}" style="background: ${lunchBg}; border: 1px dashed ${lunchBorder}; text-align: center; color: ${lunchText}; font-size: 11px; font-weight: 800; letter-spacing: 1px; border-radius: 6px;">
-            🍽️ LUNCH BREAK · 1:20 PM – 2:00 PM
+            LUNCH BREAK · 1:20 PM – 2:00 PM
           </td>
         </tr>
       `;
@@ -99,7 +108,7 @@ export function renderVerticalGridHtml(
           }
           if (cell && cell.kind === "course" && cell.course) {
             const c = cell.course;
-            const colorHex = COLOR_HEX_MAP[c.color] || "#2563eb";
+            const colorHex = courseColorHex(c.color);
             const rowSpan = (cell as any).run?.bands?.length || 1;
             const slotText = cell.slots.join("+");
             const boxBg = isLight ? `${colorHex}18` : `${colorHex}26`;
@@ -109,7 +118,7 @@ export function renderVerticalGridHtml(
             <div style="background: ${boxBg}; border: 1px solid ${boxBorder}; border-left: 4px solid ${colorHex}; border-radius: 6px; padding: 6px 8px; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between;">
               <div>
                 <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px; margin-bottom: 3px;">
-                  <span style="background: ${colorHex}; color: #ffffff; font-size: 11px; font-weight: 800; padding: 2px 5px; border-radius: 4px; letter-spacing: 0.3px;">
+                  <span style="background: ${colorHex}; color: ${badgeTextOn(colorHex)}; font-size: 11px; font-weight: 800; padding: 2px 5px; border-radius: 4px; letter-spacing: 0.3px;">
                     ${escapeHtml(c.code)}
                   </span>
                   <span style="font-size: 10px; font-weight: 700; color: ${slotPillColor}; background: ${slotPillBg}; padding: 1px 5px; border-radius: 4px;">
@@ -182,11 +191,11 @@ export function renderHorizontalGridHtml(
   const numPeriods = Math.max(effectiveTheory.length, effectiveLab.length);
   const lunchIdx = effectiveTheory.findIndex((p) => p?.lunch);
 
-  const borderColor = isLight ? "#cbd5e1" : "rgba(255,255,255,0.08)";
-  const cellBorderColor = isLight ? "#e2e8f0" : "rgba(255,255,255,0.06)";
-  const thBg = isLight ? "#f1f5f9" : "rgba(30, 41, 59, 0.7)";
-  const thColor = isLight ? "#1e293b" : "#93c5fd";
-  const thSubColor = isLight ? "#64748b" : "#cbd5e1";
+  const borderColor = isLight ? "#d9d1c2" : "rgba(255,255,255,0.08)";
+  const cellBorderColor = isLight ? "#e6dfd1" : "rgba(255,255,255,0.06)";
+  const thBg = isLight ? "#f3eee4" : "rgba(0, 52, 49, 0.7)";
+  const thColor = isLight ? "#0b2a28" : "#abd1c6";
+  const thSubColor = isLight ? "#4a5f5c" : "#d9d1c2";
   const lunchThBg = isLight ? "rgba(245, 158, 11, 0.16)" : "rgba(245, 158, 11, 0.2)";
   const lunchThBorder = isLight ? "rgba(245, 158, 11, 0.45)" : "rgba(245, 158, 11, 0.35)";
   const lunchText = isLight ? "#b45309" : "#fbbf24";
@@ -194,16 +203,16 @@ export function renderHorizontalGridHtml(
   const lunchColBg = isLight ? "rgba(245, 158, 11, 0.14)" : "rgba(245, 158, 11, 0.15)";
   const lunchColBorder = isLight ? "rgba(245, 158, 11, 0.4)" : "rgba(245, 158, 11, 0.35)";
   const lunchDivider = isLight ? "rgba(245, 158, 11, 0.5)" : "rgba(245, 158, 11, 0.5)";
-  const cellBg = isLight ? "#ffffff" : "rgba(15, 23, 42, 0.4)";
-  const emptyBorder = isLight ? "1px dashed #cbd5e1" : "1px dashed rgba(255,255,255,0.05)";
-  const emptyText = isLight ? "#64748b" : "#475569";
+  const cellBg = isLight ? "#ffffff" : "rgba(0, 30, 29, 0.4)";
+  const emptyBorder = isLight ? "1px dashed #d9d1c2" : "1px dashed rgba(255,255,255,0.05)";
+  const emptyText = isLight ? "#4a5f5c" : "#3d5551";
   const slotPillBg = isLight ? "rgba(0,0,0,0.07)" : "rgba(0,0,0,0.3)";
-  const slotPillColor = isLight ? "#334155" : "#cbd5e1";
-  const venueColor = isLight ? "#475569" : "#94a3b8";
-  const dayThBg = isLight ? "#f1f5f9" : "rgba(30, 41, 59, 0.7)";
-  const dayThColor = isLight ? "#0f172a" : "#f8fafc";
-  const wrapperBg = isLight ? "#ffffff" : "#0c1222";
-  const wrapperBorder = isLight ? "#cbd5e1" : "rgba(255,255,255,0.1)";
+  const slotPillColor = isLight ? "#2c4a46" : "#d9d1c2";
+  const venueColor = isLight ? "#3d5551" : "#8fb5aa";
+  const dayThBg = isLight ? "#f3eee4" : "rgba(0, 52, 49, 0.7)";
+  const dayThColor = isLight ? "#001e1d" : "#faf7f0";
+  const wrapperBg = isLight ? "#ffffff" : "#002624";
+  const wrapperBorder = isLight ? "#d9d1c2" : "rgba(255,255,255,0.1)";
 
   const thHeaders: string[] = [];
   for (let i = 0; i < numPeriods; i++) {
@@ -267,10 +276,10 @@ export function renderHorizontalGridHtml(
           const renderHalf = (slotName?: string, course?: AddedCourse | null) => {
             if (!slotName) return `<div style="height: 28px;"></div>`;
             if (course) {
-              const colorHex = COLOR_HEX_MAP[course.color] || "#2563eb";
+              const colorHex = courseColorHex(course.color);
               const boxBg = isLight ? `${colorHex}18` : `${colorHex}33`;
               const boxBorder = isLight ? `${colorHex}77` : `${colorHex}88`;
-              const codeColor = isLight ? "#0f172a" : "#ffffff";
+              const codeColor = isLight ? "#001e1d" : "#ffffff";
               return `
               <div style="background: ${boxBg}; border: 1px solid ${boxBorder}; border-radius: 4px; padding: 3px 5px; margin: 2px 0;">
                 <div style="display: flex; align-items: center; justify-content: space-between; gap: 2px;">
@@ -334,33 +343,33 @@ export function renderCourseTableHtml(
   groupedCourses: (AddedCourse & { ids: string[]; batches: string[] })[],
   isLight = false,
 ): string {
-  const containerBg = isLight ? "#ffffff" : "rgba(15, 23, 42, 0.85)";
-  const containerBorder = isLight ? "#cbd5e1" : "rgba(255, 255, 255, 0.1)";
-  const headerBorder = isLight ? "#e2e8f0" : "rgba(255, 255, 255, 0.08)";
-  const titleColor = isLight ? "#0f172a" : "#ffffff";
-  const subColor = isLight ? "#64748b" : "#94a3b8";
-  const thRowBorder = isLight ? "#cbd5e1" : "rgba(255,255,255,0.1)";
-  const thTextColor = isLight ? "#475569" : "#94a3b8";
-  const rowBorder = isLight ? "#e2e8f0" : "rgba(255,255,255,0.06)";
-  const rowEvenBg = isLight ? "#ffffff" : "rgba(15, 23, 42, 0.4)";
-  const rowOddBg = isLight ? "#f8fafc" : "rgba(15, 23, 42, 0.2)";
-  const courseTitleColor = isLight ? "#0f172a" : "#ffffff";
-  const batchColor = isLight ? "#0284c7" : "#38bdf8";
-  const typeColor = isLight ? "#2563eb" : "#93c5fd";
-  const creditsColor = isLight ? "#0f172a" : "#f8fafc";
-  const slotBg = isLight ? "#f1f5f9" : "rgba(30, 41, 59, 0.8)";
-  const slotBorder = isLight ? "#cbd5e1" : "rgba(255,255,255,0.1)";
-  const slotColor = isLight ? "#334155" : "#cbd5e1";
-  const venueColor = isLight ? "#475569" : "#cbd5e1";
-  const facNameColor = isLight ? "#0f172a" : "#f1f5f9";
-  const unreviewedBg = isLight ? "#f1f5f9" : "rgba(255,255,255,0.04)";
-  const unreviewedBorder = isLight ? "#cbd5e1" : "rgba(255,255,255,0.08)";
-  const unreviewedText = isLight ? "#64748b" : "#64748b";
-  const metricsTextColor = isLight ? "#64748b" : "#94a3b8";
+  const containerBg = isLight ? "#ffffff" : "rgba(0, 30, 29, 0.85)";
+  const containerBorder = isLight ? "#d9d1c2" : "rgba(255, 255, 255, 0.1)";
+  const headerBorder = isLight ? "#e6dfd1" : "rgba(255, 255, 255, 0.08)";
+  const titleColor = isLight ? "#001e1d" : "#ffffff";
+  const subColor = isLight ? "#4a5f5c" : "#8fb5aa";
+  const thRowBorder = isLight ? "#d9d1c2" : "rgba(255,255,255,0.1)";
+  const thTextColor = isLight ? "#3d5551" : "#8fb5aa";
+  const rowBorder = isLight ? "#e6dfd1" : "rgba(255,255,255,0.06)";
+  const rowEvenBg = isLight ? "#ffffff" : "rgba(0, 30, 29, 0.4)";
+  const rowOddBg = isLight ? "#faf7f0" : "rgba(0, 30, 29, 0.2)";
+  const courseTitleColor = isLight ? "#001e1d" : "#ffffff";
+  const batchColor = isLight ? "#00636a" : "#7fc4c9";
+  const typeColor = isLight ? "#004643" : "#abd1c6";
+  const creditsColor = isLight ? "#001e1d" : "#faf7f0";
+  const slotBg = isLight ? "#f3eee4" : "rgba(0, 52, 49, 0.8)";
+  const slotBorder = isLight ? "#d9d1c2" : "rgba(255,255,255,0.1)";
+  const slotColor = isLight ? "#2c4a46" : "#d9d1c2";
+  const venueColor = isLight ? "#3d5551" : "#d9d1c2";
+  const facNameColor = isLight ? "#001e1d" : "#f3eee4";
+  const unreviewedBg = isLight ? "#f3eee4" : "rgba(255,255,255,0.04)";
+  const unreviewedBorder = isLight ? "#d9d1c2" : "rgba(255,255,255,0.08)";
+  const unreviewedText = isLight ? "#4a5f5c" : "#4a5f5c";
+  const metricsTextColor = isLight ? "#4a5f5c" : "#8fb5aa";
 
   const rows = groupedCourses
     .map((c, idx) => {
-      const colorHex = COLOR_HEX_MAP[c.color] || "#2563eb";
+      const colorHex = courseColorHex(c.color);
       const typeLabel = typeLabels[c.type] || c.type || "Theory";
 
       const facultyNames = c.faculty ? c.faculty.split(/\s*\/\s*/).filter(Boolean) : ["TBA"];
@@ -424,12 +433,12 @@ export function renderCourseTableHtml(
 
       return `
       <tr style="border-bottom: 1px solid ${rowBorder}; background: ${idx % 2 === 0 ? rowEvenBg : rowOddBg};">
-        <td style="padding: 10px 8px; font-size: 12px; font-weight: 700; color: #64748b; text-align: center; vertical-align: middle;">
+        <td style="padding: 10px 8px; font-size: 12px; font-weight: 700; color: #4a5f5c; text-align: center; vertical-align: middle;">
           ${idx + 1}
         </td>
         <td class="pdf-course-cell" style="padding: 10px 12px; vertical-align: middle;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span class="pdf-course-code" style="background: ${colorHex}; color: #ffffff; font-size: 11px; font-weight: 800; padding: 3px 7px; border-radius: 5px; letter-spacing: 0.5px;">
+            <span class="pdf-course-code" style="background: ${colorHex}; color: ${badgeTextOn(colorHex)}; font-size: 11px; font-weight: 800; padding: 3px 7px; border-radius: 5px; letter-spacing: 0.5px;">
               ${escapeHtml(c.code)}
             </span>
             <div>
@@ -468,7 +477,7 @@ export function renderCourseTableHtml(
     <div class="pdf-course-section" style="background: ${containerBg}; border: 1px solid ${containerBorder}; border-radius: 14px; padding: 18px 20px;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid ${headerBorder};">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 14px; font-weight: 800; color: ${titleColor};">📋 ENROLLED COURSES &amp; ${isVitfacIntegrationEnabled() ? "FACULTY REVIEWS" : "FACULTY"}</span>
+          <span style="font-size: 14px; font-weight: 800; color: ${titleColor};">ENROLLED COURSES &amp; ${isVitfacIntegrationEnabled() ? "FACULTY REVIEWS" : "FACULTY"}</span>
           ${isVitfacIntegrationEnabled() ? `<span style="font-size: 11px; color: ${subColor};">(Vitfac Sentiment &amp; Ratings)</span>` : ""}
         </div>
       </div>
@@ -541,33 +550,33 @@ function renderExamScheduleDocumentHtml(params: {
     : `EXAMINATION SCHEDULE — ${escapeHtml(formattedSemester || semester || "ACADEMIC SESSION")}`;
 
   const headerHtml = `
-    <div style="text-align: center; border-bottom: 2px solid #0f172a; padding-bottom: 12px; margin-bottom: 14px;">
-      <div style="font-size: 19px; font-weight: 900; letter-spacing: 1.5px; color: #0f172a; text-transform: uppercase;">
+    <div style="text-align: center; border-bottom: 2px solid #001e1d; padding-bottom: 12px; margin-bottom: 14px;">
+      <div style="font-size: 19px; font-weight: 900; letter-spacing: 1.5px; color: #001e1d; text-transform: uppercase;">
         AmazeCC
       </div>
-      <div style="font-size: 11px; font-weight: 700; color: #475569; letter-spacing: 0.8px; text-transform: uppercase; margin-top: 3px;">
+      <div style="font-size: 11px; font-weight: 700; color: #3d5551; letter-spacing: 0.8px; text-transform: uppercase; margin-top: 3px;">
         Student Academic Initiative • Exam Schedule &amp; Timetable
       </div>
-      <div style="display: inline-block; margin-top: 8px; padding: 4px 18px; background: #0f172a; color: #ffffff; font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; border-radius: 3px;">
+      <div style="display: inline-block; margin-top: 8px; padding: 4px 18px; background: #001e1d; color: #ffffff; font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; border-radius: 3px;">
         ${docTitle}
       </div>
     </div>
   `;
 
   const metaHtml = `
-    <table style="width: 100%; border-collapse: collapse; border: 1px solid #94a3b8; margin-bottom: 16px; font-size: 11px;">
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid #8fb5aa; margin-bottom: 16px; font-size: 11px;">
       <tbody>
         <tr>
-          <td style="padding: 6px 10px; background: #f8fafc; font-weight: 700; color: #334155; border: 1px solid #cbd5e1; width: 18%;">Academic Term:</td>
-          <td style="padding: 6px 10px; font-weight: 700; color: #0f172a; border: 1px solid #cbd5e1; width: 32%;">${escapeHtml(formattedSemester || semester || "Current Session")}</td>
-          <td style="padding: 6px 10px; background: #f8fafc; font-weight: 700; color: #334155; border: 1px solid #cbd5e1; width: 18%;">Date Generated:</td>
-          <td style="padding: 6px 10px; font-weight: 600; color: #0f172a; border: 1px solid #cbd5e1; width: 32%;">${escapeHtml(dateStr)}</td>
+          <td style="padding: 6px 10px; background: #faf7f0; font-weight: 700; color: #2c4a46; border: 1px solid #d9d1c2; width: 18%;">Academic Term:</td>
+          <td style="padding: 6px 10px; font-weight: 700; color: #001e1d; border: 1px solid #d9d1c2; width: 32%;">${escapeHtml(formattedSemester || semester || "Current Session")}</td>
+          <td style="padding: 6px 10px; background: #faf7f0; font-weight: 700; color: #2c4a46; border: 1px solid #d9d1c2; width: 18%;">Date Generated:</td>
+          <td style="padding: 6px 10px; font-weight: 600; color: #001e1d; border: 1px solid #d9d1c2; width: 32%;">${escapeHtml(dateStr)}</td>
         </tr>
         <tr>
-          <td style="padding: 6px 10px; background: #f8fafc; font-weight: 700; color: #334155; border: 1px solid #cbd5e1;">Exams Scheduled:</td>
-          <td style="padding: 6px 10px; font-weight: 700; color: #0f172a; border: 1px solid #cbd5e1;">${allRows.length} ${allRows.length === 1 ? "Examination" : "Examinations"}</td>
-          <td style="padding: 6px 10px; background: #f8fafc; font-weight: 700; color: #334155; border: 1px solid #cbd5e1;">Exam Series:</td>
-          <td style="padding: 6px 10px; font-weight: 700; color: #0f172a; border: 1px solid #cbd5e1;">${escapeHtml(examTypes.join(", "))}</td>
+          <td style="padding: 6px 10px; background: #faf7f0; font-weight: 700; color: #2c4a46; border: 1px solid #d9d1c2;">Exams Scheduled:</td>
+          <td style="padding: 6px 10px; font-weight: 700; color: #001e1d; border: 1px solid #d9d1c2;">${allRows.length} ${allRows.length === 1 ? "Examination" : "Examinations"}</td>
+          <td style="padding: 6px 10px; background: #faf7f0; font-weight: 700; color: #2c4a46; border: 1px solid #d9d1c2;">Exam Series:</td>
+          <td style="padding: 6px 10px; font-weight: 700; color: #001e1d; border: 1px solid #d9d1c2;">${escapeHtml(examTypes.join(", "))}</td>
         </tr>
       </tbody>
     </table>
@@ -575,10 +584,10 @@ function renderExamScheduleDocumentHtml(params: {
 
   if (allRows.length === 0) {
     return `
-      <div style="width: 820px; background: #ffffff; color: #0f172a; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 28px 32px; box-sizing: border-box; border: 1px solid #94a3b8; border-radius: 4px;">
+      <div style="width: 820px; background: #ffffff; color: #001e1d; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 28px 32px; box-sizing: border-box; border: 1px solid #8fb5aa; border-radius: 4px;">
         ${headerHtml}
         ${metaHtml}
-        <div style="padding: 40px; text-align: center; color: #64748b; font-size: 13px; font-weight: 600; border: 1px dashed #cbd5e1; border-radius: 4px;">
+        <div style="padding: 40px; text-align: center; color: #4a5f5c; font-size: 13px; font-weight: 600; border: 1px dashed #d9d1c2; border-radius: 4px;">
           No exam schedule data available to export.
         </div>
       </div>
@@ -598,34 +607,34 @@ function renderExamScheduleDocumentHtml(params: {
           const sessionText = formatExamSession(subj.examSession, subj.reportingTime);
 
           return `
-            <tr style="background: ${idx % 2 === 0 ? "#ffffff" : "#f8fafc"}; border-bottom: 1px solid #cbd5e1; font-size: 11px;">
-              <td style="padding: 7px 4px; border: 1px solid #cbd5e1; text-align: center; vertical-align: middle; font-weight: 700; color: #475569;">
+            <tr style="background: ${idx % 2 === 0 ? "#ffffff" : "#faf7f0"}; border-bottom: 1px solid #d9d1c2; font-size: 11px;">
+              <td style="padding: 7px 4px; border: 1px solid #d9d1c2; text-align: center; vertical-align: middle; font-weight: 700; color: #3d5551;">
                 ${idx + 1}
               </td>
-              <td style="padding: 7px 8px; border: 1px solid #cbd5e1; vertical-align: middle;">
-                <div style="font-weight: 800; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color: #0f172a; font-size: 11.5px; letter-spacing: 0.2px;">
+              <td style="padding: 7px 8px; border: 1px solid #d9d1c2; vertical-align: middle;">
+                <div style="font-weight: 800; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color: #001e1d; font-size: 11.5px; letter-spacing: 0.2px;">
                   ${escapeHtml(subj.courseCode || "")}
                 </div>
-                <div style="font-weight: 600; color: #334155; margin-top: 1px; font-size: 10.5px; line-height: 1.25;">
+                <div style="font-weight: 600; color: #2c4a46; margin-top: 1px; font-size: 10.5px; line-height: 1.25;">
                   ${escapeHtml(subj.courseTitle || subj.courseCode || "Untitled Course")}
                 </div>
               </td>
-              <td style="padding: 7px 4px; border: 1px solid #cbd5e1; text-align: center; vertical-align: middle;">
-                <span style="font-size: 10px; font-weight: 700; color: #0f172a;">${escapeHtml(subj.slot && subj.slot !== "-" ? subj.slot : "—")}</span>
+              <td style="padding: 7px 4px; border: 1px solid #d9d1c2; text-align: center; vertical-align: middle;">
+                <span style="font-size: 10px; font-weight: 700; color: #001e1d;">${escapeHtml(subj.slot && subj.slot !== "-" ? subj.slot : "—")}</span>
               </td>
-              <td style="padding: 7px 6px; border: 1px solid #cbd5e1; vertical-align: middle; font-weight: 700; color: #0f172a; white-space: nowrap;">
+              <td style="padding: 7px 6px; border: 1px solid #d9d1c2; vertical-align: middle; font-weight: 700; color: #001e1d; white-space: nowrap;">
                 ${escapeHtml(subj.examDate || "TBA")}
               </td>
-              <td style="padding: 7px 6px; border: 1px solid #cbd5e1; vertical-align: middle; font-size: 10.5px; color: #334155; font-weight: 600;">
-                ${escapeHtml(subj.examTime || "TBA")}
+              <td style="padding: 7px 6px; border: 1px solid #d9d1c2; vertical-align: middle; font-size: 10.5px; color: #2c4a46; font-weight: 600; white-space: nowrap;">
+                ${escapeHtml(compactExamTime(subj.examTime))}
               </td>
-              <td style="padding: 7px 6px; border: 1px solid #cbd5e1; vertical-align: middle; font-size: 10.5px; color: #0f172a; font-weight: 600;">
+              <td style="padding: 7px 6px; border: 1px solid #d9d1c2; vertical-align: middle; font-size: 10.5px; color: #001e1d; font-weight: 600; white-space: nowrap;">
                 ${escapeHtml(sessionText)}
               </td>
-              <td style="padding: 7px 4px; border: 1px solid #cbd5e1; text-align: center; vertical-align: middle; font-weight: 700; color: #0f172a;">
+              <td style="padding: 7px 4px; border: 1px solid #d9d1c2; text-align: center; vertical-align: middle; font-weight: 700; color: #001e1d;">
                 ${escapeHtml(venueText)}
               </td>
-              <td style="padding: 7px 4px; border: 1px solid #cbd5e1; text-align: center; vertical-align: middle; font-size: 10px; font-weight: 700; color: #0f172a;">
+              <td style="padding: 7px 4px; border: 1px solid #d9d1c2; text-align: center; vertical-align: middle; font-size: 10px; font-weight: 700; color: #001e1d; white-space: nowrap;">
                 ${escapeHtml(seatText)}
               </td>
             </tr>
@@ -634,11 +643,11 @@ function renderExamScheduleDocumentHtml(params: {
         .join("");
 
       return `
-        <div style="background: #1e293b; color: #ffffff; padding: 7px 12px; font-size: 11.5px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-top: 14px; margin-bottom: 0px; border: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center;">
+        <div style="background: #0b2a28; color: #ffffff; padding: 7px 12px; font-size: 11.5px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-top: 14px; margin-bottom: 0px; border: 1px solid #0b2a28; display: flex; justify-content: space-between; align-items: center;">
           <span>${escapeHtml(seriesFullName(examType))}</span>
           <span style="font-size: 10.5px; font-weight: 600; opacity: 0.9;">${rows.length} ${rows.length === 1 ? "Course" : "Courses"}</span>
         </div>
-        <table style="width: 100%; border-collapse: collapse; border: 1px solid #94a3b8; border-top: none; margin-bottom: 14px; font-size: 11px; table-layout: fixed;">
+        <table style="width: 100%; border-collapse: collapse; border: 1px solid #8fb5aa; border-top: none; margin-bottom: 14px; font-size: 11px; table-layout: fixed;">
           <colgroup>
             <col style="width: 5%;" />
             <col style="width: 32%;" />
@@ -650,15 +659,15 @@ function renderExamScheduleDocumentHtml(params: {
             <col style="width: 7%;" />
           </colgroup>
           <thead>
-            <tr style="background: #f1f5f9; border-bottom: 1px solid #94a3b8; font-size: 10px; font-weight: 800; color: #0f172a; text-transform: uppercase;">
-              <th style="padding: 7px 4px; border: 1px solid #cbd5e1; text-align: center;">#</th>
-              <th style="padding: 7px 8px; border: 1px solid #cbd5e1; text-align: left;">Course Code &amp; Title</th>
-              <th style="padding: 7px 4px; border: 1px solid #cbd5e1; text-align: center;">Slot</th>
-              <th style="padding: 7px 6px; border: 1px solid #cbd5e1; text-align: left;">Date</th>
-              <th style="padding: 7px 6px; border: 1px solid #cbd5e1; text-align: left;">Timing</th>
-              <th style="padding: 7px 6px; border: 1px solid #cbd5e1; text-align: left;">Session &amp; Rep.</th>
-              <th style="padding: 7px 4px; border: 1px solid #cbd5e1; text-align: center;">Venue</th>
-              <th style="padding: 7px 4px; border: 1px solid #cbd5e1; text-align: center;">Seat</th>
+            <tr style="background: #f3eee4; border-bottom: 1px solid #8fb5aa; font-size: 10px; font-weight: 800; color: #001e1d; text-transform: uppercase;">
+              <th style="padding: 7px 4px; border: 1px solid #d9d1c2; text-align: center;">#</th>
+              <th style="padding: 7px 8px; border: 1px solid #d9d1c2; text-align: left;">Course Code &amp; Title</th>
+              <th style="padding: 7px 4px; border: 1px solid #d9d1c2; text-align: center;">Slot</th>
+              <th style="padding: 7px 6px; border: 1px solid #d9d1c2; text-align: left;">Date</th>
+              <th style="padding: 7px 6px; border: 1px solid #d9d1c2; text-align: left;">Timing</th>
+              <th style="padding: 7px 6px; border: 1px solid #d9d1c2; text-align: left;">Session &amp; Rep.</th>
+              <th style="padding: 7px 4px; border: 1px solid #d9d1c2; text-align: center;">Venue</th>
+              <th style="padding: 7px 4px; border: 1px solid #d9d1c2; text-align: center;">Seat</th>
             </tr>
           </thead>
           <tbody>
@@ -670,8 +679,8 @@ function renderExamScheduleDocumentHtml(params: {
     .join("");
 
   const instructionsHtml = `
-    <div style="border: 1px solid #94a3b8; background: #f8fafc; padding: 10px 14px; margin-top: 14px; margin-bottom: 12px; font-size: 9.5px; color: #334155; line-height: 1.5; border-radius: 4px;">
-      <div style="font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; border-bottom: 1px solid #cbd5e1; padding-bottom: 3px;">
+    <div style="border: 1px solid #8fb5aa; background: #faf7f0; padding: 10px 14px; margin-top: 14px; margin-bottom: 12px; font-size: 9.5px; color: #2c4a46; line-height: 1.5; border-radius: 4px;">
+      <div style="font-weight: 800; color: #001e1d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; border-bottom: 1px solid #d9d1c2; padding-bottom: 3px;">
         Important Exam Guidelines &amp; Student Notes
       </div>
       <ol style="margin: 0; padding-left: 16px;">
@@ -685,14 +694,14 @@ function renderExamScheduleDocumentHtml(params: {
   `;
 
   const footerHtml = `
-    <div style="border-top: 1px solid #cbd5e1; padding-top: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 9px; color: #64748b;">
+    <div style="border-top: 1px solid #d9d1c2; padding-top: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 9px; color: #4a5f5c;">
       <span>AmazeCC is an independent student initiative • Not officially affiliated with university administration • Verify with VTOP notices</span>
       <span>Created via AmazeCC • Built by students, for students</span>
     </div>
   `;
 
   return `
-    <div style="width: 820px; background: #ffffff; color: #0f172a; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 28px 32px; box-sizing: border-box; border: 1px solid #94a3b8; border-radius: 4px;">
+    <div style="width: 820px; background: #ffffff; color: #001e1d; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 28px 32px; box-sizing: border-box; border: 1px solid #8fb5aa; border-radius: 4px;">
       ${headerHtml}
       ${metaHtml}
       ${seriesTablesHtml}
@@ -711,10 +720,20 @@ function formatExamSeat(subj: any): string {
       ? String(subj.seatNo).trim()
       : null;
 
-  if (loc && no) return `Loc: ${loc} · No: ${no}`;
-  if (loc) return `Loc: ${loc}`;
-  if (no) return `No: ${no}`;
+  // Short so it fits one line in the exam table ("R6C2 · #21").
+  if (loc && no) return `${loc} · #${no}`;
+  if (loc) return loc;
+  if (no) return `#${no}`;
   return "TBA";
+}
+
+/** "09:15 AM - 12:30 PM" -> "9:15 AM–12:30 PM" (fits one line in the table). */
+function compactExamTime(value: unknown): string {
+  if (typeof value !== "string" || !value.trim()) return "TBA";
+  return value
+    .trim()
+    .replace(/\b0(\d:\d\d)/g, "$1")
+    .replace(/\s*-\s*/g, "–");
 }
 
 function formatExamVenue(venue: unknown): string {
@@ -729,7 +748,7 @@ function formatExamSession(session: unknown, reporting: unknown): string {
   const rep =
     typeof reporting === "string" && reporting.trim() !== "" && reporting.trim() !== "-" ? reporting.trim() : null;
 
-  if (sess && rep) return `${sess} · Report: ${rep}`;
+  if (sess && rep) return `${sess} · ${rep}`;
   if (sess) return sess;
   if (rep) return `Report: ${rep}`;
   return "TBA";
@@ -768,31 +787,31 @@ export function generateExamScheduleHtml(params: ExamScheduleExportParams): stri
 
   const formattedSemester = semester ? formatSemesterName(semester) : null;
 
-  const containerBg = isLight ? "#ffffff" : "#090d16";
-  const containerBorder = isLight ? "#cbd5e1" : "rgba(255, 255, 255, 0.1)";
-  const headerBorder = isLight ? "#e2e8f0" : "rgba(255, 255, 255, 0.08)";
-  const titleColor = isLight ? "#0f172a" : "#ffffff";
-  const subtitleColor = isLight ? "#64748b" : "#94a3b8";
-  const mutedColor = isLight ? "#64748b" : "#64748b";
-  const cardBg = isLight ? "#ffffff" : "rgba(15, 23, 42, 0.75)";
-  const cardBorder = isLight ? "#e2e8f0" : "rgba(255, 255, 255, 0.08)";
-  const cardDivider = isLight ? "#f1f5f9" : "rgba(255, 255, 255, 0.06)";
-  const codeColor = isLight ? "#2563eb" : "#60a5fa";
-  const courseTitleColor = isLight ? "#0f172a" : "#f8fafc";
-  const labelColor = isLight ? "#64748b" : "#64748b";
-  const valueColor = isLight ? "#0f172a" : "#f1f5f9";
-  const subValueColor = isLight ? "#64748b" : "#94a3b8";
-  const slotBg = isLight ? "rgba(59, 130, 246, 0.08)" : "rgba(59, 130, 246, 0.15)";
-  const slotBorder = isLight ? "rgba(59, 130, 246, 0.25)" : "rgba(59, 130, 246, 0.3)";
-  const slotColor = isLight ? "#1d4ed8" : "#93c5fd";
-  const statBg = isLight ? "rgba(59, 130, 246, 0.08)" : "rgba(59, 130, 246, 0.12)";
-  const statBorder = isLight ? "rgba(59, 130, 246, 0.25)" : "rgba(59, 130, 246, 0.3)";
-  const statLabelColor = isLight ? "#2563eb" : "#93c5fd";
-  const statValColor = isLight ? "#0f172a" : "#ffffff";
-  const statBg2 = isLight ? "rgba(139, 92, 246, 0.08)" : "rgba(139, 92, 246, 0.12)";
-  const statBorder2 = isLight ? "rgba(139, 92, 246, 0.25)" : "rgba(139, 92, 246, 0.3)";
-  const statLabelColor2 = isLight ? "#7c3aed" : "#c4b5fd";
-  const statValColor2 = isLight ? "#0f172a" : "#ffffff";
+  const containerBg = isLight ? "#ffffff" : "#001e1d";
+  const containerBorder = isLight ? "#d9d1c2" : "rgba(255, 255, 255, 0.1)";
+  const headerBorder = isLight ? "#e6dfd1" : "rgba(255, 255, 255, 0.08)";
+  const titleColor = isLight ? "#001e1d" : "#ffffff";
+  const subtitleColor = isLight ? "#4a5f5c" : "#8fb5aa";
+  const mutedColor = isLight ? "#4a5f5c" : "#4a5f5c";
+  const cardBg = isLight ? "#ffffff" : "rgba(0, 30, 29, 0.75)";
+  const cardBorder = isLight ? "#e6dfd1" : "rgba(255, 255, 255, 0.08)";
+  const cardDivider = isLight ? "#f3eee4" : "rgba(255, 255, 255, 0.06)";
+  const codeColor = isLight ? "#004643" : "#f9bc60";
+  const courseTitleColor = isLight ? "#001e1d" : "#faf7f0";
+  const labelColor = isLight ? "#4a5f5c" : "#4a5f5c";
+  const valueColor = isLight ? "#001e1d" : "#f3eee4";
+  const subValueColor = isLight ? "#4a5f5c" : "#8fb5aa";
+  const slotBg = isLight ? "rgba(63, 143, 132, 0.08)" : "rgba(63, 143, 132, 0.15)";
+  const slotBorder = isLight ? "rgba(63, 143, 132, 0.25)" : "rgba(63, 143, 132, 0.3)";
+  const slotColor = isLight ? "#00332f" : "#abd1c6";
+  const statBg = isLight ? "rgba(63, 143, 132, 0.08)" : "rgba(63, 143, 132, 0.12)";
+  const statBorder = isLight ? "rgba(63, 143, 132, 0.25)" : "rgba(63, 143, 132, 0.3)";
+  const statLabelColor = isLight ? "#004643" : "#abd1c6";
+  const statValColor = isLight ? "#001e1d" : "#ffffff";
+  const statBg2 = isLight ? "rgba(249, 188, 96, 0.08)" : "rgba(249, 188, 96, 0.12)";
+  const statBorder2 = isLight ? "rgba(249, 188, 96, 0.25)" : "rgba(249, 188, 96, 0.3)";
+  const statLabelColor2 = isLight ? "#7a4f00" : "#f9bc60";
+  const statValColor2 = isLight ? "#001e1d" : "#ffffff";
 
   const dateStr = new Date().toLocaleDateString(undefined, {
     weekday: "short",
@@ -816,7 +835,7 @@ export function generateExamScheduleHtml(params: ExamScheduleExportParams): stri
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 18px; border-bottom: 1px solid ${headerBorder};">
       <div>
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-          <span style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: #ffffff; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; letter-spacing: 1px; text-transform: uppercase;">
+          <span style="background: linear-gradient(135deg, #3f8f84, #f9bc60); color: #ffffff; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; letter-spacing: 1px; text-transform: uppercase;">
             AmazeCC
           </span>
           <span style="font-size: 11px; font-weight: 700; color: ${subtitleColor};">
@@ -860,29 +879,29 @@ export function generateExamScheduleHtml(params: ExamScheduleExportParams): stri
       if (rows.length === 0) return "";
 
       const tone = seriesTone(examType);
-      const toneColor = tone === "violet" ? "#8b5cf6" : tone === "sky" ? "#0ea5e9" : "#6366f1";
+      const toneColor = tone === "violet" ? "#f9bc60" : tone === "sky" ? "#0ea5e9" : "#004643";
       const toneBg = isLight
         ? tone === "violet"
-          ? "rgba(139, 92, 246, 0.1)"
+          ? "rgba(249, 188, 96, 0.1)"
           : tone === "sky"
             ? "rgba(14, 165, 233, 0.1)"
-            : "rgba(99, 102, 241, 0.1)"
+            : "rgba(0, 70, 67, 0.1)"
         : tone === "violet"
-          ? "rgba(139, 92, 246, 0.2)"
+          ? "rgba(249, 188, 96, 0.2)"
           : tone === "sky"
             ? "rgba(14, 165, 233, 0.2)"
-            : "rgba(99, 102, 241, 0.2)";
+            : "rgba(0, 70, 67, 0.2)";
       const toneBorder = isLight
         ? tone === "violet"
-          ? "rgba(139, 92, 246, 0.3)"
+          ? "rgba(249, 188, 96, 0.3)"
           : tone === "sky"
             ? "rgba(14, 165, 233, 0.3)"
-            : "rgba(99, 102, 241, 0.3)"
+            : "rgba(0, 70, 67, 0.3)"
         : tone === "violet"
-          ? "rgba(139, 92, 246, 0.4)"
+          ? "rgba(249, 188, 96, 0.4)"
           : tone === "sky"
             ? "rgba(14, 165, 233, 0.4)"
-            : "rgba(99, 102, 241, 0.4)";
+            : "rgba(0, 70, 67, 0.4)";
 
       const sectionHeader = `
         <div style="display: flex; align-items: center; justify-content: space-between; margin: 28px 0 14px 0; padding-bottom: 8px; border-bottom: 1px solid ${headerBorder};">
@@ -910,10 +929,10 @@ export function generateExamScheduleHtml(params: ExamScheduleExportParams): stri
               idx % 2 === 0
                 ? isLight
                   ? "#ffffff"
-                  : "rgba(15, 23, 42, 0.4)"
+                  : "rgba(0, 30, 29, 0.4)"
                 : isLight
-                  ? "#f8fafc"
-                  : "rgba(15, 23, 42, 0.2)";
+                  ? "#faf7f0"
+                  : "rgba(0, 30, 29, 0.2)";
             return `
               <tr style="background: ${rowBg}; border-bottom: 1px solid ${cardBorder}; font-size: 12px;">
                 <td style="padding: 10px 12px; vertical-align: middle;">
@@ -966,7 +985,7 @@ export function generateExamScheduleHtml(params: ExamScheduleExportParams): stri
                 <col style="width: 14%;" />
               </colgroup>
               <thead>
-                <tr style="background: ${isLight ? "#f1f5f9" : "rgba(30, 41, 59, 0.7)"}; border-bottom: 1px solid ${cardBorder}; font-size: 10.5px; font-weight: 800; color: ${subtitleColor}; text-transform: uppercase;">
+                <tr style="background: ${isLight ? "#f3eee4" : "rgba(0, 52, 49, 0.7)"}; border-bottom: 1px solid ${cardBorder}; font-size: 10.5px; font-weight: 800; color: ${subtitleColor}; text-transform: uppercase;">
                   <th style="padding: 10px 12px;">COURSE</th>
                   <th style="padding: 10px 8px; text-align: center;">SLOT</th>
                   <th style="padding: 10px 10px;">DATE &amp; TIME</th>
@@ -1013,7 +1032,7 @@ export function generateExamScheduleHtml(params: ExamScheduleExportParams): stri
                 </div>
               </div>
 
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; padding-top: 10px; border-top: 1px solid ${cardDivider}; font-size: 12px;">
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px 12px; padding-top: 10px; border-top: 1px solid ${cardDivider}; font-size: 12px;">
                 <div>
                   <div style="font-size: 9.5px; font-weight: 700; text-transform: uppercase; color: ${labelColor}; letter-spacing: 0.5px;">Date &amp; Time</div>
                   <div style="font-weight: 700; color: ${valueColor}; margin-top: 2px;">
@@ -1049,7 +1068,7 @@ export function generateExamScheduleHtml(params: ExamScheduleExportParams): stri
 
       return `
         ${sectionHeader}
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 24px;">
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 24px;">
           ${cardsHtml}
         </div>
       `;

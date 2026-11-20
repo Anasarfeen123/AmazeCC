@@ -12,6 +12,8 @@ export type Settings = {
   targetAttendance?: number;
   showGpa?: boolean;
   showProfilePhoto?: boolean;
+  /** Display size: scales text, spacing and controls (root font-size). */
+  uiSize?: "compact" | "default" | "large";
   /** Set once the student flips the photo switch; until then the logo shows. */
   profilePhotoChosen?: boolean;
   blurGrades?: boolean;

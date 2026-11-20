@@ -215,7 +215,7 @@ function DashboardContent({
   }
 
   return (
-    <div className="dashboard-shell w-full max-w-md md:max-w-full mx-auto overflow-visible">
+    <div className="dashboard-shell w-full max-w-[448px] md:max-w-full mx-auto overflow-visible">
       {/* Keyboard users: jump past the sidebar's ~10 controls to the page.
           Hidden until focused (R11). */}
       <a

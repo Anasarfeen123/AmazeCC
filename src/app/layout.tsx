@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ThemeProvider } from "@amazecontinuityprojects/amazeui";
+import UiSizeSync from "@/components/custom/theme/UiSizeSync";
 import NightThemeSync from "@/components/custom/theme/NightThemeSync";
 import GrawlixTagger from "@/components/custom/theme/GrawlixTagger";
 import { GoogleAnalytics } from "@next/third-parties/google";
@@ -113,7 +114,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           id="amaze-night-theme-early"
           // Before first paint, so the Night theme does not flash obsidian.
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{if(localStorage.getItem("theme")==="night")document.documentElement.classList.add("night");}catch(e){}})();`,
+            __html: `(function(){try{var h=document.documentElement;if(localStorage.getItem("theme")==="night")h.classList.add("night");var st=JSON.parse(localStorage.getItem("settings")||"{}");if(st&&(st.uiSize==="compact"||st.uiSize==="large"))h.setAttribute("data-ui-size",st.uiSize);}catch(e){}})();`,
           }}
         />
         <script
@@ -138,6 +139,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           value={{ light: "light", dark: "dark", night: "dark" }}
         >
           <NightThemeSync />
+          <UiSizeSync />
           <GrawlixTagger />
           {children}
         </ThemeProvider>

@@ -991,8 +991,25 @@
 /* Phones: everything a little smaller (user, 2026-11-21: "elements in
    mobile are too big"). Sizes are rem-based, so one root change scales
    text, spacing and controls together. 15px keeps h-11 controls at 41px. */
+/* Display size (Settings -> Appearance, html[data-ui-size]). Phones are a
+   step smaller by default (user: "make it even smaller").
+   compact / default / large: phones 13 / 14 / 16 px, larger screens 15 / 16 / 17 px. */
 @media (max-width: 639px) {
   html {
+    font-size: 14px;
+  }
+  html[data-ui-size="compact"] {
+    font-size: 13px;
+  }
+  html[data-ui-size="large"] {
+    font-size: 16px;
+  }
+}
+@media (min-width: 640px) {
+  html[data-ui-size="compact"] {
     font-size: 15px;
+  }
+  html[data-ui-size="large"] {
+    font-size: 17px;
   }
 }

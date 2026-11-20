@@ -1424,6 +1424,25 @@ export default function ProfilePage({
           />
         </div>
 
+        {/* Display size: root font-size via data-ui-size (UiSizeSync). */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
+          <div>
+            <p className="text-sm font-bold text-text-primary">Display size</p>
+            <p className="text-xs text-text-muted">How big text and buttons are. Compact fits more on screen</p>
+          </div>
+          <SegmentedControl
+            grow
+            className="w-full shrink-0 sm:w-72"
+            value={settings?.uiSize === "compact" || settings?.uiSize === "large" ? settings.uiSize : "default"}
+            onChange={(v) => updateSetting("uiSize", v)}
+            options={[
+              { value: "compact", label: "Compact" },
+              { value: "default", label: "Default" },
+              { value: "large", label: "Large" },
+            ]}
+          />
+        </div>
+
         <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>
             <p className="text-sm font-bold text-text-primary">Sounds</p>

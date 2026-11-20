@@ -2,6 +2,7 @@
 
 import { WifiOff, RefreshCw } from "lucide-react";
 import Link from "next/link";
+import BrickBreak from "@/components/custom/games/BrickBreak";
 
 /**
  * Offline fallback.
@@ -14,12 +15,12 @@ import Link from "next/link";
  */
 export default function OfflinePage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-surface-secondary p-4">
-      <div className="bg-surface border-2 border-border-ink rounded-2xl p-8 max-w-md w-full text-center shadow-lg">
+    <div className="page-dots min-h-screen flex flex-col items-center justify-center gap-6 bg-background p-4">
+      <div className="bg-surface border-2 border-border-ink rounded-[16px] p-8 max-w-md w-full text-center shadow-brutal-md">
         <div className="w-16 h-16 mx-auto bg-surface-secondary rounded-full flex items-center justify-center mb-6">
           <WifiOff className="w-8 h-8 text-text-muted" />
         </div>
-        <h1 className="text-2xl font-bold text-text-heading mb-2">You&apos;re offline</h1>
+        <h1 className="font-display text-2xl font-bold uppercase text-text-heading mb-2">You&apos;re offline</h1>
         <p className="text-text-muted mb-6">
           We couldn&apos;t load this page from the cache. Your saved data — timetable, tasks, attendance, settings — is
           still here; open the dashboard to see it.
@@ -39,6 +40,14 @@ export default function OfflinePage() {
           </button>
         </div>
       </div>
+
+      {/* Something to do while the connection comes back. */}
+      <section aria-label="Brick breaker" className="w-full max-w-md space-y-2">
+        <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+          Bored? Break some bricks
+        </p>
+        <BrickBreak />
+      </section>
     </div>
   );
 }

@@ -56,3 +56,6 @@ export const gradesDisplayIsOpenAtom = atom<boolean>(false);
 export const isOfflineAtom = atom<boolean>(false);
 export const isAPIworkingAtom = atom<boolean>(false);
 export const showReloadBannerAtom = atom<boolean>(false);
+
+/** The brick-breaker sheet (offline game / easter egg). */
+export const isGameOpenAtom = atom(false);

@@ -63,6 +63,7 @@ import { useRouter } from "next/navigation";
 import { clearSignInReturn, peekSignInReturn, VTOP_LOGIN_EVENT } from "@/lib/signInReturn";
 import { credentialManager } from "@/lib/sync-engine/credential-manager";
 import { hasStoredVtopCredentials } from "./app/readBootstrapSnapshot";
+import GameSheet from "@/components/custom/games/GameSheet";
 import ConnectionBanner from "./shared/ConnectionBanner";
 import { ACTION_SHORTCUTS, isMacPlatform, NAV_SHORTCUTS } from "@/lib/shortcuts";
 
@@ -508,6 +509,7 @@ function MainRuntime({ initialIntent, onSignedOut }: MainProps) {
           )}
 
           <ConnectionBanner enabled={isLoggedIn && !demoMode} />
+          <GameSheet />
           <AuthenticatedWorkspace
             handleLogOutRequest={handleLogOutRequest}
             handleReloadRequest={handleReloadRequest}

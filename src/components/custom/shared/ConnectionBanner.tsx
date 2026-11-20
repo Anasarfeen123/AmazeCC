@@ -1,7 +1,8 @@
 "use client";
 
+import { isGameOpenAtom } from "@/store/uiAtoms";
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { CloudOff, Loader2, ServerCrash, X } from "lucide-react";
 import { isOfflineAtom } from "@/store/uiAtoms";
 import { checkVtopNow, getVtopState, subscribeVtopState, watchVtopState } from "@/lib/vtopStatus";
@@ -12,6 +13,7 @@ import { checkVtopNow, getVtopState, subscribeVtopState, watchVtopState } from "
  * keeps showing saved data, and the banner says so. Dismissible per problem.
  */
 export default function ConnectionBanner({ enabled }: { enabled: boolean }) {
+  const setGameOpen = useSetAtom(isGameOpenAtom);
   const isOffline = useAtomValue(isOfflineAtom);
   const vtop = useSyncExternalStore(subscribeVtopState, getVtopState, () => "unknown" as const);
   const [dismissed, setDismissed] = useState<"offline" | "vtop" | null>(null);
@@ -52,7 +54,14 @@ export default function ConnectionBanner({ enabled }: { enabled: boolean }) {
         <p className="min-w-0 flex-1 leading-snug">
           {offline ? (
             <>
-              <strong>You&apos;re offline.</strong> Showing your saved data. It refreshes when you&apos;re back online.
+              <strong>You&apos;re offline.</strong> Showing your saved data. It refreshes when you&apos;re back online.{" "}
+              <button
+                type="button"
+                onClick={() => setGameOpen(true)}
+                className="ml-1 font-bold underline underline-offset-2 cursor-pointer"
+              >
+                Play while you wait
+              </button>
             </>
           ) : (
             <>

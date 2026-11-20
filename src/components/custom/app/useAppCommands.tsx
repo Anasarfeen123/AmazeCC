@@ -1,5 +1,6 @@
 "use client";
 
+import { isGameOpenAtom } from "@/store/uiAtoms";
 import { useMemo } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useTheme } from "next-themes";
@@ -60,6 +61,7 @@ export function useAppCommands(input: AppCommandInputs) {
   const ODhoursData = useAtomValue(odHoursDataAtom) as any;
   const setGradesDisplayIsOpen = useSetAtom(gradesDisplayIsOpenAtom);
   const setSettings = useSetAtom(settingsAtom);
+  const setGameOpen = useSetAtom(isGameOpenAtom);
   const setTasksQuickAddRequest = useSetAtom(tasksQuickAddRequestAtom);
   const setIsFeedbackOpen = useSetAtom(isFeedbackModalOpenAtom);
   const isLoggedIn = useAtomValue(isLoggedInAtom);
@@ -542,6 +544,15 @@ export function useAppCommands(input: AppCommandInputs) {
       onSelect: () => setSettings((prev) => setPrivacyMode(prev, !prev.privacyMode)),
     });
     toggle("Hide Home Page Search Bar", "hideHomeSearchBar", "Settings", "🔍");
+    result.push({
+      id: "play-bricks",
+      label: "Break some bricks",
+      description: "A silly little game. Works offline too.",
+      icon: "🎮",
+      category: "Fun",
+      keywords: ["game", "offline", "bricks", "breakout", "bored", "play"],
+      onSelect: () => setGameOpen(true),
+    });
 
     [
       { id: "light", label: "Light", icon: "☀️" },

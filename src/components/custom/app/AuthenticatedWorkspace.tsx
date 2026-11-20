@@ -1,5 +1,6 @@
 "use client";
 
+import AppLoading from "@/components/custom/shared/AppLoading";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useAtomValue } from "jotai";
@@ -9,7 +10,7 @@ import { useDashboardScreenHistory } from "../dashboard/useDashboardScreenHistor
 import type { IntroLogin } from "../onboarding/OnboardingIntro";
 
 function WorkspaceLoading() {
-  return <div className="min-h-screen bg-surface-secondary" role="status" aria-label="Opening your workspace" />;
+  return <AppLoading />;
 }
 
 const DashboardContent = dynamic(() => import("../Dashboard"), { loading: WorkspaceLoading });

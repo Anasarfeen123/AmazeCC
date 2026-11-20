@@ -779,3 +779,52 @@
     animation: none;
   }
 }
+
+/* App loading screen (shared/AppLoading.tsx). */
+@keyframes app-loading-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-3deg);
+  }
+}
+@keyframes app-loading-bar {
+  0% {
+    transform: translateX(-110%);
+  }
+  100% {
+    transform: translateX(310%);
+  }
+}
+@keyframes app-loading-tip {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.app-loading-bob {
+  animation: app-loading-bob 1.6s ease-in-out infinite;
+}
+.app-loading-bar {
+  animation: app-loading-bar 1.2s ease-in-out infinite;
+}
+.app-loading-tip {
+  animation: app-loading-tip 0.3s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-loading-bob,
+  .app-loading-tip {
+    animation: none;
+  }
+  .app-loading-bar {
+    animation: none;
+    width: 100%;
+    opacity: 0.6;
+  }
+}

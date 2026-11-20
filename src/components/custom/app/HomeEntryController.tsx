@@ -1,5 +1,6 @@
 "use client";
 
+import AppLoading from "@/components/custom/shared/AppLoading";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import GuestExperience from "./GuestExperience";
@@ -14,16 +15,7 @@ type EntryIntent = "login" | "demo" | null;
  * a guest actually asks for it ("Get Started" / "Try the demo") or a saved
  * session exists. Until it lands this is the fallback surface.
  */
-export const OpeningScreen = () => (
-  <div
-    className="flex min-h-screen items-center justify-center gap-3 bg-surface-secondary text-text-muted dark:bg-[#03060f]"
-    role="status"
-    aria-label="Opening your workspace"
-  >
-    <span className="h-5 w-5 animate-spin rounded-full border-2 border-current border-r-transparent" />
-    <span className="text-sm font-semibold">Opening your workspace…</span>
-  </div>
-);
+export const OpeningScreen = () => <AppLoading />;
 
 const AuthenticatedRuntime = dynamic(() => import("../Main"), { loading: OpeningScreen });
 
@@ -111,13 +103,8 @@ export default function HomeEntryController() {
   // Guest experience: rendered statically on server and hydrated immediately without spinner flash.
   return (
     <>
-      <div
-        className="opening-screen-fallback hidden min-h-screen items-center justify-center gap-3 bg-surface-secondary text-text-muted dark:bg-[#03060f]"
-        role="status"
-        aria-label="Opening your workspace"
-      >
-        <span className="h-5 w-5 animate-spin rounded-full border-2 border-current border-r-transparent" />
-        <span className="text-sm font-semibold">Opening your workspace…</span>
+      <div className="opening-screen-fallback hidden w-full flex-col">
+        <AppLoading />
       </div>
       <div className="guest-experience-root flex min-h-screen flex-col">
         <GuestExperience onGetStarted={handleGetStarted} onTryDemo={handleTryDemo} />

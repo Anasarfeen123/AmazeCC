@@ -1,4 +1,5 @@
 "use client";
+import AppLoading from "@/components/custom/shared/AppLoading";
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useAtom, useSetAtom, useAtomValue } from "jotai";
@@ -560,16 +561,7 @@ function MainRuntime({ initialIntent, onSignedOut }: MainProps) {
 }
 
 function OpeningScreen() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center gap-3 bg-surface-secondary text-text-muted"
-      role="status"
-      aria-label="Opening your workspace"
-    >
-      <span className="h-5 w-5 animate-spin rounded-full border-2 border-current border-r-transparent" />
-      <span className="text-sm font-semibold">Opening your workspace…</span>
-    </div>
-  );
+  return <AppLoading />;
 }
 
 function GlobalShortcutsModal({ onClose }: { onClose: () => void }) {

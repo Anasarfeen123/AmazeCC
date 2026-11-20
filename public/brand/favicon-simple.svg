@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><title>AmazeCC</title>
+<rect width="32" height="32" rx="7" fill="#004643"/>
+<path d="M3 25.5 L8 11.5 L11.5 11.5 L7.5 26.5 Z" fill="#4FB3A5"/>
+<path d="M29 25.5 L24 11.5 L20.5 11.5 L24.5 26.5 Z" fill="#F9BC60"/>
+<path d="M11 26.5 L16 7 L21 26.5" fill="none" stroke="#FFF6E5" stroke-width="4.6" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

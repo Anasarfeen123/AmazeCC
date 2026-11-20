@@ -1,5 +1,6 @@
 "use client";
 
+import { courseAccent } from "@/lib/courseColors";
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import {
   Clock,
@@ -1917,6 +1918,13 @@ export default function SimplifiedMobileHome({
                       >
                         {/* Live Progress Background Fill Bar */}
                         {isLive && <LiveClassProgress time={cls.time} variant="compact-background" />}
+                        {/* Course colour: a thin stripe on the left edge (user: a colour per
+                            course, "kinda subtle"). Same colour for the course everywhere. */}
+                        <span
+                          aria-hidden
+                          className="absolute inset-y-0 left-0 z-20 w-1.5"
+                          style={{ backgroundColor: courseAccent(cls.courseCode) }}
+                        />
 
                         <div className="relative py-3 px-4 z-10 flex items-center justify-between gap-3">
                           {/* Left: 2 Lines of info */}

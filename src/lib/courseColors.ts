@@ -53,3 +53,33 @@ export function courseColorHex(key: string | null | undefined): string {
 }
 
 export const COURSE_COLOR_KEYS = Object.keys(PALETTE);
+
+/**
+ * A soft accent per course, picked from the course code (stable: the same
+ * course gets the same colour on every screen and after re-syncs; position in
+ * a list does not matter). Only mid-light brand colours, so a thin stripe of
+ * it reads on cream, dark teal and black alike. For subtle marks (a card's
+ * edge stripe), not for fills behind text.
+ */
+const ACCENTS = [
+  "#F9BC60",
+  "#E16162",
+  "#9ED9B5",
+  "#ABD1C6",
+  "#F2A7B5",
+  "#7FC4C9",
+  "#C8D96F",
+  "#B8A6D9",
+  "#F4A259",
+  "#8FB8DE",
+];
+
+export function courseAccent(code: string | null | undefined): string {
+  const key = String(code ?? "")
+    .trim()
+    .toUpperCase();
+  if (!key) return ACCENTS[0];
+  let h = 0;
+  for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
+  return ACCENTS[h % ACCENTS.length];
+}

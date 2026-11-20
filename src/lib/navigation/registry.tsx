@@ -874,22 +874,25 @@ export const moduleRegistry: ModuleEntry[] = [
   },
 ];
 
+/**
+ * What can be pinned to the phone bottom bar (Settings and the Modules
+ * sheet both read this). Screens people open often and that work today.
+ * Not offered (2026-11-20): Announcements (hidden), Event/Club Hub (the
+ * server has no routes yet), More (a hub), Profile and Credentials
+ * (settings, not shortcuts). Each id must exist in NavigationTabs tabIcons.
+ */
 export const quickPinTabs = [
-  { id: "attendance", label: "Timetable Calendar" },
+  { id: "attendance", label: "Timetable" },
   { id: "academics", label: "Academics" },
-  { id: "payments", label: "Payments" },
-  { id: "libraries", label: "Libraries" },
   { id: "free-class", label: "Free Classrooms" },
+  { id: "hostel", label: "Hostel" },
+  { id: "transport", label: "Bus Routes" },
+  { id: "libraries", label: "Libraries" },
+  { id: "friend-finder", label: "Classmates" },
   { id: "faculty-schedule", label: "Faculty Schedule" },
-  { id: "paper-scanner", label: "Paper Scanner" },
-  { id: "events", label: "Event Hub" },
-  { id: "clubs", label: "Club Hub" },
-  { id: "community", label: "Announcements" },
+  { id: "tools", label: "Tools" },
+  { id: "payments", label: "Payments" },
   { id: "cabshare", label: "Cab Share" },
-  { id: "transport", label: "Transport" },
-  { id: "more", label: "More" },
-  { id: "profile", label: "Profile" },
-  { id: "credentials", label: "Credentials" },
 ];
 
 export function getModuleRegistry(ctx: NavContext = {} as NavContext): ModuleEntry[] {

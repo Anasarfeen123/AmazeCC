@@ -1,5 +1,6 @@
 "use client";
 
+import { quickPinTabs } from "@/lib/navigation/registry";
 import { syncEngine } from "@/lib/sync-engine";
 import { updatePostHogPersonName } from "@/lib/posthog";
 import { switchApiHost, hasBackupApi, getActiveApiUrl, BACKUP_API_URL, type ApiHostChoice } from "@/lib/fetch-utils";
@@ -2205,22 +2206,11 @@ export default function ProfilePage({
       <div className="bg-surface rounded-2xl border-2 border-border-ink p-5 space-y-5 shadow-2xs">
         <h3 className="font-display text-base font-bold uppercase text-text-heading">Bottom bar shortcuts</h3>
         <p className="text-xs text-text-muted">
-          Pin up to 4 custom shortcuts to your bottom navigation bar for quick access. Home is always present.
+          Pick up to 4 screens for the bottom bar on phones. Home is always there.
         </p>
 
         <div className="flex flex-wrap gap-2 pt-1">
-          {[
-            { id: "attendance", label: "Attendance" },
-            { id: "academics", label: "Academics" },
-            { id: "tools", label: "Tools Hub" },
-            { id: "payments", label: "Payments" },
-            { id: "libraries", label: "Libraries" },
-            { id: "cabshare", label: "Cab Share" },
-            { id: "transport", label: "Transport" },
-            { id: "more", label: "More Hub" },
-            { id: "profile", label: "Profile" },
-            { id: "credentials", label: "Credentials" },
-          ].map((tab) => {
+          {quickPinTabs.map((tab) => {
             const pinned = settings?.pinnedNavTabs ?? [];
             const isPinned = pinned.includes(tab.id);
             const atLimit = !isPinned && pinned.length >= 4;

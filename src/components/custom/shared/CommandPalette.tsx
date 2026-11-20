@@ -160,6 +160,8 @@ export interface CommandItem {
   description?: string;
   icon?: React.ReactNode | string;
   category?: string;
+  /** Extra words that should find this command (not shown). */
+  keywords?: string[];
   rightSlot?: React.ReactNode;
   detail?: React.ReactNode;
   subpage?: React.ReactNode;
@@ -303,7 +305,8 @@ export function CommandPalette({ isOpen, onClose, commands, demoMode = false }: 
 
     return allCommands
       .filter((cmd) => {
-        const text = `${cmd.label} ${cmd.description || ""} ${cmd.category || ""}`.toLowerCase();
+        const text =
+          `${cmd.label} ${cmd.description || ""} ${cmd.category || ""} ${(cmd.keywords ?? []).join(" ")}`.toLowerCase();
         return queryWords.every((word) => text.includes(word));
       })
       .slice(0, 40);

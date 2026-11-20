@@ -550,7 +550,7 @@ export function useAppCommands(input: AppCommandInputs) {
       description: "A silly little game. Works offline too.",
       icon: "🎮",
       category: "Fun",
-      keywords: ["game", "offline", "bricks", "breakout", "bored", "play"],
+      keywords: ["game", "games", "offline", "bricks", "breakout", "bored", "play", "fun", "easter egg"],
       onSelect: () => setGameOpen(true),
     });
 

@@ -9,7 +9,7 @@ import LogoMark from "./LogoMark";
  * tip — half app tips, half (mostly) useful campus advice.
  *
  * The first tip is fixed so the server HTML and the first client render
- * match; a random one takes over after mount, then rotates every 9 s (user: 4.5 s changed too fast to read).
+ * match; the shared tip (see currentTip) takes over after mount and changes every 9 s.
  */
 export const LOADING_TIPS: string[] = [
   "Ctrl+K (⌘K on a Mac) searches the whole app.",
@@ -38,12 +38,37 @@ export const LOADING_TIPS: string[] = [
   "Free Classrooms shows empty rooms right now. Group study, sorted.",
 ];
 
+/**
+ * One tip shared by every loading screen in this page load. Opening the app
+ * passes through several loading screens in a row (entry, app shell,
+ * workspace, dashboard), each a new AppLoading; when each picked its own
+ * random tip, the tip changed every second or so (user: "changing so fast").
+ * Now the first one picks, later ones keep it, and it only advances after
+ * TIP_MS on screen.
+ */
+const TIP_MS = 9000;
+const tipState = { index: -1, since: 0 };
+
+function currentTip(): number {
+  const now = Date.now();
+  if (tipState.index < 0) {
+    tipState.index = Math.floor(Math.random() * LOADING_TIPS.length);
+    tipState.since = now;
+  } else if (now - tipState.since >= TIP_MS) {
+    tipState.index = (tipState.index + 1) % LOADING_TIPS.length;
+    tipState.since = now;
+  }
+  return tipState.index;
+}
+
 export default function AppLoading({ label = "Opening your workspace" }: { label?: string }) {
+  // First render uses tip 0 so the server HTML and the first client render
+  // match; the shared tip takes over after mount.
   const [tip, setTip] = useState(0);
 
   useEffect(() => {
-    setTip(Math.floor(Math.random() * LOADING_TIPS.length));
-    const id = window.setInterval(() => setTip((t) => (t + 1) % LOADING_TIPS.length), 9000);
+    setTip(currentTip());
+    const id = window.setInterval(() => setTip(currentTip()), 1000);
     return () => window.clearInterval(id);
   }, []);
 

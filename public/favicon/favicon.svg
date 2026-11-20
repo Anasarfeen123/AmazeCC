@@ -1,6 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><title>AmazeCC</title>
-<rect width="32" height="32" rx="7" fill="#004643"/>
-<path d="M3 25.5 L8 11.5 L11.5 11.5 L7.5 26.5 Z" fill="#4FB3A5"/>
-<path d="M29 25.5 L24 11.5 L20.5 11.5 L24.5 26.5 Z" fill="#F9BC60"/>
-<path d="M11 26.5 L16 7 L21 26.5" fill="none" stroke="#FFF6E5" stroke-width="4.6" stroke-linejoin="round" stroke-linecap="round"/>
+<rect width="32" height="32" rx="7" fill="#03323A"/>
+<path d="M1.8 22.8 L4.8 13.2 L9.2 12.4 L8 24.6 Z" fill="#12857A"/>
+<path d="M30.2 22.8 L27.2 13.2 L22.8 12.4 L24 24.6 Z" fill="#E2692C"/>
+<path d="M3.8 24 L7.2 14 L11.6 13.4 L10.4 25.6 Z" fill="#5CC9A7"/>
+<path d="M28.2 24 L24.8 14 L20.4 13.4 L21.6 25.6 Z" fill="#F9BC60"/>
+<path d="M6.8 26.6 L12.8 9.8 Q16 4.4 19.2 9.8 L16.4 10.9 L11.6 26.6 Z" fill="#FFF4DF"/>
+<path d="M16.4 10.9 L19.2 9.8 L25.2 26.6 L20.4 26.6 Z" fill="#D8C2A3"/>
+<path d="M16 18.8 L16.6 20.6 L18.4 21.2 L16.6 21.8 L16 23.6 L15.4 21.8 L13.6 21.2 L15.4 20.6 Z" fill="#F9BC60"/>
 </svg>

@@ -3,7 +3,7 @@ import { plainErrorMessage } from "@/lib/plainError";
 import { useState, useEffect, useCallback } from "react";
 import { api } from "@/lib/sync-engine";
 import { runPageSync } from "@/lib/sync-engine/single-sync";
-import SubpageLayout from "../shared/SubpageLayout";
+import { IconButton, PageShell } from "../shared/primitives";
 import { Skeleton } from "@amazecontinuityprojects/amazeui";
 import BottomSheet from "../shared/BottomSheet";
 import { AnimatePresence } from "framer-motion";
@@ -265,17 +265,15 @@ export default function CircularsTab({ loginToVTOP, onBack, setActiveTab }: Circ
       });
   }, []);
 
-  // `SubpageLayout` from amazeui renders its back button unconditionally — unlike
-  // this repo's `PageShell`, it does not hide the control when `onBack` is
-  // absent. So every branch below has to supply a real one; an empty arrow
-  // function renders a button that swallows the tap and does nothing.
+  // Every branch supplies a real back action (to Attendance when there is no
+  // onBack), so the Back button never does nothing.
   const leave = onBack ?? (() => setActiveTab?.("attendance"));
 
   // Engine refreshes carry their own session, so data on screen is enough to
   // render even before the credentialed mount fetch resolves.
   if ((!creds && !data) || loading) {
     return (
-      <SubpageLayout title="Circulars" onBack={leave}>
+      <PageShell eyebrow="VTOP · Notices" title="Circulars" subtitle="Notices and circulars from VIT" onBack={leave}>
         {error ? (
           <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
             <AlertTriangle className="h-9 w-9 text-warning-foreground" />
@@ -296,26 +294,27 @@ export default function CircularsTab({ loginToVTOP, onBack, setActiveTab }: Circ
             <Skeleton className="h-64 w-full rounded-2xl" />
           </div>
         )}
-      </SubpageLayout>
+      </PageShell>
     );
   }
 
   const circulars: CircularItem[] = data?.circulars || [];
 
   return (
-    <SubpageLayout
+    <PageShell
+      eyebrow="VTOP · Notices"
       title="Circulars"
+      subtitle="Notices and circulars from VIT"
       onBack={leave}
-      action={
-        <button
+      actions={
+        <IconButton
           onClick={() => {
             void refreshCirculars();
           }}
-          className="p-2.5 rounded-full bg-secondary text-primary hover:brightness-95 transition-colors"
-          title="Reload"
+          title="Reload circulars"
         >
-          <RefreshCcw className="w-5 h-5" />
-        </button>
+          <RefreshCcw className="w-4 h-4" />
+        </IconButton>
       }
     >
       <AnimatePresence>
@@ -334,7 +333,7 @@ export default function CircularsTab({ loginToVTOP, onBack, setActiveTab }: Circ
           <TreeNode key={i} item={item} creds={creds} />
         ))}
       </div>
-    </SubpageLayout>
+    </PageShell>
   );
 }
 

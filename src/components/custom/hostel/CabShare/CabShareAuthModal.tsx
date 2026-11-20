@@ -143,8 +143,10 @@ export default function CabShareAuthModal({
   if (!isOpen) return null;
 
   return (
-    <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-      <div className={TILE_CARD}>
+    // minmax(0,1fr) on phones too: a plain grid column grows to its longest
+    // line, which pushed this card past the screen edge at 360px.
+    <section className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className={`${TILE_CARD} min-w-0`}>
         <div className="flex items-start gap-3">
           <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${TONE_ICON_TILE.indigo}`}>
             <Car className="h-5 w-5" />
@@ -184,9 +186,10 @@ export default function CabShareAuthModal({
               <button
                 type="button"
                 onClick={signInInteractive}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-colors hover:brightness-110"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-center text-sm font-bold text-primary-foreground transition-colors hover:brightness-110"
               >
-                Sign up or sign in with Amaze ID <ArrowRight className="h-4 w-4" />
+                <span className="min-w-0 break-words">Sign up or sign in with Amaze ID</span>
+                <ArrowRight className="h-4 w-4 shrink-0" />
               </button>
             </div>
           )}

@@ -1,5 +1,6 @@
 "use client";
 
+import BrandBackButton from "@/components/custom/shared/primitives/BrandBackButton";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { RefreshCcw } from "lucide-react";
@@ -34,7 +35,12 @@ export default function DashboardHostelFeature({
   const [counsellingRefreshKey, setCounsellingRefreshKey] = useState(0);
 
   return (
-    <div>
+    <div className="space-y-4">
+      {/* Sub-screens get the brand Back button to Hostel Hub, like every
+          other page (they had none, so the only way back was the sidebar). */}
+      {activeSubTab !== "overview" && activeSubTab !== "payment" && (
+        <BrandBackButton onClick={() => setActiveSubTab("overview")} label="Hostel Hub" />
+      )}
       {activeSubTab === "overview" && (
         <HostelOverview hostelData={hostelData} setHostelActiveSubTab={setActiveSubTab} />
       )}
@@ -50,8 +56,7 @@ export default function DashboardHostelFeature({
       {activeSubTab === "payment" && <PaymentsTab loginToVTOP={loginToVTOP} onBack={onSystemBack} />}
       {activeSubTab === "counselling" && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-text-heading">Hostel Counselling</h2>
+          <div className="flex items-center justify-end">
             <button
               onClick={() => setCounsellingRefreshKey((key) => key + 1)}
               className="p-2.5 rounded-full bg-info-surface text-info hover:bg-info-surface transition-colors"

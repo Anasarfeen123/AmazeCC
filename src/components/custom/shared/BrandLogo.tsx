@@ -1,8 +1,6 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { useSetAtom } from "jotai";
-import { isGameOpenAtom } from "@/store/uiAtoms";
 
 /**
  * The AmazeCC logo, one component for every place it appears.
@@ -47,8 +45,10 @@ const TAG: Record<Size, string> = {
  * whatever the surrounding link does.
  */
 const LOGO_LINES = ["ok you found it", "stop poking me", "go attend a class", "75% or bust", "that tickles"];
+/** Window event the game sheet listens for (keeps the logo free of jotai). */
+export const OPEN_GAME_EVENT = "amazecc:open-game";
+
 function useLogoEgg() {
-  const setGameOpen = useSetAtom(isGameOpenAtom);
   const [wobble, setWobble] = useState(false);
   const [line, setLine] = useState("");
   const taps = useRef<number[]>([]);
@@ -61,14 +61,14 @@ function useLogoEgg() {
     found.current += 1;
     if (found.current >= 2) {
       found.current = 0;
-      setGameOpen(true);
+      window.dispatchEvent(new Event(OPEN_GAME_EVENT));
       return;
     }
     setWobble(true);
     setLine(LOGO_LINES[Math.floor(Math.random() * LOGO_LINES.length)]);
     window.setTimeout(() => setWobble(false), 700);
     window.setTimeout(() => setLine(""), 2200);
-  }, [setGameOpen]);
+  }, []);
   return { tap, wobble, line };
 }
 

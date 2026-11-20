@@ -167,7 +167,12 @@ export default function LaundrySchedule({ hostelData, handleHostelDetailsFetch }
       {/* Header layout */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-border-muted">
         <div>
-          <h1 className="text-xl md:text-3xl font-bold text-text-heading tracking-tight">Laundry Hub</h1>
+          <p className="inline-flex items-center rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 mb-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-secondary-foreground leading-none">
+            Hostel · Laundry
+          </p>
+          <h1 className="font-display text-[28px] sm:text-[36px] font-bold uppercase text-text-heading tracking-tight leading-[1.05] break-words">
+            Laundry
+          </h1>
           <div className="flex flex-wrap items-center gap-2 mt-1">
             <span className="text-xs text-text-muted font-semibold">Block {hostel} Schedule</span>
             <span className="text-xs bg-secondary text-secondary-foreground px-2 py-0.5 rounded-[6px] font-bold flex items-center gap-1">

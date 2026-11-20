@@ -103,10 +103,13 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
     <div className="space-y-6">
       {/* Title Header */}
       <div>
-        <h1 className="text-xl md:text-3xl font-bold text-text-heading tracking-tight">Hostel Hub</h1>
-        <p className="text-xs text-text-muted mt-1">
-          Manage your residential status, laundry schedules, leave details, and dining.
+        <p className="inline-flex items-center rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 mb-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-secondary-foreground leading-none">
+          Hostel
         </p>
+        <h1 className="font-display text-[28px] sm:text-[36px] font-bold uppercase text-text-heading tracking-tight leading-[1.05] break-words">
+          Hostel Hub
+        </h1>
+        <p className="text-xs text-text-muted mt-1">Mess menu, laundry slots, leave and room counselling.</p>
       </div>
 
       {/* Grid Dashboard layout */}
@@ -128,9 +131,7 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
               {menuItems ? (
                 <p className="whitespace-pre-line text-text-primary font-medium leading-relaxed">{menuItems}</p>
               ) : (
-                <p className="text-text-muted italic">
-                  No menu cached. Tap view full menu to load it from the remote database.
-                </p>
+                <p className="text-text-muted italic">No menu saved yet. Open the full menu to load it.</p>
               )}
             </div>
           </div>

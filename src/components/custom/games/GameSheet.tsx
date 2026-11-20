@@ -5,6 +5,7 @@ import { useAtom } from "jotai";
 import { BrandSheet } from "@/components/custom/shared/primitives/BrandSheet";
 import { isGameOpenAtom } from "@/store/uiAtoms";
 import BrickBreak from "./BrickBreak";
+import { OPEN_GAME_EVENT } from "@/components/custom/shared/BrandLogo";
 
 /**
  * The offline brick-breaker in a bottom sheet. Opened from the offline banner ("Play while
@@ -40,8 +41,14 @@ export default function GameSheet() {
         setOpen(true);
       }
     };
+    // The logo easter egg (BrandLogo) asks for the game with a window event.
+    const onOpen = () => setOpen(true);
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener(OPEN_GAME_EVENT, onOpen);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener(OPEN_GAME_EVENT, onOpen);
+    };
   }, [setOpen]);
   return (
     <BrandSheet

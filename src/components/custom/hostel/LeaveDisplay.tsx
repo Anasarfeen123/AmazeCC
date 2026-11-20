@@ -89,10 +89,13 @@ export default function LeaveDisplay({ leaveData, handleHostelDetailsFetch }: Le
       {/* Header layout */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-border-muted">
         <div>
-          <h1 className="text-xl md:text-3xl font-bold text-text-heading tracking-tight">Leave Management</h1>
-          <p className="text-xs text-text-muted mt-1">
-            File outings, check leave approvals, and inspect past leaves timeline.
+          <p className="inline-flex items-center rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 mb-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-secondary-foreground leading-none">
+            Hostel · Leave
           </p>
+          <h1 className="font-display text-[28px] sm:text-[36px] font-bold uppercase text-text-heading tracking-tight leading-[1.05] break-words">
+            Leave & outings
+          </h1>
+          <p className="text-xs text-text-muted mt-1">Apply for outings and leave, and see what is approved.</p>
         </div>
 
         <div className="flex gap-2 w-full md:w-auto">

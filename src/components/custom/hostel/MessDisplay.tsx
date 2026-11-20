@@ -287,10 +287,10 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-4 border-b border-border-ink">
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-bold uppercase tracking-wider bg-secondary text-secondary-foreground border border-border-ink mb-2 min-h-9">
-            <Utensils size={11} /> Mess Menu
+            <Utensils size={11} /> Hostel · Mess
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-text-heading leading-tight font-outfit">
-            Hostel Mess Schedule
+          <h1 className="font-display text-[28px] sm:text-[36px] font-bold uppercase text-text-heading tracking-tight leading-[1.05] break-words">
+            Mess menu
           </h1>
           <p className="text-xs text-text-muted mt-0.5 font-medium flex items-center gap-1.5">
             <span>{currentMonth} Schedule</span>
@@ -319,7 +319,7 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
                   gender === g ? "bg-surface text-primary shadow-xs" : "text-text-muted hover:text-text-heading "
                 }`}
               >
-                {g === "Male" ? "Mens" : "Womens"}
+                {g === "Male" ? "Men's" : "Women's"}
               </button>
             ))}
           </div>

@@ -30,6 +30,14 @@ light + dark captures at 390 and 1440 (and 820 where layout changes).
   Rows were moved, not rewritten (same settings keys). Candidates still
   to ask the user about: the Default/Fire app icon picker, the Focus
   timer defaults living in Semester & campus.
+- Errors: every on-screen error goes through `lib/plainError.ts`
+  (`plainErrorMessage(err, fallback)`); add new error displays the same
+  way. Dates with a day are day-first en-GB everywhere ("20 Nov").
+- Fun: offline brick-breaker (`games/BrickBreak.tsx`, unbranded on
+  purpose), opened from the offline banner, `~offline`, the command
+  palette and the Konami code; logo 7-tap wobble; 1-4 am greeting.
+- `scripts/redesign/visual-check.sh`: before/after screenshot diff in
+  three themes. Run it before and after any colour/token change.
 Open from this round: a colour per course (asked the user, no answer yet);
 360px checks beyond Home; Find Classmates with a real account (batch
 filter not seen on screen).

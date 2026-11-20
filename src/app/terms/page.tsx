@@ -131,7 +131,7 @@ export default function TermsOfServicePage() {
       active="terms"
       eyebrow="Terms"
       title="Terms of service"
-      updated="19 Nov 2026"
+      updated="20 Nov 2026"
       summary={[
         "AmazeCC is a free student project. It is not an official VIT app.",
         "Use it only with your own VTOP account. You are responsible for that account.",

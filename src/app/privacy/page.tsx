@@ -4,14 +4,15 @@ import Link from "next/link";
 import LegalLayout, { type LegalSection } from "@/components/custom/legal/LegalLayout";
 
 /*
- * Every statement here was checked against the code on 2026-11-19
+ * Every statement here was checked against the code on 2026-11-20
  * (frontend + amazecc-api). If you change how data flows, update this page in
  * the same change. Sources:
  *   - credentials vault: src/lib/credentialVault.ts (AES-GCM, this browser)
  *   - VTOP sign-in relay: api/src/app/api/login/route.ts (password passed to
  *     VTOP, not stored)
  *   - class statistics: api/src/lib/marksStats.ts (running averages only)
- *   - analytics: src/lib/posthog.ts (identify by registration number + name,
+ *   - analytics: src/lib/posthog.ts (identify by registration number, name,
+ *     application number, semester;
  *     autocapture off, session recording off unless you start a bug
  *     recording), Google Analytics in src/app/layout.tsx
  *   - server tables: social_*, cabshare_*, push_subscriptions,
@@ -32,6 +33,10 @@ const sections: LegalSection[] = [
           The academic data AmazeCC fetches for you (attendance, marks, grades, timetable, exams, payments and so on),
           your settings, and the app&rsquo;s cache are stored in this browser&rsquo;s local storage. Signing out, or
           clearing this site&rsquo;s data in your browser, removes all of it.
+        </p>
+        <p>
+          Your VTOP photo is kept on this device too, and is only shown if you turn on &ldquo;Show my VTOP photo&rdquo;
+          in Settings; otherwise the AmazeCC logo is shown.
         </p>
       </>
     ),
@@ -110,9 +115,10 @@ const sections: LegalSection[] = [
         </p>
         <p>
           <strong>PostHog</strong> (through shoot.amazecc.com) is used to find and fix errors and to understand which
-          features are used. When you are signed in it is linked to your <strong>registration number and name</strong>,
-          so we can trace a bug to the account it happened on. It does not record your screen: session recording is off
-          unless you start a bug recording yourself from the feedback screen, and it does not capture what you type.
+          features are used. When you are signed in it is linked to your{" "}
+          <strong>registration number, name, application number and current semester</strong>, so we can trace a bug to
+          the account it happened on. It does not record your screen: session recording is off unless you start a bug
+          recording yourself from the feedback screen, and it does not capture what you type.
         </p>
         <p>We do not sell your data, show ads, or share analytics with anyone else.</p>
       </>
@@ -172,12 +178,12 @@ export default function PrivacyPolicyPage() {
       active="privacy"
       eyebrow="Privacy"
       title="Privacy policy"
-      updated="19 Nov 2026"
+      updated="20 Nov 2026"
       summary={[
         "Your VTOP password is saved encrypted in your browser, and your academic data stays on your device.",
         "To sign in, the AmazeCC server relays your ID and password to VTOP over HTTPS. It does not save your password.",
         "The server only keeps what you choose to share: Friend Finder, Cab Share, uploads, feedback, notifications.",
-        "Error tracking (PostHog) is linked to your registration number and name. No ads, nothing sold.",
+        "Error tracking (PostHog) is linked to your registration number, name and semester. No ads, nothing sold.",
         "Sign out to clear your device; email us to delete anything on the server.",
       ]}
       sections={sections}

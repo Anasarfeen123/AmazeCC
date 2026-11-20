@@ -321,7 +321,7 @@ export default function FacultyInfoTab({
         if (!cancelled && roster && roster.length > 0) {
           const schools = [...new Set(roster.map((r) => r.school))].sort().map((s) => ({
             id: s,
-            school_name: s.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+            school_name: prettySchoolName(s),
           }));
           setSchools(schools);
           setLoadingSchools(false);
@@ -683,4 +683,38 @@ export default function FacultyInfoTab({
       <FacultyReviewSheetHost target={reviewFaculty} onClose={() => setReviewFaculty(null)} />
     </>
   );
+}
+
+/**
+ * Roster school ids look like "cdmm-centers" or "industrial_design". Show
+ * them as words: spaces for - and _, title case, and vowel-less short words
+ * (CDMM, CNR, SSL) in capitals, since those are acronyms.
+ */
+const VIT_ACRONYMS = new Set([
+  "VIT",
+  "SCOPE",
+  "SENSE",
+  "SELECT",
+  "SMEC",
+  "SAS",
+  "SSL",
+  "SCE",
+  "SBST",
+  "VITBS",
+  "SHINE",
+  "VISH",
+  "VAIAL",
+]);
+
+function prettySchoolName(id: string): string {
+  return id
+    .replace(/[-_]+/g, " ")
+    .trim()
+    .split(/\s+/)
+    .map((w) =>
+      VIT_ACRONYMS.has(w.toUpperCase()) || /^[^aeiou]{2,5}$/i.test(w) || /^[A-Z]{2,}$/.test(w)
+        ? w.toUpperCase()
+        : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase(),
+    )
+    .join(" ");
 }

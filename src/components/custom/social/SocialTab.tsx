@@ -272,11 +272,13 @@ export default function SocialTab({ attendanceData, isDemo }: { attendanceData: 
         {/* People — pinned */}
         <button type="button" onClick={() => setScreen("people")} className={`${TILE} h-32 sm:h-36`}>
           <div className="flex items-center justify-between gap-1">
-            <span className="text-xs sm:text-xs font-bold uppercase tracking-wider text-text-muted font-outfit truncate">
+            {/* The label keeps its width; a long badge ("Not synced") truncates
+                instead (at 360px the label was cut to "P…"). */}
+            <span className="shrink-0 font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
               People
             </span>
             <span
-              className={`text-xs sm:text-xs font-bold uppercase px-2 py-0.5 rounded-md shrink-0 border ${TONE_BADGE[syncBadge.tone]}`}
+              className={`min-w-0 truncate text-xs font-bold uppercase px-2 py-0.5 rounded-md border ${TONE_BADGE[syncBadge.tone]}`}
             >
               {syncBadge.label}
             </span>

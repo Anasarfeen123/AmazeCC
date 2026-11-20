@@ -1,3 +1,4 @@
+import { courseAccent } from "@/lib/courseColors";
 import { useState, useMemo, useCallback } from "react";
 import { ChipTabs, EmptyPanel, PageShell, SelectField } from "../shared/primitives";
 import { LIST_ROW, LIST_SHELL, SEARCH_FIELD, TILE_INTERACTIVE_ROW } from "@/lib/uiTokens";
@@ -601,8 +602,14 @@ export default function SimplifiedAcademicsPage({
       <div
         key={course.courseCode}
         {...clickable(() => handleCourseClick(course.courseCode))}
-        className={`${LIST_ROW} group cursor-pointer select-none`}
+        className={`${LIST_ROW} relative group cursor-pointer select-none`}
       >
+        {/* Course colour stripe, same colour as on Home (courseAccent). */}
+        <span
+          aria-hidden
+          className="absolute inset-y-0 left-0 w-1.5"
+          style={{ backgroundColor: courseAccent(course.courseCode) }}
+        />
         {/* Left Column: Clean Icon + Course Code, Title & Subtitle */}
         <div className="flex items-center gap-3 min-w-0 flex-1">
           {/* Course Details */}

@@ -38,6 +38,18 @@ light + dark captures at 390 and 1440 (and 820 where layout changes).
   palette and the Konami code; logo 7-tap wobble; 1-4 am greeting.
 - `scripts/redesign/visual-check.sh`: before/after screenshot diff in
   three themes. Run it before and after any colour/token change.
+- Round 2026-11-20 (late): game pop-up works on all sizes (it was in the
+  phone-only BrandSheet); one AppLoading screen with rotating tips
+  (shared/AppLoading.tsx, LOADING_TIPS); curated bottom-bar pins
+  (registry quickPinTabs); subtle course colour stripe (courseAccent);
+  privacy page matches PostHog identify fields; classmates batch filter
+  verified with a real account (fixed: pick the first value that looks
+  like a VIT reg no); useAppBadge hook; settings config split into
+  header/settings/sections.ts. 360px sweep done in light, dark, night.
+- Still open: section renderers in ProfilePage and the FFCS planner body
+  are single large components; split them only in a pass coordinated with
+  other contributors (they share ~40 pieces of state). Release: wait for
+  the user.
 Open from this round: a colour per course (asked the user, no answer yet);
 360px checks beyond Home; Find Classmates with a real account (batch
 filter not seen on screen).

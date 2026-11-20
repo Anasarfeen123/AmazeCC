@@ -1828,7 +1828,7 @@ export default function SimplifiedMobileHome({
               </div>
             ) : (
               /* ── VIEWPORT STATE 4: REGULAR TIMETABLE CLASSES ── */
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {dayRows.map((row: any, index: number) => {
                   // A lab slot taken over by its Lab FAT paper renders as the
                   // collapsed exam slot, in the class's own place in the list.
@@ -1918,7 +1918,7 @@ export default function SimplifiedMobileHome({
                           style={{ backgroundColor: courseAccent(cls.courseCode) }}
                         />
 
-                        <div className="relative py-3 px-4 z-10 flex items-center justify-between gap-3">
+                        <div className="relative py-2.5 pl-4 pr-3 z-10 flex items-center justify-between gap-3">
                           {/* Left: 2 Lines of info */}
                           <div className="min-w-0 flex-1">
                             {/* Line 1: Slot + Title + Status */}
@@ -1927,7 +1927,7 @@ export default function SimplifiedMobileHome({
                                 {cls.slotName}
                               </span>
                               <h3
-                                className="min-w-0 font-bold text-sm text-text-heading line-clamp-2 font-outfit leading-tight"
+                                className="min-w-0 font-sans font-bold text-sm text-text-heading line-clamp-2 leading-tight"
                                 title={cls.courseTitle}
                               >
                                 {cls.courseTitle}
@@ -1941,7 +1941,7 @@ export default function SimplifiedMobileHome({
                             </div>
 
                             {/* Line 2: Time • Venue • Bunkable count */}
-                            <div className="flex items-center gap-2 mt-1.5 text-xs text-text-muted flex-wrap">
+                            <div className="flex items-center gap-x-1.5 gap-y-1 mt-1 text-xs text-text-muted flex-wrap">
                               <span className="flex items-center gap-1 font-semibold text-text-primary shrink-0">
                                 <Clock className="w-3 h-3 text-primary" />
                                 {cls.time}
@@ -1961,17 +1961,16 @@ export default function SimplifiedMobileHome({
                                       const erp = getFacultyErp(cls);
                                       handleOpenFacultySchedule(erp || cls.faculty);
                                     }}
-                                    className="inline-flex items-center gap-1 font-semibold text-text-muted hover:text-primary transition-colors cursor-pointer truncate max-w-[180px]"
+                                    className="inline-flex items-center gap-1 font-semibold text-text-muted hover:text-primary transition-colors cursor-pointer truncate max-w-[120px]"
                                     title="View faculty timetable schedule"
                                   >
                                     <span className="truncate">{facultyDisplayName(cls.faculty)}</span>
                                   </button>
                                 </>
                               )}
-                              <span className="text-text-muted">•</span>
                               <span
                                 data-private="attendance"
-                                className={`inline-flex items-center gap-1 rounded-[6px] border-2 px-1.5 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] ${
+                                className={`inline-flex items-center gap-1 rounded-[6px] border-2 px-1.5 py-px text-[11px] font-bold leading-tight ${
                                   TONE_BADGE[
                                     bunkStatus === "safe" ? "emerald" : bunkStatus === "warning" ? "amber" : "red"
                                   ]

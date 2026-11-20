@@ -126,7 +126,7 @@ const MobileBottomNav = memo(function MobileBottomNav({
   return (
     <nav
       aria-label="Main"
-      className="brand-sidebar md:hidden fixed bottom-[calc(env(safe-area-inset-bottom,0px)+12px)] left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-[420px] z-40 border-2 border-border-ink rounded-[14px] p-1.5 shadow-brutal-md flex items-stretch justify-around gap-1 mobile-bottom-nav-bar"
+      className="brand-sidebar md:hidden fixed bottom-[calc(env(safe-area-inset-bottom,0px)+12px)] left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-[420px] z-40 border-2 border-border-ink rounded-[14px] p-1 shadow-brutal-sm flex items-stretch justify-around gap-1 mobile-bottom-nav-bar"
     >
       {items.map((item) => (
         <button
@@ -135,7 +135,7 @@ const MobileBottomNav = memo(function MobileBottomNav({
           onClick={() => onItemTap(item)}
           aria-label={hasSectionHome(item.id) ? `${item.label} — double tap for home` : item.label}
           aria-current={item.isActive ? "page" : undefined}
-          className={`flex flex-1 min-h-12 flex-col items-center justify-center gap-0.5 rounded-[10px] border-2 px-1 py-1 select-none cursor-pointer transition-colors motion-reduce:transition-none ${
+          className={`flex flex-1 min-h-11 flex-col items-center justify-center gap-0.5 rounded-[10px] border-2 px-1 py-0.5 select-none cursor-pointer transition-colors motion-reduce:transition-none ${
             item.isActive
               ? "bg-highlight text-highlight-foreground border-border-ink shadow-brutal-sm"
               : "border-transparent text-cream hover:bg-surface-hover"
@@ -144,7 +144,7 @@ const MobileBottomNav = memo(function MobileBottomNav({
           <span className="flex items-center justify-center [&_svg]:h-5 [&_svg]:w-5 [&_svg]:stroke-[2.2]" aria-hidden>
             {item.icon}
           </span>
-          <span className="font-mono text-xs font-bold uppercase tracking-[0.04em] leading-none truncate max-w-full">
+          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.04em] leading-none truncate max-w-full">
             {item.label}
           </span>
         </button>

@@ -1,5 +1,14 @@
 # Next steps for the next contributor (written 2026-11-19, end of session)
 
+> **2026-11-20:** the fork's `main` (Anasarfeen123/AmazeCC) now equals
+> `redesign`. The previous fork main (the 8 Nov "calm notebook" design)
+> is kept as `main-before-redesign-2026-11-20` on the fork. The real repo
+> (AmazeContinuityProjects/AmazeCC) is untouched: no push or PR there until
+> the user says so. Push with `git push fork redesign` and, to update the
+> fork main too, `git push fork redesign:main`. Verified at db867756:
+> tsc clean, eslint 0 errors, vitest 15 baseline failures, `next build`
+> ok, built site runs with no console errors.
+
 Read first: `HANDOFF.md` (rules, how to work), `ROADMAP.md` (status table),
 `design/README.md`, `PRIVACY_MODE.md`. Fork only: `git push fork redesign`.
 Test baseline: 15 failures (oauth2, social-* x6 files, syncNotificationRedesign).

@@ -1,5 +1,6 @@
 "use client";
 
+import { useAppBadge } from "@/lib/useAppBadge";
 import { courseAccent } from "@/lib/courseColors";
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import {
@@ -644,18 +645,9 @@ export default function SimplifiedMobileHome({
     }).length;
   }, [attendanceList, targetAttendancePct]);
 
-  // Installed app: show the number of low-attendance courses on the app icon
-  // (Badging API; Android Chrome, desktop Chrome/Edge, iOS 16.4+ home-screen
-  // apps). Cleared when nothing is low, and in demo mode.
-  useEffect(() => {
-    const nav = navigator as Navigator & {
-      setAppBadge?: (n?: number) => Promise<void>;
-      clearAppBadge?: () => Promise<void>;
-    };
-    if (!nav.setAppBadge || !nav.clearAppBadge) return;
-    const count = isDemoMode ? 0 : criticalCount;
-    (count > 0 ? nav.setAppBadge(count) : nav.clearAppBadge()).catch(() => {});
-  }, [criticalCount, isDemoMode]);
+  // Installed app: the number of low-attendance courses on the app icon
+  // (cleared when none are low, and in demo mode).
+  useAppBadge(isDemoMode ? 0 : criticalCount);
 
   // Parsed academic calendar events
   const analyzedCalendarResults = useMemo(() => {

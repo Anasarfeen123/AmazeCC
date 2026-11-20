@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import BrandLogo from "./BrandLogo";
+import LogoMark from "./LogoMark";
 
 /**
  * The one loading screen: shown while the app opens (HomeEntryController,
@@ -9,7 +9,7 @@ import BrandLogo from "./BrandLogo";
  * tip — half app tips, half (mostly) useful campus advice.
  *
  * The first tip is fixed so the server HTML and the first client render
- * match; a random one takes over after mount, then rotates every 4.5 s.
+ * match; a random one takes over after mount, then rotates every 9 s (user: 4.5 s changed too fast to read).
  */
 export const LOADING_TIPS: string[] = [
   "Ctrl+K (⌘K on a Mac) searches the whole app.",
@@ -43,7 +43,7 @@ export default function AppLoading({ label = "Opening your workspace" }: { label
 
   useEffect(() => {
     setTip(Math.floor(Math.random() * LOADING_TIPS.length));
-    const id = window.setInterval(() => setTip((t) => (t + 1) % LOADING_TIPS.length), 4500);
+    const id = window.setInterval(() => setTip((t) => (t + 1) % LOADING_TIPS.length), 9000);
     return () => window.clearInterval(id);
   }, []);
 
@@ -54,7 +54,7 @@ export default function AppLoading({ label = "Opening your workspace" }: { label
       aria-label={label}
     >
       <div className="app-loading-bob">
-        <BrandLogo variant="mark" size="xl" />
+        <LogoMark intro className="h-24 w-24 rounded-[22%] shadow-brutal-sm" />
       </div>
 
       <div className="w-full max-w-[260px] space-y-3">

@@ -1367,7 +1367,7 @@ export default function SimplifiedMobileHome({
                   />
                 ) : (
                   // Phones only: on tablet/desktop the sidebar already carries the logo.
-                  <BrandLogo variant="mark" size="md" className="md:hidden" />
+                  <BrandLogo variant="mark" size="md" className="md:hidden" syncing={isSpinning} />
                 )}
               </div>
 

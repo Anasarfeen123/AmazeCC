@@ -59,6 +59,15 @@ light + dark captures at 390 and 1440 (and 820 where layout changes).
   are single large components; split them only in a pass coordinated with
   other contributors (they share ~40 pieces of state). Release: wait for
   the user.
+- To investigate: `src/__tests__/worker-artifact.test.ts` runs only when a
+  production build exists in `out/` (normally skipped). After
+  `next build` on 2026-11-20 it failed: the built FFCS generator worker
+  did not install a message handler in the test's bare worker context
+  ("expected 'object' to be 'function'", then a 5 s timeout). Either the
+  production worker is broken or the test does not match how Next 16
+  emits workers. Check by running the generator on a production build
+  (serve `out/`, open /ffcs, generate). Delete `out/` afterwards, or
+  local `vitest` counts these 2 extra failures.
 Open from this round: a colour per course (asked the user, no answer yet);
 360px checks beyond Home; Find Classmates with a real account (batch
 filter not seen on screen).

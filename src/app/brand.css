@@ -828,3 +828,162 @@
     opacity: 0.6;
   }
 }
+
+/* LogoMark (shared/LogoMark.tsx): the app icon in layers.
+   Pivots in the 1024 icon: book spine ~ (50%, 70%), star centre (50%, 66%). */
+.logo-mark .logo-page-l {
+  transform-origin: 46% 70%;
+}
+.logo-mark .logo-page-r {
+  transform-origin: 54% 70%;
+}
+.logo-mark .logo-a {
+  transform-origin: 50% 70%;
+}
+.logo-mark .logo-star {
+  transform-origin: 50% 66%;
+}
+
+/* intro: "book opens", ~0.95 s */
+@keyframes logo-tile-in {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes logo-a-in {
+  0% {
+    transform: translateY(-38%);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(4%);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(-2%);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes logo-page-l-in {
+  0% {
+    transform: rotate(38deg) scaleX(0.2);
+    opacity: 0;
+  }
+  70% {
+    transform: rotate(-5deg) scaleX(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes logo-page-r-in {
+  0% {
+    transform: rotate(-38deg) scaleX(0.2);
+    opacity: 0;
+  }
+  70% {
+    transform: rotate(5deg) scaleX(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes logo-star-in {
+  0% {
+    transform: scale(0) rotate(-120deg);
+    opacity: 0;
+  }
+  65% {
+    transform: scale(1.35) rotate(10deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+@keyframes logo-twinkle {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: none;
+  }
+  50% {
+    transform: scale(1.18);
+    filter: brightness(1.15);
+  }
+}
+.logo-mark.is-intro .logo-tile {
+  animation: logo-tile-in 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+.logo-mark.is-intro .logo-a {
+  animation: logo-a-in 0.42s cubic-bezier(0.3, 0.9, 0.3, 1) 0.14s both;
+}
+.logo-mark.is-intro .logo-page-l {
+  animation: logo-page-l-in 0.36s cubic-bezier(0.25, 0.9, 0.3, 1.1) 0.38s both;
+}
+.logo-mark.is-intro .logo-page-r {
+  animation: logo-page-r-in 0.36s cubic-bezier(0.25, 0.9, 0.3, 1.1) 0.44s both;
+}
+.logo-mark.is-intro .logo-star {
+  animation:
+    logo-star-in 0.3s cubic-bezier(0.3, 1.4, 0.4, 1) 0.68s both,
+    logo-twinkle 0.5s ease-in-out 1.05s 1;
+}
+
+/* in the app: star turns while syncing; pages flutter once when it ends */
+@keyframes logo-star-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes logo-flutter-l {
+  0%,
+  100% {
+    transform: none;
+  }
+  40% {
+    transform: rotate(-9deg);
+  }
+  70% {
+    transform: rotate(3deg);
+  }
+}
+@keyframes logo-flutter-r {
+  0%,
+  100% {
+    transform: none;
+  }
+  40% {
+    transform: rotate(9deg);
+  }
+  70% {
+    transform: rotate(-3deg);
+  }
+}
+.logo-mark.is-syncing .logo-star {
+  animation: logo-star-spin 1.6s linear infinite;
+}
+.logo-mark.is-flutter .logo-page-l {
+  animation: logo-flutter-l 0.6s ease-out;
+}
+.logo-mark.is-flutter .logo-page-r {
+  animation: logo-flutter-r 0.6s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-mark .logo-layer {
+    animation: none !important;
+  }
+}

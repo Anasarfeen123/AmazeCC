@@ -1111,6 +1111,7 @@ export default function NavigationTabs({
                 size={isOpen ? "sm" : "md"}
                 markSrc={currentIcon.includes("fire") ? currentIcon : undefined}
                 wordClassName="text-cream"
+                syncing={isSpinning}
               />
             </div>
             {isOpen && (

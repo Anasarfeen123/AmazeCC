@@ -16,7 +16,7 @@ import { useCallback, useRef, useState } from "react";
  * in headers/sidebars, `"lockup"` + `tagline` for brand moments (hero, footer).
  */
 
-import { getAssetPath } from "@/lib/utils";
+import LogoMark from "./LogoMark";
 
 type Size = "sm" | "md" | "lg" | "xl";
 
@@ -77,6 +77,7 @@ export function BrandLogo({
   size = "md",
   tagline = false,
   markSrc,
+  syncing = false,
   className = "",
   wordClassName = "",
 }: {
@@ -85,6 +86,8 @@ export function BrandLogo({
   tagline?: boolean;
   /** Override the mark image (e.g. the user's chosen alternate app icon). */
   markSrc?: string;
+  /** A sync is running: the star in the mark turns (LogoMark). */
+  syncing?: boolean;
   className?: string;
   /** Colour for "Amaze" when the default heading ink is wrong (e.g. on teal). */
   wordClassName?: string;
@@ -92,13 +95,21 @@ export function BrandLogo({
   const egg = useLogoEgg();
   const mark = (
     <span className="relative inline-flex shrink-0" onClick={egg.tap}>
-      <img
-        src={markSrc ?? getAssetPath("/brand/icon-app.svg")}
-        alt=""
-        aria-hidden="true"
-        decoding="async"
-        className={`brand-logo-mark ${MARK[size]} shrink-0 rounded-[22%] object-contain shadow-brutal-sm ${egg.wobble ? "logo-wobble" : ""}`}
-      />
+      {markSrc ? (
+        <img
+          src={markSrc}
+          alt=""
+          aria-hidden="true"
+          decoding="async"
+          className={`brand-logo-mark ${MARK[size]} shrink-0 rounded-[22%] object-contain shadow-brutal-sm ${egg.wobble ? "logo-wobble" : ""}`}
+        />
+      ) : (
+        // Layered app icon, so the star can turn while syncing (LogoMark).
+        <LogoMark
+          syncing={syncing}
+          className={`brand-logo-mark ${MARK[size]} rounded-[22%] shadow-brutal-sm ${egg.wobble ? "logo-wobble" : ""}`}
+        />
+      )}
       {egg.line && (
         <span
           role="status"

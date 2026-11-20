@@ -35,7 +35,9 @@ const nextConfig = {
   output: "export",
   basePath: basePath,
   trailingSlash: true,
-  allowedDevOrigins: ["192.168.1.101", "localhost:3001", "192.168.1.101:3001"],
+  // Phones on the same Wi-Fi open the dev server by the laptop's LAN address;
+  // Next blocks dev assets for origins not listed here.
+  allowedDevOrigins: ["192.168.1.101", "localhost:3001", "192.168.1.101:3001", "10.159.73.107"],
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath,
   },

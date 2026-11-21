@@ -19,7 +19,7 @@ import { downloadExamSchedulePdf } from "@/lib/exportTimetable";
 import { generateExamScheduleHtml } from "@/lib/exportTimetableHtml";
 import { downloadHtmlImage } from "@/lib/imageDownload";
 import BottomSheet from "../shared/BottomSheet";
-import { GHOST_BUTTON, SECTION_CHIP } from "@/lib/uiTokens";
+import { GHOST_BUTTON } from "@/lib/uiTokens";
 import {
   buildExamRows,
   nextExamLabel,
@@ -313,14 +313,13 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
       <div ref={captureRef} className="space-y-4">
         {/* ── EXAM SERIES ── */}
         {examTypes.length > 1 && (
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <SegmentedControl
-              options={[{ value: ALL_TYPES, label: "All" }, ...examTypes.map((t) => ({ value: t, label: t }))]}
-              value={typeFilter}
-              onChange={setTypeFilter}
-            />
-            <span className={`${SECTION_CHIP} shrink-0`}>{visibleRows.length}</span>
-          </div>
+          // Full-width filter; the total chip went (each series shows its own count).
+          <SegmentedControl
+            grow
+            options={[{ value: ALL_TYPES, label: "All" }, ...examTypes.map((t) => ({ value: t, label: t }))]}
+            value={typeFilter}
+            onChange={setTypeFilter}
+          />
         )}
 
         <div className="space-y-6 sm:space-y-7">
@@ -341,26 +340,9 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
                     count={rows.length}
                     right={
                       <div className="flex items-center gap-1 sm:gap-1.5">
-                        <button
-                          type="button"
-                          onClick={() => handleDownloadPdf(examType)}
-                          title={`Download ${examType} Schedule (PDF)`}
-                          disabled={isDownloading || isDownloadingPdf}
-                          className={GHOST_BUTTON}
-                        >
-                          <Printer className="w-3.5 h-3.5 text-primary" />
-                          <span className="text-xs font-bold">{examType} PDF</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleDownloadImage(examType)}
-                          title={`Download ${examType} as PNG`}
-                          disabled={isDownloading || isDownloadingPdf}
-                          className={GHOST_BUTTON}
-                        >
-                          <Download className="w-3.5 h-3.5 text-success-foreground" />
-                          <span className="text-xs font-bold">{examType} PNG</span>
-                        </button>
+                        {/* Per-series PDF/PNG buttons removed: the header's
+                            "Choose exam to download" and the filtered PNG/PDF
+                            already do this (owner: the page was cluttered). */}
                         {isIOS && hasCalendarData ? (
                           <a
                             href={generateICSFile(subjects, examType)}

@@ -75,23 +75,6 @@ const getCourseCredits = (course: any) => {
   return credits > 0 ? credits : -1;
 };
 
-/** Pill colours for a score out of 100: green 80+, yellow 65+, red below. */
-const scorePillTone = (pct: number | null): string => {
-  if (pct === null || !Number.isFinite(pct)) return "border-border-muted bg-surface-secondary text-text-primary";
-  if (pct >= 80) return "border-success-foreground/40 bg-success-surface text-success-foreground";
-  if (pct >= 65) return "border-warning-foreground/40 bg-warning-surface text-warning-foreground";
-  return "border-danger-foreground/40 bg-danger-surface text-danger-foreground";
-};
-
-/** Same tones for a letter grade (S/A good, B/C middle, D/E/F low). */
-const gradePillTone = (grade: string): string => {
-  const g = grade.trim().toUpperCase();
-  if (g === "S" || g === "A") return scorePillTone(90);
-  if (g === "B" || g === "C") return scorePillTone(70);
-  if (g === "D" || g === "E" || g === "F") return scorePillTone(0);
-  return scorePillTone(null);
-};
-
 const formatUpToTwoDecimals = (num: number, padDecimals = false): string => {
   if (!Number.isFinite(num)) return "0";
   const rounded = Math.round(num * 100) / 100;
@@ -590,11 +573,6 @@ export default function SimplifiedAcademicsPage({
     const norm = normalizeCourse(main || course);
     const displayCode = norm.baseCode || norm.code || course.courseCode;
     const displayTitle = norm.title || course.courseTitle;
-    const courseTypeLabel = isEmbedded
-      ? "Embedded Theory + Lab"
-      : norm.componentType === "Lab Only" || course.lab
-        ? "Lab Only"
-        : "Theory Only";
 
     const grandWeightage = calculateGrandWeightage(course, decimalValues);
 
@@ -610,91 +588,65 @@ export default function SimplifiedAcademicsPage({
           className="absolute inset-y-0 left-0 w-1.5"
           style={{ backgroundColor: courseAccent(course.courseCode) }}
         />
-        {/* Left Column: Clean Icon + Course Code, Title & Subtitle */}
-        <div className="flex items-center gap-3 min-w-0 flex-1">
-          {/* Course Details */}
-          <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-[6px] border-2 border-border-ink bg-surface-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-text-primary">
-                {displayCode}
-              </span>
-              <span
-                className={`rounded-[6px] border-2 border-border-ink px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-obsidian ${
-                  isEmbedded ? "bg-ochre" : course.lab ? "bg-mint" : "bg-sage"
-                }`}
-              >
-                {isEmbedded ? "Embedded" : course.lab ? "Lab" : "Theory"}
-              </span>
+        {/* Calm row (owner: rows were cluttered; StudentCC-style): the name,
+            one quiet line (code · type · credits), the score with its
+            percentage, and a thin progress bar. No badge boxes. */}
+        <div className="min-w-0 flex-1 pl-1.5">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <p className="line-clamp-2 font-outfit text-base font-bold leading-snug text-text-heading">
+                {displayTitle}
+              </p>
+              <p className="mt-0.5 truncate text-xs text-text-muted">
+                {[
+                  displayCode,
+                  isEmbedded ? "Embedded" : course.lab ? "Lab" : "Theory",
+                  (norm.credits ?? course.credits) > 0
+                    ? `${norm.credits ?? course.credits} ${Number(norm.credits ?? course.credits) === 1 ? "credit" : "credits"}`
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </p>
             </div>
-
-            {/* Course Title */}
-            <p className="mt-1.5 line-clamp-2 font-display text-base font-bold leading-snug text-text-heading">
-              {displayTitle}
-            </p>
-
-            {/* Subtitle containing course type, credits and slot */}
-            <p className="mt-0.5 truncate font-mono text-xs text-text-muted">
-              {[
-                // The badge already says Theory/Lab; keep the detail only for embedded.
-                isEmbedded ? courseTypeLabel : "",
-                (norm.credits ?? course.credits) > 0 ? `${norm.credits ?? course.credits} credits` : "",
-                norm.slotDisplay || main?.slotName || main?.slot
-                  ? `Slot ${norm.slotDisplay || main.slotName || main.slot}`
-                  : "",
-              ]
-                .filter(Boolean)
-                .join(" // ")}
-            </p>
-          </div>
-        </div>
-
-        {/* Right Column: Overall Grand Weightage Points Scored & Forward Arrow */}
-        <div className="flex items-center gap-1 sm:gap-2.5 shrink-0 text-right">
-          <div>
-            {course.grade ? (
-              <div
-                className={`flex flex-col items-end rounded-[10px] border-2 px-2 py-1.5 sm:px-3 ${gradePillTone(String(course.grade))}`}
-              >
-                <span data-private="marks" className="font-display text-base sm:text-xl font-bold leading-none">
-                  {course.grade}
-                </span>
-                <span className="mt-1 font-mono text-xs font-bold uppercase opacity-80">Final grade</span>
-              </div>
-            ) : grandWeightage.hasAssessments ? (
-              <div
-                className={`flex flex-col items-end rounded-[10px] border-2 px-2 py-1.5 sm:px-3 ${scorePillTone(grandWeightage.percentage)}`}
-              >
-                <span
-                  data-private="marks"
-                  className="font-display text-base sm:text-xl font-bold leading-none tabular-nums whitespace-nowrap"
-                >
-                  {grandWeightage.maxWeight > 0
-                    ? `${grandWeightage.displayScore} / ${grandWeightage.displayMax}`
-                    : `${grandWeightage.displayScore}`}
-                </span>
-                {grandWeightage.maxWeight !== 100 && (
-                  <span
-                    data-private={grandWeightage.percentage !== null ? "marks" : undefined}
-                    className="mt-1 font-mono text-xs font-bold uppercase opacity-80"
+            <div className="flex shrink-0 items-start gap-1 text-right">
+              {course.grade ? (
+                <div>
+                  <p data-private="marks" className="font-display text-xl font-bold leading-none text-text-heading">
+                    {course.grade}
+                  </p>
+                  <p className="mt-1 text-xs text-text-muted">Final grade</p>
+                </div>
+              ) : grandWeightage.hasAssessments ? (
+                <div>
+                  <p
+                    data-private="marks"
+                    className="whitespace-nowrap font-display text-lg font-bold leading-none tabular-nums text-text-heading"
                   >
-                    {grandWeightage.percentage !== null
-                      ? `${formatUpToTwoDecimals(grandWeightage.percentage, decimalValues)}%`
-                      : "Weightage"}
-                  </span>
-                )}
-              </div>
-            ) : (
-              <div className="flex flex-col items-end rounded-[10px] border-2 border-dashed border-border px-2 py-1.5 sm:px-3">
-                <span className="font-mono text-xs font-bold uppercase text-text-primary">Pending</span>
-                <span className="mt-1 font-mono text-xs text-text-muted">No marks yet</span>
-              </div>
-            )}
+                    {grandWeightage.maxWeight > 0
+                      ? `${grandWeightage.displayScore} / ${grandWeightage.displayMax}`
+                      : `${grandWeightage.displayScore}`}
+                  </p>
+                  {grandWeightage.percentage !== null && grandWeightage.maxWeight !== 100 ? (
+                    <p data-private="marks" className="mt-1 text-xs text-text-muted tabular-nums">
+                      {formatUpToTwoDecimals(grandWeightage.percentage, decimalValues)}%
+                    </p>
+                  ) : null}
+                </div>
+              ) : (
+                <p className="pt-0.5 text-xs text-text-muted">No marks yet</p>
+              )}
+              <ChevronRight className="mt-0.5 h-4 w-4 text-text-muted" aria-hidden />
+            </div>
           </div>
-
-          {/* Navigation indicator */}
-          <div className="p-1 rounded-lg text-text-muted group-hover:text-primary group-hover:translate-x-0.5 transition-all">
-            <ChevronRight className="w-4 h-4" />
-          </div>
+          {!course.grade && grandWeightage.hasAssessments && grandWeightage.percentage !== null ? (
+            <div className="mt-2.5 h-1.5 w-full overflow-hidden rounded-full bg-surface-secondary" aria-hidden>
+              <div
+                className="h-full rounded-full bg-primary"
+                style={{ width: `${Math.max(0, Math.min(100, grandWeightage.percentage))}%` }}
+              />
+            </div>
+          ) : null}
         </div>
       </div>
     );

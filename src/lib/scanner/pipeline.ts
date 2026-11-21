@@ -156,7 +156,9 @@ const LABELED_CODE = new RegExp(
 );
 
 const TITLE_PATTERNS: RegExp[] = [
-  /(?:course|subject)\s*name\b[^a-z0-9]{0,10}[:.+=\-–—]*\s*([^\n]{1,80})/i,
+  // "Course Title" is the label VIT papers print (it fell through to the
+  // heading fallback, which picked the "Course Code: …" line as the title).
+  /(?:course|subject)\s*(?:name|title)\b[^a-z0-9]{0,10}[:.+=\-–—]*\s*([^\n]{1,80})/i,
   new RegExp(String.raw`(?:course|subject)\s*code\s*[,;:]\s*(${COURSE_CODE})\s*[,;:\-–—]\s*([^\n]{1,80})`, "i"),
   /(?:^|\n)[^\S\n]*(?:course|subject)\s*[:.+=\-–—]+\s*([^\n]{1,80})/i,
 ];
@@ -179,6 +181,8 @@ function headingLine(text: string): string | null {
     if (
       trimmed.length >= 4 &&
       trimmed.length <= 80 &&
+      // A "Course Code: X" line names the code, not the paper.
+      !/^(?:course|subject)\s*code\b/i.test(trimmed) &&
       /(course|subject|unit|chapter|assignment|lecture|tutorial)/i.test(trimmed)
     ) {
       return trimmed;

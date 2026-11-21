@@ -591,3 +591,18 @@ describe("scanner pipeline: uploadStoredScan", () => {
     expect((await store.get("scan-1"))?.meta.upload.status).toBe("queued");
   });
 });
+
+describe("extractPaperHints: VIT 'Course Title' label", () => {
+  it("takes the title from 'Course Title:' and not the 'Course Code:' line", () => {
+    const text = [
+      "VIT UNIVERSITY CHENNAI",
+      "Continuous Assessment Test - II",
+      "Course Code: BCSE302L",
+      "Course Title: Database Systems",
+      "Slot: A2 Duration: 90 Minutes Max Marks: 50",
+    ].join("\n");
+    const hints = extractPaperHints(text);
+    expect(hints.subjectCode).toBe("BCSE302L");
+    expect(hints.title).toBe("Database Systems");
+  });
+});

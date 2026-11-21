@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { AlertCircle, Check, Copy, Download, ExternalLink, FileText, Trash2, UploadCloud } from "lucide-react";
 import BottomSheet from "@/components/custom/shared/BottomSheet";
 import Button from "@/components/custom/shared/Button";
@@ -90,13 +90,19 @@ export default function PaperDetailSheet({ record, store, onClose, onChanged, on
     classNbr !== (meta.exam?.classNbr || "") ||
     maxMarks !== (meta.exam?.maxMarks ? String(meta.exam.maxMarks) : "");
 
-  const thumbUrl = useMemo(() => (record.thumbnail ? URL.createObjectURL(record.thumbnail) : null), [record.thumbnail]);
-  useEffect(
-    () => () => {
-      if (thumbUrl) URL.revokeObjectURL(thumbUrl);
-    },
-    [thumbUrl],
-  );
+  // Created and revoked in one effect: as a useMemo + cleanup pair the
+  // cleanup ran on React's dev double-mount and revoked the URL the memo
+  // kept, so the preview showed as a broken image.
+  const [thumbUrl, setThumbUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!record.thumbnail) {
+      setThumbUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(record.thumbnail);
+    setThumbUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [record.thumbnail]);
 
   const saveEdits = async () => {
     const updatedExam: ExamDetails | null =

@@ -19,7 +19,7 @@ export function VitfacReviewPill({
 }: {
   employeeId?: string | null;
   name?: string | null;
-  onClick?: (e: React.MouseEvent) => void;
+  onClick?: (e: React.SyntheticEvent) => void;
   className?: string;
 }) {
   if (!ENABLE_VITFAC_INTEGRATION) return null;
@@ -36,15 +36,26 @@ export function VitfacReviewPill({
       : "bg-danger-surface text-danger-foreground border-border-ink hover:bg-danger-surface";
 
   return (
-    <button
-      type="button"
+    // A span with button semantics, not a <button>: the pill sits inside
+    // clickable rows that are themselves buttons (the FFCS faculty swap
+    // sheet), and <button> in <button> is invalid HTML (hydration error).
+    <span
+      role="button"
+      tabIndex={0}
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          e.stopPropagation();
+          onClick?.(e);
+        }
+      }}
       title={`vitfac rating: ${review.wPct}% W (${review.reviews} reviews). Click to view breakdown.`}
       className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md border text-xs font-bold transition-all cursor-pointer shrink-0 relative hit-expand touch-press ${colorClass} ${className}`.trim()}
     >
       <span>{review.wPct}% W</span>
       <span className="text-xs opacity-70">({review.reviews})</span>
-    </button>
+    </span>
   );
 }
 

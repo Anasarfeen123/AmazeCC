@@ -8,8 +8,8 @@ import LogoMark from "./LogoMark";
  * Main, AuthenticatedWorkspace). Brand logo, a moving ink bar, and a rotating
  * tip — half app tips, half (mostly) useful campus advice.
  *
- * The first tip is fixed so the server HTML and the first client render
- * match; the shared tip (see currentTip) takes over after mount and changes every 9 s.
+ * The tip text appears after mount (the server cannot know the shared tip),
+ * changes every 9 s, and fades only when it actually changes.
  */
 export const LOADING_TIPS: string[] = [
   "Ctrl+K (⌘K on a Mac) searches the whole app.",
@@ -47,7 +47,9 @@ export const LOADING_TIPS: string[] = [
  * TIP_MS on screen.
  */
 const TIP_MS = 9000;
-const tipState = { index: -1, since: 0 };
+// lastShown: the tip a loading screen last put on screen, so the next screen
+// showing the same tip does not replay the fade (that read as blinking).
+const tipState = { index: -1, since: 0, lastShown: -1 };
 
 function currentTip(): number {
   const now = Date.now();
@@ -62,13 +64,27 @@ function currentTip(): number {
 }
 
 export default function AppLoading({ label = "Opening your workspace" }: { label?: string }) {
-  // First render uses tip 0 so the server HTML and the first client render
-  // match; the shared tip takes over after mount.
-  const [tip, setTip] = useState(0);
+  // No tip text until mounted: the server cannot know the shared tip, and
+  // rendering tip 0 first then swapping flashed on every loading screen
+  // (user: "tips are blinking and buggy"). The box keeps its height.
+  const [tip, setTip] = useState<number | null>(null);
+  // Fade only when the text actually changes, not when a new loading screen
+  // mounts with the tip the previous screen was already showing.
+  const [fade, setFade] = useState(false);
 
   useEffect(() => {
-    setTip(currentTip());
-    const id = window.setInterval(() => setTip(currentTip()), 1000);
+    const show = () => {
+      const next = currentTip();
+      if (next === tipState.lastShown) {
+        setTip((prev) => (prev === next ? prev : next));
+        return;
+      }
+      setFade(tipState.lastShown !== -1);
+      tipState.lastShown = next;
+      setTip(next);
+    };
+    show();
+    const id = window.setInterval(show, 1000);
     return () => window.clearInterval(id);
   }, []);
 
@@ -93,9 +109,12 @@ export default function AppLoading({ label = "Opening your workspace" }: { label
         <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
           Tip
         </span>
-        {/* key: re-mounts so the fade runs on each new tip */}
-        <p key={tip} className="app-loading-tip mt-2 min-h-[2.75rem] text-sm leading-snug text-text-primary">
-          {LOADING_TIPS[tip]}
+        {/* key: re-mounts so the fade runs when the tip changes */}
+        <p
+          key={tip ?? "none"}
+          className={`${fade ? "app-loading-tip " : ""}mt-2 min-h-[2.75rem] text-sm leading-snug text-text-primary`}
+        >
+          {tip === null ? "\u00a0" : LOADING_TIPS[tip]}
         </p>
       </div>
     </div>

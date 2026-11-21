@@ -421,7 +421,7 @@ export async function processScan(
 
   /* 4. PDF — the artifact the whole feature exists to produce */
   emit("pdf", 0, 1);
-  const pdf = await buildScanPdf(cleaned, { title });
+  const pdf = await buildScanPdf(cleaned, { title, jpegQuality: 0.85 });
   emit("pdf", 1, 1);
 
   /* 5. thumbnail — display sugar; its absence is a note, not a failure */

@@ -13,6 +13,7 @@
  */
 
 import type { Raster } from "./types";
+import { encodeJpeg } from "./rasterIO";
 
 let jsPdfModule: Promise<typeof import("jspdf")> | undefined;
 const loadJsPdf = () => (jsPdfModule ??= import("jspdf"));
@@ -39,6 +40,13 @@ export function fitOnA4(width: number, height: number): { x: number; y: number; 
 export interface ScanPdfOptions {
   /** PDF metadata title — the student's paper title when they have set one. */
   title?: string;
+  /**
+   * Embed pages as JPEG at this quality (0-1) instead of lossless RGBA.
+   * Lossless was ~5 MB per page (owner noticed the size); 0.85 keeps text
+   * crisp at a few hundred KB. Needs a canvas: where there is none (tests,
+   * workers) or encoding fails, the page falls back to lossless.
+   */
+  jpegQuality?: number;
 }
 
 /**
@@ -67,13 +75,29 @@ export async function buildScanPdf(pages: readonly Raster[], options: ScanPdfOpt
     subject: "Scanned with Paper Scanner",
   });
 
+  const jpegs = await Promise.all(pages.map((raster) => toJpegBytes(raster, options.jpegQuality)));
+
   pages.forEach((raster, index) => {
     if (index > 0) pdf.addPage();
     const { x, y, w, h } = fitOnA4(raster.width, raster.height);
-    // No `format`: jsPDF infers the RGBA path from the data's shape, which is
-    // the only input this file ever hands it.
-    pdf.addImage({ imageData: raster, x, y, width: w, height: h });
+    const jpeg = jpegs[index];
+    if (jpeg) {
+      pdf.addImage(jpeg, "JPEG", x, y, w, h, undefined, "NONE");
+    } else {
+      // No `format`: jsPDF infers the RGBA path from the data's shape.
+      pdf.addImage({ imageData: raster, x, y, width: w, height: h });
+    }
   });
 
   return pdf.output("blob");
+}
+
+async function toJpegBytes(raster: Raster, quality: number | undefined): Promise<Uint8Array | null> {
+  if (quality === undefined || typeof document === "undefined") return null;
+  try {
+    const blob = await encodeJpeg(raster, quality);
+    return new Uint8Array(await blob.arrayBuffer());
+  } catch {
+    return null;
+  }
 }

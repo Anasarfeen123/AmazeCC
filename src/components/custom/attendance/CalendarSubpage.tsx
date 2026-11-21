@@ -6,6 +6,7 @@ import { activeTabAtom, activeToolsSubTabAtom } from "@/store/uiAtoms";
 import {
   BookOpen,
   Calendar as CalendarIcon,
+  ChevronLeft,
   ChevronRight,
   Clock,
   Download,
@@ -642,7 +643,7 @@ export default function CalendarSubpage({
       </IconButton>
       <IconButton
         onClick={() => downloadCalendar(months)}
-        title="Sync the semester to your calendar (.ics)"
+        title="Add to calendar"
         disabled={months.length === 0}
       >
         <Download className="w-4 h-4" />
@@ -712,6 +713,70 @@ export default function CalendarSubpage({
 
   return (
     <PageShell {...shellProps}>
+      {/* ── Month grid, first on the page (owner: the calendar is the most
+          important part and the page felt cluttered). One header row:
+          ‹ month › and Today; the programme picker sits under the grid. ── */}
+      <div className={TILE_CARD}>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex min-w-0 items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => handleMonthChange(Math.max(0, effectiveIndex - 1))}
+              disabled={effectiveIndex <= 0}
+              aria-label="Previous month"
+              className="relative hit-expand inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] text-text-primary hover:bg-surface-secondary disabled:opacity-30 cursor-pointer"
+            >
+              <ChevronLeft className="h-4 w-4" aria-hidden />
+            </button>
+            <h2 className="truncate font-display text-base sm:text-lg font-bold uppercase leading-none text-text-heading">
+              {activeMonth.label}
+            </h2>
+            <button
+              type="button"
+              onClick={() => handleMonthChange(Math.min(months.length - 1, effectiveIndex + 1))}
+              disabled={effectiveIndex >= months.length - 1}
+              aria-label="Next month"
+              className="relative hit-expand inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] text-text-primary hover:bg-surface-secondary disabled:opacity-30 cursor-pointer"
+            >
+              <ChevronRight className="h-4 w-4" aria-hidden />
+            </button>
+          </div>
+          {today ? (
+            <button
+              type="button"
+              onClick={() => openDay(today)}
+              title={todaySummary(today, dayCardsMap)}
+              aria-label={`Open today: ${todaySummary(today, dayCardsMap)}`}
+              className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-[8px] border-2 border-border-ink bg-secondary px-2.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground cursor-pointer"
+            >
+              <ToneDot tone={todayTone(today)} size="md" />
+              Today
+            </button>
+          ) : null}
+        </div>
+
+        <div className="mt-3">
+          <MonthGrid
+            months={months}
+            activeIndex={effectiveIndex}
+            onMonthChange={handleMonthChange}
+            onSelectDay={openDay}
+            selectedDateKey={selected?.dateKey ?? null}
+            hideAttendance={hideAttendance}
+            showMonthTabs={false}
+          />
+        </div>
+
+        <div className="mt-3 flex items-center gap-2 border-t-2 border-border-muted pt-3">
+          <span className="shrink-0 font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
+            Programme
+          </span>
+          <div className="min-w-0 flex-1">
+            <SelectField value={type} onChange={handleTypeChange} options={CALENDAR_OPTIONS} size="md" />
+          </div>
+        </div>
+      </div>
+
       {/*
        * Two stat cards, side by side, and both are carousels.
        *
@@ -769,55 +834,6 @@ export default function CalendarSubpage({
             }
           />
         ) : null}
-      </div>
-
-      {/* ── Month grid ──
-          "Today" lives in this header as an action, not as a third stat card.
-          It was a tile, and two tiles plus a carousel is three cards competing
-          over the same reading time; today is also the one thing on this page
-          that is a link rather than a measurement, so it belongs with the grid
-          it jumps into. */}
-      <div className={TILE_CARD}>
-        <SectionHeader
-          icon={CalendarIcon}
-          title={activeMonth.label}
-          count={activeMonth.summary.total}
-          right={
-            today ? (
-              <button
-                type="button"
-                onClick={() => openDay(today)}
-                title="Open today"
-                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-surface-secondary text-text-muted hover:bg-surface-hover transition-colors cursor-pointer shrink-0"
-              >
-                <ToneDot tone={todayTone(today)} size="md" />
-                <span className="text-xs font-bold">{todaySummary(today, dayCardsMap)}</span>
-                <ChevronRight className="w-3 h-3" />
-              </button>
-            ) : null
-          }
-        />
-
-        {/* Its own row, not the section header's `right` slot: that slot is
-            shrink-0, and a native select is ~256px, which on a 360px phone
-            leaves the month name about sixty pixels. */}
-        <div className="mt-3 flex items-center gap-2">
-          <span className="shrink-0 text-xs font-bold uppercase tracking-wider text-text-muted">Programme</span>
-          <div className="min-w-0 flex-1">
-            <SelectField value={type} onChange={handleTypeChange} options={CALENDAR_OPTIONS} />
-          </div>
-        </div>
-
-        <div className="mt-3">
-          <MonthGrid
-            months={months}
-            activeIndex={effectiveIndex}
-            onMonthChange={handleMonthChange}
-            onSelectDay={openDay}
-            selectedDateKey={selected?.dateKey ?? null}
-            hideAttendance={hideAttendance}
-          />
-        </div>
       </div>
 
       {/* ── Upcoming ──

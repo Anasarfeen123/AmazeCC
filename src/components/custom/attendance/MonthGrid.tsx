@@ -17,8 +17,11 @@ import {
 /** The squircle the Theory and Lab log grids already use. */
 /* Capped height, not aspect-square: on a wide desktop card square cells grew
    to ~120px and the month became mostly empty space. */
+// Phones/tablets: number + dots, centred. Laptops (lg): a real calendar cell,
+// date top-left and the day's first event written out (owner: the laptop
+// calendar was big empty boxes).
 const CELL =
-  "relative h-12 sm:h-14 lg:h-16 rounded-[10px] border-2 border-transparent flex flex-col items-center justify-center gap-1 transition-colors duration-150 cursor-pointer";
+  "relative h-12 sm:h-14 lg:h-24 rounded-[10px] border-2 border-transparent flex flex-col items-center justify-center gap-1 lg:items-start lg:justify-start lg:gap-1.5 lg:p-2 lg:text-left transition-colors duration-150 cursor-pointer";
 
 /**
  * Day-type tint.
@@ -73,6 +76,7 @@ export default function MonthGrid({
   onSelectDay,
   selectedDateKey = null,
   hideAttendance = false,
+  showMonthTabs = true,
   className = "",
 }: {
   months: CalendarMonthModel[];
@@ -82,6 +86,8 @@ export default function MonthGrid({
   /** Ring on the day the sheet is open for. */
   selectedDateKey?: string | null;
   hideAttendance?: boolean;
+  /** The scrolling month chips; off when the caller has its own ‹ month › header. */
+  showMonthTabs?: boolean;
   className?: string;
 }) {
   const today = todayKey();
@@ -98,11 +104,13 @@ export default function MonthGrid({
 
   return (
     <div className={cn("w-full min-w-0 flex flex-col gap-3", className)}>
-      <ChipTabs
-        options={monthOptions}
-        value={month.id}
-        onChange={(id) => onMonthChange(months.findIndex((m) => m.id === id))}
-      />
+      {showMonthTabs ? (
+        <ChipTabs
+          options={monthOptions}
+          value={month.id}
+          onChange={(id) => onMonthChange(months.findIndex((m) => m.id === id))}
+        />
+      ) : null}
 
       <AnimatePresence mode="wait">
         <m.div
@@ -120,14 +128,17 @@ export default function MonthGrid({
           ))}
 
           {Array.from({ length: blanks }, (_, i) => (
-            <div key={`blank-${i}`} className="aspect-square" aria-hidden="true" />
+            // Same height as a day cell: aspect-square made the first row ~120px
+            // tall and empty on a laptop.
+            <div key={`blank-${i}`} className="h-12 sm:h-14 lg:h-24" aria-hidden="true" />
           ))}
 
           {month.days.map((day) => {
             const isToday = day.dateKey === today;
             const isSelected = day.dateKey === selectedDateKey;
             const markers = dayMarkers(day, hideAttendance);
-            const eventCount = day.events.filter((e) => e.kind !== "class" && e.kind !== "working").length;
+            const notable = day.events.filter((e) => e.kind !== "class" && e.kind !== "working");
+            const eventCount = notable.length;
 
             return (
               <button
@@ -151,7 +162,7 @@ export default function MonthGrid({
               >
                 <span
                   className={cn(
-                    "text-xs font-bold font-outfit leading-none",
+                    "text-xs lg:text-sm font-bold font-outfit leading-none",
                     day.dayType === "holiday"
                       ? "text-danger-foreground dark:text-obsidian"
                       : day.dayType === "semiholiday"
@@ -168,7 +179,19 @@ export default function MonthGrid({
                     same optical position as the theory/lab grids; with three it
                     wraps to a cluster, which is the signal that the day is
                     worth opening. */}
-                <span className="flex items-center gap-0.5 h-1.5">
+                {/* Laptops: the first event in words, "+N" for the rest. */}
+                {notable.length > 0 ? (
+                  <span
+                    className={cn(
+                      "hidden lg:block w-full truncate text-xs font-semibold leading-tight text-text-primary",
+                      (day.dayType === "holiday" || day.dayType === "semiholiday") && "dark:text-obsidian",
+                    )}
+                  >
+                    {notable[0].title}
+                    {notable.length > 1 ? <span className="text-text-muted"> +{notable.length - 1}</span> : null}
+                  </span>
+                ) : null}
+                <span className={cn("flex items-center gap-0.5 h-1.5", notable.length > 0 && "lg:mt-auto")}>
                   {markers.length > 0 ? (
                     markers.map((tone, i) => <ToneDot key={`${tone}-${i}`} tone={tone} />)
                   ) : (

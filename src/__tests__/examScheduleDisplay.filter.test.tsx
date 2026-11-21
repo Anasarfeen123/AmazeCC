@@ -136,10 +136,13 @@ describe("exam schedule filter spacing", () => {
     expect(openSpy).not.toHaveBeenCalled();
   });
 
-  it("downloads PDF specifically for a selected series when series download button is clicked", async () => {
+  it("downloads PDF for the series picked in the filter (header PDF button)", async () => {
+    // Per-series buttons were removed (owner: clutter); pick the series in
+    // the filter and the header PDF button downloads just that one.
     const pdfSpy = vi.spyOn(exportTimetable, "downloadExamSchedulePdf").mockResolvedValue();
     renderSchedule();
-    const cat1Btn = screen.getByTitle("Download CAT1 Schedule (PDF)");
+    fireEvent.click(screen.getByRole("button", { name: "CAT1" }));
+    const cat1Btn = screen.getAllByTitle("Download CAT1 Schedule (PDF)")[0];
     await act(async () => {
       fireEvent.click(cat1Btn);
     });

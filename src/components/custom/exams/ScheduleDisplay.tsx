@@ -314,12 +314,15 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
         {/* ── EXAM SERIES ── */}
         {examTypes.length > 1 && (
           // Full-width filter; the total chip went (each series shows its own count).
-          <SegmentedControl
-            grow
-            options={[{ value: ALL_TYPES, label: "All" }, ...examTypes.map((t) => ({ value: t, label: t }))]}
-            value={typeFilter}
-            onChange={setTypeFilter}
-          />
+          <div className="flex items-center justify-between gap-2">
+            <SegmentedControl
+              grow
+              className="min-w-0 flex-1"
+              options={[{ value: ALL_TYPES, label: "All" }, ...examTypes.map((t) => ({ value: t, label: t }))]}
+              value={typeFilter}
+              onChange={setTypeFilter}
+            />
+          </div>
         )}
 
         <div className="space-y-6 sm:space-y-7">

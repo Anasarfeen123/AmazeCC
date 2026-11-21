@@ -25,6 +25,9 @@ export function useCarousel(count: number, autoplayMs = 5000) {
 
   useEffect(() => {
     if (paused || count < 2 || autoplayMs <= 0) return;
+    // Reduced motion: no autoplay; slides change only when the user swipes
+    // or taps the dots (critique 2026-11-22: content moved under the eye).
+    if (typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
     const timer = setInterval(() => setIndex((i) => (i + 1) % count), autoplayMs);
     return () => clearInterval(timer);
   }, [paused, count, autoplayMs, manual]);
@@ -34,7 +37,7 @@ export function useCarousel(count: number, autoplayMs = 5000) {
       setIndex(((next % count) + count) % count);
       setManual((m) => m + 1);
     },
-    [count]
+    [count],
   );
 
   // Callers use this when navigating away and back, to start at slide 0 again.

@@ -131,7 +131,8 @@ export function InsightCarousel({
       className={cn(
         TILE,
         height,
-        slideClickable && "transition-all hover:scale-[1.01] active:scale-[0.98] cursor-pointer",
+        // Brand press (DESIGN_LANGUAGE §5 bans scale pops).
+        slideClickable && "brutal-press cursor-pointer",
         !slideClickable && "cursor-default",
         // Ours to pan horizontally; the page keeps its own vertical scroll.
         swipe.className,

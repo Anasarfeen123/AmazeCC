@@ -16,7 +16,7 @@ const MEALS: Array<{ name: string; until: number }> = [
   { name: "Breakfast", until: 10 },
   { name: "Lunch", until: 15 },
   { name: "Snacks", until: 18 },
-  { name: "Dinner", until: 24 },
+  { name: "Dinner", until: 22 },
 ];
 
 function menuFile(hostelInfo: any): string {
@@ -34,19 +34,24 @@ export default function MessToday({ hostelInfo, onOpen }: { hostelInfo: any; onO
     const file = menuFile(hostelInfo);
     const pick = (list: any[]) => {
       const now = new Date();
-      const day = now.toLocaleDateString("en-US", { weekday: "long" });
+      // After dinner (10 pm) the next meal is tomorrow's breakfast, and the
+      // line says so (critique: "Breakfast" late at night was ambiguous).
+      const lateNight = now.getHours() >= MEALS[3].until;
+      const forDay = new Date(now);
+      if (lateNight) forDay.setDate(forDay.getDate() + 1);
+      const day = forDay.toLocaleDateString("en-US", { weekday: "long" });
       const row = list.find((r) => String(r?.Day) === day);
-      const meal = MEALS.find((m) => now.getHours() < m.until) ?? MEALS[3];
+      const meal = lateNight ? MEALS[0] : (MEALS.find((m) => now.getHours() < m.until) ?? MEALS[3]);
       const raw = row?.[meal.name];
       if (!raw) return;
-      const text = getSmartMenuText(String(raw), getCurrentWeekOfMonth(now));
+      const text = getSmartMenuText(String(raw), getCurrentWeekOfMonth(forDay));
       const items = text
         .split("\n")
         .map((l) => l.replace(/^\d+\.\s*/, "").trim())
         .filter(Boolean)
         .slice(0, 2)
         .join(" · ");
-      if (alive && items) setLine({ meal: meal.name, items });
+      if (alive && items) setLine({ meal: lateNight ? `Tomorrow's ${meal.name.toLowerCase()}` : meal.name, items });
     };
     try {
       const cached = getTypedStorageItem(file as any) as { list?: any[] } | null;

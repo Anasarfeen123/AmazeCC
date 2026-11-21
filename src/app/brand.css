@@ -1192,3 +1192,12 @@
 .dark .cal-day-quiet {
   background-color: color-mix(in oklab, var(--text-primary) 7%, var(--surface));
 }
+
+/* AmazeUI's SidebarProfile sets the degree line at 10px (ui/src/components/
+   ui/sidebar-profile.tsx:64, also a malformed `text-sidebar-foreground/`).
+   The project minimum is 12px (TYPOGRAPHY.md); lift it here until AmazeUI
+   can be published with the fix. */
+[data-sidebar-root] .text-\[10px\] {
+  font-size: 12px;
+  line-height: 1.3;
+}

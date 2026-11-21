@@ -15,7 +15,6 @@ import {
   RefreshCcw,
   ChevronRight,
   ChevronLeft,
-  Coffee,
   CheckCircle2,
   Calendar as CalendarIcon,
   Search,
@@ -327,7 +326,10 @@ function LiveClassProgress({
 }
 
 const HomeInsightCarousel = React.memo(function HomeInsightCarousel({ slides }: { slides: readonly InsightSlide[] }) {
-  const carousel = useCarousel(slides.length);
+  // A shortage leads the slides; it stays until swiped (critique
+  // 2026-11-22: "am I short anywhere?" showed only a third of the time).
+  const holdShortage = slides[0]?.id === "alerts";
+  const carousel = useCarousel(slides.length, holdShortage ? 0 : 5000);
   return <InsightCarousel slides={slides} carousel={carousel} ariaLabel="Rotating insights" className="min-w-0" />;
 });
 
@@ -780,7 +782,10 @@ export default function SimplifiedMobileHome({
         id: "alerts",
         title: `Below ${targetAttendancePct}%`,
         headline: `${criticalCount} ${criticalCount === 1 ? "course" : "courses"}`,
-        subline: worstCourse ? `Worst: ${worstCourse.title} ${worstCourse.pct.toFixed(1)}%` : "Attend the next classes",
+        // Percentage first: the course name truncates on phones, the number must not.
+        subline: worstCourse
+          ? `Worst ${worstCourse.pct.toFixed(1)}% · ${worstCourse.title}`
+          : "Attend the next classes",
         badge: "Warning",
         badgeColor: "bg-danger-surface text-danger-foreground border-border-ink",
         onClick: () => {
@@ -900,7 +905,13 @@ export default function SimplifiedMobileHome({
           {overallAttendance.attended} of {overallAttendance.total} attended
         </span>
       ),
-      badge: overallAttendance.status,
+      // Say why: "Warning" on 79% read as an error with no reason (critique).
+      badge:
+        overallAttendance.status === "Warning"
+          ? `Near ${targetAttendancePct}%`
+          : overallAttendance.status === "Critical"
+            ? `Below ${targetAttendancePct}%`
+            : overallAttendance.status,
       badgeColor: undefined as string | undefined,
       privacyCategory: "attendance" as const,
       tone: overallAttendance.status === "Safe" ? "emerald" : overallAttendance.status === "Warning" ? "amber" : "red",
@@ -910,7 +921,7 @@ export default function SimplifiedMobileHome({
         setActiveAttendanceSubTab("predictor");
       },
     }),
-    [overallAttendance, settings?.decimalValues, setActiveTab, setActiveAttendanceSubTab],
+    [overallAttendance, settings?.decimalValues, setActiveTab, setActiveAttendanceSubTab, targetAttendancePct],
   );
 
   const secondaryTiles = useMemo(
@@ -1880,33 +1891,46 @@ export default function SimplifiedMobileHome({
                 }
               />
             ) : dayRows.length === 0 ? (
-              /* ── VIEWPORT STATE 3: FREE DAY (NO CLASSES SCHEDULED) ── */
-              <div className="p-8 rounded-[14px] card-surface border-2 border-border-ink text-center space-y-3 shadow-2xs">
-                <div className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center mx-auto text-secondary-foreground">
-                  <Coffee className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-sm text-text-heading font-outfit">No classes on {selectedDay}!</h3>
-                  <p className="text-xs text-text-muted mt-1 max-w-xs mx-auto">
-                    No lectures or lab sessions are scheduled for this day. Enjoy your free time or check free
-                    classrooms.
-                  </p>
-                </div>
-                <div className="flex justify-center gap-2 pt-1">
-                  <button
-                    onClick={() => {
-                      // Free Classrooms lives in Tools, so it is opened there
-                      // directly rather than through an Academics value that
-                      // Dashboard used to translate into a Tools section switch.
-                      setActiveTab("tools");
-                      setActiveToolsSubTab?.("free-class");
-                    }}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-secondary-foreground bg-secondary border-2 border-border-ink px-3.5 py-2 rounded-xl transition-all cursor-pointer"
-                  >
-                    Free Classrooms <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
+              /* ── VIEWPORT STATE 3: FREE DAY (NO CLASSES SCHEDULED) ──
+                 One row, not a tall card (critique 2026-11-22: it repeated
+                 "No classes" and pushed Mess and quick actions down). It
+                 points at the next teaching day this week instead. */
+              (() => {
+                const from = weekDays.findIndex((d) => d.dayCode === selectedDay);
+                const next = weekDays
+                  .slice(from + 1)
+                  .map((d) => ({ d, n: timetableMap[d.detectedDayOrder || d.dayCode]?.length || 0 }))
+                  .find((x) => x.n > 0);
+                const dayName = next ? next.d.dayCode.charAt(0) + next.d.dayCode.slice(1).toLowerCase() : "";
+                return (
+                  <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 rounded-[14px] card-surface border-2 border-border-ink px-4 py-3">
+                    <p className="min-w-0 text-sm text-text-primary text-pretty">
+                      <span className="font-semibold text-text-heading">Free day.</span>{" "}
+                      {next ? (
+                        <button
+                          type="button"
+                          onClick={() => setSelectedDay(next.d.dayCode)}
+                          className="underline decoration-2 underline-offset-2 cursor-pointer"
+                        >
+                          {dayName}: {next.n} {next.n === 1 ? "class" : "classes"}
+                        </button>
+                      ) : (
+                        "No more classes this week."
+                      )}
+                    </p>
+                    <button
+                      onClick={() => {
+                        // Free Classrooms lives in Tools, opened there directly.
+                        setActiveTab("tools");
+                        setActiveToolsSubTab?.("free-class");
+                      }}
+                      className="inline-flex shrink-0 items-center gap-1 text-xs font-bold text-secondary-foreground bg-secondary border-2 border-border-ink px-3 py-1.5 rounded-[10px] cursor-pointer"
+                    >
+                      Free classrooms <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                );
+              })()
             ) : (
               /* ── VIEWPORT STATE 4: REGULAR TIMETABLE CLASSES ── */
               <div className="space-y-2">

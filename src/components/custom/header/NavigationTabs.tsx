@@ -140,7 +140,7 @@ const MobileBottomNav = memo(function MobileBottomNav({
           onClick={() => onItemTap(item)}
           aria-label={hasSectionHome(item.id) ? `${item.label} — double tap for home` : item.label}
           aria-current={item.isActive ? "page" : undefined}
-          className={`flex min-w-0 flex-1 min-h-11 flex-col items-center justify-center gap-0.5 rounded-[10px] border-2 px-1 max-[359px]:px-0 py-0.5 select-none cursor-pointer transition-colors motion-reduce:transition-none ${
+          className={`flex min-w-0 flex-1 min-h-11 flex-col items-center justify-center gap-0.5 rounded-[10px] border-2 px-1 max-[429px]:px-0 py-0.5 select-none cursor-pointer transition-colors motion-reduce:transition-none ${
             item.isActive
               ? "bg-highlight text-highlight-foreground border-border-ink shadow-brutal-sm"
               : "border-transparent text-cream hover:bg-surface-hover"
@@ -149,9 +149,9 @@ const MobileBottomNav = memo(function MobileBottomNav({
           <span className="flex items-center justify-center [&_svg]:h-5 [&_svg]:w-5 [&_svg]:stroke-[2.2]" aria-hidden>
             {item.icon}
           </span>
-          {/* Under 360px (e.g. 320x480) four labels do not fit at 12px with
+          {/* Under 430px (most phones; 390 cut "ACADEMI…") four labels do not fit at 12px with
               tracking ("ACADEMICS" overflowed its tab): 11px, no tracking. */}
-          <span className="font-mono text-xs max-[359px]:text-[11px] font-bold uppercase tracking-[0.04em] max-[359px]:tracking-normal leading-none truncate max-w-full">
+          <span className="font-mono text-xs max-[429px]:text-[11px] font-bold uppercase tracking-[0.04em] max-[429px]:tracking-normal leading-none truncate max-w-full">
             {item.label}
           </span>
         </button>

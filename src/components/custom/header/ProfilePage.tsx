@@ -1543,6 +1543,17 @@ export default function ProfilePage({
           <h3 className="font-display text-base font-bold uppercase text-text-heading">Home</h3>
           <p className="text-xs text-text-muted">What the Home screen shows.</p>
         </div>
+        <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
+          <div>
+            <p className="text-sm font-bold text-text-primary">Swipe up to open Modules</p>
+            <p className="text-xs text-text-muted">Swipe up on the phone navigation bar to open Modules.</p>
+          </div>
+          <Switch
+            label="Swipe up to open Modules"
+            checked={settings?.swipeUpModules !== false}
+            onCheckedChange={(val) => updateSetting("swipeUpModules", val)}
+          />
+        </div>
         {/* Tasks Placement on Home */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>

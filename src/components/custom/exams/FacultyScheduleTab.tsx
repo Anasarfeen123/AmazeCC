@@ -1,19 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { ChevronRight, GraduationCap, Search, Users } from "lucide-react";
 import { attendanceDataAtom, marksDataAtom } from "@/store/dataAtoms";
 import { settingsAtom } from "@/store/settingsAtoms";
-import {
-  EmptyPanel,
-  ListShell,
-  ListSkeleton,
-  PageShell,
-  SectionHeader,
-  SegmentedControl,
-  ToneBadge,
-} from "../shared/primitives";
+import { EmptyPanel, ListShell, ListSkeleton, PageShell, SectionHeader, ToneBadge } from "../shared/primitives";
 import { LIST_ROW, SEARCH_FIELD } from "@/lib/uiTokens";
 import FacultyScheduleModal from "./FFCS/components/modals/FacultyScheduleModal";
 import { VitfacReviewPill, FacultyAvatar } from "./FFCS/components/FacultyReviewSheet";
@@ -26,10 +18,7 @@ import {
 } from "./FFCS/logic/facultyGroups";
 import type { TimetableState } from "@/lib/ffcsTypes";
 import {
-  FINAL_FFCS_REPORTS,
   GLOBAL_SEMESTER_CHANGE_EVENT,
-  broadcastGlobalSemesterChange,
-  finalSemesterToVtopId,
   getSelectedFinalSemesterId,
   mapToFinalSemesterId,
   type FinalFFCSSemesterId,
@@ -131,7 +120,6 @@ function courseSummary(group: FacultyNameGroup): string {
  */
 export default function FacultyScheduleTab({
   onBack,
-  handleReloadRequest,
 }: {
   onBack?: () => void;
   /**
@@ -142,7 +130,7 @@ export default function FacultyScheduleTab({
    */
   handleReloadRequest?: (semesterId?: string, modeId?: string) => Promise<void>;
 }) {
-  const [settings, setSettings] = useAtom(settingsAtom);
+  const settings = useAtomValue(settingsAtom);
   const globalFinalSemester = useMemo(
     () => mapToFinalSemesterId(settings?.currSemesterID) ?? getSelectedFinalSemesterId(),
     [settings?.currSemesterID],
@@ -170,10 +158,8 @@ export default function FacultyScheduleTab({
 
   // Sync when global semester changes in settingsAtom
   useEffect(() => {
-    if (globalFinalSemester && globalFinalSemester !== semesterId) {
-      setSemesterId(globalFinalSemester);
-    }
-  }, [globalFinalSemester, semesterId]);
+    if (globalFinalSemester) setSemesterId(globalFinalSemester);
+  }, [globalFinalSemester]);
 
   // Sync on window event or storage event
   useEffect(() => {
@@ -193,21 +179,8 @@ export default function FacultyScheduleTab({
     };
   }, [semesterId]);
 
-  const handleSemesterSwitch = useCallback(
-    (next: FinalFFCSSemesterId) => {
-      if (next === semesterId) return;
-      setSemesterId(next);
-      if (handleReloadRequest) {
-        // The reload owns the global semester write, the broadcast, and the
-        // full sync the new term's caches need — this page only tracks it.
-        void handleReloadRequest(finalSemesterToVtopId(next));
-      } else {
-        broadcastGlobalSemesterChange(next);
-        setSettings((prev) => ({ ...prev, currSemesterID: finalSemesterToVtopId(next) }));
-      }
-    },
-    [semesterId, handleReloadRequest, setSettings],
-  );
+  // No semester picker (owner): the page follows the semester chosen in the
+  // sidebar or bottom bar (globalFinalSemester, synced above).
 
   // The current timetable (attendance) and the current semester's enrolled
   // courses (marks) are global jotai atoms, so this page reads them directly
@@ -582,15 +555,6 @@ export default function FacultyScheduleTab({
         eyebrow="Faculty Schedule"
         title="Find a faculty's classes"
         subtitle="Your professors first, then every faculty on the FFCS report."
-        actions={
-          <SegmentedControl
-            options={FINAL_FFCS_REPORTS.map((r) => ({ value: r.id, label: r.label }))}
-            value={semesterId}
-            onChange={(val) => {
-              handleSemesterSwitch(val as FinalFFCSSemesterId);
-            }}
-          />
-        }
         selectable
       >
         {content}

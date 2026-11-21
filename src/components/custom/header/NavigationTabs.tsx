@@ -305,8 +305,6 @@ export default function NavigationTabs({
     };
   }, []);
 
-  // No swipe-up gesture — App Library is opened only via the Modules button
-
   // Keep the matching drill-in panel open for section-level destinations.
   useEffect(() => {
     if (activeTab === "academics") {
@@ -1080,7 +1078,11 @@ export default function NavigationTabs({
             swallowing outside-taps meant to dismiss, and covering popups that
             extended into its region. A bottom nav must dim with the page, not
             hover over modals. */}
-        <MobileBottomNav items={rawNavItems} onItemTap={handleNavItemTap} onSwipeUp={() => setIsAppLibraryOpen(true)} />
+        <MobileBottomNav
+          items={rawNavItems}
+          onItemTap={handleNavItemTap}
+          onSwipeUp={settings.swipeUpModules !== false ? () => setIsAppLibraryOpen(true) : undefined}
+        />
 
         <AppLibraryPortal
           open={isAppLibraryOpen}

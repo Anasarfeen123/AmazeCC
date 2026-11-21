@@ -16,7 +16,7 @@ SHOT="$(pwd)/scripts/redesign/shot.mjs"
 ROOT="$(pwd)/../.scratch/screens/$(date +%Y-%m-%d)"
 THEMES=${THEMES:-"light dark night"}
 SIZES=${SIZES:-"mobile-1:360:780:1,mobile-2:390:844:1,mobile-3:430:932:1,tablet:820:1180:1,pc-1:1280:800:0,pc-2:1440:900:0,pc-3:1920:1080:0"}
-APP_ROUTES=${APP_ROUTES:-"home=/,calendar=/?tab=attendance-calendar,courses=/?tab=academics-courses,grades=/?tab=academics-grades,exams=/?tab=academics-schedule,predictor=/?tab=tools-attendance-predictor,ffcs-in-app=/?tab=ffcs,payments=/?tab=payments,libraries=/?tab=libraries,hostel=/?tab=hostel-overview,tools=/?tab=tools-overview,scanner=/?tab=paper-scanner,settings=/?tab=profile"}
+APP_ROUTES=${APP_ROUTES:-"home=/,calendar=/?tab=attendance-calendar,courses=/?tab=academics-courses,grades=/?tab=academics-grades,exams=/?tab=academics-schedule,predictor=/?tab=tools-attendance-predictor,ffcs-in-app=/?tab=ffcs,payments=/?tab=payments,libraries=/?tab=libraries,hostel=/?tab=hostel-overview,tools=/?tab=tools-overview,scanner=/?tab=paper-scanner,free-classrooms=/?tab=free-class,faculty-schedule=/?tab=faculty-schedule,find-classmates=/?tab=friend-finder,settings=/?tab=profile"}
 GUEST_ROUTES=${GUEST_ROUTES:-"landing=/,sign-in=/?signin=1,ffcs-planner=/ffcs/"}
 
 mkdir -p "$ROOT"

@@ -715,7 +715,7 @@ export default function FreeClassroomsTab({
       onBack={onBack}
       eyebrow="Free Classrooms"
       title="Find an empty room"
-      subtitle="Every room on campus, from the FFCS report and the live timetable."
+      subtitle="Find available rooms by day, time and block."
       actions={
         <div className="flex items-center gap-2">
           <SegmentedControl
@@ -747,7 +747,7 @@ export default function FreeClassroomsTab({
             className="w-full text-left cursor-pointer transition-transform"
           >
             <StatTile
-              label="Free now"
+              label={isLiveSlot ? "Free now" : "Free in selected slot"}
               value={metrics.total}
               sub={`${metrics.blocks} ${metrics.blocks === 1 ? "block" : "blocks"} with space`}
               badge={isLiveSlot ? "Live" : "Selected"}

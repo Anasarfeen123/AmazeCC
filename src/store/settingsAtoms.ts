@@ -39,6 +39,8 @@ export type Settings = {
   };
   /** @deprecated See `colorPalette`. The glass card look is gone. */
   cardSurfaceZinc?: boolean;
+  /** Open Modules by swiping up on the mobile navigation bar. */
+  swipeUpModules?: boolean;
   hideHomeSearchBar?: boolean;
   reloadAllData?: boolean;
   isSidebarCollapsed?: boolean;
@@ -122,6 +124,7 @@ export const defaultSettings: Settings = {
   privacyMode: false,
   privacyCategories: [],
   privacyCoverStyle: "comic",
+  swipeUpModules: true,
   hideHomeSearchBar: false,
   reloadAllData: false,
   isSidebarCollapsed: false,

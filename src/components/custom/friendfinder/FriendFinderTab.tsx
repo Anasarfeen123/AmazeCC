@@ -79,7 +79,6 @@ import {
   IconButton,
   ListSkeleton,
   PageShell,
-  RadioGroup,
   SectionHeader,
   SegmentedControl,
   StatTile,
@@ -99,7 +98,6 @@ export interface FriendFinderTabProps {
   onRequestSignIn?: () => void;
 }
 
-const REGISTERED = "registered";
 const CLASSMATES_PATH = "/?open=friend-finder";
 const FRIEND_FINDER_CACHE_KEY_PREFIX = "amaze_friend_finder_cache_";
 
@@ -1870,14 +1868,6 @@ export default function FriendFinderTab({
     const publish = () => {
       void run({ op: "publish", source: "registered" }, "action");
     };
-    const options = [
-      {
-        value: REGISTERED,
-        label: "My registered timetable",
-        icon: <BadgeCheck className="w-4 h-4" />,
-        description: "Read from VTOP after registration. Others see you as verified.",
-      },
-    ];
 
     return (
       <PageShell
@@ -1922,8 +1912,10 @@ export default function FriendFinderTab({
             </div>
 
             <div className={`${TILE_CARD} space-y-4`}>
-              <SectionHeader title="What to share" />
-              <RadioGroup name="friend-finder-source" options={options} value={REGISTERED} onChange={() => {}} />
+              <SectionHeader title="My registered timetable" />
+              <p className="text-sm text-muted-foreground">
+                Your registered timetable from VTOP is shared. Others see you as verified.
+              </p>
               <div className="flex flex-col-reverse sm:flex-row gap-2 pt-1">
                 {editing ? (
                   <button

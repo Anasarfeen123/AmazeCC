@@ -91,6 +91,7 @@ export function FacultyAvatar({
 }: FacultyAvatarProps) {
   const { review } = useVitfacReview(employeeId, name);
   const [failedUrls, setFailedUrls] = useState<string[]>([]);
+  const [loadedUrl, setLoadedUrl] = useState<string | null>(null);
 
   // Resolve employee ID from prop OR from review match (e.g. when only faculty name was passed)
   const resolvedEmpId = employeeId || review?.employeeId || null;
@@ -137,18 +138,24 @@ export function FacultyAvatar({
       className={`relative shrink-0 overflow-hidden flex items-center justify-center font-bold select-none border border-border-strong/60 ${sizeClasses} ${className}`}
     >
       {effectiveUrl ? (
-        <img
-          src={effectiveUrl}
-          alt={alt || name || "Faculty"}
-          loading="lazy"
-          decoding="async"
-          onError={() => {
-            if (effectiveUrl) {
-              setFailedUrls((prev) => [...prev, effectiveUrl]);
-            }
-          }}
-          className="w-full h-full object-cover rounded-[inherit]"
-        />
+        <>
+          {loadedUrl !== effectiveUrl && (
+            <span aria-hidden="true" className={`absolute inset-0 animate-pulse ${toneClasses}`} />
+          )}
+          <img
+            src={effectiveUrl}
+            alt={alt || name || "Faculty"}
+            loading="lazy"
+            decoding="async"
+            onLoad={() => setLoadedUrl(effectiveUrl)}
+            onError={() => {
+              if (effectiveUrl) {
+                setFailedUrls((prev) => [...prev, effectiveUrl]);
+              }
+            }}
+            className={`w-full h-full object-cover rounded-[inherit] ${loadedUrl === effectiveUrl ? "opacity-100" : "opacity-0"}`}
+          />
+        </>
       ) : (
         <span className={`w-full h-full flex items-center justify-center font-bold ${toneClasses}`}>{initials}</span>
       )}

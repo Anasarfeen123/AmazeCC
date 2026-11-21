@@ -4,7 +4,7 @@ import BrandLogo from "../shared/BrandLogo";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { ArrowRight, Heart, Moon, MoonStar, Sun } from "lucide-react";
+import { ArrowRight, ChevronRight, Heart, Menu as MenuIcon, Moon, MoonStar, Sun, X } from "lucide-react";
 import { nextTheme } from "@/lib/shortcuts";
 import { CycleWord } from "../landing/LandingMotion";
 
@@ -51,6 +51,13 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
+
   const scrollToSection = (sectionId: string) => {
     setMenuOpen(false);
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
@@ -94,7 +101,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
             aria-label={`Switch to ${targetLabel.toLowerCase()} mode`}
             title={`${targetLabel} mode`}
             onClick={() => setTheme(targetTheme)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-primary shadow-brutal-sm brutal-press"
+            className="hidden h-10 w-10 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-primary shadow-brutal-sm brutal-press sm:inline-flex"
           >
             <span key={targetTheme} className="landing-pop">
               {targetTheme === "night" ? (
@@ -116,55 +123,131 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
           <button
             type="button"
             onClick={onGetStarted}
-            className="inline-flex min-h-10 items-center rounded-[10px] border-2 border-border-ink bg-primary px-3 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-primary-foreground shadow-brutal-sm brutal-press"
+            className="inline-flex min-h-10 items-center gap-1.5 rounded-[10px] border-2 border-border-ink bg-highlight px-3.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-highlight-foreground shadow-brutal-sm brutal-press"
           >
-            Get started
+            Sign in
+            <ArrowRight size={14} aria-hidden />
           </button>
           <button
             type="button"
             aria-expanded={menuOpen}
             aria-controls="landing-menu"
             onClick={() => setMenuOpen((v) => !v)}
-            className="inline-flex min-h-10 items-center rounded-[10px] border-2 border-border-ink bg-surface px-3 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-primary shadow-brutal-sm lg:hidden"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-primary shadow-brutal-sm brutal-press lg:hidden"
           >
-            {menuOpen ? "Close" : "Menu"}
+            {menuOpen ? <X size={18} aria-hidden /> : <MenuIcon size={18} aria-hidden />}
           </button>
         </div>
 
         {/* Section menu below lg (the inline links are hidden there). */}
         {menuOpen ? (
-          <nav
-            id="landing-menu"
-            aria-label="Sections"
-            className="absolute inset-x-4 top-full z-50 mt-2 grid gap-1 rounded-[14px] border-[3px] border-border-ink bg-surface p-2 shadow-brutal-lg sm:inset-x-8 lg:hidden"
-          >
-            {SECTIONS.map((section) => (
-              <button
-                key={section.id}
-                type="button"
-                onClick={() => scrollToSection(section.id)}
-                className="flex min-h-12 items-center rounded-[10px] px-3 text-left font-display text-base font-bold uppercase text-text-heading hover:bg-surface-secondary"
-              >
-                {section.label}
-              </button>
-            ))}
-            <a
-              href="/ffcs/"
-              className="flex min-h-12 items-center rounded-[10px] px-3 font-display text-base font-bold uppercase text-text-heading hover:bg-surface-secondary"
-            >
-              FFCS planner
-            </a>
+          <>
+            {/* Tap outside closes. */}
             <button
               type="button"
-              onClick={() => {
-                setMenuOpen(false);
-                onTryDemo();
-              }}
-              className="mt-1 inline-flex min-h-12 items-center justify-center rounded-[10px] border-2 border-border-ink bg-highlight font-mono text-sm font-bold uppercase tracking-[0.06em] text-highlight-foreground"
+              aria-label="Close menu"
+              tabIndex={-1}
+              onClick={() => setMenuOpen(false)}
+              className="fixed inset-0 top-16 -z-10 cursor-default bg-[color-mix(in_oklab,var(--shadow-ink)_45%,transparent)] lg:hidden"
+            />
+            <nav
+              id="landing-menu"
+              aria-label="Sections"
+              className="landing-menu-in absolute inset-x-3 top-full z-50 mt-2 max-h-[calc(100dvh-5.5rem)] overflow-y-auto rounded-[16px] border-[3px] border-border-ink bg-surface p-3 shadow-brutal-lg sm:inset-x-8 lg:hidden"
             >
-              Try the demo
-            </button>
-          </nav>
+              <p className="px-2 pb-1 font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-muted">
+                Jump to
+              </p>
+              <ul className="divide-y-2 divide-border-muted">
+                {SECTIONS.map((section, i) => (
+                  <li key={section.id}>
+                    <button
+                      type="button"
+                      onClick={() => scrollToSection(section.id)}
+                      className="flex min-h-12 w-full items-center gap-3 rounded-[10px] px-2 text-left hover:bg-surface-secondary"
+                    >
+                      <span className="font-mono text-xs font-bold text-text-muted">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="flex-1 font-display text-lg font-bold uppercase text-text-heading">
+                        {section.label}
+                      </span>
+                      <ChevronRight size={18} className="text-text-muted" aria-hidden />
+                    </button>
+                  </li>
+                ))}
+                <li>
+                  <a
+                    href="/ffcs/"
+                    className="flex min-h-12 items-center gap-3 rounded-[10px] px-2 hover:bg-surface-secondary"
+                  >
+                    <span className="font-mono text-xs font-bold text-text-muted">06</span>
+                    <span className="flex-1 font-display text-lg font-bold uppercase text-text-heading">
+                      FFCS planner
+                    </span>
+                    <span className="rounded-[6px] border-2 border-border-ink bg-mint px-1.5 font-mono text-[10px] font-bold uppercase text-obsidian">
+                      No sign-in
+                    </span>
+                  </a>
+                </li>
+              </ul>
+
+              <div className="mt-3 flex items-center justify-between gap-3 rounded-[12px] border-2 border-border-muted px-3 py-2">
+                <span className="font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-muted">Theme</span>
+                <div
+                  role="group"
+                  aria-label="Theme"
+                  className="flex gap-0.5 rounded-[10px] border-2 border-border-ink bg-background p-0.5"
+                >
+                  {(["light", "dark", "night"] as const).map((t) => {
+                    const Icon = t === "light" ? Sun : t === "dark" ? Moon : MoonStar;
+                    const on = currentTheme === t;
+                    return (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setTheme(t)}
+                        aria-pressed={on}
+                        aria-label={`${t[0].toUpperCase()}${t.slice(1)} theme`}
+                        className={`inline-flex h-9 w-9 items-center justify-center rounded-[7px] border-2 ${
+                          on
+                            ? "border-border-ink bg-secondary text-secondary-foreground"
+                            : "border-transparent text-text-muted"
+                        }`}
+                      >
+                        <Icon size={16} aria-hidden />
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="mt-3 grid gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onGetStarted();
+                  }}
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[10px] border-[3px] border-border-ink bg-highlight font-mono text-sm font-bold uppercase tracking-[0.06em] text-highlight-foreground shadow-brutal-sm brutal-press"
+                >
+                  Sign in with VTOP
+                  <ArrowRight size={16} aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onTryDemo();
+                  }}
+                  className="inline-flex min-h-11 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-primary"
+                >
+                  Try the demo
+                </button>
+              </div>
+            </nav>
+          </>
         ) : null}
       </header>
 
@@ -195,7 +278,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
           height={941}
           loading="eager"
           decoding="async"
-          className="absolute inset-x-0 bottom-0 -z-20 h-auto w-full scale-105 blur-[10px] lg:inset-0 lg:h-full lg:object-cover lg:object-[50%_70%] dark:hidden"
+          className="absolute inset-x-0 bottom-0 -z-20 h-auto w-full scale-105 blur-[10px] max-md:hidden lg:inset-0 lg:h-full lg:object-cover lg:object-[50%_70%] dark:hidden"
         />
         <img
           src="/landing/campus-night.webp"
@@ -205,10 +288,13 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
           height={941}
           loading="eager"
           decoding="async"
-          className="absolute inset-x-0 bottom-0 -z-20 h-auto w-full scale-105 blur-[10px] lg:inset-0 lg:h-full lg:object-cover lg:object-[50%_70%] hidden dark:block"
+          className="absolute inset-x-0 bottom-0 -z-20 hidden h-auto w-full scale-105 blur-[10px] md:dark:block lg:inset-0 lg:h-full lg:object-cover lg:object-[50%_70%]"
         />
         {/* Backdrop: a flat wash of the page colour so the art sits behind, not on top. */}
-        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-background/60 dark:bg-background/45" />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 hidden bg-background/60 md:block dark:bg-background/45"
+        />
 
         <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-4 pb-14 pt-6 sm:gap-12 sm:px-8 sm:pt-12 lg:grid-cols-[1fr_1.1fr] lg:gap-10 lg:pb-20">
           {/* On phones the words sit on the page (a card inside the page, with a
@@ -243,21 +329,22 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
               your FFCS draft. One app instead of five portals.
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <button
-                type="button"
-                onClick={onTryDemo}
-                className="inline-flex min-h-12 items-center justify-center rounded-[10px] border-[3px] border-border-ink bg-highlight px-6 font-mono text-[13px] font-bold uppercase tracking-[0.06em] text-highlight-foreground shadow-brutal-lg brutal-press"
-              >
-                Try the demo
-              </button>
+            {/* Sign in leads (user: it should be more focused than the demo). */}
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
               <button
                 type="button"
                 onClick={onGetStarted}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[10px] border-[3px] border-border-ink bg-surface px-6 font-mono text-[13px] font-bold uppercase tracking-[0.06em] text-text-primary shadow-brutal-lg brutal-press"
+                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-[10px] border-[3px] border-border-ink bg-highlight px-7 font-mono text-sm font-bold uppercase tracking-[0.06em] text-highlight-foreground shadow-brutal-lg brutal-press"
               >
                 Sign in with VTOP
-                <ArrowRight size={16} aria-hidden />
+                <ArrowRight size={18} aria-hidden />
+              </button>
+              <button
+                type="button"
+                onClick={onTryDemo}
+                className="inline-flex min-h-11 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface px-5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-primary shadow-brutal-sm brutal-press"
+              >
+                Or try the demo first
               </button>
             </div>
             <p className="mt-4 font-mono text-xs text-text-muted" aria-live="polite">
@@ -269,8 +356,29 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
               read, on an ochre block with three stickers (user: the shrunken
               desktop window + phone + five stickers "looks bad" on mobile). */}
           <div className="relative mx-auto w-full max-w-[330px] px-6 pb-6 pt-4 md:hidden" aria-hidden="true">
-            <div className="absolute inset-x-2 bottom-0 top-12 rotate-[4deg] rounded-[24px] border-[3px] border-border-ink bg-ochre" />
-            <div className="landing-float-b relative mx-auto w-[78%] overflow-hidden rounded-[26px] border-[3px] border-border-ink bg-surface shadow-brutal-lg [--tilt:-3deg]">
+            {/* The campus art, sharp and framed (blurred behind the whole
+                hero it was only a smudge under the phone). */}
+            <div className="absolute inset-x-0 bottom-2 top-10 rotate-[3deg] overflow-hidden rounded-[24px] border-[3px] border-border-ink bg-ochre shadow-brutal-md">
+              <img
+                src="/landing/campus-day.webp"
+                alt=""
+                width={1672}
+                height={941}
+                loading="eager"
+                decoding="async"
+                className="h-full w-full object-cover object-[28%_60%] dark:hidden"
+              />
+              <img
+                src="/landing/campus-night.webp"
+                alt=""
+                width={1671}
+                height={941}
+                loading="eager"
+                decoding="async"
+                className="hidden h-full w-full object-cover object-[28%_60%] dark:block"
+              />
+            </div>
+            <div className="landing-float-b relative mx-auto w-[72%] overflow-hidden rounded-[26px] border-[3px] border-border-ink bg-surface shadow-brutal-lg [--tilt:-3deg]">
               <img
                 src="/landing/home-phone-light.webp"
                 alt=""

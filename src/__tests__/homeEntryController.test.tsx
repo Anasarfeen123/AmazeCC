@@ -48,18 +48,18 @@ describe("HomeEntryController", () => {
 
     // The guest hero headline and action buttons should be immediately present
     expect(screen.getByText("Your VIT life,")).toBeDefined();
-    expect(screen.getAllByRole("button", { name: /Get Started/i })[0]).toBeDefined();
+    expect(screen.getAllByRole("button", { name: /^Sign in/i })[0]).toBeDefined();
     expect(screen.getAllByRole("button", { name: /Try demo|Try the demo/i })[0]).toBeDefined();
 
     // Authenticated workspace must NOT be rendered
     expect(screen.queryByTestId("authenticated-workspace")).toBeNull();
   });
 
-  it("transitions immediately to authenticated workspace with login intent when Get Started is clicked", async () => {
+  it("transitions immediately to authenticated workspace with login intent when Sign in is clicked", async () => {
     render(<HomeEntryController />);
 
-    const getStartedBtn = screen.getAllByRole("button", { name: /Get Started/i })[0];
-    fireEvent.click(getStartedBtn);
+    const signInBtn = screen.getAllByRole("button", { name: /^Sign in/i })[0];
+    fireEvent.click(signInBtn);
 
     await waitFor(() => {
       expect(screen.getByTestId("authenticated-workspace")).toBeDefined();

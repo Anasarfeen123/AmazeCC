@@ -1,5 +1,7 @@
 "use client";
 
+import { getAssetPath } from "@/lib/utils";
+
 /**
  * The screens a first-time visitor sees *before* the five onboarding steps:
  *
@@ -67,7 +69,22 @@ const MIN_SYNC_FACE_MS = 1400;
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-background px-4 text-text-primary select-none animate-in fade-in duration-200 sm:px-8">
+    // Brand page background (dot grid + glows, brand.css) and the campus art
+    // along the bottom edge, faded (user: "no background in sign in?").
+    <div className="page-dots fixed inset-0 z-50 flex flex-col overflow-hidden bg-background px-4 text-text-primary select-none animate-in fade-in duration-200 sm:px-8">
+      <img
+        src={getAssetPath("/landing/campus-day.webp")}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-auto w-full opacity-35 dark:hidden"
+      />
+      <img
+        src={getAssetPath("/landing/campus-night.webp")}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-auto w-full opacity-40 dark:block"
+      />
+      <div aria-hidden="true" />
       <div className="relative z-10 flex min-h-0 flex-1 flex-col overflow-y-auto pt-[calc(env(safe-area-inset-top,0px)+1.25rem)] pb-[calc(env(safe-area-inset-bottom,0px)+1.25rem)] sm:pt-[calc(env(safe-area-inset-top,0px)+1.75rem)] sm:pb-[calc(env(safe-area-inset-bottom,0px)+1.75rem)]">
         {children}
       </div>

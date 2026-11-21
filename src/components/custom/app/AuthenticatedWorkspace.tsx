@@ -8,6 +8,8 @@ import { demoModeAtom, isLoggedInAtom, showIntroAtom } from "@/store";
 import AppIntroExperience from "./AppIntroExperience";
 import { useDashboardScreenHistory } from "../dashboard/useDashboardScreenHistory";
 import type { IntroLogin } from "../onboarding/OnboardingIntro";
+import { SIGN_IN_PARAM } from "@/lib/signInReturn";
+import { getAssetPath } from "@/lib/utils";
 
 function WorkspaceLoading() {
   return <AppLoading />;
@@ -65,14 +67,41 @@ export default function AuthenticatedWorkspace(props: AuthenticatedWorkspaceProp
   return (
     <>
       {demoMode && (
+        // The demo banner carries the way out (user: "the top bar should have
+        // option to sign in or leave demo"). Leaving clears the demo through the
+        // normal sign-out (back to the landing page); Sign in does the same,
+        // then opens the sign-in form (/?signin=1).
         <div
           role="status"
-          className="w-full border-b-2 border-border-ink bg-highlight text-highlight-foreground px-4 py-2 md:pl-[88px] lg:pl-[296px] flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-sm"
+          className="flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-2 border-b-2 sm:justify-center border-border-ink bg-highlight px-3 py-2 text-sm text-highlight-foreground md:pl-[88px] lg:pl-[296px]"
         >
-          <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] rounded-[6px] border-2 border-border-ink bg-text-primary text-background px-1.5 py-0.5">
-            Demo
+          <span className="flex min-w-0 items-center gap-2">
+            <span className="rounded-[6px] border-2 border-border-ink bg-text-primary px-1.5 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-background">
+              Demo
+            </span>
+            <span className="text-[13px] leading-tight">
+              Sample data<span className="hidden sm:inline">, not your records</span>.
+            </span>
           </span>
-          <span>Sample data, not your real records.</span>
+          <span className="flex shrink-0 items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                props.handleLogOutRequest();
+                window.location.assign(getAssetPath(`/?${SIGN_IN_PARAM}=1`));
+              }}
+              className="inline-flex min-h-9 items-center rounded-[8px] border-2 border-border-ink bg-primary px-3 font-mono text-xs font-bold uppercase tracking-[0.06em] text-primary-foreground shadow-brutal-sm brutal-press"
+            >
+              Sign in
+            </button>
+            <button
+              type="button"
+              onClick={() => props.handleLogOutRequest()}
+              className="inline-flex min-h-9 items-center rounded-[8px] border-2 border-border-ink bg-surface px-3 font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-primary"
+            >
+              Leave demo
+            </button>
+          </span>
         </div>
       )}
       <DashboardContent

@@ -1,4 +1,3 @@
-
 const MARGIN = 13;
 const PAGE_W = 210;
 const PAGE_H = 297;
@@ -22,9 +21,9 @@ export async function downloadStudentReportPdf(html: string, fileName: string, g
   pdf.setProperties({ title: "AmazeCC Student Academic Report", creator: "AmazeCC" });
   const doc = new DOMParser().parseFromString(html, "text/html");
   const root = doc.querySelector("article") || doc.body;
-  const ink = grayscale ? "#171717" : "#172033";
-  const accent = grayscale ? "#222222" : "#173b67";
-  const band = grayscale ? "#ededed" : "#eaf0f7";
+  const ink = grayscale ? "#171717" : "#001e1d";
+  const accent = grayscale ? "#222222" : "#004643"; // brand teal (was navy)
+  const band = grayscale ? "#ededed" : "#eef3ef";
   let y = MARGIN;
   let page = 1;
   const sectionPages = new Map<string, number>();
@@ -255,14 +254,14 @@ export async function downloadStudentReportPdf(html: string, fileName: string, g
             : cell.tint === "od"
               ? grayscale
                 ? [230, 235, 240]
-                : [232, 242, 251]
+                : [239, 245, 241]
               : cell.tint === "present"
                 ? grayscale
                   ? [234, 240, 234]
                   : [233, 246, 237]
                 : cell.date
                   ? [255, 255, 255]
-                  : [249, 250, 253];
+                  : [250, 248, 243];
         pdf.setFillColor(...(tint as [number, number, number]));
         pdf.setDrawColor(grayscale ? 215 : 220, grayscale ? 215 : 229, grayscale ? 215 : 239);
         pdf.setLineWidth(0.15);
@@ -299,8 +298,8 @@ export async function downloadStudentReportPdf(html: string, fileName: string, g
       pdf.setFontSize(6.2);
       pdf.setLineWidth(0.18);
       headers.forEach((header, i) => {
-        pdf.setFillColor(grayscale ? 237 : 235, grayscale ? 237 : 241, grayscale ? 237 : 248);
-        pdf.setDrawColor(grayscale ? 195 : 205, grayscale ? 195 : 216, grayscale ? 195 : 229);
+        pdf.setFillColor(grayscale ? 237 : 238, grayscale ? 237 : 243, grayscale ? 237 : 239);
+        pdf.setDrawColor(grayscale ? 195 : 217, grayscale ? 195 : 209, grayscale ? 195 : 194);
         pdf.rect(x, y, widths[i], 7, "FD");
         pdf.setTextColor(ink);
         pdf.text(pdf.splitTextToSize(safe(header), widths[i] - 2) as string[], x + 1, y + 2.7);
@@ -322,14 +321,14 @@ export async function downloadStudentReportPdf(html: string, fileName: string, g
         drawHeader();
       }
       let x = MARGIN;
-      pdf.setDrawColor(grayscale ? 205 : 215, grayscale ? 205 : 225, grayscale ? 205 : 236);
+      pdf.setDrawColor(grayscale ? 205 : 217, grayscale ? 205 : 209, grayscale ? 205 : 194);
       pdf.setLineWidth(0.15);
       pdf.setTextColor(ink);
       pdf.setFont("helvetica", "normal");
       pdf.setFontSize(6.2);
       headers.forEach((_, i) => {
         if (rowIndex % 2 === 1) {
-          pdf.setFillColor(grayscale ? 249 : 248, grayscale ? 249 : 250, grayscale ? 249 : 253);
+          pdf.setFillColor(grayscale ? 249 : 250, grayscale ? 249 : 248, grayscale ? 249 : 243);
           pdf.rect(x, y, widths[i], height, "F");
         }
         pdf.rect(x, y, widths[i], height);
@@ -366,7 +365,7 @@ export async function downloadStudentReportPdf(html: string, fileName: string, g
       const x = MARGIN + index * slot + (slot - barW * 2 - gap) / 2;
       const present = Number(item.dataset.value) || 0;
       const absent = Number(item.dataset.absent) || 0;
-      pdf.setFillColor(grayscale ? 75 : 45, grayscale ? 75 : 106, grayscale ? 75 : 159);
+      pdf.setFillColor(grayscale ? 75 : 0, grayscale ? 75 : 70, grayscale ? 75 : 67);
       if (present) pdf.rect(x, base - (present / max) * height, barW, (present / max) * height, "F");
       pdf.setFillColor(grayscale ? 165 : 197, grayscale ? 165 : 84, grayscale ? 165 : 84);
       if (absent) pdf.rect(x + barW + gap, base - (absent / max) * height, barW, (absent / max) * height, "F");
@@ -381,7 +380,7 @@ export async function downloadStudentReportPdf(html: string, fileName: string, g
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(5.5);
     pdf.setTextColor(ink);
-    pdf.setFillColor(grayscale ? 75 : 45, grayscale ? 75 : 106, grayscale ? 75 : 159);
+    pdf.setFillColor(grayscale ? 75 : 0, grayscale ? 75 : 70, grayscale ? 75 : 67);
     pdf.rect(MARGIN, y, 2, 2, "F");
     pdf.text("Present sessions", MARGIN + 3, y + 1.8);
     pdf.setFillColor(grayscale ? 165 : 197, grayscale ? 165 : 84, grayscale ? 165 : 84);
@@ -454,71 +453,55 @@ export async function downloadStudentReportPdf(html: string, fileName: string, g
 
   for (const node of Array.from(root.children)) {
     if (node.matches(".report-divider")) {
-      newPage();
+      // Chapter band, not a full decorative page (user: the report was 17
+      // pages for little data; six of them were blob-and-wave dividers).
+      if (y > BOTTOM - 70) newPage();
+      else if (y > MARGIN + 2) y += 4;
       if (node.id) sectionPages.set(node.id, page);
-      pdf.setFillColor(grayscale ? 244 : 239, grayscale ? 244 : 245, grayscale ? 244 : 251);
-      pdf.rect(0, 0, PAGE_W, PAGE_H, "F");
-      pdf.setFillColor(grayscale ? 229 : 229, grayscale ? 229 : 239, grayscale ? 229 : 247);
-      pdf.circle(36, 76, 31, "F");
-      pdf.setFillColor(grayscale ? 236 : 246, grayscale ? 236 : 225, grayscale ? 236 : 190);
-      pdf.circle(177, 200, 22, "F");
-      // Build the divider waves from filled ellipses and rectangles. jsPDF's
-      // `lines` expects a path-segment format that these relative point pairs
-      // do not satisfy, and rejects the document during export.
-      pdf.setFillColor(grayscale ? 225 : 222, grayscale ? 225 : 239, grayscale ? 225 : 235);
-      for (let x = -12, i = 0; x < PAGE_W + 12; x += 12, i += 1) {
-        pdf.ellipse(x, 240 + (i % 2 === 0 ? -2 : 2), 8, 8, "F");
-      }
-      pdf.rect(0, 246, PAGE_W, PAGE_H - 246, "F");
-      pdf.setFillColor(grayscale ? 238 : 249, grayscale ? 238 : 223, grayscale ? 238 : 183);
-      for (let x = -12, i = 0; x < PAGE_W + 12; x += 12, i += 1) {
-        pdf.ellipse(x, 255 + (i % 2 === 0 ? 2 : -2), 8, 7, "F");
-      }
-      pdf.rect(0, 260, PAGE_W, PAGE_H - 260, "F");
-      pdf.setDrawColor(grayscale ? 190 : 195, grayscale ? 190 : 213, grayscale ? 190 : 230);
-      pdf.setLineWidth(0.5);
-      pdf.setDrawColor(grayscale ? 190 : 195, grayscale ? 190 : 213, grayscale ? 190 : 230);
-      pdf.roundedRect(MARGIN, 68, CONTENT_W, 144, 8, 8, "S");
-      pdf.setTextColor(accent);
+      const bandTop = y;
+      const label = safe(node.querySelector("span")?.textContent?.trim() || "AMAZECC STUDENT RECORD");
+      const heading = safe(node.querySelector("h2")?.textContent?.trim() || "Report section");
+      const blurb = safe(node.querySelector("p")?.textContent?.trim() || "");
+      const blurbLines = blurb ? (pdf.splitTextToSize(blurb, CONTENT_W - 16) as string[]) : [];
+      const bandH = 20 + blurbLines.length * 3.6;
+      if (grayscale) pdf.setFillColor(238, 238, 238);
+      else pdf.setFillColor(227, 239, 233);
+      pdf.rect(MARGIN, bandTop, CONTENT_W, bandH, "F");
+      if (grayscale) pdf.setFillColor(60, 60, 60);
+      else pdf.setFillColor(0, 70, 67);
+      pdf.rect(MARGIN, bandTop, 2.2, bandH, "F");
       pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(8);
-      pdf.text(safe(node.querySelector("span")?.textContent?.trim() || "AMAZECC STUDENT RECORD"), PAGE_W / 2, 125, {
-        align: "center",
-      });
-      pdf.setFontSize(22);
-      pdf.text(
-        pdf.splitTextToSize(
-          safe(node.querySelector("h2")?.textContent?.trim() || "Historical academic report"),
-          CONTENT_W - 20,
-        ) as string[],
-        PAGE_W / 2,
-        145,
-        { align: "center" },
-      );
-      markHeading(node.querySelector(":scope > h2"), 139);
-      pdf.setFont("helvetica", "normal");
-      pdf.setFontSize(9);
-      pdf.setTextColor(90);
-      pdf.text(
-        pdf.splitTextToSize(safe(node.querySelector("p")?.textContent?.trim() || ""), CONTENT_W - 30) as string[],
-        PAGE_W / 2,
-        160,
-        { align: "center" },
-      );
-      newPage();
+      pdf.setFontSize(7);
+      pdf.setTextColor(grayscale ? "#555555" : "#7a4f00");
+      pdf.text(label, MARGIN + 7, bandTop + 6.5);
+      pdf.setFontSize(14);
+      pdf.setTextColor(accent);
+      pdf.text(heading, MARGIN + 7, bandTop + 13.5);
+      markHeading(node.querySelector(":scope > h2"), bandTop + 8);
+      if (blurbLines.length) {
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(8);
+        pdf.setTextColor(90);
+        pdf.text(blurbLines, MARGIN + 7, bandTop + 18.5);
+      }
+      y = bandTop + bandH + 6;
       continue;
     }
     if (node.matches("header.report-cover")) {
       const h = node.querySelector("h1")?.textContent?.trim() || "Student Academic Report";
-      const paper = grayscale ? [247, 247, 247] : [246, 249, 253];
+      const paper = grayscale ? [247, 247, 247] : [247, 241, 230]; // brand cream
       pdf.setFillColor(...(paper as [number, number, number]));
       pdf.rect(0, 0, PAGE_W, PAGE_H, "F");
-      pdf.setFillColor(grayscale ? 220 : 230, grayscale ? 220 : 239, grayscale ? 220 : 249);
-      pdf.circle(157, 74, 46, "F");
-      pdf.setFillColor(grayscale ? 205 : 235, grayscale ? 205 : 206, grayscale ? 205 : 226);
-      pdf.circle(177, 189, 26, "F");
-      pdf.setFillColor(grayscale ? 230 : 248, grayscale ? 230 : 219, grayscale ? 230 : 174);
-      pdf.circle(43, 226, 19, "F");
+      // Brand cover: a teal bar down the left edge and one ochre "sticker"
+      // with an ink border and hard shadow (was three pastel circles).
+      pdf.setFillColor(grayscale ? 60 : 0, grayscale ? 60 : 70, grayscale ? 60 : 67);
+      pdf.rect(0, 0, 9, PAGE_H, "F");
+      pdf.setFillColor(grayscale ? 40 : 0, grayscale ? 40 : 30, grayscale ? 40 : 29);
+      pdf.roundedRect(PAGE_W - 62 + 2.5, PAGE_H - 78 + 2.5, 40, 40, 5, 5, "F");
+      pdf.setFillColor(grayscale ? 215 : 249, grayscale ? 215 : 188, grayscale ? 215 : 96);
+      pdf.setDrawColor(grayscale ? 40 : 0, grayscale ? 40 : 30, grayscale ? 40 : 29);
+      pdf.setLineWidth(0.9);
+      pdf.roundedRect(PAGE_W - 62, PAGE_H - 78, 40, 40, 5, 5, "FD");
       const logo = node.querySelector<HTMLImageElement>(".report-logo");
       if (logo?.getAttribute("src")) {
         try {
@@ -657,13 +640,8 @@ export async function downloadStudentReportPdf(html: string, fileName: string, g
     } else if (node.matches(".report-notice"))
       write(node.textContent?.trim() || "", MARGIN, CONTENT_W, 7, false, "#555555");
     else if (node.matches(".report-section")) {
-      if (
-        (node.classList.contains("report-curriculum-section") ||
-          node.classList.contains("report-grade-history-section") ||
-          node.classList.contains("report-page-start")) &&
-        y > MARGIN + 2
-      )
-        newPage();
+      // Sections flow on; a new page only when the heading would be stranded.
+      if (y > BOTTOM - 40) newPage();
       const sectionHeading = node.querySelector(":scope > h2");
       title(sectionHeading?.textContent?.trim() || "Report section");
       markHeading(sectionHeading, y - 12);
@@ -676,7 +654,7 @@ export async function downloadStudentReportPdf(html: string, fileName: string, g
           continue;
         }
         if (child.matches(".report-month")) {
-          if (y > MARGIN + 2) newPage();
+          if (y > BOTTOM - 60) newPage();
           const heading = child.querySelector("h3");
           if (heading) title(heading.textContent?.trim() || "Attendance month");
           markHeading(heading, y - 12);
@@ -702,7 +680,7 @@ export async function downloadStudentReportPdf(html: string, fileName: string, g
           continue;
         }
         if (child.matches(".report-subject")) {
-          if (y > MARGIN + 2) newPage();
+          if (y > BOTTOM - 60) newPage();
           const heading = child.querySelector("h3");
           if (heading) title(heading.textContent?.trim() || "Subject dossier");
           markHeading(heading, y - 12);
@@ -782,7 +760,7 @@ export async function downloadStudentReportPdf(html: string, fileName: string, g
           drawSummaryCards(child);
         } else if (child.matches(".report-curriculum-groups")) {
           for (const category of Array.from(child.querySelectorAll(":scope > .report-curriculum-category"))) {
-            if (y > MARGIN + 2) newPage();
+            if (y > BOTTOM - 50) newPage();
             const heading = category.querySelector(":scope > h3");
             if (heading) title(heading.textContent?.trim() || "Curriculum category");
             markHeading(heading, y - 12);

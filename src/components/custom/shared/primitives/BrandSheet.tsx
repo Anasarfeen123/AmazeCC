@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { SHEET_ENTER, SHEET_EXIT, useSheetDrag } from "@/lib/useSheetDrag";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 import { AnimatePresence, m } from "framer-motion";
@@ -50,6 +50,22 @@ export function BrandSheet({
 }: BrandSheetProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   useFocusTrap(panelRef, open);
+  // Esc closes (R11 keyboard walk: the Modules sheet had no keyboard close).
+  // Only while focus is inside this panel, so a sheet stacked above another
+  // closes alone.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      const panel = panelRef.current;
+      if (panel && panel.contains(document.activeElement)) {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
   const { y, scrimOpacity, startDrag, dragProps } = useSheetDrag(onClose);
   return (
     <AnimatePresence>

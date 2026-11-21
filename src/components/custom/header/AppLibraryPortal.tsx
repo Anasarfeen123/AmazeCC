@@ -183,6 +183,37 @@ const AppLibraryPortal = memo(
         showBack={false}
         searchQuery={librarySearchQuery}
         onSearchChange={setLibrarySearchQuery}
+        headerRight={
+          // Theme at the top of the sheet (user: it was at the very bottom,
+          // under every module). Icon-only to fit beside the title.
+          <div
+            role="group"
+            aria-label="Theme"
+            className="flex shrink-0 gap-0.5 rounded-[10px] border-2 border-border-ink bg-surface p-0.5"
+          >
+            {(["light", "dark", "night"] as const).map((t) => {
+              const Icon = t === "light" ? Sun : t === "dark" ? Moon : MoonStar;
+              const on = theme === t;
+              return (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={(e) => handleThemeChange(t, e)}
+                  aria-pressed={on}
+                  aria-label={`${t[0].toUpperCase()}${t.slice(1)} theme`}
+                  title={`${t[0].toUpperCase()}${t.slice(1)} theme`}
+                  className={`inline-flex h-9 w-9 items-center justify-center rounded-[7px] border-2 transition-colors cursor-pointer ${
+                    on
+                      ? "border-border-ink bg-secondary text-secondary-foreground"
+                      : "border-transparent text-text-muted hover:text-text-primary"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" aria-hidden />
+                </button>
+              );
+            })}
+          </div>
+        }
       >
         {!librarySearchQuery && (
           <div className="mb-4 flex items-center justify-between gap-3 rounded-[12px] border-2 border-border-ink bg-surface px-3 py-2 shadow-brutal-sm">
@@ -356,32 +387,6 @@ const AppLibraryPortal = memo(
             })}
           </div>
         </details>
-
-        <div
-          className="shrink-0 space-y-2 border-t-2 border-border-ink bg-surface-secondary px-5 py-4"
-          style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)" }}
-        >
-          <h4 className="px-0.5 text-xs font-bold uppercase tracking-widest text-text-muted font-outfit">Theme</h4>
-          <div className="flex w-full gap-1 rounded-[10px] border-2 border-border-ink bg-surface p-1">
-            {["light", "dark", "night"].map((t) => (
-              <button
-                key={t}
-                onClick={(e) => handleThemeChange(t, e)}
-                aria-pressed={theme === t}
-                className={`flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-[8px] border-2 py-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] transition-colors cursor-pointer ${
-                  theme === t
-                    ? "bg-secondary border-border-ink text-secondary-foreground shadow-brutal-sm"
-                    : "border-transparent text-text-muted hover:text-text-primary"
-                }`}
-              >
-                {t === "light" && <Sun className="h-4 w-4" aria-hidden />}
-                {t === "dark" && <Moon className="h-4 w-4" aria-hidden />}
-                {t === "night" && <MoonStar className="h-4 w-4" aria-hidden />}
-                <span>{t}</span>
-              </button>
-            ))}
-          </div>
-        </div>
       </AppLibrary>
     );
   },

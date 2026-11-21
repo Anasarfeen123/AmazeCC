@@ -49,5 +49,10 @@ export default function DashboardHomeFeature(props: DashboardHomeFeatureProps) {
         : props.attendanceData),
   };
 
-  return <SimplifiedHome {...enhancedProps} />;
+  // Privacy mode hides values only on Home and the sidebar (globals.css).
+  return (
+    <div data-privacy-zone="home" className="contents">
+      <SimplifiedHome {...enhancedProps} />
+    </div>
+  );
 }

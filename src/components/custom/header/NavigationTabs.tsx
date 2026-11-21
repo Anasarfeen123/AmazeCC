@@ -1097,6 +1097,7 @@ export default function NavigationTabs({
       <Sidebar
         ref={sidebarRef}
         data-sidebar-root="true"
+        data-privacy-zone="sidebar"
         aria-label="Primary navigation"
         className="brand-sidebar top-0 left-0 h-[100dvh] rounded-none border-0 border-r-2 border-border-ink shadow-none !duration-200 motion-reduce:!duration-0"
         isOpen={isOpen}

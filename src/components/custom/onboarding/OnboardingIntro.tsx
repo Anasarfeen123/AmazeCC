@@ -84,10 +84,11 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
 }
 
 const inputClass =
-  "w-full rounded-xl border border-border-ink bg-background px-4 py-2.5 text-sm font-bold text-text-heading transition-all placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-border-ink";
+  // text-base: iOS zooms the page when a field under 16px is focused.
+  "min-h-12 w-full rounded-[10px] border-2 border-border-ink bg-background px-4 py-2.5 text-base font-bold text-text-heading transition-colors placeholder:font-normal placeholder:text-text-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ochre sm:text-sm";
 
 const ctaClass =
-  "flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3.5 font-bold text-sm text-primary-foreground shadow-brutal-sm border-2 border-border-ink transition-all hover:brightness-110 cursor-pointer font-outfit tracking-wide";
+  "flex min-h-12 w-full items-center justify-center gap-2 rounded-[10px] border-[3px] border-border-ink bg-primary px-5 font-mono text-sm font-bold uppercase tracking-[0.06em] text-primary-foreground shadow-brutal-md brutal-press cursor-pointer disabled:opacity-70";
 
 export default function OnboardingIntro({ initialPhase, login, onDone }: OnboardingIntroProps) {
   const [phase, setPhase] = useState<IntroPhase>(initialPhase);
@@ -208,7 +209,9 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
         {phase === "login" && (
           <div className="grid w-full animate-in fade-in slide-in-from-bottom-4 duration-300 gap-6 lg:grid-cols-2 lg:items-center lg:gap-10">
             {/* Amaze ID — one account for every AmazeCC app */}
-            <div className="brand-sidebar rounded-[14px] border-[3px] border-border-ink p-4 shadow-brutal-md sm:p-5 lg:col-span-2">
+            {/* Phones: after the VTOP form (it was the first thing on screen, above
+                the heading, and pushed the form below the fold). */}
+            <div className="brand-sidebar order-last rounded-[14px] border-[3px] border-border-ink p-4 shadow-brutal-md sm:p-5 lg:order-first lg:col-span-2">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex min-w-0 items-center gap-3">
                   <div className="min-w-0">
@@ -262,16 +265,16 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
             </div>
 
             {/* Pitch (design language of the hero pages) */}
-            <div className="space-y-4 text-left">
+            <div className="space-y-3 text-left sm:space-y-4">
               <Brand />
               <p className="w-fit rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
                 {"Step 1 of 4 // Sign in"}
               </p>
-              <h1 className="font-display text-[32px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[40px]">
+              <h1 className="font-display text-[28px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[40px]">
                 Bring your VIT life
                 <span className="block text-hero">into one place.</span>
               </h1>
-              <p className="max-w-md text-base leading-relaxed text-text-muted">
+              <p className="hidden max-w-md text-base leading-relaxed text-text-muted sm:block">
                 Sign in with your VTOP credentials and we will pull attendance, grades, your timetable and campus
                 services straight from the source.
               </p>
@@ -292,16 +295,14 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
             </div>
 
             {/* Sign-in card */}
-            <div className="rounded-[14px] border border-border-ink bg-surface p-5 shadow-2xl sm:p-6">
+            <div className="rounded-[14px] border-[3px] border-border-ink bg-surface p-4 shadow-brutal-lg sm:p-6">
               <form onSubmit={submit} className="space-y-4 text-left">
-                <div className="space-y-1 border-b border-border-ink pb-3">
-                  <h2 className="text-sm font-bold uppercase tracking-wider text-text-heading font-outfit">
-                    Sign in to VTOP
-                  </h2>
+                <div className="space-y-1 border-b-2 border-border-ink pb-3">
+                  <h2 className="font-display text-lg font-bold uppercase text-text-heading">Sign in to VTOP</h2>
                   <p className="text-xs text-text-muted">Just your user ID and password.</p>
                 </div>
 
-                <div className="flex items-center justify-between gap-3 rounded-xl border border-border-ink bg-background px-3 py-2.5">
+                <div className="flex min-h-11 items-center justify-between gap-3 rounded-[10px] border-2 border-border-muted bg-background px-3 py-1.5">
                   <div className="flex items-center gap-2 text-xs font-bold text-text-muted">
                     <Server size={13} className="text-text-muted" />
                     Target server
@@ -357,7 +358,7 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
                       type="button"
                       aria-label={showPassword ? "Hide password" : "Show password"}
                       onClick={() => setShowPassword((prev) => !prev)}
-                      className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg p-2 text-text-muted transition-colors hover:text-text-heading"
+                      className="absolute right-1 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-[8px] text-text-muted transition-colors hover:text-text-heading"
                     >
                       {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                     </button>
@@ -378,9 +379,12 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
                   {!submitting && <ArrowRight size={15} />}
                 </button>
 
-                <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs text-text-muted">
+                <div className="flex flex-col gap-2 pt-1 text-xs text-text-muted sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                   <span>Saved encrypted on this device; sent only to sign you in.</span>
-                  <a href="/ffcs/" className="font-bold text-primary transition-colors hover:text-primary">
+                  <a
+                    href="/ffcs/"
+                    className="inline-flex min-h-11 items-center font-bold text-primary underline underline-offset-4 sm:min-h-0"
+                  >
                     Skip — open FFCS Planner
                   </a>
                 </div>

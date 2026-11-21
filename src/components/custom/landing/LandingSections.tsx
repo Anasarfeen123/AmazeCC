@@ -174,6 +174,124 @@ function SlotGridMini() {
   );
 }
 
+/** Marks tile: CGPA and three assessments against the class average. */
+function MarksMini() {
+  return (
+    <div className="space-y-3 text-obsidian">
+      <div className="flex items-end justify-between">
+        <span className="font-display text-[44px] font-bold leading-none">
+          <CountUp to={8.42} decimals={2} />
+        </span>
+        <span className="pb-2 font-mono text-xs font-bold uppercase">CGPA // target 8.6</span>
+      </div>
+      {[
+        ["CAT 1", 41, 33],
+        ["CAT 2", 44, 35],
+        ["FAT", 78, 64],
+      ].map(([name, you, avg]) => {
+        const max = name === "FAT" ? 100 : 50;
+        return (
+          <div key={name as string} className="grid grid-cols-[3.5rem_1fr_auto] items-center gap-2">
+            <span className="font-mono text-xs font-bold uppercase">{name}</span>
+            <div className="relative h-4 overflow-hidden rounded-[5px] border-2 border-obsidian bg-cream">
+              <div className="h-full bg-teal" style={{ width: `${((you as number) / max) * 100}%` }} />
+              <div
+                className="absolute inset-y-0 w-1 bg-coral"
+                style={{ left: `${((avg as number) / max) * 100}%` }}
+                title="Class average"
+              />
+            </div>
+            <span className="font-mono text-xs font-bold tabular-nums">
+              {you}/{max}
+            </span>
+          </div>
+        );
+      })}
+      <p className="font-mono text-xs font-bold uppercase">
+        <span className="mr-1 inline-block h-2.5 w-2.5 bg-coral align-middle" /> class average
+      </p>
+    </div>
+  );
+}
+
+/** Campus tile: mess, OD hours and the next bus. */
+function CampusMini() {
+  return (
+    <ul className="grid gap-2 text-obsidian">
+      {[
+        ["Mess", "Breakfast till 09:00", "Idli, vada, sambar", "bg-ochre"],
+        ["On duty", "39 of 40 hours", "One hour left this semester", "bg-sage"],
+        ["Bus", "Route 12 at 5:10 PM", "From the main gate", "bg-mint"],
+      ].map(([tag, head, sub, bg]) => (
+        <li key={tag} className="flex items-center gap-3 rounded-[10px] border-2 border-obsidian bg-cream px-3 py-2">
+          <span className={`${BADGE} ${bg} shrink-0`}>{tag}</span>
+          <span className="min-w-0">
+            <span className="block truncate font-display text-sm font-bold uppercase">{head}</span>
+            <span className="block truncate text-xs">{sub}</span>
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** The stacked feature cards (sec-features). */
+const STACK: Array<{
+  label: string;
+  title: string;
+  desc: string;
+  bg: string;
+  badge: string;
+  panel: string;
+  visual: ReactNode;
+}> = [
+  {
+    label: "Attendance",
+    title: "Know before you skip",
+    desc: "Every course with the 75% line drawn, and exactly how many classes you can skip or must attend.",
+    bg: "bg-ochre text-obsidian",
+    badge: "bg-obsidian text-cream",
+    panel: "border-obsidian bg-cream text-obsidian",
+    visual: <AttendanceMini />,
+  },
+  {
+    label: "Timetable",
+    title: "Today, at a glance",
+    desc: "Your classes, rooms and faculty for the day, with the one happening now marked. Works offline.",
+    bg: "bg-teal text-cream",
+    badge: "bg-ochre text-obsidian",
+    panel: "border-cream/70 bg-obsidian/30 text-cream",
+    visual: <TimetableMini />,
+  },
+  {
+    label: "Marks",
+    title: "Marks with the class average",
+    desc: "Every assessment next to how the class did, and the grades you need to hit your target CGPA.",
+    bg: "bg-sage text-obsidian",
+    badge: "bg-obsidian text-cream",
+    panel: "border-obsidian bg-cream",
+    visual: <MarksMini />,
+  },
+  {
+    label: "FFCS",
+    title: "Spot the clash before registration",
+    desc: "Plan next semester's slots, see clashes the moment they happen, and share the plan with friends.",
+    bg: "bg-mint text-obsidian",
+    badge: "bg-obsidian text-cream",
+    panel: "border-obsidian bg-cream",
+    visual: <SlotGridMini />,
+  },
+  {
+    label: "Campus",
+    title: "The rest of your day",
+    desc: "Mess menu, OD hours, buses, libraries and events, without five more portals.",
+    bg: "bg-coral text-obsidian",
+    badge: "bg-obsidian text-cream",
+    panel: "border-obsidian bg-obsidian/10",
+    visual: <CampusMini />,
+  },
+];
+
 const MODULE_TAGS = [
   "Attendance",
   "Marks",
@@ -255,64 +373,55 @@ export default function LandingSections() {
           }
           sub="And a few things VTOP never had. All of it works offline once synced."
         />
-        <div className="grid grid-cols-1 gap-5 pb-2 pr-2 sm:grid-cols-2 lg:grid-cols-4">
-          <Reveal className={`${CARD} bg-ochre p-6 text-obsidian sm:col-span-2 lg:row-span-2`}>
-            <span className={`${BADGE} bg-obsidian text-cream`}>Attendance</span>
-            <h3 className="mt-4 font-display text-2xl font-bold uppercase leading-tight">Know before you skip</h3>
-            <p className="mt-2 max-w-md text-base">
-              Every course with the 75% line drawn, and how many classes you can skip or must attend.
-            </p>
-            <div className="mt-6">
-              <AttendanceMini />
-            </div>
-          </Reveal>
-          <Reveal delay={80} className={`${CARD} bg-teal p-6 text-cream sm:col-span-2`}>
-            <span className={`${BADGE} bg-ochre ${INK}`}>Timetable</span>
-            <h3 className="mt-3 font-display text-xl font-bold uppercase">Today, at a glance</h3>
-            <div className="mt-4">
-              <TimetableMini />
-            </div>
-          </Reveal>
-          <Reveal delay={120} className={`${CARD} bg-sage p-6 text-obsidian`}>
-            <span className={`${BADGE} bg-cream ${INK}`}>Marks</span>
-            <p className="mt-4 font-display text-[36px] font-bold leading-none">
-              <CountUp to={8.42} decimals={2} />
-            </p>
-            <p className="mt-1 font-mono text-xs font-bold uppercase">CGPA // plan with target grades</p>
-          </Reveal>
-          <Reveal delay={160} className={`${CARD} bg-mint p-6 text-obsidian`}>
-            <span className={`${BADGE} bg-cream ${INK}`}>FFCS</span>
-            <h3 className="mt-3 font-display text-lg font-bold uppercase leading-tight">Spot the clash</h3>
-            <div className="mt-3">
-              <SlotGridMini />
-            </div>
-          </Reveal>
-          <Reveal delay={80} className={`${CARD} bg-orange p-6 text-obsidian`}>
-            <span className={`${BADGE} bg-cream ${INK}`}>Mess</span>
-            <p className="mt-3 font-display text-lg font-bold uppercase leading-tight">Breakfast till 09:00</p>
-            <p className="mt-1 text-sm">Idli, vada, sambar, chutney.</p>
-          </Reveal>
-          <Reveal delay={120} className={`${CARD} bg-coral p-6 text-obsidian`}>
-            <span className={`${BADGE} bg-cream ${INK}`}>On duty</span>
-            <p className="mt-3 font-display text-[44px] font-bold leading-none">
-              <CountUp to={39} />
-              <span className="text-xl">/40</span>
-            </p>
-            <p className="mt-1 font-mono text-xs font-bold uppercase">OD hours this semester</p>
-          </Reveal>
-          {[
-            ["Exams", "Seat, venue and reporting time for every CAT and FAT."],
-            ["Faculty finder", "Where a teacher is right now, and their free slots."],
-            ["Free classrooms", "Empty rooms by block and hour."],
-            ["Payments", "Dues, receipts and wallet without digging in VTOP."],
-            ["Libraries", "Search the catalogue, see what is due back."],
-            ["Events", "Club events and hackathons, registrations in one place."],
-          ].map(([t, d], i) => (
-            <Reveal key={t} delay={(i % 4) * 70} className={`${CARD} bg-surface p-5`}>
-              <h3 className="font-display text-base font-bold uppercase leading-tight text-text-heading">{t}</h3>
-              <p className="mt-2 text-sm text-text-muted">{d}</p>
-            </Reveal>
+        {/* Stacked cards: each sticks under the header while the next one
+            slides up over it (user: "like the overlapping cards" on
+            clay.com). Plain CSS position:sticky, a little lower per card so
+            the edges of the earlier ones stay visible. */}
+        <ol className="relative space-y-6 pb-8">
+          {STACK.map((card, i) => (
+            <li
+              key={card.label}
+              className="sticky"
+              style={{ top: `calc(5rem + env(safe-area-inset-top, 0px) + ${i * 14}px)` }}
+            >
+              <article
+                className={`${CARD} ${card.bg} grid min-h-[380px] gap-6 p-6 sm:p-8 lg:min-h-[400px] lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-12 lg:p-12`}
+              >
+                <div>
+                  <span className={`${BADGE} ${card.badge}`}>{card.label}</span>
+                  <h3 className="mt-4 font-display text-[26px] font-bold uppercase leading-[1.05] sm:text-[34px] lg:text-[40px]">
+                    {card.title}
+                  </h3>
+                  <p className="mt-3 max-w-md text-base opacity-90">{card.desc}</p>
+                </div>
+                <div className={`rounded-[12px] border-[3px] p-4 sm:p-5 ${card.panel}`}>{card.visual}</div>
+              </article>
+            </li>
           ))}
+        </ol>
+
+        <div className="space-y-4">
+          <p className={`${BADGE} bg-surface text-text-primary`}>And the rest</p>
+          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              ["Exams", "Seat, venue and reporting time for every CAT and FAT."],
+              ["Faculty finder", "Where a teacher is right now, and their free slots."],
+              ["Free classrooms", "Empty rooms by block and hour."],
+              ["Payments", "Dues, receipts and wallet without digging in VTOP."],
+              ["Libraries", "Search the catalogue, see what is due back."],
+              ["Events", "Club events and hackathons, registrations in one place."],
+            ].map(([t, d], idx) => (
+              <Reveal
+                as="li"
+                key={t}
+                delay={(idx % 3) * 70}
+                className="rounded-[12px] border-[3px] border-border-ink bg-surface p-4 shadow-brutal-sm"
+              >
+                <h4 className="font-display text-base font-bold uppercase leading-tight text-text-heading">{t}</h4>
+                <p className="mt-1 text-sm text-text-muted">{d}</p>
+              </Reveal>
+            ))}
+          </ul>
         </div>
       </section>
 
@@ -387,7 +496,7 @@ export default function LandingSections() {
             [<CountUp key="m" to={14} />, "modules in one app"],
             [<CountUp key="l" to={75} suffix="%" />, "line drawn on every bar"],
             [<CountUp key="a" to={0} />, "ads, ever"],
-            [<CountUp key="t" to={2} />, "themes, light and dark"],
+            [<CountUp key="t" to={3} />, "themes: light, dark, night"],
           ].map(([n, label], i) => (
             <Reveal as="li" key={i} delay={i * 80} className="border-l-[3px] border-ochre pl-4">
               <p className="font-display text-[40px] font-bold leading-none text-ochre sm:text-[48px]">{n}</p>
@@ -504,7 +613,7 @@ export default function LandingSections() {
       <div className="border-y-[3px] border-border-ink bg-obsidian py-3 text-ochre">
         <Marquee
           reverse
-          items={["Free", "Made by students", "Works offline", "Light and dark", "No ads", "For VIT Chennai"]}
+          items={["Free", "Made by students", "Works offline", "Light, dark and night", "No ads", "For VIT Chennai"]}
           itemClassName="font-display text-base font-bold uppercase sm:text-lg"
         />
       </div>

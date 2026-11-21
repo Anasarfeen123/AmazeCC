@@ -60,7 +60,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
     "rounded-[8px] px-2 py-1.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted transition-colors hover:bg-surface-secondary hover:text-text-heading";
 
   return (
-    <main className="relative flex min-h-screen flex-col overflow-x-hidden bg-background text-text-heading selection:bg-secondary">
+    <main className="relative flex min-h-screen flex-col overflow-x-clip bg-background text-text-heading selection:bg-secondary">
       <header
         className={`sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between gap-3 px-4 transition-colors duration-200 sm:px-8 ${
           isScrolled ? "border-b-2 border-border-ink bg-background" : "border-b-2 border-transparent bg-background"
@@ -210,12 +210,17 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
         {/* Backdrop: a flat wash of the page colour so the art sits behind, not on top. */}
         <div aria-hidden="true" className="absolute inset-0 -z-10 bg-background/60 dark:bg-background/45" />
 
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-12 px-4 pb-14 pt-8 sm:px-8 sm:pt-12 lg:grid-cols-[1fr_1.1fr] lg:gap-10 lg:pb-20">
-          <div className="relative max-w-xl rounded-[20px] border-[3px] border-border-ink bg-surface p-5 shadow-brutal-lg sm:p-7">
-            <div className="landing-pop mb-6">
-              <BrandLogo size="md" tagline />
+        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-4 pb-14 pt-6 sm:gap-12 sm:px-8 sm:pt-12 lg:grid-cols-[1fr_1.1fr] lg:gap-10 lg:pb-20">
+          {/* On phones the words sit on the page (a card inside the page, with a
+              second logo under the header one, read as a box in a box). */}
+          <div className="relative max-w-xl sm:rounded-[20px] sm:border-[3px] sm:border-border-ink sm:bg-surface sm:p-7 sm:shadow-brutal-lg">
+            {/* hidden on a wrapper: .landing-pop sets display and would win. */}
+            <div className="mb-6 hidden sm:block">
+              <div className="landing-pop">
+                <BrandLogo size="md" tagline />
+              </div>
             </div>
-            <h1 className="font-display text-[32px] font-bold uppercase leading-[1.05] sm:text-[44px] lg:text-[52px]">
+            <h1 className="font-display text-[34px] font-bold uppercase leading-[1.02] sm:text-[44px] lg:text-[52px]">
               Your VIT life,
               <span className="block text-hero">all in one place.</span>
             </h1>
@@ -260,7 +265,50 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
             </p>
           </div>
 
-          <div className="relative mx-auto w-full max-w-xl pb-10 pr-8 pt-6 lg:max-w-none" aria-hidden="true">
+          {/* Phones and small tablets: one phone screenshot, big enough to
+              read, on an ochre block with three stickers (user: the shrunken
+              desktop window + phone + five stickers "looks bad" on mobile). */}
+          <div className="relative mx-auto w-full max-w-[330px] px-6 pb-6 pt-4 md:hidden" aria-hidden="true">
+            <div className="absolute inset-x-2 bottom-0 top-12 rotate-[4deg] rounded-[24px] border-[3px] border-border-ink bg-ochre" />
+            <div className="landing-float-b relative mx-auto w-[78%] overflow-hidden rounded-[26px] border-[3px] border-border-ink bg-surface shadow-brutal-lg [--tilt:-3deg]">
+              <img
+                src="/landing/home-phone-light.webp"
+                alt=""
+                width={390}
+                height={800}
+                loading="eager"
+                decoding="async"
+                className="block h-auto w-full dark:hidden"
+              />
+              <img
+                src="/landing/home-phone-dark.webp"
+                alt=""
+                width={390}
+                height={800}
+                loading="eager"
+                decoding="async"
+                className="hidden h-auto w-full dark:block"
+              />
+            </div>
+            {[
+              { t: "79% // safe", c: "bg-mint", pos: "left-0 top-[40%]", anim: "landing-float-a [--tilt:-6deg]" },
+              { t: "Can skip 2", c: "bg-sage", pos: "right-0 top-[62%]", anim: "landing-float-b [--tilt:5deg]" },
+              { t: "FAT // 20 Nov", c: "bg-coral", pos: "left-1 bottom-[12%]", anim: "landing-float-a [--tilt:-3deg]" },
+            ].map((st, i) => (
+              <span
+                key={st.t}
+                style={{ animationDelay: `${i * 0.6}s` }}
+                className={`absolute ${st.pos} ${st.anim} z-10 whitespace-nowrap rounded-[8px] border-[3px] border-border-ink ${st.c} px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-obsidian shadow-brutal-sm`}
+              >
+                {st.t}
+              </span>
+            ))}
+          </div>
+
+          <div
+            className="relative mx-auto hidden w-full max-w-xl pb-10 pr-8 pt-6 md:block lg:max-w-none"
+            aria-hidden="true"
+          >
             {/* Colour blocks behind the shots */}
             <div className="landing-parallax absolute -right-2 top-0 h-[70%] w-[70%] rotate-3 rounded-[20px] border-[3px] border-border-ink bg-ochre [--depth:14px]" />
             <div className="landing-parallax absolute -left-4 bottom-0 h-[45%] w-[45%] -rotate-6 rounded-[20px] border-[3px] border-border-ink bg-sage [--depth:-12px]" />

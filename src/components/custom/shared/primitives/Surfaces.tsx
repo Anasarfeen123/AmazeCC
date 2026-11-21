@@ -60,7 +60,9 @@ export function StatTile({
   icon,
   tone = "emerald",
   variant = "default",
-  height = "h-32 sm:h-36",
+  // 144px on phones too (owner: tiles felt cramped once the status badge
+  // wraps under the label at phone width).
+  height = "h-36",
   className = "",
   privacyCategory,
 }: {
@@ -111,7 +113,7 @@ export function StatTile({
 
   return (
     <div className={`${TILE} ${surface} ${height} ${className}`.trim()}>
-      <div className="flex flex-wrap items-center justify-between gap-1">
+      <div className="flex flex-wrap items-center justify-between gap-x-1 gap-y-1.5">
         <span
           className={`font-mono text-xs font-semibold uppercase tracking-[0.06em] ${labelTone} min-w-0 break-words`}
         >

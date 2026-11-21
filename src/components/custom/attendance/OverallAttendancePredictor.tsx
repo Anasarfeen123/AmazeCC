@@ -561,7 +561,7 @@ export default function OverallAttendancePredictor({
       <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
         <StatTile
           variant="highlight"
-          height="h-32 sm:h-36"
+          height="h-36"
           label="Projected Avg"
           icon={<Sparkles className="w-4 h-4 text-primary" />}
           tone={overallStats.predictedPct >= targetThreshold ? "emerald" : "red"}
@@ -581,7 +581,7 @@ export default function OverallAttendancePredictor({
         <InsightCarousel
           slides={summarySlides}
           carousel={carousel}
-          height="h-32 sm:h-36"
+          height="h-36"
           interactiveDots
           ariaLabel="Attendance summary"
         />

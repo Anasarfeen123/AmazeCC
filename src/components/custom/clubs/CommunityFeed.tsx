@@ -242,12 +242,7 @@ export default function CommunityFeed({
               badge="Live"
               tone="indigo"
             />
-            <InsightCarousel
-              slides={insightSlides}
-              carousel={carousel}
-              height="h-32 sm:h-36"
-              ariaLabel="Feed insights"
-            />
+            <InsightCarousel slides={insightSlides} carousel={carousel} height="h-36" ariaLabel="Feed insights" />
           </div>
 
           <div className="space-y-3">

@@ -757,12 +757,7 @@ export default function FreeClassroomsTab({
               variant="highlight"
             />
           </button>
-          <InsightCarousel
-            slides={insightSlides}
-            carousel={carousel}
-            height="h-32 sm:h-36"
-            ariaLabel="Availability insights"
-          />
+          <InsightCarousel slides={insightSlides} carousel={carousel} height="h-36" ariaLabel="Availability insights" />
         </div>
       )}
 

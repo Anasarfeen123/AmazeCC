@@ -595,12 +595,7 @@ export default function EventHubTab({
               />
             </button>
 
-            <InsightCarousel
-              slides={insightSlides}
-              carousel={carousel}
-              height="h-32 sm:h-36"
-              ariaLabel="Event insights"
-            />
+            <InsightCarousel slides={insightSlides} carousel={carousel} height="h-36" ariaLabel="Event insights" />
           </div>
 
           <p className="px-1 -mt-3 text-xs leading-relaxed text-text-muted font-medium">

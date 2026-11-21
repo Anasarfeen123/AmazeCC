@@ -72,7 +72,9 @@ export function InsightCarousel({
   slides,
   carousel,
   headlineSize = "sm",
-  height = "h-32 sm:h-36",
+  // 144px on phones too (owner: tiles felt cramped once the status badge
+  // wraps under the label at phone width).
+  height = "h-36",
   interactiveDots = false,
   footerRight,
   pauseOnHover = true,
@@ -159,7 +161,7 @@ export function InsightCarousel({
         />
       ) : null}
 
-      <div className="flex flex-wrap items-center justify-between gap-1 relative z-10 pointer-events-none">
+      <div className="flex flex-wrap items-center justify-between gap-x-1 gap-y-1.5 relative z-10 pointer-events-none">
         <span className={LABEL}>{slide.label}</span>
         {slide.badge ? (
           <span

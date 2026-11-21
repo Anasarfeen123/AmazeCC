@@ -14,7 +14,7 @@ export function valueFitClass(value: ReactNode, size: "sm" | "lg" = "sm"): strin
   const text = typeof value === "string" || typeof value === "number" ? String(value) : "";
   const len = text.length;
   const big = size === "lg" ? "text-[40px] sm:text-[56px]" : "text-[32px] sm:text-[40px]";
-  const sizeClass = !text || len <= 6 ? big : len <= 9 ? "text-[26px] sm:text-[32px]" : "text-[20px] sm:text-[26px]";
+  const sizeClass = !text || len <= 6 ? big : len <= 9 ? "text-[22px] sm:text-[32px]" : "text-[18px] sm:text-[26px]";
   const wrap = /\s/.test(text.trim())
     ? "line-clamp-2 break-normal leading-tight"
     : "whitespace-nowrap truncate leading-none";

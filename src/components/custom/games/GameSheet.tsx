@@ -17,10 +17,20 @@ import { OPEN_GAME_EVENT } from "@/components/custom/shared/BrandLogo";
  * Opened from the offline banner, the command palette, the Konami code and
  * the logo easter egg. The game only runs while this is open.
  */
+const BACKDROP_GRACE_MS = 1200;
+
 export default function GameSheet() {
   const [open, setOpen] = useAtom(isGameOpenAtom);
   const panelRef = useRef<HTMLDivElement>(null);
   useFocusTrap(panelRef, open);
+  // When it opened. The logo egg is a run of taps at the top of the screen,
+  // and the sheet opens under them: the extra taps landed on the backdrop
+  // and closed the game at once (owner). The backdrop ignores taps for a
+  // moment after opening; the X button and Esc always work.
+  const openedAt = useRef(0);
+  useEffect(() => {
+    if (open) openedAt.current = Date.now();
+  }, [open]);
 
   // Easter egg: the Konami code (up up down down left right left right b a)
   // opens the game from anywhere. Ignored while typing in a field.
@@ -65,7 +75,9 @@ export default function GameSheet() {
     <div className="fixed inset-0 z-[300] flex items-end justify-center md:items-center md:p-6" role="presentation">
       <div
         className="absolute inset-0 bg-[color-mix(in_oklab,var(--shadow-ink)_55%,transparent)]"
-        onClick={close}
+        onClick={() => {
+          if (Date.now() - openedAt.current > BACKDROP_GRACE_MS) close();
+        }}
         aria-hidden
       />
       <div

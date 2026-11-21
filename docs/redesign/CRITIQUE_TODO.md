@@ -113,20 +113,24 @@ both are the owner-decided brand (`design/DESIGN_LANGUAGE.md`).
 
 Show the owner the direction before building (biggest visual change).
 
-- [ ] **#27 25 pastel squares** (pink, lavender, blue) outside the
+- [x] **#27 25 pastel squares** (pink, lavender, blue) outside the
       teal / ochre / sage palette; reads like any super-app. Fix: a brand list
       grouped Study / Campus / Tools with a status per row ("Payments · 1
       due", "Library · 2 books"), or keep the grid in brand colours only.
-- [ ] **#28 Too many choices at once** (25+ tiles plus theme and semester).
+      Done (owner chose "grid, but smarter"): the grid stays; the off-brand sky, lavender and pink tones became butter, mid teal and orange from the brand palette.
+- [x] **#28 Too many choices at once** (25+ tiles plus theme and semester).
       Fix: pinned and most-used first; the rest under "All modules".
+      Tried "Your modules" + a folded "All modules", then reverted at the owner's request ("All modules should be there, it was good before"). The full grid stays visible.
 
 ## 6. Desktop
 
-- [ ] **#29 Sidebar repeats the stat tiles** (Attendance, Credits, OD).
+- [x] **#29 Sidebar repeats the stat tiles** (Attendance, Credits, OD).
       Fix: show them in one place.
-- [ ] **#30 Day chips float in very wide columns; class rows stretch
+      Done: the sidebar stat tiles hide on Home only (they repeat the Home tiles); every other page keeps them.
+- [x] **#30 Day chips float in very wide columns; class rows stretch
       ~1,080px with the % far from the title.** Fix: cap content width; keep
       the % beside the title.
+      An 860px Home cap left a big empty right side on wide screens (owner); removed. Instead the page container widens to 1440px from 2xl, so wide monitors fill evenly.
 
 ## 7. Copy and states
 

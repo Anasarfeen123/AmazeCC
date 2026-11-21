@@ -327,103 +327,105 @@ const AppLibraryPortal = memo(
             </div>
           )
         ) : (
-          primaryGroups.map((group) => {
-            const segments: Array<
-              { type: "items"; items: ModuleEntry[] } | { type: "academics" } | { type: "hostel" }
-            > = [];
-            let bucket: ModuleEntry[] = [];
-            const flush = () => {
-              if (bucket.length) {
-                segments.push({ type: "items", items: bucket });
-                bucket = [];
+          <div className="space-y-6">
+            {primaryGroups.map((group) => {
+              const segments: Array<
+                { type: "items"; items: ModuleEntry[] } | { type: "academics" } | { type: "hostel" }
+              > = [];
+              let bucket: ModuleEntry[] = [];
+              const flush = () => {
+                if (bucket.length) {
+                  segments.push({ type: "items", items: bucket });
+                  bucket = [];
+                }
+              };
+              for (const item of group.items) {
+                if (item.target.kind === "panel" && item.target.panel === "academics") {
+                  flush();
+                  segments.push({ type: "academics" });
+                } else if (item.target.kind === "panel" && item.target.panel === "hostel") {
+                  flush();
+                  segments.push({ type: "hostel" });
+                } else {
+                  bucket.push(item);
+                }
               }
-            };
-            for (const item of group.items) {
-              if (item.target.kind === "panel" && item.target.panel === "academics") {
-                flush();
-                segments.push({ type: "academics" });
-              } else if (item.target.kind === "panel" && item.target.panel === "hostel") {
-                flush();
-                segments.push({ type: "hostel" });
-              } else {
-                bucket.push(item);
-              }
-            }
-            flush();
+              flush();
 
-            return (
-              <div key={group.name} className="space-y-3 pb-2">
-                <h3 className="flex items-center gap-2 px-1 font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-muted">
-                  {group.name}
-                  <span className="h-0.5 flex-1 rounded-full bg-border-muted" aria-hidden />
-                </h3>
-                <div className="space-y-3">
-                  {segments.map((seg, idx) => {
-                    if (seg.type === "academics") {
-                      return (
-                        <div key={`${group.name}-academics-${idx}`} className="space-y-2">
-                          <h4 className="px-1 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
-                            Academics
-                          </h4>
-                          <div className="grid grid-cols-4 gap-x-1 gap-y-4 sm:grid-cols-6">
-                            {academicsItems.map((sub) =>
-                              renderItemCard(sub, {
-                                tint: "bg-secondary text-secondary-foreground",
-                                subtitle: "Academics Tracker",
-                              }),
-                            )}
+              return (
+                <div key={group.name} className="space-y-3 pb-2">
+                  <h3 className="flex items-center gap-2 px-1 font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-muted">
+                    {group.name}
+                    <span className="h-0.5 flex-1 rounded-full bg-border-muted" aria-hidden />
+                  </h3>
+                  <div className="space-y-3">
+                    {segments.map((seg, idx) => {
+                      if (seg.type === "academics") {
+                        return (
+                          <div key={`${group.name}-academics-${idx}`} className="space-y-2">
+                            <h4 className="px-1 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+                              Academics
+                            </h4>
+                            <div className="grid grid-cols-4 gap-x-1 gap-y-4 sm:grid-cols-6">
+                              {academicsItems.map((sub) =>
+                                renderItemCard(sub, {
+                                  tint: "bg-secondary text-secondary-foreground",
+                                  subtitle: "Academics Tracker",
+                                }),
+                              )}
+                            </div>
                           </div>
+                        );
+                      }
+                      if (seg.type === "hostel") {
+                        return (
+                          <div key={`${group.name}-hostel-${idx}`} className="space-y-2">
+                            <h4 className="px-1 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+                              Hostel
+                            </h4>
+                            <div className="grid grid-cols-4 gap-x-1 gap-y-4 sm:grid-cols-6">
+                              {hostelItems.map((sub) =>
+                                renderItemCard(sub, {
+                                  cleanPrefix: "Hostel ",
+                                  tint: "bg-warning-surface text-warning-foreground dark:text-warning-foreground",
+                                  subtitle: "Hostel Hub",
+                                }),
+                              )}
+                            </div>
+                          </div>
+                        );
+                      }
+                      return (
+                        <div
+                          key={`${group.name}-items-${idx}`}
+                          className="grid grid-cols-4 gap-x-1 gap-y-4 sm:grid-cols-6"
+                        >
+                          {seg.items.map((item) =>
+                            renderItemCard(item, {
+                              tint:
+                                group.name === "Study"
+                                  ? "bg-secondary text-secondary-foreground"
+                                  : group.name === "Campus"
+                                    ? "bg-warning-surface text-warning-foreground dark:text-warning-foreground"
+                                    : group.name === "Tools"
+                                      ? "bg-success-surface text-success-foreground dark:text-success-foreground"
+                                      : "bg-info-surface text-info",
+                              subtitle:
+                                group.name === "Study"
+                                  ? "Academic trackers & schedule"
+                                  : group.name === "Campus"
+                                    ? "Campus services"
+                                    : "Social & utilities",
+                            }),
+                          )}
                         </div>
                       );
-                    }
-                    if (seg.type === "hostel") {
-                      return (
-                        <div key={`${group.name}-hostel-${idx}`} className="space-y-2">
-                          <h4 className="px-1 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
-                            Hostel
-                          </h4>
-                          <div className="grid grid-cols-4 gap-x-1 gap-y-4 sm:grid-cols-6">
-                            {hostelItems.map((sub) =>
-                              renderItemCard(sub, {
-                                cleanPrefix: "Hostel ",
-                                tint: "bg-warning-surface text-warning-foreground dark:text-warning-foreground",
-                                subtitle: "Hostel Hub",
-                              }),
-                            )}
-                          </div>
-                        </div>
-                      );
-                    }
-                    return (
-                      <div
-                        key={`${group.name}-items-${idx}`}
-                        className="grid grid-cols-4 gap-x-1 gap-y-4 sm:grid-cols-6"
-                      >
-                        {seg.items.map((item) =>
-                          renderItemCard(item, {
-                            tint:
-                              group.name === "Study"
-                                ? "bg-secondary text-secondary-foreground"
-                                : group.name === "Campus"
-                                  ? "bg-warning-surface text-warning-foreground dark:text-warning-foreground"
-                                  : group.name === "Tools"
-                                    ? "bg-success-surface text-success-foreground dark:text-success-foreground"
-                                    : "bg-info-surface text-info",
-                            subtitle:
-                              group.name === "Study"
-                                ? "Academic trackers & schedule"
-                                : group.name === "Campus"
-                                  ? "Campus services"
-                                  : "Social & utilities",
-                          }),
-                        )}
-                      </div>
-                    );
-                  })}
+                    })}
+                  </div>
                 </div>
-              </div>
-            );
-          })
+              );
+            })}
+          </div>
         )}
       </AppLibrary>
     );

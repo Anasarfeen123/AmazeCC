@@ -744,8 +744,8 @@ export default function NavigationTabs({
     const pinnedTabs = settings?.pinnedNavTabs ?? [];
     const tabData: Record<string, { label: string; icon: any; onSelect: () => void; isActive: boolean }> = {
       attendance: {
-        label: "Attendance",
-        icon: CalendarCheck,
+        label: "Calendar",
+        icon: Calendar,
         isActive: activeTab === "attendance",
         onSelect: () => {
           selectTab("attendance");
@@ -1171,8 +1171,14 @@ export default function NavigationTabs({
                     </div>
                   </div>
                   {/* Three tiles fit one row; with CGPA shown, four ~52px tiles
-                      overflowed ("CREDITS", "79.1%"), so they go 2 x 2. */}
-                  <div className={`grid gap-1.5 ${shouldDisplayGpa ? "grid-cols-2" : "grid-flow-col auto-cols-fr"}`}>
+                      overflowed ("CREDITS", "79.1%"), so they go 2 x 2.
+                      Hidden on Home, whose own tiles show the same numbers
+                      (critique #29); useful on every other page. */}
+                  <div
+                    className={`grid gap-1.5 ${shouldDisplayGpa ? "grid-cols-2" : "grid-flow-col auto-cols-fr"} ${
+                      activeTab === "home" ? "hidden" : ""
+                    }`}
+                  >
                     {shouldDisplayGpa && (
                       <button
                         onClick={() => {

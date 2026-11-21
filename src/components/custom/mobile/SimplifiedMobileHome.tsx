@@ -1405,7 +1405,8 @@ export default function SimplifiedMobileHome({
   return (
     <div className="w-full max-w-4xl lg:max-w-none mx-auto lg:mx-0 pt-3 sm:pt-5 md:pb-8 animate-in fade-in duration-300">
       <div className="flex flex-col lg:flex-row items-start gap-6 xl:gap-8 w-full">
-        {/* Left Column: Feed, Stats, Timetable, Shortcuts */}
+        {/* Left Column: Feed, Stats, Timetable, Shortcuts. Fills the page
+            width (an 860px cap left a big empty right side; user). */}
         <div className="w-full lg:flex-1 lg:min-w-0 space-y-6 text-left">
           {/* ── TOP APP BAR: AVATAR / ICON ABOVE GREETING & CONTROLS ── */}
           <div className="flex items-start justify-between px-1">

@@ -1099,13 +1099,15 @@
   --tone: #abd1c6;
 }
 .icon-tone-sky {
-  --tone: #8fb8de;
+  /* Brand-only tones in Modules (critique #27): sky blue, lavender and
+     pink became butter, mid teal and orange from the brand palette. */
+  --tone: #f2d06b;
 }
 .icon-tone-sea {
   --tone: #7fc4c9;
 }
 .icon-tone-violet {
-  --tone: #b8a6d9;
+  --tone: #3f8f84;
 }
 .icon-tone-teal {
   --tone: #4fb3a5;
@@ -1120,7 +1122,7 @@
   --tone: #e16162;
 }
 .icon-tone-rose {
-  --tone: #f2a7b5;
+  --tone: #e66a2c;
 }
 .icon-tone-apricot {
   --tone: #f4a259;

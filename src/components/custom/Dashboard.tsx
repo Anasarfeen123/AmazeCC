@@ -300,7 +300,7 @@ function DashboardContent({
           onClose={() => setShowFeedbackStatus(false)}
           loginToVTOP={loginToVTOP}
         />
-        <div className="px-4 py-4 sm:px-6 md:p-6 lg:p-10 max-w-7xl mx-auto w-full">
+        <div className="px-4 py-4 sm:px-6 md:p-6 lg:p-10 max-w-7xl 2xl:max-w-[1440px] mx-auto w-full">
           <DashboardRoute route="home">
             <DashboardHomeFeature
               attendanceData={attendanceData}

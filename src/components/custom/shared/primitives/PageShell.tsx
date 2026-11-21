@@ -1,6 +1,7 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { Children, Fragment, isValidElement, useState, type ReactElement, type ReactNode } from "react";
+import { MoreHorizontal, X } from "lucide-react";
 import BrandBackButton from "./BrandBackButton";
 import TitleBlock from "./TitleBlock";
 import LastSynced from "../LastSynced";
@@ -104,7 +105,50 @@ export default function PageShell({
     ) : onBack ? (
       <BrandBackButton onClick={onBack} label={backLabel} className="self-start" />
     ) : null;
-  const cluster = actions ? <div className={ACTION_CLUSTER}>{actions}</div> : null;
+  // Phones: with more than two actions, the first stays and the rest fold
+  // behind "More" (user: header buttons overflowed the screen, e.g. the
+  // Exam schedule's five). The folded ones open as a labelled row under the
+  // header. sm and up: every action inline, as before.
+  const [moreOpen, setMoreOpen] = useState(false);
+  const items = flattenActions(actions);
+  const folds = items.length > 2;
+  const cluster = actions ? (
+    folds ? (
+      <>
+        <div className={`${ACTION_CLUSTER} hidden sm:flex`}>{items}</div>
+        <div className={`${ACTION_CLUSTER} sm:hidden`}>
+          {items[0]}
+          <button
+            type="button"
+            onClick={() => setMoreOpen((v) => !v)}
+            aria-expanded={moreOpen}
+            aria-label={moreOpen ? "Close more actions" : `More actions (${items.length - 1})`}
+            title="More actions"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-primary shadow-brutal-sm brutal-press cursor-pointer"
+          >
+            {moreOpen ? <X className="h-4 w-4" aria-hidden /> : <MoreHorizontal className="h-4 w-4" aria-hidden />}
+          </button>
+        </div>
+      </>
+    ) : (
+      <div className={ACTION_CLUSTER}>{items}</div>
+    )
+  ) : null;
+  const moreRow =
+    folds && moreOpen ? (
+      <div
+        className="mb-4 grid grid-cols-4 gap-2 rounded-[14px] border-2 border-border-ink bg-surface p-3 shadow-brutal-sm sm:hidden"
+        role="group"
+        aria-label="More actions"
+      >
+        {items.slice(1).map((item, i) => (
+          <div key={i} className="flex flex-col items-center gap-1 text-center">
+            {item}
+            <span className="line-clamp-2 text-xs leading-tight text-text-muted">{actionLabel(item)}</span>
+          </div>
+        ))}
+      </div>
+    ) : null;
 
   if (layout === "actions-above") {
     return (
@@ -116,6 +160,7 @@ export default function PageShell({
               {cluster}
             </div>
           ) : null}
+          {moreRow}
           {titleBlock}
         </div>
         {children}
@@ -130,7 +175,29 @@ export default function PageShell({
         {titleBlock}
         {cluster}
       </div>
+      {moreRow ? <div className={HEADER_ROOT}>{moreRow}</div> : null}
       {children}
     </div>
   );
+}
+
+/** The action nodes as a flat list (fragments unwrapped, empty slots dropped). */
+function flattenActions(actions: ReactNode): ReactNode[] {
+  const out: ReactNode[] = [];
+  Children.forEach(actions, (child) => {
+    if (child === null || child === undefined || child === false || child === "") return;
+    if (isValidElement(child) && child.type === Fragment) {
+      out.push(...flattenActions((child as ReactElement<{ children?: ReactNode }>).props.children));
+    } else out.push(child);
+  });
+  return out.map((c, i) => (isValidElement(c) && c.key == null ? <Fragment key={i}>{c}</Fragment> : c));
+}
+
+/** A folded action's caption: its title or aria-label (IconButton sets both). */
+function actionLabel(node: ReactNode): string {
+  if (!isValidElement(node)) return "";
+  const props = node.props as { title?: string; "aria-label"?: string; children?: ReactNode };
+  if (props.title || props["aria-label"]) return String(props.title || props["aria-label"]);
+  if (node.type === Fragment) return actionLabel(Children.toArray(props.children)[0]);
+  return "";
 }

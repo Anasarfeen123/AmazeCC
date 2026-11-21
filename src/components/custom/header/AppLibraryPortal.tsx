@@ -216,25 +216,27 @@ const AppLibraryPortal = memo(
         }
       >
         {!librarySearchQuery && (
-          <div className="mb-4 flex items-center justify-between gap-3 rounded-[12px] border-2 border-border-ink bg-surface px-3 py-2 shadow-brutal-sm">
-            <span className="font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-muted">Semester</span>
-            <div className="relative flex items-center">
-              <SelectField
-                value={settings.currSemesterID || config.semesterIDs[config.semesterIDs.length - 2]}
-                onChange={(val) => {
-                  handleReloadRequest(val);
-                }}
-                options={config.semesterIDs.map((semId: string) => ({
-                  value: semId,
-                  label: formatSemesterName(semId),
-                }))}
-                searchable={false}
-                role="group"
-                aria-label="Current semester"
-                size="auto"
-                className="w-full [&>button:first-child]:border-none [&>button:first-child]:bg-transparent [&>button:first-child]:pr-5 [&>button:first-child]:font-bold [&>button:first-child]:text-text-heading"
-              />
-            </div>
+          // Full-width field with its label above (user: the selector was "too
+          // short", a size="auto" text pill squeezed into the row).
+          <div className="mb-4">
+            <span className="mb-1.5 block font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-muted">
+              Semester
+            </span>
+            <SelectField
+              value={settings.currSemesterID || config.semesterIDs[config.semesterIDs.length - 2]}
+              onChange={(val) => {
+                handleReloadRequest(val);
+              }}
+              options={config.semesterIDs.map((semId: string) => ({
+                value: semId,
+                label: formatSemesterName(semId),
+              }))}
+              searchable={false}
+              role="group"
+              aria-label="Current semester"
+              size="lg"
+              className="w-full sm:w-full [&>button:first-child]:w-full [&>button:first-child_span]:font-bold [&>button:first-child_span]:text-text-heading"
+            />
           </div>
         )}
 

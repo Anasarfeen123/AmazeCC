@@ -1087,3 +1087,14 @@
 .dark.night .icon-tone {
   background-color: color-mix(in oklab, var(--tone) 16%, var(--surface));
 }
+
+/* Live class progress on Home (LiveClassProgress): how much of the class
+   has passed, as a mint wash with a solid edge at the current time. */
+.live-progress-fill {
+  background: color-mix(in oklab, #9ed9b5 34%, transparent);
+  border-right: 3px solid #4fb3a5;
+}
+.dark .live-progress-fill {
+  background: color-mix(in oklab, #9ed9b5 16%, transparent);
+  border-right-color: #9ed9b5;
+}

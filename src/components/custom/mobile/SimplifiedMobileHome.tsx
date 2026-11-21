@@ -273,18 +273,13 @@ function LiveClassProgress({
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
   const progressPct = Math.min(100, Math.max(0, ((currentMinutes - start) / duration) * 100));
 
-  if (variant === "compact-background") {
+  // The fill had no colour (a bulk restyle removed its classes), so a live
+  // class showed no progress (user report). Mint wash + a solid edge at "now".
+  if (variant === "compact-background" || variant === "detailed-background") {
     return (
       <div
-        className="absolute inset-0 pointer-events-none transition-all duration-700 ease-linear"
-        style={{ width: `${progressPct}%` }}
-      />
-    );
-  }
-  if (variant === "detailed-background") {
-    return (
-      <div
-        className="absolute inset-0 pointer-events-none transition-all duration-700 ease-linear"
+        aria-hidden
+        className="live-progress-fill absolute inset-y-0 left-0 pointer-events-none transition-[width] duration-700 ease-linear"
         style={{ width: `${progressPct}%` }}
       />
     );
@@ -299,7 +294,7 @@ function LiveClassProgress({
       }
     >
       <div
-        className="h-full rounded-full transition-all duration-700 ease-linear"
+        className="h-full rounded-full bg-mint transition-[width] duration-700 ease-linear"
         style={{ width: `${progressPct}%` }}
       />
     </div>

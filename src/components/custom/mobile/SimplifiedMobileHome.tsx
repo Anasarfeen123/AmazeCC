@@ -22,7 +22,6 @@ import {
   Bug,
   List,
   Layers,
-  CalendarDays,
   UserSearch,
   UsersRound,
   Sun,
@@ -1381,23 +1380,6 @@ export default function SimplifiedMobileHome({
     };
   };
 
-  // Formatted date string for selected day based on active calendar week
-  const getSelectedDayFormattedDate = () => {
-    // The week header above already names the month and year (user: the
-    // date showed twice), so this is just "Friday, 20". The month is added
-    // only when the week spans two months.
-    if (selectedDayMeta) {
-      const spansMonths =
-        weekDays.length > 0 && weekDays[0].fullDate.getMonth() !== weekDays[weekDays.length - 1].fullDate.getMonth();
-      return selectedDayMeta.fullDate.toLocaleDateString("en-GB", {
-        weekday: "long",
-        day: "numeric",
-        ...(spansMonths ? { month: "short" as const } : {}),
-      });
-    }
-    return selectedDay;
-  };
-
   // State checks for the active view
   // Calendar-marked or paper-derived: either signal alone marks the day.
   const isLabFatDay = Boolean(selectedDayMeta?.isLabFatDay) || selectedDayLabFat.length > 0;
@@ -1576,35 +1558,49 @@ export default function SimplifiedMobileHome({
             own pill rather than shorten, so refusing to shrink is the honest
             answer and `ml-auto` keeps it right-aligned when it wraps to a line
             of its own. */}
+            {/* Fits one line at 390px even with the Today chip (user: the view
+                toggle wrapped onto a line of its own): no date range on
+                phones, a smaller heading. It may still wrap as a last resort. */}
             <div className="flex flex-wrap items-center justify-between gap-2 px-1">
-              <div className="flex items-center gap-2 flex-wrap min-w-0">
-                <div className="flex items-center gap-1.5 min-w-0">
-                  <CalendarDays className="w-4 h-4 text-primary shrink-0" />
-                  <h2 className="text-sm font-bold text-text-heading font-outfit tracking-tight truncate">
+              <div className="flex items-center gap-2 min-w-0">
+                {/* Month as a real heading, with the week's dates beside it
+                    (user: "improve this"; it was a small icon + label). */}
+                <div className="flex min-w-0 items-baseline gap-2">
+                  <h2 className="font-display text-sm sm:text-lg font-bold uppercase leading-none text-text-heading truncate">
                     {calendarWeekHeader}
                   </h2>
+                  {weekDays.length > 0 ? (
+                    <span className="hidden sm:inline shrink-0 font-mono text-xs text-text-muted">
+                      {weekDays[0].fullDate.getDate()}–{weekDays[weekDays.length - 1].fullDate.getDate()}{" "}
+                      {weekDays[weekDays.length - 1].fullDate.toLocaleDateString("en-GB", { month: "short" })}
+                    </span>
+                  ) : null}
                 </div>
 
                 {/* Week navigation arrows. The strip itself is swipeable too; these
                 stay because a chevron is the one affordance that works with a
                 keyboard and a screen reader without a gesture. */}
-                <div className="flex items-center gap-1 ml-1 shrink-0">
-                  <button
-                    onClick={() => goToWeek(weekOffset - 1, -1)}
-                    className="relative hit-expand p-1 rounded-lg bg-surface-secondary hover:bg-surface-tertiary text-text-muted transition-colors cursor-pointer"
-                    title="Previous Week"
-                    aria-label="Previous Week"
-                  >
-                    <ChevronLeft className="w-3.5 h-3.5" aria-hidden />
-                  </button>
-                  <button
-                    onClick={() => goToWeek(weekOffset + 1, 1)}
-                    className="relative hit-expand p-1 rounded-lg bg-surface-secondary hover:bg-surface-tertiary text-text-muted transition-colors cursor-pointer"
-                    title="Next Week"
-                    aria-label="Next Week"
-                  >
-                    <ChevronRight className="w-3.5 h-3.5" aria-hidden />
-                  </button>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  {/* One joined control: previous | next, brand edge. */}
+                  <div className="inline-flex h-8 items-stretch overflow-hidden rounded-[8px] border-2 border-border-ink bg-surface shadow-brutal-sm">
+                    <button
+                      onClick={() => goToWeek(weekOffset - 1, -1)}
+                      className="inline-flex w-8 items-center justify-center text-text-primary hover:bg-surface-secondary transition-colors cursor-pointer"
+                      title="Previous Week"
+                      aria-label="Previous Week"
+                    >
+                      <ChevronLeft className="w-4 h-4" aria-hidden />
+                    </button>
+                    <span className="w-0.5 bg-border-ink" aria-hidden />
+                    <button
+                      onClick={() => goToWeek(weekOffset + 1, 1)}
+                      className="inline-flex w-8 items-center justify-center text-text-primary hover:bg-surface-secondary transition-colors cursor-pointer"
+                      title="Next Week"
+                      aria-label="Next Week"
+                    >
+                      <ChevronRight className="w-4 h-4" aria-hidden />
+                    </button>
+                  </div>
                   {/* "Today" — the way back, from wherever the selection is.
 
                   This started life as a "This Week" chip that only appeared
@@ -1631,7 +1627,7 @@ export default function SimplifiedMobileHome({
                         if (weekOffset !== 0) goToWeek(0, 0 < weekOffset ? 1 : -1);
                         setSelectedDay(todayDayCode);
                       }}
-                      className="relative hit-expand text-xs font-bold uppercase px-2 py-0.5 rounded-lg bg-secondary text-secondary-foreground border-2 border-border-ink ml-1 cursor-pointer"
+                      className="inline-flex h-8 items-center font-mono text-xs font-bold uppercase tracking-[0.06em] px-2.5 rounded-[8px] bg-secondary text-secondary-foreground border-2 border-border-ink shadow-brutal-sm cursor-pointer"
                       title="Back to today"
                     >
                       Today
@@ -1710,7 +1706,7 @@ export default function SimplifiedMobileHome({
                   // this is a 900px column where a stretched circle would be a
                   // swimming pool. `justify-self` parks the capped circle in the
                   // middle of its track.
-                  className="grid grid-cols-7 gap-0.5 sm:gap-1.5 lg:max-w-[560px]"
+                  className="grid grid-cols-7 gap-1 sm:gap-2"
                 >
                   {weekDays.map((item) => {
                     const isSelected = selectedDay === item.dayCode;
@@ -1736,7 +1732,7 @@ export default function SimplifiedMobileHome({
                         // visual only.
                         aria-current={item.isToday ? "date" : undefined}
                         className={cn(
-                          "w-full max-w-[52px] min-h-12 justify-self-center rounded-[10px] border-2 flex flex-col items-center justify-center gap-1 py-1.5 transition-colors duration-150 cursor-pointer",
+                          "w-full min-h-12 sm:min-h-[72px] rounded-[10px] border-2 flex flex-col items-center justify-center gap-1 py-1.5 transition-colors duration-150 cursor-pointer",
                           tint.fill,
                           tint.edge,
                           isSelected ? SELECTED_RING : item.isToday ? TODAY_RING : "hover:bg-surface-hover",
@@ -1745,8 +1741,19 @@ export default function SimplifiedMobileHome({
                         <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] leading-none text-text-muted">
                           {item.dayCode}
                         </span>
-                        <span className={cn("text-base font-bold font-display leading-none", ink)}>
+                        <span className={cn("text-base sm:text-xl font-bold font-display leading-none", ink)}>
                           {item.dayNumber}
+                        </span>
+                        {/* What the day holds; tablet and desktop only (no
+                            room in a 48px phone card). */}
+                        <span className="hidden sm:block font-mono text-xs leading-none text-text-muted">
+                          {flavour === "exam"
+                            ? "Exam"
+                            : flavour === "holiday"
+                              ? "Holiday"
+                              : count > 0
+                                ? `${count} ${count === 1 ? "class" : "classes"}`
+                                : "Free"}
                         </span>
                       </button>
                     );
@@ -1757,9 +1764,10 @@ export default function SimplifiedMobileHome({
 
             {/* Selected Day Sub-Header */}
             <div className="flex items-center justify-between px-1 pt-1">
+              {/* No date line: the selected card above already shows the day
+                  and the header the month (user: the date showed twice). */}
               <div>
-                <h3 className="text-sm font-bold text-text-heading font-outfit">{getSelectedDayFormattedDate()}</h3>
-                <p className="text-xs text-text-muted font-medium">
+                <p className="text-sm font-semibold text-text-heading">
                   {isLabFatDay ? (
                     <span className="inline-flex items-center gap-1.5">
                       <span className="font-bold text-danger-foreground">
@@ -1775,7 +1783,9 @@ export default function SimplifiedMobileHome({
                     "Academic Holiday / Non-Instructional"
                   ) : (
                     (nowNextLine ??
-                    `${selectedDayClasses.length} ${selectedDayClasses.length === 1 ? "session" : "sessions"} scheduled`)
+                    (selectedDayClasses.length === 0
+                      ? "No classes"
+                      : `${selectedDayClasses.length} ${selectedDayClasses.length === 1 ? "class" : "classes"}`))
                   )}
                 </p>
               </div>

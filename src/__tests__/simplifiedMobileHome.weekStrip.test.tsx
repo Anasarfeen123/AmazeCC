@@ -101,7 +101,8 @@ afterEach(() => {
 describe("week strip", () => {
   it("draws seven circles for the week, Monday first", () => {
     renderHome();
-    const labels = circles().map((c) => c.textContent);
+    // Each card also carries a "4 classes" / "Exam" / "Free" line from sm up.
+    const labels = circles().map((c) => (c.textContent ?? "").replace(/(Exam|Holiday|Free|\d+ class(es)?)$/, ""));
     expect(labels).toEqual(["MON28", "TUE29", "WED30", "THU1", "FRI2", "SAT3", "SUN4"]);
   });
 
@@ -119,7 +120,7 @@ describe("week strip", () => {
     expect(exam.className).toContain("bg-warning-surface");
     // The word is not on the face of the circle, but it is not gone either —
     // and the exam count rides in the accessible name, not the title.
-    expect(exam.textContent).toBe("TUE29");
+    expect(exam.textContent).toBe("TUE29Exam");
     expect(exam.getAttribute("aria-label")).toBe("Tue 29 Sept · Exam day, 1 exam");
   });
 

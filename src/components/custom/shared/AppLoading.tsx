@@ -67,7 +67,11 @@ export default function AppLoading({ label = "Opening your workspace" }: { label
   // No tip text until mounted: the server cannot know the shared tip, and
   // rendering tip 0 first then swapping flashed on every loading screen
   // (user: "tips are blinking and buggy"). The box keeps its height.
-  const [tip, setTip] = useState<number | null>(null);
+  // A loading screen mounted after an earlier one (opening passes through
+  // several) starts with the tip already on screen, so the box is never
+  // empty for a frame between screens. Only the very first, server-rendered
+  // screen starts empty (lastShown is -1 there, on server and client alike).
+  const [tip, setTip] = useState<number | null>(() => (tipState.lastShown >= 0 ? tipState.lastShown : null));
   // Fade only when the text actually changes, not when a new loading screen
   // mounts with the tip the previous screen was already showing.
   const [fade, setFade] = useState(false);

@@ -1,5 +1,6 @@
 "use client";
 import { Github, Linkedin, Users } from "lucide-react";
+import ContributorList, { CONTRIBUTORS, CONTRIBUTORS_AS_OF } from "./ContributorList";
 import teamData from "../../../data/team.json";
 import { IconLink, ListRowText, ListShell, PageShell, SectionHeader, StatTile } from "../shared/primitives";
 import { LIST_ROW, TONE_ICON_TILE } from "@/lib/uiTokens";
@@ -18,8 +19,6 @@ export default function TeamModal({ handleClose }: { handleClose: () => void }) 
     .filter((c) => c.members && c.members.length > 0)
     .sort((a, b) => a.order - b.order);
 
-  const totalMembers = sortedCommittees.reduce((n, c) => n + (c.members?.length || 0), 0);
-
   return (
     <PageShell
       eyebrow="About"
@@ -30,19 +29,35 @@ export default function TeamModal({ handleClose }: { handleClose: () => void }) 
       <div className="space-y-6">
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
           <StatTile
-            label="Committees"
-            value={sortedCommittees.length}
-            badge="Active"
+            label="Commits"
+            value={CONTRIBUTORS.reduce((n, c) => n + c.commits, 0).toLocaleString("en-IN")}
+            badge="All repos"
             tone="indigo"
-            sub="with published members"
+            sub="AmazeCC, API and AmazeUI"
           />
           <StatTile
             label="Contributors"
-            value={totalMembers}
-            badge="Credited"
+            value={CONTRIBUTORS.length}
+            badge="On GitHub"
             tone="neutral"
-            sub="across the project"
+            sub="who have committed code"
           />
+        </div>
+
+        <div className="space-y-3">
+          <div className="px-1">
+            <SectionHeader icon={Github} title="Contributors" count={CONTRIBUTORS.length} />
+            <p className="mt-1.5 text-xs leading-relaxed text-text-muted font-medium">
+              Most commits first, across AmazeCC, its API and AmazeUI. As of{" "}
+              {new Date(`${CONTRIBUTORS_AS_OF}T00:00:00`).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })}
+              .
+            </p>
+          </div>
+          <ContributorList />
         </div>
 
         {sortedCommittees.map((committee) => {
@@ -85,7 +100,7 @@ export default function TeamModal({ handleClose }: { handleClose: () => void }) 
 
                     {member.github && (
                       <IconLink
-                        href={`https://github/${member.github}`}
+                        href={`https://github.com/${member.github}`}
                         title={`${member.name} on GitHub`}
                         ariaLabel={`Open ${member.name}'s GitHub profile`}
                       >

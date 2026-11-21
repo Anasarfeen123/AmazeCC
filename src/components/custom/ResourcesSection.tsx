@@ -13,6 +13,8 @@ import {
   Users,
 } from "lucide-react";
 import type { ReactNode } from "react";
+import Link from "next/link";
+import ContributorList, { CONTRIBUTORS } from "./header/ContributorList";
 import { useDashboardNavigator } from "./dashboard/DashboardNavigator";
 import quickLinks from "../../data/quickLinks.json";
 import Links from "./header/Links";
@@ -64,6 +66,23 @@ function ResourceRow({
 
   const className = `${LIST_ROW} ${href ? "" : "cursor-pointer"}`;
 
+  // App pages (/privacy, /terms) open as pages in the same tab through Next's
+  // Link, which adds the deploy's base path; a bare href broke on the
+  // GitHub Pages copy and opened a second tab (owner: open proper pages).
+  if (href && href.startsWith("/")) {
+    return (
+      <Link href={href} className={className}>
+        {icon ? (
+          <span className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border ${iconClass}`}>
+            {icon}
+          </span>
+        ) : null}
+        <ListRowText title={title} subtitle={desc} />
+        <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
+      </Link>
+    );
+  }
+
   if (href) {
     return (
       <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
@@ -104,7 +123,11 @@ export default function ResourcesSection({ setActiveSubpage }: { setActiveSubpag
               icon={<ExternalLink className="w-4.5 h-4.5" />}
               iconClass={TONE_ICON_TILE.violet}
               title={link.title}
-              desc="VIT community discussion forums and updates"
+              desc={
+                link.icon === "whatsapp"
+                  ? "Join the AmazeCC WhatsApp community for updates"
+                  : "A short Google Form for bugs and feature ideas"
+              }
             />
           ))}
         </ListShell>
@@ -113,6 +136,20 @@ export default function ResourcesSection({ setActiveSubpage }: { setActiveSubpag
       <div className="space-y-3">
         <SectionHeader icon={Link2} title="Links" />
         <Links />
+      </div>
+
+      <div className="space-y-3">
+        <SectionHeader icon={Github} title="Contributors" count={CONTRIBUTORS.length} />
+        <ContributorList limit={5} />
+        <ListShell>
+          <ResourceRow
+            onClick={() => setActiveSubpage("team")}
+            icon={<Users className="w-4.5 h-4.5" />}
+            iconClass={TONE_ICON_TILE.indigo}
+            title="All contributors and the team"
+            desc="Everyone who has committed code, and the committees"
+          />
+        </ListShell>
       </div>
 
       <div className="space-y-3">
@@ -133,18 +170,11 @@ export default function ResourcesSection({ setActiveSubpage }: { setActiveSubpag
             desc="View latest updates, features and releases in AmazeCC"
           />
           <ResourceRow
-            onClick={() => setActiveSubpage("team")}
-            icon={<Users className="w-4.5 h-4.5" />}
-            iconClass={TONE_ICON_TILE.indigo}
-            title="The Team"
-            desc="Meet the Amaze Continuity Projects team"
-          />
-          <ResourceRow
             onClick={() => setActiveSubpage("hallOfFame")}
             icon={<Trophy className="w-4.5 h-4.5" />}
             iconClass={TONE_ICON_TILE.amber}
             title="Hall of Fame"
-            desc="Meet the contributors, developers, and testers of the app"
+            desc="The open-source projects AmazeCC builds on"
           />
           <ResourceRow
             href="https://github.com/AmazeContinuityProjects/AmazeCC/"

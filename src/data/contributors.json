@@ -1,0 +1,12 @@
+{
+  "asOf": "2026-11-22",
+  "source": "GitHub contributors of AmazeContinuityProjects/AmazeCC, amazecc-api and AmazeUI (commits, bots excluded)",
+  "contributors": [
+    { "login": "SugeethJSA", "name": "Sugeeth Jayaraj S.A.", "commits": 779, "role": "Overall Head", "avatar": "https://avatars.githubusercontent.com/u/123886342?v=4" },
+    { "login": "Arya4930", "name": "Arya", "commits": 477, "role": "UniCC author", "avatar": "https://avatars.githubusercontent.com/u/85472696?v=4" },
+    { "login": "Anasarfeen123", "name": "Anas Arfeen", "commits": 265, "role": "Developer", "avatar": "https://avatars.githubusercontent.com/u/92318093?v=4" },
+    { "login": "DumbTempest", "name": "Rajat", "commits": 46, "role": "Developer", "avatar": "https://avatars.githubusercontent.com/u/180581699?v=4" },
+    { "login": "dhivyanj", "name": "Dhivyan Jeshua S", "commits": 18, "role": "Technical Director", "avatar": "https://avatars.githubusercontent.com/u/110014750?v=4" },
+    { "login": "Scorpiozo", "name": "Scorpiozo", "commits": 2, "role": "Contributor", "avatar": "https://avatars.githubusercontent.com/u/180565990?v=4" }
+  ]
+}

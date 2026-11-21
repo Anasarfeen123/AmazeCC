@@ -88,6 +88,10 @@ export type ModuleEntry = {
 };
 
 const hostelVisible = (ctx: NavContext) => ctx.isHosteller === true || ctx.residentialStatus === "hosteller";
+/** Bus pages are for day scholars: hidden for hostellers (user). The
+ *  student's own residency setting wins; otherwise the VTOP flag decides. */
+const transportVisible = (ctx: NavContext) =>
+  ctx.residentialStatus ? ctx.residentialStatus !== "hosteller" : ctx.isHosteller !== true;
 
 export const moduleRegistry: ModuleEntry[] = [
   // --- Study / main ---
@@ -270,6 +274,7 @@ export const moduleRegistry: ModuleEntry[] = [
   },
   {
     id: "transport",
+    visibleWhen: transportVisible,
     label: "Transport",
     description: "Bus routes, stops & placements",
     icon: Bus,
@@ -742,6 +747,7 @@ export const moduleRegistry: ModuleEntry[] = [
   },
   {
     id: "ds-transport-reg",
+    visibleWhen: transportVisible,
     label: "Transport Registration",
     description: "Register for transport services",
     icon: Bus,
@@ -753,6 +759,7 @@ export const moduleRegistry: ModuleEntry[] = [
   },
   {
     id: "tr-bus-routes",
+    visibleWhen: transportVisible,
     label: "Bus Routes",
     description: "Browse all bus routes, stops & contacts",
     icon: Bus,
@@ -764,6 +771,7 @@ export const moduleRegistry: ModuleEntry[] = [
   },
   {
     id: "tr-placements",
+    visibleWhen: transportVisible,
     label: "Vehicle Placements",
     description: "5 PM & 6 PM vehicle placement info",
     icon: Bus,

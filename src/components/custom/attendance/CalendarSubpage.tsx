@@ -401,7 +401,7 @@ export default function CalendarSubpage({
         // A theory/lab pair share a base code, so the title is the only thing
         // that tells them apart once the code is in the kicker.
         value: `${Number(c.pct.toFixed(1))}%`,
-        sub: `${c.attended} of ${c.total} held${c.slot ? ` · ${c.slot}` : ""}`,
+        sub: `${c.attended}/${c.total} held`,
         badge: c.status,
         privacyCategory: "attendance",
         subPrivacyCategory: "attendance",
@@ -830,7 +830,21 @@ export default function CalendarSubpage({
       <section className="space-y-2.5">
         <SectionHeader icon={Sparkles} title="Upcoming" count={upcoming.length} />
         {upcoming.length === 0 ? (
-          <EmptyPanel variant="dashed" title="Nothing scheduled ahead." />
+          // A next step, not a dead end (critique #32).
+          <EmptyPanel
+            variant="dashed"
+            title="Nothing scheduled ahead."
+            description="Add a deadline or test and it shows up here and on the calendar."
+            action={
+              <button
+                type="button"
+                onClick={() => setTaskSheetOpen(true)}
+                className="inline-flex min-h-11 items-center rounded-[10px] border-2 border-border-ink bg-secondary px-4 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground shadow-brutal-sm brutal-press cursor-pointer"
+              >
+                Add a task
+              </button>
+            }
+          />
         ) : (
           <ListShell>
             {upcoming.map((item) => (

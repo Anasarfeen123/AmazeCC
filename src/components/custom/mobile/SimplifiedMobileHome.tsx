@@ -1,6 +1,10 @@
 "use client";
 
 import { totalCreditsEarned } from "@/lib/credits";
+import MessToday from "./MessToday";
+import HomeNudge from "./HomeNudge";
+import config from "../../../../config.json";
+import { LAST_SYNC_EVENT, readLastSyncAt } from "@/lib/sync-engine/sync-session";
 import { useAppBadge } from "@/lib/useAppBadge";
 import { courseAccent } from "@/lib/courseColors";
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -111,7 +115,7 @@ interface SimplifiedMobileHomeProps {
   setActiveAttendanceSubTab: (tab: string) => void;
   setActiveProfileSubTab?: (tab: string) => void;
   setActiveToolsSubTab?: (tab: string) => void;
-  handleReloadRequest: () => Promise<void>;
+  handleReloadRequest: (semesterId?: string) => Promise<void>;
   onOpenCommandPalette: () => void;
   profileData?: any;
   ODhoursData?: any;
@@ -238,6 +242,30 @@ function TimeBasedGreeting() {
   return <>Good evening</>;
 }
 
+/** "Synced 12 min ago" under the name (critique #33). Hidden until the
+ *  first successful sync is recorded. */
+function LastSyncedLabel() {
+  const now = useNow();
+  const [at, setAt] = useState<number | null>(null);
+  useEffect(() => {
+    const read = () => setAt(readLastSyncAt());
+    read();
+    window.addEventListener(LAST_SYNC_EVENT, read);
+    return () => window.removeEventListener(LAST_SYNC_EVENT, read);
+  }, []);
+  if (!at) return null;
+  const mins = Math.max(0, Math.floor((now.getTime() - at) / 60_000));
+  const text =
+    mins < 1
+      ? "just now"
+      : mins < 60
+        ? `${mins} min ago`
+        : mins < 60 * 24
+          ? `${Math.floor(mins / 60)} h ago`
+          : `${Math.floor(mins / (60 * 24))} d ago`;
+  return <p className="mt-1 font-mono text-xs text-text-muted">Synced {text}</p>;
+}
+
 function LiveClassBadge({ time, detailed = false }: { time: string; detailed?: boolean }) {
   const now = useNow();
   const [, end] = String(time || "")
@@ -323,6 +351,7 @@ export default function SimplifiedMobileHome({
   setActiveAttendanceSubTab,
   setActiveProfileSubTab,
   setActiveToolsSubTab,
+  setHostelActiveSubTab,
   handleReloadRequest,
   onOpenCommandPalette,
   profileData: profileDataProp,
@@ -1354,12 +1383,16 @@ export default function SimplifiedMobileHome({
 
   // Formatted date string for selected day based on active calendar week
   const getSelectedDayFormattedDate = () => {
+    // The week header above already names the month and year (user: the
+    // date showed twice), so this is just "Friday, 20". The month is added
+    // only when the week spans two months.
     if (selectedDayMeta) {
+      const spansMonths =
+        weekDays.length > 0 && weekDays[0].fullDate.getMonth() !== weekDays[weekDays.length - 1].fullDate.getMonth();
       return selectedDayMeta.fullDate.toLocaleDateString("en-GB", {
         weekday: "long",
-        month: "short",
         day: "numeric",
-        year: "numeric",
+        ...(spansMonths ? { month: "short" as const } : {}),
       });
     }
     return selectedDay;
@@ -1437,6 +1470,7 @@ export default function SimplifiedMobileHome({
               >
                 {profileName}
               </h1>
+              {!isDemoMode ? <LastSyncedLabel /> : null}
             </div>
 
             {/* Action Controls */}
@@ -1479,6 +1513,16 @@ export default function SimplifiedMobileHome({
               </button>
             </div>
           </div>
+
+          {/* Small dismissible notice: switch to the current semester, or add
+              to the home screen (one at a time; snoozed for days). */}
+          {!isDemoMode ? (
+            <HomeNudge
+              currentSemesterId={config.semesterIDs[config.semesterIDs.length - 2] ?? null}
+              viewingSemesterId={settings?.currSemesterID ?? null}
+              onSwitchSemester={(id) => void handleReloadRequest(id)}
+            />
+          ) : null}
 
           {/* ── STATS: DYNAMIC MULTI-TILE & CAROUSEL GRID ── */}
           <div
@@ -1547,19 +1591,19 @@ export default function SimplifiedMobileHome({
                 <div className="flex items-center gap-1 ml-1 shrink-0">
                   <button
                     onClick={() => goToWeek(weekOffset - 1, -1)}
-                    className="relative hit-expand inline-flex h-9 w-9 items-center justify-center rounded-[8px] border-2 border-border-muted bg-surface-secondary text-text-primary hover:bg-surface-tertiary transition-colors cursor-pointer"
+                    className="relative hit-expand p-1 rounded-lg bg-surface-secondary hover:bg-surface-tertiary text-text-muted transition-colors cursor-pointer"
                     title="Previous Week"
                     aria-label="Previous Week"
                   >
-                    <ChevronLeft className="w-4 h-4" aria-hidden />
+                    <ChevronLeft className="w-3.5 h-3.5" aria-hidden />
                   </button>
                   <button
                     onClick={() => goToWeek(weekOffset + 1, 1)}
-                    className="relative hit-expand inline-flex h-9 w-9 items-center justify-center rounded-[8px] border-2 border-border-muted bg-surface-secondary text-text-primary hover:bg-surface-tertiary transition-colors cursor-pointer"
+                    className="relative hit-expand p-1 rounded-lg bg-surface-secondary hover:bg-surface-tertiary text-text-muted transition-colors cursor-pointer"
                     title="Next Week"
                     aria-label="Next Week"
                   >
-                    <ChevronRight className="w-4 h-4" aria-hidden />
+                    <ChevronRight className="w-3.5 h-3.5" aria-hidden />
                   </button>
                   {/* "Today" — the way back, from wherever the selection is.
 
@@ -1587,7 +1631,7 @@ export default function SimplifiedMobileHome({
                         if (weekOffset !== 0) goToWeek(0, 0 < weekOffset ? 1 : -1);
                         setSelectedDay(todayDayCode);
                       }}
-                      className="relative hit-expand inline-flex min-h-9 items-center font-mono text-xs font-bold uppercase px-2.5 rounded-[8px] bg-secondary text-secondary-foreground border-2 border-border-ink ml-1 cursor-pointer"
+                      className="relative hit-expand text-xs font-bold uppercase px-2 py-0.5 rounded-lg bg-secondary text-secondary-foreground border-2 border-border-ink ml-1 cursor-pointer"
                       title="Back to today"
                     >
                       Today
@@ -1666,7 +1710,7 @@ export default function SimplifiedMobileHome({
                   // this is a 900px column where a stretched circle would be a
                   // swimming pool. `justify-self` parks the capped circle in the
                   // middle of its track.
-                  className="grid grid-cols-7 gap-0.5 sm:gap-1.5"
+                  className="grid grid-cols-7 gap-0.5 sm:gap-1.5 lg:max-w-[560px]"
                 >
                   {weekDays.map((item) => {
                     const isSelected = selectedDay === item.dayCode;
@@ -2295,6 +2339,17 @@ export default function SimplifiedMobileHome({
                 One uniform grid instead of five full-width buttons in five
                 colours (the main source of clutter on the old home). Bug
                 reports already have a button in the header. */}
+            {/* Hostellers only (user): the next meal, one tap to the menu. */}
+            {(hostelData as any)?.hostelInfo?.isHosteller && settings?.residentialStatus !== "dayscholar" ? (
+              <MessToday
+                hostelInfo={(hostelData as any).hostelInfo}
+                onOpen={() => {
+                  setActiveTab("hostel");
+                  setHostelActiveSubTab?.("mess");
+                }}
+              />
+            ) : null}
+
             <section aria-label="Quick actions" className="space-y-3 pt-2">
               <SectionHeader title="Quick actions" />
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 pr-1 pb-1">

@@ -73,10 +73,10 @@ both are the owner-decided brand (`design/DESIGN_LANGUAGE.md`).
 - [x] **#12 Stat tiles are dot carousels** that hide content behind swipes.
       Fix: show both facts without swiping, or label the swipe.
       Partly: the most important slide (shortage) is first; the carousel itself stays.
-- [ ] **#13 OD hours drop off Home when a shortage alert shows; no mess
+- [x] **#13 OD hours drop off Home when a shortage alert shows; no mess
       menu on Home.** Fix: keep OD visible; add a small "Mess today" line or
       suggest pinning it.
-      OD done (always a slide now). Open: "Mess today" on Home needs the hostel menu data on Home.
+      OD done (always a slide now). "Mess · Lunch: …" line on Home for hostellers only (owner), from the cached mess menu.
 - [x] **#14 Three unlabelled header icons; the bug icon is red** (reads as an
       error). Fix: move Report a bug to Settings or make it neutral; label or
       tooltip the rest.
@@ -134,21 +134,26 @@ Show the owner the direction before building (biggest visual change).
 
 ## 7. Copy and states
 
-- [ ] **#31 Truncation:** "5 of 7 hel…" (carousel tile); the NEW badge
+- [x] **#31 Truncation:** "5 of 7 hel…" (carousel tile); the NEW badge
       clipped to "NEI" (Academics link cards). Fix: wrap or shorten, give the
       badge room.
-- [ ] **#32 "Nothing scheduled ahead." has no next step.** Fix: an action
+      Done: tile sub "5/7 held"; the Marks Predictor title wraps so NEW is never clipped; "Previous semesters" card no longer truncates.
+- [x] **#32 "Nothing scheduled ahead." has no next step.** Fix: an action
       ("Add a task", "See the exam schedule").
-- [ ] **#33 No "last synced" time.** Fix: "Synced 12 min ago" near the sync
+      Done: the empty Upcoming panel offers "Add a task".
+- [x] **#33 No "last synced" time.** Fix: "Synced 12 min ago" near the sync
       button.
-- [ ] **#34 Grade History:** "Terms recorded 3 / across 3 published" is
+      Done: "Synced N min ago" under the name on Home (recorded when a sync succeeds; hidden in demo).
+- [x] **#34 Grade History:** "Terms recorded 3 / across 3 published" is
       redundant; a term showing 1 course looks wrong. Fix: simpler label,
       check the count.
-- [ ] **#35 Small labels above titles** ("Good evening,", "Attendance ·
+      Done: the sub line shows the total graded courses instead of repeating the term count. The "1 course" terms are thin demo data (sample course lists), not a bug.
+- [x] **#35 Small labels above titles** ("Good evening,", "Attendance ·
       Calendar", "Academics"). Brand pattern, but Impeccable bans them.
       **Owner decision:** keep (mark the rule ignored in
       `.impeccable/critique/ignore.md`) or remove the ones that repeat the
       title.
+      Owner: keep the titles. Recorded in .impeccable/critique/ignore.md.
 
 ---
 
@@ -158,3 +163,15 @@ Show the owner the direction before building (biggest visual change).
 - `tsc` 0 errors; vitest at the baseline; `scripts/redesign/contrast.py`
   passes in Light, Dark and Night.
 - Re-run `/impeccable critique` on Home; target 30+/40.
+
+## Follow-ups from the owner (2026-11-21)
+
+- [x] "Mess today" only for hostellers; Transport (and its bus pages) hidden
+      for hostellers (registry `transportVisible`).
+- [x] Residency detected from the VTOP profile (`isHosteller`): onboarding
+      pre-selects it ("Detected from VTOP"), and a sync fills it in when the
+      student has not chosen one.
+- [x] Onboarding asks "College bus user?" only for day scholars.
+- [x] Small dismissible notices on Home (`HomeNudge`): switch to the current
+      semester (snoozed 3 days), add to home screen (snoozed 14 days); one
+      at a time, not in demo.

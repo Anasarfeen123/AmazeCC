@@ -36,7 +36,7 @@ import {
   setSyncPresentation,
   useSyncSession,
 } from "@/lib/sync-engine/sync-session";
-import { setTypedStorageItem } from "@/lib/storage";
+import { setTypedStorageItem, storage } from "@/lib/storage";
 
 export type InterfaceOptionId = "simplified";
 
@@ -153,8 +153,21 @@ export default function AmazeOnboardingFlow({
   // numbered steps; the standalone interface picker has none of them.
   const [introDone, setIntroDone] = useState(!intro);
   const syncSession = useSyncSession();
+  // Residency comes from the VTOP profile when it is known (it reports
+  // isHosteller), so the student only confirms it instead of guessing.
+  const vtopIsHosteller = (() => {
+    try {
+      const flag = (storage.profile.get() as any)?.isHosteller;
+      return typeof flag === "boolean" ? flag : null;
+    } catch {
+      return null;
+    }
+  })();
   const [temp, setTemp] = useState({
     ...settings,
+    residentialStatus:
+      settings?.residentialStatus ??
+      (vtopIsHosteller === null ? undefined : vtopIsHosteller ? "hosteller" : "dayscholar"),
     pinnedNavTabs: settings?.pinnedNavTabs || ["attendance", "academics", "cabshare"],
     showProfilePhoto: settings?.showProfilePhoto ?? true,
     isDayscholarWithBus: settings?.isDayscholarWithBus ?? false,
@@ -398,6 +411,11 @@ export default function AmazeOnboardingFlow({
         <label className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
           Campus Residency & Commute
         </label>
+        {vtopIsHosteller !== null ? (
+          <p className="text-xs text-text-muted">
+            Detected from VTOP: {vtopIsHosteller ? "hosteller" : "day scholar"}. Change it if that is wrong.
+          </p>
+        ) : null}
         <div className="grid grid-cols-2 gap-2.5">
           {[
             { id: "hosteller", label: "Hosteller", desc: "Living on campus", icon: GraduationCap },
@@ -427,20 +445,23 @@ export default function AmazeOnboardingFlow({
           })}
         </div>
 
-        {/* College Bus Registration Toggle */}
-        <div className="p-3 rounded-[12px] bg-surface-secondary border-2 border-border-ink flex items-center justify-between mt-1">
-          <div className="flex items-center gap-2">
-            <div>
-              <p className="text-sm font-bold text-text-heading">College bus user?</p>
-              <p className="text-xs text-text-muted">Show bus routes and stops</p>
+        {/* College bus: day scholars only (user: a hosteller was asked if
+            they use the college bus). */}
+        {temp.residentialStatus === "dayscholar" ? (
+          <div className="p-3 rounded-[12px] bg-surface-secondary border-2 border-border-ink flex items-center justify-between mt-1">
+            <div className="flex items-center gap-2">
+              <div>
+                <p className="text-sm font-bold text-text-heading">College bus user?</p>
+                <p className="text-xs text-text-muted">Show bus routes and stops</p>
+              </div>
             </div>
+            <Switch
+              checked={!!temp.isDayscholarWithBus}
+              onCheckedChange={(v) => update("isDayscholarWithBus", v)}
+              label="College bus user"
+            />
           </div>
-          <Switch
-            checked={!!temp.isDayscholarWithBus}
-            onCheckedChange={(v) => update("isDayscholarWithBus", v)}
-            label="College bus user"
-          />
-        </div>
+        ) : null}
       </div>
     </div>
   );

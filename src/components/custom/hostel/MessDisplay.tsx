@@ -45,7 +45,7 @@ const shortToFullDay: Record<string, string> = Object.fromEntries(
 );
 
 // Helper to determine current week of month (Week 1: 1-7, Week 2: 8-14, Week 3: 15-21, Week 4: 22+)
-const getCurrentWeekOfMonth = (d: Date = new Date()): number => {
+export const getCurrentWeekOfMonth = (d: Date = new Date()): number => {
   const day = d.getDate();
   if (day <= 7) return 1;
   if (day <= 14) return 2;
@@ -54,7 +54,7 @@ const getCurrentWeekOfMonth = (d: Date = new Date()): number => {
 };
 
 // Smart menu parser: filters items for current week & removes week qualifiers
-const getSmartMenuText = (rawText: string, weekNum: number): string => {
+export const getSmartMenuText = (rawText: string, weekNum: number): string => {
   if (!rawText || typeof rawText !== "string" || rawText.trim() === "" || rawText === "No items listed.") {
     return "No items listed.";
   }

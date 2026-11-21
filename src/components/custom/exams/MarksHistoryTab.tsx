@@ -250,7 +250,12 @@ export default function MarksHistoryTab({
       id: "terms",
       label: "Terms recorded",
       value: String(rows.filter((r) => r.courses.length > 0).length),
-      sub: rows.length > 1 ? `across ${rows.length} published` : "so far",
+      // The total graded courses, not the term count again (critique #34:
+      // "3 / across 3 published" said the same thing twice).
+      sub: (() => {
+        const n = rows.reduce((acc, r) => acc + r.courses.length, 0);
+        return `${n} ${n === 1 ? "course" : "courses"} graded`;
+      })(),
       badge: "History",
       tone: "neutral",
     });
@@ -445,7 +450,10 @@ export default function MarksHistoryTab({
           value={rows.filter((r) => r.courses.length > 0).length}
           badge="All time"
           tone="indigo"
-          sub={rows.length > 1 ? `${rows.length} terms published` : "so far"}
+          sub={(() => {
+            const n = rows.reduce((acc, r) => acc + r.courses.length, 0);
+            return `${n} ${n === 1 ? "course" : "courses"} graded`;
+          })()}
         />
       </div>
 

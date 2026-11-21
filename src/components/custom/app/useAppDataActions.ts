@@ -153,6 +153,15 @@ export function useAppDataActions({
         }
 
         const isHosteller = (profileRes as any)?.isHosteller ?? false;
+        // Fill in residency from VTOP when the student has not chosen one, so
+        // hosteller-only (mess) and day-scholar-only (transport) parts show
+        // for the right people without asking.
+        const vtopFlag = (profileRes as any)?.isHosteller;
+        if (typeof vtopFlag === "boolean" && !settings.residentialStatus) {
+          setSettings((prev: any) =>
+            prev.residentialStatus ? prev : { ...prev, residentialStatus: vtopFlag ? "hosteller" : "dayscholar" },
+          );
+        }
 
         const coreData = await syncEngine.sync<any>("core", {
           semesterId: currSemesterID,

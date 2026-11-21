@@ -539,7 +539,9 @@ export async function fetchWithFailover(input: RequestInfo | URL, init?: Request
           if (recovered.ok) noteAmazeccServing(uniccRouteName(urlStr));
           return recovered;
         } catch (primaryError) {
-          console.error(`Primary API call also failed:`, primaryError);
+          // warn, not error: the chain still tries UniCC next, and console.error
+          // raises the Next dev overlay for a handled, often temporary failure.
+          console.warn(`Primary API call also failed:`, primaryError);
           return attemptUnicc(urlStr, input, init, prepareInput, primaryError);
         }
       }
@@ -569,7 +571,7 @@ export async function fetchWithFailover(input: RequestInfo | URL, init?: Request
         if (backupRes.ok) noteAmazeccServing(uniccRouteName(urlStr));
         return backupRes;
       } catch (backupError) {
-        console.error(`Backup API call also failed:`, backupError);
+        console.warn(`Backup API call also failed:`, backupError);
         return attemptUnicc(urlStr, input, init, prepareInput, backupError);
       }
     }

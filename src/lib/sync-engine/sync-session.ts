@@ -189,10 +189,32 @@ export function bumpSyncProgress(delta: number) {
  * dismissed, because the sheet is where the password prompt and its CTA
  * live, and a timed close would take them away before the student can act.
  */
+export const LAST_SYNC_KEY = "amazecc.lastSyncAt";
+export const LAST_SYNC_EVENT = "amazecc:last-sync";
+
+/** Milliseconds timestamp of the last successful sync, or null. */
+export function readLastSyncAt(): number | null {
+  try {
+    const v = Number(localStorage.getItem(LAST_SYNC_KEY));
+    return Number.isFinite(v) && v > 0 ? v : null;
+  } catch {
+    return null;
+  }
+}
+
 export function closeSyncSession(holdMs: number = DEFAULT_HOLD_MS, outcome: Exclude<SyncOutcome, null> = "success") {
   if (!state.open) return;
   setSyncProgress(100);
   state = { ...state, outcome };
+  // When the data last synced, for "Synced 12 min ago" (critique #33).
+  if (outcome === "success") {
+    try {
+      localStorage.setItem(LAST_SYNC_KEY, String(Date.now()));
+      window.dispatchEvent(new Event(LAST_SYNC_EVENT));
+    } catch {
+      // storage blocked: the label just stays hidden
+    }
+  }
   emit();
 
   // Nothing this run can fix on its own, so the hold would only take the CTA

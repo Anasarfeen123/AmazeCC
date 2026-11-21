@@ -36,7 +36,6 @@ import {
   PanelLeftOpen,
   RefreshCcw,
   Building,
-  CalendarCheck,
   ChevronRight,
   Command,
   CreditCard,

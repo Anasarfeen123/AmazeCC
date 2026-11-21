@@ -850,13 +850,14 @@ export default function SimplifiedAcademicsPage({
               <Sparkles className="w-5 h-5" />
             </div>
             <div className="min-w-0">
-              <p className="text-xs sm:text-sm font-bold font-outfit text-text-heading truncate flex items-center gap-2">
+              {/* Wraps instead of truncating: the NEW badge was clipped to "NEI". */}
+              <p className="text-xs sm:text-sm font-bold font-outfit text-text-heading flex flex-wrap items-center gap-x-2 gap-y-1">
                 <span>Marks Predictor & Simulator</span>
-                <span className="px-1.5 py-0.2 rounded-md bg-primary text-primary-foreground text-xs font-bold uppercase">
+                <span className="shrink-0 px-1.5 rounded-md bg-primary text-primary-foreground text-xs font-bold uppercase">
                   New
                 </span>
               </p>
-              <p className="text-xs text-text-muted truncate">
+              <p className="text-xs text-text-muted line-clamp-2">
                 Simulate what-if scores, calculate points lost & solve FAT targets
               </p>
             </div>
@@ -927,10 +928,8 @@ export default function SimplifiedAcademicsPage({
               <History className="w-5 h-5" />
             </div>
             <div className="min-w-0">
-              <p className="text-xs sm:text-sm font-bold font-outfit text-text-heading truncate">
-                Looking for previous semesters?
-              </p>
-              <p className="text-xs text-text-muted truncate">
+              <p className="text-xs sm:text-sm font-bold font-outfit text-text-heading truncate">Previous semesters</p>
+              <p className="text-xs text-text-muted line-clamp-2">
                 {pastSemesters.length > 0
                   ? `View archived courses and grades from ${pastSemesters.length} earlier semesters`
                   : "View archived courses, GPA & grades from previous semesters"}

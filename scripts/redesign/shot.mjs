@@ -291,6 +291,67 @@ for (const tok of (process.env.KEYS || "").split(",").filter(Boolean)) {
   }
   await sleep(400);
 }
+// DRAGS="selector|dy|ms;...": real mouse drags (Input.dispatchMouseEvent)
+// from the centre of the first visible match, dy px down over ms, then
+// release; logs the open dialog's transform mid-drag and 800ms after
+// release (checks sheet drag-to-dismiss and snap-back).
+for (const tok of (process.env.DRAGS || "").split(";").filter(Boolean)) {
+  const [sel, dyS, msS] = tok.split("|");
+  const dy = Number(dyS),
+    ms = Number(msS || 300);
+  const pt = JSON.parse(
+    (await evalJs(
+      `(() => { const e=[...document.querySelectorAll(${JSON.stringify(sel)})].find(e=>e.getClientRects().length); if(!e) return "null"; const r=e.getBoundingClientRect(); return JSON.stringify({x:r.left+r.width/2,y:r.top+r.height/2}) })()`,
+    )) || "null",
+  );
+  if (!pt) {
+    console.log("DRAG no element", sel);
+    continue;
+  }
+  const probe = `(() => { const d=[...document.querySelectorAll("[role=dialog]")]; return d.length ? d.map(e=>Math.round(e.getBoundingClientRect().top)+"px").join(",") : "closed" })()`;
+  const before = await evalJs(probe);
+  await send("Input.dispatchMouseEvent", {
+    type: "mousePressed",
+    x: pt.x,
+    y: pt.y,
+    button: "left",
+    buttons: 1,
+    clickCount: 1,
+  });
+  const steps = Math.max(4, Math.round(ms / 16));
+  let mid = "";
+  for (let i = 1; i <= steps; i++) {
+    await send("Input.dispatchMouseEvent", {
+      type: "mouseMoved",
+      x: pt.x,
+      y: pt.y + (dy * i) / steps,
+      button: "left",
+      buttons: 1,
+    });
+    await sleep(ms / steps);
+    if (i === steps && !process.env.DRAG_FAST) mid = await evalJs(probe);
+  }
+  await send("Input.dispatchMouseEvent", {
+    type: "mouseReleased",
+    x: pt.x,
+    y: pt.y + dy,
+    button: "left",
+    buttons: 0,
+    clickCount: 1,
+  });
+  await sleep(800);
+  console.log(
+    "DRAG",
+    sel,
+    dy + "px/" + ms + "ms",
+    "top before",
+    before,
+    "at release",
+    mid,
+    "after",
+    await evalJs(probe),
+  );
+}
 // EVAL="js expression": print its value just before the capture.
 if (process.env.EVAL) console.log("EVAL", await evalJs(process.env.EVAL));
 if (process.env.KEYS)

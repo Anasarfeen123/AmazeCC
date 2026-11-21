@@ -109,10 +109,7 @@ const panels = () => Array.from(document.querySelectorAll<HTMLElement>("[data-pr
 
 const panelByText = (text: string) => panels().find((p) => p.textContent?.includes(text));
 
-const backdrops = () =>
-  Array.from(document.querySelectorAll<HTMLElement>("div")).filter(
-    (d) => typeof d.className === "string" && d.className.includes("bg-black/45"),
-  );
+const backdrops = () => Array.from(document.querySelectorAll<HTMLElement>("[data-sheet-backdrop]"));
 
 describe("faculty review pane stacking", () => {
   it("opens above the Switch Faculty pane that summoned it, backdrop included", async () => {

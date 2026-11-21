@@ -27,14 +27,11 @@ afterEach(() => {
 /**
  * The backdrop, not the panel.
  *
- * Selected by its own styling rather than a z-index class: the z-index is an
- * inline style (a sheet rendered above a z-300 surface passes a higher pair),
- * so it no longer appears in `className`. The backdrop's translucent overlay
- * classes are what distinguish it from the panel and the keyboard-lift wrapper,
- * which are also `fixed inset-0`.
+ * Selected by its data attribute: the z-index is an inline style, and the
+ * dimming colour now sits on an inner layer (it fades as the sheet is
+ * dragged), so neither identifies the clickable backdrop.
  */
-const backdrop = () =>
-  document.querySelector(".fixed.inset-0.bg-black\\/45") as HTMLElement | null;
+const backdrop = () => document.querySelector("[data-sheet-backdrop]") as HTMLElement | null;
 
 /**
  * A sheet host that actually unmounts on close.
@@ -100,15 +97,14 @@ function Solo({
   );
 }
 
-const renderStack = (ids: string[], onClose: (id: string) => void) =>
-  render(<Stack ids={ids} onClose={onClose} />);
+const renderStack = (ids: string[], onClose: (id: string) => void) => render(<Stack ids={ids} onClose={onClose} />);
 
 describe("BottomSheet dismissal", () => {
   it("keeps sheet content natively scrollable on touch devices without scroll chaining", () => {
     render(
       <BottomSheet overlayId="scrollable-sheet" onClose={() => {}}>
         <span>Scrollable sheet content</span>
-      </BottomSheet>
+      </BottomSheet>,
     );
 
     const content = document.querySelector(".overflow-y-auto");
@@ -174,13 +170,7 @@ describe("BottomSheet dismissal", () => {
     // The sync sheet's shape: swipe and backdrop *park*, only the X cancels.
     const parked: string[] = [];
     const cancelled: string[] = [];
-    render(
-      <Solo
-        onClose={() => cancelled.push("x")}
-        onSwipeDown={() => parked.push("park")}
-        showClose={false}
-      />,
-    );
+    render(<Solo onClose={() => cancelled.push("x")} onSwipeDown={() => parked.push("park")} showClose={false} />);
 
     fireEvent.keyDown(document, { key: "Escape" });
 
@@ -222,9 +212,7 @@ describe("BottomSheet dismissal", () => {
   it("honours a custom backdrop handler", () => {
     const parked: string[] = [];
     const closed: string[] = [];
-    render(
-      <Solo onClose={() => closed.push("x")} onBackdropClick={() => parked.push("park")} />,
-    );
+    render(<Solo onClose={() => closed.push("x")} onBackdropClick={() => parked.push("park")} />);
 
     const overlay = backdrop();
     fireEvent.click(overlay!);

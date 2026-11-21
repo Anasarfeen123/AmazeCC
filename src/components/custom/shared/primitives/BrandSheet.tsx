@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { SHEET_ENTER, SHEET_EXIT, useSheetDrag } from "@/lib/useSheetDrag";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 import { AnimatePresence, m } from "framer-motion";
 import { ArrowLeft, Search, X } from "lucide-react";
@@ -12,7 +13,8 @@ import type { ReactNode } from "react";
  * Brand version of AmazeUI 1.6's `AppLibrary`, same props, so swapping back
  * once AmazeUI is updated is a one-line import change. Differences:
  * - paper/charcoal surface with a 3px ink top edge, no glass or blur,
- * - a quick slide (180ms ease) instead of a soft spring,
+ * - slides on a no-overshoot spring; drag the grabber or header down to
+ *   close (long pull or quick flick), see useSheetDrag,
  * - display-type title, 44px labelled close and back buttons,
  * - a brand search field with a 44px clear button,
  * - the scrim is ink at 55% and dismisses on tap.
@@ -48,6 +50,7 @@ export function BrandSheet({
 }: BrandSheetProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   useFocusTrap(panelRef, open);
+  const { y, scrimOpacity, startDrag, dragProps } = useSheetDrag(onClose);
   return (
     <AnimatePresence>
       {open && (
@@ -56,56 +59,64 @@ export function BrandSheet({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: 0.18 }}
             onClick={onClose}
             aria-hidden
-            className="fixed inset-0 z-[55] bg-[color-mix(in_oklab,var(--shadow-ink)_55%,transparent)] md:hidden"
-          />
+            className="fixed inset-0 z-[55] md:hidden"
+          >
+            <m.div
+              className="absolute inset-0 bg-[color-mix(in_oklab,var(--shadow-ink)_55%,transparent)]"
+              style={{ opacity: scrimOpacity }}
+            />
+          </m.div>
           <m.div
             ref={panelRef}
             role="dialog"
             aria-modal="true"
             aria-label={title}
             initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "100%" }}
-            transition={{ duration: 0.18, ease: [0.2, 0.8, 0.2, 1] }}
+            animate={{ y: 0, transition: SHEET_ENTER }}
+            exit={{ y: "100%", transition: SHEET_EXIT }}
+            {...dragProps}
             className={`fixed bottom-0 left-0 right-0 z-[60] flex max-h-[86dvh] flex-col overflow-hidden rounded-t-[20px] border-x-[3px] border-t-[3px] border-border-ink bg-background md:hidden ${className}`.trim()}
-            style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+            style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)", y }}
           >
-            <div className="flex w-full shrink-0 justify-center pt-2.5" aria-hidden>
-              <div className="h-1.5 w-12 rounded-full bg-border-muted" />
-            </div>
+            {/* Grabber + header: drag down to close. */}
+            <div className="shrink-0 cursor-grab touch-none active:cursor-grabbing" onPointerDown={startDrag}>
+              <div className="flex w-full shrink-0 justify-center pt-2.5" aria-hidden>
+                <div className="h-1.5 w-12 rounded-full bg-border-muted" />
+              </div>
 
-            <div className="shrink-0 border-b-2 border-border-ink px-4 pb-3 pt-2">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex min-w-0 flex-1 items-center gap-2">
-                  {showBack && (
-                    <button
-                      type="button"
-                      onClick={onBack}
-                      aria-label="Back"
-                      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] border-2 border-border-ink bg-highlight text-highlight-foreground"
-                    >
-                      <ArrowLeft className="h-5 w-5" strokeWidth={2.5} aria-hidden />
-                    </button>
-                  )}
-                  <div className="min-w-0">
-                    <h2 className="truncate font-display text-2xl font-bold uppercase leading-none text-text-heading">
-                      {title}
-                    </h2>
-                    {subtitle && <p className="mt-1 font-mono text-xs text-text-muted">{subtitle}</p>}
+              <div className="shrink-0 border-b-2 border-border-ink px-4 pb-3 pt-2">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex min-w-0 flex-1 items-center gap-2">
+                    {showBack && (
+                      <button
+                        type="button"
+                        onClick={onBack}
+                        aria-label="Back"
+                        className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] border-2 border-border-ink bg-highlight text-highlight-foreground"
+                      >
+                        <ArrowLeft className="h-5 w-5" strokeWidth={2.5} aria-hidden />
+                      </button>
+                    )}
+                    <div className="min-w-0">
+                      <h2 className="truncate font-display text-2xl font-bold uppercase leading-none text-text-heading">
+                        {title}
+                      </h2>
+                      {subtitle && <p className="mt-1 font-mono text-xs text-text-muted">{subtitle}</p>}
+                    </div>
                   </div>
+                  {headerRight}
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    aria-label="Close"
+                    className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-primary"
+                  >
+                    <X className="h-5 w-5" aria-hidden />
+                  </button>
                 </div>
-                {headerRight}
-                <button
-                  type="button"
-                  onClick={onClose}
-                  aria-label="Close"
-                  className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-primary"
-                >
-                  <X className="h-5 w-5" aria-hidden />
-                </button>
               </div>
             </div>
 

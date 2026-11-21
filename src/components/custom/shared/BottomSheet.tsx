@@ -8,6 +8,7 @@ import { X } from "lucide-react";
 import { isTopOverlay, useOverlayBack } from "@/lib/overlayStack";
 import { acquireBodyScrollLock } from "@/lib/bodyScrollLock";
 import { useKeyboardInset } from "@/lib/useKeyboardInset";
+import { SHEET_ENTER, SHEET_EXIT, useSheetDrag } from "@/lib/useSheetDrag";
 import { IconButton } from "./primitives/Controls";
 
 interface BottomSheetProps {
@@ -193,38 +194,8 @@ export default function BottomSheet({
   // Grabber-initiated swipe-down to dismiss (content keeps native scrolling)
   const panelRef = useRef<HTMLDivElement>(null);
   useFocusTrap(panelRef, true);
-  const dragState = useRef({ startY: 0, dy: 0, dragging: false });
-
-  const onGrabberPointerDown = (e: React.PointerEvent) => {
-    if (!dismissable) return;
-    // Never hijack presses that start on interactive elements (e.g. the X
-    // button): capturing the pointer would retarget pointer-up and kill
-    // their click, which breaks the X on mouse-driven viewports.
-    if ((e.target as HTMLElement).closest("button, a, input, textarea, select, [role='button']")) return;
-    dragState.current = { startY: e.clientY, dy: 0, dragging: true };
-    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
-  };
-
-  const onGrabberPointerMove = (e: React.PointerEvent) => {
-    const s = dragState.current;
-    if (!s.dragging || !panelRef.current) return;
-    s.dy = Math.max(0, e.clientY - s.startY);
-    panelRef.current.style.transition = "none";
-    panelRef.current.style.transform = `translateY(${s.dy}px)`;
-  };
-
-  const endGrabberDrag = () => {
-    const s = dragState.current;
-    if (!s.dragging) return;
-    s.dragging = false;
-    if (panelRef.current) {
-      panelRef.current.style.transition = "";
-      panelRef.current.style.transform = "";
-    }
-    const dy = s.dy;
-    s.dy = 0;
-    if (dy > 120) handleSwipeDown();
-  };
+  // Drag-to-dismiss from the grabber and the header (see useSheetDrag).
+  const { y: sheetY, scrimOpacity, startDrag, dragProps } = useSheetDrag(handleSwipeDown, dismissable);
 
   if (!portalReady) return null;
 
@@ -246,7 +217,10 @@ export default function BottomSheet({
   // of its own, which keeps it optically centred *and* keeps the X out of the
   // drag subtree entirely.
   const chrome = (
-    <div className="relative flex w-full shrink-0 items-center justify-between gap-3 px-4 pt-3 pb-2">
+    <div
+      className="relative flex w-full shrink-0 touch-none items-center justify-between gap-3 px-4 pt-3 pb-2"
+      onPointerDown={startDrag}
+    >
       {showClose && dismissable && !hasTitleCard ? (
         <button
           onClick={onClose}
@@ -261,10 +235,7 @@ export default function BottomSheet({
 
       <div
         className="absolute inset-x-0 top-0 flex cursor-grab justify-center pt-3 active:cursor-grabbing touch-none select-none"
-        onPointerDown={onGrabberPointerDown}
-        onPointerMove={onGrabberPointerMove}
-        onPointerUp={endGrabberDrag}
-        onPointerCancel={endGrabberDrag}
+        onPointerDown={startDrag}
       >
         <div className="h-1 w-12 rounded-full bg-surface-tertiary" />
       </div>
@@ -285,15 +256,18 @@ export default function BottomSheet({
         style={{ WebkitOverflowScrolling: "touch" }}
       >
         {hasTitleCard && (
-          <TitleCard
-            title={title}
-            subtitle={subtitle}
-            icon={icon}
-            accent={accent}
-            trailing={trailing}
-            closeLabel={closeLabel}
-            onClose={onClose}
-          />
+          // The header is a drag handle too (a bigger target than the grabber).
+          <div className="touch-none" onPointerDown={startDrag}>
+            <TitleCard
+              title={title}
+              subtitle={subtitle}
+              icon={icon}
+              accent={accent}
+              trailing={trailing}
+              closeLabel={closeLabel}
+              onClose={onClose}
+            />
+          </div>
         )}
         {children}
       </div>
@@ -335,12 +309,12 @@ export default function BottomSheet({
       aria-modal="true"
       aria-label={typeof title === "string" ? title : undefined}
       initial={{ y: "100%" }}
-      animate={{ y: 0 }}
-      exit={{ y: "100%" }}
-      transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
+      animate={{ y: 0, transition: SHEET_ENTER }}
+      exit={{ y: "100%", transition: SHEET_EXIT }}
+      {...dragProps}
       data-prevent-swipe="true"
       className={`${anchoredBottom}w-[calc(100%-2rem)] ${maxWidth} ${surface} rounded-[14px] shadow-[0_-15px_40px_-15px_rgba(0,0,0,0.3)] ${className}`}
-      style={panelStyle}
+      style={{ ...panelStyle, y: sheetY }}
     >
       {panelBody}
     </motion.div>
@@ -351,12 +325,12 @@ export default function BottomSheet({
       aria-modal="true"
       aria-label={typeof title === "string" ? title : undefined}
       initial={{ y: "100%" }}
-      animate={{ y: 0 }}
-      exit={{ y: "100%" }}
-      transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
+      animate={{ y: 0, transition: SHEET_ENTER }}
+      exit={{ y: "100%", transition: SHEET_EXIT }}
+      {...dragProps}
       data-prevent-swipe="true"
       className={`${anchoredBottom}w-full ${maxWidth} ${surface} rounded-t-[28px] sm:rounded-[14px] shadow-[0_-15px_40px_-15px_rgba(0,0,0,0.3)] ${className}`}
-      style={panelStyle}
+      style={{ ...panelStyle, y: sheetY }}
     >
       {panelBody}
     </motion.div>
@@ -411,9 +385,13 @@ export default function BottomSheet({
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
         onClick={dismissable ? handleBackdropClick : undefined}
-        className="fixed inset-0 bg-black/45"
+        data-sheet-backdrop=""
+        className="fixed inset-0"
         style={{ willChange: "opacity", zIndex: backdropZIndex }}
-      />
+      >
+        {/* Fades as the sheet is pulled down. */}
+        <motion.div className="absolute inset-0 bg-black/45" style={{ opacity: scrimOpacity }} />
+      </motion.div>
       {panel}
     </>,
     document.body,

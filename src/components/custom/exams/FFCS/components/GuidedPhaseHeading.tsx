@@ -12,8 +12,10 @@ interface GuidedPhaseHeadingProps {
 }
 
 const toneClasses: Record<GuidedPhaseTone, { tile: string; text: string }> = {
-  indigo: { tile: "bg-secondary border-border-ink", text: "text-primary" },
-  purple: { tile: "bg-secondary border-border-ink", text: "text-primary" },
+  // Sage tile, sage foreground: text-primary is mint in Dark/Night, the
+  // same as the tile, so the icon vanished.
+  indigo: { tile: "bg-secondary border-border-ink", text: "text-secondary-foreground" },
+  purple: { tile: "bg-secondary border-border-ink", text: "text-secondary-foreground" },
   amber: { tile: "bg-warning-surface border-border-ink", text: "text-warning-foreground" },
   rose: { tile: "bg-danger-surface border-border-ink", text: "text-danger-foreground" },
   emerald: { tile: "bg-success-surface border-border-ink", text: "text-success-foreground" },

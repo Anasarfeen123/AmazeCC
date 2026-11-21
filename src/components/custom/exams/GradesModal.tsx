@@ -1,5 +1,7 @@
 "use client";
 
+import { totalCreditsEarned } from "@/lib/credits";
+
 import { gradeTone } from "@/lib/gradeTone";
 import { RefreshCcw } from "lucide-react";
 import NoContentFound from "../NoContentFound";
@@ -215,8 +217,7 @@ function GradesDisplay({ allGradesData, data, handleFetchGrades, marksData, atte
             let baseRequired = parseFloat(totalCredits.creditsRequired);
 
             if (earned === 0 && marksData?.cgpa?.creditsEarned) {
-              earned =
-                parseFloat(marksData.cgpa.creditsEarned) + parseFloat(marksData.cgpa.nonGradedRequirement || "0");
+              earned = totalCreditsEarned(marksData.cgpa) ?? 0;
               baseRequired = parseFloat(marksData.cgpa.creditsRequired) || 160;
             } else if (earned === 0 && effectiveGrades.length > 0) {
               earned = effectiveGrades.reduce((acc, curr) => acc + (parseFloat(curr.creditsEarned) || 0), 0);

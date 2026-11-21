@@ -119,9 +119,9 @@ export function StatTile({
         </span>
         {badge ? (
           <span
-            // Hidden on phones (user: badges crowd the two-up stat row);
-            // still read out, and shown from sm up.
-            className={`max-sm:sr-only font-mono text-xs font-semibold uppercase tracking-[0.06em] px-1.5 py-0.5 rounded-[6px] border-2 shrink-0 ${
+            // Shown on phones too, tighter (critique: hiding it left "79%"
+            // with no Safe/Warning word); the row wraps if it cannot fit.
+            className={`font-mono text-xs font-semibold uppercase tracking-[0.06em] px-1 py-0 sm:px-1.5 sm:py-0.5 rounded-[6px] border-2 shrink-0 ${
               loud ? "bg-text-primary text-background border-border-ink" : (TONE_BADGE[tone] ?? TONE_BADGE.zinc)
             }`}
           >

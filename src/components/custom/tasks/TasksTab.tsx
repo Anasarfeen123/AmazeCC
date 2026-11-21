@@ -299,7 +299,7 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
               Open tasks
             </span>
             <span
-              className={`max-sm:sr-only text-xs sm:text-xs font-bold uppercase px-2 py-0.5 rounded-md shrink-0 border ${
+              className={`text-xs font-bold uppercase px-1 py-0 sm:px-2 sm:py-0.5 rounded-md shrink-0 border ${
                 TONE_BADGE[overdueTasks.length > 0 ? "red" : "emerald"]
               }`}
             >

@@ -1,5 +1,7 @@
 "use client";
 
+import { totalCreditsEarned } from "@/lib/credits";
+
 import { gradeTone } from "@/lib/gradeTone";
 import React, { useState, useEffect, useMemo } from "react";
 import { AnimatePresence, m } from "framer-motion";
@@ -503,7 +505,7 @@ export default function CurriculumPage({
   let totalEarned = totalRow ? num(totalRow.creditsEarned) : 0;
 
   if (totalEarned === 0 && marksData?.cgpa?.creditsEarned) {
-    totalEarned = num(marksData.cgpa.creditsEarned) + num(marksData.cgpa.nonGradedRequirement);
+    totalEarned = totalCreditsEarned(marksData.cgpa) ?? 0;
     totalRequired = num(marksData.cgpa.creditsRequired) || curricTotal || 160;
   }
   if (totalEarned === 0 && effectiveGrades.length > 0) {

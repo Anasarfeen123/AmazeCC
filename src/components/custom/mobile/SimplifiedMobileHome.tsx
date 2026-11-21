@@ -1,5 +1,6 @@
 "use client";
 
+import { totalCreditsEarned } from "@/lib/credits";
 import { useAppBadge } from "@/lib/useAppBadge";
 import { courseAccent } from "@/lib/courseColors";
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -244,16 +245,16 @@ function LiveClassBadge({ time, detailed = false }: { time: string; detailed?: b
     .map((value) => value.trim());
   const minutesLeft = Math.max(0, parseAttendanceTime(end) - (now.getHours() * 60 + now.getMinutes()));
 
+  // Ink on mint with the brand edge (was white on emerald, 2.5:1), and the
+  // minutes always say "left" (critique: "LIVE (23M)" read as ambiguous).
   return (
     <span
-      className={
-        detailed
-          ? "inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-2.5 py-0.8 rounded-xl bg-emerald-500 text-white shadow-xs"
-          : "inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-500 text-white shrink-0 shadow-2xs"
-      }
+      className={`inline-flex shrink-0 items-center gap-1.5 rounded-[6px] border-2 border-obsidian bg-mint font-mono text-xs font-bold uppercase tracking-[0.04em] text-obsidian ${
+        detailed ? "px-2 py-0.5" : "px-1.5"
+      }`}
     >
-      <span className={detailed ? "w-1.5 h-1.5 rounded-full bg-white" : "w-1 h-1 rounded-full bg-white"} />
-      Live ({minutesLeft}m{detailed ? " left" : ""})
+      <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-obsidian motion-safe:animate-pulse" />
+      Live · {minutesLeft} min left
     </span>
   );
 }
@@ -721,11 +722,11 @@ export default function SimplifiedMobileHome({
     }
 
     // Slide 2: Credits
-    const creditsVal = marksData?.cgpa?.creditsEarned ?? (unifiedAcademics?.grades as any)?.cgpa?.creditsEarned;
+    const creditsVal = totalCreditsEarned(marksData?.cgpa ?? (unifiedAcademics?.grades as any)?.cgpa);
     slides.push({
       id: "credits",
       title: "Credits",
-      headline: creditsVal ? `${Number(creditsVal)} cr` : "—",
+      headline: creditsVal !== null ? `${creditsVal} cr` : "—",
       subline: "Degree Curriculum Earned",
       badge: "Degree",
       onClick: () => {
@@ -1296,7 +1297,14 @@ export default function SimplifiedMobileHome({
     } else {
       const canMiss = Math.floor(attended / thresholdDec - total);
       const canMissValue = isLab ? Math.floor(canMiss / 2) : canMiss;
-      if (canMissValue <= 0) {
+      if (canMissValue <= 0 && isLab) {
+        // A lab is two periods, so one skip counts as two absences. Say what
+        // it does instead of a bare "No skips left" on a 100% lab (critique).
+        const afterSkip = Math.floor((attended / (total + 2)) * 100);
+        bunkStatus = "warning";
+        bunkText = `Skip → ${afterSkip}%`;
+        bunkSubtext = "Labs count double: one lab is two classes";
+      } else if (canMissValue <= 0) {
         bunkStatus = "warning";
         bunkText = "No skips left";
         bunkSubtext = "On safety margin";
@@ -1841,7 +1849,7 @@ export default function SimplifiedMobileHome({
                     );
                   }
                   const cls = row.cls;
-                  const { status, minutesUntilStart, attended, total, currentPct, bunkStatus, bunkText } =
+                  const { status, minutesUntilStart, attended, total, currentPct, bunkStatus, bunkText, bunkSubtext } =
                     getClassProgressAndBunk(cls, minuteNow);
 
                   const isLive = status === "live";
@@ -1972,7 +1980,8 @@ export default function SimplifiedMobileHome({
                                 }`}
                               >
                                 <span className="w-1.5 h-1.5 rounded-full bg-current" aria-hidden />
-                                {bunkText}
+                                <span title={bunkSubtext || undefined}>{bunkText}</span>
+                                {bunkSubtext ? <span className="sr-only">: {bunkSubtext}</span> : null}
                               </span>
                             </div>
 
@@ -2127,7 +2136,8 @@ export default function SimplifiedMobileHome({
                               }`}
                             >
                               <span className="w-1.5 h-1.5 rounded-full bg-current" aria-hidden />
-                              {bunkText}
+                              <span title={bunkSubtext || undefined}>{bunkText}</span>
+                              {bunkSubtext ? <span className="sr-only">: {bunkSubtext}</span> : null}
                             </span>
 
                             {showTaskBadgeInline && taskSummary.total > 0 && (

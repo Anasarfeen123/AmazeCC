@@ -14,7 +14,7 @@ both are the owner-decided brand (`design/DESIGN_LANGUAGE.md`).
 
 ## 1. Trust and correctness (do first)
 
-- [ ] **#1 "Leave demo" is unreadable in Dark and Night (1.3:1).**
+- [x] **#1 "Leave demo" is unreadable in Dark and Night (1.3:1).**
       The brand rule in `src/app/brand.css` (~372-392, "text inside a brand
       fill") recolours every `.text-text-primary` inside `bg-highlight`,
       including the nested `bg-surface` button in
@@ -22,21 +22,21 @@ both are the owner-decided brand (`design/DESIGN_LANGUAGE.md`).
       Fix: scope the rule to text directly on the fill (or reset it on
       `.bg-surface` descendants); then sweep other nested surfaces inside
       coloured fills in Dark and Night (`scripts/redesign/contrast.py`).
-- [ ] **#2 "Live" badge: white on emerald, 2.5:1.**
+- [x] **#2 "Live" badge: white on emerald, 2.5:1.**
       `SimplifiedMobileHome.tsx` (~251, `bg-emerald-500 text-white`).
       Fix: ink text on mint (brand tokens), or a darker green.
-- [ ] **#3 Credits disagree: sidebar 47.5 vs Home tile 42.5 (desktop).**
+- [x] **#3 Credits disagree: sidebar 47.5 vs Home tile 42.5 (desktop).**
       Fix: one source for both.
-- [ ] **#4 CGPA 9.18 is above every term GPA on Grade History.**
+- [x] **#4 CGPA 9.18 is above every term GPA on Grade History.**
       Impossible for a credit-weighted average. Fix the demo data, or the
       calculation if real accounts are affected too.
-- [ ] **#5 A lab at 100% shows "No skips left" with no reason.**
+- [x] **#5 A lab at 100% shows "No skips left" with no reason.**
       Labs count double (`canMiss / 2`). Fix: badge says "Labs count double";
       tap explains the maths.
-- [ ] **#6 "LIVE (23M)" is ambiguous.** Fix: "23 min left".
-- [ ] **#7 Attendance calendar opens on Dec 2025 while the semester is
+- [x] **#6 "LIVE (23M)" is ambiguous.** Fix: "23 min left".
+- [x] **#7 Attendance calendar opens on Dec 2025 while the semester is
       Fall 2026-27.** Fix: open on the current month of the selected semester.
-- [ ] **#8 Overall attendance has no status word on phones.**
+- [x] **#8 Overall attendance has no status word on phones.**
       `StatTile` hides the badge with `max-sm:sr-only` (`Surfaces.tsx`).
       Fix: always show the word, shortened if needed.
 

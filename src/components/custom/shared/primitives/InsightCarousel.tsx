@@ -32,7 +32,7 @@ import type { PrivacyCategory } from "@/lib/privacyMode";
 
 const LABEL = "font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted min-w-0 break-words";
 const BADGE =
-  "max-sm:sr-only font-mono text-xs font-semibold uppercase tracking-[0.06em] px-1.5 py-0.5 rounded-[6px] border-2 shrink-0";
+  "font-mono text-xs font-semibold uppercase tracking-[0.06em] px-1 py-0 sm:px-1.5 sm:py-0.5 rounded-[6px] border-2 shrink-0";
 const SUBLINE = "font-mono text-xs text-text-muted truncate";
 const DOT_ACTIVE = "w-4 bg-text-primary";
 const DOT_IDLE = "w-1.5 bg-border-muted";

@@ -116,28 +116,24 @@ describe("parseDayOrder", () => {
     expect(
       parseDayOrder([
         { type: "Other", text: "Instructional Day", category: "Instructional Day Order - Thursday Day Order" },
-      ])
+      ]),
     ).toBe("THU");
   });
 
   it("copes with the separator being a colon or an en dash", () => {
     expect(
-      parseDayOrder([
-        { type: "Other", text: "Instructional Day", category: "Instructional Day Order: Friday" },
-      ])
+      parseDayOrder([{ type: "Other", text: "Instructional Day", category: "Instructional Day Order: Friday" }]),
     ).toBe("FRI");
     expect(
       parseDayOrder([
         { type: "Other", text: "Instructional Day", category: "Instructional Day Order – Monday Day Order" },
-      ])
+      ]),
     ).toBe("MON");
   });
 
   it("reads a bare abbreviation", () => {
     expect(
-      parseDayOrder([
-        { type: "Other", text: "Instructional Day", category: "Instructional Day Order - SAT" },
-      ])
+      parseDayOrder([{ type: "Other", text: "Instructional Day", category: "Instructional Day Order - SAT" }]),
     ).toBe("SAT");
   });
 
@@ -152,15 +148,13 @@ describe("parseDayOrder", () => {
           text: "Instructional Day",
           category: "Saturday - Instruction Day Order - Thursday Day Order",
         },
-      ])
+      ]),
     ).toBe("THU");
   });
 
   it("finds the phrase in `text` as well as `category`", () => {
     expect(
-      parseDayOrder([
-        { type: "Other", text: "Instructional Day Order - Tuesday Day Order", category: "Working day" },
-      ])
+      parseDayOrder([{ type: "Other", text: "Instructional Day Order - Tuesday Day Order", category: "Working day" }]),
     ).toBe("TUE");
   });
 
@@ -171,24 +165,26 @@ describe("parseDayOrder", () => {
     // throw; it turns a rescheduled Tuesday into an ordinary teaching day, which
     // is invisible until you are sitting in the wrong class.
     const forms: [string, string][] = [
-      ["Monday", "MON"], ["Tuesday", "TUE"], ["Wednesday", "WED"],
-      ["Thursday", "THU"], ["Friday", "FRI"], ["Saturday", "SAT"],
+      ["Monday", "MON"],
+      ["Tuesday", "TUE"],
+      ["Wednesday", "WED"],
+      ["Thursday", "THU"],
+      ["Friday", "FRI"],
+      ["Saturday", "SAT"],
       ["Sunday", "SUN"],
     ];
     for (const [name, expected] of forms) {
       expect(
         parseDayOrder([
           { type: "Other", text: "Instructional Day", category: `Instructional Day Order - ${name} Day Order` },
-        ])
+        ]),
       ).toBe(expected);
     }
   });
 
   it("does not read a word that merely starts like a weekday", () => {
     expect(
-      parseDayOrder([
-        { type: "Other", text: "Instructional Day", category: "Working day - Monsoon Season" },
-      ])
+      parseDayOrder([{ type: "Other", text: "Instructional Day", category: "Working day - Monsoon Season" }]),
     ).toBeUndefined();
   });
 
@@ -198,14 +194,12 @@ describe("parseDayOrder", () => {
       parseDayOrder([
         { type: "Other", text: "Holiday", category: "Sunday Observance" },
         { type: "Other", text: "Instructional Day", category: "Working day" },
-      ])
+      ]),
     ).toBeUndefined();
   });
 
   it("is undefined on an ordinary working day", () => {
-    expect(
-      parseDayOrder([{ type: "Other", text: "Instructional Day", category: "Working day" }])
-    ).toBeUndefined();
+    expect(parseDayOrder([{ type: "Other", text: "Instructional Day", category: "Working day" }])).toBeUndefined();
     expect(parseDayOrder([])).toBeUndefined();
   });
 
@@ -213,7 +207,7 @@ describe("parseDayOrder", () => {
     // "Instructional Day" and "No Instructional Day" both contain day-shaped
     // words; neither names a timetable to follow.
     expect(
-      parseDayOrder([{ type: "Other", text: "Instructional Day", category: "Instructional Day Order" }])
+      parseDayOrder([{ type: "Other", text: "Instructional Day", category: "Instructional Day Order" }]),
     ).toBeUndefined();
   });
 });
@@ -238,9 +232,7 @@ describe("day order on the day model", () => {
 
   it("explains a reschedule in words, naming both days", () => {
     const day = dayOn(rescheduledCalendar("2026-08-08", "Instructional Day Order - Thursday Day Order"), 8);
-    expect(dayOrderNote(day)).toBe(
-      "Following the Thursday timetable on this Saturday."
-    );
+    expect(dayOrderNote(day)).toBe("Following the Thursday timetable on this Saturday.");
   });
 
   it("says nothing when the date already follows the named day", () => {
@@ -359,9 +351,7 @@ describe("buildAttendanceByDate", () => {
 
   it("keeps the raw VTOP date so the notes tracker stays compatible", () => {
     // The Theory and Lab log pages key `uniCC_notes_tracker` on this string.
-    const byDate = buildAttendanceByDate([
-      viewLink("25BLC1081", "Biology", [["Aug 12, 2026", "Absent"]]),
-    ]);
+    const byDate = buildAttendanceByDate([viewLink("25BLC1081", "Biology", [["Aug 12, 2026", "Absent"]])]);
     expect(byDate.get("2026-08-12")!.courses[0].rawDate).toBe("Aug 12, 2026");
   });
 
@@ -371,9 +361,7 @@ describe("buildAttendanceByDate", () => {
   });
 
   it("finds one course's status on a day", () => {
-    const byDate = buildAttendanceByDate([
-      viewLink("25BLC1081", "Biology", [["2026-08-12", "Absent"]]),
-    ]);
+    const byDate = buildAttendanceByDate([viewLink("25BLC1081", "Biology", [["2026-08-12", "Absent"]])]);
     expect(statusForClass(byDate, "2026-08-12", "25BLC1081")).toBe("Absent");
     expect(statusForClass(byDate, "2026-08-12", "OTHER")).toBe(null);
     expect(statusForClass(byDate, "2026-08-20", "25BLC1081")).toBe(null);
@@ -387,11 +375,8 @@ describe("buildAttendanceLog", () => {
 
   it("calls an untouched day a full day", () => {
     const rows = buildAttendanceLog(
-      buildAttendanceByDate([
-        at("AM-1", [["2026-08-10", "Present"]]),
-        at("PM-1", [["2026-08-10", "Present"]]),
-      ]),
-      startMinutes
+      buildAttendanceByDate([at("AM-1", [["2026-08-10", "Present"]]), at("PM-1", [["2026-08-10", "Present"]])]),
+      startMinutes,
     );
     expect(rows).toHaveLength(1);
     expect(rows[0].status).toBe("present");
@@ -403,32 +388,23 @@ describe("buildAttendanceLog", () => {
     // This is the whole reason the log exists: "you missed a class" does not
     // tell you whether you lost the morning.
     const morningMiss = buildAttendanceLog(
-      buildAttendanceByDate([
-        at("AM-1", [["2026-08-10", "Absent"]]),
-        at("PM-1", [["2026-08-10", "Present"]]),
-      ]),
-      startMinutes
+      buildAttendanceByDate([at("AM-1", [["2026-08-10", "Absent"]]), at("PM-1", [["2026-08-10", "Present"]])]),
+      startMinutes,
     );
     expect(morningMiss[0].status).toBe("morning half-day");
     expect(morningMiss[0].tone).toBe("amber");
 
     const eveningMiss = buildAttendanceLog(
-      buildAttendanceByDate([
-        at("AM-1", [["2026-08-10", "Present"]]),
-        at("PM-1", [["2026-08-10", "Absent"]]),
-      ]),
-      startMinutes
+      buildAttendanceByDate([at("AM-1", [["2026-08-10", "Present"]]), at("PM-1", [["2026-08-10", "Absent"]])]),
+      startMinutes,
     );
     expect(eveningMiss[0].status).toBe("evening half-day");
   });
 
   it("calls a total miss an absent day", () => {
     const rows = buildAttendanceLog(
-      buildAttendanceByDate([
-        at("AM-1", [["2026-08-10", "Absent"]]),
-        at("PM-1", [["2026-08-10", "Absent"]]),
-      ]),
-      startMinutes
+      buildAttendanceByDate([at("AM-1", [["2026-08-10", "Absent"]]), at("PM-1", [["2026-08-10", "Absent"]])]),
+      startMinutes,
     );
     expect(rows[0].status).toBe("absent");
     expect(rows[0].tone).toBe("red");
@@ -437,11 +413,8 @@ describe("buildAttendanceLog", () => {
 
   it("does not let an on-duty read as a missed class in the verdict", () => {
     const rows = buildAttendanceLog(
-      buildAttendanceByDate([
-        at("AM-1", [["2026-08-10", "Absent"]]),
-        at("PM-1", [["2026-08-10", "On Duty"]]),
-      ]),
-      startMinutes
+      buildAttendanceByDate([at("AM-1", [["2026-08-10", "Absent"]]), at("PM-1", [["2026-08-10", "On Duty"]])]),
+      startMinutes,
     );
     // An approved absence is not a missed one, so the evening half is clean and
     // the day reads as a morning miss — not as wholly absent. It is still
@@ -453,11 +426,8 @@ describe("buildAttendanceLog", () => {
 
   it("calls a day with only on-duty a partial OD", () => {
     const rows = buildAttendanceLog(
-      buildAttendanceByDate([
-        at("AM-1", [["2026-08-10", "Present"]]),
-        at("PM-1", [["2026-08-10", "On Duty"]]),
-      ]),
-      startMinutes
+      buildAttendanceByDate([at("AM-1", [["2026-08-10", "Present"]]), at("PM-1", [["2026-08-10", "On Duty"]])]),
+      startMinutes,
     );
     expect(rows[0].status).toBe("partial od");
     expect(rows[0].tone).toBe("amber");
@@ -473,7 +443,7 @@ describe("buildAttendanceLog", () => {
         ]),
       ]),
       startMinutes,
-      new Date(2026, 7, 11)
+      new Date(2026, 7, 11),
     );
     expect(rows.map((r) => r.dateKey)).toEqual(["2026-08-12", "2026-08-11", "2026-08-10"]);
     expect(rows[0].isFuture).toBe(true);
@@ -482,10 +452,7 @@ describe("buildAttendanceLog", () => {
 
   it("survives a course whose slot time is unknown", () => {
     // No slot match -> no start time -> treated as morning, never NaN.
-    const rows = buildAttendanceLog(
-      buildAttendanceByDate([at("AM-1", [["2026-08-10", "Absent"]]) ]),
-      () => null
-    );
+    const rows = buildAttendanceLog(buildAttendanceByDate([at("AM-1", [["2026-08-10", "Absent"]])]), () => null);
     expect(rows[0].status).toBe("morning half-day");
   });
 });
@@ -499,7 +466,7 @@ describe("filterLog", () => {
       ]),
     ]),
     () => 8 * 60,
-    new Date(2026, 7, 11)
+    new Date(2026, 7, 11),
   );
 
   it("keeps everything under 'all'", () => {
@@ -543,7 +510,10 @@ describe("buildEnrichedCalendars", () => {
           days: [
             {
               date: 20,
-              events: [{ type: "Instructional Day", text: "Instructional Day", category: "Working day" }, { type: "Other", text: "CAT - I", category: "Continuous Assessment Test" }],
+              events: [
+                { type: "Instructional Day", text: "Instructional Day", category: "Working day" },
+                { type: "Other", text: "CAT - I", category: "Continuous Assessment Test" },
+              ],
             },
           ],
         },
@@ -556,7 +526,19 @@ describe("buildEnrichedCalendars", () => {
     const [august] = buildEnrichedCalendars({
       calendars: monthCalendar("August 2026"),
       attendance: [viewLink("25BLC1081", "Biology", [["2026-08-12", "Absent"]])],
-      schedule: { Schedule: { CAT: [{ courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-20", examTime: "10:00 AM", venue: "AB1-101" }] } },
+      schedule: {
+        Schedule: {
+          CAT: [
+            {
+              courseCode: "25BLC1081",
+              courseTitle: "Biology",
+              examDate: "2026-08-20",
+              examTime: "10:00 AM",
+              venue: "AB1-101",
+            },
+          ],
+        },
+      },
       moodle: [{ name: "Course/Assignment 3", due: "2026-08-25T23:59:00", done: false, url: "https://moodle/3" }],
       tasks: [
         {
@@ -714,8 +696,20 @@ describe("exam days", () => {
     schedule: {
       Schedule: {
         CAT: [
-          { courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-20", examTime: "10:00 AM", venue: "AB1-101" },
-          { courseCode: "25BLC1082", courseTitle: "Physics", examDate: "2026-08-20", examTime: "02:00 PM", venue: "AB1-102" },
+          {
+            courseCode: "25BLC1081",
+            courseTitle: "Biology",
+            examDate: "2026-08-20",
+            examTime: "10:00 AM",
+            venue: "AB1-101",
+          },
+          {
+            courseCode: "25BLC1082",
+            courseTitle: "Physics",
+            examDate: "2026-08-20",
+            examTime: "02:00 PM",
+            venue: "AB1-102",
+          },
         ],
       },
     },
@@ -725,7 +719,11 @@ describe("exam days", () => {
     const examDay = withExam[0].days.find((d) => d.date === 20)!;
     expect(isExamDay(examDay)).toBe(true);
     expect(examsOn(examDay)).toHaveLength(2);
-    expect(examsOn(examDay).map((e) => e.title).sort()).toEqual(["Biology", "Physics"]);
+    expect(
+      examsOn(examDay)
+        .map((e) => e.title)
+        .sort(),
+    ).toEqual(["Biology", "Physics"]);
   });
 
   it("does not call an ordinary working day an exam day", () => {
@@ -812,8 +810,7 @@ describe("milestones", () => {
         },
       ],
     });
-    const titles = (d: number) =>
-      august.days.find((x) => x.date === d)!.events.map((e) => e.title);
+    const titles = (d: number) => august.days.find((x) => x.date === d)!.events.map((e) => e.title);
     expect(titles(1)).toContain("CAT I");
     expect(titles(2)).toContain("CAT II");
     expect(titles(3)).toContain("Mid Term Test");
@@ -843,9 +840,7 @@ describe("milestones", () => {
         {
           month: "August 2026",
           year: 2026,
-          days: [
-            { date: 6, events: [{ type: "Other", text: "Vibrance 2026", category: "College event" }] },
-          ],
+          days: [{ date: 6, events: [{ type: "Other", text: "Vibrance 2026", category: "College event" }] }],
         },
       ],
     });
@@ -906,9 +901,7 @@ describe("milestones", () => {
         {
           month: "August 2026",
           year: 2026,
-          days: [
-            { date: 10, events: [{ type: "Other", text: "LID FOR THEORY CLASSES", category: "Working day" }] },
-          ],
+          days: [{ date: 10, events: [{ type: "Other", text: "LID FOR THEORY CLASSES", category: "Working day" }] }],
         },
       ],
       moodle: [{ name: "Course/DA", due: "2026-08-10T23:59:00", done: false }],
@@ -942,10 +935,22 @@ describe("exam series naming", () => {
           seriesKeys.map((k) => [
             k,
             [
-              { courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-20", examTime: "10:00 AM", venue: "AB1-101" },
-              { courseCode: "25BLC1082", courseTitle: "Physics", examDate: "2026-08-20", examTime: "02:00 PM", venue: "AB1-102" },
+              {
+                courseCode: "25BLC1081",
+                courseTitle: "Biology",
+                examDate: "2026-08-20",
+                examTime: "10:00 AM",
+                venue: "AB1-101",
+              },
+              {
+                courseCode: "25BLC1082",
+                courseTitle: "Physics",
+                examDate: "2026-08-20",
+                examTime: "02:00 PM",
+                venue: "AB1-102",
+              },
             ],
-          ])
+          ]),
         ),
       },
     });
@@ -1222,8 +1227,20 @@ describe("dayHeadline", () => {
       schedule: {
         Schedule: {
           "CAT - II": [
-            { courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-20", examTime: "9:00 AM to 10:00 AM", venue: "Room 204" },
-            { courseCode: "25BLC1082", courseTitle: "Physics", examDate: "2026-08-20", examTime: "11:00 AM to 12:00 PM", venue: "Room 204" },
+            {
+              courseCode: "25BLC1081",
+              courseTitle: "Biology",
+              examDate: "2026-08-20",
+              examTime: "9:00 AM to 10:00 AM",
+              venue: "Room 204",
+            },
+            {
+              courseCode: "25BLC1082",
+              courseTitle: "Physics",
+              examDate: "2026-08-20",
+              examTime: "11:00 AM to 12:00 PM",
+              venue: "Room 204",
+            },
           ],
         },
       },
@@ -1270,9 +1287,7 @@ describe("dayHeadline", () => {
         {
           month: "August 2026",
           year: 2026,
-          days: [
-            { date: 10, events: [{ type: "Other", text: "LID FOR THEORY CLASSES", category: "Working day" }] },
-          ],
+          days: [{ date: 10, events: [{ type: "Other", text: "LID FOR THEORY CLASSES", category: "Working day" }] }],
         },
       ],
     });
@@ -1290,7 +1305,13 @@ describe("dayHeadline", () => {
       schedule: {
         Schedule: {
           FAT: [
-            { courseCode: "25CS1101", courseTitle: "Data Structures", examDate: "2026-08-28", examTime: "2:00 PM to 3:00 PM", venue: "Hall A" },
+            {
+              courseCode: "25CS1101",
+              courseTitle: "Data Structures",
+              examDate: "2026-08-28",
+              examTime: "2:00 PM to 3:00 PM",
+              venue: "Hall A",
+            },
           ],
         },
       },
@@ -1326,7 +1347,10 @@ describe("dayHeadline", () => {
           month: "August 2026",
           year: 2026,
           days: [
-            { date: 12, events: [{ type: "Non Instructional Day", text: "No Instructional Day", category: "Vibrance 2026" }] },
+            {
+              date: 12,
+              events: [{ type: "Non Instructional Day", text: "No Instructional Day", category: "Vibrance 2026" }],
+            },
           ],
         },
       ],
@@ -1367,9 +1391,7 @@ describe("dayHeadline", () => {
           days: [{ date: 15, events: [{ type: "Holiday", text: "Holiday", category: "Independence Day" }] }],
         },
       ],
-      tasks: [
-        { id: "t1", title: "Maths assignment", dueDate: "2026-08-15", status: "pending" } as Task,
-      ],
+      tasks: [{ id: "t1", title: "Maths assignment", dueDate: "2026-08-15", status: "pending" } as Task],
     });
     const day = august.days.find((d) => d.date === 15)!;
 
@@ -1401,16 +1423,11 @@ describe("two milestones on one date", () => {
     // VTOP puts a CAT I row and a CAT II row on the same date around a combined
     // test block. The schedule knows which one happened, because it has to name
     // a room and a seat.
-    const day = withMilestones(
-      ["CAT - I", "CAT - II"],
-      {
-        Schedule: {
-          "CAT - II": [
-            { courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-20", venue: "AB1-101" },
-          ],
-        },
-      }
-    );
+    const day = withMilestones(["CAT - I", "CAT - II"], {
+      Schedule: {
+        "CAT - II": [{ courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-20", venue: "AB1-101" }],
+      },
+    });
 
     expect(milestones(day)).toHaveLength(1);
     expect(milestones(day)[0].title).toBe("CAT II");
@@ -1420,16 +1437,11 @@ describe("two milestones on one date", () => {
   it("keeps the CAT whose series the schedule spelled differently", () => {
     // The override is by *data*, not by name. "CAT2" has to win over the
     // calendar's "CAT - I" row just as readily.
-    const day = withMilestones(
-      ["CAT - I", "CAT - II"],
-      {
-        Schedule: {
-          CAT2: [
-            { courseCode: "25BLC1081", courseTitle: "Physics", examDate: "2026-08-20", venue: "AB1-101" },
-          ],
-        },
-      }
-    );
+    const day = withMilestones(["CAT - I", "CAT - II"], {
+      Schedule: {
+        CAT2: [{ courseCode: "25BLC1081", courseTitle: "Physics", examDate: "2026-08-20", venue: "AB1-101" }],
+      },
+    });
 
     expect(milestones(day)).toHaveLength(1);
     expect(milestones(day)[0].title).toBe("CAT II");
@@ -1437,19 +1449,12 @@ describe("two milestones on one date", () => {
 
   it("keeps both when the schedule has papers for both", () => {
     // Two confirmed exams on one date is two real things, not a duplicate.
-    const day = withMilestones(
-      ["CAT - I", "CAT - II"],
-      {
-        Schedule: {
-          "CAT - I": [
-            { courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-20", venue: "AB1-101" },
-          ],
-          "CAT - II": [
-            { courseCode: "25BLC1082", courseTitle: "Physics", examDate: "2026-08-20", venue: "AB1-101" },
-          ],
-        },
-      }
-    );
+    const day = withMilestones(["CAT - I", "CAT - II"], {
+      Schedule: {
+        "CAT - I": [{ courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-20", venue: "AB1-101" }],
+        "CAT - II": [{ courseCode: "25BLC1082", courseTitle: "Physics", examDate: "2026-08-20", venue: "AB1-101" }],
+      },
+    });
 
     expect(milestones(day).map((m: any) => m.title)).toEqual(["CAT I", "CAT II"]);
   });
@@ -1465,9 +1470,7 @@ describe("two milestones on one date", () => {
   it("leaves a lone milestone alone", () => {
     const day = withMilestones(["CAT - I"], {
       Schedule: {
-        "CAT - I": [
-          { courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-20", venue: "AB1-101" },
-        ],
+        "CAT - I": [{ courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-20", venue: "AB1-101" }],
       },
     });
 
@@ -1481,21 +1484,21 @@ describe("two milestones on one date", () => {
     // the one day it matters most.
     const day = withMilestones(["CAT - I", "LID FOR THEORY CLASSES"], {
       Schedule: {
-        "CAT - I": [
-          { courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-20", venue: "AB1-101" },
-        ],
+        "CAT - I": [{ courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-20", venue: "AB1-101" }],
       },
     });
 
-    expect(milestones(day).map((m: any) => m.title).sort()).toEqual(["CAT I", "LID — Theory"]);
+    expect(
+      milestones(day)
+        .map((m: any) => m.title)
+        .sort(),
+    ).toEqual(["CAT I", "LID — Theory"]);
   });
 
   it("still reports the day as an exam day, whatever it kept", () => {
     const day = withMilestones(["CAT - I", "CAT - II"], {
       Schedule: {
-        "CAT - II": [
-          { courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-20", venue: "AB1-101" },
-        ],
+        "CAT - II": [{ courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-20", venue: "AB1-101" }],
       },
     });
 
@@ -1526,9 +1529,7 @@ describe("assessmentsOn", () => {
           "Final Assessment": [
             { courseCode: "25CS1101", courseTitle: "Data Structures", examDate: "2026-08-20", venue: "Hall A" },
           ],
-          "CAT - II": [
-            { courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-20", venue: "AB1-101" },
-          ],
+          "CAT - II": [{ courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-20", venue: "AB1-101" }],
         },
       },
     });
@@ -1571,7 +1572,9 @@ describe("assessmentsOn", () => {
         {
           month: "August 2026",
           year: 2026,
-          days: [{ date: 5, events: [{ type: "Instructional Day", text: "Instructional Day", category: "Working day" }] }],
+          days: [
+            { date: 5, events: [{ type: "Instructional Day", text: "Instructional Day", category: "Working day" }] },
+          ],
         },
       ],
     });
@@ -1587,9 +1590,7 @@ describe("assessmentsOn", () => {
         {
           month: "August 2026",
           year: 2026,
-          days: [
-            { date: 15, events: [{ type: "Holiday", text: "Holiday", category: "Independence Day" }] },
-          ],
+          days: [{ date: 15, events: [{ type: "Holiday", text: "Holiday", category: "Independence Day" }] }],
         },
       ],
     })[0].days.find((d) => d.date === 15)!;
@@ -1627,16 +1628,16 @@ describe("EventHub registrations on the calendar", () => {
   });
 
   it("leaves other dates alone", () => {
-    const day = august([
-      { name: "Robotics Club Workshop", date: "2026-08-29", time: "4:00 PM" },
-    ]).days.find((d) => d.date === 22)!;
+    const day = august([{ name: "Robotics Club Workshop", date: "2026-08-29", time: "4:00 PM" }]).days.find(
+      (d) => d.date === 22,
+    )!;
 
     expect(day.events.filter((e) => e.kind === "event")).toHaveLength(0);
   });
 
   it("carries the profile photo on the event so the row can show it", () => {
     const day = august([{ name: "Vibrance", date: "2026-08-22" }], "https://cdn.test/me.jpg").days.find(
-      (d) => d.date === 22
+      (d) => d.date === 22,
     )!;
 
     expect(day.events.find((e) => e.kind === "event")!.avatarUrl).toBe("https://cdn.test/me.jpg");
@@ -1662,7 +1663,7 @@ describe("EventHub registrations on the calendar", () => {
     // EventHub records the form before the money moves, so a pending payment
     // is not something the user is going to turn up to.
     const day = august([{ name: "Paid Workshop", date: "2026-08-22", paymentStatus: "PENDING" }]).days.find(
-      (d) => d.date === 22
+      (d) => d.date === 22,
     )!;
 
     expect(day.events.filter((e) => e.kind === "event")).toHaveLength(0);
@@ -1670,9 +1671,7 @@ describe("EventHub registrations on the calendar", () => {
 
   it("accepts the payment spellings EventHub actually uses", () => {
     ["Paid", "FREE", "Payment Success"].forEach((paymentStatus) => {
-      const day = august([{ name: "Event X", date: "2026-08-22", paymentStatus }]).days.find(
-        (d) => d.date === 22
-      )!;
+      const day = august([{ name: "Event X", date: "2026-08-22", paymentStatus }]).days.find((d) => d.date === 22)!;
       expect(day.events.filter((e) => e.kind === "event")).toHaveLength(1);
     });
   });
@@ -1690,9 +1689,7 @@ describe("EventHub registrations on the calendar", () => {
       ],
       schedule: {
         Schedule: {
-          "CAT - II": [
-            { courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-22", venue: "AB1-101" },
-          ],
+          "CAT - II": [{ courseCode: "25BLC1081", courseTitle: "Biology", examDate: "2026-08-22", venue: "AB1-101" }],
         },
       },
       registeredEvents: [{ name: "Vibrance", date: "2026-08-22" }],
@@ -1705,9 +1702,7 @@ describe("EventHub registrations on the calendar", () => {
   });
 
   it("does not turn a teaching day into something else", () => {
-    const day = august([{ name: "Robotics Club Workshop", date: "2026-08-22" }]).days.find(
-      (d) => d.date === 22
-    )!;
+    const day = august([{ name: "Robotics Club Workshop", date: "2026-08-22" }]).days.find((d) => d.date === 22)!;
 
     expect(day.dayType).toBe("instructional");
     expect(hasClasses(day)).toBe(true);
@@ -1724,7 +1719,9 @@ describe("EventHub registrations on the calendar", () => {
         {
           month: "October 2026",
           year: 2026,
-          days: [{ date: 7, events: [{ type: "Instructional Day", text: "Instructional Day", category: "Working day" }] }],
+          days: [
+            { date: 7, events: [{ type: "Instructional Day", text: "Instructional Day", category: "Working day" }] },
+          ],
         },
       ],
       registeredEvents: [{ name: "Vibrance 2026", date: "2026-10-07", time: "5:00 PM" }],
@@ -1738,10 +1735,9 @@ describe("EventHub registrations on the calendar", () => {
   });
 
   it("ignores a registration with no usable date", () => {
-    const day = august([
-      { name: "Mystery Event", date: "" },
-      { name: "Mystery Event 2" },
-    ]).days.find((d) => d.date === 22)!;
+    const day = august([{ name: "Mystery Event", date: "" }, { name: "Mystery Event 2" }]).days.find(
+      (d) => d.date === 22,
+    )!;
 
     expect(day.events.filter((e) => e.kind === "event")).toHaveLength(0);
   });
@@ -1797,9 +1793,7 @@ describe("activeMonthIndex", () => {
 
 describe("synthesiseDay", () => {
   it("rebuilds a day the published calendar does not cover", () => {
-    const byDate = buildAttendanceByDate([
-      viewLink("A", "Biology", [["2026-06-30", "Absent"]]),
-    ]);
+    const byDate = buildAttendanceByDate([viewLink("A", "Biology", [["2026-06-30", "Absent"]])]);
     const day = synthesiseDay(byDate.get("2026-06-30")!);
     expect(day.dateKey).toBe("2026-06-30");
     expect(day.date).toBe(30);
@@ -1896,5 +1890,14 @@ describe("summariseOd", () => {
   it("is all zeroes for no data", () => {
     expect(summariseOd(null)).toMatchObject({ totalHours: 0, validHours: 0, wastedHours: 0 });
     expect(summariseOd([])).toMatchObject({ totalHours: 0 });
+  });
+});
+
+describe("month order across a year boundary", () => {
+  it("puts Dec 2025 before Jan 2026 (Winter semester), year first", () => {
+    const cal = [...monthCalendar("JANUARY 2026"), ...monthCalendar("DECEMBER 2025"), ...monthCalendar("APRIL 2026")];
+    cal[1].year = 2025;
+    const months = buildEnrichedCalendars({ calendars: cal });
+    expect(months.map((m) => `${m.year}-${m.monthIndex}`)).toEqual(["2025-11", "2026-0", "2026-3"]);
   });
 });

@@ -1,5 +1,7 @@
 "use client";
 
+import { totalCreditsEarned } from "@/lib/credits";
+
 import {
   memo,
   useCallback,
@@ -332,9 +334,7 @@ export default function NavigationTabs({
     ODhoursData && ODhoursData.length > 0 && ODhoursData[0].courses
       ? ODhoursData.reduce((sum: number, day: any) => sum + day.total, 0)
       : 0;
-  const credits = marksData?.cgpa
-    ? Number(marksData.cgpa.creditsEarned) + Number(marksData.cgpa.nonGradedRequirement || 0)
-    : unifiedAcademics.cgpa || "-";
+  const credits = marksData?.cgpa ? (totalCreditsEarned(marksData.cgpa) ?? 0) : unifiedAcademics.cgpa || "-";
   const formatAttendancePercentage = (value: unknown) => {
     const numeric = Number(value);
     if (value == null || value === "" || !Number.isFinite(numeric) || numeric < 0) return undefined;

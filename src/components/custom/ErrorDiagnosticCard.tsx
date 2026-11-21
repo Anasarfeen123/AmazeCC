@@ -124,7 +124,6 @@ export default function ErrorDiagnosticCard(props: ErrorDiagnosticCardProps) {
     <ErrorScreen
       code="Oops"
       codeTone="coral"
-      eyebrow="Something went wrong"
       title={props.title}
       description={props.description}
       actions={

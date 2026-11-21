@@ -117,6 +117,14 @@ const evalJs = async (expr) =>
   (await send("Runtime.evaluate", { expression: expr, awaitPromise: true, returnByValue: true })).result?.result?.value;
 
 await send("Page.enable");
+// DOWNLOAD_DIR=/path: let the page download files into that folder (e.g. to
+// review generated PDFs).
+if (process.env.DOWNLOAD_DIR)
+  await send("Browser.setDownloadBehavior", {
+    behavior: "allow",
+    downloadPath: process.env.DOWNLOAD_DIR,
+    eventsEnabled: false,
+  }).catch(() => send("Page.setDownloadBehavior", { behavior: "allow", downloadPath: process.env.DOWNLOAD_DIR }));
 if (process.env.PRE_W)
   await send("Emulation.setDeviceMetricsOverride", {
     width: Number(process.env.PRE_W),

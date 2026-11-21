@@ -1663,6 +1663,8 @@ export default function SimplifiedMobileHome({
                     ]}
                     value={pillStyle}
                     onChange={setPillStyle}
+                    // Words from 640px up (critique #15); icons + aria-labels on phones.
+                    labelsFromSm
                   />
                 )}
               </div>

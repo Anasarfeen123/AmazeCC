@@ -81,9 +81,9 @@ both are the owner-decided brand (`design/DESIGN_LANGUAGE.md`).
       error). Fix: move Report a bug to Settings or make it neutral; label or
       tooltip the rest.
       Done: the bug icon is neutral. The three icons keep their aria-labels and tooltips.
-- [ ] **#15 "Compact / Detailed" toggle is two unlabelled icons** at the top
+- [x] **#15 "Compact / Detailed" toggle is two unlabelled icons** at the top
       right. Fix: text labels, or move into view options.
-      Open: no room for "Compact / Detailed" text at 390px next to the 36px week arrows and Today chip; icons keep aria-labels/tooltips.
+      Done: the words show from 640px up (the old `xs:inline` never matched; there is no xs breakpoint). Phones keep icons with aria-labels and tooltips.
 - [x] **#16 Class rows: icon before every fact and grow on hover** (both
       banned in `DESIGN_LANGUAGE.md`); a coral course stripe reads as danger.
       Fix: drop per-fact icons and hover scale; keep status colours out of

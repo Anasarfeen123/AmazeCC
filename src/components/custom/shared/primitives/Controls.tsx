@@ -106,6 +106,7 @@ export function SegmentedControl<T extends string>({
   onChange,
   grow = false,
   scroll = false,
+  labelsFromSm = false,
   className = "",
 }: {
   options: readonly { value: T; label: string; icon?: ReactNode; title?: string }[];
@@ -117,6 +118,12 @@ export function SegmentedControl<T extends string>({
   grow?: boolean;
   /** Scroll horizontally instead of wrapping, for many segments on phones. */
   scroll?: boolean;
+  /**
+   * Icon segments show their text label from sm (640px) up. Off by default:
+   * the old `xs:inline` never matched (no xs breakpoint), so icon segments
+   * were icon-only everywhere and some rows were sized for that.
+   */
+  labelsFromSm?: boolean;
   className?: string;
 }) {
   const container = grow ? "flex items-center gap-1" : "flex flex-wrap items-center max-w-full";
@@ -144,7 +151,9 @@ export function SegmentedControl<T extends string>({
           )}
         >
           {opt.icon ? <span className="shrink-0 flex items-center">{opt.icon}</span> : null}
-          {opt.label ? <span className={opt.icon ? "hidden xs:inline" : ""}>{opt.label}</span> : null}
+          {opt.label ? (
+            <span className={opt.icon ? (labelsFromSm ? "hidden sm:inline" : "hidden") : ""}>{opt.label}</span>
+          ) : null}
         </button>
       ))}
     </div>

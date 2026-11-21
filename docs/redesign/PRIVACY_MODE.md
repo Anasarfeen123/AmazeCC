@@ -33,3 +33,12 @@ and a comic style of cover.
   colour utilities cannot leak the hidden value.
 - `privacyMode.test.tsx` covers root category classes, legacy reads, master /
   category interaction and tagged stat values.
+
+## Scope: Home and the sidebar only (owner, 2026-11-22)
+
+Privacy mode and the per-category switches hide values only inside a
+`[data-privacy-zone]`: Home (`DashboardHomeFeature`) and the desktop
+sidebar (`NavigationTabs`). Every other page (Grade History, Academics,
+Payments, …) always shows real values: opening one means you want to see
+it. The explicit CGPA hide (`.crayon-hide`) is not scoped. To add a zone,
+put `data-privacy-zone="<name>"` on its root.

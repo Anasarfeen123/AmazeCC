@@ -248,6 +248,11 @@ options. The 200% equivalent (720px CSS viewport from a 1440px desktop) has no
 overlap or clipped controls on Home. `shot.mjs` now supports `KEY_WALK=N` and
 `ONLY_ZOOM=1` so this can be repeated. The specialised dialog follow-up remains.
 
+**Dialog audit, 2026-11-22:** OptionPicker, CommandPalette and FFCS settings
+trap focus and close on Esc. BrandSheet (the Modules sheet) trapped focus
+but had no Esc; it now closes on Esc while focus is inside it. The
+credential editor sits inside a trapping sheet. Bottom bar fits at 320px.
+
 Keyboard order in sidebar, sheets and spotlight; focus trapped in dialogs;
 `aria-current` on all nav; reduced motion on every animated screen; 200%
 zoom without overlap; screen-reader labels for all icon buttons.

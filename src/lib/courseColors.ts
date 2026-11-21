@@ -17,7 +17,7 @@ const CREAM = "text-cream";
 
 const PALETTE: Record<string, CourseColour> = {
   "bg-blue-600": { cls: `bg-[#004643] ${CREAM}`, hex: "#004643" }, // brand teal
-  "bg-purple-600": { cls: `bg-[#E16162] ${INK}`, hex: "#E16162" }, // coral
+  "bg-purple-600": { cls: `bg-[#6F8FB5] ${INK}`, hex: "#6F8FB5" }, // slate (was coral #E16162, the danger colour: critique #16)
   "bg-emerald-500": { cls: `bg-[#9ED9B5] ${INK}`, hex: "#9ED9B5" }, // mint
   "bg-red-600": { cls: `bg-[#E66A2C] ${INK}`, hex: "#E66A2C" }, // orange
   "bg-amber-500": { cls: `bg-[#F9BC60] ${INK}`, hex: "#F9BC60" }, // ochre
@@ -28,7 +28,7 @@ const PALETTE: Record<string, CourseColour> = {
   "bg-cyan-600": { cls: `bg-[#7FC4C9] ${INK}`, hex: "#7FC4C9" }, // sea
   "bg-fuchsia-500": { cls: `bg-[#D9A3C7] ${INK}`, hex: "#D9A3C7" }, // rose clay
   "bg-lime-500": { cls: `bg-[#C8D96F] ${INK}`, hex: "#C8D96F" }, // lime
-  "bg-rose-600": { cls: `bg-[#C9553D] ${CREAM}`, hex: "#C9553D" }, // brick
+  "bg-rose-600": { cls: `bg-[#B08D5E] ${INK}`, hex: "#B08D5E" }, // caramel (was brick #C9553D, read as danger)
   "bg-violet-600": { cls: `bg-[#B8A6D9] ${INK}`, hex: "#B8A6D9" }, // lavender (soft, not indigo)
   "bg-sky-500": { cls: `bg-[#8FB8DE] ${INK}`, hex: "#8FB8DE" }, // sky
   "bg-yellow-500": { cls: `bg-[#F2D06B] ${INK}`, hex: "#F2D06B" }, // butter

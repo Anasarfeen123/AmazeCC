@@ -60,28 +60,35 @@ both are the owner-decided brand (`design/DESIGN_LANGUAGE.md`).
 
 ## 3. Home: the answer first
 
-- [ ] **#9 Live / next class is below the fold** (row 5 at 4:45 pm, partly
+- [x] **#9 Live / next class is below the fold** (row 5 at 4:45 pm, partly
       under the bottom bar). Fix: a "Now / Next" card under the stat tiles:
       class, room, minutes left or until start, skip verdict.
-- [ ] **#10 Finished classes take full rows.** Fix: fold into one line,
+      Done as a "Now: … · room" / "Next: … at 2:00" line under the date, with finished classes folded (no extra card).
+- [x] **#10 Finished classes take full rows.** Fix: fold into one line,
       "4 done · show".
-- [ ] **#11 The hero tile is overall attendance**, which means little at
+- [x] **#11 The hero tile is overall attendance**, which means little at
       VIT (75% is per course). Fix: hero = "3 courses below 75%" naming the
       worst ("Attend Computer Networks next class"); overall % second.
-- [ ] **#12 Stat tiles are dot carousels** that hide content behind swipes.
+      Done: the shortage tile leads the second tile and names the worst course ("Worst: Computer Networks 71.4%"); overall % stays the big tile.
+- [x] **#12 Stat tiles are dot carousels** that hide content behind swipes.
       Fix: show both facts without swiping, or label the swipe.
+      Partly: the most important slide (shortage) is first; the carousel itself stays.
 - [ ] **#13 OD hours drop off Home when a shortage alert shows; no mess
       menu on Home.** Fix: keep OD visible; add a small "Mess today" line or
       suggest pinning it.
-- [ ] **#14 Three unlabelled header icons; the bug icon is red** (reads as an
+      OD done (always a slide now). Open: "Mess today" on Home needs the hostel menu data on Home.
+- [x] **#14 Three unlabelled header icons; the bug icon is red** (reads as an
       error). Fix: move Report a bug to Settings or make it neutral; label or
       tooltip the rest.
+      Done: the bug icon is neutral. The three icons keep their aria-labels and tooltips.
 - [ ] **#15 "Compact / Detailed" toggle is two unlabelled icons** at the top
       right. Fix: text labels, or move into view options.
-- [ ] **#16 Class rows: icon before every fact and grow on hover** (both
+      Open: no room for "Compact / Detailed" text at 390px next to the 36px week arrows and Today chip; icons keep aria-labels/tooltips.
+- [x] **#16 Class rows: icon before every fact and grow on hover** (both
       banned in `DESIGN_LANGUAGE.md`); a coral course stripe reads as danger.
       Fix: drop per-fact icons and hover scale; keep status colours out of
       course stripes.
+      Done: hover scale removed; coral and brick course colours replaced (slate, caramel). Row icons kept: the owner wants icons in rows (text-only read as an "info barrage").
 
 ## 4. Names and navigation
 

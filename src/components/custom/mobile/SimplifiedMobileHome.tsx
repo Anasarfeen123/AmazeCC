@@ -641,6 +641,26 @@ export default function SimplifiedMobileHome({
     }).length;
   }, [attendanceList, targetAttendancePct]);
 
+  // The course furthest below the line, named on the shortage tile
+  // (critique #11: "3 Low" said nothing about which course to attend).
+  const worstCourse = useMemo(() => {
+    if (!Array.isArray(attendanceList)) return null;
+    let worst: { title: string; pct: number } | null = null;
+    for (const c of attendanceList) {
+      if (!c) continue;
+      const slot = String(c.slotName || "")
+        .trim()
+        .toUpperCase();
+      const total = parseInt(c.totalClasses, 10) || 0;
+      if (slot.includes("NULL") || slot === "NIL" || total === 0) continue;
+      const pct = parseFloat(c.attendancePercentage);
+      if (isNaN(pct) || pct >= targetAttendancePct) continue;
+      if (!worst || pct < worst.pct)
+        worst = { title: shortCourseName(c.courseTitle) || String(c.courseCode || ""), pct };
+    }
+    return worst;
+  }, [attendanceList, targetAttendancePct]);
+
   // Installed app: the number of low-attendance courses on the app icon
   // (cleared when none are low, and in demo mode).
   useAppBadge(isDemoMode ? 0 : criticalCount);
@@ -737,11 +757,12 @@ export default function SimplifiedMobileHome({
 
     // Slide 3: OD Hours or Alert
     if (criticalCount > 0) {
-      slides.push({
+      // Leads the carousel (unshift) so the shortage is what shows first.
+      slides.unshift({
         id: "alerts",
-        title: "Shortage Alert",
-        headline: `${criticalCount} Low`,
-        subline: `Courses below ${targetAttendancePct}%`,
+        title: `Below ${targetAttendancePct}%`,
+        headline: `${criticalCount} ${criticalCount === 1 ? "course" : "courses"}`,
+        subline: worstCourse ? `Worst: ${worstCourse.title} ${worstCourse.pct.toFixed(1)}%` : "Attend the next classes",
         badge: "Warning",
         badgeColor: "bg-danger-surface text-danger-foreground border-border-ink",
         onClick: () => {
@@ -749,7 +770,10 @@ export default function SimplifiedMobileHome({
           setActiveSubTab("courses-simplified");
         },
       });
-    } else {
+    }
+    // OD always has a slide now (it used to vanish whenever a shortage
+    // alert took its place; critique #13).
+    {
       slides.push({
         id: "od",
         title: "On-Duty",
@@ -807,6 +831,7 @@ export default function SimplifiedMobileHome({
     shouldDisplayGpa,
     marksData,
     criticalCount,
+    worstCourse,
     targetAttendancePct,
     totalODHours,
     nextUpcomingExam,
@@ -1350,6 +1375,33 @@ export default function SimplifiedMobileHome({
   // Sessions still running: the slot list minus the labs that became exams.
   const stillOnCount = dayRows.filter((row) => row.kind === "class").length;
 
+  // Today only: fold finished classes into one line, and say what is on now
+  // or next under the date (critique #9/#10: at 4:45 pm the live class was
+  // row 5, below the fold and under the bottom bar).
+  const [showDone, setShowDone] = useState(false);
+  const rowStatuses: string[] = dayRows.map((row: any) =>
+    row.kind === "class" ? getClassProgressAndBunk(row.cls, minuteNow).status : "other",
+  );
+  const doneCount = isTodayView ? rowStatuses.filter((st) => st === "completed").length : 0;
+  const visibleRows = dayRows.filter(
+    (_row: any, i: number) => showDone || !isTodayView || rowStatuses[i] !== "completed",
+  );
+  const nowNextLine = (() => {
+    if (!isTodayView) return null;
+    const liveIdx = rowStatuses.indexOf("live");
+    const nextIdx = rowStatuses.indexOf("upcoming");
+    const pick = liveIdx !== -1 ? liveIdx : nextIdx;
+    if (pick === -1) return doneCount > 0 ? "All classes done for today" : null;
+    const cls = (dayRows[pick] as any).cls;
+    const title = String(cls.courseTitle || cls.courseCode || "Class");
+    const room = cls.slotVenue ? ` · ${cls.slotVenue}` : "";
+    if (liveIdx !== -1) return `Now: ${title}${room}`;
+    const start = String(cls.time || "")
+      .split("-")[0]
+      ?.trim();
+    return `Next: ${title}${start ? ` at ${start}` : ""}${room}`;
+  })();
+
   return (
     <div className="w-full max-w-4xl lg:max-w-none mx-auto lg:mx-0 pt-3 sm:pt-5 md:pb-8 animate-in fade-in duration-300">
       <div className="flex flex-col lg:flex-row items-start gap-6 xl:gap-8 w-full">
@@ -1422,7 +1474,7 @@ export default function SimplifiedMobileHome({
                 title="Report a Bug / Glitch"
                 aria-label="Report a Bug / Glitch"
               >
-                <Bug className="w-4 h-4 text-danger-foreground" />
+                <Bug className="w-4 h-4" aria-hidden />
               </button>
             </div>
           </div>
@@ -1677,7 +1729,8 @@ export default function SimplifiedMobileHome({
                   ) : isHolidayOrOff ? (
                     "Academic Holiday / Non-Instructional"
                   ) : (
-                    `${selectedDayClasses.length} ${selectedDayClasses.length === 1 ? "session" : "sessions"} scheduled`
+                    (nowNextLine ??
+                    `${selectedDayClasses.length} ${selectedDayClasses.length === 1 ? "session" : "sessions"} scheduled`)
                   )}
                 </p>
               </div>
@@ -1832,7 +1885,20 @@ export default function SimplifiedMobileHome({
             ) : (
               /* ── VIEWPORT STATE 4: REGULAR TIMETABLE CLASSES ── */
               <div className="space-y-2">
-                {dayRows.map((row: any, index: number) => {
+                {doneCount > 0 ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowDone((v) => !v)}
+                    aria-expanded={showDone}
+                    className="flex min-h-11 w-full items-center justify-between rounded-[12px] border-2 border-dashed border-border-muted px-4 font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted hover:bg-surface-secondary cursor-pointer"
+                  >
+                    <span>
+                      {doneCount} {doneCount === 1 ? "class" : "classes"} done
+                    </span>
+                    <span className="text-text-primary">{showDone ? "Hide" : "Show"}</span>
+                  </button>
+                ) : null}
+                {visibleRows.map((row: any, index: number) => {
                   // A lab slot taken over by its Lab FAT paper renders as the
                   // collapsed exam slot, in the class's own place in the list.
                   if (row.kind === "labFat") {
@@ -1909,7 +1975,7 @@ export default function SimplifiedMobileHome({
                             : isCompleted
                               ? "bg-surface-secondary border-border-ink opacity-75 hover:opacity-100"
                               : "card-surface border-border-ink shadow-xs hover:border-border-ink "
-                        } hover:scale-[1.006] active:scale-[0.99]`}
+                        } active:scale-[0.99]`}
                       >
                         {/* Live Progress Background Fill Bar */}
                         {isLive && <LiveClassProgress time={cls.time} variant="compact-background" />}
@@ -2038,7 +2104,7 @@ export default function SimplifiedMobileHome({
                           : isCompleted
                             ? "bg-surface-secondary border-border-ink opacity-75 hover:opacity-100"
                             : "card-surface border-border-ink shadow-xs hover:border-border-ink "
-                      } hover:scale-[1.008] active:scale-[0.99]`}
+                      } active:scale-[0.99]`}
                     >
                       {/* Dynamic Progress Fill Bar */}
                       {isLive && <LiveClassProgress time={cls.time} variant="detailed-background" />}

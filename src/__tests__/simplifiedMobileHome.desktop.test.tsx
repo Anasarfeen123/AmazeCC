@@ -3,7 +3,10 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import SimplifiedMobileHome from "../components/custom/mobile/SimplifiedMobileHome";
 import { installLocalStorage } from "./helpers/localStorage";
 
-const TODAY = new Date(2026, 8, 29, 10, 0, 0); // Tuesday, 10am local
+// 7am: both fixture classes are still upcoming, so neither is folded into
+// the "N classes done" line (these tests are about clicking a class).
+const TODAY = new Date(2026, 8, 29, 7, 0, 0); // Tuesday, 7am local
+const MID_MORNING = new Date(2026, 8, 29, 10, 0, 0);
 
 const course1 = {
   courseCode: "CSE1001",
@@ -193,5 +196,17 @@ describe("SimplifiedMobileHome Desktop Layout & Course Pane", () => {
 
     expect(window.localStorage.getItem("friend_finder_source")).toBe("home");
     expect(setActiveTab).toHaveBeenCalledWith("friend-finder");
+  });
+});
+
+describe("finished classes fold on today (critique #10)", () => {
+  it("folds the 8:00 class at 10am, names the next class, and shows it on demand", () => {
+    vi.setSystemTime(MID_MORNING);
+    render(<SimplifiedMobileHome {...defaultProps()} />);
+    expect(screen.queryByText("Problem Solving and Programming")).toBeNull();
+    const toggle = screen.getByRole("button", { name: /1 class done/i });
+    expect(screen.getByText(/^Next: /)).toBeDefined();
+    fireEvent.click(toggle);
+    expect(screen.getByText("Problem Solving and Programming")).toBeDefined();
   });
 });

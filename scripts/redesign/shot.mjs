@@ -117,6 +117,9 @@ const evalJs = async (expr) =>
   (await send("Runtime.evaluate", { expression: expr, awaitPromise: true, returnByValue: true })).result?.result?.value;
 
 await send("Page.enable");
+// INIT_JS='js': run in every document before its own scripts (e.g. to
+// record what the loading screen shows from the first frame).
+if (process.env.INIT_JS) await send("Page.addScriptToEvaluateOnNewDocument", { source: process.env.INIT_JS });
 // DOWNLOAD_DIR=/path: let the page download files into that folder (e.g. to
 // review generated PDFs).
 if (process.env.DOWNLOAD_DIR)

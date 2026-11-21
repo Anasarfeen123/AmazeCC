@@ -181,6 +181,8 @@ if (process.env.LOGIN) {
   );
   await send("Page.navigate", { url: BASE + "/" });
   await sleep(15000);
+} else if (process.env.GUEST) {
+  // GUEST=1: stay signed out (landing page / sign-in screens).
 } else {
   // enter demo
   const clicked = await evalJs(

@@ -1,5 +1,7 @@
 "use client";
 
+import { getAssetPath } from "@/lib/utils";
+
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { safeSessionStorage } from "./ffcsGeneratorSessionPrefs";
 import { WORKER_BASE, CDN_BASE, toCdnImageUrl } from "./workerBase";
@@ -532,7 +534,7 @@ export async function loadFacultyRoster(): Promise<FacultyRosterEntry[]> {
     // first so the UI never waits on the network and never shrinks.
     let base: FacultyRosterEntry[] = [];
     try {
-      const res = await fetch("/data/vit-faculty/roster.json");
+      const res = await fetch(getAssetPath("/data/vit-faculty/roster.json"));
       if (res.ok) {
         const list = (await res.json()) as FacultyRosterEntry[];
         if (Array.isArray(list) && list.length > 0) {

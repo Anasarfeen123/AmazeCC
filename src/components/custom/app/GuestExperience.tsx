@@ -1,5 +1,7 @@
 "use client";
 
+import { getAssetPath } from "@/lib/utils";
+
 import BrandLogo from "../shared/BrandLogo";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
@@ -75,7 +77,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
         <div className="flex min-w-0 items-center gap-6">
-          <a href="/" className="flex shrink-0 items-center gap-2.5" aria-label="AmazeCC home">
+          <a href={getAssetPath("/")} className="flex shrink-0 items-center gap-2.5" aria-label="AmazeCC home">
             <BrandLogo variant="mark" size="md" className="min-[431px]:hidden" />
             <BrandLogo size="md" className="max-[430px]:hidden" />
           </a>
@@ -90,7 +92,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
 
         <div className="flex shrink-0 items-center gap-2">
           <a
-            href="/ffcs/"
+            href={getAssetPath("/ffcs/")}
             title="Open the FFCS planner without signing in"
             className={`hidden sm:inline-flex ${navLink}`}
           >
@@ -179,7 +181,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
                 ))}
                 <li>
                   <a
-                    href="/ffcs/"
+                    href={getAssetPath("/ffcs/")}
                     className="flex min-h-12 items-center gap-3 rounded-[10px] px-2 hover:bg-surface-secondary"
                   >
                     <span className="font-mono text-xs font-bold text-text-muted">06</span>
@@ -271,7 +273,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
             own shape at the bottom of the hero (cover cropped it into a close-up
             on tall phone heroes). */}
         <img
-          src="/landing/campus-day.webp"
+          src={getAssetPath("/landing/campus-day.webp")}
           alt=""
           aria-hidden="true"
           width={1672}
@@ -281,7 +283,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
           className="absolute inset-x-0 bottom-0 -z-20 h-auto w-full scale-105 blur-[10px] max-md:hidden lg:inset-0 lg:h-full lg:object-cover lg:object-[50%_70%] dark:hidden"
         />
         <img
-          src="/landing/campus-night.webp"
+          src={getAssetPath("/landing/campus-night.webp")}
           alt=""
           aria-hidden="true"
           width={1671}
@@ -360,7 +362,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
                 hero it was only a smudge under the phone). */}
             <div className="absolute inset-x-0 bottom-2 top-10 rotate-[3deg] overflow-hidden rounded-[24px] border-[3px] border-border-ink bg-ochre shadow-brutal-md">
               <img
-                src="/landing/campus-day.webp"
+                src={getAssetPath("/landing/campus-day.webp")}
                 alt=""
                 width={1672}
                 height={941}
@@ -369,7 +371,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
                 className="h-full w-full object-cover object-[28%_60%] dark:hidden"
               />
               <img
-                src="/landing/campus-night.webp"
+                src={getAssetPath("/landing/campus-night.webp")}
                 alt=""
                 width={1671}
                 height={941}
@@ -380,7 +382,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
             </div>
             <div className="landing-float-b relative mx-auto w-[72%] overflow-hidden rounded-[26px] border-[3px] border-border-ink bg-surface shadow-brutal-lg [--tilt:-3deg]">
               <img
-                src="/landing/home-phone-light.webp"
+                src={getAssetPath("/landing/home-phone-light.webp")}
                 alt=""
                 width={390}
                 height={800}
@@ -389,7 +391,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
                 className="block h-auto w-full dark:hidden"
               />
               <img
-                src="/landing/home-phone-dark.webp"
+                src={getAssetPath("/landing/home-phone-dark.webp")}
                 alt=""
                 width={390}
                 height={800}
@@ -430,7 +432,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
               </div>
               {/* Both themes rendered, CSS picks one (the server does not know the theme). */}
               <img
-                src="/landing/home-desktop-light.webp"
+                src={getAssetPath("/landing/home-desktop-light.webp")}
                 alt=""
                 width={1200}
                 height={717}
@@ -439,7 +441,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
                 className="block h-auto w-full dark:hidden"
               />
               <img
-                src="/landing/home-desktop-dark.webp"
+                src={getAssetPath("/landing/home-desktop-dark.webp")}
                 alt=""
                 width={1200}
                 height={717}
@@ -452,7 +454,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
             <div className="landing-parallax absolute -bottom-2 right-0 w-[34%] min-w-[120px] [--depth:-16px]">
               <div className="landing-float-b overflow-hidden rounded-[20px] border-[3px] border-border-ink bg-surface shadow-brutal-lg [--tilt:4deg]">
                 <img
-                  src="/landing/home-phone-light.webp"
+                  src={getAssetPath("/landing/home-phone-light.webp")}
                   alt=""
                   width={390}
                   height={800}
@@ -461,7 +463,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
                   className="block h-auto w-full dark:hidden"
                 />
                 <img
-                  src="/landing/home-phone-dark.webp"
+                  src={getAssetPath("/landing/home-phone-dark.webp")}
                   alt=""
                   width={390}
                   height={800}
@@ -512,7 +514,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
       {/* Closing call to action */}
       <section className="relative overflow-hidden border-t-[3px] border-border-ink bg-ochre px-4 py-20 text-obsidian sm:px-8 sm:py-28">
         <img
-          src="/brand/glyph.svg"
+          src={getAssetPath("/brand/glyph.svg")}
           alt=""
           aria-hidden="true"
           className="landing-float-a pointer-events-none absolute -right-16 -top-10 w-[420px] max-w-none opacity-90 [--tilt:-8deg] sm:-right-6"

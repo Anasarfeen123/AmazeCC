@@ -69,16 +69,10 @@ export function DashboardNavigatorProvider({ children }: { children: ReactNode }
     [activeTab, setActiveTab],
   );
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const tabParam = params.get("tab");
-      if (tabParam) {
-        setActiveTab(tabParam);
-      }
-    } catch {}
-  }, [setActiveTab]);
+  // ?tab= deep links are handled once, in NavigationTabs, through the module
+  // registry (ids and aliases). This used to also set the raw value as the
+  // tab, so an unknown one ("?tab=settings") left an empty page instead of
+  // Home.
 
   useEffect(() => {
     const academicsHome = "courses-simplified";

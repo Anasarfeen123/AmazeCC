@@ -1,3 +1,4 @@
+import { getAssetPath } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { AnimatePresence, m } from "framer-motion";
 import { Bell, X } from "lucide-react";
@@ -53,7 +54,7 @@ export default function PushPromptModal({ UserID }: { UserID: string }) {
 
       const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || DEFAULT_VAPID_PUBLIC_KEY;
 
-      const registration = await navigator.serviceWorker.register("/sw.js");
+      const registration = await navigator.serviceWorker.register(getAssetPath("/sw.js"));
       await navigator.serviceWorker.ready;
 
       let sub: PushSubscription | null = null;

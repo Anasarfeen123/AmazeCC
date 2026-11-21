@@ -1,4 +1,6 @@
 "use client";
+
+import { getAssetPath } from "@/lib/utils";
 import AppLoading from "@/components/custom/shared/AppLoading";
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
@@ -337,7 +339,7 @@ function MainRuntime({ initialIntent, onSignedOut }: MainProps) {
   }, [handleLogin, setIsReloading]);
 
   const handleDemoClick = async () => {
-    const demoData = await (await fetch("/data/demoData.json")).json();
+    const demoData = await (await fetch(getAssetPath("/data/demoData.json"))).json();
     setDemoMode(true);
     setTypedStorageItem("demoMode", "true");
     setIDs({

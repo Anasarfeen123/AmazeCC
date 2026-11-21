@@ -23,9 +23,10 @@ const withSerwist = withSerwistInit({
   disable: process.env.NODE_ENV === "development",
 });
 
-// Set to your repository name (e.g. '/AmazeCC') if deploying to <username>.github.io/<repo-name>
-// Keep empty '' if deploying to a custom domain (like amazecc.com) or a root user/org page.
-const basePath = "";
+// Empty for amazecc.com (custom domain). A GitHub Pages project site lives
+// under /<repo>/, so the fork's Pages build sets PAGES_BASE_PATH=/AmazeCC
+// (repo variable, see .github/workflows/nextjs.yml). Unset = "" = as before.
+const basePath = (process.env.PAGES_BASE_PATH || "").replace(/\/+$/, "");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

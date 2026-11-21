@@ -1,5 +1,7 @@
 "use client";
 
+import { getAssetPath } from "@/lib/utils";
+
 import Switch from "../shared/primitives/Switch";
 
 import { useState, useEffect } from "react";
@@ -81,7 +83,7 @@ export default function PushNotificationManager() {
 
   async function registerServiceWorker() {
     try {
-      const registration = await navigator.serviceWorker.register("/sw.js");
+      const registration = await navigator.serviceWorker.register(getAssetPath("/sw.js"));
       await navigator.serviceWorker.ready;
       const sub = await registration.pushManager.getSubscription();
       setSubscription(sub);

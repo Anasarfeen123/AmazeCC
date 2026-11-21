@@ -1,5 +1,7 @@
 "use client";
 
+import { getAssetPath } from "@/lib/utils";
+
 import { useCallback } from "react";
 import config from "../../../../config.json";
 import { syncEngine, cancelAllRequests } from "@/lib/sync-engine";
@@ -79,7 +81,7 @@ export function useAppDataActions({
   const handleLogin = useCallback(
     async (currSemesterID = config.semesterIDs[config.semesterIDs.length - 2], loginIds?: Ids) => {
       if (demoMode || IDs.VtopUsername === "demo") {
-        const demoData = await (await fetch("/data/demoData.json")).json();
+        const demoData = await (await fetch(getAssetPath("/data/demoData.json"))).json();
         setDemoMode(true);
         storage.demoMode.set(true);
         setIsReloading(true);
@@ -323,7 +325,7 @@ export function useAppDataActions({
         ) ?? BUILT_IN_MODES.find((m) => m.id === "quarterly")!;
 
       if (demoMode) {
-        const demoData = await (await fetch("/data/demoData.json")).json();
+        const demoData = await (await fetch(getAssetPath("/data/demoData.json"))).json();
         setIsReloading(true);
         openSyncSession("Demo environment");
 

@@ -115,6 +115,10 @@ const TAB_ALIASES: Record<string, string> = {
   grades: "academics-grades",
   exams: "academics-schedule",
   tasks: "tools-tasks",
+  // Old or guessable links that have no entry of their own.
+  settings: "profile",
+  credentials: "profile",
+  predictor: "tools-attendance-predictor",
 };
 
 const MobileBottomNav = memo(function MobileBottomNav({

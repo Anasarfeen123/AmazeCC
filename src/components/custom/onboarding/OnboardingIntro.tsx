@@ -399,7 +399,7 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
                 <div className="flex flex-col gap-2 pt-1 text-xs text-text-muted sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                   <span>Saved encrypted on this device; sent only to sign you in.</span>
                   <a
-                    href="/ffcs/"
+                    href={getAssetPath("/ffcs/")}
                     className="inline-flex min-h-11 items-center font-bold text-primary underline underline-offset-4 sm:min-h-0"
                   >
                     Skip — open FFCS Planner

@@ -1,5 +1,7 @@
 "use client";
 
+import { getAssetPath } from "@/lib/utils";
+
 import { RefreshCw } from "lucide-react";
 import BrickBreak from "@/components/custom/games/BrickBreak";
 import ErrorScreen, { ERROR_PRIMARY, ERROR_SECONDARY } from "@/components/custom/shared/ErrorScreen";
@@ -22,7 +24,7 @@ export default function OfflinePage() {
       description="This page was not saved for offline use. Your synced timetable, attendance, marks and settings are still on this device: open Home to see them."
       actions={
         <>
-          <a href="/" className={ERROR_PRIMARY}>
+          <a href={getAssetPath("/")} className={ERROR_PRIMARY}>
             Open Home
           </a>
           <button type="button" onClick={() => window.location.reload()} className={ERROR_SECONDARY}>

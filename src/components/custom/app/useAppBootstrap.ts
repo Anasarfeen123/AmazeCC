@@ -1,5 +1,7 @@
 "use client";
 
+import { getAssetPath } from "@/lib/utils";
+
 import { useEffect, useState } from "react";
 import { useSetAtom } from "jotai";
 import {
@@ -95,7 +97,7 @@ export function useAppBootstrap() {
     // written to storage, so a reload used to come back empty ("0 of 0
     // attended", blank Attendance). Reload it from the demo file instead.
     if (isDemoStored && !storedAttendance?.attendance) {
-      void fetch("/data/demoData.json")
+      void fetch(getAssetPath("/data/demoData.json"))
         .then((res) => (res.ok ? res.json() : null))
         .then((demo: any) => {
           if (!demo) return;

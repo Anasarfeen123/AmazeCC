@@ -1,5 +1,7 @@
 "use client";
 
+import { getAssetPath } from "@/lib/utils";
+
 import { useEffect, useRef, useState } from "react";
 import { handleCallback, signInInteractive } from "@/lib/oauth2";
 
@@ -18,14 +20,14 @@ export default function AuthCallbackPage() {
     ran.current = true;
     handleCallback().then((result) => {
       if (result.ok) {
-        window.location.replace("/");
+        window.location.replace(getAssetPath("/"));
         return;
       }
       const params = new URLSearchParams(window.location.search);
       const isSilentMiss = params.get("error") === "login_required";
       setError(isSilentMiss ? null : (result.error ?? "Sign-in failed."));
       if (isSilentMiss) {
-        window.location.replace("/");
+        window.location.replace(getAssetPath("/"));
       }
     });
   }, []);
@@ -33,7 +35,11 @@ export default function AuthCallbackPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="w-full max-w-md bg-surface border border-border-ink rounded-[14px] p-8 space-y-5 text-center">
-        <img src="/brand/icon-app.svg" alt="AmazeCC Logo" className="w-16 h-16 mx-auto object-contain" />
+        <img
+          src={getAssetPath("/brand/icon-app.svg")}
+          alt="AmazeCC Logo"
+          className="w-16 h-16 mx-auto object-contain"
+        />
         {error ? (
           <>
             <h1 className="text-xl font-bold text-text-primary">Sign-in didn&apos;t finish</h1>

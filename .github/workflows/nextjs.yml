@@ -54,6 +54,9 @@ jobs:
           # NEXT_PUBLIC_* is inlined at build time, so it has to be present here.
           # Without this the published bundle keeps whatever default is compiled
           # into the source and silently points at the wrong API host.
+          # Sub-folder for a <user>.github.io/<repo>/ project site (a fork's
+          # demo). Unset on the main site (custom domain) = served at the root.
+          PAGES_BASE_PATH: ${{ vars.PAGES_BASE_PATH }}
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL || 'https://hono.amazecc.com' }}
           NEXT_PUBLIC_BACKUP_API_URL: ${{ vars.NEXT_PUBLIC_BACKUP_API_URL || 'https://api.amazecc.com' }}
           NEXT_PUBLIC_UNICC_API_URL: ${{ vars.NEXT_PUBLIC_UNICC_API_URL || 'https://api-unicc.arya22.dev' }}

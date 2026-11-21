@@ -67,6 +67,10 @@ export const viewport: Viewport = {
 const APP_NAME = "AmazeCC";
 const APP_DESCRIPTION = "Attendance, marks, timetable and campus tools for VIT Chennai students, in one free app.";
 
+// Same prefix as next.config basePath (empty on amazecc.com); metadata URLs
+// are not prefixed by Next, so they carry it themselves.
+const BASE_PATH = (process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/+$/, "");
+
 export const metadata: Metadata = {
   applicationName: APP_NAME,
   title: {
@@ -74,7 +78,7 @@ export const metadata: Metadata = {
     template: "%s - AmazeCC App",
   },
   description: APP_DESCRIPTION,
-  manifest: "/manifest.json",
+  manifest: `${BASE_PATH}/manifest.json`,
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -85,12 +89,12 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon/favicon.ico" },
-      { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
-      { url: "/favicon/favicon.svg", type: "image/svg+xml" },
+      { url: `${BASE_PATH}/favicon/favicon.ico` },
+      { url: `${BASE_PATH}/favicon/favicon-96x96.png`, sizes: "96x96", type: "image/png" },
+      { url: `${BASE_PATH}/favicon/favicon.svg`, type: "image/svg+xml" },
     ],
-    shortcut: "/favicon/favicon.ico",
-    apple: "/favicon/apple-touch-icon.png",
+    shortcut: `${BASE_PATH}/favicon/favicon.ico`,
+    apple: `${BASE_PATH}/favicon/apple-touch-icon.png`,
   },
 };
 

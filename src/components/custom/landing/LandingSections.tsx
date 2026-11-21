@@ -107,8 +107,11 @@ function Heading({ label, title, sub, tone = "" }: { label: string; title: React
   return (
     <Reveal className={`max-w-2xl space-y-3 ${tone}`}>
       <span className={`${BADGE} bg-surface text-text-primary`}>{label}</span>
-      <h2 className="font-display text-[26px] font-bold uppercase leading-[1.05] sm:text-[38px]">{title}</h2>
-      {sub ? <p className="text-sm opacity-80 sm:text-base">{sub}</p> : null}
+      <h2 className="font-display text-[26px] font-bold uppercase leading-[1.05] text-balance sm:text-[38px]">
+        {title}
+      </h2>
+      {/* Full ink: at 80% it was 4.1:1 on coral (audit); size keeps it secondary. */}
+      {sub ? <p className="text-sm sm:text-base">{sub}</p> : null}
     </Reveal>
   );
 }

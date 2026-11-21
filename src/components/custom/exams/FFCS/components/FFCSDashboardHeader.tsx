@@ -727,9 +727,10 @@ export default function FFCSDashboardHeader({
 
       {/* ── ZONE 3: SELECTABLE DASHBOARD WIDGETS ── */}
       <div className="space-y-2 pt-1">
-        <h3 id="ffcs-widgets-heading" className="px-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+        {/* h2: it follows the page h1 (audit: h1 then h3 skipped a level). */}
+        <h2 id="ffcs-widgets-heading" className="px-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">
           Show on this page
-        </h3>
+        </h2>
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(220px,0.8fr)_minmax(0,2fr)] gap-3 items-start">
           <nav aria-label="Planner menu" className="space-y-3">
             {isMobileViewport ? (

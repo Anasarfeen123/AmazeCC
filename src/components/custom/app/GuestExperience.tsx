@@ -517,7 +517,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
           src={getAssetPath("/brand/glyph.svg")}
           alt=""
           aria-hidden="true"
-          className="landing-float-a pointer-events-none absolute -right-16 -top-10 w-[420px] max-w-none opacity-90 [--tilt:-8deg] sm:-right-6"
+          className="landing-float-a pointer-events-none absolute -bottom-20 -right-24 w-[260px] max-w-none opacity-25 [--tilt:-8deg] sm:-right-6 sm:-top-10 sm:bottom-auto sm:w-[420px] sm:opacity-90"
         />
         <div className="relative mx-auto max-w-7xl">
           <h2 className="max-w-3xl font-display text-[32px] font-bold uppercase leading-[1.05] sm:text-[48px]">

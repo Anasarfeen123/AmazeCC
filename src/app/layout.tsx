@@ -118,7 +118,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           id="amaze-night-theme-early"
           // Before first paint, so the Night theme does not flash obsidian.
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var h=document.documentElement;if(localStorage.getItem("theme")==="night")h.classList.add("night");var st=JSON.parse(localStorage.getItem("settings")||"{}");if(st&&(st.uiSize==="compact"||st.uiSize==="large"))h.setAttribute("data-ui-size",st.uiSize);}catch(e){}})();`,
+            __html: `(function(){try{var h=document.documentElement;var t=localStorage.getItem("theme");if(t==="night"||!t)h.classList.add("night");var st=JSON.parse(localStorage.getItem("settings")||"{}");if(st&&(st.uiSize==="compact"||st.uiSize==="large"))h.setAttribute("data-ui-size",st.uiSize);}catch(e){}})();`,
           }}
         />
         <script
@@ -134,7 +134,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <BackgroundPrefetch />
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          // New visitors start in Night, the deeper dark (owner, 2026-11-21).
+          defaultTheme="night"
           enableSystem={false}
           disableTransitionOnChange
           themes={["light", "dark", "night"]}

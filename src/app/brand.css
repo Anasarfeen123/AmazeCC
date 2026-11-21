@@ -27,7 +27,12 @@
      user's reference mocks (2026-11-19). Space Grotesk stays loaded as the
      fallback for glyphs Space Mono lacks. */
   --font-display: var(--font-space-mono), var(--font-space-grotesk), ui-monospace, monospace;
-  --font-outfit: var(--font-space-mono), var(--font-space-grotesk), ui-monospace, monospace;
+  /* Card titles, class names and section headings (font-outfit, ~470
+     uses) are Space Grotesk, not Space Mono: with every heading in the
+     blocky mono, card-heavy screens had no contrast (teammate feedback,
+     2026-11-21). Mono stays for page titles and numbers (font-display),
+     labels, buttons and nav (font-mono). */
+  --font-outfit: var(--font-space-grotesk), var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-space-mono), var(--font-geist-mono), ui-monospace, monospace;
 
   /* Label floor. Phones use a 13-14px root (Display size), so the stock

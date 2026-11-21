@@ -280,7 +280,7 @@ export const StagedCard = memo(function StagedCard({
               )}
             </div>
             <div
-              className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-colors ${selectedIds.has(tt.id) ? "bg-amber-500 border-border-ink text-white" : "border-muted-foreground/30"}`}
+              className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-colors ${selectedIds.has(tt.id) ? "bg-ochre border-border-ink text-obsidian" : "border-muted-foreground/30"}`}
             >
               {selectedIds.has(tt.id) && <Check className="w-4 h-4" />}
             </div>
@@ -322,7 +322,7 @@ export const StagedCard = memo(function StagedCard({
           <div className="bg-surface-secondary/30 rounded-xl p-3 flex flex-col items-center justify-center text-center group relative">
             <span className="text-2xl font-bold text-text-heading">{formatHours(tt.metrics?.gaps ?? 0)}h</span>
             <span className="text-xs uppercase font-bold text-muted-foreground tracking-wider">Total Gaps</span>
-            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-max max-w-[200px] bg-surface text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 active:opacity-100 pointer-events-none transition-opacity z-50 shadow-xl grid grid-cols-2 gap-x-3 gap-y-1">
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-max max-w-[200px] bg-surface text-text-heading text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 active:opacity-100 pointer-events-none transition-opacity z-50 shadow-xl grid grid-cols-2 gap-x-3 gap-y-1">
               {Object.entries(tt.metrics?.gapsPerDay || {}).map(([day, gap]) => (
                 <div key={day} className="flex justify-between gap-3">
                   <span className="font-bold text-text-muted uppercase">{day}</span>
@@ -436,7 +436,7 @@ export const StagedCard = memo(function StagedCard({
                   >
                     <span className="font-medium">Variant {vIdx + 1}</span>
                     <div
-                      className={`w-4 h-4 rounded-sm border flex items-center justify-center ${isSelected ? "bg-amber-500 border-border-ink text-white" : "border-muted-foreground/30"}`}
+                      className={`w-4 h-4 rounded-sm border flex items-center justify-center ${isSelected ? "bg-ochre border-border-ink text-obsidian" : "border-muted-foreground/30"}`}
                     >
                       {isSelected && <Check className="w-3 h-3" />}
                     </div>

@@ -206,7 +206,7 @@ export const TargetCourseLocker: React.FC<TargetCourseLockerProps> = ({
           }}
           className={`px-2 py-1 rounded text-xs font-bold transition-colors ${
             offeringGroupBy === opt.id
-              ? "bg-amber-500 text-white shadow-sm"
+              ? "bg-ochre text-obsidian shadow-sm"
               : "bg-surface-secondary hover:bg-surface-secondary/80 text-text-heading/70"
           }`}
         >
@@ -254,7 +254,7 @@ export const TargetCourseLocker: React.FC<TargetCourseLockerProps> = ({
                     }}
                     className={`px-2 py-1 rounded text-xs font-bold transition-colors ${
                       allSelected
-                        ? "bg-amber-500 text-white shadow-sm"
+                        ? "bg-ochre text-obsidian shadow-sm"
                         : "bg-surface-secondary hover:bg-surface-secondary/80 text-text-heading/70"
                     }`}
                   >
@@ -296,7 +296,7 @@ export const TargetCourseLocker: React.FC<TargetCourseLockerProps> = ({
                       <span
                         className={`shrink-0 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center ${
                           rankNumber.get(fac) === 1
-                            ? "bg-amber-500 text-white"
+                            ? "bg-ochre text-obsidian"
                             : "bg-surface-secondary text-muted-foreground border border-border-strong"
                         }`}
                         title={`Rank #${rankNumber.get(fac)} by overall W%`}
@@ -476,14 +476,14 @@ const OfferingRow: React.FC<{
         />
       )}
       {isOffChecked ? (
-        <span className="w-5 h-5 rounded bg-amber-500 text-white flex items-center justify-center shrink-0">
+        <span className="w-5 h-5 rounded bg-ochre text-obsidian flex items-center justify-center shrink-0">
           <Check className="w-3.5 h-3.5" strokeWidth={3} />
         </span>
       ) : typeof rank === "number" ? (
         <span
           className={`inline-flex items-center gap-0.5 text-xs font-bold px-1.5 py-0.5 rounded shrink-0 ${
             rank === 1
-              ? "bg-amber-500 text-white"
+              ? "bg-ochre text-obsidian"
               : "bg-surface-secondary/70 border border-border-strong/70 text-muted-foreground"
           }`}
           title={`Rank #${rank} of rated faculty by overall W%`}

@@ -199,7 +199,7 @@ export default function FacultyReviewSheet({
                   onClick={() => setActiveCourseFilter("global")}
                   className={`px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
                     activeCourseFilter === "global"
-                      ? "bg-amber-500 text-white font-bold shadow-xs"
+                      ? "bg-ochre text-obsidian font-bold shadow-xs"
                       : "bg-surface-secondary text-muted-foreground hover:text-text-heading border border-border-strong/70"
                   }`}
                 >
@@ -212,7 +212,7 @@ export default function FacultyReviewSheet({
                     onClick={() => setActiveCourseFilter(c.code)}
                     className={`px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
                       activeCourseFilter.toUpperCase() === c.code.toUpperCase()
-                        ? "bg-amber-500 text-white font-bold shadow-xs"
+                        ? "bg-ochre text-obsidian font-bold shadow-xs"
                         : "bg-surface-secondary text-muted-foreground hover:text-text-heading border border-border-strong/70"
                     }`}
                   >

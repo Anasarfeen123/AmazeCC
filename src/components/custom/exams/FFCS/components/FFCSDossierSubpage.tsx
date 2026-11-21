@@ -1,5 +1,7 @@
 "use client";
 
+import { inkOn } from "@/lib/courseColors";
+
 import { useState, useMemo } from "react";
 import { useOverlayBack } from "@/lib/overlayStack";
 import {
@@ -501,7 +503,7 @@ export default function FFCSDossierSubpage({
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-white text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">
+                <span className="bg-primary text-primary-foreground border-2 border-border-ink text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">
                   Official Registration Dossier
                 </span>
                 <span className={`text-xs font-semibold ${textMuted}`}>
@@ -727,7 +729,7 @@ export default function FFCSDossierSubpage({
                     <div>
                       <div className="flex items-start justify-between gap-2 mb-3">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-full text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
+                          <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground border-2 border-border-ink font-bold text-xs flex items-center justify-center shrink-0">
                             {initials || "FAC"}
                           </div>
                           <div>
@@ -878,8 +880,9 @@ export default function FFCSDossierSubpage({
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                     <div className="flex items-center gap-2">
                       <span
-                        className="text-white text-xs font-bold px-2.5 py-1 rounded-md"
-                        style={{ backgroundColor: colorHex }}
+                        className="text-xs font-bold px-2.5 py-1 rounded-md"
+                        // Ink or cream by the course colour (white failed on mint/sage).
+                        style={{ backgroundColor: colorHex, color: inkOn(colorHex) }}
                       >
                         {half.code}
                       </span>

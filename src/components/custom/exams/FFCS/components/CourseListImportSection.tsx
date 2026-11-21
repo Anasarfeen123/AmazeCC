@@ -236,7 +236,7 @@ function ImportPreview({ result, onImport }: { result: FileImport; onImport: () 
         type="button"
         onClick={onImport}
         disabled={result.courses.length === 0}
-        className="self-end bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+        className="self-end bg-primary hover:brightness-110 text-primary-foreground border-2 border-border-ink text-xs font-bold px-4 py-2 rounded-xl transition-all flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
       >
         <CheckCircle2 className="w-3.5 h-3.5" />
         Import {result.courses.length} course{result.courses.length === 1 ? "" : "s"}

@@ -330,7 +330,7 @@ export default function FFCSFriendsSubpage({
                   type="button"
                   disabled={!linkInput.trim() || isResolving}
                   onClick={() => void handleAddFromLink()}
-                  className="shrink-0 bg-pink-500 hover:bg-pink-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold px-5 py-3 rounded-xl text-sm transition-colors shadow-brutal-sm flex items-center justify-center gap-2"
+                  className="shrink-0 bg-primary hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground border-2 border-border-ink font-bold px-5 py-3 rounded-xl text-sm transition-colors shadow-brutal-sm flex items-center justify-center gap-2"
                 >
                   {isResolving ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserPlus className="w-4 h-4" />}
                   {isResolving ? "Adding…" : "Add friend"}
@@ -377,7 +377,7 @@ export default function FFCSFriendsSubpage({
                 <button
                   type="button"
                   onClick={() => setSection("add")}
-                  className="bg-pink-500 hover:bg-pink-600 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors"
+                  className="bg-primary hover:brightness-110 text-primary-foreground border-2 border-border-ink text-sm font-bold px-4 py-2 rounded-xl transition-colors"
                 >
                   Add a friend
                 </button>
@@ -466,7 +466,7 @@ export default function FFCSFriendsSubpage({
                 type="button"
                 disabled={!newGroupName.trim() || newGroupFriends.length === 0}
                 onClick={createGroup}
-                className="bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-xl transition-colors text-sm"
+                className="bg-primary hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground border-2 border-border-ink font-bold py-2.5 rounded-xl transition-colors text-sm"
               >
                 Create Group
               </button>
@@ -573,7 +573,7 @@ export default function FFCSFriendsSubpage({
             <button
               type="button"
               onClick={handleSaveFriend}
-              className="bg-pink-500 hover:bg-pink-600 text-white px-5 py-2 rounded-lg text-sm font-bold transition-colors shadow-brutal-sm"
+              className="bg-primary hover:brightness-110 text-primary-foreground border-2 border-border-ink px-5 py-2 rounded-lg text-sm font-bold transition-colors shadow-brutal-sm"
             >
               Save Friend
             </button>

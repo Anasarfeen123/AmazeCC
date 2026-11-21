@@ -146,7 +146,7 @@ export default function AutoBlockingCard({
             onClick={() => handleToggleDayBlock(blockingActiveDay, "morning_theory")}
             className={`text-xs font-bold px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
               morningTheoryBlocked
-                ? "bg-rose-600 text-white border-border-ink shadow-xs"
+                ? "bg-coral text-obsidian border-border-ink shadow-xs"
                 : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
             }`}
           >
@@ -158,7 +158,7 @@ export default function AutoBlockingCard({
             onClick={() => handleToggleDayBlock(blockingActiveDay, "morning_lab")}
             className={`text-xs font-bold px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
               morningLabBlocked
-                ? "bg-rose-600 text-white border-border-ink shadow-xs"
+                ? "bg-coral text-obsidian border-border-ink shadow-xs"
                 : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
             }`}
           >
@@ -170,7 +170,7 @@ export default function AutoBlockingCard({
             onClick={() => handleToggleDayBlock(blockingActiveDay, "evening_theory")}
             className={`text-xs font-bold px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
               eveningTheoryBlocked
-                ? "bg-rose-600 text-white border-border-ink shadow-xs"
+                ? "bg-coral text-obsidian border-border-ink shadow-xs"
                 : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
             }`}
           >
@@ -182,7 +182,7 @@ export default function AutoBlockingCard({
             onClick={() => handleToggleDayBlock(blockingActiveDay, "evening_lab")}
             className={`text-xs font-bold px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
               eveningLabBlocked
-                ? "bg-rose-600 text-white border-border-ink shadow-xs"
+                ? "bg-coral text-obsidian border-border-ink shadow-xs"
                 : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
             }`}
           >
@@ -194,7 +194,7 @@ export default function AutoBlockingCard({
             onClick={() => handleToggleDayBlock(blockingActiveDay, "all")}
             className={`text-xs font-bold px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
               dayAllBlocked
-                ? "bg-rose-600 text-white border-border-ink shadow-xs"
+                ? "bg-coral text-obsidian border-border-ink shadow-xs"
                 : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
             }`}
           >

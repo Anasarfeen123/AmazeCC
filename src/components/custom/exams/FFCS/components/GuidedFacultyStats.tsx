@@ -173,7 +173,7 @@ export function FacultySingleReviewStat({
             ★
           </div>
           <div className="min-w-0">
-            <p className="text-xs font-bold text-white truncate">
+            <p className="text-xs font-bold text-text-heading truncate">
               {role && <span className="text-text-muted mr-1.5 font-normal">[{role}]</span>}
               {name}
             </p>
@@ -201,7 +201,7 @@ export function FacultySingleReviewStat({
         <div className="flex items-center gap-3 min-w-0">
           <FacultyAvatar employeeId={employeeId} name={name} size="md" tone={isHighRating ? "indigo" : "zinc"} />
           <div className="min-w-0">
-            <p className="text-xs sm:text-sm font-bold text-white truncate font-outfit">
+            <p className="text-xs sm:text-sm font-bold text-text-heading truncate font-outfit">
               {role && <span className="text-text-muted mr-1.5 font-normal text-xs">[{role}]</span>}
               {name}
             </p>
@@ -240,7 +240,7 @@ export function FacultySingleReviewStat({
               <Flame className="w-3 h-3 text-danger-foreground" />
               <span>Teaching</span>
             </div>
-            <div className="text-xs sm:text-sm font-bold text-white font-outfit">
+            <div className="text-xs sm:text-sm font-bold text-text-heading font-outfit">
               {typeof review.metrics.lecture === "number" ? review.metrics.lecture.toFixed(1) : "—"}
               <span className="text-xs font-normal text-text-muted"> / 5</span>
             </div>
@@ -251,7 +251,7 @@ export function FacultySingleReviewStat({
               <Award className="w-3 h-3 text-primary" />
               <span>DA / Assign</span>
             </div>
-            <div className="text-xs sm:text-sm font-bold text-white font-outfit">
+            <div className="text-xs sm:text-sm font-bold text-text-heading font-outfit">
               {typeof review.metrics.da === "number" ? review.metrics.da.toFixed(1) : "—"}
               <span className="text-xs font-normal text-text-muted"> / 5</span>
             </div>
@@ -262,7 +262,7 @@ export function FacultySingleReviewStat({
               <Sparkles className="w-3 h-3 text-warning-foreground" />
               <span>Class Vibe</span>
             </div>
-            <div className="text-xs sm:text-sm font-bold text-white font-outfit">
+            <div className="text-xs sm:text-sm font-bold text-text-heading font-outfit">
               {typeof review.metrics.vibe === "number" ? review.metrics.vibe.toFixed(1) : "—"}
               <span className="text-xs font-normal text-text-muted"> / 5</span>
             </div>

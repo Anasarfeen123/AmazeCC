@@ -31,7 +31,7 @@ export default function SetupStrategyCard({
           onClick={() => setCourseStrategy("lock_advance")}
           className={`w-full p-4 sm:p-5 rounded-2xl border text-left transition-all cursor-pointer flex items-start gap-4 group relative ${
             courseStrategy === "lock_advance"
-              ? "bg-secondary border-border-ink text-white shadow-lg ring-1 ring-border-ink"
+              ? "bg-secondary border-border-ink text-secondary-foreground shadow-lg ring-1 ring-border-ink"
               : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink hover:bg-surface-secondary"
           }`}
         >
@@ -72,7 +72,7 @@ export default function SetupStrategyCard({
           onClick={() => setCourseStrategy("one_by_one")}
           className={`w-full p-4 sm:p-5 rounded-2xl border text-left transition-all cursor-pointer flex items-start gap-4 group relative ${
             courseStrategy === "one_by_one"
-              ? "bg-secondary border-border-ink text-white shadow-lg ring-1 ring-border-ink"
+              ? "bg-secondary border-border-ink text-secondary-foreground shadow-lg ring-1 ring-border-ink"
               : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink hover:bg-surface-secondary"
           }`}
         >

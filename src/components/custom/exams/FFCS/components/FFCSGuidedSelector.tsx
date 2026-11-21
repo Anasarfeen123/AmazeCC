@@ -1419,7 +1419,7 @@ export default function FFCSGuidedSelector({
               })}
               className={`w-full p-3.5 sm:p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between gap-3 group ${
                 isSelected
-                  ? "bg-secondary border-border-ink text-white shadow-md ring-1 ring-border-ink"
+                  ? "bg-secondary border-border-ink text-secondary-foreground shadow-md ring-1 ring-border-ink"
                   : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink hover:bg-surface-secondary"
               }`}
             >
@@ -1441,7 +1441,7 @@ export default function FFCSGuidedSelector({
                         type="text"
                         value={editingTtName}
                         onChange={(e) => setEditingTtName(e.target.value)}
-                        className="bg-surface border border-border-ink rounded-lg px-2.5 py-1 text-base sm:text-sm font-bold text-white focus:outline-none w-full max-w-xs"
+                        className="bg-surface border border-border-ink rounded-lg px-2.5 py-1 text-base sm:text-sm font-bold text-text-heading focus:outline-none w-full max-w-xs"
                         autoFocus
                       />
                       <button
@@ -1572,7 +1572,7 @@ export default function FFCSGuidedSelector({
               value={locksSearchQuery}
               onChange={(e) => setLocksSearchQuery(e.target.value)}
               placeholder="Search mandatory course code or title..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border-ink bg-background text-base sm:text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-border-ink transition-all placeholder:text-text-muted"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border-ink bg-background text-base sm:text-sm font-bold text-text-heading focus:outline-none focus:ring-2 focus:ring-border-ink transition-all placeholder:text-text-muted"
             />
           </div>
         )}
@@ -1608,7 +1608,7 @@ export default function FFCSGuidedSelector({
                   key={c.code}
                   className={`p-3 sm:p-3.5 rounded-2xl border transition-all ${
                     isSelected
-                      ? "bg-secondary border-border-ink text-white shadow-sm"
+                      ? "bg-secondary border-border-ink text-secondary-foreground shadow-sm"
                       : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink hover:bg-surface-secondary"
                   }`}
                 >
@@ -1886,7 +1886,7 @@ export default function FFCSGuidedSelector({
                 })}
                 className={`p-3 sm:p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col gap-2 group ${
                   isSelected
-                    ? "bg-secondary border-border-ink text-white shadow-md ring-1 ring-border-ink"
+                    ? "bg-secondary border-border-ink text-secondary-foreground shadow-md ring-1 ring-border-ink"
                     : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink hover:bg-surface-secondary"
                 }`}
               >
@@ -2063,7 +2063,7 @@ export default function FFCSGuidedSelector({
                                     onClick={() => handleToggleLockSlot(c.code, slot)}
                                     className={`text-xs font-bold px-2 py-0.5 rounded-md border transition-all cursor-pointer flex items-center gap-1 ${
                                       checked
-                                        ? "bg-secondary border-border-ink text-white"
+                                        ? "bg-secondary border-border-ink text-secondary-foreground"
                                         : "bg-surface border-border-ink text-text-muted hover:text-text-secondary"
                                     }`}
                                   >
@@ -2372,7 +2372,7 @@ export default function FFCSGuidedSelector({
                         onClick={() => handleToggleLockSlot(currentCode, slot)}
                         className={`text-xs font-bold px-3 py-1 rounded-xl border transition-all cursor-pointer flex items-center gap-1.5 ${
                           checked
-                            ? "bg-secondary border-border-ink text-white shadow-xs ring-1 ring-border-ink"
+                            ? "bg-secondary border-border-ink text-secondary-foreground shadow-xs ring-1 ring-border-ink"
                             : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
                         }`}
                       >
@@ -2451,7 +2451,7 @@ export default function FFCSGuidedSelector({
                   value={facultySearchQuery}
                   onChange={(e) => setFacultySearchQuery(e.target.value)}
                   placeholder="Search faculty name..."
-                  className="w-full bg-background border border-border-ink rounded-xl pl-9 pr-3 py-1.5 text-base sm:text-xs text-white placeholder:text-text-muted focus:outline-none focus:border-border-ink transition-colors"
+                  className="w-full bg-background border border-border-ink rounded-xl pl-9 pr-3 py-1.5 text-base sm:text-xs text-text-heading placeholder:text-text-muted focus:outline-none focus:border-border-ink transition-colors"
                 />
               </div>
             )}
@@ -2472,7 +2472,7 @@ export default function FFCSGuidedSelector({
                       {...clickable(() => handleToggleLockFaculty(currentCode, fac.name))}
                       className={`p-2.5 sm:p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-2.5 ${
                         checked
-                          ? "bg-secondary border-border-ink text-white shadow-xs ring-1 ring-border-ink"
+                          ? "bg-secondary border-border-ink text-secondary-foreground shadow-xs ring-1 ring-border-ink"
                           : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink hover:bg-surface-secondary"
                       }`}
                     >
@@ -2587,7 +2587,7 @@ export default function FFCSGuidedSelector({
                     onClick={() => setAutoMinHalfDays(num)}
                     className={`py-2 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${
                       isSelected
-                        ? "bg-emerald-600 text-white shadow-md ring-1 ring-emerald-400"
+                        ? "bg-primary text-primary-foreground shadow-brutal-sm ring-1 ring-border-ink"
                         : "bg-surface border border-border-ink text-text-secondary hover:border-border-ink"
                     }`}
                   >
@@ -2727,7 +2727,7 @@ export default function FFCSGuidedSelector({
                   onClick={() => setAutoPreference(opt.id as any)}
                   className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
                     autoPreference === opt.id
-                      ? "bg-secondary border-border-ink text-white shadow-md ring-1 ring-border-ink"
+                      ? "bg-secondary border-border-ink text-secondary-foreground shadow-md ring-1 ring-border-ink"
                       : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink"
                   }`}
                 >
@@ -3009,7 +3009,7 @@ export default function FFCSGuidedSelector({
                         step={1}
                         value={autoFacultyMetricWeights[key]}
                         onChange={(event) => updateAutoFacultyWeight(key, event.target.value)}
-                        className="w-16 rounded-lg border border-border-ink bg-surface px-2 py-1 text-right text-white"
+                        className="w-16 rounded-lg border border-border-ink bg-surface px-2 py-1 text-right text-text-heading"
                       />
                     </label>
                   ))}
@@ -3042,7 +3042,7 @@ export default function FFCSGuidedSelector({
                         step={step}
                         value={autoFacultyScoreFilters[key]}
                         onChange={(event) => updateAutoFacultyFilter(key, event.target.value)}
-                        className="w-16 rounded-lg border border-border-ink bg-surface px-2 py-1 text-right text-white"
+                        className="w-16 rounded-lg border border-border-ink bg-surface px-2 py-1 text-right text-text-heading"
                       />
                     </label>
                   ))}
@@ -3443,7 +3443,7 @@ export default function FFCSGuidedSelector({
                   onClick={() => navigateBrowsingTimetable(idx, idx >= browsingTimetableIndex ? "forward" : "backward")}
                   className={`snap-center px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 border ${
                     isSelected
-                      ? "bg-secondary border-border-ink text-white shadow-sm ring-1 ring-border-ink"
+                      ? "bg-secondary border-border-ink text-secondary-foreground shadow-sm ring-1 ring-border-ink"
                       : "bg-background border-border-ink text-text-muted hover:text-text-secondary hover:bg-surface"
                   }`}
                 >
@@ -3546,7 +3546,7 @@ export default function FFCSGuidedSelector({
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search code (e.g. BCSE101), title, or batch..."
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border-ink bg-background text-base sm:text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-border-ink transition-all placeholder:text-text-muted"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border-ink bg-background text-base sm:text-sm font-bold text-text-heading focus:outline-none focus:ring-2 focus:ring-border-ink transition-all placeholder:text-text-muted"
         />
       </div>
 
@@ -3643,7 +3643,7 @@ export default function FFCSGuidedSelector({
                 onClick={() => handleSelectCourse(c.code)}
                 className={`w-full p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between gap-3 group ${
                   isSelected
-                    ? "bg-secondary border-border-ink text-white ring-1 ring-border-ink"
+                    ? "bg-secondary border-border-ink text-secondary-foreground ring-1 ring-border-ink"
                     : inTimetable
                       ? "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink"
                       : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink hover:bg-surface-secondary"
@@ -3755,7 +3755,7 @@ export default function FFCSGuidedSelector({
               onClick={() => handleSelectOffering(originalIndex)}
               className={`w-full p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-3 group relative ${
                 isSelected
-                  ? "bg-secondary border-border-ink text-white shadow-md ring-1 ring-border-ink"
+                  ? "bg-secondary border-border-ink text-secondary-foreground shadow-md ring-1 ring-border-ink"
                   : clash
                     ? "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink"
                     : "bg-surface-secondary border-border-ink text-text-secondary hover:border-border-ink hover:bg-surface-secondary"
@@ -3763,7 +3763,7 @@ export default function FFCSGuidedSelector({
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="font-mono font-bold text-xs px-2.5 py-1 rounded-xl bg-surface border border-border-ink text-white">
+                  <span className="font-mono font-bold text-xs px-2.5 py-1 rounded-xl bg-surface border border-border-ink text-text-heading">
                     {offering.SLOT}
                   </span>
                   {isCurrentSlot ? (
@@ -3937,7 +3937,7 @@ export default function FFCSGuidedSelector({
               {splitSlots(selectedOffering.SLOT).map((s) => (
                 <span
                   key={s}
-                  className="px-2.5 py-1 rounded-xl bg-surface border border-border-ink font-mono font-bold text-white text-xs shadow-2xs"
+                  className="px-2.5 py-1 rounded-xl bg-surface border border-border-ink font-mono font-bold text-text-heading text-xs shadow-2xs"
                 >
                   {s}
                 </span>
@@ -4288,7 +4288,7 @@ export default function FFCSGuidedSelector({
             type="button"
             disabled={!currentVariant}
             onClick={() => currentVariant && handleApplyVariant(currentVariant)}
-            className="flex-1 min-w-[260px] lg:whitespace-nowrap py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-brutal-sm transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 shrink-0"
+            className="flex-1 min-w-[260px] lg:whitespace-nowrap py-3.5 px-4 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground border-2 border-border-ink font-bold text-xs sm:text-sm shadow-brutal-sm transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 shrink-0"
           >
             <Check className="w-4 h-4 shrink-0" />
             <span className="lg:whitespace-nowrap">Apply This Recommendation to {activeTimetable.name} 🚀</span>
@@ -4305,7 +4305,7 @@ export default function FFCSGuidedSelector({
             type="button"
             onClick={handlePrevStep}
             aria-label="Previous Step"
-            className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-surface hover:bg-surface-secondary border border-border-ink text-white flex items-center justify-center shadow-lg transition-all active:scale-90 cursor-pointer shrink-0"
+            className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-surface hover:bg-surface-secondary border border-border-ink text-text-heading flex items-center justify-center shadow-lg transition-all active:scale-90 cursor-pointer shrink-0"
             title="Back to Review"
           >
             <ChevronLeft className="w-5 h-5 shrink-0" />

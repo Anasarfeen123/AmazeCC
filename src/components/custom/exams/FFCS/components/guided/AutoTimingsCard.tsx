@@ -127,7 +127,7 @@ export default function AutoTimingsCard({
                 setAutoMinStartTime(val);
                 if (val) autoBlockOutsideSlots(val, autoMaxEndTime);
               }}
-              className="px-2.5 py-1 rounded-xl bg-surface border border-border-ink text-white text-xs font-mono font-bold"
+              className="px-2.5 py-1 rounded-xl bg-surface border border-border-ink text-text-heading text-xs font-mono font-bold"
             />
           </div>
 
@@ -174,7 +174,7 @@ export default function AutoTimingsCard({
                 setAutoMaxEndTime(val);
                 if (val) autoBlockOutsideSlots(autoMinStartTime, val);
               }}
-              className="px-2.5 py-1 rounded-xl bg-surface border border-border-ink text-white text-xs font-mono font-bold"
+              className="px-2.5 py-1 rounded-xl bg-surface border border-border-ink text-text-heading text-xs font-mono font-bold"
             />
           </div>
 

@@ -83,3 +83,17 @@ export function courseAccent(code: string | null | undefined): string {
   for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
   return ACCENTS[h % ACCENTS.length];
 }
+
+/** Ink or cream text for a coloured fill, by luminance (WCAG relative luminance). */
+export function inkOn(hex: string): string {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
+  if (!m) return "#001e1d";
+  const n = parseInt(m[1], 16);
+  const ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => {
+    const c = v / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  const L = 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2];
+  // Contrast with ink (L 0.011) vs cream (L 0.98): pick the larger.
+  return (L + 0.05) / (0.011 + 0.05) >= (0.98 + 0.05) / (L + 0.05) ? "#001e1d" : "#fffdf8";
+}

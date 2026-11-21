@@ -1492,7 +1492,7 @@ export function FFCSGeneratorSubpage({
           onClose();
           setSuccessMsg(`Successfully saved and switched to ${generatorPreviewTimetable.name}`);
         }}
-        className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold text-xs sm:text-sm transition-all shadow-sm cursor-pointer"
+        className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-ochre hover:brightness-105 text-obsidian border-2 border-border-ink rounded-xl font-bold text-xs sm:text-sm transition-all shadow-sm cursor-pointer"
       >
         <Save className="w-3.5 h-3.5" /> Save & Use This
       </button>
@@ -1534,7 +1534,7 @@ export function FFCSGeneratorSubpage({
         onClick={saveSelectedTimetables}
         aria-label={`Save ${selectedStagedIds.size} selected timetables`}
         title={`Save selected (${selectedStagedIds.size})`}
-        className="min-h-10 min-w-10 flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-sm cursor-pointer"
+        className="min-h-10 min-w-10 flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 bg-ochre hover:brightness-105 disabled:opacity-50 disabled:cursor-not-allowed text-obsidian border-2 border-border-ink text-xs sm:text-sm font-bold rounded-xl transition-all shadow-sm cursor-pointer"
       >
         <Save className="w-4 h-4" />
         <span className="hidden sm:inline">Save Selected ({selectedStagedIds.size})</span>
@@ -2515,7 +2515,7 @@ export function FFCSGeneratorSubpage({
                                 </span>
                               ) : null}
                               {activeLockerCode === t.code && (
-                                <span className="hidden h-5 w-5 shrink-0 items-center justify-center rounded bg-amber-500 text-white lg:flex">
+                                <span className="hidden h-5 w-5 shrink-0 items-center justify-center rounded bg-ochre text-obsidian lg:flex">
                                   <Check className="h-3.5 w-3.5" strokeWidth={3} />
                                 </span>
                               )}
@@ -2753,7 +2753,7 @@ export function FFCSGeneratorSubpage({
                               type="button"
                               aria-pressed={generatorCourseGroupBy === opt.id}
                               onClick={() => setGeneratorCourseGroupBy(opt.id)}
-                              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors ${generatorCourseGroupBy === opt.id ? "bg-amber-500 text-white shadow-sm" : "bg-surface-secondary hover:bg-surface-secondary/80 text-text-heading/70"}`}
+                              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors ${generatorCourseGroupBy === opt.id ? "bg-ochre text-obsidian shadow-sm" : "bg-surface-secondary hover:bg-surface-secondary/80 text-text-heading/70"}`}
                             >
                               {opt.label}
                             </button>
@@ -2846,7 +2846,7 @@ export function FFCSGeneratorSubpage({
                                         }}
                                       />
                                       <span
-                                        className={`shrink-0 w-5 h-5 rounded border flex items-center justify-center transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-amber-500/40 ${isSelected ? "bg-amber-500 border-border-ink text-white" : "bg-surface border-border-strong text-transparent"}`}
+                                        className={`shrink-0 w-5 h-5 rounded border flex items-center justify-center transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-amber-500/40 ${isSelected ? "bg-ochre border-border-ink text-obsidian" : "bg-surface border-border-strong text-transparent"}`}
                                       >
                                         <Check className="w-3.5 h-3.5" strokeWidth={3} />
                                       </span>

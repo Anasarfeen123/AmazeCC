@@ -69,7 +69,6 @@ import { unifiedAcademicsAtom } from "@/store";
 import type { NormalizedCourse } from "@/types/course";
 import { normalizeCourse } from "@/lib/courseNormalizer";
 import { shouldShowProfilePhoto } from "@/lib/settingsVisibility";
-import { privacyCategories } from "@/lib/privacyMode";
 import { storage } from "@/lib/storage";
 import type { EventHubRegistration } from "@/types/data/eventhub";
 import { formatSemesterName } from "@/lib/formatSemesterName";
@@ -228,7 +227,8 @@ export default function CalendarSubpage({
   const [reloading, setReloading] = useState(false);
   const registeredEvents = useAtomValue(registeredEventsAtom);
   const settings = useAtomValue(settingsAtom);
-  const hideAttendance = privacyCategories(settings).includes("attendance");
+  // Privacy mode covers Home and the sidebar only (owner): real values here.
+  const hideAttendance = false;
   const unifiedAcademics = useAtomValue(unifiedAcademicsAtom);
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -641,11 +641,7 @@ export default function CalendarSubpage({
       >
         <RefreshCcw className="w-4 h-4" />
       </IconButton>
-      <IconButton
-        onClick={() => downloadCalendar(months)}
-        title="Add to calendar"
-        disabled={months.length === 0}
-      >
+      <IconButton onClick={() => downloadCalendar(months)} title="Add to calendar" disabled={months.length === 0}>
         <Download className="w-4 h-4" />
       </IconButton>
       {!isMoodleConnected ? (

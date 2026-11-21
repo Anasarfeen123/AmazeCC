@@ -14,8 +14,6 @@ import {
   GraduationCap,
   Download,
   Loader2,
-  Eye,
-  EyeOff,
   CheckCircle2,
   Calculator,
   LayoutGrid,
@@ -44,9 +42,6 @@ import {
 } from "../shared/primitives";
 import SelectField from "../shared/primitives/SelectField";
 import { CHIP, LIST_ROW, LIST_SHELL, SEARCH_FIELD, TILE } from "@/lib/uiTokens";
-import { settingsAtom } from "@/store/settingsAtoms";
-import { useAtom } from "jotai";
-import { privacyCategories, togglePrivacyCategory } from "@/lib/privacyMode";
 import { storage, getTypedStorageItem, setTypedStorageItem } from "@/lib/storage";
 import { normalizeCourse } from "@/lib/courseNormalizer";
 import { buildCategoryRows, splitCurriculumRows, num, type CategoryRow } from "@/lib/curriculum";
@@ -286,13 +281,9 @@ export default function CurriculumPage({
   const [openGroups, setOpenGroups] = useState<Set<string>>(new Set());
   const [openBaskets, setOpenBaskets] = useState<Set<string>>(new Set());
 
-  // ─ CGPA Blur State (persisted, single source of truth in the top bar) ─
-  const [privacySettings, setSettings] = useAtom(settingsAtom);
-  const isCgpaBlurred = privacyCategories(privacySettings).includes("cgpa");
-
-  const toggleCgpaBlur = () => {
-    setSettings((prev) => togglePrivacyCategory(prev, "cgpa", !privacyCategories(prev).includes("cgpa")));
-  };
+  // Privacy mode covers Home and the sidebar only (owner, 2026-11-22): this
+  // page always shows CGPA and grades, so it has no hide state or toggle.
+  const isCgpaBlurred = false;
 
   // ─ Fetch Curriculum Data ─
   // Shared ingest for the silent mount fetch and the engine-backed sync below.
@@ -1479,9 +1470,6 @@ export default function CurriculumPage({
             ) : (
               <Download className="w-4 h-4" />
             )}
-          </IconButton>
-          <IconButton onClick={toggleCgpaBlur} title="Blur grades">
-            {isCgpaBlurred ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
           </IconButton>
         </>
       }

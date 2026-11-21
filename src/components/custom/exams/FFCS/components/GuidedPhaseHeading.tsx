@@ -27,14 +27,16 @@ export function GuidedPhaseHeading({
   title,
   description,
 }: GuidedPhaseHeadingProps) {
-  const iconClasses = `w-12 h-12 rounded-2xl border flex items-center justify-center shadow-lg ${toneClasses[tone].tile} ${toneClasses[tone].text}`;
+  const iconClasses = `w-12 h-12 rounded-[12px] border-2 flex items-center justify-center shadow-brutal-sm ${toneClasses[tone].tile} ${toneClasses[tone].text}`;
 
   if (variant === "portrait") {
     return (
       <div className="flex flex-col items-center gap-2 shrink-0">
         <div className={iconClasses}>{icon}</div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-white font-outfit tracking-tight">{title}</h1>
-        <p className="text-xs text-text-muted font-medium max-w-xs sm:max-w-md">{description}</p>
+        <h1 className="font-display text-2xl sm:text-3xl font-bold uppercase leading-tight text-text-heading">
+          {title}
+        </h1>
+        <p className="text-sm text-text-muted max-w-xs sm:max-w-md">{description}</p>
       </div>
     );
   }
@@ -46,7 +48,9 @@ export function GuidedPhaseHeading({
         <span className={`text-xs font-bold uppercase tracking-wider font-outfit ${toneClasses[tone].text}`}>
           {eyebrow}
         </span>
-        <h1 className="text-2xl lg:text-3xl font-bold text-white font-outfit tracking-tight">{title}</h1>
+        <h1 className="font-display text-2xl lg:text-3xl font-bold uppercase leading-tight text-text-heading">
+          {title}
+        </h1>
       </div>
       <p className="text-xs text-text-muted font-medium leading-relaxed">{description}</p>
     </>

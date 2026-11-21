@@ -4632,8 +4632,9 @@ export default function FFCSGuidedSelector({
       }
     >
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-secondary " />
-        <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-secondary " />
+        {/* The two 550px sage circles that sat here drew arcs on a phone, with
+            a dark gap between them behind the cards (owner: "fix the guided
+            hero"). The page keeps the plain brand dot background. */}
       </div>
 
       {addedJustNow && (
@@ -4749,12 +4750,7 @@ export default function FFCSGuidedSelector({
                     icon={<Sparkles className="w-6 h-6" />}
                     eyebrow={<>Phase 1 · Mode</>}
                     title={<>Choose Creation Mode</>}
-                    description={
-                      <>
-                        Choose between automated algorithmic generation or building your timetable step-by-step with
-                        real-time clash checking.
-                      </>
-                    }
+                    description={<>Let AmazeCC generate clash-free options, or build your timetable yourself.</>}
                   />
                 </>
               )}
@@ -5106,9 +5102,7 @@ export default function FFCSGuidedSelector({
                       tone="indigo"
                       icon={<Sparkles className="w-6 h-6" />}
                       title={<>Choose Creation Mode</>}
-                      description={
-                        <>Choose between automated algorithmic generation or building your timetable step-by-step.</>
-                      }
+                      description={<>Let AmazeCC generate clash-free options, or build your timetable yourself.</>}
                     />
                     <SetupModeCard isLandscape={false} setPlanMode={setPlanMode} planMode={planMode} />
                   </div>

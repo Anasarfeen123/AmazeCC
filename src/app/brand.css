@@ -1175,3 +1175,12 @@
     animation: none;
   }
 }
+
+/* Calendar teaching days (MonthGrid): a sage tint that stands apart from
+   the card they sit on (owner: cells and card were the same colour). */
+.cal-day-teaching {
+  background-color: color-mix(in oklab, var(--color-sage) 32%, var(--surface));
+}
+.dark .cal-day-teaching {
+  background-color: color-mix(in oklab, var(--color-sage) 18%, var(--surface));
+}

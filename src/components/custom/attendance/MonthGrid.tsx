@@ -35,7 +35,9 @@ const CELL =
 const TINT: Record<CalendarDayModel["dayType"], string> = {
   // Teaching days get a quiet tile so the month reads as a grid; in dark the
   // holiday/shortened tints were muddy brown, so they become solid fills.
-  instructional: "bg-surface-secondary",
+  // A sage tint, not surface-secondary: that matched the card behind it
+  // (owner: the date cells and the background were the same colour).
+  instructional: "cal-day-teaching",
   semiholiday: "bg-warning-surface dark:bg-ochre",
   nonInstructional: "",
   holiday: "bg-danger-surface dark:bg-coral",

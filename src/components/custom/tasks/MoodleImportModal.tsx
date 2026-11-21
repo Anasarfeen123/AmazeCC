@@ -126,7 +126,7 @@ export default function MoodleImportModal({ isOpen, onClose, onImportComplete }:
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5 flex-wrap mb-1">
                           {item.courseCode && (
-                            <span className="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-surface-secondary text-text-primary">
+                            <span className="text-xs font-bold px-1.5 py-0.2 rounded bg-surface-secondary text-text-primary">
                               {item.courseCode}
                             </span>
                           )}

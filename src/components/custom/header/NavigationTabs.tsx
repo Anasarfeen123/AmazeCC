@@ -146,7 +146,7 @@ const MobileBottomNav = memo(function MobileBottomNav({
           <span className="flex items-center justify-center [&_svg]:h-5 [&_svg]:w-5 [&_svg]:stroke-[2.2]" aria-hidden>
             {item.icon}
           </span>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.04em] leading-none truncate max-w-full">
+          <span className="font-mono text-xs font-bold uppercase tracking-[0.04em] leading-none truncate max-w-full">
             {item.label}
           </span>
         </button>

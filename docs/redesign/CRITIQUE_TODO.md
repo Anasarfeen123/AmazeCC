@@ -42,21 +42,21 @@ both are the owner-decided brand (`design/DESIGN_LANGUAGE.md`).
 
 ## 2. Text size and accessibility
 
-- [ ] **#17 60-74 labels per screen are 10-10.5px** (bottom-bar labels,
+- [x] **#17 60-74 labels per screen are 10-10.5px** (bottom-bar labels,
       demo banner, class-row details, calendar days, course rows). The
       project rule is 12-13px (`design/TYPOGRAPHY.md`).
       Fix: 12px minimum for labels and metadata; keep the compact spacing.
       Known spots: `NavigationTabs.tsx` (`text-[10px]` labels),
       `AppLibraryPortal.tsx` (`text-[11px]`), Home compact skip badge
       (`text-[11px]`), task kind badge (`text-[9.5px]`).
-- [ ] **#18 Week arrows (~22px) and the Today chip (~20px) are small tap
+- [x] **#18 Week arrows (~22px) and the Today chip (~20px) are small tap
       targets.** Fix: at least 44px hit area (can stay visually small).
-- [ ] **#19 Heading skip on Attendance:** h2 "Attendance log" -> h4 dates.
+- [x] **#19 Heading skip on Attendance:** h2 "Attendance log" -> h4 dates.
       Fix: dates as h3.
-- [ ] **#20 Calendar legend:** Assignment and Milestone dots share a colour;
+- [x] **#20 Calendar legend:** Assignment and Milestone dots share a colour;
       red-filled days have no legend entry. Fix: distinct colour or shape,
       add the red-day entry.
-- [ ] **#21 One 10.5px body paragraph on Attendance.** Covered by #17.
+- [x] **#21 One 10.5px body paragraph on Attendance.** Covered by #17.
 
 ## 3. Home: the answer first
 

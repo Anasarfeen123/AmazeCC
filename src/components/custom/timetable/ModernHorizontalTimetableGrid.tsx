@@ -102,7 +102,7 @@ export default function ModernHorizontalTimetableGrid({
                       title="Lunch Break: 1:20 PM - 2:00 PM"
                     >
                       <div className="flex flex-col items-center justify-center leading-tight py-1 select-none">
-                        <span className="text-[9.5px] font-bold text-warning-foreground tracking-wider">LUNCH</span>
+                        <span className="text-xs font-bold text-warning-foreground tracking-wider">LUNCH</span>
                         <span className="text-xs font-bold text-warning-foreground mt-0.5">1:20-2:00</span>
                       </div>
                     </th>

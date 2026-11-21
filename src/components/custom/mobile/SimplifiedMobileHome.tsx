@@ -1494,19 +1494,19 @@ export default function SimplifiedMobileHome({
                 <div className="flex items-center gap-1 ml-1 shrink-0">
                   <button
                     onClick={() => goToWeek(weekOffset - 1, -1)}
-                    className="p-1 rounded-lg bg-surface-secondary hover:bg-surface-tertiary text-text-muted transition-all cursor-pointer"
+                    className="relative hit-expand inline-flex h-9 w-9 items-center justify-center rounded-[8px] border-2 border-border-muted bg-surface-secondary text-text-primary hover:bg-surface-tertiary transition-colors cursor-pointer"
                     title="Previous Week"
                     aria-label="Previous Week"
                   >
-                    <ChevronLeft className="w-3.5 h-3.5" />
+                    <ChevronLeft className="w-4 h-4" aria-hidden />
                   </button>
                   <button
                     onClick={() => goToWeek(weekOffset + 1, 1)}
-                    className="p-1 rounded-lg bg-surface-secondary hover:bg-surface-tertiary text-text-muted transition-all cursor-pointer"
+                    className="relative hit-expand inline-flex h-9 w-9 items-center justify-center rounded-[8px] border-2 border-border-muted bg-surface-secondary text-text-primary hover:bg-surface-tertiary transition-colors cursor-pointer"
                     title="Next Week"
                     aria-label="Next Week"
                   >
-                    <ChevronRight className="w-3.5 h-3.5" />
+                    <ChevronRight className="w-4 h-4" aria-hidden />
                   </button>
                   {/* "Today" — the way back, from wherever the selection is.
 
@@ -1534,7 +1534,7 @@ export default function SimplifiedMobileHome({
                         if (weekOffset !== 0) goToWeek(0, 0 < weekOffset ? 1 : -1);
                         setSelectedDay(todayDayCode);
                       }}
-                      className="text-xs font-bold uppercase px-2 py-0.5 rounded-lg bg-secondary text-secondary-foreground border-2 border-border-ink ml-1 cursor-pointer"
+                      className="relative hit-expand inline-flex min-h-9 items-center font-mono text-xs font-bold uppercase px-2.5 rounded-[8px] bg-secondary text-secondary-foreground border-2 border-border-ink ml-1 cursor-pointer"
                       title="Back to today"
                     >
                       Today
@@ -1973,7 +1973,7 @@ export default function SimplifiedMobileHome({
                               )}
                               <span
                                 data-private="attendance"
-                                className={`inline-flex items-center gap-1 rounded-[6px] border-2 px-1.5 py-px text-[11px] font-bold leading-tight ${
+                                className={`inline-flex items-center gap-1 rounded-[6px] border-2 px-1.5 py-px text-xs font-bold leading-tight ${
                                   TONE_BADGE[
                                     bunkStatus === "safe" ? "emerald" : bunkStatus === "warning" ? "amber" : "red"
                                   ]
@@ -2199,7 +2199,7 @@ export default function SimplifiedMobileHome({
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5 mb-1">
                           <span
-                            className={`text-[9.5px] font-bold uppercase px-1.5 py-0.2 rounded border ${
+                            className={`text-xs font-bold uppercase px-1.5 py-0.2 rounded border ${
                               (KIND_CONFIG[t.kind] || KIND_CONFIG.homework).badgeClass
                             }`}
                           >

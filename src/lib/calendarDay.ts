@@ -250,7 +250,8 @@ export const LEGEND_ITEMS = [
   { tone: KIND_TONE.assignment, label: "Assignment" },
   { tone: KIND_TONE.milestone, label: "Milestone" },
   { tone: KIND_TONE.od, label: "OD" },
-  { tone: KIND_TONE.holiday, label: "Holiday" },
+  // Holidays are drawn as red-filled days, not dots; say so (critique #20).
+  { tone: KIND_TONE.holiday, label: "Holiday (red days)" },
 ] as const;
 
 /**

@@ -169,7 +169,7 @@ const AppLibraryPortal = memo(
               />
             ) : null}
           </span>
-          <span className="line-clamp-2 w-full text-[11px] font-semibold leading-tight text-text-heading">{label}</span>
+          <span className="line-clamp-2 w-full text-xs font-semibold leading-tight text-text-heading">{label}</span>
         </button>
       );
     };
@@ -289,7 +289,7 @@ const AppLibraryPortal = memo(
                     if (seg.type === "academics") {
                       return (
                         <div key={`${group.name}-academics-${idx}`} className="space-y-2">
-                          <h4 className="px-1 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-text-muted">
+                          <h4 className="px-1 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
                             Academics
                           </h4>
                           <div className="grid grid-cols-4 gap-x-1 gap-y-4 sm:grid-cols-6">
@@ -306,7 +306,7 @@ const AppLibraryPortal = memo(
                     if (seg.type === "hostel") {
                       return (
                         <div key={`${group.name}-hostel-${idx}`} className="space-y-2">
-                          <h4 className="px-1 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-text-muted">
+                          <h4 className="px-1 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
                             Hostel
                           </h4>
                           <div className="grid grid-cols-4 gap-x-1 gap-y-4 sm:grid-cols-6">

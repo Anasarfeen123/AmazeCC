@@ -57,7 +57,10 @@ export function ToneDot({
     emerald: "bg-emerald-500",
     amber: "bg-amber-500",
     sky: "bg-sage",
-    violet: "bg-primary",
+    // Assignment (violet) and Milestone (indigo) were the same filled teal
+    // dot, so the calendar legend could not tell them apart (critique #20).
+    // Same brand colour, different shape: a ring for violet.
+    violet: "bg-transparent border-2 border-primary",
     indigo: "bg-primary",
     red: "bg-red-500",
     cyan: "bg-cyan-500",

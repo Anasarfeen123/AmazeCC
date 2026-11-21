@@ -1351,7 +1351,7 @@ export default function SyncNotification({
                           )}
 
                           {servingText && (
-                            <div className="mt-1 pt-1 border-t border-border-ink px-2 py-1 text-[9.5px] font-medium text-text-muted leading-tight">
+                            <div className="mt-1 pt-1 border-t border-border-ink px-2 py-1 text-xs font-medium text-text-muted leading-tight">
                               {servingText}
                             </div>
                           )}

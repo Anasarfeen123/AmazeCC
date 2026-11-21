@@ -149,7 +149,7 @@ export default function AutoTimingsCard({
                   }`}
                 >
                   <span>{preset.label}</span>
-                  <span className="text-[9.5px] opacity-75 font-normal">{preset.desc}</span>
+                  <span className="text-xs opacity-75 font-normal">{preset.desc}</span>
                 </button>
               );
             })}
@@ -196,7 +196,7 @@ export default function AutoTimingsCard({
                   }`}
                 >
                   <span>{preset.label}</span>
-                  <span className="text-[9.5px] opacity-75 font-normal">{preset.desc}</span>
+                  <span className="text-xs opacity-75 font-normal">{preset.desc}</span>
                 </button>
               );
             })}

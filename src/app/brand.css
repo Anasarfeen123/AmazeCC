@@ -30,6 +30,12 @@
   --font-outfit: var(--font-space-mono), var(--font-space-grotesk), ui-monospace, monospace;
   --font-mono: var(--font-space-mono), var(--font-geist-mono), ui-monospace, monospace;
 
+  /* Label floor. Phones use a 13-14px root (Display size), so the stock
+     0.75rem text-xs rendered labels at 10.5px, under the 12px label rule in
+     design/TYPOGRAPHY.md (critique #17: 60-74 such labels per screen). The
+     layout keeps its compact spacing; only text-xs gets a 12px floor. */
+  --text-xs: max(12px, 0.75rem);
+
   /* Hard shadows. Bottom-right, no blur, ink coloured. Every existing
      shadow-* class becomes one of the three spec steps. */
   --shadow-2xs: 3px 3px 0 0 var(--shadow-ink);

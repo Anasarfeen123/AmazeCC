@@ -986,7 +986,7 @@ function LogRow({ row, onClick }: { row: AttendanceLogRow; onClick: () => void }
       <div className="min-w-0 flex-1">
         <ListRowText
           title={row.dateObj.toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}
-          titleTag="h4"
+          titleTag="h3"
           subtitle={`${row.weekday} · ${sub}`}
           right={
             // Same treatment as the Upcoming rows: the dot carries the status in

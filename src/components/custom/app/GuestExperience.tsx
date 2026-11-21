@@ -186,7 +186,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
                     <span className="flex-1 font-display text-lg font-bold uppercase text-text-heading">
                       FFCS planner
                     </span>
-                    <span className="rounded-[6px] border-2 border-border-ink bg-mint px-1.5 font-mono text-[10px] font-bold uppercase text-obsidian">
+                    <span className="rounded-[6px] border-2 border-border-ink bg-mint px-1.5 font-mono text-xs font-bold uppercase text-obsidian">
                       No sign-in
                     </span>
                   </a>

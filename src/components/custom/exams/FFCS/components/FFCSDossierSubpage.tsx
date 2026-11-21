@@ -800,7 +800,7 @@ export default function FFCSDossierSubpage({
                           {(rev.lore?.green || []).slice(0, 2).map((item) => (
                             <span
                               key={item.text}
-                              className={`text-[9.5px] font-semibold px-1.5 py-0.5 rounded border ${
+                              className={`text-xs font-semibold px-1.5 py-0.5 rounded border ${
                                 isLightMode
                                   ? "bg-success-surface text-emerald-800 border-border-ink"
                                   : "bg-success-surface text-success-foreground border-border-ink"
@@ -812,7 +812,7 @@ export default function FFCSDossierSubpage({
                           {(rev.lore?.red || []).slice(0, 1).map((item) => (
                             <span
                               key={item.text}
-                              className={`text-[9.5px] font-semibold px-1.5 py-0.5 rounded border ${
+                              className={`text-xs font-semibold px-1.5 py-0.5 rounded border ${
                                 isLightMode
                                   ? "bg-danger-surface text-rose-800 border-border-ink"
                                   : "bg-danger-surface text-danger-foreground border-border-ink"
@@ -934,7 +934,7 @@ export default function FFCSDossierSubpage({
                               </div>
                               {rev && rev.reviews > 0 && (
                                 <span
-                                  className={`text-[9.5px] font-bold px-1.5 py-0.5 rounded border shrink-0 ${
+                                  className={`text-xs font-bold px-1.5 py-0.5 rounded border shrink-0 ${
                                     rev.wPct >= 70
                                       ? isLightMode
                                         ? "bg-success-surface text-emerald-800 border-border-ink"
@@ -949,7 +949,7 @@ export default function FFCSDossierSubpage({
                               )}
                             </div>
 
-                            <span className="text-[9.5px] font-bold px-2 py-0.5 rounded bg-success-surface text-success-foreground border border-border-ink shrink-0 uppercase">
+                            <span className="text-xs font-bold px-2 py-0.5 rounded bg-success-surface text-success-foreground border border-border-ink shrink-0 uppercase">
                               ✓ 0 Clash
                             </span>
                           </div>

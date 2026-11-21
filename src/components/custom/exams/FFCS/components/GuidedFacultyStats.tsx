@@ -78,7 +78,7 @@ export function FacultyScoreBadge({
     >
       <span className="text-xs">★</span>
       <span>{wPct}% Score</span>
-      <span className="text-[9.5px] font-normal opacity-75 font-mono">({review.reviews})</span>
+      <span className="text-xs font-normal opacity-75 font-mono">({review.reviews})</span>
     </button>
   );
 }

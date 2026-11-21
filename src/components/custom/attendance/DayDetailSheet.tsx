@@ -48,7 +48,6 @@ import {
   type CalendarDayModel,
   type CalendarDayEvent,
   type DayAttendance,
-  type DayType,
 } from "@/lib/calendarDay";
 import { downloadDay } from "./calendarIcs";
 
@@ -67,22 +66,6 @@ import { downloadDay } from "./calendarIcs";
  * useless; showing the real slots with a recorded status overlaid where one
  * exists makes the sheet useful in both directions.
  */
-
-/**
- * The day-type pill.
- *
- * "No classes" and "Holiday" are different claims and must not read the same:
- * a non-instructional day is a working day at a college that is open, and
- * calling it a holiday is the error the old page made. `null` means the day is
- * outside the published calendar, which deserves no badge at all.
- */
-const DAY_TYPE_META: Record<DayType, { label: string; tone: string } | null> = {
-  instructional: { label: "Instructional day", tone: "emerald" },
-  semiholiday: { label: "Shortened day", tone: "amber" },
-  nonInstructional: { label: "No classes", tone: "sky" },
-  holiday: { label: "Holiday", tone: "red" },
-  other: null,
-};
 
 const STATUS_TONE: Record<string, string> = {
   present: "emerald",
@@ -230,7 +213,6 @@ export default function DayDetailSheet({
 
   if (!day) return null;
 
-  const dayType = DAY_TYPE_META[day.dayType];
   const { attendance, events } = day;
   const classesToday = hasClasses(day);
   const papers = examsOn(day).length;
@@ -264,17 +246,14 @@ export default function DayDetailSheet({
       closeLabel="Close day detail"
     >
       <div className="space-y-6">
-        <div className="flex items-center gap-2 flex-wrap">
-          {dayType ? <DotPill tone={dayType.tone}>{dayType.label}</DotPill> : null}
-          {papers > 0 ? <ToneBadge tone="amber">Exam day</ToneBadge> : null}
-          {day.dayType === "nonInstructional" ? <ToneBadge tone="sky">College open</ToneBadge> : null}
-          {isToday ? <ToneBadge tone="indigo">Today</ToneBadge> : null}
-          {day.taskCount > 0 ? (
-            <ToneBadge tone="violet">
-              {day.taskCount} task{day.taskCount === 1 ? "" : "s"}
-            </ToneBadge>
-          ) : null}
-        </div>
+        {/* Only what the header does not already say (owner: the sheet
+            repeated "Holiday" three times). */}
+        {papers > 0 || isToday ? (
+          <div className="flex items-center gap-2 flex-wrap">
+            {papers > 0 ? <ToneBadge tone="amber">Exam day</ToneBadge> : null}
+            {isToday ? <ToneBadge tone="indigo">Today</ToneBadge> : null}
+          </div>
+        ) : null}
 
         {/*
          * The timetable's slot in the sheet. The live weekly timetable is only
@@ -399,10 +378,9 @@ export default function DayDetailSheet({
          * today" in the sheet.
          */}
         <section className="space-y-2.5">
-          <SectionHeader icon={ListChecks} title="Tasks" count={assignments.length} />
-          {assignments.length === 0 ? (
-            <EmptyPanel variant="dashed" title={isToday ? "Nothing due today." : "Nothing due on this day."} />
-          ) : (
+          {/* No tasks: just the add / connect buttons, no empty box. */}
+          {assignments.length > 0 ? <SectionHeader icon={ListChecks} title="Tasks" count={assignments.length} /> : null}
+          {assignments.length === 0 ? null : (
             <ListShell>
               {assignments.map((event, i) => {
                 const isOverdue = Boolean(event.dueAt && event.dueAt.getTime() < Date.now());
@@ -545,7 +523,6 @@ export default function DayDetailSheet({
             <Download className="w-3.5 h-3.5" />
             Add to calendar
           </GhostButton>
-          <span className="text-xs font-bold uppercase tracking-wider text-text-muted">{day.dateKey}</span>
         </div>
       </div>
     </BottomSheet>
@@ -577,34 +554,39 @@ function EventSection({
   /** Line under the header — e.g. why the timetable is absent. */
   note?: string;
 }) {
+  // VTOP files many holidays under a bare category ("General"); a row that
+  // says only that adds nothing under a "Holiday" heading.
+  const shown = events.filter((e) => !/^(general|holiday|other)$/i.test(e.title.trim()));
   return (
     <section className="space-y-2.5">
-      <SectionHeader icon={icon} title={title} count={events.length} />
-      {note ? <p className="px-1 -mt-1 text-xs font-medium text-text-muted">{note}</p> : null}
-      <ListShell>
-        {events.map((event, i) => (
-          <div key={`${event.kind}-${event.title}-${i}`}>
-            <EventRow event={event} />
-            {event.papers?.length ? (
-              <div className="border-t border-border-ink bg-surface-secondary">
-                {event.papers.map((paper, j) => (
-                  <div key={`${paper.title}-${j}`} className="flex items-center gap-3 py-2.5 pl-8 pr-4">
-                    <ToneDot tone="amber" />
-                    <div className="min-w-0 flex-1">
-                      <ListRowText
-                        title={paper.title}
-                        titleTag="h4"
-                        subtitle={paper.detail}
-                        className="[&_p:first-child]:text-[13px]"
-                      />
+      <SectionHeader icon={icon} title={title} count={shown.length > 1 ? shown.length : undefined} />
+      {note ? <p className="px-1 -mt-1 text-sm text-text-muted">{note}</p> : null}
+      {shown.length === 0 ? null : (
+        <ListShell>
+          {shown.map((event, i) => (
+            <div key={`${event.kind}-${event.title}-${i}`}>
+              <EventRow event={event} />
+              {event.papers?.length ? (
+                <div className="border-t border-border-ink bg-surface-secondary">
+                  {event.papers.map((paper, j) => (
+                    <div key={`${paper.title}-${j}`} className="flex items-center gap-3 py-2.5 pl-8 pr-4">
+                      <ToneDot tone="amber" />
+                      <div className="min-w-0 flex-1">
+                        <ListRowText
+                          title={paper.title}
+                          titleTag="h4"
+                          subtitle={paper.detail}
+                          className="[&_p:first-child]:text-[13px]"
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            ) : null}
-          </div>
-        ))}
-      </ListShell>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          ))}
+        </ListShell>
+      )}
     </section>
   );
 }
@@ -612,8 +594,9 @@ function EventSection({
 /** One event: its kind pill, its title, and an optional external link. */
 function EventRow({ event }: { event: CalendarDayEvent }) {
   return (
+    // A dot, not a kind pill: the section heading already names the kind.
     <div className="flex items-center gap-3 py-3 px-4">
-      <DotPill tone={event.tone}>{kindLabel(event.kind)}</DotPill>
+      <ToneDot tone={event.tone} size="md" />
       {/* Only events the user registered for carry a photo, and only when their
           photo-visibility setting allows it — both decided before the event was
           built, so there is nothing to check here. */}
@@ -622,7 +605,12 @@ function EventRow({ event }: { event: CalendarDayEvent }) {
         <ListRowText
           title={event.title}
           titleTag="h4"
-          subtitle={event.detail}
+          // "Deepavali (Deepavali)": skip a detail that only repeats the title.
+          subtitle={
+            event.detail && event.detail.replace(/[()]/g, "").trim().toLowerCase() !== event.title.trim().toLowerCase()
+              ? event.detail
+              : undefined
+          }
           right={
             event.url ? (
               <IconLink

@@ -4,7 +4,7 @@ import { isGameOpenAtom } from "@/store/uiAtoms";
 import { useMemo } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useTheme } from "next-themes";
-import { privacyCategories, setPrivacyMode, togglePrivacyCategory } from "@/lib/privacyMode";
+import { privacyCategories, setPrivacyMode } from "@/lib/privacyMode";
 import config from "../../../../config.json";
 import LibrarySearchPalette from "../palette/LibrarySearchPalette";
 import EventSearchPalette from "../palette/EventSearchPalette";
@@ -522,23 +522,15 @@ export function useAppCommands(input: AppCommandInputs) {
       });
     };
     toggle("Decimal Values in Attendance", "decimalValues", "Settings", "🔢");
-    result.push({
-      id: "setting-hide-cgpa",
-      label: "Hide CGPA",
-      description: privacyCategories(settings).includes("cgpa")
-        ? "Currently on — tap to reveal"
-        : "Currently off — tap to cover",
-      icon: "🙈",
-      category: "Settings",
-      onSelect: () =>
-        setSettings((prev) => togglePrivacyCategory(prev, "cgpa", !privacyCategories(prev).includes("cgpa"))),
-    });
     toggle("Dayscholar Bus Mode", "isDayscholarWithBus", "Settings", "🚌");
     toggle("Show my VTOP photo instead of the logo", "showProfilePhoto", "Settings", "👤");
     result.push({
       id: "setting-hide-all-private",
-      label: "Privacy mode",
-      description: privacyCategories(settings).length ? "Currently on — tap to reveal" : "Currently off — tap to cover",
+      // Merged with the old "Hide CGPA" command (owner): one switch, CGPA & GPA.
+      label: "Privacy mode (hide CGPA)",
+      description: privacyCategories(settings).length
+        ? "On: CGPA & GPA hidden on Home and sidebar — tap to show"
+        : "Off — tap to hide CGPA & GPA on Home and sidebar",
       icon: "🔒",
       category: "Settings",
       onSelect: () => setSettings((prev) => setPrivacyMode(prev, !prev.privacyMode)),

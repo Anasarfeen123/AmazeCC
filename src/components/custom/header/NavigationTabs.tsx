@@ -124,13 +124,31 @@ const TAB_ALIASES: Record<string, string> = {
 const MobileBottomNav = memo(function MobileBottomNav({
   items,
   onItemTap,
+  onSwipeUp,
 }: {
   items: MobileNavItem[];
   onItemTap: (item: MobileNavItem) => void;
+  /** Swipe up on the bar opens Modules (owner), like a phone's app drawer. */
+  onSwipeUp?: () => void;
 }) {
+  const start = useRef<{ x: number; y: number } | null>(null);
   return (
     <nav
       aria-label="Main"
+      onTouchStart={(e) => {
+        const t = e.touches[0];
+        start.current = t ? { x: t.clientX, y: t.clientY } : null;
+      }}
+      onTouchEnd={(e) => {
+        const s0 = start.current;
+        start.current = null;
+        const t = e.changedTouches[0];
+        if (!s0 || !t || !onSwipeUp) return;
+        const dy = t.clientY - s0.y;
+        const dx = t.clientX - s0.x;
+        // Up at least 40px and mostly vertical; a tap or a sideways drag is not a swipe.
+        if (dy < -40 && Math.abs(dx) < Math.abs(dy) * 0.75) onSwipeUp();
+      }}
       className="brand-sidebar md:hidden fixed bottom-[calc(env(safe-area-inset-bottom,0px)+12px)] left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-[359px]:w-[calc(100%-1rem)] max-w-[420px] z-40 border-2 border-border-ink rounded-[14px] p-1 shadow-brutal-sm flex items-stretch justify-around gap-1 max-[359px]:gap-0.5 mobile-bottom-nav-bar"
     >
       {items.map((item) => (
@@ -1062,7 +1080,7 @@ export default function NavigationTabs({
             swallowing outside-taps meant to dismiss, and covering popups that
             extended into its region. A bottom nav must dim with the page, not
             hover over modals. */}
-        <MobileBottomNav items={rawNavItems} onItemTap={handleNavItemTap} />
+        <MobileBottomNav items={rawNavItems} onItemTap={handleNavItemTap} onSwipeUp={() => setIsAppLibraryOpen(true)} />
 
         <AppLibraryPortal
           open={isAppLibraryOpen}

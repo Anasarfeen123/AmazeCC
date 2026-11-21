@@ -957,7 +957,7 @@ export default function SimplifiedMobileHome({
                     : s.id === "od"
                       ? "emerald"
                       : "amber",
-          blur: s.id === "cgpa" && (settings?.CGPAHidden || settings?.blurGrades) ? "crayon-hide" : undefined,
+          blur: s.id === "cgpa" && privacyCategories(settings).includes("cgpa") ? "crayon-hide" : undefined,
           privacyCategory: (s.id === "cgpa"
             ? "cgpa"
             : s.id === "credits"

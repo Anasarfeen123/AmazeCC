@@ -6,25 +6,14 @@ import { privacyCategories, setHideAllPrivacy, togglePrivacyCategory } from "../
 import { defaultSettings } from "../store/settingsAtoms";
 
 describe("privacy mode", () => {
-  it("adds and removes the privacy-mode class on <html>", () => {
-    const { rerender } = renderHook(
-      // "Hide all" = every category chosen; plain privacyMode now means CGPA only.
-      ({ on }) =>
-        useAppAppearance(
-          {
-            privacyMode: on,
-            privacyCategories: ["cgpa", "attendance", "marks", "fees", "credits", "id", "identity"],
-            colorPalette: "default",
-          },
-          "dark",
-        ),
-      {
-        initialProps: { on: true },
-      },
-    );
-    expect(document.documentElement.classList.contains("privacy-mode")).toBe(true);
-    rerender({ on: false });
+  it("privacy mode toggles only the CGPA class on <html> (owner: merged with Hide CGPA)", () => {
+    const { rerender } = renderHook(({ on }) => useAppAppearance({ privacyMode: on }, "dark"), {
+      initialProps: { on: true },
+    });
+    expect(document.documentElement.classList.contains("privacy-hide-cgpa")).toBe(true);
     expect(document.documentElement.classList.contains("privacy-mode")).toBe(false);
+    rerender({ on: false });
+    expect(document.documentElement.classList.contains("privacy-hide-cgpa")).toBe(false);
   });
 
   it("marks stat tile values as private", () => {
@@ -32,11 +21,10 @@ describe("privacy mode", () => {
     expect(getByText("8.91").getAttribute("data-private")).toBe("cgpa");
   });
 
-  it("adds just the selected category class on <html>", () => {
+  it("ignores saved non-CGPA categories", () => {
     const { unmount } = renderHook(() => useAppAppearance({ privacyMode: true, privacyCategories: ["fees"] }, "dark"));
-    expect(document.documentElement.classList.contains("privacy-hide-fees")).toBe(true);
-    expect(document.documentElement.classList.contains("privacy-hide-marks")).toBe(false);
-    expect(document.documentElement.classList.contains("privacy-mode")).toBe(false);
+    expect(document.documentElement.classList.contains("privacy-hide-fees")).toBe(false);
+    expect(document.documentElement.classList.contains("privacy-hide-cgpa")).toBe(true);
     unmount();
   });
 
@@ -46,24 +34,21 @@ describe("privacy mode", () => {
     expect(privacyCategories({ CGPAHidden: true })).toEqual(["cgpa"]);
   });
 
-  it("keeps Hide all and individual category changes in sync", () => {
-    const hidden = setHideAllPrivacy(defaultSettings, true);
-    expect(hidden.privacyCategories).toHaveLength(7);
-    const feesOnly = togglePrivacyCategory(hidden, "cgpa", false);
-    expect(feesOnly.privacyMode).toBe(true);
-    expect(feesOnly.privacyCategories).not.toContain("cgpa");
+  it("every switch is the same CGPA switch", () => {
+    expect(setHideAllPrivacy(defaultSettings, true).privacyCategories).toEqual(["cgpa"]);
+    expect(togglePrivacyCategory(defaultSettings, "fees", true).privacyMode).toBe(true);
+    expect(togglePrivacyCategory({ ...defaultSettings, privacyMode: true }, "cgpa", false).privacyMode).toBe(false);
   });
 });
 
 import { setPrivacyMode } from "../lib/privacyMode";
 
 describe("privacy master switch", () => {
-  it("turns on with CGPA only when nothing is chosen, and keeps choices when off", () => {
-    const on = setPrivacyMode({ ...defaultSettings, privacyCategories: [] }, true);
-    expect(on.privacyMode).toBe(true);
+  it("on hides CGPA only; off hides nothing", () => {
+    const on = setPrivacyMode({ ...defaultSettings, privacyCategories: ["fees"] }, true);
     expect(on.privacyCategories).toEqual(["cgpa"]);
-    const off = setPrivacyMode({ ...on, privacyCategories: ["cgpa", "fees"] }, false);
+    const off = setPrivacyMode(on, false);
     expect(off.privacyMode).toBe(false);
-    expect(off.privacyCategories).toEqual(["cgpa", "fees"]);
+    expect(privacyCategories(off)).toEqual([]);
   });
 });

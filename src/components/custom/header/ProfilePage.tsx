@@ -71,13 +71,7 @@ import SyncCadenceGuide from "../shared/SyncCadenceGuide";
 import { listModes, loadCustomModes, resolveMode, type SyncMode } from "@/lib/sync-engine/sync-modes";
 import { clearApiCache } from "../exams/GenericApiView";
 import { useTheme } from "next-themes";
-import {
-  PRIVACY_CATEGORIES,
-  PRIVACY_CATEGORY_DETAILS,
-  privacyCategories,
-  setPrivacyMode,
-  togglePrivacyCategory,
-} from "@/lib/privacyMode";
+import { privacyCategories, setPrivacyMode } from "@/lib/privacyMode";
 
 import {
   DRILLDOWNS,
@@ -1389,14 +1383,6 @@ export default function ProfilePage({
 
   // 2. Appearance & Theme Section
   const selectedPrivacyCategories = privacyCategories(settings);
-  const privacyCoverageLabel =
-    selectedPrivacyCategories.length === 0
-      ? "Nothing covered"
-      : selectedPrivacyCategories.length === PRIVACY_CATEGORIES.length
-        ? "Everything covered"
-        : selectedPrivacyCategories.length === 1
-          ? PRIVACY_CATEGORY_DETAILS[selectedPrivacyCategories[0]].label
-          : `${PRIVACY_CATEGORY_DETAILS[selectedPrivacyCategories[0]].label} +${selectedPrivacyCategories.length - 1}`;
 
   const renderPreferencesContent = () => (
     <div className="space-y-6">
@@ -1605,15 +1591,14 @@ export default function ProfilePage({
         <div>
           <h3 className="font-display text-base font-bold uppercase text-text-heading">Privacy</h3>
           <p className="text-xs text-text-muted">
-            Cover numbers when someone can see your screen. Hover or tap a covered value to peek.
+            Cover your CGPA and GPA on Home and in the sidebar when someone can see your screen. Every other page shows
+            them. Hover or tap a covered value to peek.
           </p>
         </div>
         <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>
             <p className="text-sm font-bold text-text-primary">Privacy mode</p>
-            <p className="text-xs text-text-muted">
-              Hides your CGPA by default; choose more under Private values. Shortcut: Alt/Option + P
-            </p>
+            <p className="text-xs text-text-muted">Hides CGPA and GPA. Shortcut: Alt/Option + P</p>
           </div>
           <Switch
             label="Privacy mode"
@@ -1640,41 +1625,11 @@ export default function ProfilePage({
           />
         </div>
 
-        <div className="p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
-          <details className="group relative">
-            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-[10px] border-2 border-border-ink bg-surface-secondary px-3 text-sm font-bold text-text-primary shadow-brutal-sm [&::-webkit-details-marker]:hidden">
-              <span className="min-w-0 truncate">Private values: {privacyCoverageLabel}</span>
-              <ChevronRight
-                className="h-4 w-4 shrink-0 transition-transform duration-150 group-open:rotate-90"
-                aria-hidden
-              />
-            </summary>
-            <div className="mt-2 divide-y-2 divide-border-ink overflow-hidden rounded-[10px] border-2 border-border-ink bg-surface shadow-brutal-sm">
-              {PRIVACY_CATEGORIES.map((category) => {
-                const detail = PRIVACY_CATEGORY_DETAILS[category];
-                return (
-                  <div key={category} className="flex items-center justify-between gap-4 px-3 py-2.5">
-                    <div className="min-w-0">
-                      <p className="text-sm font-bold text-text-primary">{detail.label}</p>
-                      <p className="text-xs text-text-muted">{detail.description}</p>
-                    </div>
-                    <Switch
-                      label={`Cover ${detail.label}`}
-                      checked={selectedPrivacyCategories.includes(category)}
-                      onCheckedChange={(val) => setSettings((prev: any) => togglePrivacyCategory(prev, category, val))}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </details>
-        </div>
-
         <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>
             <p className="text-sm font-bold text-text-primary">Remove the CGPA card from Home</p>
             <p className="text-xs text-text-muted">
-              When CGPA is hidden in Privacy Mode, Home leaves the card out instead of covering it
+              With privacy mode on, Home leaves the card out instead of covering it
             </p>
           </div>
           <Switch

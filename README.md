@@ -1,7 +1,7 @@
 # AmazeCC
 
 <p align="center">
-  <img src="public/images/icons/AmazeCC.png" width="320" alt="AmazeCC">
+  <img src="public/brand/icon-primary-512.png" width="160" alt="AmazeCC">
 </p>
 
 <p align="center">

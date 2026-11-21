@@ -56,8 +56,12 @@ export default function ScannerCamera({
     setMounted(true);
   }, []);
 
-  /* Acquire and tear down the stream. */
+  /* Acquire and tear down the stream.
+     Waits for `mounted`: the view renders through a portal only after the
+     first mount, so starting earlier found no <video> and the stream never
+     reached it (owner: no camera preview). */
   useEffect(() => {
+    if (!mounted) return;
     let cancelled = false;
     let localStream: MediaStream | null = null;
     const video = videoRef.current;
@@ -71,15 +75,7 @@ export default function ScannerCamera({
 
     (async () => {
       try {
-        const isPortrait = typeof window !== "undefined" && window.innerHeight > window.innerWidth;
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: { ideal: facingMode },
-            width: { ideal: isPortrait ? 1080 : 1920 },
-            height: { ideal: isPortrait ? 1920 : 1080 },
-          },
-          audio: false,
-        });
+        const stream = await openCamera(facingMode);
         if (cancelled) {
           stream.getTracks().forEach((t) => t.stop());
           return;
@@ -116,7 +112,7 @@ export default function ScannerCamera({
       streamRef.current = null;
       if (video) video.srcObject = null;
     };
-  }, [facingMode]);
+  }, [facingMode, mounted]);
 
   const toggleTorch = async () => {
     const track = streamRef.current?.getVideoTracks()[0];
@@ -394,4 +390,52 @@ export default function ScannerCamera({
     </div>,
     document.body,
   );
+}
+
+/**
+ * The camera on the requested side, reliably.
+ *
+ * `facingMode: { ideal }` plus a portrait-shaped resolution let some phones
+ * pick the front camera (it "fit" the resolution better), so a scan opened
+ * as a selfie (owner). Ask for the side *exactly*, at a landscape size the
+ * sensors actually report; fall back to a preference on devices with one
+ * camera; and if a browser still hands over the wrong side, find the right
+ * one by its label (labels are readable once permission is granted).
+ */
+async function openCamera(facing: "environment" | "user"): Promise<MediaStream> {
+  const size = { width: { ideal: 1920 }, height: { ideal: 1080 } };
+  let stream: MediaStream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { exact: facing }, ...size },
+      audio: false,
+    });
+  } catch (err) {
+    const name = (err as { name?: string }).name;
+    if (name === "NotAllowedError" || name === "SecurityError") throw err;
+    // OverconstrainedError / NotFoundError: no camera on that side.
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: facing }, ...size },
+      audio: false,
+    });
+  }
+
+  const got = stream.getVideoTracks()[0]?.getSettings?.().facingMode;
+  if (facing === "environment" && got === "user") {
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const back = devices.find((d) => d.kind === "videoinput" && /back|rear|environment/i.test(d.label));
+      if (back) {
+        const better = await navigator.mediaDevices.getUserMedia({
+          video: { deviceId: { exact: back.deviceId }, ...size },
+          audio: false,
+        });
+        stream.getTracks().forEach((t) => t.stop());
+        stream = better;
+      }
+    } catch {
+      /* keep the stream we have */
+    }
+  }
+  return stream;
 }

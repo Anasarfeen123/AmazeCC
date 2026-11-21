@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { activeTabAtom, activeToolsSubTabAtom } from "@/store/uiAtoms";
 import {
   BookOpen,
   Calendar as CalendarIcon,
@@ -657,10 +658,19 @@ export default function CalendarSubpage({
     </>
   );
 
+  // Straight to the skip predictor (critique #23: it was only reachable from
+  // the Tools hub, while students look for it here).
+  const setActiveTab = useSetAtom(activeTabAtom);
+  const setActiveToolsSubTab = useSetAtom(activeToolsSubTabAtom);
+  const openPredictor = () => {
+    setActiveToolsSubTab("attendance-predictor");
+    setActiveTab("tools");
+  };
+
   const shellProps = {
     syncedOps: ["calendar"],
-    eyebrow: "Attendance · Calendar",
-    title: "Super Calendar",
+    eyebrow: "Attendance",
+    title: "Calendar",
     subtitle: [CALENDAR_TYPES[type], currSemesterID ? formatSemesterName(currSemesterID) : null]
       .filter(Boolean)
       .join(" · "),
@@ -712,6 +722,17 @@ export default function CalendarSubpage({
        * Every card says what its number is *of*. A bare "87%" beside another
        * "87%" is not information, and this is the page people screenshot.
        */}
+      <button
+        type="button"
+        onClick={openPredictor}
+        className="mb-3 flex min-h-12 w-full items-center justify-between gap-3 rounded-[12px] border-2 border-border-ink bg-mint px-4 text-left text-obsidian shadow-brutal-sm brutal-press cursor-pointer"
+      >
+        <span className="min-w-0">
+          <span className="block font-display text-sm font-bold uppercase">Skip predictor</span>
+          <span className="block text-xs">How many classes you can skip, course by course</span>
+        </span>
+        <ChevronRight className="h-4 w-4 shrink-0" aria-hidden />
+      </button>
       <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
         <InsightCarousel
           slides={summarySlides}

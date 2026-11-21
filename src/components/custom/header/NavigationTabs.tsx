@@ -427,10 +427,9 @@ export default function NavigationTabs({
 
   const tabIcons = useMemo<Record<string, { icon: React.ReactNode; label: string }>>(
     () => ({
-      attendance:
-        activeAttendanceSubTab === "calendar"
-          ? { icon: <Calendar className="h-5 w-5 stroke-[2]" />, label: "Calendar" }
-          : { icon: <CalendarCheck className="h-5 w-5 stroke-[2]" />, label: "Attendance" },
+      // Fixed label and icon (critique #22): it used to flip between
+      // "Calendar" and "Attendance" with the sub-page.
+      attendance: { icon: <Calendar className="h-5 w-5 stroke-[2]" />, label: "Calendar" },
       academics: { icon: <GraduationCap className="h-5 w-5 stroke-[2]" />, label: "Academics" },
       tools: { icon: <Layers className="h-5 w-5 stroke-[2]" />, label: "Tools" },
       payments: { icon: <CreditCard className="h-5 w-5 stroke-[2]" />, label: "Payments" },

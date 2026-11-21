@@ -92,17 +92,20 @@ both are the owner-decided brand (`design/DESIGN_LANGUAGE.md`).
 
 ## 4. Names and navigation
 
-- [ ] **#22 One place, three names:** bottom bar "Calendar" (label and icon
+- [x] **#22 One place, three names:** bottom bar "Calendar" (label and icon
       change with the sub-tab, `NavigationTabs.tsx` ~429-433), page "Super
       Calendar", Modules "Timetable Calendar". Fix: "Attendance" everywhere;
       the tab label never changes.
-- [ ] **#23 The skip predictor is not on the page the Calendar tab opens.**
+      Done as "Calendar" everywhere (the Attendance section is the calendar, OD and circulars; per-course attendance lives in Academics), and the bottom-bar label no longer flips.
+- [x] **#23 The skip predictor is not on the page the Calendar tab opens.**
       Fix: Attendance opens on the predictor; the calendar is a second view.
-- [ ] **#24 "Academics" twice** in Modules and twice in the desktop sidebar.
+      Done: a "Skip predictor" row at the top of Calendar, and a registry entry so Modules and search find it (it was Tools-hub only).
+- [x] **#24 "Academics" twice** in Modules and twice in the desktop sidebar.
       Fix: dedupe.
-- [ ] **#25 "Bottom bar shortcuts" is folded away at the bottom of Modules.**
+      Done in Modules. The desktop sidebar's second Academics is the Pinned section, which repeats pins by design.
+- [x] **#25 "Bottom bar shortcuts" is folded away at the bottom of Modules.**
       Fix: move it up, or reach it from the bottom bar (press and hold).
-- [ ] **#26 Semester selector is first in Modules and reloads everything
+- [x] **#26 Semester selector is first in Modules and reloads everything
       with no confirmation.** Fix: confirm ("Switch to Winter 2025-26? This
       reloads your data.") or move it below the modules.
 

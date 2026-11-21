@@ -190,6 +190,7 @@ export const MODULE_TONE: Record<string, ToneName> = {
   tools: "sea",
   tasks: "sky",
   "attendance-predictor": "mint",
+  "tools-attendance-predictor": "mint",
   qbank: "rose",
   "faculty-info": "violet",
   "marks-predictor": "ochre",

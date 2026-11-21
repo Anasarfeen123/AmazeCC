@@ -51,6 +51,7 @@ const AppLibraryPortal = memo(
     void tabIcons;
 
     const [librarySearchQuery, setLibrarySearchQuery] = useState("");
+    const [pendingSemester, setPendingSemester] = useState<string | null>(null);
 
     useEffect(() => {
       if (!open) {
@@ -224,8 +225,9 @@ const AppLibraryPortal = memo(
             </span>
             <SelectField
               value={settings.currSemesterID || config.semesterIDs[config.semesterIDs.length - 2]}
+              // Switching reloads everything, so ask first (critique #26).
               onChange={(val) => {
-                handleReloadRequest(val);
+                if (val !== (settings.currSemesterID || "")) setPendingSemester(val);
               }}
               options={config.semesterIDs.map((semId: string) => ({
                 value: semId,
@@ -237,7 +239,78 @@ const AppLibraryPortal = memo(
               size="lg"
               className="w-full sm:w-full [&>button:first-child]:w-full [&>button:first-child_span]:font-bold [&>button:first-child_span]:text-text-heading"
             />
+            {pendingSemester ? (
+              <div
+                role="alertdialog"
+                aria-label="Switch semester"
+                className="mt-2 rounded-[12px] border-2 border-border-ink bg-highlight p-3 text-highlight-foreground"
+              >
+                <p className="text-sm font-bold">
+                  Switch to {formatSemesterName(pendingSemester)}? This reloads your data.
+                </p>
+                <div className="mt-2 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const next = pendingSemester;
+                      setPendingSemester(null);
+                      handleReloadRequest(next);
+                    }}
+                    className="inline-flex min-h-10 items-center rounded-[8px] border-2 border-obsidian bg-teal px-4 font-mono text-xs font-bold uppercase tracking-[0.06em] text-cream cursor-pointer"
+                  >
+                    Switch
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPendingSemester(null)}
+                    className="inline-flex min-h-10 items-center rounded-[8px] border-2 border-obsidian bg-cream px-4 font-mono text-xs font-bold uppercase tracking-[0.06em] text-obsidian cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : null}
           </div>
+        )}
+
+        {/* Moved up from the very bottom of the sheet (critique #25). */}
+        {!librarySearchQuery && (
+          <details className="group/pins mb-4 rounded-[12px] border-2 border-border-muted bg-surface-secondary px-4 py-1">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-heading">
+                Bottom bar shortcuts
+              </span>
+              <span className="flex items-center gap-2 font-mono text-xs font-bold uppercase text-text-muted">
+                {(settings?.pinnedNavTabs ?? []).length}/4
+                <ChevronRight className="h-4 w-4 transition-transform group-open/pins:rotate-90" aria-hidden />
+              </span>
+            </summary>
+            <div className="flex flex-wrap gap-1.5 pt-2 pb-1">
+              {quickPinTabs.map((tab) => {
+                const pinned = settings?.pinnedNavTabs ?? [];
+                const isPinned = pinned.includes(tab.id);
+                const atLimit = !isPinned && pinned.length >= 4;
+                return (
+                  <button
+                    key={tab.id}
+                    disabled={atLimit}
+                    onClick={() => togglePin(tab.id)}
+                    aria-pressed={isPinned}
+                    className={`inline-flex min-h-9 items-center gap-1 px-3 py-1.5 rounded-[10px] border-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] transition-colors cursor-pointer select-none ${
+                      isPinned
+                        ? "bg-secondary border-border-ink text-secondary-foreground shadow-brutal-sm"
+                        : atLimit
+                          ? "bg-surface-secondary border-border-muted text-text-disabled cursor-not-allowed"
+                          : "bg-surface border-border-ink text-text-primary hover:bg-surface-secondary"
+                    }`}
+                  >
+                    {isPinned ? "✓ " : "+ "}
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+          </details>
         )}
 
         {librarySearchQuery ? (
@@ -352,43 +425,6 @@ const AppLibraryPortal = memo(
             );
           })
         )}
-
-        <details className="group/pins shrink-0 border-t-2 border-border-ink bg-surface-secondary px-5 py-3 mt-4">
-          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-            <span className="font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-heading">
-              Bottom bar shortcuts
-            </span>
-            <span className="flex items-center gap-2 font-mono text-xs font-bold uppercase text-text-muted">
-              {(settings?.pinnedNavTabs ?? []).length}/4
-              <ChevronRight className="h-4 w-4 transition-transform group-open/pins:rotate-90" aria-hidden />
-            </span>
-          </summary>
-          <div className="flex flex-wrap gap-1.5 pt-2 pb-1">
-            {quickPinTabs.map((tab) => {
-              const pinned = settings?.pinnedNavTabs ?? [];
-              const isPinned = pinned.includes(tab.id);
-              const atLimit = !isPinned && pinned.length >= 4;
-              return (
-                <button
-                  key={tab.id}
-                  disabled={atLimit}
-                  onClick={() => togglePin(tab.id)}
-                  aria-pressed={isPinned}
-                  className={`inline-flex min-h-9 items-center gap-1 px-3 py-1.5 rounded-[10px] border-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] transition-colors cursor-pointer select-none ${
-                    isPinned
-                      ? "bg-secondary border-border-ink text-secondary-foreground shadow-brutal-sm"
-                      : atLimit
-                        ? "bg-surface-secondary border-border-muted text-text-disabled cursor-not-allowed"
-                        : "bg-surface border-border-ink text-text-primary hover:bg-surface-secondary"
-                  }`}
-                >
-                  {isPinned ? "✓ " : "+ "}
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-        </details>
       </AppLibrary>
     );
   },

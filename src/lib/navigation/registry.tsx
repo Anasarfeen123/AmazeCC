@@ -105,7 +105,10 @@ export const moduleRegistry: ModuleEntry[] = [
   },
   {
     id: "attendance-calendar",
-    label: "Timetable Calendar",
+    // One name for one place (critique #22): the bottom bar, the page and
+    // Modules all say "Calendar" (was Calendar / Super Calendar / Timetable
+    // Calendar).
+    label: "Calendar",
     description: "Academic calendar & timetable events",
     icon: Calendar,
     group: "Study",
@@ -122,8 +125,22 @@ export const moduleRegistry: ModuleEntry[] = [
     },
     pinnable: true,
     pinId: "attendance",
-    pinLabel: "Timetable Calendar",
-    keywords: ["calendar", "timetable", "attendance"],
+    pinLabel: "Calendar",
+    keywords: ["calendar", "timetable", "attendance", "timetable calendar", "super calendar"],
+  },
+  {
+    // The skip predictor was only reachable from the Tools hub (critique #23).
+    id: "tools-attendance-predictor",
+    label: "Skip predictor",
+    description: "How many classes you can skip or must attend",
+    icon: CalendarCheck,
+    group: "Study",
+    searchGroup: "Study",
+    paletteCategory: "Attendance",
+    paletteIcon: "📊",
+    target: { kind: "tabSub", tab: "tools", subtabKey: "tools", subtab: "attendance-predictor" },
+    surfaces: { appLibraryPrimary: true, appLibrarySearch: true, commandPalette: true },
+    keywords: ["attendance", "predictor", "bunk", "skip", "75"],
   },
   {
     id: "academics",
@@ -138,7 +155,9 @@ export const moduleRegistry: ModuleEntry[] = [
     surfaces: {
       sidebar: true,
       sidebarGroup: "study",
-      appLibraryPrimary: true,
+      // Not a Modules tile: the "academics-panel" group right below it
+      // already lists every Academics page (critique #24: Academics twice).
+      appLibraryPrimary: false,
       appLibrarySearch: true,
       commandPalette: true,
     },

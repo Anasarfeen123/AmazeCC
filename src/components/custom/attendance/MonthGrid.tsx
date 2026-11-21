@@ -39,9 +39,11 @@ const TINT: Record<CalendarDayModel["dayType"], string> = {
   // (owner: the date cells and the background were the same colour).
   instructional: "cal-day-teaching",
   semiholiday: "bg-warning-surface dark:bg-ochre",
-  nonInstructional: "",
+  // No-class and outside-calendar days get a quiet neutral cell too (owner:
+  // with no fill they merged into the card).
+  nonInstructional: "cal-day-quiet",
   holiday: "bg-danger-surface dark:bg-coral",
-  other: "",
+  other: "cal-day-quiet",
 };
 
 const DAY_TYPE_TEXT: Record<CalendarDayModel["dayType"], string> = {

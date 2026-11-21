@@ -1184,3 +1184,11 @@
 .dark .cal-day-teaching {
   background-color: color-mix(in oklab, var(--color-sage) 18%, var(--surface));
 }
+/* Days with no classes or outside the calendar: a quiet neutral cell, so
+   every day reads as a cell rather than blank card. */
+.cal-day-quiet {
+  background-color: color-mix(in oklab, var(--text-primary) 5%, var(--surface));
+}
+.dark .cal-day-quiet {
+  background-color: color-mix(in oklab, var(--text-primary) 7%, var(--surface));
+}

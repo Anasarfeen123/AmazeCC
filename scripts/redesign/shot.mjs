@@ -357,6 +357,18 @@ for (const tok of (process.env.DRAGS || "").split(";").filter(Boolean)) {
     await evalJs(probe),
   );
 }
+// UPLOAD="css selector|/abs/file": set a file input's files (real upload).
+if (process.env.UPLOAD) {
+  const [sel, file] = process.env.UPLOAD.split("|");
+  const root = (await send("DOM.getDocument", { depth: 1 })).result.root;
+  const nodeId = (await send("DOM.querySelector", { nodeId: root.nodeId, selector: sel })).result?.nodeId;
+  if (!nodeId) console.log("UPLOAD no element", sel);
+  else {
+    await send("DOM.setFileInputFiles", { nodeId, files: [file] });
+    console.log("UPLOAD ok", sel);
+  }
+  await sleep(Number(process.env.UPLOAD_WAIT || 4000));
+}
 // EVAL="js expression": print its value just before the capture.
 if (process.env.EVAL) console.log("EVAL", await evalJs(process.env.EVAL));
 if (process.env.KEYS)
@@ -397,6 +409,35 @@ if (process.env.KEY_WALK) {
     );
   }
   console.log("KEY_WALK\n" + stops.join("\n"));
+}
+// BATCH_DIR=/dir BATCH_ROUTES="home=/,calendar=/?tab=attendance-calendar"
+// BATCH_SIZES="mobile-1:360:780:1,pc-1:1280:800:0": after the one-time setup
+// (demo + theme), capture every route at every size into
+// <dir>/<size label>/<route name>.png, then exit. One browser for the lot.
+if (process.env.BATCH_DIR) {
+  const { mkdirSync } = await import("node:fs");
+  const routes = process.env.BATCH_ROUTES.split(",").map((r) => [
+    r.slice(0, r.indexOf("=")),
+    r.slice(r.indexOf("=") + 1),
+  ]);
+  const sizes = process.env.BATCH_SIZES.split(",").map((x) => x.split(":"));
+  for (const [label, sw, sh, sm] of sizes) {
+    const w = Number(sw),
+      h = Number(sh);
+    await send("Emulation.setDeviceMetricsOverride", { width: w, height: h, deviceScaleFactor: 1, mobile: sm === "1" });
+    mkdirSync(`${process.env.BATCH_DIR}/${label}`, { recursive: true });
+    for (const [name, route] of routes) {
+      await send("Page.navigate", { url: BASE + route });
+      await sleep(Number(process.env.NAV_WAIT || 6000));
+      const shot = (await send("Page.captureScreenshot", { format: "png" })).result;
+      writeFileSync(`${process.env.BATCH_DIR}/${label}/${name}.png`, Buffer.from(shot.data, "base64"));
+      console.log("BATCH", label, name);
+    }
+  }
+  ws.close();
+  chrome.kill();
+  cleanup();
+  process.exit(0);
 }
 for (const [name, w, h, mobile] of SIZES) {
   await send("Emulation.setDeviceMetricsOverride", { width: w, height: h, deviceScaleFactor: 1, mobile });

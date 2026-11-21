@@ -14,7 +14,6 @@ import {
   PageShell,
   SegmentedControl,
   StatTile,
-  ToneBadge,
   useCarousel,
   type InsightSlide,
 } from "../shared/primitives";
@@ -488,7 +487,6 @@ export default function OverallAttendancePredictor({
         label: "Remaining Days",
         value: totalRemainingWorkingDays,
         sub: activeMilestone.lockLabel,
-        badge: "working days",
         tone: "indigo",
         dotLabel: "Remaining working days",
       },
@@ -518,8 +516,8 @@ export default function OverallAttendancePredictor({
   return (
     <PageShell
       syncedOps={["attendanceMarks"]}
-      eyebrow="Attendance · Predictor"
-      title="Attendance Predictor & Simulator"
+      eyebrow="Attendance"
+      title="Skip predictor"
       subtitle={
         <>
           Projected <span data-private="attendance">{formatPct(overallStats.predictedPct, decimalValues)}%</span> ·
@@ -538,9 +536,14 @@ export default function OverallAttendancePredictor({
     >
       {/* Target: in the page, not the header row (with Back and Reset it
           overflowed a 390px phone and pushed Reset off-screen). */}
-      <div className="flex flex-wrap items-center gap-3 px-1">
-        <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">Target</span>
+      {/* Four equal segments across the row (it overflowed a 390px phone). */}
+      <div className="flex items-center gap-3 px-1">
+        <span className="shrink-0 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+          Target
+        </span>
         <SegmentedControl
+          grow
+          className="min-w-0 flex-1"
           options={THRESHOLD_OPTIONS.map((th) => ({
             value: String(th) as TargetThresholdOption,
             label: `${th}%`,
@@ -597,10 +600,9 @@ export default function OverallAttendancePredictor({
             </>
           ) : mode === "LID" || mode === "ALL" ? (
             <>
-              Lab attendance locks at LID — Lab
-              {impDates.lidLabDate ? <> ({formatShortDate(impDates.lidLabDate)})</> : null}; theory at LID — Theory
-              {impDates.lidTheoryDate ? <> ({formatShortDate(impDates.lidTheoryDate)})</> : null}.
-              {lockedNow > 0 ? ` ${lockedNow} course${lockedNow === 1 ? " is" : "s are"} already frozen.` : null}
+              Labs lock{impDates.lidLabDate ? <> {formatShortDate(impDates.lidLabDate)}</> : " at LID"}, theory
+              {impDates.lidTheoryDate ? <> {formatShortDate(impDates.lidTheoryDate)}</> : " at LID"}
+              {lockedNow > 0 ? ` · ${lockedNow} course${lockedNow === 1 ? "" : "s"} frozen` : null}.
             </>
           ) : (
             <>Every scheduled working day is projected.</>
@@ -635,16 +637,21 @@ export default function OverallAttendancePredictor({
 
         {/* Quick Batch Simulation Actions */}
         <div className="flex items-center gap-2">
-          <ToneBadge tone="emerald" size="lg" icon={<CheckCircle2 className="w-3.5 h-3.5" />}>
-            <button type="button" onClick={handleAttendAll} className="cursor-pointer">
-              Attend All
-            </button>
-          </ToneBadge>
-          <ToneBadge tone="amber" size="lg" icon={<Flame className="w-3.5 h-3.5" />}>
-            <button type="button" onClick={handleBunkFridays} className="cursor-pointer">
-              Bunk Fridays
-            </button>
-          </ToneBadge>
+          {/* Real buttons, not buttons inside status badges. */}
+          <button
+            type="button"
+            onClick={handleAttendAll}
+            className="inline-flex min-h-10 items-center gap-1.5 rounded-[10px] border-2 border-border-ink bg-mint px-3 font-mono text-xs font-bold uppercase tracking-[0.06em] text-obsidian shadow-brutal-sm brutal-press cursor-pointer"
+          >
+            <CheckCircle2 className="h-3.5 w-3.5" aria-hidden /> Attend all
+          </button>
+          <button
+            type="button"
+            onClick={handleBunkFridays}
+            className="inline-flex min-h-10 items-center gap-1.5 rounded-[10px] border-2 border-border-ink bg-ochre px-3 font-mono text-xs font-bold uppercase tracking-[0.06em] text-obsidian shadow-brutal-sm brutal-press cursor-pointer"
+          >
+            <Flame className="h-3.5 w-3.5" aria-hidden /> Skip Fridays
+          </button>
         </div>
       </div>
 

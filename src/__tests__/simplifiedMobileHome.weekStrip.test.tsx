@@ -238,17 +238,10 @@ describe("the header row's layout", () => {
     expect(name.parentElement?.className).toContain("min-w-0");
   });
 
-  it("refuses to squeeze the filter, and keeps it right-aligned if it wraps", () => {
-    // Its segments are `whitespace-nowrap`, so a squeezed control would
-    // overflow its own pill rather than shorten. (The filter is suppressed on
-    // an exam or holiday day, and this fixture's today is an exam day, so
-    // select an ordinary one first.)
+  it("has no Compact/Detailed toggle on Home (it lives in Settings)", () => {
     renderHome();
     fireEvent.click(within(strip()).getByTitle("Fri 2 Oct · No classes"));
-
-    const filter = screen.getByTitle("2-Line Compact Pill View");
-    const group = filter.closest("div.shrink-0") as HTMLElement;
-    expect(group.className).toContain("ml-auto");
+    expect(screen.queryByTitle("2-Line Compact Pill View")).toBeNull();
   });
 });
 

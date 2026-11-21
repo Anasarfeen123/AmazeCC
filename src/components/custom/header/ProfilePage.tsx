@@ -1443,6 +1443,25 @@ export default function ProfilePage({
           />
         </div>
 
+        {/* Home class rows: moved here from a toggle on Home (owner);
+            Compact by default. */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
+          <div>
+            <p className="text-sm font-bold text-text-primary">Home class rows</p>
+            <p className="text-xs text-text-muted">Compact fits more classes; Detailed shows bigger cards</p>
+          </div>
+          <SegmentedControl
+            grow
+            className="w-full shrink-0 sm:w-72"
+            value={settings?.timetablePillStyle === "detailed" ? "detailed" : "compact"}
+            onChange={(v) => updateSetting("timetablePillStyle", v)}
+            options={[
+              { value: "compact", label: "Compact" },
+              { value: "detailed", label: "Detailed" },
+            ]}
+          />
+        </div>
+
         <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-secondary border-2 border-border-ink">
           <div>
             <p className="text-sm font-bold text-text-primary">Sounds</p>

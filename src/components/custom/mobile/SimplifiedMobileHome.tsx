@@ -20,8 +20,6 @@ import {
   Calendar as CalendarIcon,
   Search,
   Bug,
-  List,
-  Layers,
   UserSearch,
   UsersRound,
   Sun,
@@ -61,7 +59,6 @@ import {
   StatTile,
   ListShell,
   SectionHeader,
-  SegmentedControl,
   useCarousel,
   useHorizontalSwipe,
   type InsightSlide,
@@ -557,13 +554,6 @@ export default function SimplifiedMobileHome({
   });
 
   const pillStyle: "compact" | "detailed" = settings?.timetablePillStyle || "compact";
-
-  const setPillStyle = (style: "compact" | "detailed") => {
-    setSettings((prev: any) => {
-      const next = { ...prev, timetablePillStyle: style };
-      return next;
-    });
-  };
 
   // Sync profile info
   useEffect(() => {
@@ -1644,29 +1634,7 @@ export default function SimplifiedMobileHome({
                 link survives on small screens, on the selected-day row below,
                 where it is the only route to it. */}
 
-                {/* Pill Style Selector (Compact 2-Line vs Detailed) */}
-                {!isExamDay && !isHolidayOrOff && (
-                  <SegmentedControl
-                    options={[
-                      {
-                        value: "compact" as const,
-                        label: "Compact",
-                        icon: <List className="w-3.5 h-3.5" />,
-                        title: "2-Line Compact Pill View",
-                      },
-                      {
-                        value: "detailed" as const,
-                        label: "Detailed",
-                        icon: <Layers className="w-3.5 h-3.5" />,
-                        title: "Spacious Detailed Card View",
-                      },
-                    ]}
-                    value={pillStyle}
-                    onChange={setPillStyle}
-                    // Words from 640px up (critique #15); icons + aria-labels on phones.
-                    labelsFromSm
-                  />
-                )}
+                {/* Compact / Detailed lives in Settings now (owner). */}
               </div>
             </div>
 

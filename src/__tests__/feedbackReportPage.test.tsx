@@ -82,8 +82,8 @@ describe("FeedbackReportPage", () => {
   it("renders overview menu with 3 options following course subpage guidelines", () => {
     renderFeedbackPage();
 
-    expect(screen.getByText("Feedback and Support")).toBeDefined();
-    expect(screen.getByText("Support Sections")).toBeDefined();
+    expect(screen.getByRole("heading", { name: "Feedback" })).toBeDefined();
+    expect(screen.getByText("Sections")).toBeDefined();
     expect(screen.getByText("New Report")).toBeDefined();
     expect(screen.getByText("My Tickets & Support")).toBeDefined();
     expect(screen.getByText("Diagnostics", { selector: "h3, p, span, div" })).toBeDefined();
@@ -95,13 +95,13 @@ describe("FeedbackReportPage", () => {
   it("renders categories in guided hero mode and PostHog badge when entering New Report subpage", () => {
     renderFeedbackPage({ initialTab: "report" });
 
-    expect(screen.getByText("New Report")).toBeDefined();
+    expect(screen.getAllByText(/New report/i).length).toBeGreaterThan(0);
     expect(screen.getByText("Bug Report")).toBeDefined();
     expect(screen.getByText("Feature Request")).toBeDefined();
     expect(screen.getByText("UI / UX Polish")).toBeDefined();
     expect(screen.getByText("General Notes")).toBeDefined();
-    expect(screen.getByText("Guided Hero")).toBeDefined();
-    expect(screen.getByText("Classic Form")).toBeDefined();
+    expect(screen.getAllByText("Guided").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Form").length).toBeGreaterThan(0);
   });
 
   it("renders the hero submission flow in full screen with full-screen container classes and controls", () => {
@@ -111,8 +111,9 @@ describe("FeedbackReportPage", () => {
     expect(heroContainer).toBeDefined();
     expect(heroContainer.className).toContain("fixed inset-0 z-50 h-[100dvh] w-full");
     expect(screen.getByTitle(/Fullscreen/i)).toBeDefined();
-    expect(screen.getByTitle(/Close/i)).toBeDefined();
-    expect(screen.getByRole("button", { name: /Classic Form/i })).toBeDefined();
+    // One back control: the guided header has Back, no separate close.
+    expect(screen.getByRole("button", { name: /Back to Feedback/i })).toBeDefined();
+    expect(screen.getByRole("button", { name: "Form" })).toBeDefined();
   });
 
   it("advances to Step 2 in Guided Hero Mode and toggles reactive DOM recording", () => {
@@ -122,14 +123,12 @@ describe("FeedbackReportPage", () => {
     fireEvent.click(screen.getByText("Bug Report"));
 
     // Step 2: Now on concern screen
-    const recordingToggle = screen.getByLabelText(/Toggle reactive DOM session recording/i);
+    const recordingToggle = screen.getByLabelText(/Record the bug/i);
     expect(recordingToggle).toBeDefined();
 
-    expect(
-      screen.getByText(/The session recording will automatically take place within the reactive DOM of the app/i),
-    ).toBeDefined();
+    expect(screen.getByText(/Records what happens in AmazeCC/i)).toBeDefined();
 
-    expect(screen.getByText(/the recording may include personal data or grades rendered on screen/i)).toBeDefined();
+    expect(screen.getByText(/Passwords are always hidden/i)).toBeDefined();
 
     fireEvent.click(recordingToggle);
     expect(posthogModule.startPostHogSessionRecording).toHaveBeenCalled();
@@ -145,7 +144,7 @@ describe("FeedbackReportPage", () => {
     const descInput = screen.getByPlaceholderText(/Explain what went wrong/i);
     fireEvent.change(descInput, { target: { value: "Buttons are unresponsive in Safari 17" } });
 
-    const recordingToggle = screen.getByLabelText(/Toggle reactive DOM session recording/i);
+    const recordingToggle = screen.getByLabelText(/Record the bug/i);
     fireEvent.click(recordingToggle);
 
     // Click "Continue to Contact" to reach Step 3
@@ -185,7 +184,7 @@ describe("FeedbackReportPage", () => {
     renderFeedbackPage({ initialTab: "report" });
 
     // Switch to Classic Form mode
-    fireEvent.click(screen.getByText("Classic Form"));
+    fireEvent.click(screen.getByRole("button", { name: "Form" }));
 
     // All form inputs are now visible simultaneously
     const descInput = screen.getByPlaceholderText(/Explain what went wrong/i);
@@ -224,7 +223,7 @@ describe("FeedbackReportPage", () => {
     const diagRow = screen.getByText("Diagnostics", { selector: "h3, p, span, div" });
     fireEvent.click(diagRow);
 
-    expect(screen.getByText("PostHog Telemetry & Integration Engine")).toBeDefined();
+    expect(screen.getByText("How reports are delivered")).toBeDefined();
     expect(screen.getAllByText("21BCE0001").length).toBeGreaterThan(0);
     expect(screen.getByText("sess_test123")).toBeDefined();
     expect(screen.getByText("Signed Token Identity Verification")).toBeDefined();
@@ -249,16 +248,16 @@ describe("FeedbackReportPage", () => {
     expect(screen.getByText("Bug Report")).toBeDefined();
 
     // Click back button to return to overview
-    fireEvent.click(screen.getByRole("button", { name: /Support Sections/i }));
-    expect(screen.getByText("Support Sections")).toBeDefined();
+    fireEvent.click(screen.getAllByRole("button", { name: /Back/i })[0]);
+    expect(screen.getByText("Sections")).toBeDefined();
     expect(screen.getByText("My Tickets & Support")).toBeDefined();
 
     // 2. Navigate to PostHog Diagnostics subpage
     fireEvent.click(screen.getByText("Diagnostics", { selector: "h3, p, span, div" }));
-    expect(screen.getByText("PostHog Telemetry & Integration Engine")).toBeDefined();
+    expect(screen.getByText("How reports are delivered")).toBeDefined();
 
     // Click back button to return to overview
-    fireEvent.click(screen.getByRole("button", { name: /Support Sections/i }));
-    expect(screen.getByText("Support Sections")).toBeDefined();
+    fireEvent.click(screen.getAllByRole("button", { name: /Back/i })[0]);
+    expect(screen.getByText("Sections")).toBeDefined();
   });
 });

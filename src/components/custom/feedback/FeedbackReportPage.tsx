@@ -28,15 +28,21 @@ import {
   ArrowRight,
   Info,
   Layers,
-  Sparkle,
   FileText,
   Pencil,
   Maximize2,
   Minimize2,
-  X,
 } from "lucide-react";
 import { AnimatePresence, m } from "framer-motion";
-import { PageShell, ToneBadge, Switch, SectionHeader, ListShell, ListRowText } from "../shared/primitives";
+import {
+  PageShell,
+  ToneBadge,
+  Switch,
+  SectionHeader,
+  ListShell,
+  ListRowText,
+  SegmentedControl,
+} from "../shared/primitives";
 import { TILE_CARD, SEARCH_FIELD, LIST_ROW, TONE_ICON_TILE } from "@/lib/uiTokens";
 import { useOverlayBack } from "@/lib/overlayStack";
 import { acquireBodyScrollLock } from "@/lib/bodyScrollLock";
@@ -135,6 +141,46 @@ export interface FeedbackReportPageProps {
   initialCategory?: ReportCategory;
   initialStep?: 1 | 2 | 3 | 4;
   initialTab?: FeedbackSubpage;
+}
+
+/* Shared by the guided and classic report (owner: the page looked bad). */
+const FIELD =
+  "w-full rounded-[12px] border-2 border-border-ink bg-surface px-3.5 py-3 text-sm text-text-heading placeholder:text-text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+const FIELD_LABEL = "mb-1.5 block font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted";
+
+/** The four report kinds as a compact 2x2 grid: icon, name, one line. */
+function CategoryPicker({ value, onPick }: { value: ReportCategory; onPick: (id: ReportCategory) => void }) {
+  return (
+    <div className="grid w-full grid-cols-2 gap-2.5">
+      {CATEGORIES.map((cat) => {
+        const Icon = cat.icon;
+        const on = value === cat.id;
+        return (
+          <button
+            key={cat.id}
+            type="button"
+            aria-pressed={on}
+            onClick={() => onPick(cat.id)}
+            className={`flex min-h-[100px] flex-col justify-between gap-2 rounded-[14px] border-2 border-border-ink p-3.5 text-left brutal-press cursor-pointer ${
+              on
+                ? "bg-secondary text-secondary-foreground shadow-brutal-md"
+                : "bg-surface text-text-primary shadow-brutal-sm"
+            }`}
+          >
+            <span
+              className={`flex h-9 w-9 items-center justify-center rounded-[10px] border-2 border-border-ink ${cat.badgeClass}`}
+            >
+              <Icon className="h-4.5 w-4.5" aria-hidden />
+            </span>
+            <span>
+              <span className="block text-sm font-bold leading-tight">{cat.label}</span>
+              <span className="mt-0.5 block text-xs leading-snug opacity-75">{cat.desc}</span>
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
 }
 
 export default function FeedbackReportPage({
@@ -599,15 +645,9 @@ export default function FeedbackReportPage({
   if (activeSubpage === "overview") {
     return (
       <PageShell
-        eyebrow={
-          <span className="inline-flex items-center gap-2">
-            <span>AmazeCC Support</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-            <span className="text-primary font-bold">Feedback</span>
-          </span>
-        }
-        title="Feedback and Support"
-        subtitle="Report glitches, share feature requests, or converse directly with developer tickets."
+        eyebrow="AmazeCC"
+        title="Feedback"
+        subtitle="Report a bug, suggest a feature, or follow up on what you sent."
         onBack={onBack}
         actions={
           <div className="flex items-center gap-2">
@@ -625,7 +665,7 @@ export default function FeedbackReportPage({
           {/* Stat tiles removed (owner: they carried no meaning). */}
           {/* ── COURSE SUBPAGE GUIDELINE MENU (Joined Grouped List) ── */}
           <div className="space-y-3">
-            <SectionHeader icon={Layers} title="Support Sections" count={3} />
+            <SectionHeader icon={Layers} title="Sections" count={3} />
 
             <ListShell>
               {/* Option 1: New Report */}
@@ -707,6 +747,23 @@ export default function FeedbackReportPage({
     );
   }
 
+  // Guided / Form switch, the app's segmented control (owner: the hand-made
+  // "Guided Hero | Classic Form" pill looked off). Guided goes full screen.
+  const modeSwitch = (
+    <SegmentedControl
+      options={[
+        { value: "guided" as const, label: "Guided" },
+        { value: "classic" as const, label: "Form" },
+      ]}
+      value={flowMode}
+      onChange={(next) => {
+        if (next === "guided") requestNativeFullscreen().catch(() => {});
+        else exitNativeFullscreen().catch(() => {});
+        setFlowMode(next);
+      }}
+    />
+  );
+
   // ── SUBPAGE 1: NEW REPORT (GUIDED HERO MODE - TRUE FULL SCREEN LIKE ONBOARDING) ──
   if (activeSubpage === "report" && flowMode === "guided") {
     const heroContent = (
@@ -714,12 +771,6 @@ export default function FeedbackReportPage({
         data-testid="guided-hero-container"
         className="fixed inset-0 z-50 h-[100dvh] w-full bg-background text-text-primary flex flex-col justify-between overflow-hidden select-none px-4 sm:px-8 pt-[calc(env(safe-area-inset-top,0px)+1rem)] pb-[calc(env(safe-area-inset-bottom,0px)+1rem)] sm:pt-[calc(env(safe-area-inset-top,0px)+1.5rem)] sm:pb-[calc(env(safe-area-inset-bottom,0px)+1.5rem)] animate-in fade-in duration-300"
       >
-        {/* Background ambient lighting */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-secondary " />
-          <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[550px] h-[550px] rounded-full bg-secondary " />
-        </div>
-
         {/* ── TOP BAR: BACK BUTTON, PROGRESS PILLS & ACTIONS ── */}
         <header className="relative z-20 w-full max-w-2xl sm:max-w-3xl mx-auto flex items-center justify-between shrink-0 pt-1">
           <div className="flex items-center gap-2">
@@ -729,12 +780,15 @@ export default function FeedbackReportPage({
                 exitNativeFullscreen().catch(() => {});
                 setActiveSubpage("overview");
               }}
-              className="flex items-center gap-1.5 text-xs font-bold text-text-muted hover:text-text-heading transition-colors cursor-pointer py-1.5 px-3 rounded-xl bg-surface border border-border-ink"
+              aria-label="Back to Feedback"
+              className="inline-flex min-h-10 items-center gap-1.5 rounded-[10px] border-2 border-border-ink bg-surface px-2.5 font-mono text-xs font-bold uppercase tracking-[0.04em] text-text-heading shadow-brutal-sm brutal-press cursor-pointer"
             >
               <ChevronLeft className="w-4 h-4" />
-              <span>Support Sections</span>
+              <span className="hidden sm:inline">Back</span>
             </button>
-            <span className="text-xs font-bold uppercase tracking-wider text-primary font-outfit">New Report</span>
+            <span className="hidden font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted md:inline">
+              New report
+            </span>
           </div>
 
           {/* Step Indicator Pills (matching AmazeOnboardingFlow) */}
@@ -760,47 +814,14 @@ export default function FeedbackReportPage({
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1 bg-surface p-1 rounded-2xl border border-border-ink">
-              <button
-                type="button"
-                onClick={() => setFlowMode("guided")}
-                className="px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 bg-primary text-primary-foreground shadow-xs"
-              >
-                <Sparkle className="w-3.5 h-3.5" />
-                <span>Guided Hero</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  exitNativeFullscreen().catch(() => {});
-                  setFlowMode("classic");
-                }}
-                className="px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 text-text-muted hover:text-text-heading"
-              >
-                <Layers className="w-3.5 h-3.5" />
-                <span>Classic Form</span>
-              </button>
-            </div>
-
+            {modeSwitch}
             <button
               type="button"
               onClick={handleToggleFullScreen}
               title={isNativeFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
-              className="p-2 rounded-xl bg-surface border border-border-ink text-text-muted hover:text-text-heading transition-colors cursor-pointer"
+              className="hidden sm:inline-flex h-10 w-10 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-heading shadow-brutal-sm brutal-press cursor-pointer"
             >
               {isNativeFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                exitNativeFullscreen().catch(() => {});
-                setActiveSubpage("overview");
-              }}
-              title="Close"
-              className="p-2 rounded-xl bg-surface border border-border-ink text-text-muted hover:text-text-heading transition-colors cursor-pointer"
-            >
-              <X className="w-4 h-4" />
             </button>
           </div>
         </header>
@@ -850,7 +871,7 @@ export default function FeedbackReportPage({
                   }}
                   className="px-5 py-2.5 rounded-xl border border-border-ink hover:bg-surface-hover text-xs font-bold text-text-muted transition-colors cursor-pointer"
                 >
-                  Back to Support Sections
+                  Done
                 </button>
               </div>
             </div>
@@ -867,54 +888,20 @@ export default function FeedbackReportPage({
                   className="my-auto w-full space-y-5 text-center"
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-bold uppercase tracking-wider bg-secondary text-secondary-foreground border border-border-ink font-outfit min-h-9">
-                      <Sparkle className="w-3.5 h-3.5" />
-                      Guided Hero · Step 1
-                    </div>
-                    <h1 className="text-2xl sm:text-3xl font-bold text-text-heading font-outfit tracking-tight">
+                    <p className="font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-muted">
+                      Step 1 of 4
+                    </p>
+                    <h1 className="font-display text-2xl font-bold uppercase leading-tight text-text-heading sm:text-3xl">
                       What would you like to share?
                     </h1>
-                    <p className="text-xs sm:text-sm text-text-muted font-medium max-w-sm mx-auto">
-                      Select a category below to open a focused, clean screen.
-                    </p>
                   </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 w-full pt-1">
-                    {CATEGORIES.map((cat) => {
-                      const Icon = cat.icon;
-                      const isSelected = category === cat.id;
-                      return (
-                        <button
-                          key={cat.id}
-                          type="button"
-                          onClick={() => {
-                            setCategory(cat.id);
-                            setGuidedStep(2);
-                          }}
-                          className={`group p-4 sm:p-5 rounded-2xl border text-left transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between min-h-[120px] ${
-                            isSelected
-                              ? "border-border-ink bg-secondary ring-2 ring-border-ink shadow-lg"
-                              : "border-border-ink bg-surface hover:border-border-ink hover:bg-surface-hover shadow-xs hover:shadow-lg active:scale-[0.99]"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between w-full mb-2.5">
-                            <div className={`p-2.5 rounded-xl ${cat.badgeClass}`}>
-                              <Icon className="w-4.5 h-4.5" />
-                            </div>
-                            <span className="text-xs font-bold uppercase px-2 py-0.5 rounded-[6px] bg-surface-secondary text-text-muted border border-border-ink font-outfit">
-                              {cat.tag}
-                            </span>
-                          </div>
-                          <div>
-                            <h3 className="text-sm sm:text-base font-bold text-text-heading font-outfit">
-                              {cat.label}
-                            </h3>
-                            <p className="text-xs text-text-muted font-medium leading-relaxed mt-1">{cat.desc}</p>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <CategoryPicker
+                    value={category}
+                    onPick={(id) => {
+                      setCategory(id);
+                      setGuidedStep(2);
+                    }}
+                  />
                 </m.div>
               )}
 
@@ -934,7 +921,7 @@ export default function FeedbackReportPage({
                     >
                       <ActiveCatIcon className="w-6 h-6" />
                     </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-text-heading font-outfit tracking-tight">
+                    <h2 className="font-display text-2xl font-bold uppercase leading-tight text-text-heading sm:text-3xl">
                       {activeCatMeta.promptTitle}
                     </h2>
                     <p className="text-xs sm:text-sm text-text-muted font-medium max-w-sm mx-auto">
@@ -944,21 +931,21 @@ export default function FeedbackReportPage({
 
                   <div className="w-full space-y-3.5">
                     <div>
-                      <label className="block text-xs font-bold text-text-muted mb-1.5">
-                        Headline / Topic <span className="text-text-muted font-normal">(Optional)</span>
+                      <label className={FIELD_LABEL}>
+                        Short title <span className="text-text-muted font-normal">(Optional)</span>
                       </label>
                       <input
                         type="text"
                         value={subject}
                         onChange={(e) => setSubject(e.target.value)}
                         placeholder={activeCatMeta.headlinePlaceholder}
-                        className="w-full px-4 py-3 rounded-2xl bg-surface border border-border-ink text-text-heading placeholder:text-text-muted focus:outline-none focus:border-border-ink focus:ring-1 focus:ring-border-ink transition-all text-sm font-medium"
+                        className={FIELD}
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-text-muted mb-1.5">
-                        Detailed Concern <span className="text-danger-foreground">*</span>
+                      <label className={FIELD_LABEL}>
+                        What happened? <span className="text-danger-foreground">*</span>
                       </label>
                       <textarea
                         required
@@ -966,30 +953,20 @@ export default function FeedbackReportPage({
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder={activeCatMeta.concernPlaceholder}
-                        className="w-full px-4 py-3.5 rounded-2xl bg-surface border border-border-ink text-sm font-medium text-text-heading placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-border-ink focus:border-border-ink transition-all leading-relaxed"
+                        className={FIELD}
                       />
                     </div>
 
                     {category === "bug" && (
                       <div className="space-y-3 pt-1">
                         <div>
-                          <label className="block text-xs font-bold text-text-muted mb-1.5">Severity Level</label>
-                          <div className="grid grid-cols-3 gap-2">
-                            {SEVERITIES.map((s) => (
-                              <button
-                                key={s.value}
-                                type="button"
-                                onClick={() => setSeverity(s.value)}
-                                className={`py-2 px-3 rounded-xl border text-center transition-all cursor-pointer ${
-                                  severity === s.value
-                                    ? "border-border-ink bg-danger-surface text-danger-foreground font-bold shadow-xs"
-                                    : "border-border-ink bg-surface text-text-muted hover:bg-surface-hover hover:text-text-muted text-xs"
-                                }`}
-                              >
-                                <div className="text-xs font-bold">{s.label}</div>
-                              </button>
-                            ))}
-                          </div>
+                          <label className={FIELD_LABEL}>Severity Level</label>
+                          <SegmentedControl
+                            grow
+                            options={SEVERITIES.map((sv) => ({ value: sv.value, label: sv.label, title: sv.desc }))}
+                            value={severity}
+                            onChange={setSeverity}
+                          />
                         </div>
 
                         {/* Reactive DOM recording toggle */}
@@ -1005,9 +982,7 @@ export default function FeedbackReportPage({
                               </div>
                               <div className="space-y-1">
                                 <div className="flex items-center gap-2">
-                                  <span className="text-xs font-bold text-text-primary">
-                                    Attach Reactive DOM Session Recording
-                                  </span>
+                                  <span className="text-xs font-bold text-text-primary">Record the bug</span>
                                   {isRecordingLive && (
                                     <span className="px-2 py-0.5 rounded-[6px] text-xs font-bold uppercase bg-danger-surface text-danger-foreground border border-border-ink animate-pulse">
                                       Active
@@ -1015,13 +990,11 @@ export default function FeedbackReportPage({
                                   )}
                                 </div>
                                 <p className="text-xs text-text-muted leading-relaxed">
-                                  The session recording will automatically take place within the reactive DOM of the app
-                                  so your phone is not overwhelmed by screen casting or video encoding. You can navigate
-                                  anywhere in AmazeCC to replicate the glitch. If you reload, it cancels.
+                                  Records what happens in AmazeCC (not a screen video) while you repeat the problem.
+                                  Reloading the page cancels it.
                                 </p>
                                 <p className="text-xs text-warning-foreground font-medium">
-                                  Note: the recording may include personal data or grades rendered on screen during your
-                                  session. Passwords and sensitive inputs are masked by default.
+                                  It can include what is on screen, like marks. Passwords are always hidden.
                                 </p>
                               </div>
                             </div>
@@ -1029,7 +1002,7 @@ export default function FeedbackReportPage({
                               <Switch
                                 checked={enableSessionRecording}
                                 onCheckedChange={handleToggleRecording}
-                                label="Toggle reactive DOM session recording"
+                                label="Record the bug"
                               />
                             </div>
                           </div>
@@ -1054,7 +1027,7 @@ export default function FeedbackReportPage({
                     <div className="w-12 h-12 mx-auto rounded-2xl bg-secondary border border-border-ink text-secondary-foreground flex items-center justify-center shadow-lg">
                       <Mail className="w-6 h-6" />
                     </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-text-heading font-outfit tracking-tight">
+                    <h2 className="font-display text-2xl font-bold uppercase leading-tight text-text-heading sm:text-3xl">
                       Where Should We Reach You?
                     </h2>
                     <p className="text-xs sm:text-sm text-text-muted font-medium max-w-sm mx-auto">
@@ -1064,7 +1037,7 @@ export default function FeedbackReportPage({
 
                   <div className="w-full space-y-3.5">
                     <div>
-                      <label className="block text-xs font-bold text-text-muted mb-1.5">
+                      <label className={FIELD_LABEL}>
                         Personal Email Address <span className="text-text-muted font-normal">(Optional)</span>
                       </label>
                       <div className="relative">
@@ -1074,16 +1047,16 @@ export default function FeedbackReportPage({
                           value={contactEmail}
                           onChange={(e) => handleEmailChange(e.target.value)}
                           placeholder="your.personal.email@gmail.com"
-                          className="w-full pl-10 pr-4 py-3 rounded-2xl bg-surface border border-border-ink text-sm font-medium text-text-heading placeholder:text-text-muted focus:outline-none focus:border-border-ink focus:ring-1 focus:ring-border-ink transition-all"
+                          className={`${FIELD} pl-10`}
                         />
                       </div>
                       <p className="text-xs text-text-muted mt-1 leading-relaxed">
-                        Developer replies from the PostHog dashboard will be delivered to this email and synced in-app.
+                        Replies also show up under My tickets.
                       </p>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-text-muted mb-1.5">Author Identifier</label>
+                      <label className={FIELD_LABEL}>Sent as</label>
                       <div className="px-4 py-3 rounded-2xl bg-surface border border-border-ink text-xs font-mono text-text-muted flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <ShieldCheck className="w-4 h-4 text-primary" />
@@ -1134,7 +1107,7 @@ export default function FeedbackReportPage({
                     <div className="w-12 h-12 mx-auto rounded-2xl bg-success-surface border border-border-ink text-success-foreground flex items-center justify-center shadow-lg">
                       <FileText className="w-6 h-6" />
                     </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-text-heading font-outfit tracking-tight">
+                    <h2 className="font-display text-2xl font-bold uppercase leading-tight text-text-heading sm:text-3xl">
                       Review Your Submission
                     </h2>
                     <p className="text-xs sm:text-sm text-text-muted font-medium max-w-sm mx-auto">
@@ -1157,7 +1130,7 @@ export default function FeedbackReportPage({
                       </div>
                     </div>
                     <div className="p-3 rounded-2xl bg-surface border border-border-ink text-center shadow-xs">
-                      <div className="text-xs font-bold uppercase text-text-muted font-outfit">DOM Replay</div>
+                      <div className="text-xs font-bold uppercase text-text-muted font-outfit">Recording</div>
                       <div
                         className={`text-xs font-bold mt-0.5 ${enableSessionRecording ? "text-danger-foreground" : "text-text-muted"}`}
                       >
@@ -1250,9 +1223,7 @@ export default function FeedbackReportPage({
                               <Video className="w-4 h-4 animate-pulse" />
                             </div>
                             <div>
-                              <div className="text-xs font-bold text-text-heading">
-                                Reactive DOM Session Replay Attached
-                              </div>
+                              <div className="text-xs font-bold text-text-heading">Recording attached</div>
                               <div className="text-xs text-text-muted">
                                 Safe in-DOM interaction replay will be sent with ticket
                               </div>
@@ -1266,7 +1237,7 @@ export default function FeedbackReportPage({
                         <div className="p-3 rounded-xl border border-border-ink bg-background flex items-center justify-between">
                           <div className="flex items-center gap-2 text-xs text-text-muted">
                             <VideoOff className="w-4 h-4" />
-                            <span>No session recording attached</span>
+                            <span>No recording attached</span>
                           </div>
                           <button
                             type="button"
@@ -1400,31 +1371,7 @@ export default function FeedbackReportPage({
         title="New Report"
         subtitle="Submit a bug report, feature request, or UI polish directly to developers."
         onBack={() => setActiveSubpage("overview")}
-        actions={
-          !submitSuccess ? (
-            <div className="flex items-center gap-1.5 bg-surface-secondary/70 p-1 rounded-2xl border border-border-muted">
-              <button
-                type="button"
-                onClick={() => {
-                  setFlowMode("guided");
-                  requestNativeFullscreen().catch(() => {});
-                }}
-                className="px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 text-text-muted hover:text-text-primary"
-              >
-                <Sparkle className="w-3.5 h-3.5" />
-                <span>Guided Hero</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setFlowMode("classic")}
-                className="px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 bg-surface text-text-primary border border-border-muted shadow-xs"
-              >
-                <Layers className="w-3.5 h-3.5" />
-                <span>Classic Form</span>
-              </button>
-            </div>
-          ) : null
-        }
+        actions={!submitSuccess ? modeSwitch : null}
       >
         <div className="space-y-6">
           {submitSuccess ? (
@@ -1468,7 +1415,7 @@ export default function FeedbackReportPage({
                   }}
                   className="px-5 py-2.5 rounded-xl border border-border-muted hover:bg-surface-secondary text-xs font-bold text-text-primary transition-colors cursor-pointer"
                 >
-                  Back to Support Sections
+                  Done
                 </button>
               </div>
             </div>
@@ -1477,91 +1424,41 @@ export default function FeedbackReportPage({
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Category selector */}
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-sm font-bold text-text-primary font-outfit">Select Category</h3>
-                    <p className="text-xs text-text-muted">
-                      Select a category so we can route it to the right developer inbox
-                    </p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                  {CATEGORIES.map((cat) => {
-                    const Icon = cat.icon;
-                    const isSelected = category === cat.id;
-                    return (
-                      <button
-                        key={cat.id}
-                        type="button"
-                        onClick={() => setCategory(cat.id)}
-                        className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
-                          isSelected
-                            ? "border-border-ink bg-secondary ring-2 ring-border-ink shadow-xs"
-                            : "border-border-strong dark:border-border bg-surface-secondary/40 hover:bg-surface-secondary"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <div className={`p-2 rounded-xl ${cat.badgeClass}`}>
-                            <Icon className="w-4 h-4" />
-                          </div>
-                          <span className="text-xs font-bold uppercase px-1.5 py-0.5 rounded bg-surface-tertiary text-text-muted border border-border-muted font-outfit">
-                            {cat.tag}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-xs font-bold text-text-primary block font-outfit">{cat.label}</span>
-                          <span className="text-xs text-text-muted leading-tight mt-0.5 block">{cat.desc}</span>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+                <p className={FIELD_LABEL}>What is it about?</p>
+                <CategoryPicker value={category} onPick={setCategory} />
               </div>
 
               {/* Bug Specific Severity */}
               {category === "bug" && (
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-text-muted uppercase tracking-wider block font-outfit">
-                    Severity Level
-                  </label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {SEVERITIES.map((s) => (
-                      <button
-                        key={s.value}
-                        type="button"
-                        onClick={() => setSeverity(s.value)}
-                        className={`py-2 px-3 rounded-xl border text-center transition-all cursor-pointer ${
-                          severity === s.value
-                            ? "border-border-ink bg-danger-surface text-danger-foreground font-bold"
-                            : "border-border-muted bg-surface-secondary/40 text-text-secondary text-xs"
-                        }`}
-                      >
-                        <div className="text-xs font-bold">{s.label}</div>
-                        <div className="text-xs text-text-muted opacity-80 hidden sm:block">{s.desc}</div>
-                      </button>
-                    ))}
-                  </div>
+                  <label className={FIELD_LABEL}>Severity Level</label>
+                  <SegmentedControl
+                    grow
+                    options={SEVERITIES.map((sv) => ({ value: sv.value, label: sv.label, title: sv.desc }))}
+                    value={severity}
+                    onChange={setSeverity}
+                  />
                 </div>
               )}
 
               {/* Form Inputs */}
               <div className={`${TILE_CARD} space-y-4`}>
                 <div>
-                  <label className="block text-xs font-bold text-text-primary mb-1">
-                    Title / Headline <span className="text-text-muted font-normal">(Optional)</span>
+                  <label className={FIELD_LABEL}>
+                    Short title <span className="text-text-muted font-normal">(Optional)</span>
                   </label>
                   <input
                     type="text"
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
                     placeholder={activeCatMeta.headlinePlaceholder}
-                    className={SEARCH_FIELD}
+                    className={FIELD}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-text-primary mb-1">
-                    Detailed Description <span className="text-danger-foreground">*</span>
+                  <label className={FIELD_LABEL}>
+                    What happened? <span className="text-danger-foreground">*</span>
                   </label>
                   <textarea
                     required
@@ -1569,13 +1466,13 @@ export default function FeedbackReportPage({
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder={activeCatMeta.concernPlaceholder}
-                    className="w-full px-4 py-3 rounded-2xl bg-surface dark:bg-surface-secondary border border-border-strong dark:border-border text-xs sm:text-sm font-medium text-text-heading placeholder:text-text-muted focus:outline-none focus:border-border-strong leading-relaxed"
+                    className={FIELD}
                   />
                 </div>
 
                 {category === "bug" && (
                   <div>
-                    <label className="block text-xs font-bold text-text-primary mb-1">
+                    <label className={FIELD_LABEL}>
                       Steps to Reproduce <span className="text-text-muted font-normal">(Optional)</span>
                     </label>
                     <textarea
@@ -1583,30 +1480,27 @@ export default function FeedbackReportPage({
                       value={stepsToReproduce}
                       onChange={(e) => setStepsToReproduce(e.target.value)}
                       placeholder="1. Go to Academics Tab&#10;2. Click on Grades&#10;3. Click Export to PDF"
-                      className="w-full px-4 py-2.5 rounded-2xl bg-surface dark:bg-surface-secondary border border-border-strong dark:border-border text-xs font-mono text-text-heading placeholder:text-text-muted focus:outline-none focus:border-border-strong"
+                      className={`${FIELD} font-mono text-xs`}
                     />
                   </div>
                 )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                   <div>
-                    <label className="block text-xs font-bold text-text-primary mb-1">
-                      Personal Email{" "}
-                      <span className="text-text-muted font-normal">(Optional, for developer replies)</span>
+                    <label className={FIELD_LABEL}>
+                      Email for a reply <span className="font-normal normal-case">(optional)</span>
                     </label>
                     <input
                       type="email"
                       value={contactEmail}
                       onChange={(e) => handleEmailChange(e.target.value)}
                       placeholder="your.personal.email@gmail.com"
-                      className={SEARCH_FIELD}
+                      className={FIELD}
                     />
-                    <p className="text-xs text-text-muted mt-1 leading-tight">
-                      Developer replies from the PostHog dashboard will be delivered to this email and synced in-app.
-                    </p>
+                    <p className="text-xs text-text-muted mt-1 leading-tight">Replies also show up under My tickets.</p>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-text-primary mb-1">Author Identifier</label>
+                    <label className={FIELD_LABEL}>Sent as</label>
                     <div className="px-4 py-2.5 rounded-2xl bg-surface-secondary/50 border border-border-muted text-xs font-mono text-text-muted flex items-center justify-between">
                       <span className="font-bold text-text-primary">{distinctId}</span>
                       <ToneBadge tone={isIdentityVerified ? "emerald" : "indigo"}>
@@ -1630,9 +1524,7 @@ export default function FeedbackReportPage({
                     </div>
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs sm:text-sm font-bold text-text-primary">
-                          Attach Reactive DOM Session Recording
-                        </span>
+                        <span className="text-xs sm:text-sm font-bold text-text-primary">Record the bug</span>
                         {isRecordingLive && (
                           <span className="px-2 py-0.5 rounded-[6px] text-xs font-bold uppercase bg-danger-surface text-danger-foreground border border-border-ink animate-pulse">
                             Recording Active
@@ -1640,9 +1532,8 @@ export default function FeedbackReportPage({
                         )}
                       </div>
                       <p className="text-xs text-text-muted leading-relaxed">
-                        The session recording will automatically take place within the reactive DOM of the app so your
-                        phone is not overwhelmed by screen casting or video encoding. You can navigate anywhere in
-                        AmazeCC to replicate the glitch. If you reload, it cancels.
+                        Records what happens in AmazeCC (not a screen video) while you repeat the problem. Reloading the
+                        page cancels it.
                       </p>
                     </div>
                   </div>
@@ -1650,7 +1541,7 @@ export default function FeedbackReportPage({
                     <Switch
                       checked={enableSessionRecording}
                       onCheckedChange={handleToggleRecording}
-                      label="Toggle reactive DOM session recording"
+                      label="Record the bug"
                     />
                   </div>
                 </div>
@@ -1781,16 +1672,8 @@ export default function FeedbackReportPage({
   if (activeSubpage === "tickets") {
     return (
       <PageShell
-        eyebrow={
-          <button
-            type="button"
-            onClick={() => setActiveSubpage("overview")}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-text-muted hover:text-text-primary transition-colors cursor-pointer"
-          >
-            <ChevronLeft className="w-3.5 h-3.5" />
-            <span>Support Sections</span>
-          </button>
-        }
+        // One back control: PageShell's Back (owner: redundant back buttons).
+        eyebrow="Feedback"
         title="My Tickets & Support"
         subtitle="View and converse directly with developers on your submitted tickets."
         onBack={() => setActiveSubpage("overview")}
@@ -1984,16 +1867,8 @@ export default function FeedbackReportPage({
   // ── SUBPAGE 3: POSTHOG DIAGNOSTICS & TELEMETRY ──
   return (
     <PageShell
-      eyebrow={
-        <button
-          type="button"
-          onClick={() => setActiveSubpage("overview")}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-text-muted hover:text-text-primary transition-colors cursor-pointer"
-        >
-          <ChevronLeft className="w-3.5 h-3.5" />
-          <span>Support Sections</span>
-        </button>
-      }
+      // One back control: PageShell's Back (owner: redundant back buttons).
+      eyebrow="Feedback"
       title="Diagnostics"
       subtitle="Check this device's session and feedback connection."
       onBack={() => setActiveSubpage("overview")}
@@ -2034,7 +1909,7 @@ export default function FeedbackReportPage({
 
         <div className={`${TILE_CARD} space-y-4`}>
           <div className="flex items-center justify-between border-b border-border-muted pb-3">
-            <h4 className="text-xs font-bold text-text-primary font-outfit">PostHog Telemetry & Integration Engine</h4>
+            <h4 className="text-xs font-bold text-text-primary font-outfit">How reports are delivered</h4>
             <ToneBadge tone="emerald">Active</ToneBadge>
           </div>
 

@@ -34,8 +34,11 @@ android {
     buildTypes {
         release {
             if (ks && file(ks).exists()) signingConfig signingConfigs.release
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // R8: drop unused Capacitor/AndroidX code and resources (owner: 10 MB
+            // APK). Capacitor's own consumer rules keep @CapacitorPlugin classes.
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }

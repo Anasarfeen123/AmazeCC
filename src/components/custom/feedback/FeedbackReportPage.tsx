@@ -1616,19 +1616,15 @@ export default function FeedbackReportPage({
                       className="w-full sm:w-auto px-4 py-2 rounded-xl bg-surface-tertiary hover:bg-border-muted border border-border-muted text-xs font-bold text-text-primary flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-98"
                     >
                       <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
-                      <span>Start Bug Reproduction Recording (Across App)</span>
+                      <span>Start recording</span>
                     </button>
                   </div>
                 )}
 
-                <div className="p-3 rounded-xl bg-warning-surface border border-border-ink flex items-start gap-2.5 text-warning-foreground">
-                  <Info className="w-4 h-4 shrink-0 mt-0.5" />
-                  <p className="text-xs leading-relaxed">
-                    <strong>Privacy Notice:</strong> Because this captures live DOM mutations within the app to help
-                    reproduce bugs, the recording may include personal data or grades rendered on screen during your
-                    session. Passwords and sensitive inputs are masked by default.
-                  </p>
-                </div>
+                <p className="flex items-start gap-1.5 text-xs text-text-muted">
+                  <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+                  It can include what is on screen, like marks. Passwords are always hidden.
+                </p>
               </div>
 
               {submitError && (

@@ -165,10 +165,10 @@ describe("FFCSGuidedSelector", () => {
 
     // Now on strategy step
     expect(screen.getAllByText("Course Strategy").length).toBeGreaterThan(0);
-    expect(screen.getByText("Lock Target Courses in Advance")).toBeDefined();
+    expect(screen.getByText("Lock target courses first")).toBeDefined();
 
     // Select Lock Target Courses
-    fireEvent.click(screen.getByText("Lock Target Courses in Advance"));
+    fireEvent.click(screen.getByText("Lock target courses first"));
     fireEvent.click(screen.getByRole("button", { name: /Continue to Lock Courses/i }));
 
     // Now on locks screen
@@ -252,11 +252,11 @@ describe("FFCSGuidedSelector", () => {
 
     // Step 3: Strategy Question -> Ask whether to lock target courses or normally add to list
     expect(screen.getAllByText("Course Strategy").length).toBeGreaterThan(0);
-    expect(screen.getByText("Normally Add Courses in List")).toBeDefined();
-    expect(screen.getByText("Lock Target Courses in Advance")).toBeDefined();
+    expect(screen.getByText("Just pick courses")).toBeDefined();
+    expect(screen.getByText("Lock target courses first")).toBeDefined();
 
-    // Choose Normally Add Courses in List
-    fireEvent.click(screen.getByText("Normally Add Courses in List"));
+    // Choose Just pick courses
+    fireEvent.click(screen.getByText("Just pick courses"));
     fireEvent.click(screen.getByRole("button", { name: /Continue to Course Selection/i }));
 
     // Step 4: Auto Courses -> Select BCSE102
@@ -363,8 +363,8 @@ describe("FFCSGuidedSelector", () => {
     fireEvent.click(screen.getByRole("button", { name: /Continue to Timetable Selection/i }));
     fireEvent.click(screen.getByRole("button", { name: /Continue to Course Strategy/i }));
 
-    // Choose Lock Target Courses in Advance
-    fireEvent.click(screen.getByText("Lock Target Courses in Advance"));
+    // Choose Lock target courses first
+    fireEvent.click(screen.getByText("Lock target courses first"));
     fireEvent.click(screen.getByRole("button", { name: /Continue to Lock Courses/i }));
 
     // Now on Lock Courses & Slots screen
@@ -401,7 +401,7 @@ describe("FFCSGuidedSelector", () => {
     fireEvent.click(screen.getByText("Auto-Generate Timetable"));
     fireEvent.click(screen.getByRole("button", { name: /Continue to Timetable Selection/i }));
     fireEvent.click(screen.getByRole("button", { name: /Continue to Course Strategy/i }));
-    fireEvent.click(screen.getByText("Normally Add Courses in List"));
+    fireEvent.click(screen.getByText("Just pick courses"));
     fireEvent.click(screen.getByRole("button", { name: /Continue to Course Selection/i }));
 
     // On auto_courses: verify manual builder switcher banner exists
@@ -414,7 +414,7 @@ describe("FFCSGuidedSelector", () => {
 
     // Now on manual course selector (builder Step 1)
     expect(screen.getByText("Want algorithm to solve combinations for you?")).toBeDefined();
-    const autoGenBtn = screen.getByRole("button", { name: /Auto-Generate Timetable ✨/i });
+    const autoGenBtn = screen.getByRole("button", { name: /Auto-Generate Timetable/i });
     expect(autoGenBtn).toBeDefined();
 
     // Switch back to auto-generator
@@ -447,7 +447,7 @@ describe("FFCSGuidedSelector", () => {
     fireEvent.click(screen.getByText("Auto-Generate Timetable"));
     fireEvent.click(screen.getByRole("button", { name: /Continue to Timetable Selection/i }));
     fireEvent.click(screen.getByRole("button", { name: /Continue to Course Strategy/i }));
-    fireEvent.click(screen.getByText("Normally Add Courses in List"));
+    fireEvent.click(screen.getByText("Just pick courses"));
     fireEvent.click(screen.getByRole("button", { name: /Continue to Course Selection/i }));
 
     // Select BCSE101
@@ -501,7 +501,7 @@ describe("FFCSGuidedSelector", () => {
     fireEvent.click(screen.getByText("Auto-Generate Timetable"));
     fireEvent.click(screen.getByRole("button", { name: /Continue to Timetable Selection/i }));
     fireEvent.click(screen.getByRole("button", { name: /Continue to Course Strategy/i }));
-    fireEvent.click(screen.getByText("Normally Add Courses in List"));
+    fireEvent.click(screen.getByText("Just pick courses"));
     fireEvent.click(screen.getByRole("button", { name: /Continue to Course Selection/i }));
 
     // Select BCSE102
@@ -535,7 +535,7 @@ describe("FFCSGuidedSelector", () => {
     fireEvent.click(blockMorningBtn);
 
     // Verify day toggle changes to Unblock Morning Theory and unblock to allow solver to find combinations
-    const unblockBtn = screen.getByRole("button", { name: /Unblock Morning Theory ✓/i });
+    const unblockBtn = screen.getByRole("button", { name: /Unblock Morning Theory/i });
     expect(unblockBtn).toBeDefined();
     fireEvent.click(unblockBtn);
 
@@ -554,10 +554,10 @@ describe("FFCSGuidedSelector", () => {
     // Select generation limit (e.g. 50, then Unlimited)
     fireEvent.click(screen.getByRole("button", { name: "50" }));
     expect(screen.getByText("50 Timetables")).toBeDefined();
-    fireEvent.click(screen.getByRole("button", { name: "Unlimited ✨" }));
+    fireEvent.click(screen.getByRole("button", { name: "Unlimited" }));
     // "Unlimited" means no ceiling now — the switch itself lifts the engine's
     // 30K limit, so there is no "(30k max)" qualifier left to show.
-    expect(screen.getByText("Unlimited")).toBeDefined();
+    expect(screen.getAllByText("Unlimited").length).toBeGreaterThan(0);
     fireEvent.click(screen.getByRole("checkbox", { name: /Avoid consecutive lab slots/i }));
     expect(screen.getByRole("checkbox", { name: /Treat lunch as a break/i })).toBeDefined();
 
@@ -599,7 +599,7 @@ describe("FFCSGuidedSelector", () => {
     fireEvent.click(screen.getByText("Auto-Generate Timetable"));
     fireEvent.click(screen.getByRole("button", { name: /Continue to Timetable Selection/i }));
     fireEvent.click(screen.getByRole("button", { name: /Continue to Course Strategy/i }));
-    fireEvent.click(screen.getByText("Normally Add Courses in List"));
+    fireEvent.click(screen.getByText("Just pick courses"));
     fireEvent.click(screen.getByRole("button", { name: /Continue to Course Selection/i }));
 
     // Select BCSE101
@@ -644,7 +644,7 @@ describe("FFCSGuidedSelector", () => {
     fireEvent.click(blockThuMorningTheory);
 
     // Verify it updates to Unblock Morning Theory
-    expect(screen.getByRole("button", { name: /Unblock Morning Theory ✓/i })).toBeDefined();
+    expect(screen.getByRole("button", { name: /Unblock Morning Theory/i })).toBeDefined();
 
     // Verify Morning Lab button is still unblocked (theory and lab are NOT blocked together!)
     expect(screen.getByRole("button", { name: /Block Morning Lab \(08:00 - 13:20\)/i })).toBeDefined();
@@ -717,7 +717,7 @@ describe("FFCSGuidedSelector", () => {
 
     // Step 3: Course Strategy -> Choose One by One
     expect(screen.getAllByText("Course Strategy").length).toBeGreaterThan(0);
-    fireEvent.click(screen.getByRole("button", { name: /Choose Courses One by One/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Choose courses one by one/i }));
     fireEvent.click(screen.getByRole("button", { name: /Start Adding Courses/i }));
 
     // Step 4: Unified Course Selection for Timetable 1

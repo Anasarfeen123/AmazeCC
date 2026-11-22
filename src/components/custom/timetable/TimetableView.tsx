@@ -1,4 +1,5 @@
 "use client";
+import SelectField from "../shared/primitives/SelectField";
 
 /**
  * The common timetable.
@@ -170,7 +171,8 @@ export default function TimetableView({
         >
           <div className="min-w-0">
             {title && <h3 className="font-outfit text-base font-bold text-text-heading">{title}</h3>}
-            <p className="text-xs font-medium text-text-muted">
+            {/* Hidden on phones: the View dropdown says it (owner: declutter). */}
+            <p className={cn("text-xs font-medium text-text-muted", isMobile && "sr-only")}>
               {mode === "auto"
                 ? isMobile
                   ? "Auto · showing the vertical view on this phone"
@@ -182,19 +184,38 @@ export default function TimetableView({
                     : "Pinned to the modern grid"}
             </p>
           </div>
-          <div className="flex shrink-0 flex-col gap-1.5 sm:items-end">
-            <SegmentedControl options={MODE_OPTIONS} value={mode} onChange={setMode} grow scroll />
-            {showDensity && (
-              <SegmentedControl
-                options={DENSITY_OPTIONS}
-                value={activeDensity}
-                onChange={setDensity}
-                grow
-                scroll
-                className="max-w-[14rem]"
+          {isMobile ? (
+            // Phones: one row, a View dropdown and the density toggle. The
+            // four-way segmented control did not fit 390px ("Classic" cut off).
+            <div className="flex items-center gap-2">
+              <SelectField
+                aria-label="Timetable view"
+                size="xl"
+                searchable={false}
+                className="min-w-0 flex-1"
+                value={mode}
+                options={MODE_OPTIONS.map((o) => ({ value: o.value, label: `View: ${o.label}` }))}
+                onChange={setMode}
               />
-            )}
-          </div>
+              {showDensity && (
+                <SegmentedControl options={DENSITY_OPTIONS} value={activeDensity} onChange={setDensity} />
+              )}
+            </div>
+          ) : (
+            <div className="flex shrink-0 flex-col gap-1.5 sm:items-end">
+              <SegmentedControl options={MODE_OPTIONS} value={mode} onChange={setMode} grow scroll />
+              {showDensity && (
+                <SegmentedControl
+                  options={DENSITY_OPTIONS}
+                  value={activeDensity}
+                  onChange={setDensity}
+                  grow
+                  scroll
+                  className="max-w-[14rem]"
+                />
+              )}
+            </div>
+          )}
         </div>
       )}
 

@@ -1499,7 +1499,7 @@ export default function FFCSGuidedSelector({
                       : "bg-surface border-border-ink text-text-muted"
                   }`}
                 >
-                  {isSelected ? "Selected ✓" : "Choose"}
+                  {isSelected ? "Selected" : "Choose"}
                 </span>
               </div>
             </div>
@@ -1974,7 +1974,7 @@ export default function FFCSGuidedSelector({
                           : "bg-surface border-border-ink text-text-muted"
                       }`}
                     >
-                      {isSelected ? "Included ✓" : "Add +"}
+                      {isSelected ? "Included" : "Add +"}
                     </span>
                   </div>
                 </div>
@@ -2010,7 +2010,7 @@ export default function FFCSGuidedSelector({
                               }}
                               className="text-xs text-primary hover:text-primary font-bold transition-colors cursor-pointer flex items-center gap-0.5"
                             >
-                              <span>Dedicated Screen ↗</span>
+                              <span>Dedicated screen</span>
                             </button>
                           </div>
                         </div>
@@ -2645,7 +2645,7 @@ export default function FFCSGuidedSelector({
                     : "bg-surface border-border-ink text-text-muted hover:text-text-heading hover:border-border-ink"
                 }`}
               >
-                Unlimited ✨
+                Unlimited
               </button>
             </div>
             {autoNoLimit && (
@@ -3535,7 +3535,7 @@ export default function FFCSGuidedSelector({
           }}
           className="font-bold text-primary hover:text-primary hover:underline shrink-0 text-xs cursor-pointer"
         >
-          Auto-Generate Timetable ✨
+          Auto-Generate Timetable
         </button>
       </div>
 
@@ -4230,7 +4230,7 @@ export default function FFCSGuidedSelector({
             ) : (
               <>
                 <Wand2 className="w-4 h-4 shrink-0" />
-                <span>Generate Timetable Recommendations ✨</span>
+                <span>Generate Timetable Recommendations</span>
               </>
             )}
           </button>
@@ -4291,7 +4291,7 @@ export default function FFCSGuidedSelector({
             className="flex-1 min-w-[260px] lg:whitespace-nowrap py-3.5 px-4 rounded-2xl bg-primary hover:brightness-110 text-primary-foreground border-2 border-border-ink font-bold text-xs sm:text-sm shadow-brutal-sm transition-all cursor-pointer font-outfit tracking-wide flex items-center justify-center gap-2 shrink-0"
           >
             <Check className="w-4 h-4 shrink-0" />
-            <span className="lg:whitespace-nowrap">Apply This Recommendation to {activeTimetable.name} 🚀</span>
+            <span className="lg:whitespace-nowrap">Apply This Recommendation to {activeTimetable.name}</span>
           </button>
         </div>
       );

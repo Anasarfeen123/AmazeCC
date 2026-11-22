@@ -203,7 +203,7 @@ export default function SelectedCoursesList({
                   ))}
                 </div>
                 <div className="text-xs text-muted-foreground font-medium truncate shrink-0 max-w-[140px]">
-                  📍 {course.venue}
+                  {course.venue}
                 </div>
               </div>
             </div>

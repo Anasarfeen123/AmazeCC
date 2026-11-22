@@ -108,7 +108,7 @@ function generateFacultyGuideHtml(
     <div style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);border-radius:14px;padding:16px;margin-bottom:14px;">
       <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(59,130,246,0.25);padding-bottom:10px;margin-bottom:12px;">
         <div style="display:flex;align-items:center;gap:8px;">
-          <span style="font-size:13px;font-weight:700;color:#93c5fd;">⚡ FULL DROP-IN COMBINED REPLACEMENTS</span>
+          <span style="font-size:13px;font-weight:700;color:#93c5fd;">FULL DROP-IN COMBINED REPLACEMENTS</span>
           <span style="font-size:11px;color:#cbd5e1;">(Zero Clash Risk · Same Slots)</span>
         </div>
       </div>
@@ -141,7 +141,7 @@ function generateFacultyGuideHtml(
       ? `
     <div style="background:rgba(15,23,42,0.9);border:1px solid #1e293b;border-radius:14px;padding:16px;margin-bottom:14px;">
       <div style="font-size:12px;font-weight:700;color:#93c5fd;margin-bottom:10px;">
-        ⚡ OTHER AVAILABLE OFFERINGS (Clash-Free · Other Slots)
+        OTHER AVAILABLE OFFERINGS (Clash-Free · Other Slots)
       </div>
       ${clashFreeOther
         .slice(0, 6)
@@ -286,7 +286,7 @@ function generateFacultyGuideHtml(
       <!-- Registration Strategy -->
       <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:14px;padding:16px;margin-bottom:16px;">
         <div style="font-size:12px;font-weight:800;color:#fbbf24;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">
-          ⚡ How to Pick It Out in FFCS (Registration Strategy)
+          How to Pick It Out in FFCS (Registration Strategy)
         </div>
         <div style="font-size:12px;color:#cbd5e1;line-height:1.6;">
           <div style="margin-bottom:6px;"><strong style="color:#fbbf24;">1. Search Course:</strong> In VTOP Course Registration, search by Course Code <strong style="color:#ffffff;">${escape(code)}</strong>.</div>
@@ -882,7 +882,7 @@ export default function SlotFacultySwapSheet({
                             className="text-xs font-semibold px-2 py-0.5 rounded-md bg-red-950/50 text-danger-foreground border border-red-900/30 max-w-[160px] truncate"
                             title={clashReason}
                           >
-                            ⚠️ Clash
+                            Clash
                           </span>
                         ) : (
                           <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-success-surface text-success-foreground border border-border-ink">

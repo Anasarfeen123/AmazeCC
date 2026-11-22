@@ -150,7 +150,7 @@ export default function AutoBlockingCard({
                 : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
             }`}
           >
-            {morningTheoryBlocked ? "Unblock Morning Theory ✓" : "Block Morning Theory (08:00 - 13:25)"}
+            {morningTheoryBlocked ? "Unblock Morning Theory" : "Block Morning Theory (08:00 - 13:25)"}
           </button>
 
           <button
@@ -162,7 +162,7 @@ export default function AutoBlockingCard({
                 : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
             }`}
           >
-            {morningLabBlocked ? "Unblock Morning Lab ✓" : "Block Morning Lab (08:00 - 13:20)"}
+            {morningLabBlocked ? "Unblock Morning Lab" : "Block Morning Lab (08:00 - 13:20)"}
           </button>
 
           <button
@@ -174,7 +174,7 @@ export default function AutoBlockingCard({
                 : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
             }`}
           >
-            {eveningTheoryBlocked ? "Unblock Afternoon Theory ✓" : "Block Afternoon Theory (14:00 - 19:30)"}
+            {eveningTheoryBlocked ? "Unblock Afternoon Theory" : "Block Afternoon Theory (14:00 - 19:30)"}
           </button>
 
           <button
@@ -186,7 +186,7 @@ export default function AutoBlockingCard({
                 : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
             }`}
           >
-            {eveningLabBlocked ? "Unblock Afternoon Lab ✓" : "Block Afternoon Lab (14:00 - 19:30)"}
+            {eveningLabBlocked ? "Unblock Afternoon Lab" : "Block Afternoon Lab (14:00 - 19:30)"}
           </button>
 
           <button
@@ -198,7 +198,7 @@ export default function AutoBlockingCard({
                 : "bg-background border-border-ink text-text-secondary hover:border-border-ink"
             }`}
           >
-            {dayAllBlocked ? "Unblock Full Day ✓" : "Block Entire Day"}
+            {dayAllBlocked ? "Unblock Full Day" : "Block Entire Day"}
           </button>
 
           <button

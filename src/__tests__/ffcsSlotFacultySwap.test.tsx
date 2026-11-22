@@ -428,7 +428,7 @@ describe("SlotFacultySwapSheet", () => {
     expect(screen.getByText("LAB: L7+L8")).toBeTruthy();
 
     // Clash indicators
-    expect(screen.getAllByText("⚠️ Clash").length).toBe(2);
+    expect(screen.getAllByText("Clash").length).toBe(2);
     expect(screen.getByText("✓ No Clash")).toBeTruthy();
 
     // Clicking clash offering does NOT call onSwap

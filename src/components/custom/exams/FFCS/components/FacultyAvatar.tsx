@@ -1,4 +1,5 @@
 "use client";
+import { Loader2 } from "lucide-react";
 
 import React, { useState } from "react";
 import { ENABLE_VITFAC_INTEGRATION, useVitfacReview, useChennaiImage } from "@/lib/vitfacService";
@@ -89,7 +90,7 @@ export function FacultyAvatar({
   className = "",
   alt,
 }: FacultyAvatarProps) {
-  const { review } = useVitfacReview(employeeId, name);
+  const { review, loading: reviewLoading } = useVitfacReview(employeeId, name);
   const [failedUrls, setFailedUrls] = useState<string[]>([]);
   const [loadedUrl, setLoadedUrl] = useState<string | null>(null);
 
@@ -132,20 +133,25 @@ export function FacultyAvatar({
   }[tone];
 
   const initials = getFacultyInitials(name, review?.avatar);
+  // Spinner while the photo is being looked up or downloaded (owner: show a
+  // loader, not an empty tile); initials only once we know there is none.
+  const spinner = (
+    <span aria-hidden="true" className={`absolute inset-0 flex items-center justify-center ${toneClasses}`}>
+      <Loader2 className="h-1/2 w-1/2 max-h-5 max-w-5 animate-spin motion-reduce:animate-none opacity-70" />
+    </span>
+  );
 
   return (
     <div
+      aria-busy={(effectiveUrl ? loadedUrl !== effectiveUrl : reviewLoading) || undefined}
       className={`relative shrink-0 overflow-hidden flex items-center justify-center font-bold select-none border border-border-strong/60 ${sizeClasses} ${className}`}
     >
       {effectiveUrl ? (
         <>
-          {loadedUrl !== effectiveUrl && (
-            <span aria-hidden="true" className={`absolute inset-0 animate-pulse ${toneClasses}`} />
-          )}
+          {loadedUrl !== effectiveUrl && spinner}
           <img
             src={effectiveUrl}
             alt={alt || name || "Faculty"}
-            loading="lazy"
             decoding="async"
             onLoad={() => setLoadedUrl(effectiveUrl)}
             onError={() => {
@@ -156,6 +162,8 @@ export function FacultyAvatar({
             className={`w-full h-full object-cover rounded-[inherit] ${loadedUrl === effectiveUrl ? "opacity-100" : "opacity-0"}`}
           />
         </>
+      ) : reviewLoading ? (
+        spinner
       ) : (
         <span className={`w-full h-full flex items-center justify-center font-bold ${toneClasses}`}>{initials}</span>
       )}

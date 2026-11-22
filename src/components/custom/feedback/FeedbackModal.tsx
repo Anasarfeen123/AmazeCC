@@ -27,7 +27,6 @@ import buildInfo from "@/data/buildInfo.json";
 import {
   Bug,
   CheckCircle2,
-  ChevronRight,
   ExternalLink,
   HeartHandshake,
   Lightbulb,
@@ -267,7 +266,7 @@ export default function FeedbackModal() {
           className="text-xs font-semibold text-primary hover:underline flex items-center gap-1 cursor-pointer mr-1"
           title="Open full feedback & bug report page"
         >
-          <span>Full Page</span>
+          <span>Full page</span>
           <ExternalLink className="w-3.5 h-3.5" />
         </button>
       }
@@ -281,7 +280,7 @@ export default function FeedbackModal() {
             <div className="space-y-1">
               <h3 className="text-base font-bold text-text-primary">Thank you for your feedback!</h3>
               <p className="text-xs text-text-muted max-w-xs mx-auto leading-relaxed">
-                Your report has been logged into PostHog.
+                Sent. The developers read every report.
                 {ticketId && (
                   <span className="block mt-1 font-mono font-bold text-primary">Ticket ID: #{ticketId}</span>
                 )}
@@ -378,7 +377,7 @@ export default function FeedbackModal() {
                       ? "Describe your idea and how it would help you..."
                       : "Tell us what you love or what could be better..."
                 }
-                className="w-full rounded-xl border border-border-muted bg-surface-secondary/60 p-3 text-xs text-text-primary placeholder:text-text-muted focus:border-border-ink focus:outline-none focus:ring-1 focus:ring-border-ink resize-none transition-colors"
+                className="w-full rounded-xl border-2 border-border-ink bg-surface p-3 text-sm text-text-primary placeholder:text-text-muted focus:border-border-ink focus:outline-none focus:ring-1 focus:ring-border-ink resize-none transition-colors"
               />
             </div>
 
@@ -392,7 +391,7 @@ export default function FeedbackModal() {
                 value={contact}
                 onChange={(e) => setContact(e.target.value)}
                 placeholder="your.personal@gmail.com"
-                className="w-full rounded-xl border border-border-muted bg-surface-secondary/60 px-3 py-2 text-xs text-text-primary placeholder:text-text-muted focus:border-border-ink focus:outline-none focus:ring-1 focus:ring-border-ink transition-colors"
+                className="w-full min-h-11 rounded-xl border-2 border-border-ink bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-border-ink focus:outline-none focus:ring-1 focus:ring-border-ink transition-colors"
               />
             </div>
 
@@ -430,67 +429,41 @@ export default function FeedbackModal() {
                 </div>
               </div>
             ) : (
-              <div className="p-3.5 rounded-2xl border border-border-ink bg-danger-surface space-y-2.5">
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className="p-1.5 rounded-lg bg-danger-surface text-danger-foreground shrink-0">
-                      <Video className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <span className="text-xs font-bold text-text-primary block leading-tight">Show us the bug</span>
-                      <span className="text-xs text-text-muted block mt-0.5">
-                        Record what happens in AmazeCC while you repeat it
-                      </span>
-                    </div>
-                  </div>
+              // One compact row (owner: the brown block with a paragraph was too much).
+              <div className="flex items-center gap-3 rounded-[12px] border-2 border-border-ink bg-surface-secondary p-3">
+                <Video className="h-5 w-5 shrink-0 text-text-muted" aria-hidden />
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-text-heading leading-tight">Show us the bug</p>
+                  <p className="mt-0.5 text-xs text-text-muted leading-snug">
+                    The sheet closes while you repeat it; tap Finish &amp; Review to come back.
+                  </p>
                 </div>
-
                 <button
                   type="button"
                   onClick={handleStartReplicating}
-                  className="w-full min-h-11 py-2.5 px-3 rounded-xl bg-primary hover:brightness-110 text-primary-foreground text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs"
+                  className="inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-[10px] border-2 border-border-ink bg-surface px-3 font-mono text-xs font-bold uppercase tracking-[0.04em] text-text-heading shadow-brutal-sm brutal-press cursor-pointer"
                 >
-                  <span className="w-2.5 h-2.5 rounded-full bg-surface animate-pulse" />
-                  <span>Start recording</span>
+                  <span className="h-2 w-2 rounded-full bg-coral" aria-hidden />
+                  Record
                 </button>
-
-                <p className="text-xs text-text-muted leading-relaxed">
-                  This window closes and a small bar stays at the top. Do what caused the bug, then tap{" "}
-                  <strong>&quot;Finish &amp; Review&quot;</strong> to come back with the recording attached. Reloading
-                  the page cancels it.
-                </p>
               </div>
             )}
 
-            {/* Diagnostic note */}
-            <div className="flex items-center gap-1.5 text-xs text-text-muted">
-              <span>
-                Diagnostics: App #{buildInfo.commitHash} · Screen: {activeTab}
-              </span>
-            </div>
-
             {/* Submit */}
-            <button
-              type="submit"
-              disabled={isSubmitting || !message.trim()}
-              className="w-full py-2.5 rounded-xl bg-primary hover:brightness-110 disabled:opacity-50 text-primary-foreground font-semibold text-xs flex items-center justify-center gap-2 transition-transform cursor-pointer"
-            >
-              <Send className="w-3.5 h-3.5" />
-              <span>{isSubmitting ? "Sending..." : "Submit to PostHog"}</span>
-            </button>
-
-            {/* Link to Full Page */}
-            <button
-              type="button"
-              onClick={() => {
-                handleClose();
-                setActiveTab("feedback");
-              }}
-              className="text-xs text-primary hover:underline flex items-center justify-center gap-1 w-full pt-1 cursor-pointer font-semibold"
-            >
-              <span>Need detailed diagnostics or ticket tracking? Open Full Bug Report Page</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </button>
+            <div className="space-y-1.5 pt-1">
+              <button
+                type="submit"
+                disabled={isSubmitting || !message.trim()}
+                className="flex min-h-12 w-full items-center justify-center gap-2 rounded-[12px] border-2 border-border-ink bg-primary font-mono text-sm font-bold uppercase tracking-[0.04em] text-primary-foreground shadow-brutal-sm brutal-press cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
+              >
+                <Send className="h-4 w-4" aria-hidden />
+                <span>{isSubmitting ? "Sending…" : "Send report"}</span>
+              </button>
+              <p className="text-center text-xs text-text-muted">
+                {message.trim() ? "Includes" : "Write a message to send. Includes"} app #{buildInfo.commitHash} and this
+                screen ({activeTab}).
+              </p>
+            </div>
           </form>
         )}
       </div>

@@ -21,6 +21,13 @@ vi.mock("next/navigation", () => ({
 const storage = installLocalStorage();
 stubScrollIntoView();
 
+/** The planner menu; on phones it is folded behind "Planner tools", so open it first. */
+function plannerNav(): HTMLElement {
+  const toggle = screen.queryByRole("button", { name: /Planner tools/ });
+  if (toggle && toggle.getAttribute("aria-expanded") === "false") fireEvent.click(toggle);
+  return screen.getByRole("navigation", { name: "Planner menu" });
+}
+
 describe("FFCSTimetableTab", () => {
   afterEach(() => {
     // The overlay stack is module-global: a sheet left open by one test must
@@ -111,7 +118,7 @@ describe("FFCSTimetableTab", () => {
     try {
       render(<FFCSTimetableTab />);
 
-      expect(screen.getByRole("button", { name: /Switch Planner View Modern planner/ })).toBeDefined();
+      expect(within(plannerNav()).getByRole("button", { name: /Switch Planner View Modern planner/ })).toBeDefined();
       expect(screen.queryByText("Enter Full Screen & Start")).toBeNull();
       expect(screen.queryByText("Install App")).toBeNull();
     } finally {
@@ -499,7 +506,7 @@ describe("FFCSTimetableTab", () => {
     for (const label of ["Planner view", "Course list", "Settings"]) {
       expect(menu.getByRole("menuitem", { name: label })).toBeDefined();
     }
-    const plannerMenu = within(screen.getByRole("navigation", { name: "Planner menu" }));
+    const plannerMenu = within(plannerNav());
     expect(plannerMenu.getByRole("region", { name: "Views & Course Lists" }).className).toContain("xl:hidden");
     expect(plannerMenu.getByRole("region", { name: "Planner Settings" }).className).toContain("xl:hidden");
   }, 30_000);
@@ -573,7 +580,7 @@ describe("FFCSTimetableTab", () => {
     );
     render(<FFCSTimetableTab />);
 
-    const plannerMenu = within(screen.getByRole("navigation", { name: "Planner menu" }));
+    const plannerMenu = within(plannerNav());
     expect(plannerMenu.getByRole("button", { name: /How does this work\?/ })).toBeDefined();
     expect(screen.queryByRole("button", { name: "How does this work?" })).toBeNull();
     // The theme switch lives in the site top bar / app sidebar, not here.
@@ -583,7 +590,7 @@ describe("FFCSTimetableTab", () => {
   it("lets the desktop Add Courses menu entry toggle its widget", () => {
     render(<FFCSTimetableTab />);
 
-    const plannerMenu = within(screen.getByRole("navigation", { name: "Planner menu" }));
+    const plannerMenu = within(plannerNav());
     const addCourses = plannerMenu.getByRole("button", { name: /Add Courses/ });
     expect(addCourses.getAttribute("aria-pressed")).toBe("true");
     expect(screen.getByRole("region", { name: "Add Courses widget" })).toBeDefined();
@@ -609,13 +616,13 @@ describe("FFCSTimetableTab", () => {
     );
     render(<FFCSTimetableTab />);
 
-    fireEvent.click(screen.getByRole("button", { name: /Social & Friends/ }));
+    fireEvent.click(within(plannerNav()).getByRole("button", { name: /Social & Friends/ }));
     expect(await screen.findByRole("heading", { name: "Social & Friends" })).toBeDefined();
     expect(screen.getByRole("region", { name: "Social & Friends widget" })).toBeDefined();
     expect(screen.queryByRole("region", { name: "Timetable Actions widget" })).toBeNull();
     expect(screen.queryByRole("region", { name: "Add Courses widget" })).toBeNull();
     expect(
-      within(screen.getByRole("navigation", { name: "Planner menu" })).queryByRole("button", {
+      within(plannerNav()).queryByRole("button", {
         name: /^Add Courses$/,
       }),
     ).toBeNull();
@@ -651,7 +658,7 @@ describe("FFCSTimetableTab", () => {
     } as any);
 
     render(<FFCSTimetableTab />);
-    fireEvent.click(screen.getByRole("button", { name: /Manually Add Course/ }));
+    fireEvent.click(within(plannerNav()).getByRole("button", { name: /Manually Add Course/ }));
 
     fireEvent.click(await screen.findByText("BCSE101", {}, { timeout: 5000 }));
 
@@ -665,7 +672,7 @@ describe("FFCSTimetableTab", () => {
   it("puts course-planning actions in the menu and keeps their actions wired", () => {
     render(<FFCSTimetableTab />);
 
-    expect(screen.getByRole("navigation", { name: "Planner menu" })).toBeDefined();
+    expect(plannerNav()).toBeDefined();
     const manualAdd = screen.getByRole("button", { name: /Manually Add Course/ });
     const targetCourses = screen.getByRole("button", { name: /Target Courses/ });
     expect(manualAdd).toBeDefined();
@@ -679,7 +686,7 @@ describe("FFCSTimetableTab", () => {
   it("opens planner settings from the planner menu", async () => {
     render(<FFCSTimetableTab />);
 
-    const plannerMenu = within(screen.getByRole("navigation", { name: "Planner menu" }));
+    const plannerMenu = within(plannerNav());
     fireEvent.click(plannerMenu.getByRole("button", { name: /Planner Settings/ }));
     // The settings modal is a lazy chunk now — wait for its distinctive
     // content before counting the headings (findAll* resolves at ≥1 match,
@@ -695,7 +702,7 @@ describe("FFCSTimetableTab", () => {
     render(<FFCSTimetableTab />);
 
     expect(screen.queryByTitle("Load the Winter Semester 2026-2027 slot timetable")).toBeNull();
-    const plannerMenu = within(screen.getByRole("navigation", { name: "Planner menu" }));
+    const plannerMenu = within(plannerNav());
     fireEvent.click(plannerMenu.getByRole("button", { name: /Switch Course List/ }));
     expect(screen.getByRole("heading", { name: "Switch Course List" })).toBeDefined();
     expect(screen.getByRole("button", { name: /Fall Semester/ })).toBeDefined();
@@ -732,7 +739,7 @@ describe("FFCSTimetableTab", () => {
 
     render(<FFCSTimetableTab />);
 
-    const plannerMenu = within(screen.getByRole("navigation", { name: "Planner menu" }));
+    const plannerMenu = within(plannerNav());
     fireEvent.click(plannerMenu.getByRole("button", { name: /Switch Course List/ }));
 
     // The import is a menu row of its own in the picker, beside the reports.
@@ -1018,7 +1025,7 @@ describe("FFCSTimetableTab", () => {
 
     // Open the planner-view menu sheet, choose Guided, and apply it.
     fireEvent.click(
-      within(screen.getByRole("navigation", { name: "Planner menu" })).getByRole("button", {
+      within(plannerNav()).getByRole("button", {
         name: /Switch Planner View/,
       }),
     );
@@ -1156,7 +1163,7 @@ describe("FFCSTimetableTab", () => {
     expect(JSON.parse(storage.getItem("ffcs_courseLocks")!)).toHaveLength(2);
 
     // Switch to the mock list, which drops BCSE102...
-    const plannerMenu = within(screen.getByRole("navigation", { name: "Planner menu" }));
+    const plannerMenu = within(plannerNav());
     fireEvent.click(plannerMenu.getByRole("button", { name: /Switch Course List/ }));
     fireEvent.click(await screen.findByRole("button", { name: /Winter 2026-27 Mock List/ }));
 

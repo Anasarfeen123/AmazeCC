@@ -63,11 +63,11 @@ const EXPECTED: ReadonlyArray<{
   },
   {
     file: "src/components/custom/attendance/OverallAttendancePredictor.tsx",
-    // Target picker row, summary grid, lock explainer, milestone strip,
+    // Summary panel, lock explainer, Target + Count until, What if,
     // calendar card, course menu, info card. The lock explainer is a
     // sibling paragraph, not nested inside the summary grid it explains.
     // The day simulator is conditional: hidden with no working days left.
-    shells: [["div:div", "div:div", "p:div", "div:div", "cond&&", "div:stack", "div:stack"]],
+    shells: [["div:div", "p:div", "div:div", "div:div", "cond&&", "div:stack", "div:stack"]],
     branches: [],
   },
   {

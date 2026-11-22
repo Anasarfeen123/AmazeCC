@@ -1,11 +1,12 @@
 "use client";
+import SelectField from "../shared/primitives/SelectField";
 
 import { useState, useMemo, useCallback } from "react";
 import { useSetAtom, useAtomValue } from "jotai";
 import { unifiedAcademicsAtom } from "@/store";
 import type { NormalizedCourse } from "@/types/course";
 import { normalizeCourse } from "@/lib/courseNormalizer";
-import { ChipTabs, EmptyPanel, GhostButton, ListShell, PageShell, SegmentedControl } from "../shared/primitives";
+import { EmptyPanel, GhostButton, ListShell, PageShell } from "../shared/primitives";
 import { SEARCH_FIELD, TILE_CARD } from "@/lib/uiTokens";
 import { getTargetAttendancePct, settingsAtom } from "@/store/settingsAtoms";
 import {
@@ -29,18 +30,7 @@ import {
   type DayStates,
   type SimulationMode,
 } from "@/lib/attendancePredictor";
-import {
-  Calendar,
-  ChevronLeft,
-  ChevronRight,
-  RotateCcw,
-  CheckCircle2,
-  Flame,
-  Search,
-  BookOpen,
-  Snowflake,
-  Zap,
-} from "lucide-react";
+import { Calendar, ChevronLeft, ChevronRight, RotateCcw, Search, BookOpen, Snowflake, Zap } from "lucide-react";
 import { clickable } from "@/lib/a11y";
 
 /** The four attendance targets the picker offers, and their option values. */
@@ -459,31 +449,8 @@ export default function OverallAttendancePredictor({
         </>
       }
     >
-      {/* Target: in the page, not the header row (with Back and Reset it
-          overflowed a 390px phone and pushed Reset off-screen). */}
-      {/* Four equal segments across the row (it overflowed a 390px phone). */}
-      <div className="flex items-center gap-3 px-1">
-        <span className="shrink-0 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
-          Target
-        </span>
-        <SegmentedControl
-          grow
-          className="min-w-0 flex-1"
-          options={THRESHOLD_OPTIONS.map((th) => ({
-            value: String(th) as TargetThresholdOption,
-            label: `${th}%`,
-          }))}
-          value={String(targetThreshold) as TargetThresholdOption}
-          onChange={(next) => {
-            const th = Number(next);
-            setTargetThreshold(th);
-            setSettings((prev) => ({ ...prev, targetAttendance: th }));
-          }}
-        />
-      </div>
-
       {/* One compact panel, not a tile plus a 6-slide carousel (owner: too dense). */}
-      <div className="summary-row grid grid-cols-3 divide-x-2 divide-border-ink rounded-[14px] border-2 border-border-ink bg-surface shadow-brutal-sm">
+      <div className="grid grid-cols-3 divide-x-2 divide-border-ink rounded-[14px] border-2 border-border-ink bg-surface shadow-brutal-sm">
         {[
           {
             label: "Projected",
@@ -532,49 +499,62 @@ export default function OverallAttendancePredictor({
         </span>
       </p>
 
-      {/* ── MILESTONE SELECTOR STRIP ── */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <ChipTabs
-          options={milestoneOptions.map((opt) => ({
-            value: opt.id,
-            label: (
-              <>
-                {opt.label}
-                {opt.date ? (
-                  <span className="ml-1.5 opacity-80 text-xs font-normal">
-                    ({opt.date.toLocaleDateString("en-GB", { month: "short", day: "numeric" })})
-                  </span>
-                ) : null}
-              </>
-            ),
-            title: opt.available ? `Simulate up to ${opt.label}` : `${opt.label} (no data)`,
-          }))}
-          value={mode}
-          onChange={(next) => {
-            if (next === mode) return;
-            const opt = milestoneOptions.find((o) => o.id === next);
-            if (opt?.available) setMode(next);
-          }}
-        />
-
-        {/* Quick Batch Simulation Actions */}
-        <div className="flex items-center gap-2">
-          {/* Real buttons, not buttons inside status badges. */}
-          <button
-            type="button"
-            onClick={handleAttendAll}
-            className="inline-flex min-h-10 items-center gap-1.5 rounded-[10px] border-2 border-border-ink bg-mint px-3 font-mono text-xs font-bold uppercase tracking-[0.06em] text-obsidian shadow-brutal-sm brutal-press cursor-pointer"
-          >
-            <CheckCircle2 className="h-3.5 w-3.5" aria-hidden /> Attend all
-          </button>
-          <button
-            type="button"
-            onClick={handleBunkFridays}
-            className="inline-flex min-h-10 items-center gap-1.5 rounded-[10px] border-2 border-border-ink bg-ochre px-3 font-mono text-xs font-bold uppercase tracking-[0.06em] text-obsidian shadow-brutal-sm brutal-press cursor-pointer"
-          >
-            <Flame className="h-3.5 w-3.5" aria-hidden /> Skip Fridays
-          </button>
-        </div>
+      {/* ── TARGET + COUNT UNTIL dropdowns; WHAT IF as two small actions (owner) ── */}
+      <div className="grid grid-cols-2 gap-3">
+        <label className="min-w-0 space-y-1">
+          <span className="block px-1 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+            Target
+          </span>
+          <SelectField<TargetThresholdOption>
+            aria-label="Target attendance"
+            size="md"
+            searchable={false}
+            value={String(targetThreshold) as TargetThresholdOption}
+            options={THRESHOLD_OPTIONS.map((th) => ({ value: String(th) as TargetThresholdOption, label: `${th}%` }))}
+            onChange={(next) => {
+              const th = Number(next);
+              setTargetThreshold(th);
+              setSettings((prev) => ({ ...prev, targetAttendance: th }));
+            }}
+          />
+        </label>
+        <label className="min-w-0 space-y-1">
+          <span className="block px-1 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+            Count until
+          </span>
+          <SelectField<SimulationMode>
+            aria-label="Count until"
+            size="md"
+            searchable={false}
+            value={mode}
+            options={milestoneOptions
+              .filter((o) => o.available)
+              .map((o) => ({
+                value: o.id as SimulationMode,
+                label: o.date
+                  ? `${o.label} (${o.date.toLocaleDateString("en-GB", { day: "numeric", month: "short" })})`
+                  : o.label,
+              }))}
+            onChange={(next) => setMode(next)}
+          />
+        </label>
+      </div>
+      <div className="-mt-1 flex flex-wrap items-center gap-2 px-1">
+        <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">What if</span>
+        <button
+          type="button"
+          onClick={handleAttendAll}
+          className="min-h-9 rounded-[8px] border-2 border-border-ink bg-surface px-2.5 text-xs font-semibold text-text-heading brutal-press cursor-pointer"
+        >
+          I attend all
+        </button>
+        <button
+          type="button"
+          onClick={handleBunkFridays}
+          className="min-h-9 rounded-[8px] border-2 border-border-ink bg-surface px-2.5 text-xs font-semibold text-text-heading brutal-press cursor-pointer"
+        >
+          I skip Fridays
+        </button>
       </div>
 
       {/* ── INTERACTIVE CALENDAR SIMULATOR SECTION ── */}
@@ -710,16 +690,20 @@ export default function OverallAttendancePredictor({
             />
           </div>
 
-          {/* Filter Pills */}
-          <ChipTabs
-            options={[
-              { value: "all" as FilterType, label: "All" },
-              { value: "safe", label: `Safe (≥${targetThreshold}%)` },
-              { value: "risk", label: `At Risk (<${targetThreshold}%)` },
-              { value: "theory", label: "Theory" },
-              { value: "lab", label: "Lab" },
-            ]}
+          {/* One dropdown, not five chips (owner: too many buttons). */}
+          <SelectField<FilterType>
+            aria-label="Show courses"
+            size="md"
+            searchable={false}
+            className="w-full sm:w-44 shrink-0"
             value={filterType}
+            options={[
+              { value: "all", label: "All courses" },
+              { value: "safe", label: `Safe (≥${targetThreshold}%)` },
+              { value: "risk", label: `At risk (<${targetThreshold}%)` },
+              { value: "theory", label: "Theory only" },
+              { value: "lab", label: "Labs only" },
+            ]}
             onChange={setFilterType}
           />
         </div>
@@ -734,180 +718,189 @@ export default function OverallAttendancePredictor({
           />
         ) : (
           <ListShell>
-            {filteredCourses.map((course) => {
-              const isSafe = course.predictedPct >= targetThreshold;
-              const isClose = isSafe && course.predictedPct < targetThreshold + 4;
-              const expanded = openSubject?.courseCode === course.courseCode;
-              const dates = expanded
-                ? courseMeetingDates(
-                    course.courseCode,
-                    dayCardsMap,
-                    allWorkingDays,
-                    effectiveDayMap,
-                    course.ceiling,
-                    course.lockDate,
-                  )
-                : [];
-              const skips = skipSetFor(courseSkips, course.courseCode);
+            {/* Theory and lab of one course share a block (owner). */}
+            {Object.values(
+              filteredCourses.reduce<Record<string, typeof filteredCourses>>((acc, c) => {
+                const base = String(c.courseCode).replace(/\((T|L|P|E|TH|LO)\)$/i, "");
+                (acc[base] ||= []).push(c);
+                return acc;
+              }, {}),
+            ).map((parts) => {
+              const base = String(parts[0].courseCode).replace(/\((T|L|P|E|TH|LO)\)$/i, "");
+              const renderPart = (course: (typeof filteredCourses)[number]) => {
+                const isSafe = course.predictedPct >= targetThreshold;
+                const isClose = isSafe && course.predictedPct < targetThreshold + 4;
+                const expanded = openSubject?.courseCode === course.courseCode;
+                const dates = expanded
+                  ? courseMeetingDates(
+                      course.courseCode,
+                      dayCardsMap,
+                      allWorkingDays,
+                      effectiveDayMap,
+                      course.ceiling,
+                      course.lockDate,
+                    )
+                  : [];
+                const skips = skipSetFor(courseSkips, course.courseCode);
 
-              return (
-                <div key={course.courseCode} className={expanded ? "bg-surface-secondary" : ""}>
-                  {/* The menu item itself, mirroring "Course sections" in the
-                      course subpage overview: tile, title, value, chevron. */}
-                  <button
-                    type="button"
-                    onClick={() => setOpenSubject(expanded ? null : course)}
-                    aria-expanded={expanded}
-                    aria-label={`${expanded ? "Hide" : "Choose dates to skip for"} ${course.courseCode}`}
-                    className="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-hover"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        <span className="rounded-[6px] border-2 border-border-ink bg-surface-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-text-primary">
-                          {course.courseCode}
-                        </span>
-                        <span
-                          className={`rounded-[6px] border-2 border-border-ink px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-obsidian ${
-                            course.isLab ? "bg-mint" : "bg-sage"
-                          }`}
-                        >
+                return (
+                  <div key={course.courseCode} className={expanded ? "rounded-[10px] bg-surface-secondary" : ""}>
+                    {/* One compact line per part, like the Marks list: part,
+                      detail, projected %, thin bar (owner: make it smaller). */}
+                    <button
+                      type="button"
+                      onClick={() => setOpenSubject(expanded ? null : course)}
+                      aria-expanded={expanded}
+                      aria-label={`${expanded ? "Hide" : "Choose dates to skip for"} ${course.courseCode}`}
+                      className="w-full cursor-pointer rounded-[10px] px-2 py-2 text-left transition-colors hover:bg-surface-hover"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="w-14 shrink-0 font-mono text-xs font-bold uppercase text-text-heading">
                           {course.isLab ? "Lab" : "Theory"}
                         </span>
-                        {course.skippedCount > 0 && (
-                          <span className="rounded-[6px] border-2 border-border-ink bg-ochre px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-obsidian">
-                            {course.skippedCount} skip{course.skippedCount === 1 ? "" : "s"}
-                          </span>
+                        <span className="min-w-0 flex-1 truncate text-xs text-text-muted">
+                          {[
+                            course.slotName,
+                            course.locked ? "locked" : "",
+                            course.skippedCount > 0
+                              ? `${course.skippedCount} skip${course.skippedCount === 1 ? "" : "s"}`
+                              : "",
+                          ]
+                            .filter(Boolean)
+                            .join(" · ")}
+                        </span>
+                        <span
+                          data-private="attendance"
+                          className={`shrink-0 font-display text-base font-bold leading-none ${
+                            isSafe
+                              ? isClose
+                                ? "text-warning-foreground"
+                                : "text-success-foreground"
+                              : "text-danger-foreground"
+                          }`}
+                        >
+                          {formatPct(course.predictedPct, decimalValues)}%
+                        </span>
+                        <ChevronRight
+                          className={`h-4 w-4 shrink-0 text-text-muted transition-transform duration-200 ${expanded ? "rotate-90" : ""}`}
+                          aria-hidden
+                        />
+                      </div>
+                      <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-surface-tertiary">
+                        <div
+                          className={`h-full rounded-full ${isSafe ? (isClose ? "bg-ochre" : "bg-primary") : "bg-coral"}`}
+                          style={{ width: `${Math.max(0, Math.min(100, course.predictedPct))}%` }}
+                        />
+                      </div>
+                    </button>
+
+                    {/* The dropdown: this subject's dates, revealed in place. */}
+                    {expanded && (
+                      <div className="px-4 pb-4 -mt-1">
+                        {course.locked ? (
+                          <p className="flex items-start gap-2 rounded-xl bg-surface-secondary p-3 text-xs leading-relaxed text-text-muted font-medium">
+                            <Snowflake className="h-3.5 w-3.5 shrink-0 mt-px" />
+                            <span>
+                              Attendance is frozen
+                              {course.lockDate ? <> as of {formatShortDate(course.lockDate)}</> : null}
+                              {course.isLab ? " for lab" : " for theory"}, so there is nothing left to skip.
+                            </span>
+                          </p>
+                        ) : dates.length === 0 ? (
+                          <EmptyPanel
+                            variant="dashed"
+                            title="No classes left to project"
+                            description="Every scheduled class for this course is in the past, or its attendance is already locked."
+                          />
+                        ) : (
+                          <>
+                            <p className="px-1 pb-2 text-xs leading-relaxed text-text-muted font-medium">
+                              {course.isLab
+                                ? "A lab session counts as two hours, so skipping one costs two classes."
+                                : "Skipped dates count as absent for this subject only — nothing else on the timetable moves."}
+                            </p>
+                            <ListShell>
+                              {dates.map((date) => {
+                                const time = date.getTime();
+                                const skipped = skips.has(time);
+                                return (
+                                  <button
+                                    key={time}
+                                    type="button"
+                                    onClick={() => toggleSubjectSkip(course.courseCode, date)}
+                                    aria-pressed={skipped}
+                                    className="w-full py-2 px-3 flex items-center gap-3 text-left cursor-pointer transition-colors hover:bg-surface-hover active:bg-surface-tertiary "
+                                  >
+                                    <span
+                                      className={`flex h-9 w-9 shrink-0 flex-col items-center justify-center rounded-xl border ${
+                                        skipped
+                                          ? "border-border-ink bg-amber-500 text-white"
+                                          : "border-border-muted bg-surface-secondary"
+                                      }`}
+                                    >
+                                      <span className="text-xs font-bold uppercase leading-none opacity-80">
+                                        {date.toLocaleDateString("en-GB", { weekday: "short" })}
+                                      </span>
+                                      <span className="text-sm font-bold font-outfit leading-tight">
+                                        {date.getDate()}
+                                      </span>
+                                    </span>
+                                    <span className="min-w-0 flex-1">
+                                      <span className="block truncate text-sm font-bold text-text-heading dark:text-text-heading">
+                                        {date.toLocaleDateString("en-GB", { day: "numeric", month: "long" })}
+                                      </span>
+                                      <span className="block text-xs font-medium text-text-muted dark:text-text-muted">
+                                        {skipped
+                                          ? `Will be marked absent${course.isLab ? " (2 hrs)" : ""}`
+                                          : "Scheduled class"}
+                                      </span>
+                                    </span>
+                                    <span
+                                      className={`shrink-0 rounded-[6px] px-2 py-0.5 text-xs font-bold uppercase tracking-wider ${
+                                        skipped
+                                          ? "bg-warning-surface text-warning-foreground"
+                                          : "bg-surface-secondary text-text-muted "
+                                      }`}
+                                    >
+                                      {skipped ? "Skipped" : "Skip"}
+                                    </span>
+                                  </button>
+                                );
+                              })}
+                            </ListShell>
+                            {course.skippedCount > 0 && (
+                              <div className="pt-2">
+                                <GhostButton
+                                  onClick={() =>
+                                    setCourseSkips((prev) => ({
+                                      ...prev,
+                                      [course.courseCode]: {},
+                                    }))
+                                  }
+                                  title="Clear every skipped date for this subject"
+                                >
+                                  <RotateCcw className="w-3.5 h-3.5" />
+                                  Clear {course.skippedCount} skipped date
+                                  {course.skippedCount === 1 ? "" : "s"}
+                                </GhostButton>
+                              </div>
+                            )}
+                          </>
                         )}
                       </div>
-                      <h3 className="mt-1.5 truncate font-display text-sm font-bold text-text-heading sm:text-base">
-                        {course.courseTitle || course.courseCode}
-                      </h3>
-                      <p className="mt-0.5 truncate font-mono text-xs text-text-muted">
-                        {[
-                          course.locked ? "Locked" : "",
-                          course.slotName,
-                          course.meetingDays?.join(", ") || "No timetable",
-                        ]
-                          .filter(Boolean)
-                          .join(" // ")}{" "}
-                        {" // now "}
-                        <span data-private="attendance">{formatPct(course.currentPct, decimalValues)}%</span>
-                      </p>
-                    </div>
-
-                    <div className="flex shrink-0 items-center gap-2">
-                      {/* Projected % as a coloured block, like the Academics list:
-                          mint = at/above target, ochre = within 5 points, coral = below. */}
-                      <span
-                        data-private="attendance"
-                        className={`min-w-[76px] rounded-[10px] border-2 border-border-ink px-2.5 py-1.5 text-right font-display text-lg font-bold leading-none text-obsidian shadow-brutal-sm ${
-                          isSafe ? "bg-mint" : isClose ? "bg-ochre" : "bg-coral"
-                        }`}
-                      >
-                        {formatPct(course.predictedPct, decimalValues)}%
-                      </span>
-                      <ChevronRight
-                        className={`h-4 w-4 text-text-muted transition-transform duration-200 ${expanded ? "rotate-90" : ""}`}
-                        aria-hidden
-                      />
-                    </div>
-                  </button>
-
-                  {/* The dropdown: this subject's dates, revealed in place. */}
-                  {expanded && (
-                    <div className="px-4 pb-4 -mt-1">
-                      {course.locked ? (
-                        <p className="flex items-start gap-2 rounded-xl bg-surface-secondary p-3 text-xs leading-relaxed text-text-muted font-medium">
-                          <Snowflake className="h-3.5 w-3.5 shrink-0 mt-px" />
-                          <span>
-                            Attendance is frozen
-                            {course.lockDate ? <> as of {formatShortDate(course.lockDate)}</> : null}
-                            {course.isLab ? " for lab" : " for theory"}, so there is nothing left to skip.
-                          </span>
-                        </p>
-                      ) : dates.length === 0 ? (
-                        <EmptyPanel
-                          variant="dashed"
-                          title="No classes left to project"
-                          description="Every scheduled class for this course is in the past, or its attendance is already locked."
-                        />
-                      ) : (
-                        <>
-                          <p className="px-1 pb-2 text-xs leading-relaxed text-text-muted font-medium">
-                            {course.isLab
-                              ? "A lab session counts as two hours, so skipping one costs two classes."
-                              : "Skipped dates count as absent for this subject only — nothing else on the timetable moves."}
-                          </p>
-                          <ListShell>
-                            {dates.map((date) => {
-                              const time = date.getTime();
-                              const skipped = skips.has(time);
-                              return (
-                                <button
-                                  key={time}
-                                  type="button"
-                                  onClick={() => toggleSubjectSkip(course.courseCode, date)}
-                                  aria-pressed={skipped}
-                                  className="w-full py-2 px-3 flex items-center gap-3 text-left cursor-pointer transition-colors hover:bg-surface-hover active:bg-surface-tertiary "
-                                >
-                                  <span
-                                    className={`flex h-9 w-9 shrink-0 flex-col items-center justify-center rounded-xl border ${
-                                      skipped
-                                        ? "border-border-ink bg-amber-500 text-white"
-                                        : "border-border-muted bg-surface-secondary"
-                                    }`}
-                                  >
-                                    <span className="text-xs font-bold uppercase leading-none opacity-80">
-                                      {date.toLocaleDateString("en-GB", { weekday: "short" })}
-                                    </span>
-                                    <span className="text-sm font-bold font-outfit leading-tight">
-                                      {date.getDate()}
-                                    </span>
-                                  </span>
-                                  <span className="min-w-0 flex-1">
-                                    <span className="block truncate text-sm font-bold text-text-heading dark:text-text-heading">
-                                      {date.toLocaleDateString("en-GB", { day: "numeric", month: "long" })}
-                                    </span>
-                                    <span className="block text-xs font-medium text-text-muted dark:text-text-muted">
-                                      {skipped
-                                        ? `Will be marked absent${course.isLab ? " (2 hrs)" : ""}`
-                                        : "Scheduled class"}
-                                    </span>
-                                  </span>
-                                  <span
-                                    className={`shrink-0 rounded-[6px] px-2 py-0.5 text-xs font-bold uppercase tracking-wider ${
-                                      skipped
-                                        ? "bg-warning-surface text-warning-foreground"
-                                        : "bg-surface-secondary text-text-muted "
-                                    }`}
-                                  >
-                                    {skipped ? "Skipped" : "Skip"}
-                                  </span>
-                                </button>
-                              );
-                            })}
-                          </ListShell>
-                          {course.skippedCount > 0 && (
-                            <div className="pt-2">
-                              <GhostButton
-                                onClick={() =>
-                                  setCourseSkips((prev) => ({
-                                    ...prev,
-                                    [course.courseCode]: {},
-                                  }))
-                                }
-                                title="Clear every skipped date for this subject"
-                              >
-                                <RotateCcw className="w-3.5 h-3.5" />
-                                Clear {course.skippedCount} skipped date
-                                {course.skippedCount === 1 ? "" : "s"}
-                              </GhostButton>
-                            </div>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  )}
+                    )}
+                  </div>
+                );
+              };
+              return (
+                <div key={base} className="px-2 py-2">
+                  <div className="flex items-baseline justify-between gap-2 px-2">
+                    <h3 className="min-w-0 truncate font-display text-sm font-bold text-text-heading">
+                      {parts[0].courseTitle || base}
+                    </h3>
+                    <span className="shrink-0 font-mono text-xs text-text-muted">{base}</span>
+                  </div>
+                  {[...parts].sort((a, b) => Number(a.isLab) - Number(b.isLab)).map(renderPart)}
                 </div>
               );
             })}

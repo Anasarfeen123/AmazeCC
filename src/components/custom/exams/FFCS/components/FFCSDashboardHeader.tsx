@@ -284,6 +284,9 @@ export default function FFCSDashboardHeader({
   const isModernLayout = currentLayoutLabel?.toLowerCase().startsWith("modern") ?? false;
   const [enabledWidgets, setEnabledWidgets] = useState<DashboardWidget[]>(["add-courses", "timetables"]);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
+  // Phones: the 13-row tool menu sits behind one row, closed by default, so
+  // the timetable is near the top (owner: work on FFCS for mobile).
+  const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
   const [mobileWidget, setMobileWidget] = useState<MobileWidget | null>(null);
   const [isWeeklyDetailsOpen, setIsWeeklyDetailsOpen] = useState(false);
   const [isClashDetailsOpen, setIsClashDetailsOpen] = useState(false);
@@ -728,11 +731,41 @@ export default function FFCSDashboardHeader({
       {/* ── ZONE 3: SELECTABLE DASHBOARD WIDGETS ── */}
       <div className="space-y-2 pt-1">
         {/* h2: it follows the page h1 (audit: h1 then h3 skipped a level). */}
-        <h2 id="ffcs-widgets-heading" className="px-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+        <h2
+          id="ffcs-widgets-heading"
+          className={
+            isMobileViewport ? "sr-only" : "px-1 text-xs font-bold uppercase tracking-wider text-muted-foreground"
+          }
+        >
           Show on this page
         </h2>
+        {isMobileViewport && (
+          <button
+            type="button"
+            onClick={() => setMobileToolsOpen((o) => !o)}
+            aria-expanded={mobileToolsOpen}
+            aria-controls="ffcs-planner-menu"
+            className="flex min-h-12 w-full items-center justify-between gap-3 rounded-[12px] border-2 border-border-ink bg-surface px-4 text-left shadow-brutal-sm brutal-press cursor-pointer"
+          >
+            <span className="min-w-0">
+              <span className="block font-display text-sm font-bold uppercase text-text-heading">Planner tools</span>
+              <span className="block truncate text-xs text-text-muted">
+                Add courses, auto-generate, friends, export, settings
+              </span>
+            </span>
+            <ChevronDown
+              className={`h-4 w-4 shrink-0 text-text-muted transition-transform ${mobileToolsOpen ? "rotate-180" : ""}`}
+              aria-hidden
+            />
+          </button>
+        )}
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(220px,0.8fr)_minmax(0,2fr)] gap-3 items-start">
-          <nav aria-label="Planner menu" className="space-y-3">
+          <nav
+            id="ffcs-planner-menu"
+            aria-label="Planner menu"
+            className="space-y-3"
+            hidden={isMobileViewport && !mobileToolsOpen}
+          >
             {isMobileViewport ? (
               <section aria-labelledby="ffcs-add-course-heading" className="space-y-2">
                 <h3

@@ -103,7 +103,8 @@ export default function ThemeToggle({ className = "", showLabel = false }: Theme
           transition={{ duration: 0.18, ease: "easeOut" }}
           className="flex items-center justify-center"
         >
-          <Icon className="h-4.5 w-4.5 stroke-[2.2] text-primary" aria-hidden />
+          {/* Inherits the button colour: primary teal vanished on teal headers (FFCS). */}
+          <Icon className="h-4.5 w-4.5 stroke-[2.2] text-current" aria-hidden />
         </motion.div>
 
         {showLabel && (

@@ -221,17 +221,7 @@ export default function BottomSheet({
       className="relative flex w-full shrink-0 touch-none items-center justify-between gap-3 px-4 pt-3 pb-2"
       onPointerDown={startDrag}
     >
-      {showClose && dismissable && !hasTitleCard ? (
-        <button
-          onClick={onClose}
-          aria-label="Close"
-          className="relative z-10 shrink-0 rounded-full bg-surface-secondary p-2 text-text-muted transition-colors hover:bg-surface-tertiary cursor-pointer hit-expand"
-        >
-          <X className="h-4 w-4" />
-        </button>
-      ) : (
-        <span className="w-9 shrink-0" aria-hidden />
-      )}
+      <span className="w-10 shrink-0" aria-hidden />
 
       <div
         className="absolute inset-x-0 top-0 flex cursor-grab justify-center pt-3 active:cursor-grabbing touch-none select-none"
@@ -240,7 +230,20 @@ export default function BottomSheet({
         <div className="h-1 w-12 rounded-full bg-surface-tertiary" />
       </div>
 
-      <span className="w-9 shrink-0" aria-hidden />
+      {/* Close sits top right in the brand style (owner: the grey circle on
+          the left was not a proper close button). */}
+      {showClose && dismissable && !hasTitleCard ? (
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          className="relative z-10 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] border-2 border-border-ink bg-surface text-text-heading shadow-brutal-sm brutal-press cursor-pointer"
+        >
+          <X className="h-5 w-5" />
+        </button>
+      ) : (
+        <span className="w-10 shrink-0" aria-hidden />
+      )}
     </div>
   );
 

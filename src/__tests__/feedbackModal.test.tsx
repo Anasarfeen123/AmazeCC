@@ -71,7 +71,7 @@ describe("FeedbackModal", () => {
     const textarea = screen.getByPlaceholderText(/Tell us what you love or what could be better/i);
     fireEvent.change(textarea, { target: { value: "AmazeCC is lighting fast! Love the UI." } });
 
-    const submitBtn = screen.getByRole("button", { name: /Submit to PostHog/i });
+    const submitBtn = screen.getByRole("button", { name: /Send report/i });
     fireEvent.click(submitBtn);
 
     await waitFor(() => {

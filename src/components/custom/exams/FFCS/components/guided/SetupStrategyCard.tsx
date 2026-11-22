@@ -97,8 +97,8 @@ export default function SetupStrategyCard({
             </h3>
             <p className="text-sm opacity-80 mt-1 leading-snug">
               {planMode === "auto"
-                ? "Select target courses normally from the course list without locking slot or faculty constraints, giving the solver full flexibility."
-                : "Directly enter the manual course selector and pick slot offerings dynamically as you build."}
+                ? "Pick courses from the list with no slot or faculty limits; the generator has full freedom."
+                : "Open the course selector and pick each course's slot as you go."}
             </p>
           </div>
         </button>

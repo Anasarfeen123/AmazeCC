@@ -1383,16 +1383,12 @@ export default function FFCSGuidedSelector({
   const renderSetupTimetableCard = (isLandscape = false) => (
     <div
       className={`p-5 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-4 text-left flex flex-col ${
-        isLandscape ? "h-[74vh] max-h-[640px] w-full" : "min-h-[380px] max-h-[620px]"
+        isLandscape ? "h-[74vh] max-h-[640px] w-full" : "max-h-[620px]"
       }`}
     >
       <div className="flex items-center justify-between pb-2 border-b border-border-ink shrink-0">
-        <div>
-          <h3 className="text-sm font-bold text-text-heading uppercase tracking-wider font-outfit">
-            Select Target Timetable
-          </h3>
-          <p className="text-xs text-text-muted">Choose which timetable you want to edit and save courses into.</p>
-        </div>
+        {/* The page heading already says "Select target timetable" (owner: no repeats). */}
+        <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">Your timetables</p>
         {onCreateNewTimetable && (
           <button
             type="button"
@@ -2145,7 +2141,7 @@ export default function FFCSGuidedSelector({
       return (
         <div
           className={`p-5 sm:p-6 rounded-[14px] sm:rounded-[14px] bg-surface border border-border-ink shadow-2xl space-y-4 text-center flex flex-col justify-center items-center ${
-            isLandscape ? "h-[74vh] max-h-[640px] w-full" : "min-h-[380px] max-h-[620px]"
+            isLandscape ? "h-[74vh] max-h-[640px] w-full" : "max-h-[620px]"
           }`}
         >
           <BookOpen className="w-10 h-10 text-text-muted mb-2" />

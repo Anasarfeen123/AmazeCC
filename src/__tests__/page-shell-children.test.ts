@@ -66,12 +66,14 @@ const EXPECTED: ReadonlyArray<{
     // Target picker row, summary grid, lock explainer, milestone strip,
     // calendar card, course menu, info card. The lock explainer is a
     // sibling paragraph, not nested inside the summary grid it explains.
-    shells: [["div:div", "div:div", "p:div", "div:div", "div:stack", "div:stack", "div:stack"]],
+    // The day simulator is conditional: hidden with no working days left.
+    shells: [["div:div", "div:div", "p:div", "div:div", "cond&&", "div:stack", "div:stack"]],
     branches: [],
   },
   {
     file: "src/components/custom/attendance/ODTrackerSubpage.tsx",
-    shells: [["div:div", "p:div", "div:stack", "cond&&", "TabHelpFooter:control"]],
+    // Official records are folded into History (no separate card).
+    shells: [["div:div", "p:div", "div:stack", "TabHelpFooter:control"]],
   },
   {
     file: "src/components/custom/qbank/QBankSubpage.tsx",

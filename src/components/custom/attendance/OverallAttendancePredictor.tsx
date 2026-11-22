@@ -5,18 +5,7 @@ import { useSetAtom, useAtomValue } from "jotai";
 import { unifiedAcademicsAtom } from "@/store";
 import type { NormalizedCourse } from "@/types/course";
 import { normalizeCourse } from "@/lib/courseNormalizer";
-import {
-  ChipTabs,
-  EmptyPanel,
-  GhostButton,
-  InsightCarousel,
-  ListShell,
-  PageShell,
-  SegmentedControl,
-  StatTile,
-  useCarousel,
-  type InsightSlide,
-} from "../shared/primitives";
+import { ChipTabs, EmptyPanel, GhostButton, ListShell, PageShell, SegmentedControl } from "../shared/primitives";
 import { SEARCH_FIELD, TILE_CARD } from "@/lib/uiTokens";
 import { getTargetAttendancePct, settingsAtom } from "@/store/settingsAtoms";
 import {
@@ -45,7 +34,6 @@ import {
   ChevronLeft,
   ChevronRight,
   RotateCcw,
-  Sparkles,
   CheckCircle2,
   Flame,
   Search,
@@ -60,13 +48,6 @@ const THRESHOLD_OPTIONS = [75, 80, 85, 90] as const;
 type TargetThresholdOption = `${(typeof THRESHOLD_OPTIONS)[number]}`;
 
 type FilterType = "all" | "safe" | "risk" | "theory" | "lab";
-
-/** Midnight today, for the milestone countdowns. */
-function startOfToday(d: Date): number {
-  const x = new Date(d);
-  x.setHours(0, 0, 0, 0);
-  return x.getTime();
-}
 
 /** `5 Aug`, the form a milestone date reads well in. */
 function formatShortDate(d: Date): string {
@@ -455,63 +436,7 @@ export default function OverallAttendancePredictor({
     [milestoneOptions, mode],
   );
 
-  /**
-   * The rotating half of the summary row.
-   *
-   * The headline - projected average - is a single number and belongs in a
-   * `StatTile`; these are a set worth rotating through, which is what
-   * `InsightCarousel` is for. Same pairing as `FreeClassroomsTab`.
-   */
-  const summarySlides = useMemo<InsightSlide[]>(() => {
-    const slides: InsightSlide[] = [
-      {
-        id: "safe",
-        label: "Total Safe Leaves",
-        value: overallStats.totalSafeBunks,
-        sub: `${overallStats.safeCount} of ${overallStats.totalCourses} courses safe`,
-        badge: "classes",
-        tone: "emerald",
-        dotLabel: "Total safe leaves",
-      },
-      {
-        id: "risk",
-        label: "Courses At Risk",
-        value: overallStats.atRiskCount,
-        sub: overallStats.atRiskCount === 0 ? "All courses compliant" : `Below ${targetThreshold}%`,
-        badge: `under ${targetThreshold}%`,
-        tone: overallStats.atRiskCount > 0 ? "red" : "emerald",
-        dotLabel: "Courses at risk",
-      },
-      {
-        id: "remaining",
-        label: "Remaining Days",
-        value: totalRemainingWorkingDays,
-        sub: activeMilestone.lockLabel,
-        tone: "indigo",
-        dotLabel: "Remaining working days",
-      },
-    ];
-
-    // One slide per milestone that has a real date, so the countdown to the next
-    // thing that changes a number is on the tile rather than buried in a chip.
-    for (const opt of milestoneOptions) {
-      if (!opt.date) continue;
-      const days = Math.ceil((startOfToday(opt.date) - startOfToday(new Date())) / 86_400_000);
-      slides.push({
-        id: `milestone-${opt.id}`,
-        label: opt.label,
-        value: days > 0 ? `${days}d` : "now",
-        sub: days > 0 ? `Attendance locks ${formatShortDate(opt.date)}` : `Locked ${formatShortDate(opt.date)}`,
-        badge: "milestone",
-        tone: days > 0 ? (days <= 7 ? "amber" : "indigo") : "zinc",
-        dotLabel: `${opt.label} countdown`,
-      });
-    }
-    return slides;
-  }, [overallStats, totalRemainingWorkingDays, activeMilestone, milestoneOptions, targetThreshold]);
-
   const lockedNow = predictions.filter((p) => p.locked).length;
-  const carousel = useCarousel(summarySlides.length);
 
   return (
     <PageShell
@@ -557,34 +482,31 @@ export default function OverallAttendancePredictor({
         />
       </div>
 
-      {/* ── SUMMARY: one stat card and one auto carousel, side by side ── */}
-      <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
-        <StatTile
-          variant="highlight"
-          height="h-36"
-          label="Projected Avg"
-          icon={<Sparkles className="w-4 h-4 text-primary" />}
-          tone={overallStats.predictedPct >= targetThreshold ? "emerald" : "red"}
-          value={`${formatPct(overallStats.predictedPct, decimalValues)}%`}
-          sub={
-            <>
-              Now <span data-private="attendance">{formatPct(overallStats.currentPct, decimalValues)}%</span>
-            </>
-          }
-          badge={
-            overallStats.delta >= 0
-              ? `+${formatPct(overallStats.delta, decimalValues)}`
-              : formatPct(overallStats.delta, decimalValues)
-          }
-          privacyCategory="attendance"
-        />
-        <InsightCarousel
-          slides={summarySlides}
-          carousel={carousel}
-          height="h-36"
-          interactiveDots
-          ariaLabel="Attendance summary"
-        />
+      {/* One compact panel, not a tile plus a 6-slide carousel (owner: too dense). */}
+      <div className="summary-row grid grid-cols-3 divide-x-2 divide-border-ink rounded-[14px] border-2 border-border-ink bg-surface shadow-brutal-sm">
+        {[
+          {
+            label: "Projected",
+            value: `${formatPct(overallStats.predictedPct, decimalValues)}%`,
+            sub: `now ${formatPct(overallStats.currentPct, decimalValues)}%`,
+            tone: overallStats.predictedPct >= targetThreshold ? "text-success-foreground" : "text-danger-foreground",
+          },
+          { label: "Can skip", value: String(overallStats.totalSafeBunks), sub: "classes", tone: "text-text-heading" },
+          {
+            label: "At risk",
+            value: String(overallStats.atRiskCount),
+            sub: overallStats.atRiskCount === 1 ? "course" : "courses",
+            tone: overallStats.atRiskCount > 0 ? "text-danger-foreground" : "text-text-heading",
+          },
+        ].map((f) => (
+          <div key={f.label} className="min-w-0 px-3 py-3">
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">{f.label}</p>
+            <p data-private="attendance" className={`mt-1 font-display text-2xl font-bold leading-none ${f.tone}`}>
+              {f.value}
+            </p>
+            <p className="mt-1 truncate text-xs text-text-muted">{f.sub}</p>
+          </div>
+        ))}
       </div>
 
       {/* The lock the reader is currently projecting against, spelled out. */}
@@ -656,121 +578,121 @@ export default function OverallAttendancePredictor({
       </div>
 
       {/* ── INTERACTIVE CALENDAR SIMULATOR SECTION ── */}
-      <div className={`${TILE_CARD} p-5 space-y-4`}>
-        {/* Calendar Header & Month Switcher */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-border-muted dark:border-border">
-          <div>
-            <h3 className="text-sm font-bold text-text-heading uppercase tracking-wider flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-primary" />
-              <span>Interactive day simulator{currentMonth ? ` (${currentMonth})` : ""}</span>
-            </h3>
-            <p className="text-xs text-text-muted font-medium mt-0.5">
-              Whole day, every subject: <strong>Present</strong> → <strong>Absent (Bunk)</strong> →{" "}
-              <strong>Off (Holiday)</strong>. To miss one subject only, open it from the list below.
-            </p>
+      {/* Hidden when no working days remain (a big empty box otherwise). */}
+      {totalRemainingWorkingDays > 0 && (
+        <div className={`${TILE_CARD} p-5 space-y-4`}>
+          {/* Calendar Header & Month Switcher */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-border-muted dark:border-border">
+            <div>
+              <h3 className="text-sm font-bold text-text-heading uppercase tracking-wider flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-primary" />
+                <span>Interactive day simulator{currentMonth ? ` (${currentMonth})` : ""}</span>
+              </h3>
+              <p className="text-xs text-text-muted font-medium mt-0.5">Tap a day to cycle present, absent, off.</p>
+            </div>
+
+            {/* Month Switcher Controls */}
+            {monthsAvailable.length > 1 && (
+              <div className="flex items-center gap-2">
+                <button
+                  disabled={monthIdx === 0}
+                  onClick={() => setMonthIdx((i) => Math.max(0, i - 1))}
+                  className="p-1.5 rounded-xl bg-surface-secondary text-text-primary disabled:opacity-30 disabled:cursor-not-allowed hover:bg-surface-hover transition-colors cursor-pointer"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <span className="text-xs font-bold text-text-primary min-w-[100px] text-center font-outfit">
+                  {currentMonth}
+                </span>
+                <button
+                  disabled={monthIdx >= monthsAvailable.length - 1}
+                  onClick={() => setMonthIdx((i) => Math.min(monthsAvailable.length - 1, i + 1))}
+                  className="p-1.5 rounded-xl bg-surface-secondary text-text-primary disabled:opacity-30 disabled:cursor-not-allowed hover:bg-surface-hover transition-colors cursor-pointer"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
           </div>
 
-          {/* Month Switcher Controls */}
-          {monthsAvailable.length > 1 && (
-            <div className="flex items-center gap-2">
-              <button
-                disabled={monthIdx === 0}
-                onClick={() => setMonthIdx((i) => Math.max(0, i - 1))}
-                className="p-1.5 rounded-xl bg-surface-secondary text-text-primary disabled:opacity-30 disabled:cursor-not-allowed hover:bg-surface-hover transition-colors cursor-pointer"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <span className="text-xs font-bold text-text-primary min-w-[100px] text-center font-outfit">
-                {currentMonth}
-              </span>
-              <button
-                disabled={monthIdx >= monthsAvailable.length - 1}
-                onClick={() => setMonthIdx((i) => Math.min(monthsAvailable.length - 1, i + 1))}
-                className="p-1.5 rounded-xl bg-surface-secondary text-text-primary disabled:opacity-30 disabled:cursor-not-allowed hover:bg-surface-hover transition-colors cursor-pointer"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
+          {/* Working Days Grid for the selected month */}
+          {visibleMonthDays.length === 0 ? (
+            <div className="text-center py-8 text-xs font-bold text-text-muted">
+              No working days scheduled in {currentMonth} for the selected milestone.
+            </div>
+          ) : (
+            <div className="grid grid-cols-4 sm:grid-cols-7 md:grid-cols-8 gap-2">
+              {visibleMonthDays.map((d, i) => {
+                const time = d.date.getTime();
+                const state = dateStates[time] ?? 0;
+
+                const isToday = d.date.toDateString() === today.toDateString();
+                const dateNumber = d.date.getDate();
+                const shortWeekday =
+                  d.weekday?.slice(0, 3).toUpperCase() ||
+                  d.date.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase();
+
+                // Classes scheduled that weekday. A published day order means the
+                // real weekday's cards apply, which the raw weekday lookup misses.
+                const effWeekday = effectiveDayMap.get(dayKey(d.date)) || shortWeekday;
+                const dayCards = dayCardsMap[effWeekday] || [];
+                const classCount = dayCards.length;
+
+                return (
+                  <div
+                    key={time || i}
+                    {...clickable(() => toggleDayState(d.date))}
+                    aria-pressed={state === 1}
+                    className={`group relative flex flex-col items-center justify-between p-2.5 rounded-2xl border text-center transition-all duration-200 cursor-pointer select-none ${
+                      state === 1
+                        ? "bg-danger-surface text-danger-foreground border-border-ink shadow-brutal-sm"
+                        : state === 2
+                          ? "bg-surface-tertiary text-text-muted border-dashed border-border-ink opacity-60"
+                          : isToday
+                            ? "bg-primary text-primary-foreground border-border-ink shadow-brutal-sm"
+                            : "bg-surface text-text-primary border-border-ink hover:border-border-ink dark:hover:border-border-ink shadow-2xs"
+                    }`}
+                  >
+                    <span className="text-xs font-bold uppercase tracking-wider opacity-80">{shortWeekday}</span>
+                    <span className="text-base sm:text-lg font-bold my-0.5">{dateNumber}</span>
+                    <div className="flex items-center gap-1">
+                      <span
+                        className={`text-xs font-bold px-1.5 py-0.2 rounded ${
+                          state === 1
+                            ? "bg-danger-surface text-danger-foreground"
+                            : state === 2
+                              ? "bg-surface-tertiary text-text-muted"
+                              : isToday
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-surface-secondary text-text-muted"
+                        }`}
+                      >
+                        {state === 1 ? "Absent" : state === 2 ? "Off" : `${classCount} cl`}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           )}
-        </div>
 
-        {/* Working Days Grid for the selected month */}
-        {visibleMonthDays.length === 0 ? (
-          <div className="text-center py-8 text-xs font-bold text-text-muted">
-            No working days scheduled in {currentMonth} for the selected milestone.
-          </div>
-        ) : (
-          <div className="grid grid-cols-4 sm:grid-cols-7 md:grid-cols-8 gap-2">
-            {visibleMonthDays.map((d, i) => {
-              const time = d.date.getTime();
-              const state = dateStates[time] ?? 0;
-
-              const isToday = d.date.toDateString() === today.toDateString();
-              const dateNumber = d.date.getDate();
-              const shortWeekday =
-                d.weekday?.slice(0, 3).toUpperCase() ||
-                d.date.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase();
-
-              // Classes scheduled that weekday. A published day order means the
-              // real weekday's cards apply, which the raw weekday lookup misses.
-              const effWeekday = effectiveDayMap.get(dayKey(d.date)) || shortWeekday;
-              const dayCards = dayCardsMap[effWeekday] || [];
-              const classCount = dayCards.length;
-
-              return (
-                <div
-                  key={time || i}
-                  {...clickable(() => toggleDayState(d.date))}
-                  aria-pressed={state === 1}
-                  className={`group relative flex flex-col items-center justify-between p-2.5 rounded-2xl border text-center transition-all duration-200 cursor-pointer select-none ${
-                    state === 1
-                      ? "bg-danger-surface text-danger-foreground border-border-ink shadow-brutal-sm"
-                      : state === 2
-                        ? "bg-surface-tertiary text-text-muted border-dashed border-border-ink opacity-60"
-                        : isToday
-                          ? "bg-primary text-primary-foreground border-border-ink shadow-brutal-sm"
-                          : "bg-surface text-text-primary border-border-ink hover:border-border-ink dark:hover:border-border-ink shadow-2xs"
-                  }`}
-                >
-                  <span className="text-xs font-bold uppercase tracking-wider opacity-80">{shortWeekday}</span>
-                  <span className="text-base sm:text-lg font-bold my-0.5">{dateNumber}</span>
-                  <div className="flex items-center gap-1">
-                    <span
-                      className={`text-xs font-bold px-1.5 py-0.2 rounded ${
-                        state === 1
-                          ? "bg-danger-surface text-danger-foreground"
-                          : state === 2
-                            ? "bg-surface-tertiary text-text-muted"
-                            : isToday
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-surface-secondary text-text-muted"
-                      }`}
-                    >
-                      {state === 1 ? "Absent" : state === 2 ? "Off" : `${classCount} cl`}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Legend Bar */}
-        <div className="flex flex-wrap items-center justify-center gap-4 pt-2 text-xs font-bold text-text-muted">
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-[3px] border-2 border-border-ink bg-primary" />
-            <span>Present / Attending</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-[3px] border-2 border-border-ink bg-danger-surface" />
-            <span>Absent / Bunked</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-surface-tertiary" />
-            <span>Off / Excluded</span>
+          {/* Legend Bar */}
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-2 text-xs font-bold text-text-muted">
+            <div className="flex items-center gap-1.5">
+              <div className="w-3 h-3 rounded-[3px] border-2 border-border-ink bg-primary" />
+              <span>Present / Attending</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="w-3 h-3 rounded-[3px] border-2 border-border-ink bg-danger-surface" />
+              <span>Absent / Bunked</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="w-3 h-3 rounded bg-surface-tertiary" />
+              <span>Off / Excluded</span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* ── COURSE SIMULATION BREAKDOWN ── */}
       <div className="space-y-4 pt-2">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAtom } from "jotai";
 import { officialOdDataAtom, unifiedAcademicsAtom } from "@/store";
 import type { NormalizedCourse } from "@/types/course";
@@ -22,7 +22,8 @@ import {
 } from "../shared/primitives";
 import { parseAttendanceTime } from "@/lib/attendanceTimetable";
 import config from "../../../../config.json";
-import OfficialOdSection from "./OfficialOdSection";
+import { syncEngine } from "@/lib/sync-engine";
+import { storage } from "@/lib/storage";
 import TabHelpFooter from "../shared/TabHelpFooter";
 import { getOfficialOd, matchOfficialOdForDate } from "@/lib/officialOd";
 
@@ -245,6 +246,23 @@ export default function ODTrackerSubpage({
       totalODHours: totalHours,
     };
   }, [ODhoursData, attendanceData, officialRecords]);
+
+  // One view (owner): official VTOP records are folded into History. Days
+  // with attendance carry their reason inline; records with no matching day
+  // are listed under History too, instead of a second card.
+  const unmatchedOfficial = useMemo(
+    () => officialRecords.filter((r: any) => !masterODHistory.some((d) => d.officialWhy?.includes(r))),
+    [officialRecords, masterODHistory],
+  );
+  // The removed card used to fetch the records when none were cached.
+  useEffect(() => {
+    let demo = false;
+    try {
+      demo = !!storage.demoMode.get();
+    } catch {}
+    if (demo || !currSemesterID || officialRecords.length > 0) return;
+    syncEngine.sync("officialOd", { semesterId: currSemesterID }).catch(() => {});
+  }, [currSemesterID, officialRecords.length]);
 
   const matchedDaysCount = useMemo(
     () => masterODHistory.filter((d) => d.officialWhy && d.officialWhy.length > 0).length,
@@ -541,14 +559,28 @@ export default function ODTrackerSubpage({
             })}
           </ListShell>
         )}
-      </div>
 
-      {/* ── OFFICIAL VTOP RECORDS ── */}
-      {currSemesterID && (
-        <div className="pt-2">
-          <OfficialOdSection currSemesterID={currSemesterID} allGradesData={allGradesData} />
-        </div>
-      )}
+        {unmatchedOfficial.length > 0 && (
+          <div className="space-y-2">
+            <p className="px-1 text-xs font-semibold text-text-muted">
+              Also on VTOP's official OD list ({unmatchedOfficial.length}), with no attendance change
+            </p>
+            <ListShell>
+              {unmatchedOfficial.map((r: any, i: number) => (
+                <div key={`${r.slNo}-${i}`} className={LIST_ROW}>
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-border-muted bg-surface-secondary text-text-muted">
+                    <FileText className="h-4.5 w-4.5" />
+                  </span>
+                  <ListRowText
+                    title={r.reason || r.type || "On-duty"}
+                    subtitle={[r.date, r.time, r.remarks].filter(Boolean).join(" · ")}
+                  />
+                </div>
+              ))}
+            </ListShell>
+          </div>
+        )}
+      </div>
 
       <TabHelpFooter tabId="attendance-od" />
     </PageShell>

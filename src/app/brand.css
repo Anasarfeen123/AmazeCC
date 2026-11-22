@@ -39,7 +39,16 @@
      0.75rem text-xs rendered labels at 10.5px, under the 12px label rule in
      design/TYPOGRAPHY.md (critique #17: 60-74 such labels per screen). The
      layout keeps its compact spacing; only text-xs gets a 12px floor. */
-  --text-xs: max(12px, 0.75rem);
+  --text-xs: max(13px, 0.75rem);
+  /* Reading sizes (owner, after the Fontfabric readability guide: tall
+     x-height, room between lines, ~16px body on screens). Phones keep their
+     smaller rem root for spacing and controls, but text never drops below
+     these floors, and gets more line spacing (text-xs 12 -> 13px). */
+  --text-xs--line-height: 1.45;
+  --text-sm: max(14px, 0.875rem);
+  --text-sm--line-height: 1.5;
+  --text-base: max(16px, 1rem);
+  --text-base--line-height: 1.55;
 
   /* Hard shadows. Bottom-right, no blur, ink coloured. Every existing
      shadow-* class becomes one of the three spec steps. */

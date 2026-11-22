@@ -23,16 +23,6 @@ export type Settings = {
   privacyCategories?: string[];
   /** With CGPA hidden in Privacy Mode, drop the CGPA card from Home (default on). */
   privacyRemoveCgpaCard?: boolean;
-  /** Android / desktop app: notify before each class (src/lib/nativeReminders.ts). */
-  classReminders?: boolean;
-  /** Minutes before the class for that reminder (5, 10 or 15; default 10). */
-  classReminderMinutes?: number;
-  /** With reminders on: also remind the evening before and an hour before exams (default on). */
-  examReminders?: boolean;
-  /** Android app: ask for fingerprint / screen lock when the app opens. */
-  appLock?: boolean;
-  /** Desktop app: launch when the computer starts. */
-  launchAtLogin?: boolean;
   /** Comic is text grawlix; marker is the optional blackout cover. */
   privacyCoverStyle?: "comic" | "marker";
   /**

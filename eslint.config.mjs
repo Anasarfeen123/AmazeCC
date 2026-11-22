@@ -52,7 +52,7 @@ const eslintConfig = [
         },
       ],
     },
-    ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts", "native/**"],
+    ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
   },
   // `@typescript-eslint` is registered by next's `next/typescript` config for
   // ts/tsx files only, so this rule must be scoped the same way — a plain

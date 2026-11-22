@@ -60,7 +60,6 @@ import LocalStorageSubpage from "../footer/LocalStorageSubpage";
 import ChangelogModal from "./ChangelogModal";
 import HallOfFameModal from "./HallOfFameModal";
 import TeamModal from "./TeamModal";
-import NativeAppSettings from "../native/NativeAppSettings";
 import AboutBody from "./AboutBody";
 import ProfileStatusCards from "../profile/ProfileStatusCards";
 import AcknowledgementCards from "../profile/AcknowledgementCards";
@@ -2101,9 +2100,6 @@ export default function ProfilePage({
           <PushNotificationManager />
         </div>
       </div>
-
-      {/* Android / desktop app only: class reminders, start at login. */}
-      <NativeAppSettings />
 
       {/* Install — only rendered when the browser offers the prompt. */}
       <PwaInstallCard />

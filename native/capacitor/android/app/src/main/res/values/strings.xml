@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">AmazeCC</string>
-    <string name="title_activity_main">AmazeCC</string>
-    <string name="package_name">com.amazecc.app</string>
-    <string name="custom_url_scheme">com.amazecc.app</string>
-    <string name="widget_description">Your next class, room and attendance</string>
-    <string name="widget_name">Next class</string>
-</resources>

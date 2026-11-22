@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { activeTabAtom, activeToolsSubTabAtom } from "@/store/uiAtoms";
+import { activeAttendanceSubTabAtom, activeTabAtom, activeToolsSubTabAtom } from "@/store/uiAtoms";
 import {
   BookOpen,
   Calendar as CalendarIcon,
@@ -524,6 +524,7 @@ export default function CalendarSubpage({
   // the Tools hub, while students look for it here).
   const setActiveTab = useSetAtom(activeTabAtom);
   const setActiveToolsSubTab = useSetAtom(activeToolsSubTabAtom);
+  const setActiveAttendanceSubTab = useSetAtom(activeAttendanceSubTabAtom);
   const openPredictor = () => {
     setActiveToolsSubTab("attendance-predictor");
     setActiveTab("tools");
@@ -656,6 +657,18 @@ export default function CalendarSubpage({
         <span className="min-w-0">
           <span className="block font-display text-sm font-bold uppercase">Skip predictor</span>
           <span className="block text-xs">How many classes you can skip, course by course</span>
+        </span>
+        <ChevronRight className="h-4 w-4 shrink-0" aria-hidden />
+      </button>
+      {/* On-duty was unreachable from here (owner). */}
+      <button
+        type="button"
+        onClick={() => setActiveAttendanceSubTab("od")}
+        className="mb-3 flex min-h-12 w-full items-center justify-between gap-3 rounded-[12px] border-2 border-border-ink bg-surface px-4 text-left text-text-heading shadow-brutal-sm brutal-press cursor-pointer"
+      >
+        <span className="min-w-0">
+          <span className="block font-display text-sm font-bold uppercase">On-duty</span>
+          <span className="block text-xs text-text-muted">OD hours, history and official records</span>
         </span>
         <ChevronRight className="h-4 w-4 shrink-0" aria-hidden />
       </button>

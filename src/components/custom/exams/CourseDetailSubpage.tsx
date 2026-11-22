@@ -2267,73 +2267,83 @@ export default function CourseDetailSubpage({
                   )}
                 </>
               )}
-              {/* Marks */}
-              <button onClick={() => ovGo("marks")} className={LIST_ROW}>
-                <span
-                  className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center ${TONE_ICON_TILE.indigo}`}
-                >
-                  <Target className="w-5 h-5" />
-                </span>
-                <ListRowText
-                  title="Marks"
-                  subtitle={
-                    <span data-private="marks">
-                      {isEmbedded
-                        ? `Theory ${formatNumber(ovTheoryTotals.weighted)}/${formatNumber(ovTheoryTotals.weightPercent)} · Lab ${formatNumber(ovLabTotals.weighted)}/${formatNumber(ovLabTotals.weightPercent)}`
-                        : String(courseTotalString)}
+              {/* Grades out: the grade row; until then: marks and the predictor
+                  (owner: grade entry once released, else this term's marks). */}
+              {!selectedPastGrade && (
+                <>
+                  {/* Marks */}
+                  <button onClick={() => ovGo("marks")} className={LIST_ROW}>
+                    <span
+                      className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center ${TONE_ICON_TILE.indigo}`}
+                    >
+                      <Target className="w-5 h-5" />
                     </span>
-                  }
-                />
-                <span className="flex items-center gap-2 shrink-0">
+                    <ListRowText
+                      title="Marks"
+                      subtitle={
+                        <span data-private="marks">
+                          {isEmbedded
+                            ? `Theory ${formatNumber(ovTheoryTotals.weighted)}/${formatNumber(ovTheoryTotals.weightPercent)} · Lab ${formatNumber(ovLabTotals.weighted)}/${formatNumber(ovLabTotals.weightPercent)}`
+                            : String(courseTotalString)}
+                        </span>
+                      }
+                    />
+                    <span className="flex items-center gap-2 shrink-0">
+                      <span
+                        data-private="marks"
+                        className="text-base font-bold font-outfit tracking-tight leading-none text-primary"
+                      >
+                        {isSelectedPastSemester && selectedPastGrade
+                          ? `Grade ${selectedPastGrade}`
+                          : `${courseStats.projected}%`}
+                      </span>
+                      <ChevronRight className="w-4 h-4 text-text-muted" />
+                    </span>
+                  </button>
+                  {/* Grade Predictor */}
+                  <button onClick={() => ovGo("grade-predictor")} className={LIST_ROW}>
+                    <span
+                      className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center ${TONE_ICON_TILE.violet}`}
+                    >
+                      <Sparkles className="w-5 h-5" />
+                    </span>
+                    <ListRowText
+                      title="Grade Predictor"
+                      subtitle="Simulate what-if scores and see what the FAT needs"
+                    />
+                    <span className="flex items-center gap-2 shrink-0">
+                      <span className="text-base font-bold font-outfit tracking-tight leading-none text-primary">
+                        {selectedGroup?.theory?.assessments?.length || selectedGroup?.lab?.assessments?.length
+                          ? `${(selectedGroup?.theory?.assessments?.length || 0) + (selectedGroup?.lab?.assessments?.length || 0)} tests`
+                          : "—"}
+                      </span>
+                      <ChevronRight className="w-4 h-4 text-text-muted" />
+                    </span>
+                  </button>
+                </>
+              )}
+              {selectedPastGrade ? (
+                <button onClick={() => ovGo("grades")} className={LIST_ROW}>
                   <span
-                    data-private="marks"
-                    className="text-base font-bold font-outfit tracking-tight leading-none text-primary"
+                    className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center ${TONE_ICON_TILE.emerald}`}
                   >
-                    {isSelectedPastSemester && selectedPastGrade
-                      ? `Grade ${selectedPastGrade}`
-                      : `${courseStats.projected}%`}
+                    <CheckCircle2 className="w-5 h-5" />
                   </span>
-                  <ChevronRight className="w-4 h-4 text-text-muted" />
-                </span>
-              </button>
-              {/* Grade Predictor */}
-              <button onClick={() => ovGo("grade-predictor")} className={LIST_ROW}>
-                <span
-                  className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center ${TONE_ICON_TILE.violet}`}
-                >
-                  <Sparkles className="w-5 h-5" />
-                </span>
-                <ListRowText title="Grade Predictor" subtitle="Simulate what-if scores and see what the FAT needs" />
-                <span className="flex items-center gap-2 shrink-0">
-                  <span className="text-base font-bold font-outfit tracking-tight leading-none text-primary">
-                    {selectedGroup?.theory?.assessments?.length || selectedGroup?.lab?.assessments?.length
-                      ? `${(selectedGroup?.theory?.assessments?.length || 0) + (selectedGroup?.lab?.assessments?.length || 0)} tests`
-                      : "—"}
+                  <ListRowText
+                    title="Grades"
+                    subtitle={`${isRelative ? "Relative grading" : "Absolute grading"}${courseGradeHistory.length > 0 ? ` · ${courseGradeHistory.length} record${courseGradeHistory.length === 1 ? "" : "s"}` : ""}`}
+                  />
+                  <span className="flex items-center gap-2 shrink-0">
+                    <span
+                      data-private="marks"
+                      className="text-base font-bold font-outfit tracking-tight leading-none text-text-heading"
+                    >
+                      {selectedPastGrade ? `Grade ${selectedPastGrade}` : `${courseStats.projected}%`}
+                    </span>
+                    <ChevronRight className="w-4 h-4 text-text-muted" />
                   </span>
-                  <ChevronRight className="w-4 h-4 text-text-muted" />
-                </span>
-              </button>
-              {/* Grade History */}
-              <button onClick={() => ovGo("grades")} className={LIST_ROW}>
-                <span
-                  className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center ${TONE_ICON_TILE.emerald}`}
-                >
-                  <CheckCircle2 className="w-5 h-5" />
-                </span>
-                <ListRowText
-                  title="Grades"
-                  subtitle={`${isRelative ? "Relative grading" : "Absolute grading"}${courseGradeHistory.length > 0 ? ` · ${courseGradeHistory.length} record${courseGradeHistory.length === 1 ? "" : "s"}` : ""}`}
-                />
-                <span className="flex items-center gap-2 shrink-0">
-                  <span
-                    data-private="marks"
-                    className="text-base font-bold font-outfit tracking-tight leading-none text-text-heading"
-                  >
-                    {selectedPastGrade ? `Grade ${selectedPastGrade}` : `${courseStats.projected}%`}
-                  </span>
-                  <ChevronRight className="w-4 h-4 text-text-muted" />
-                </span>
-              </button>
+                </button>
+              ) : null}
               {/* Course Plan */}
               <button onClick={() => ovGo("plan")} className={LIST_ROW}>
                 <span
@@ -2342,34 +2352,12 @@ export default function CourseDetailSubpage({
                   <FileText className="w-5 h-5" />
                 </span>
                 <ListRowText
-                  title="Review Course Details"
-                  subtitle={`${mainCourse?.faculty || "Faculty N/A"}${mainCourse?.courseType ? ` · ${isEmbedded ? "Embedded" : mainCourse.courseType}` : ""}`}
+                  title="Course page"
+                  subtitle={`Details and VTOP materials${totalUploaded > 0 ? ` · ${totalUploaded} file${totalUploaded === 1 ? "" : "s"}` : ""}`}
                 />
                 <span className="flex items-center gap-2 shrink-0">
                   <span className="text-sm font-bold font-outfit tracking-tight leading-none text-text-heading truncate max-w-24">
                     {mainCourse?.slot || "—"}
-                  </span>
-                  <ChevronRight className="w-4 h-4 text-text-muted" />
-                </span>
-              </button>
-              {/* VTOP Course Page — teacher-uploaded files */}
-              <button onClick={() => ovGo("vtop")} className={LIST_ROW}>
-                <span
-                  className={`h-10 w-10 shrink-0 rounded-2xl border flex items-center justify-center ${TONE_ICON_TILE.sky}`}
-                >
-                  <Paperclip className="w-5 h-5" />
-                </span>
-                <ListRowText
-                  title="VTOP Course Page"
-                  subtitle={
-                    totalUploaded > 0
-                      ? `${totalUploaded} file${totalUploaded === 1 ? "" : "s"} uploaded by faculty on VTOP`
-                      : "Files uploaded by faculty on VTOP"
-                  }
-                />
-                <span className="flex items-center gap-2 shrink-0">
-                  <span className="text-base font-bold font-outfit tracking-tight leading-none text-primary">
-                    {viewLoading ? "…" : totalUploaded > 0 ? String(totalUploaded) : "—"}
                   </span>
                   <ChevronRight className="w-4 h-4 text-text-muted" />
                 </span>
@@ -2695,6 +2683,18 @@ export default function CourseDetailSubpage({
       {effectiveTab === "lab-predictor" && renderPredictorPage(labAttItem, labData, "Lab")}
 
       {/* COURSE DETAILS — hero, official documents, faculty, weekly timetable, QCM */}
+      {/* One course page, two parts (owner: the two rows were the same place). */}
+      {(innerTab === "plan" || innerTab === "vtop") && (
+        <SegmentedControl
+          grow
+          options={[
+            { value: "plan", label: "Details" },
+            { value: "vtop", label: totalUploaded > 0 ? `Materials (${totalUploaded})` : "Materials" },
+          ]}
+          value={innerTab}
+          onChange={(v) => setInnerTab(v)}
+        />
+      )}
       {innerTab === "plan" && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6 mt-4">
           {/* 1 ── HERO STATS (2-up StatTile + InsightCarousel) */}

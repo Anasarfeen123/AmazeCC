@@ -1,0 +1,13 @@
+{
+  "name": "amazecc-desktop",
+  "private": true,
+  "description": "Desktop shell for AmazeCC (Tauri 2). Loads the static export in ../../out.",
+  "scripts": {
+    "tauri": "tauri",
+    "icons": "tauri icon ../../design/icon/amazecc-icon-source-1024.png -o src-tauri/icons",
+    "build": "tauri build"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.12.6"
+  }
+}

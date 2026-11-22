@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AmazeCC</string>
+    <string name="title_activity_main">AmazeCC</string>
+    <string name="package_name">com.amazecc.app</string>
+    <string name="custom_url_scheme">com.amazecc.app</string>
+</resources>

@@ -67,3 +67,12 @@ config.bat
 # agents
 .agents/
 
+
+# Native shells (native/README.md): dependencies, copied web build, outputs
+native/*/node_modules/
+native/capacitor/www/
+native/capacitor/android/app/build/
+native/capacitor/android/.gradle/
+native/capacitor/android/build/
+native/tauri/src-tauri/target/
+native/tauri/src-tauri/gen/

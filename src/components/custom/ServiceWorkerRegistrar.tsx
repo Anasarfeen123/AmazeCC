@@ -4,6 +4,7 @@ import { getAssetPath } from "@/lib/utils";
 
 import { useEffect } from "react";
 import { initPwaInstallListeners } from "@/lib/pwaInstall";
+import { installDesktopLinkHandler, nativeShell } from "@/lib/nativeShell";
 
 /**
  * Root-level PWA plumbing.
@@ -19,6 +20,11 @@ import { initPwaInstallListeners } from "@/lib/pwaInstall";
  */
 export default function ServiceWorkerRegistrar() {
   useEffect(() => {
+    // Inside the Android or desktop app: the files are on the device already,
+    // so no worker and no install prompt; desktop links go to the browser.
+    const shell = nativeShell();
+    if (shell === "desktop") return installDesktopLinkHandler();
+    if (shell) return;
     // Serwist is disabled in next.config.mjs during development, so there is
     // no worker to register until a production build is running.
     if (process.env.NODE_ENV !== "development" && "serviceWorker" in navigator) {

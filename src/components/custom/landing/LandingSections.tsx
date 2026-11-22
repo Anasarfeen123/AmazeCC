@@ -534,12 +534,16 @@ export default function LandingSections() {
       >
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.3fr]">
           <Heading label="A day" title="One app from 8 am to 9 pm" />
-          <ol className="space-y-3 pr-2">
+          {/* Phones: a sideways timeline (owner: the stacked cards wasted the
+              screen); cards snap, the next one peeks in. lg+: the list. */}
+          <ol className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 pr-6 [scrollbar-width:none] lg:mx-0 lg:block lg:space-y-3 lg:overflow-visible lg:px-0 lg:pb-0 lg:pr-2">
             {companionTimeline.map((t, i) => (
-              <Reveal as="li" key={t.time} delay={i * 70}>
-                <div className={`${CARD} grid grid-cols-[auto_1fr] items-center gap-4 bg-surface p-4`}>
+              <Reveal as="li" key={t.time} delay={i * 70} className="w-[78%] shrink-0 snap-start sm:w-[46%] lg:w-auto">
+                <div
+                  className={`${CARD} flex h-full flex-col gap-3 bg-surface p-4 lg:grid lg:grid-cols-[auto_1fr] lg:items-center lg:gap-4`}
+                >
                   <span
-                    className={`rounded-[8px] border-[3px] border-border-ink px-2 py-1 font-mono text-sm font-bold ${dayColours[i % dayColours.length]} ${i % dayColours.length === 5 ? "" : INK}`}
+                    className={`self-start rounded-[8px] border-[3px] border-border-ink px-2 py-1 font-mono text-sm font-bold lg:self-auto ${dayColours[i % dayColours.length]} ${i % dayColours.length === 5 ? "" : INK}`}
                   >
                     {t.time}
                   </span>

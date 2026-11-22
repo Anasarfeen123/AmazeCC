@@ -232,7 +232,7 @@ export default function ModernHorizontalTimetableGrid({
                     isLab?: boolean,
                   ) => {
                     if (!slotName) {
-                      return <div className="h-[38px] rounded-md bg-transparent" />;
+                      return <div className="h-[44px] rounded-md bg-transparent" />;
                     }
 
                     if (isBlocked) {
@@ -241,7 +241,7 @@ export default function ModernHorizontalTimetableGrid({
                           {...clickable(() => onToggleBlockSlot?.(slotName))}
                           title={`Blocked slot (${slotName}). Click to unblock.`}
                           className={cn(
-                            "h-[38px] p-1 rounded-md flex flex-col items-center justify-center relative transition-all duration-200 border border-border-ink",
+                            "h-[44px] p-1 rounded-md flex flex-col items-center justify-center relative transition-all duration-200 border border-border-ink",
                             "bg-[repeating-linear-gradient(45deg,transparent,transparent_3px,rgba(239,68,68,0.12)_3px,rgba(239,68,68,0.12)_6px)] dark:bg-[repeating-linear-gradient(45deg,transparent,transparent_3px,rgba(239,68,68,0.25)_3px,rgba(239,68,68,0.25)_6px)]",
                             "bg-danger-surface text-danger-foreground shadow-inner",
                             onToggleBlockSlot && "cursor-pointer hover:bg-red-100 dark:hover:bg-red-900/40",
@@ -264,7 +264,8 @@ export default function ModernHorizontalTimetableGrid({
                         <div
                           {...clickable(() => onToggleBlockSlot?.(slotName))}
                           className={cn(
-                            "h-[38px] p-1.5 rounded-md flex flex-col justify-between relative transition-all duration-200 group/tile",
+                            // 44px fits the code and the venue (38px cut the venue line in half; owner).
+                            "h-[44px] px-1.5 py-1 rounded-md flex flex-col justify-center gap-0.5 relative transition-all duration-200 group/tile",
                             onToggleBlockSlot && "cursor-pointer",
                           )}
                           style={{
@@ -282,12 +283,12 @@ export default function ModernHorizontalTimetableGrid({
                             </span>
                           </div>
 
-                          <div className="text-xs font-semibold text-text-muted truncate leading-none mt-0.5">
+                          <div className="text-xs font-semibold text-text-muted truncate leading-tight">
                             {course.venue || "TBA"}
                           </div>
 
                           {/* Hover tooltip */}
-                          <div className="absolute opacity-0 group-hover/tile:opacity-100 transition-opacity duration-200 bottom-full left-1/2 -translate-x-1/2 mb-1.5 w-max max-w-[220px] bg-surface text-white text-xs rounded-xl p-2.5 shadow-2xl z-50 pointer-events-none border border-border-ink text-center">
+                          <div className="absolute opacity-0 group-hover/tile:opacity-100 transition-opacity duration-200 bottom-full left-1/2 -translate-x-1/2 mb-1.5 w-max max-w-[220px] bg-surface text-text-primary text-xs rounded-xl p-2.5 shadow-2xl z-50 pointer-events-none border border-border-ink text-center">
                             <p className="font-bold text-text-primary">{course.title}</p>
                             {facultyStr && <p className="text-text-muted text-xs mt-0.5">{facultyStr}</p>}
                             <div className="flex items-center justify-center gap-1.5 mt-1 text-xs text-primary font-semibold">
@@ -306,7 +307,7 @@ export default function ModernHorizontalTimetableGrid({
                         <div
                           {...clickable(() => onToggleBlockSlot?.(slotName))}
                           className={cn(
-                            "h-[38px] p-1 rounded-md flex items-center justify-center border border-border-ink bg-warning-surface text-warning-foreground animate-pulse text-xs font-bold",
+                            "h-[44px] p-1 rounded-md flex items-center justify-center border border-border-ink bg-warning-surface text-warning-foreground animate-pulse text-xs font-bold",
                             onToggleBlockSlot && "cursor-pointer",
                           )}
                         >
@@ -320,7 +321,7 @@ export default function ModernHorizontalTimetableGrid({
                         {...clickable(() => onToggleBlockSlot?.(slotName))}
                         title={onToggleBlockSlot ? `Slot ${slotName}. Click to rule out.` : `Slot ${slotName}`}
                         className={cn(
-                          "h-[38px] p-1 rounded-md flex items-center justify-center border border-dashed border-border-ink transition-all duration-200",
+                          "h-[44px] p-1 rounded-md flex items-center justify-center border border-dashed border-border-muted bg-surface-secondary/40 transition-all duration-200",
                           "text-text-muted hover:text-primary hover:border-border-ink hover:bg-secondary",
                           onToggleBlockSlot && "cursor-pointer",
                         )}

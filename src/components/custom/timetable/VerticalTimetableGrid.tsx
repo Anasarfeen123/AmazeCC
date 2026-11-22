@@ -300,7 +300,7 @@ export default function VerticalTimetableGrid({
         cell.kind === "gap" && "animate-pulse border-border-ink bg-warning-surface text-warning-foreground",
         cell.kind === "empty" &&
           cn(
-            "border-dashed border-border-ink bg-surface-secondary text-text-muted",
+            "border-dashed border-border-muted bg-surface-secondary/60 text-text-muted",
             isToday && "border-border-ink bg-amber-50/60 dark:border-border-ink dark:bg-warning-surface",
           ),
       ),
@@ -318,7 +318,7 @@ export default function VerticalTimetableGrid({
         )}
       >
         <span className="flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-[3px] border-2 border-dashed border-border-ink" />
+          <span className="h-2.5 w-2.5 rounded-[3px] border-2 border-dashed border-border-muted" />
           free
         </span>
         <span className="flex items-center gap-1.5">

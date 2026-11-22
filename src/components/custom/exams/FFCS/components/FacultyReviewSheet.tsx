@@ -131,7 +131,9 @@ export default function FacultyReviewSheet({
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-3 border-b border-border-strong pb-4">
-        <div className="flex items-center gap-3">
+        {/* min-w-0 + flex-1: a long name wraps instead of running under the
+            vitfac pill (owner). */}
+        <div className="flex min-w-0 flex-1 items-center gap-3">
           <FacultyAvatar
             employeeId={prof?.employeeId || employeeId}
             name={prof?.name || facultyName}
@@ -140,7 +142,9 @@ export default function FacultyReviewSheet({
             tone="amber"
           />
           <div className="min-w-0">
-            <h3 className="font-bold text-lg text-text-heading leading-tight truncate">{prof?.name || facultyName}</h3>
+            <h3 className="font-bold text-lg text-text-heading leading-tight line-clamp-2 break-words">
+              {prof?.name || facultyName}
+            </h3>
             <p className="text-xs text-muted-foreground mt-0.5 truncate">
               {prof?.designation ? `${prof.designation} · ` : ""}
               {prof?.dept || (employeeId ? `ERP: ${employeeId}` : "Faculty")}

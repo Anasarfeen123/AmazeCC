@@ -165,6 +165,15 @@ export default function TimetableVtop({ attendance }: { attendance?: (Normalized
 
   const addedCourses = useMemo(() => convertToAddedCourses(effectiveAttendance), [effectiveAttendance]);
 
+  // Saturday and Sunday columns only when a course meets then (owner: hide
+  // empty weekend days).
+  const visibleDays = useMemo(() => {
+    const used = new Set(addedCourses.flatMap((c: any) => (c.slots || []).map(String)));
+    return DAYS.filter(
+      (d) => (d !== "SAT" && d !== "SUN") || Object.keys((slotMap as any)?.[d] || {}).some((slot) => used.has(slot)),
+    );
+  }, [addedCourses, slotMap]);
+
   /**
    * One row per course code, for the shared course list.
    *
@@ -239,7 +248,7 @@ export default function TimetableVtop({ attendance }: { attendance?: (Normalized
           courses={addedCourses}
           theoryPeriods={theoryPeriods}
           labPeriods={labPeriods}
-          days={DAYS.map((d) => ({ id: d.toLowerCase(), name: d }))}
+          days={visibleDays.map((d) => ({ id: d.toLowerCase(), name: d }))}
           attendanceByCourse={attendanceByCourse}
           className="w-full"
         />

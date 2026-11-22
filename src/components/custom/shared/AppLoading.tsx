@@ -71,7 +71,19 @@ export default function AppLoading({ label = "Opening your workspace" }: { label
   // several) starts with the tip already on screen, so the box is never
   // empty for a frame between screens. Only the very first, server-rendered
   // screen starts empty (lastShown is -1 there, on server and client alike).
-  const [tip, setTip] = useState<number | null>(() => (tipState.lastShown >= 0 ? tipState.lastShown : null));
+  const [tip, setTip] = useState<number | null>(() => {
+    if (tipState.lastShown >= 0) return tipState.lastShown;
+    // The inline script below already put a tip on the very first paint
+    // (owner: tips ASAP); adopt it so hydration does not swap the text.
+    const early = typeof window !== "undefined" ? (window as any).__amazeTip : undefined;
+    if (typeof early === "number" && LOADING_TIPS[early]) {
+      tipState.index = early;
+      tipState.since = Date.now();
+      tipState.lastShown = early;
+      return early;
+    }
+    return null;
+  });
   // Fade only when the text actually changes, not when a new loading screen
   // mounts with the tip the previous screen was already showing.
   const [fade, setFade] = useState(false);
@@ -109,18 +121,45 @@ export default function AppLoading({ label = "Opening your workspace" }: { label
         </div>
       </div>
 
-      <div className="w-full max-w-sm rounded-[14px] border-2 border-border-ink bg-surface p-4 text-left shadow-brutal-sm">
-        <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
-          Tip
+      <button
+        type="button"
+        onClick={() => {
+          // Tap for another tip.
+          const next = ((tip ?? tipState.index ?? 0) + 1) % LOADING_TIPS.length;
+          tipState.index = next;
+          tipState.since = Date.now();
+          tipState.lastShown = next;
+          setFade(true);
+          setTip(next);
+        }}
+        className="w-full max-w-sm cursor-pointer rounded-[14px] border-2 border-border-ink bg-surface p-4 text-left shadow-brutal-sm brutal-press"
+        aria-label="Show another tip"
+      >
+        <span className="flex items-center justify-between gap-2">
+          <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
+            Tip
+          </span>
+          <span className="font-mono text-xs text-text-muted">tap for another</span>
         </span>
         {/* key: re-mounts so the fade runs when the tip changes */}
-        <p
+        <span
+          id={tip === null ? "app-loading-tip" : undefined}
           key={tip ?? "none"}
-          className={`${fade ? "app-loading-tip " : ""}mt-2 min-h-[2.75rem] text-sm leading-snug text-text-primary`}
+          suppressHydrationWarning
+          className={`${fade ? "app-loading-tip " : ""}mt-2 block min-h-[2.75rem] text-sm leading-snug text-text-primary`}
         >
           {tip === null ? "\u00a0" : LOADING_TIPS[tip]}
-        </p>
-      </div>
+        </span>
+        {tip === null && (
+          // Runs as the HTML is parsed, before any app JavaScript: the tip is
+          // on screen from the first paint instead of after hydration.
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(){try{var t=${JSON.stringify(LOADING_TIPS)};var i=Math.floor(Math.random()*t.length);window.__amazeTip=i;var e=document.getElementById("app-loading-tip");if(e)e.textContent=t[i];}catch(_){}})();`,
+            }}
+          />
+        )}
+      </button>
     </div>
   );
 }

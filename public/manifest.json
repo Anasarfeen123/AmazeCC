@@ -114,5 +114,21 @@
             "auto"
         ]
     },
-    "prefer_related_applications": false
+    "prefer_related_applications": false,
+    "screenshots": [
+        {
+            "src": "./brand/screens/home-phone.webp",
+            "sizes": "390x900",
+            "type": "image/webp",
+            "form_factor": "narrow",
+            "label": "Home: attendance, today's classes and the mess menu"
+        },
+        {
+            "src": "./brand/screens/home-desktop.webp",
+            "sizes": "1280x900",
+            "type": "image/webp",
+            "form_factor": "wide",
+            "label": "Home on a laptop, with the sidebar"
+        }
+    ]
 }

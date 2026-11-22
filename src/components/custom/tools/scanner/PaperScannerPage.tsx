@@ -243,6 +243,39 @@ export default function PaperScannerPage({ onBack }: PaperScannerPageProps) {
     setMode({ name: "editor", raster: rasters[0] });
   };
 
+  // Photos shared to AmazeCC from the gallery (manifest share target; the
+  // service worker keeps them in a cache and opens ?tab=paper-scanner&shared=N).
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const n = Number(params.get("shared") || 0);
+    if (!n || typeof caches === "undefined") return;
+    let alive = true;
+    (async () => {
+      try {
+        const cache = await caches.open("amazecc-shared-images");
+        const keys = await cache.keys();
+        const rasters: Raster[] = [];
+        for (const req of keys) {
+          const res = await cache.match(req);
+          if (res) rasters.push(await decodeToRaster(await res.blob()));
+          await cache.delete(req);
+        }
+        if (alive && rasters.length) handleImportMultipleRasters(rasters);
+      } catch (err) {
+        if (alive) setFlowError(plainErrorMessage(err, "The shared photo could not be read."));
+      } finally {
+        params.delete("shared");
+        const q = params.toString();
+        window.history.replaceState(window.history.state, "", `${window.location.pathname}${q ? `?${q}` : ""}`);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+    // Once, on open from a share.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleAddPage = (quad: Quad, rotatedRaster?: Raster) => {
     if (mode.name !== "editor") return;
     const finalRaster = rotatedRaster ?? mode.raster;

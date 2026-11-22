@@ -139,6 +139,51 @@ const serwist = new Serwist({
   },
 });
 
+/**
+ * Share target (manifest.json): shared photos go to the paper scanner; text
+ * and links go to the /share page as before. Registered before Serwist so it
+ * answers the POST first. Photos wait in a small cache that the scanner
+ * reads and clears (PaperScannerPage, `?shared=`).
+ */
+const SHARE_CACHE = "amazecc-shared-images";
+self.addEventListener("fetch", (event: FetchEvent) => {
+  const url = new URL(event.request.url);
+  if (event.request.method !== "POST" || !url.pathname.replace(/\/+$/, "").endsWith("/share")) return;
+  event.respondWith(
+    (async () => {
+      const base = new URL(self.registration.scope);
+      try {
+        // Typed loosely: the RN FormData typings in this project shadow the DOM ones.
+        const form = (await event.request.formData()) as unknown as {
+          get(k: string): unknown;
+          getAll(k: string): unknown[];
+        };
+        const images = (form.getAll("images") as unknown as Blob[]).filter((f) => f instanceof Blob && f.size > 0);
+        if (images.length) {
+          const cache = await caches.open(SHARE_CACHE);
+          await Promise.all(
+            images.map((file, i) =>
+              cache.put(
+                new URL(`__shared/${i}`, base).toString(),
+                new Response(file, { headers: { "content-type": file.type || "image/jpeg" } }),
+              ),
+            ),
+          );
+          return Response.redirect(new URL(`./?tab=paper-scanner&shared=${images.length}`, base).toString(), 303);
+        }
+        const q = new URLSearchParams();
+        for (const k of ["title", "text", "url"]) {
+          const v = form.get(k);
+          if (typeof v === "string" && v) q.set(k, v);
+        }
+        return Response.redirect(new URL(`./share/?${q.toString()}`, base).toString(), 303);
+      } catch {
+        return Response.redirect(new URL("./share/", base).toString(), 303);
+      }
+    })(),
+  );
+});
+
 serwist.addEventListeners();
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";

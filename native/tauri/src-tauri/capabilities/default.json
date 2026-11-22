@@ -1,12 +1,17 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "What the AmazeCC window may do: open links in the browser, show notifications, keep its size.",
-  "windows": ["main"],
+  "description": "What the AmazeCC window may do: open links in the browser, show notifications, keep its size, start at login.",
+  "windows": [
+    "main"
+  ],
   "permissions": [
     "core:default",
     "opener:default",
     "notification:default",
-    "window-state:default"
+    "window-state:default",
+    "autostart:allow-enable",
+    "autostart:allow-disable",
+    "autostart:allow-is-enabled"
   ]
 }

@@ -62,16 +62,24 @@ bash scripts/native/build-android.sh   # APKs; needs JDK 21 + Android SDK
 
 ## What the shells add
 
-- **Android**: system back closes the open sheet, then goes back (the app's
-  overlays already use browser history); links to other sites open in the
-  browser; status bar and splash in brand teal; app icon from
-  `design/icon/amazecc-icon-source-1024.png`. Plugins installed and ready for
-  use: App, Status bar, Splash screen, Local notifications.
-- **Desktop**: one window (opening it again focuses it), size and position
-  remembered, links to other sites open in the system browser
-  (`src/lib/nativeShell.ts`), native notifications available.
-- Both skip the service worker: the files are already on the device, and a
-  cached worker would serve the previous version after an update.
+- **Class reminders** (both): _Settings → Notifications → Class reminders_.
+  A notification 5, 10 or 15 minutes before each class today and tomorrow,
+  with the time and room (`src/lib/nativeReminders.ts`). Android schedules
+  real notifications that fire with the app closed; the desktop app fires
+  them while it runs (it stays in the tray). Re-planned on every open and
+  every timetable sync. Not shown on the website or in the demo account.
+- **Android**: system back closes the open sheet, then goes back (the
+  overlays use browser history); links to other sites open in the browser;
+  teal status bar and splash; edge-to-edge insets via CSS variables (the app
+  already pads with `env(safe-area-inset-*)`); adaptive icon on brand teal.
+- **Desktop**: one instance (opening it again focuses the window); size and
+  position remembered; closing the window keeps AmazeCC in the **tray**
+  (left-click opens, menu: Open / Quit); **Start with your computer**
+  (Settings, starts hidden in the tray); links to other sites open in the
+  system browser; macOS build is universal (Apple Silicon and Intel).
+- Both skip the service worker and the install prompt: the files are
+  already on the device, and a cached worker would serve the previous
+  version after an update.
 
 The web app detects the shell with `nativeShell()` in `src/lib/nativeShell.ts`.
 
@@ -85,7 +93,7 @@ cd native/tauri && npm run icons
 
 ## Ideas for next steps
 
-- Class and exam reminders with Local notifications (already installed).
+- Exam-day reminders (FAT / CAT) on top of class reminders.
 - A home-screen widget (next class, attendance) — needs a little Kotlin.
 - Fingerprint lock for the stored VTOP password (Android Keystore).
 - Desktop: tray icon with the next class, launch at login, auto-update.

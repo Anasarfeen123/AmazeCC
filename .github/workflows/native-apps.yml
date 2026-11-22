@@ -139,6 +139,9 @@ jobs:
         with:
           node-version: "22"
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          # macOS: one universal app for Apple Silicon and Intel Macs.
+          targets: ${{ runner.os == 'macOS' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
       - uses: swatinem/rust-cache@v2
         with:
           workspaces: native/tauri/src-tauri -> target
@@ -155,17 +158,22 @@ jobs:
         shell: bash
         env:
           SKIP_WEB_BUILD: "1"
-        run: bash scripts/native/build-desktop.sh
+        run: |
+          if [ "$RUNNER_OS" = "macOS" ]; then
+            bash scripts/native/build-desktop.sh --target universal-apple-darwin
+          else
+            bash scripts/native/build-desktop.sh
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: desktop-${{ matrix.os }}
           path: |
-            native/tauri/src-tauri/target/release/bundle/**/*.exe
-            native/tauri/src-tauri/target/release/bundle/**/*.msi
-            native/tauri/src-tauri/target/release/bundle/**/*.dmg
-            native/tauri/src-tauri/target/release/bundle/**/*.AppImage
-            native/tauri/src-tauri/target/release/bundle/**/*.deb
-            native/tauri/src-tauri/target/release/bundle/**/*.rpm
+            native/tauri/src-tauri/target/**/release/bundle/**/*.exe
+            native/tauri/src-tauri/target/**/release/bundle/**/*.msi
+            native/tauri/src-tauri/target/**/release/bundle/**/*.dmg
+            native/tauri/src-tauri/target/**/release/bundle/**/*.AppImage
+            native/tauri/src-tauri/target/**/release/bundle/**/*.deb
+            native/tauri/src-tauri/target/**/release/bundle/**/*.rpm
 
   release:
     name: GitHub Release

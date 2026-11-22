@@ -26,7 +26,11 @@ export function nativeShell(): NativeShell {
  */
 export function installDesktopLinkHandler(): () => void {
   const w = window as any;
-  const openUrl: ((url: string) => Promise<void>) | undefined = w.__TAURI__?.opener?.openUrl;
+  // The opener plugin's command, through the core bridge (works whether or
+  // not the plugin also exposes a window.__TAURI__.opener global).
+  const invoke: ((cmd: string, args?: any) => Promise<any>) | undefined = w.__TAURI__?.core?.invoke;
+  const openUrl: ((url: string) => Promise<void>) | undefined =
+    w.__TAURI__?.opener?.openUrl ?? (invoke ? (url: string) => invoke("plugin:opener|open_url", { url }) : undefined);
   if (!openUrl) return () => {};
   const onClick = (e: MouseEvent) => {
     if (e.defaultPrevented || e.button !== 0) return;

@@ -23,6 +23,12 @@ export type Settings = {
   privacyCategories?: string[];
   /** With CGPA hidden in Privacy Mode, drop the CGPA card from Home (default on). */
   privacyRemoveCgpaCard?: boolean;
+  /** Android / desktop app: notify before each class (src/lib/nativeReminders.ts). */
+  classReminders?: boolean;
+  /** Minutes before the class for that reminder (5, 10 or 15; default 10). */
+  classReminderMinutes?: number;
+  /** Desktop app: launch when the computer starts. */
+  launchAtLogin?: boolean;
   /** Comic is text grawlix; marker is the optional blackout cover. */
   privacyCoverStyle?: "comic" | "marker";
   /**

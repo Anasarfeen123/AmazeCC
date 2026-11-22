@@ -15,19 +15,49 @@
  * app needs no native packages.
  */
 import { buildAttendanceDayCardsMap, getAttendanceTimeRange } from "./attendanceTimetable";
+import { buildExamRows } from "./examSchedule";
 import { nativeShell } from "./nativeShell";
 
 export type ClassReminder = { id: number; at: Date; title: string; body: string };
 
 const DAY_CODES = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"] as const;
-/** Android notification ids reserved for class reminders. */
+/** Android notification ids reserved for class reminders (71000+) and exams (72000+). */
 const ID_BASE = 71000;
 const ID_SPAN = 900;
+const EXAM_ID_BASE = 72000;
+const EXAM_ID_SPAN = 900;
+/** How far ahead exam reminders are planned. */
+const EXAM_DAYS_AHEAD = 21;
 
 function clean(s: unknown): string {
   return String(s ?? "")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+export type UpcomingClass = { startsAt: Date; title: string; venue: string; slot: string };
+
+/** Classes today and the next `days - 1` days, in order, from the timetable. */
+export function upcomingClasses(attendance: any[], now = new Date(), days = 2): UpcomingClass[] {
+  if (!Array.isArray(attendance) || attendance.length === 0) return [];
+  const map = buildAttendanceDayCardsMap(attendance) as Record<string, any[]>;
+  const out: UpcomingClass[] = [];
+  for (let d = 0; d < days; d++) {
+    const day = new Date(now);
+    day.setHours(0, 0, 0, 0);
+    day.setDate(day.getDate() + d);
+    for (const card of map[DAY_CODES[day.getDay()]] || []) {
+      const { start } = getAttendanceTimeRange(String(card.time || ""));
+      if (!Number.isFinite(start)) continue;
+      out.push({
+        startsAt: new Date(day.getTime() + start * 60_000),
+        title: clean(card.courseTitle) || clean(card.courseCode) || "Class",
+        venue: clean(card.slotVenue || card.venue),
+        slot: clean(card.slotName),
+      });
+    }
+  }
+  return out.sort((a, b) => a.startsAt.getTime() - b.startsAt.getTime());
 }
 
 export function upcomingClassReminders(
@@ -58,6 +88,42 @@ export function upcomingClassReminders(
         at,
         title: `${title} in ${minutesBefore} min`,
         body: [hh, venue, clean(card.slotName)].filter(Boolean).join(" · "),
+      });
+    }
+  }
+  return out;
+}
+
+/**
+ * Exam reminders from the exam schedule: 8 pm the evening before ("CAT2
+ * tomorrow: …") and one hour before ("in 1 hour"), for the next three weeks.
+ */
+export function upcomingExamReminders(schedule: unknown, now = new Date()): ClassReminder[] {
+  const out: ClassReminder[] = [];
+  const horizon = now.getTime() + EXAM_DAYS_AHEAD * 86_400_000;
+  let n = 0;
+  for (const row of buildExamRows(schedule, now)) {
+    const startsAt = row.startAt ?? (row.date ? new Date(row.date.getTime() + 9 * 3_600_000) : null);
+    if (!startsAt || startsAt.getTime() > horizon) continue;
+    const raw = row.raw || {};
+    const title = clean(raw.courseTitle) || clean(raw.courseCode) || "Exam";
+    const venue = clean(raw.venue);
+    const hh = startsAt.toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" });
+    const series = clean(row.examType) || "Exam";
+    const eve = new Date(startsAt);
+    eve.setDate(eve.getDate() - 1);
+    eve.setHours(20, 0, 0, 0);
+    const hourBefore = new Date(startsAt.getTime() - 3_600_000);
+    for (const [at, head] of [
+      [eve, `${series} tomorrow: ${title}`],
+      [hourBefore, `${series} in 1 hour: ${title}`],
+    ] as const) {
+      if (at.getTime() <= now.getTime()) continue;
+      out.push({
+        id: EXAM_ID_BASE + (n++ % EXAM_ID_SPAN),
+        at,
+        title: head,
+        body: [hh, venue, clean(raw.courseCode)].filter(Boolean).join(" · "),
       });
     }
   }
@@ -137,7 +203,12 @@ export async function requestReminderPermission(): Promise<boolean> {
 /** Replace all scheduled class reminders. Returns how many were set. */
 export async function syncClassReminders(
   attendance: any[],
-  { enabled, minutesBefore }: { enabled: boolean; minutesBefore: number },
+  {
+    enabled,
+    minutesBefore,
+    schedule,
+    exams = true,
+  }: { enabled: boolean; minutesBefore: number; schedule?: unknown; exams?: boolean },
 ): Promise<number> {
   const shell = nativeShell();
   if (!shell) return 0;
@@ -146,7 +217,10 @@ export async function syncClassReminders(
   if (shell === "android") await androidCancelOurs();
   if (!enabled) return 0;
 
-  const reminders = upcomingClassReminders(attendance, new Date(), minutesBefore);
+  const reminders = [
+    ...upcomingClassReminders(attendance, new Date(), minutesBefore),
+    ...(exams && schedule ? upcomingExamReminders(schedule) : []),
+  ];
   if (reminders.length === 0) return 0;
 
   if (shell === "android") {

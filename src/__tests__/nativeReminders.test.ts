@@ -45,3 +45,38 @@ describe("upcomingClassReminders", () => {
     expect(upcomingClassReminders([], MONDAY_7AM)).toEqual([]);
   });
 });
+
+import { upcomingExamReminders } from "../lib/nativeReminders";
+import { isNewer } from "../lib/appUpdates";
+
+describe("upcomingExamReminders", () => {
+  it("reminds at 8 pm the evening before and an hour before", () => {
+    // Exam Thursday 26 Nov 2026 09:30; now Monday 23 Nov, 07:00.
+    const schedule = {
+      FAT: [
+        {
+          courseCode: "BCSE302L",
+          courseTitle: "Database Systems",
+          examDate: "26-Nov-2026",
+          examTime: "09:30 AM - 12:30 PM",
+          venue: "AB1-402",
+        },
+      ],
+    };
+    const r = upcomingExamReminders(schedule, MONDAY_7AM);
+    expect(r.length).toBe(2);
+    const eve = r.find((x) => x.title.includes("tomorrow"));
+    expect(eve?.at.getHours()).toBe(20);
+    expect(eve?.at.getDate()).toBe(25);
+    expect(r.some((x) => x.title.includes("in 1 hour"))).toBe(true);
+  });
+});
+
+describe("isNewer", () => {
+  it("compares versions numerically", () => {
+    expect(isNewer("0.2.0", "0.1.9")).toBe(true);
+    expect(isNewer("0.10.0", "0.9.0")).toBe(true);
+    expect(isNewer("0.1.3", "0.1.3")).toBe(false);
+    expect(isNewer("0.1.2", "0.1.10")).toBe(false);
+  });
+});

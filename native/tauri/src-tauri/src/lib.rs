@@ -6,8 +6,13 @@
 //!   coming); the tray menu has Open and Quit;
 //! - "Start with your computer" (Settings) uses the autostart plugin and
 //!   starts hidden in the tray (`--hidden`);
+//! - auto-update: on launch, checks the GitHub release feed (latest.json),
+//!   verifies the signature against the public key in tauri.conf.json,
+//!   installs, and says so in a notification; the new version runs next time;
 //! - links to other sites open in the system browser, native notifications.
 
+use tauri_plugin_notification::NotificationExt;
+use tauri_plugin_updater::UpdaterExt;
 use tauri::{
     menu::{Menu, MenuItem},
     tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
@@ -22,6 +27,22 @@ fn show_main(app: &tauri::AppHandle) {
     }
 }
 
+/// Check for a signed update; install it if there is one. Errors (offline,
+/// no release yet) are ignored: the app keeps running as it is.
+async fn check_for_update(app: tauri::AppHandle) {
+    let Ok(updater) = app.updater() else { return };
+    let Ok(Some(update)) = updater.check().await else { return };
+    let version = update.version.clone();
+    if update.download_and_install(|_, _| {}, || {}).await.is_ok() {
+        let _ = app
+            .notification()
+            .builder()
+            .title("AmazeCC updated")
+            .body(format!("Version {version} is installed. It opens next time you start AmazeCC."))
+            .show();
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -29,6 +50,7 @@ pub fn run() {
         .plugin(tauri_plugin_window_state::Builder::default().build())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_notification::init())
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_autostart::init(
             tauri_plugin_autostart::MacosLauncher::LaunchAgent,
             Some(vec!["--hidden"]),
@@ -60,6 +82,9 @@ pub fn run() {
                 tray = tray.icon(icon.clone());
             }
             tray.build(app)?;
+
+            // Look for an update in the background; never blocks start-up.
+            tauri::async_runtime::spawn(check_for_update(app.handle().clone()));
 
             // Launched at login: stay in the tray until opened.
             if std::env::args().any(|a| a == "--hidden") {

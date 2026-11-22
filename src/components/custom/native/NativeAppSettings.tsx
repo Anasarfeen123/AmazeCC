@@ -7,6 +7,8 @@ import SelectField from "../shared/primitives/SelectField";
 import { settingsAtom } from "@/store/settingsAtoms";
 import { nativeShell, type NativeShell } from "@/lib/nativeShell";
 import { requestReminderPermission } from "@/lib/nativeReminders";
+import { authenticate, biometricAvailable } from "@/lib/nativeAndroid";
+import { checkForAppUpdate, installedVersion, type AppUpdate } from "@/lib/appUpdates";
 
 /**
  * Settings that exist only inside the Android / desktop app: class
@@ -16,8 +18,29 @@ export default function NativeAppSettings() {
   const [settings, setSettings] = useAtom(settingsAtom);
   const [shell, setShell] = useState<NativeShell>(null);
   const [denied, setDenied] = useState(false);
-  useEffect(() => setShell(nativeShell()), []);
+  const [canLock, setCanLock] = useState(false);
+  const [version, setVersion] = useState<string | null>(null);
+  const [update, setUpdate] = useState<AppUpdate | null | "none" | "checking">(null);
+  useEffect(() => {
+    const s = nativeShell();
+    setShell(s);
+    if (s === "android") {
+      void biometricAvailable().then(setCanLock);
+      void installedVersion().then(setVersion);
+    }
+  }, []);
   if (!shell) return null;
+
+  const setAppLock = async (on: boolean) => {
+    // Prove it works before relying on it (so nobody locks themselves out).
+    if (on && !(await authenticate("Turn on fingerprint lock", "Confirm it is you"))) return;
+    setSettings((prev: any) => ({ ...prev, appLock: on }));
+  };
+
+  const checkNow = async () => {
+    setUpdate("checking");
+    setUpdate((await checkForAppUpdate(true)) ?? "none");
+  };
 
   const invoke = (window as any).__TAURI__?.core?.invoke as ((c: string, a?: any) => Promise<any>) | undefined;
 
@@ -51,6 +74,7 @@ export default function NativeAppSettings() {
           <p className="text-sm font-bold text-text-primary">Class reminders</p>
           <p className="text-xs text-text-muted">
             A notification before each class today and tomorrow, with the room.
+            {shell === "android" ? " The home-screen widget shows your next class too." : ""}
             {shell === "desktop" ? " While AmazeCC is open or in the tray." : ""}
           </p>
           {denied && (
@@ -82,6 +106,68 @@ export default function NativeAppSettings() {
             ]}
             onChange={(v) => setSettings((prev: any) => ({ ...prev, classReminderMinutes: Number(v) }))}
           />
+        </div>
+      )}
+
+      {settings?.classReminders && (
+        <div className="flex items-center justify-between gap-3 rounded-xl border-2 border-border-ink bg-surface-secondary p-3.5">
+          <div className="min-w-0">
+            <p className="text-sm font-bold text-text-primary">Exam reminders</p>
+            <p className="text-xs text-text-muted">The evening before (8 pm) and an hour before each exam.</p>
+          </div>
+          <Switch
+            label="Exam reminders"
+            checked={settings?.examReminders !== false}
+            onCheckedChange={(v) => setSettings((prev: any) => ({ ...prev, examReminders: v }))}
+          />
+        </div>
+      )}
+
+      {shell === "android" && canLock && (
+        <div className="flex items-center justify-between gap-3 rounded-xl border-2 border-border-ink bg-surface-secondary p-3.5">
+          <div className="min-w-0">
+            <p className="text-sm font-bold text-text-primary">Fingerprint lock</p>
+            <p className="text-xs text-text-muted">
+              Ask for your fingerprint or screen lock when AmazeCC opens, and after 30 s away.
+            </p>
+          </div>
+          <Switch label="Fingerprint lock" checked={!!settings?.appLock} onCheckedChange={(v) => void setAppLock(v)} />
+        </div>
+      )}
+
+      {shell === "android" && (
+        <div className="flex items-center justify-between gap-3 rounded-xl border-2 border-border-ink bg-surface-secondary p-3.5">
+          <div className="min-w-0">
+            <p className="text-sm font-bold text-text-primary">Version {version ?? "…"}</p>
+            <p className="text-xs text-text-muted">
+              {update === "checking"
+                ? "Checking…"
+                : update === "none"
+                  ? "You have the latest version."
+                  : update
+                    ? `Version ${update.version} is available.`
+                    : "Updates are checked once a day."}
+            </p>
+          </div>
+          {update && typeof update === "object" ? (
+            <a
+              href={update.apkUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-10 shrink-0 items-center rounded-[10px] border-2 border-border-ink bg-primary px-3 font-mono text-xs font-bold uppercase text-primary-foreground shadow-brutal-sm brutal-press"
+            >
+              Download
+            </a>
+          ) : (
+            <button
+              type="button"
+              onClick={() => void checkNow()}
+              disabled={update === "checking"}
+              className="inline-flex min-h-10 shrink-0 items-center rounded-[10px] border-2 border-border-ink bg-surface px-3 font-mono text-xs font-bold uppercase text-text-heading shadow-brutal-sm brutal-press cursor-pointer disabled:opacity-60"
+            >
+              Check now
+            </button>
+          )}
         </div>
       )}
 

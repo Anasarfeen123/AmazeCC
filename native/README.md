@@ -62,24 +62,56 @@ bash scripts/native/build-android.sh   # APKs; needs JDK 21 + Android SDK
 
 ## What the shells add
 
-- **Class reminders** (both): _Settings → Notifications → Class reminders_.
-  A notification 5, 10 or 15 minutes before each class today and tomorrow,
-  with the time and room (`src/lib/nativeReminders.ts`). Android schedules
-  real notifications that fire with the app closed; the desktop app fires
-  them while it runs (it stays in the tray). Re-planned on every open and
-  every timetable sync. Not shown on the website or in the demo account.
-- **Android**: system back closes the open sheet, then goes back (the
-  overlays use browser history); links to other sites open in the browser;
-  teal status bar and splash; edge-to-edge insets via CSS variables (the app
-  already pads with `env(safe-area-inset-*)`); adaptive icon on brand teal.
-- **Desktop**: one instance (opening it again focuses the window); size and
-  position remembered; closing the window keeps AmazeCC in the **tray**
-  (left-click opens, menu: Open / Quit); **Start with your computer**
-  (Settings, starts hidden in the tray); links to other sites open in the
-  system browser; macOS build is universal (Apple Silicon and Intel).
-- Both skip the service worker and the install prompt: the files are
-  already on the device, and a cached worker would serve the previous
-  version after an update.
+- **Reminders** (both): _Settings → Notifications_.
+  - **Class reminders**: 5, 10 or 15 minutes before each class today and
+    tomorrow, with time and room.
+  - **Exam reminders**: 8 pm the evening before and an hour before each
+    exam in the next three weeks (on by default once reminders are on).
+  - Android schedules real notifications that fire with the app closed; the
+    desktop app fires them while it runs (it stays in the tray). Re-planned
+    on every open, return to the app and sync; off in the demo account.
+    Code: `src/lib/nativeReminders.ts`.
+- **Android**
+  - **Fingerprint lock**: asks for fingerprint, face or the phone's screen
+    lock when the app opens and after 30 s away
+    (`NativeAppLock.tsx`, `AmazeNativePlugin.java`). Turning it on asks once
+    first, so nobody locks themselves out.
+  - **Home-screen widget** "Next class": time, course, room and attendance
+    (`NextClassWidget.java`). It picks the next class against the clock each
+    time it draws, so it stays right between syncs; tap opens the app.
+  - **Update check**: once a day the app compares its version with the
+    latest GitHub Release and offers the new APK (`src/lib/appUpdates.ts`);
+    _Settings → Android app_ shows the version and a Check now button.
+  - System back closes the open sheet, then goes back; links to other sites
+    open in the browser; teal status bar and splash; edge-to-edge insets via
+    CSS variables; adaptive icon on brand teal.
+- **Desktop**
+  - **Auto-update**: on launch it reads `latest.json` from the latest GitHub
+    Release, verifies the signature against the public key in
+    `tauri.conf.json`, installs, and says so in a notification (the new
+    version runs next time).
+  - **Tray**: closing the window keeps AmazeCC in the tray (left-click opens;
+    Open / Quit menu). **Start with your computer** (Settings) starts it
+    hidden in the tray.
+  - One instance, remembered window size, links to other sites open in the
+    browser; macOS build is universal (Apple Silicon and Intel).
+- Both skip the service worker and the install prompt.
+
+## Keys and secrets
+
+Two signing keys live **only** on the maintainer's machine, in
+`~/.config/amazecc/` (never in the repo):
+
+| File                                          | Used for                | GitHub secrets                                                                                      |
+| --------------------------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------- |
+| `android-release.jks` + `android-release.env` | signing the release APK | `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD` |
+| `tauri-updater.key` + `tauri-updater.env`     | signing desktop updates | `TAURI_SIGNING_PRIVATE_KEY`, `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`                                   |
+
+Load them into the repository secrets once (`scripts/native/set-secrets.sh`).
+Back both files up: losing the Android key means users must uninstall to
+update; losing the updater key means existing desktop installs stop
+updating. Without the secrets, builds still work (debug APK, no updater
+files).
 
 The web app detects the shell with `nativeShell()` in `src/lib/nativeShell.ts`.
 

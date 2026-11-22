@@ -11,6 +11,9 @@ import type { IntroLogin } from "../onboarding/OnboardingIntro";
 import { SIGN_IN_PARAM } from "@/lib/signInReturn";
 import { getAssetPath } from "@/lib/utils";
 import NativeClassReminders from "../native/NativeClassReminders";
+import NativeAppLock from "../native/NativeAppLock";
+import NativeUpdateNotice from "../native/NativeUpdateNotice";
+import { nativeShell } from "@/lib/nativeShell";
 
 function WorkspaceLoading() {
   return <AppLoading />;
@@ -35,6 +38,9 @@ interface AuthenticatedWorkspaceProps {
 
 /** Owns the signed-in experience boundary and its dashboard history wiring. */
 export default function AuthenticatedWorkspace(props: AuthenticatedWorkspaceProps) {
+  // Decided after mount (the server render has no window).
+  const [nativeShellIsAndroid, setNativeShellIsAndroid] = useState(false);
+  useEffect(() => setNativeShellIsAndroid(nativeShell() === "android"), []);
   const isLoggedIn = useAtomValue(isLoggedInAtom);
   const demoMode = useAtomValue(demoModeAtom);
   const showIntro = useAtomValue(showIntroAtom);
@@ -117,8 +123,10 @@ export default function AuthenticatedWorkspace(props: AuthenticatedWorkspaceProp
         onCollapseScreenChange={collapseLastScreenChange}
         onRunSyncMode={props.onRunSyncMode}
       />
-      {/* Android / desktop app only: class reminders (renders nothing). */}
+      {/* Android / desktop app only: reminders + widget data, and the app lock. */}
       <NativeClassReminders />
+      <NativeAppLock />
+      {nativeShellIsAndroid && <NativeUpdateNotice />}
     </>
   );
 }

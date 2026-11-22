@@ -14,12 +14,16 @@
       "showSpinner": false
     },
     "StatusBar": {
-      "overlaysWebView": false,
       "style": "DARK",
       "backgroundColor": "#004643"
     },
     "LocalNotifications": {
       "iconColor": "#004643"
+    },
+    "SystemBars": {
+      "insetsHandling": "css",
+      "initialViewportFitValueHint": "cover",
+      "style": "DARK"
     }
   }
 }

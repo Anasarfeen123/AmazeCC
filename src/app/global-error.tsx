@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import "./globals.css";
-import posthog from "posthog-js";
+import posthog from "@/lib/posthogClient";
 import ErrorDiagnosticCard from "@/components/custom/ErrorDiagnosticCard";
 import { isChunkLoadError, recoverFromChunkLoad } from "@/lib/chunkRecovery";
 

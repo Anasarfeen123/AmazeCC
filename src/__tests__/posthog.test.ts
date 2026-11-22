@@ -25,6 +25,13 @@ import {
   trackMetricHistogram,
 } from "../lib/posthog";
 
+// The app loads PostHog after first paint through a stand-in
+// (lib/posthogClient); here it is the mocked library directly.
+vi.mock("../lib/posthogClient", async () => {
+  const mod: any = await import("posthog-js");
+  return { default: mod.default, loadPostHog: async () => mod.default };
+});
+
 vi.mock("posthog-js", () => {
   const ph = {
     identify: vi.fn(),

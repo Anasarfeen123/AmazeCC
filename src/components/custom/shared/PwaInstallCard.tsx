@@ -7,6 +7,9 @@ import { usePwaInstall } from "@/lib/pwaInstall";
 const DISMISS_KEY = "pwaInstallCardDismissed";
 
 const isIosDevice = () => typeof navigator !== "undefined" && /iphone|ipad|ipod/i.test(navigator.userAgent);
+/** Firefox for Android installs from its menu and never fires the install prompt. */
+const isAndroidFirefox = () =>
+  typeof navigator !== "undefined" && /Android/.test(navigator.userAgent) && /Firefox\//.test(navigator.userAgent);
 
 const isStandalone = () =>
   typeof window !== "undefined" &&
@@ -44,7 +47,8 @@ export default function PwaInstallCard() {
     setClient(true);
   }, []);
 
-  const showManualSteps = !canInstall && isIosDevice() && !isStandalone() && isTouchDevice();
+  const firefox = isAndroidFirefox();
+  const showManualSteps = !canInstall && (isIosDevice() || firefox) && !isStandalone() && isTouchDevice();
   const visible = client && !accepted && !dismissed && (canInstall || showManualSteps);
   if (!visible) return null;
 
@@ -69,8 +73,8 @@ export default function PwaInstallCard() {
 
       <h3 className="font-display text-base font-bold uppercase text-text-heading pr-8">Install AmazeCC</h3>
       <p className="text-xs text-text-muted">
-        Put AmazeCC on your home screen: it opens full screen, works offline, can send class reminders, and shows
-        low-attendance courses on its icon.
+        Put AmazeCC on your home screen: it opens full screen, works offline, and its icon shows how many courses and
+        exams need attention.
       </p>
 
       {canInstall ? (
@@ -83,6 +87,15 @@ export default function PwaInstallCard() {
         >
           <Download className="w-4 h-4" /> Install app
         </button>
+      ) : firefox ? (
+        <ol className="space-y-2.5 text-xs font-medium text-text-primary">
+          <li className="flex items-start gap-2.5">
+            <Download className="w-4 h-4 mt-0.5 shrink-0 text-primary" />
+            <span>
+              Tap the <strong>⋮</strong> menu in Firefox, then <strong>Install</strong> (or Add to Home screen).
+            </span>
+          </li>
+        </ol>
       ) : (
         <ol className="space-y-2.5 text-xs font-medium text-text-primary">
           <li className="flex items-start gap-2.5">

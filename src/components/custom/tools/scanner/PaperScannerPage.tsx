@@ -23,7 +23,7 @@ import { createScanStore, isIndexedDbAvailable, type ScanStore } from "@/lib/sca
 import { loadScannerSettings } from "@/lib/scanner/settings";
 import { decodeToRaster } from "@/lib/scanner/rasterIO";
 import type { CleanupMode, PaperKind, Quad, Raster, ScanMeta, ScanRecord } from "@/lib/scanner/types";
-import posthog from "posthog-js";
+import posthog from "@/lib/posthogClient";
 import ScannerCamera from "./ScannerCamera";
 import ScannerEditor from "./ScannerEditor";
 import PaperDetailSheet from "./PaperDetailSheet";

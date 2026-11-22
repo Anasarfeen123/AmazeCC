@@ -70,7 +70,7 @@ import { storage } from "@/lib/storage";
 import { hasStoredVtopCredentials } from "@/components/custom/app/readBootstrapSnapshot";
 import { getAssetPath } from "@/lib/utils";
 import { syncCurrentUserPostHogIdentity, trackFeatureUsage } from "@/lib/posthog";
-import posthog from "posthog-js";
+import posthog from "@/lib/posthogClient";
 import { forgetStoredCredentials, SIGNED_OUT_EVENT } from "@/lib/forgetDevice";
 import { getActiveRegNumber } from "@/lib/social/identity";
 import ThemeToggle from "@/components/custom/ThemeToggle";

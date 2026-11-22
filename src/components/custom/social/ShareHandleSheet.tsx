@@ -17,7 +17,7 @@ import BottomSheet from "../shared/BottomSheet";
 import { useSocialData } from "@/lib/social/useSocialData";
 import { buildInviteLink } from "@/lib/social/handle";
 import { downloadHtmlImage } from "@/lib/imageDownload";
-import posthog from "posthog-js";
+import posthog from "@/lib/posthogClient";
 
 const posthogConfigured = Boolean(
   process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN && process.env.NEXT_PUBLIC_POSTHOG_HOST,

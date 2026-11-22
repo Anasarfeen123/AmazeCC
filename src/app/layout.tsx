@@ -83,6 +83,24 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "default",
     title: APP_NAME,
+    // iPhone launch screens (brand teal + icon) so the installed app does
+    // not flash white while it opens. One per screen size; iOS picks by media.
+    startupImage: (
+      [
+        [440, 956, 3],
+        [430, 932, 3],
+        [428, 926, 3],
+        [402, 874, 3],
+        [393, 852, 3],
+        [390, 844, 3],
+        [375, 812, 3],
+        [414, 896, 2],
+        [375, 667, 2],
+      ] as const
+    ).map(([w, h, d]) => ({
+      url: `${BASE_PATH}/brand/splash/iphone-${w * d}x${h * d}.png`,
+      media: `(device-width: ${w}px) and (device-height: ${h}px) and (-webkit-device-pixel-ratio: ${d}) and (orientation: portrait)`,
+    })),
   },
   formatDetection: {
     telephone: false,

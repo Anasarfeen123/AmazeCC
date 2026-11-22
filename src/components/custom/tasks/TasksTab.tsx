@@ -18,7 +18,7 @@ import { isDueOnDay } from "@/lib/taskMatch";
 import { getTodayAttendanceDay } from "@/lib/attendanceTimetable";
 import type { Task, TaskStatus } from "@/types/tasks";
 import { isTaskOverdue } from "@/types/tasks";
-import posthog from "posthog-js";
+import posthog from "@/lib/posthogClient";
 import {
   ChipTabs,
   InsightCarousel,

@@ -10,6 +10,7 @@ import { useDashboardScreenHistory } from "../dashboard/useDashboardScreenHistor
 import type { IntroLogin } from "../onboarding/OnboardingIntro";
 import { SIGN_IN_PARAM } from "@/lib/signInReturn";
 import { getAssetPath } from "@/lib/utils";
+import AppIconBadge from "./AppIconBadge";
 
 function WorkspaceLoading() {
   return <AppLoading />;
@@ -116,6 +117,8 @@ export default function AuthenticatedWorkspace(props: AuthenticatedWorkspaceProp
         onCollapseScreenChange={collapseLastScreenChange}
         onRunSyncMode={props.onRunSyncMode}
       />
+      {/* Number on the installed app icon (renders nothing). */}
+      <AppIconBadge />
     </>
   );
 }

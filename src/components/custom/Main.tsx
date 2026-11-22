@@ -59,7 +59,7 @@ import { useAppNetworkStatus } from "./app/useAppNetworkStatus";
 import AuthenticatedWorkspace from "./app/AuthenticatedWorkspace";
 import SyncSessionHost from "./app/SyncSessionHost";
 import { useSyncSessionBridge } from "./app/useSyncSessionBridge";
-import posthog from "posthog-js";
+import posthog from "@/lib/posthogClient";
 import { trackScreenView, getPostHogUserIdentifiers, aliasPostHogUser } from "@/lib/posthog";
 import buildInfo from "@/data/buildInfo.json";
 import { useRouter } from "next/navigation";

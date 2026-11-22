@@ -43,6 +43,12 @@ function isStandalone(): boolean {
   }
 }
 
+/** Firefox for Android installs from its own menu and never fires the install prompt. */
+function isAndroidFirefox(): boolean {
+  const ua = navigator.userAgent;
+  return /Android/.test(ua) && /Firefox\//.test(ua);
+}
+
 function isIosSafari(): boolean {
   const ua = navigator.userAgent;
   return /iPhone|iPad|iPod/.test(ua) && /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS/.test(ua);
@@ -62,9 +68,11 @@ export default function HomeNudge({
   const [ready, setReady] = useState(false);
   const [hidden, setHidden] = useState<Record<NudgeId, boolean>>({ semester: true, install: true });
   const [ios, setIos] = useState(false);
+  const [firefox, setFirefox] = useState(false);
   useEffect(() => {
     setHidden({ semester: snoozed("semester"), install: snoozed("install") || isStandalone() });
     setIos(isIosSafari());
+    setFirefox(isAndroidFirefox());
     setReady(true);
   }, []);
   if (!ready) return null;
@@ -77,7 +85,7 @@ export default function HomeNudge({
   let id: NudgeId | null = null;
   if (!hidden.semester && currentSemesterId && viewingSemesterId && viewingSemesterId !== currentSemesterId)
     id = "semester";
-  else if (!hidden.install && (canInstall || ios)) id = "install";
+  else if (!hidden.install && (canInstall || ios || firefox)) id = "install";
   if (!id) return null;
 
   const text =
@@ -85,7 +93,9 @@ export default function HomeNudge({
       ? `You're viewing ${formatSemesterName(viewingSemesterId!)}.`
       : canInstall
         ? "Add AmazeCC to your home screen."
-        : "Add to Home Screen: tap Share, then Add to Home Screen.";
+        : firefox
+          ? "Install AmazeCC: tap ⋮ in Firefox, then Install."
+          : "Add to Home Screen: tap Share, then Add to Home Screen.";
   const action =
     id === "semester" ? (
       <button

@@ -121,7 +121,7 @@ const reachCapPicker = () => {
   fireEvent.click(screen.getByText("Auto-Generate Timetable"));
   fireEvent.click(screen.getByRole("button", { name: /Continue to Timetable Selection/i }));
   fireEvent.click(screen.getByRole("button", { name: /Continue to Course Strategy/i }));
-  fireEvent.click(screen.getByText("Normally Add Courses in List"));
+  fireEvent.click(screen.getByText("Just pick courses"));
   fireEvent.click(screen.getByRole("button", { name: /Continue to Course Selection/i }));
   fireEvent.click(screen.getByText("Algorithms"));
   fireEvent.click(screen.getByRole("button", { name: /Configure Slots & Faculty \(1\)/i }));
@@ -160,10 +160,10 @@ describe("guided selector cap wiring", () => {
   it("makes Unlimited lift the 30K ceiling outright", async () => {
     reachCapPicker();
 
-    fireEvent.click(screen.getByRole("button", { name: "Unlimited ✨" }));
+    fireEvent.click(screen.getByRole("button", { name: "Unlimited" }));
     // No qualifier: the switch means no ceiling, so there is no "(30k max)"
     // left to append to the word.
-    expect(screen.getByText("Unlimited")).toBeDefined();
+    expect(screen.getAllByText("Unlimited").length).toBeGreaterThan(0);
 
     await runFromBlueprint();
 

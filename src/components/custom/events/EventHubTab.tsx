@@ -1,5 +1,6 @@
 "use client";
 import { plainErrorMessage } from "@/lib/plainError";
+import { isDemoSession } from "@/lib/demoDates";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { clearEventHubSession, eventHubRequest, loginToEventHub } from "@/lib/sync-engine";
 import { runPageSync } from "@/lib/sync-engine/single-sync";
@@ -227,15 +228,17 @@ export default function EventHubTab({
 
   const fetchEvents = async () => {
     setLoading(true);
-    if (IDs?.VtopUsername === "demo") {
+    if (isDemoSession(IDs)) {
       await new Promise((resolve) => setTimeout(resolve, 300));
+      // Dates relative to today so the demo always has upcoming events.
+      const inDays = (n: number) => new Date(Date.now() + n * 86_400_000).toISOString().slice(0, 10);
       setEvents([
         {
           eid: "evt-001",
           title: "DevSprint '26 Hackathon",
           eligibility: "Open to all branches",
           type: "Coding Hackathon",
-          date: "2026-07-15",
+          date: inDays(6),
           location: "Netaji Auditorium",
           price: "Free",
           registeredDetails: null,
@@ -245,16 +248,56 @@ export default function EventHubTab({
           title: "RoboSoccer Workshop",
           eligibility: "Open to all branches",
           type: "Robotics Workshop",
-          date: "2026-07-22",
+          date: inDays(2),
           location: "MG Block Lab 202",
           price: "Paid",
           registeredDetails: {
             paymentStatus: "Paid (Online)",
             orderId: "ORD-920194",
-            registrationDate: "2026-06-20",
+            registrationDate: inDays(-12),
             certificateEligible: "Yes",
-            attendanceStatus: "Attended",
+            attendanceStatus: "Registered",
           },
+        },
+        {
+          eid: "evt-003",
+          title: "UI/UX Design Sprint",
+          eligibility: "Open to all branches",
+          type: "Design Workshop",
+          date: inDays(9),
+          location: "AB1 Seminar Hall",
+          price: "Free",
+          registeredDetails: null,
+        },
+        {
+          eid: "evt-004",
+          title: "Cloud Native Bootcamp",
+          eligibility: "CSE, IT and ECE",
+          type: "Technical Workshop",
+          date: inDays(13),
+          location: "AB3 Lab 504",
+          price: "Paid",
+          registeredDetails: null,
+        },
+        {
+          eid: "evt-005",
+          title: "Open Mic Night",
+          eligibility: "Open to all",
+          type: "Cultural",
+          date: inDays(4),
+          location: "Main Amphitheatre",
+          price: "Free",
+          registeredDetails: null,
+        },
+        {
+          eid: "evt-006",
+          title: "Quizzard: General Quiz",
+          eligibility: "Teams of two",
+          type: "Quiz",
+          date: inDays(17),
+          location: "AB2 Gallery Hall",
+          price: "Free",
+          registeredDetails: null,
         },
       ]);
       setLoading(false);
@@ -283,7 +326,7 @@ export default function EventHubTab({
        * Demo is handled inside `loginEventHub`, which returns an empty
        * session for the demo username.
        */
-      if (IDs?.VtopUsername !== "demo") {
+      if (!isDemoSession(IDs)) {
         await loginToEventHub(IDs);
       }
       // The engine `events` op pulls the public catalogue AND the user's
@@ -349,7 +392,7 @@ export default function EventHubTab({
       }
 
       setPreviewLoading(true);
-      if (IDs?.VtopUsername === "demo") {
+      if (isDemoSession(IDs)) {
         await new Promise((resolve) => setTimeout(resolve, 150));
         setPreviewData({
           eid: event.eid,
@@ -411,7 +454,7 @@ export default function EventHubTab({
     setRegisteredError("");
 
     (async () => {
-      if (IDs.VtopUsername === "demo") {
+      if (isDemoSession(IDs)) {
         await new Promise((resolve) => setTimeout(resolve, 300));
         if (!cancelled) setRegisteredEvents?.(DEMO_REGISTERED);
         return;

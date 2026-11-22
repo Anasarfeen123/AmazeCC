@@ -1,6 +1,7 @@
 "use client";
 
 import { getAssetPath } from "@/lib/utils";
+import { rebaseDemoDates } from "@/lib/demoDates";
 
 import { useEffect, useState } from "react";
 import { useSetAtom } from "jotai";
@@ -99,8 +100,9 @@ export function useAppBootstrap() {
     if (isDemoStored && !storedAttendance?.attendance) {
       void fetch(getAssetPath("/data/demoData.json"))
         .then((res) => (res.ok ? res.json() : null))
-        .then((demo: any) => {
-          if (!demo) return;
+        .then((raw: any) => {
+          if (!raw) return;
+          const demo = rebaseDemoDates(raw);
           if (demo.attendance) setAttendanceAndOD(demo.attendance);
           if (demo.marks) setMarksData(demo.marks);
           if (demo.grades) setGradesData(demo.grades);

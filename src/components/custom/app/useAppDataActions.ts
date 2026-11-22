@@ -1,6 +1,7 @@
 "use client";
 
 import { getAssetPath } from "@/lib/utils";
+import { rebaseDemoDates } from "@/lib/demoDates";
 
 import { useCallback } from "react";
 import config from "../../../../config.json";
@@ -81,7 +82,7 @@ export function useAppDataActions({
   const handleLogin = useCallback(
     async (currSemesterID = config.semesterIDs[config.semesterIDs.length - 2], loginIds?: Ids) => {
       if (demoMode || IDs.VtopUsername === "demo") {
-        const demoData = await (await fetch(getAssetPath("/data/demoData.json"))).json();
+        const demoData = rebaseDemoDates(await (await fetch(getAssetPath("/data/demoData.json"))).json());
         setDemoMode(true);
         storage.demoMode.set(true);
         setIsReloading(true);

@@ -1,6 +1,7 @@
 "use client";
 
 import { getAssetPath } from "@/lib/utils";
+import { rebaseDemoDates } from "@/lib/demoDates";
 import AppLoading from "@/components/custom/shared/AppLoading";
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
@@ -339,7 +340,8 @@ function MainRuntime({ initialIntent, onSignedOut }: MainProps) {
   }, [handleLogin, setIsReloading]);
 
   const handleDemoClick = async () => {
-    const demoData = await (await fetch(getAssetPath("/data/demoData.json"))).json();
+    // Dates are moved to the current week so exams, calendar and events are upcoming.
+    const demoData = rebaseDemoDates(await (await fetch(getAssetPath("/data/demoData.json"))).json());
     setDemoMode(true);
     setTypedStorageItem("demoMode", "true");
     setIDs({

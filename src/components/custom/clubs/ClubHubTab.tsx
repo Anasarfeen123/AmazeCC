@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { isDemoSession } from "@/lib/demoDates";
 import { useSetAtom } from "jotai";
 import { activeTabAtom } from "@/store";
 import { api } from "@/lib/sync-engine";
@@ -164,7 +165,7 @@ export default function ClubHubTab({
     setError("");
     setShowAll(false);
 
-    if (IDs?.VtopUsername === "demo") {
+    if (isDemoSession(IDs)) {
       await new Promise((resolve) => setTimeout(resolve, 400));
       setClubs(
         withDetails(

@@ -1402,6 +1402,37 @@ export default function SimplifiedMobileHome({
   const visibleRows = dayRows.filter(
     (_row: any, i: number) => showDone || !isTodayView || rowStatuses[i] !== "completed",
   );
+  // The answer first (Home critique P2): today's live or next class as a card
+  // above the stat tiles — course, time, room and how long until it starts.
+  const nowNextCard = (() => {
+    if (!isTodayView) return null;
+    const liveIdx = rowStatuses.indexOf("live");
+    const nextIdx = rowStatuses.indexOf("upcoming");
+    const pick = liveIdx !== -1 ? liveIdx : nextIdx;
+    if (pick === -1) return null;
+    const cls = (dayRows[pick] as any).cls;
+    const [startRaw, endRaw] = String(cls.time || "")
+      .split("-")
+      .map((t: string) => t.trim());
+    const nowMin = new Date().getHours() * 60 + new Date().getMinutes();
+    const live = liveIdx !== -1;
+    const mins = live ? parseAttendanceTime(endRaw) - nowMin : parseAttendanceTime(startRaw) - nowMin;
+    const rel =
+      !Number.isFinite(mins) || mins < 0
+        ? ""
+        : live
+          ? `${mins} min left`
+          : mins < 60
+            ? `in ${mins} min`
+            : `in ${Math.floor(mins / 60)} h ${mins % 60 ? `${mins % 60} min` : ""}`.trim();
+    return {
+      live,
+      title: String(cls.courseTitle || cls.courseCode || "Class"),
+      detail: [startRaw && endRaw ? `${startRaw}–${endRaw}` : startRaw, cls.slotVenue].filter(Boolean).join(" · "),
+      rel,
+    };
+  })();
+
   const nowNextLine = (() => {
     if (!isTodayView) return null;
     const liveIdx = rowStatuses.indexOf("live");
@@ -1458,11 +1489,13 @@ export default function SimplifiedMobileHome({
 
             {/* Action Controls */}
             <div className="flex items-center gap-2 pt-0.5">
-              {/* Sync Button */}
+              {/* Sync Button. From md up the sidebar has Sync and Search, so
+                  these two hide there (Home critique: duplicated); offline
+                  keeps Sync, it doubles as the offline indicator. */}
               <button
                 onClick={handleSyncClick}
                 className={`${ICON_BUTTON} gap-1.5 font-mono text-xs font-semibold uppercase ${
-                  isOffline ? "!bg-highlight !text-highlight-foreground px-3" : ""
+                  isOffline ? "!bg-highlight !text-highlight-foreground px-3" : "md:hidden"
                 }`}
                 title={isOffline ? "You're offline — tap for details" : "Sync Data from VTOP"}
                 aria-label={isOffline ? "Offline — tap for details" : "Sync Data from VTOP"}
@@ -1478,7 +1511,12 @@ export default function SimplifiedMobileHome({
               </button>
 
               {/* Spotlight Search */}
-              <button onClick={onOpenCommandPalette} className={ICON_BUTTON} title="Search (Cmd+K)" aria-label="Search">
+              <button
+                onClick={onOpenCommandPalette}
+                className={`${ICON_BUTTON} md:hidden`}
+                title="Search (Cmd+K)"
+                aria-label="Search"
+              >
                 <Search className="w-4 h-4" />
               </button>
 
@@ -1505,6 +1543,37 @@ export default function SimplifiedMobileHome({
               viewingSemesterId={settings?.currSemesterID ?? null}
               onSwitchSemester={(id) => void handleReloadRequest(id)}
             />
+          ) : null}
+
+          {nowNextCard ? (
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab("attendance");
+                setActiveAttendanceSubTab("calendar");
+              }}
+              className={`flex w-full items-center gap-3 rounded-[14px] border-2 border-border-ink px-4 py-3 text-left shadow-brutal-sm brutal-press cursor-pointer ${
+                nowNextCard.live ? "bg-mint text-obsidian" : "bg-surface text-text-primary"
+              }`}
+            >
+              <span className="min-w-0 flex-1">
+                <span
+                  className={`block font-mono text-xs font-bold uppercase tracking-[0.08em] ${nowNextCard.live ? "" : "text-text-muted"}`}
+                >
+                  {nowNextCard.live ? "Now" : "Next"}
+                  {nowNextCard.rel ? ` · ${nowNextCard.rel}` : ""}
+                </span>
+                <span className="mt-0.5 block truncate font-display text-base font-bold leading-tight sm:text-lg">
+                  {nowNextCard.title}
+                </span>
+                {nowNextCard.detail ? (
+                  <span className={`block truncate text-sm ${nowNextCard.live ? "" : "text-text-muted"}`}>
+                    {nowNextCard.detail}
+                  </span>
+                ) : null}
+              </span>
+              <ChevronRight className="h-4 w-4 shrink-0 opacity-60" aria-hidden />
+            </button>
           ) : null}
 
           {/* ── STATS: DYNAMIC MULTI-TILE & CAROUSEL GRID ── */}
@@ -1763,7 +1832,7 @@ export default function SimplifiedMobileHome({
                   ) : isHolidayOrOff ? (
                     "Academic Holiday / Non-Instructional"
                   ) : (
-                    (nowNextLine ??
+                    ((nowNextCard ? null : nowNextLine) ??
                     (selectedDayClasses.length === 0
                       ? "No classes"
                       : `${selectedDayClasses.length} ${selectedDayClasses.length === 1 ? "class" : "classes"}`))

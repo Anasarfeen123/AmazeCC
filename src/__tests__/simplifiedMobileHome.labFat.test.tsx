@@ -117,8 +117,7 @@ function renderHome(over: Record<string, unknown> = {}) {
  * The collapsed exam slot's disclosure button. The week-strip circle also says
  * "Lab FAT" in its accessible name; the slot's name carries the slot code.
  */
-const slotButton = () =>
-  screen.getByRole("button", { name: /Lab FAT exam slot L37\+L38/ }) as HTMLButtonElement;
+const slotButton = () => screen.getByRole("button", { name: /Lab FAT exam slot L37\+L38/ }) as HTMLButtonElement;
 
 beforeEach(() => {
   vi.useFakeTimers({ shouldAdvanceTime: true });
@@ -136,7 +135,7 @@ describe("Lab FAT day", () => {
     // The day is working: no all-exam takeover despite two papers today.
     expect(screen.queryByText("No regular lectures on exam day")).toBeNull();
     // The theory class still renders as a class.
-    expect(screen.getByText("Object Oriented Programming")).toBeDefined();
+    expect(screen.getAllByText("Object Oriented Programming").length).toBeGreaterThan(0);
 
     // The lab slot is now the exam — collapsed, with its time and venue shown.
     const button = slotButton();

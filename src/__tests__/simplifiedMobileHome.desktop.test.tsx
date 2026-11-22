@@ -100,7 +100,7 @@ describe("SimplifiedMobileHome Desktop Layout & Course Pane", () => {
     render(<SimplifiedMobileHome {...defaultProps()} />);
 
     // Click on course1
-    const course1Card = screen.getByText("Problem Solving and Programming");
+    const course1Card = screen.getAllByText("Problem Solving and Programming").at(-1)!;
     fireEvent.click(course1Card);
 
     // Desktop pane is now shown
@@ -118,12 +118,12 @@ describe("SimplifiedMobileHome Desktop Layout & Course Pane", () => {
     render(<SimplifiedMobileHome {...defaultProps()} />);
 
     // First click course1
-    fireEvent.click(screen.getByText("Problem Solving and Programming"));
+    fireEvent.click(screen.getAllByText("Problem Solving and Programming").at(-1)!);
     const aside = document.querySelector("aside")!;
     expect(within(aside).getByText("Prof. Ada")).toBeDefined();
 
     // Now click course2
-    fireEvent.click(screen.getByText("Data Structures and Algorithms"));
+    fireEvent.click(screen.getAllByText("Data Structures and Algorithms").at(-1)!);
     expect(within(aside).getByText("Prof. Alan")).toBeDefined();
     expect(within(aside).getByText("SJT 202")).toBeDefined();
   });
@@ -132,7 +132,7 @@ describe("SimplifiedMobileHome Desktop Layout & Course Pane", () => {
     render(<SimplifiedMobileHome {...defaultProps()} />);
 
     // Open pane by clicking course1
-    fireEvent.click(screen.getByText("Problem Solving and Programming"));
+    fireEvent.click(screen.getAllByText("Problem Solving and Programming").at(-1)!);
     expect(document.querySelector("aside")).not.toBeNull();
 
     // Click close button
@@ -148,7 +148,7 @@ describe("SimplifiedMobileHome Desktop Layout & Course Pane", () => {
     const setActiveSubTab = vi.fn();
     render(<SimplifiedMobileHome {...defaultProps({ setActiveTab, setActiveSubTab })} />);
 
-    const course1Card = screen.getByText("Problem Solving and Programming");
+    const course1Card = screen.getAllByText("Problem Solving and Programming").at(-1)!;
 
     // First click selects course1 and displays pane
     fireEvent.click(course1Card);
@@ -166,7 +166,7 @@ describe("SimplifiedMobileHome Desktop Layout & Course Pane", () => {
     const setActiveSubTab = vi.fn();
     render(<SimplifiedMobileHome {...defaultProps({ setActiveTab, setActiveSubTab })} />);
 
-    const course1Card = screen.getByText("Problem Solving and Programming");
+    const course1Card = screen.getAllByText("Problem Solving and Programming").at(-1)!;
     fireEvent.click(course1Card);
 
     // Immediately navigates on mobile without opening side pane
@@ -205,8 +205,9 @@ describe("finished classes fold on today (critique #10)", () => {
     render(<SimplifiedMobileHome {...defaultProps()} />);
     expect(screen.queryByText("Problem Solving and Programming")).toBeNull();
     const toggle = screen.getByRole("button", { name: /1 class done/i });
-    expect(screen.getByText(/^Next: /)).toBeDefined();
+    // The next class is named on the Now / Next card above the tiles.
+    expect(screen.getByText(/^Next/)).toBeDefined();
     fireEvent.click(toggle);
-    expect(screen.getByText("Problem Solving and Programming")).toBeDefined();
+    expect(screen.getAllByText("Problem Solving and Programming").at(-1)!).toBeDefined();
   });
 });

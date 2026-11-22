@@ -124,6 +124,9 @@ const PRIMARY_BUTTON =
   "inline-flex items-center justify-center gap-2 rounded-2xl bg-primary hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 text-primary-foreground font-bold px-5 py-3 text-sm shadow-brutal-sm border-2 border-border-ink transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-ink focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 const ACTION_BUTTON = `${GHOST_BUTTON} justify-center py-2.5 text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-ink`;
 
+/** Classmates shown per section row before "+N more". */
+const PREVIEW_PEOPLE = 6;
+
 const AVATAR_TONES = ["indigo", "emerald", "amber", "violet", "sky", "red"] as const;
 
 function initials(name: string): string {
@@ -607,8 +610,10 @@ function SectionCard({
         </div>
       </div>
       {count ? (
+        // List rows show the first 6 (owner: "compact it"); the rest are a
+        // "+N more" chip that opens the section. The section page shows all.
         <div className="flex flex-wrap gap-1.5 sm:pl-[52px]">
-          {entry.people.map((p) => {
+          {(onClick ? entry.people.slice(0, PREVIEW_PEOPLE) : entry.people).map((p) => {
             const isMarked = p.enrollmentRole === "theory" || p.enrollmentRole === "lab";
             const markLabel =
               p.enrollmentRole === "theory" ? "ETH only" : p.enrollmentRole === "lab" ? "ELA only" : undefined;
@@ -630,6 +635,11 @@ function SectionCard({
               />
             );
           })}
+          {onClick && count > PREVIEW_PEOPLE && (
+            <span className="inline-flex items-center rounded-2xl border-2 border-border-ink bg-surface-secondary px-2.5 py-1 font-mono text-xs font-bold text-text-heading">
+              +{count - PREVIEW_PEOPLE} more
+            </span>
+          )}
         </div>
       ) : null}
     </div>

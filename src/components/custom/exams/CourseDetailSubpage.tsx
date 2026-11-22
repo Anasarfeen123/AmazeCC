@@ -2432,7 +2432,6 @@ export default function CourseDetailSubpage({
                 <StatTile
                   label="Grading"
                   value={isRelative ? "Relative" : "Absolute"}
-                  badge="System"
                   tone="indigo"
                   sub={
                     courseGradeHistory.length > 0
@@ -2443,17 +2442,10 @@ export default function CourseDetailSubpage({
               </>
             ) : (
               <>
-                <StatTile
-                  label="Total Score"
-                  value={String(courseTotalString)}
-                  badge="Marks"
-                  tone="neutral"
-                  sub={courseTypeLabel}
-                />
+                <StatTile label="Total Score" value={String(courseTotalString)} tone="neutral" sub={courseTypeLabel} />
                 <StatTile
                   label="Projected"
                   value={`${courseStats.projected}%`}
-                  badge="Forecast"
                   tone="blue"
                   sub={`Max potential ${formatNumber(courseStats.maxPossible)}%`}
                 />

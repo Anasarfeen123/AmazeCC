@@ -81,7 +81,6 @@ import {
   PageShell,
   SectionHeader,
   SegmentedControl,
-  StatTile,
   Switch,
   ToneBadge,
 } from "../shared/primitives";
@@ -2041,22 +2040,13 @@ export default function FriendFinderTab({
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-2 gap-2 sm:gap-3">
-              <StatTile
-                label="Classmates"
-                value={uniqueClassmates}
-                sub={<span className="text-xs text-muted-foreground">found</span>}
-                tone="indigo"
-                height="h-24 sm:h-28"
-              />
-              <StatTile
-                label="Joined"
-                value={state.participants.toLocaleString()}
-                sub={<span className="text-xs text-muted-foreground">students</span>}
-                tone="neutral"
-                height="h-24 sm:h-28"
-              />
-            </div>
+            {/* One line, not two cramped tiles (owner). */}
+            <p className="px-1 text-sm text-text-muted">
+              <span className="font-mono font-bold text-text-heading">{uniqueClassmates}</span>{" "}
+              {uniqueClassmates === 1 ? "classmate" : "classmates"} found ·{" "}
+              <span className="font-mono font-bold text-text-heading">{state.participants.toLocaleString()}</span>{" "}
+              students joined
+            </p>
 
             {grouping === "classes" ? (
               <section className="space-y-3">

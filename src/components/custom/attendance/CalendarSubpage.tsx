@@ -19,7 +19,6 @@ import {
   EmptyPanel,
   GhostButton,
   IconButton,
-  InsightCarousel,
   ListRowText,
   ListShell,
   PageShell,
@@ -28,8 +27,6 @@ import {
   SelectField,
   ToneBadge,
   ToneDot,
-  useCarousel,
-  type InsightSlide,
 } from "../shared/primitives";
 import { TILE_CARD } from "@/lib/uiTokens";
 import {
@@ -38,7 +35,6 @@ import {
   resolveTeachingDay,
   type AttendanceDayCardsMap,
 } from "@/lib/attendanceTimetable";
-import { summariseAttendance } from "@/lib/attendanceSummary";
 import {
   activeMonthIndex,
   buildAttendanceByDate,
@@ -67,7 +63,6 @@ import { registeredEventsAtom, tasksAtom } from "@/store/dataAtoms";
 import { settingsAtom } from "@/store/settingsAtoms";
 import { unifiedAcademicsAtom } from "@/store";
 import type { NormalizedCourse } from "@/types/course";
-import { normalizeCourse } from "@/lib/courseNormalizer";
 import { shouldShowProfilePhoto } from "@/lib/settingsVisibility";
 import { storage } from "@/lib/storage";
 import type { EventHubRegistration } from "@/types/data/eventhub";
@@ -107,14 +102,6 @@ const CALENDAR_OPTIONS = (Object.keys(CALENDAR_TYPES) as CalendarTypeKey[]).map(
   value: key,
   label: CALENDAR_TYPES[key],
 }));
-
-/**
- * A lab's percentage in the course carousel, kept distinct from its theory
- * half's because the two are separate attendance records with separate
- * requirements — collapsing them into one number is the thing this carousel
- * exists to stop.
- */
-const LAB_VALUE = "text-success-foreground";
 
 /** A row in the Upcoming list — one date, and everything happening on it. */
 type UpcomingItem = {
@@ -342,81 +329,6 @@ export default function CalendarSubpage({
   const missedCount = useMemo(() => logRows.filter((r) => r.isMissed).length, [logRows]);
 
   /**
-   * The headline, from the app's one formula.
-   *
-   * Was counted from the `viewLink` records on this page, which is a different
-   * figure from the one every other page shows — so the calendar could display
-   * 91% on a day the home screen displayed 87% for the same student. Now both
-   * read `summariseAttendance`, which is the sum of VTOP's own per-course
-   * totals, so they cannot disagree.
-   */
-  const overall = useMemo(
-    () => summariseAttendance(attendanceList, targetAttendance),
-    [attendanceList, targetAttendance],
-  );
-
-  /**
-   * Per-course attendance, one slide each.
-   *
-   * This is the "other attendance percentage": the overall tile averages every
-   * course together, which hides a 40% theory behind a 95% lab, so the two
-   * numbers a user needs are the overall one and each course's own. Every
-   * slide names its denominator — the classes *that course* actually held —
-   * because a percentage of nothing is not a percentage.
-   */
-  const courseRows = useMemo(() => {
-    return attendanceList
-      .map((course: any) => {
-        const norm = normalizeCourse(course);
-        const attended = Number(norm.attendance?.attendedClasses ?? course?.attendedClasses) || 0;
-        const total = Number(norm.attendance?.totalClasses ?? course?.totalClasses) || 0;
-        if (total <= 0) return null;
-        const pct = (attended / total) * 100;
-        const code = norm.code || String(course?.courseCode ?? "");
-        const title = norm.title || String(course?.courseTitle ?? code ?? "Course");
-        const slot = norm.slotDisplay || String(course?.slotName ?? "");
-        const venue = norm.venue || String(course?.slotVenue ?? "");
-        const isLab = norm.isLab;
-        return {
-          id: norm.id || String(course?.courseCode ?? course?.courseTitle ?? Math.random()),
-          code,
-          title,
-          slot,
-          venue,
-          attended,
-          total,
-          pct,
-          isLab,
-          status: pct >= targetAttendance + 5 ? "Safe" : pct >= targetAttendance ? "Warning" : "Critical",
-        };
-      })
-      .filter((c): c is NonNullable<typeof c> => c !== null)
-      .sort((a, b) => (hideAttendance ? a.title.localeCompare(b.title) : a.pct - b.pct));
-  }, [attendanceList, targetAttendance, hideAttendance]);
-
-  const courseSlides = useMemo<InsightSlide[]>(
-    () =>
-      courseRows.map((c) => ({
-        id: c.id,
-        label: c.code || c.title,
-        // A theory/lab pair share a base code, so the title is the only thing
-        // that tells them apart once the code is in the kicker.
-        value: `${Number(c.pct.toFixed(1))}%`,
-        sub: `${c.attended}/${c.total} held`,
-        badge: c.status,
-        privacyCategory: "attendance",
-        subPrivacyCategory: "attendance",
-        badgePrivacyCategory: "attendance",
-        dotLabel: `${c.isLab ? "Lab" : "Theory"} ${c.title}`,
-        tone: hideAttendance ? "neutral" : c.status === "Safe" ? "emerald" : c.status === "Warning" ? "amber" : "red",
-        valueClassName: c.isLab ? LAB_VALUE : undefined,
-      })),
-    [courseRows, hideAttendance],
-  );
-
-  const courseCarousel = useCarousel(courseSlides.length);
-
-  /**
    * The left card: the semester at a glance, rotating.
    *
    * The percentage leads. The two day counts behind it are what the old
@@ -430,53 +342,6 @@ export default function CalendarSubpage({
    * the subset where something was not present. Both come off the same log the
    * section below renders, so the card and the list can never disagree.
    */
-  const summarySlides = useMemo<InsightSlide[]>(() => {
-    const statusTone =
-      overall.status === "Safe"
-        ? "emerald"
-        : overall.status === "Warning"
-          ? "amber"
-          : overall.status === "Critical"
-            ? "red"
-            : "neutral";
-
-    return [
-      {
-        id: "attendance",
-        label: "Attendance",
-        value: overall.total > 0 ? `${Number(overall.percentage.toFixed(1))}%` : "—",
-        sub: overall.total > 0 ? `${overall.attended} of ${overall.total} classes` : "No records yet",
-        badge: overall.total > 0 ? overall.status : undefined,
-        privacyCategory: "attendance",
-        subPrivacyCategory: "attendance",
-        badgePrivacyCategory: "attendance",
-        tone: hideAttendance ? "neutral" : statusTone,
-        valueClassName: "text-obsidian",
-      },
-      {
-        id: "days-done",
-        label: "Classes done",
-        value: logRows.length,
-        privacyCategory: "attendance",
-        sub: logRows.length === 1 ? "day with a record" : "days with a record",
-        tone: "emerald",
-        valueClassName: "text-obsidian",
-      },
-      {
-        id: "days-missed",
-        label: "Days missed",
-        value: missedCount,
-        privacyCategory: "attendance",
-        sub: missedCount === 1 ? "day with a miss" : "days with a miss",
-        tone: hideAttendance ? "neutral" : missedCount > 0 ? "red" : "emerald",
-        valueClassName: "text-obsidian",
-      },
-    ];
-  }, [overall, logRows.length, missedCount, hideAttendance]);
-
-  const summaryCarousel = useCarousel(summarySlides.length);
-
-  const belowTarget = useMemo(() => courseRows.filter((c) => c.status === "Critical").length, [courseRows]);
 
   const today = useMemo(() => {
     const key = todayKey();
@@ -794,43 +659,8 @@ export default function CalendarSubpage({
         </span>
         <ChevronRight className="h-4 w-4 shrink-0" aria-hidden />
       </button>
-      <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
-        <InsightCarousel
-          slides={summarySlides}
-          carousel={summaryCarousel}
-          interactiveDots
-          ariaLabel="Attendance summary"
-        />
-
-        {/* One slide per enrolled course, each a percentage of that course's own
-            held classes — the "other attendance percentage", and the one that
-            actually differs between courses. An average hides a 40% theory
-            behind a 95% lab, so this is where the number to act on lives. Worst
-            first, because the courses needing attention are the reason to look. */}
-        {courseSlides.length > 0 ? (
-          <InsightCarousel
-            slides={courseSlides}
-            carousel={courseCarousel}
-            interactiveDots
-            ariaLabel="Attendance by course"
-            footerRight={
-              !hideAttendance && belowTarget > 0 ? (
-                // The footer row is subline + this + the dots, and at half
-                // width on a phone the three together leave the subline
-                // nothing. The slides are sorted worst-first, so the count is
-                // a convenience rather than the information.
-                <span className="hidden sm:inline-flex">
-                  <span data-private="attendance">
-                    <ToneBadge tone="zinc">
-                      {belowTarget} below {targetAttendance}%
-                    </ToneBadge>
-                  </span>
-                </span>
-              ) : null
-            }
-          />
-        ) : null}
-      </div>
+      {/* Stat carousels removed (owner): the calendar and the Skip predictor
+          carry these numbers. */}
 
       {/* ── Upcoming ──
           One date-ordered list of everything still to come — exams, deadlines,

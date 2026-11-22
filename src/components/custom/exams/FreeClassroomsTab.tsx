@@ -2,7 +2,7 @@
 
 import { plainErrorMessage } from "@/lib/plainError";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Skeleton, cn } from "@amazecontinuityprojects/amazeui";
+import { cn } from "@amazecontinuityprojects/amazeui";
 import { OptionPicker } from "../shared/primitives";
 import { m } from "framer-motion";
 import {
@@ -35,7 +35,6 @@ import {
   type DayId,
   type FreeRoomCourse,
   type FreeRooms,
-  type PeriodOption,
   type WeekMap,
 } from "@/lib/freeClassrooms";
 import { buildWeekIndexAsync } from "@/lib/freeClassroomWorkerBridge";
@@ -49,28 +48,20 @@ import {
   EmptyPanel,
   GhostButton,
   IconButton,
-  InsightCarousel,
   ListRowText,
   ListShell,
   ListSkeleton,
   PageShell,
-  SectionHeader,
   SegmentedControl,
-  StatTile,
   ToneBadge,
-  useCarousel,
-  type InsightSlide,
 } from "../shared/primitives";
 
 import chennaiSchema from "@/data/campus/chennai.json";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { settingsAtom } from "@/store/settingsAtoms";
 import { getTypedStorageItem } from "@/lib/storage";
 import {
-  FINAL_FFCS_REPORTS,
   GLOBAL_SEMESTER_CHANGE_EVENT,
-  broadcastGlobalSemesterChange,
-  finalSemesterToVtopId,
   getSelectedFinalSemesterId,
   mapToFinalSemesterId,
   type FinalFFCSSemesterId,
@@ -109,22 +100,6 @@ const roomNumber = (code: string) => {
   const dash = code.indexOf("-");
   return dash >= 0 ? code.slice(dash + 1) : code;
 };
-
-/**
- * The period with the most free rooms, from the merged answer.
- *
- * The same question the report-only version asked, asked of the merged one:
- * "where should I walk to" is answered by the emptiest moment of the day, and
- * that moment can move once the server's classes are in the mix.
- */
-function bestPeriodOf(merged: MergedDay, periods: PeriodOption[]): { period: PeriodOption; free: number } | null {
-  let best: { period: PeriodOption; free: number } | null = null;
-  for (const period of periods) {
-    const free = merged.periods.get(period.key)?.free.rooms.length ?? 0;
-    if (!best || free > best.free) best = { period, free };
-  }
-  return best && best.free > 0 ? best : null;
-}
 
 /**
  * A room chip with two targets.
@@ -169,25 +144,6 @@ function RoomChip({
           <span className="text-xs font-semibold px-1 py-0.2 rounded bg-cyan-500/20 text-cyan-700 dark:text-cyan-300">
             Lab
           </span>
-        )}
-      </button>
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          onCopy(code);
-        }}
-        title={`Copy ${code}`}
-        aria-label={`Copy ${code}`}
-        className={cn(
-          "pr-2 pl-1 py-1.5 cursor-pointer text-text-muted hover:text-text-primary transition-colors active:scale-90",
-          copied && "text-success-foreground",
-        )}
-      >
-        {copied ? (
-          <Check className="w-3.5 h-3.5 text-success-foreground" />
-        ) : (
-          <Copy className="w-3 h-3 opacity-40 group-hover:opacity-100 transition-opacity" />
         )}
       </button>
     </div>
@@ -263,7 +219,6 @@ function DayPicker({
 
 export default function FreeClassroomsTab({
   onBack,
-  handleReloadRequest,
 }: {
   onBack?: () => void;
   /**
@@ -275,7 +230,7 @@ export default function FreeClassroomsTab({
   handleReloadRequest?: (semesterId?: string, modeId?: string) => Promise<void>;
 }) {
   const [courses, setCourses] = useState<FreeRoomCourse[]>([]);
-  const [settings, setSettings] = useAtom(settingsAtom);
+  const settings = useAtomValue(settingsAtom);
   const globalFinalSemester = useMemo(
     () => mapToFinalSemesterId(settings?.currSemesterID) ?? getSelectedFinalSemesterId(),
     [settings?.currSemesterID],
@@ -308,22 +263,6 @@ export default function FreeClassroomsTab({
       window.removeEventListener("storage", handleGlobalChange);
     };
   }, [semesterId]);
-
-  const handleSemesterSwitch = useCallback(
-    (next: FinalFFCSSemesterId) => {
-      if (next === semesterId) return;
-      setSemesterId(next);
-      if (handleReloadRequest) {
-        // The reload owns the global semester write, the broadcast, and the
-        // full sync the new term's caches need — this page only tracks it.
-        void handleReloadRequest(finalSemesterToVtopId(next));
-      } else {
-        broadcastGlobalSemesterChange(next);
-        setSettings((prev) => ({ ...prev, currSemesterID: finalSemesterToVtopId(next) }));
-      }
-    },
-    [semesterId, handleReloadRequest, setSettings],
-  );
 
   const [day, setDay] = useState<DayId>("mon");
   const [periodKey, setPeriodKey] = useState("");
@@ -566,63 +505,6 @@ export default function FreeClassroomsTab({
 
   /* ── hero ─────────────────────────────────────────────────────────────── */
 
-  const insightSlides = useMemo<InsightSlide[]>(() => {
-    const slides: InsightSlide[] = [];
-    if (metrics.theory > 0) {
-      slides.push({
-        id: "theory",
-        label: "Classrooms",
-        value: metrics.theory,
-        sub: "Lecture halls free now",
-        badge: "Rooms",
-        tone: "indigo",
-      });
-    }
-    if (metrics.lab > 0) {
-      slides.push({
-        id: "lab",
-        label: "Laboratories",
-        value: metrics.lab,
-        sub: "With benches free now",
-        badge: "Labs",
-        tone: "sky",
-      });
-    }
-    const best = bestPeriodOf(merged, periods);
-    if (best) {
-      slides.push({
-        id: "best",
-        label: "Emptiest period",
-        value: best.free,
-        sub: best.period.label,
-        badge: "Best",
-        tone: "violet",
-        onClick: () => {
-          setRunOnly(false);
-          setPeriodKey(best.period.key);
-        },
-      });
-    }
-    if (runFree.rooms.length > 0) {
-      slides.push({
-        id: "run",
-        label: `Free for ${RUN_LENGTH} periods`,
-        value: runFree.rooms.length,
-        sub: `From ${periods[periodIndex]?.label ?? "now"} onward`,
-        badge: "Stay",
-        tone: "emerald",
-        onClick: () => {
-          setRunOnly((v) => !v);
-          setBlockFilter("All");
-          setQuery("");
-        },
-      });
-    }
-    return slides;
-  }, [metrics, merged, runFree, periods, periodIndex]);
-
-  const carousel = useCarousel(insightSlides.length, 8000);
-
   /* ── list ─────────────────────────────────────────────────────────────── */
 
   const visibleBlocks = useMemo(() => {
@@ -717,14 +599,8 @@ export default function FreeClassroomsTab({
       title="Find an empty room"
       subtitle="Find available rooms by day, time and block."
       actions={
+        // No semester picker (owner): follows the sidebar / bottom-bar semester.
         <div className="flex items-center gap-2">
-          <SegmentedControl
-            options={FINAL_FFCS_REPORTS.map((r) => ({ value: r.id, label: r.label }))}
-            value={semesterId}
-            onChange={(val) => {
-              handleSemesterSwitch(val as FinalFFCSSemesterId);
-            }}
-          />
           <IconButton title="Reload timetable" onClick={() => load(true, semesterId)} disabled={loading}>
             <RefreshCcw className={loading ? "animate-spin" : ""} />
           </IconButton>
@@ -732,35 +608,8 @@ export default function FreeClassroomsTab({
       }
       selectable
     >
-      {/* ── HERO STAT TILES ── */}
-      {loading ? (
-        <div className="grid grid-cols-2 gap-3 sm:gap-4">
-          <Skeleton className="h-32 sm:h-36 rounded-[14px]" />
-          <Skeleton className="h-32 sm:h-36 rounded-[14px]" />
-        </div>
-      ) : error ? null : (
-        <div className="grid grid-cols-2 gap-3 sm:gap-4">
-          <button
-            type="button"
-            onClick={jumpToNow}
-            title="Jump to the current period"
-            className="w-full text-left cursor-pointer transition-transform"
-          >
-            <StatTile
-              label={isLiveSlot ? "Free now" : "Free in selected slot"}
-              value={metrics.total}
-              sub={`${metrics.blocks} ${metrics.blocks === 1 ? "block" : "blocks"} with space`}
-              badge={isLiveSlot ? "Live" : "Selected"}
-              tone={isLiveSlot ? "emerald" : "indigo"}
-              // The page's one loud card (the tile sits inside a button, so
-              // the summary-row rule would colour the button behind it).
-              variant="highlight"
-            />
-          </button>
-          <InsightCarousel slides={insightSlides} carousel={carousel} height="h-36" ariaLabel="Availability insights" />
-        </div>
-      )}
-
+      {/* Stat tiles removed (owner: cluttered); the filter below carries
+          the free counts and the slot picker has "Now". */}
       {/* ── TIME SELECTOR ── */}
       {!loading && !error && (
         <div className="rounded-2xl p-3 sm:p-3.5 bg-surface-secondary border-2 border-border-ink space-y-2.5">
@@ -838,21 +687,15 @@ export default function FreeClassroomsTab({
         <ListSkeleton rows={6} leading="dot" />
       ) : (
         <div className="space-y-4">
-          <SectionHeader
-            icon={Building2}
-            title="Rooms"
-            count={visibleBlocks.reduce((n, b) => n + b.free, 0)}
-            right={
-              <SegmentedControl
-                options={[
-                  { value: "all" as const, label: `All (${metrics.total})` },
-                  { value: "theory" as const, label: `Rooms (${metrics.theory})` },
-                  { value: "lab" as const, label: `Labs (${metrics.lab})` },
-                ]}
-                value={kindFilter}
-                onChange={setKindFilter}
-              />
-            }
+          <SegmentedControl
+            grow
+            options={[
+              { value: "all" as const, label: `All free (${metrics.total})` },
+              { value: "theory" as const, label: `Rooms (${metrics.theory})` },
+              { value: "lab" as const, label: `Labs (${metrics.lab})` },
+            ]}
+            value={kindFilter}
+            onChange={setKindFilter}
           />
 
           <div className="space-y-2.5">

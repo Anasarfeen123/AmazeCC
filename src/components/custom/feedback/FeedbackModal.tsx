@@ -311,7 +311,7 @@ export default function FeedbackModal() {
                       key={cat.id}
                       type="button"
                       onClick={() => setCategory(cat.id)}
-                      className={`flex items-start gap-2.5 p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                      className={`flex items-center gap-2.5 p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                         isSelected
                           ? "border-border-ink bg-secondary ring-1 ring-border-ink"
                           : "border-border-muted bg-surface-secondary/50 hover:bg-surface-secondary"
@@ -320,45 +320,46 @@ export default function FeedbackModal() {
                       <div className={`p-1.5 rounded-lg border ${cat.badgeClass}`}>
                         <Icon className="w-3.5 h-3.5" />
                       </div>
-                      <div className="min-w-0">
-                        <span className="block text-xs font-semibold text-text-primary leading-tight">{cat.label}</span>
-                        <span className="block text-xs text-text-muted truncate mt-0.5">{cat.desc}</span>
-                      </div>
+                      {/* Label only: the one-line descriptions were cut off on
+                          phones and added little (owner: cluttered). */}
+                      <span className="min-w-0 text-sm font-semibold text-text-primary leading-tight">{cat.label}</span>
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* Rating */}
-            <div>
-              <label className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-2">
-                How is your experience?
-              </label>
-              <div className="flex items-center justify-between gap-1.5 p-1.5 rounded-xl bg-surface-secondary/70 border border-border-muted">
-                {RATINGS.map((r) => {
-                  const isSelected = rating === r.value;
-                  return (
-                    <button
-                      key={r.value}
-                      type="button"
-                      onClick={() => setRating(r.value)}
-                      title={r.label}
-                      aria-label={`${r.value} of 5: ${r.label}`}
-                      aria-pressed={isSelected}
-                      className={`flex min-h-11 flex-1 flex-col items-center justify-center rounded-[8px] border-2 transition-colors cursor-pointer ${
-                        isSelected
-                          ? "border-border-ink bg-primary text-primary-foreground shadow-brutal-sm"
-                          : "border-transparent text-text-primary hover:border-border-ink"
-                      }`}
-                    >
-                      {/* The number; the word is the tooltip and accessible name (no emoji faces). */}
-                      <span className="font-display text-lg font-bold leading-none">{r.value}</span>
-                    </button>
-                  );
-                })}
+            {/* Rating: only for experience feedback (a bug report has no score). */}
+            {category === "experience" && (
+              <div>
+                <label className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-2">
+                  How is your experience?
+                </label>
+                <div className="flex items-center justify-between gap-1.5 p-1.5 rounded-xl bg-surface-secondary/70 border border-border-muted">
+                  {RATINGS.map((r) => {
+                    const isSelected = rating === r.value;
+                    return (
+                      <button
+                        key={r.value}
+                        type="button"
+                        onClick={() => setRating(r.value)}
+                        title={r.label}
+                        aria-label={`${r.value} of 5: ${r.label}`}
+                        aria-pressed={isSelected}
+                        className={`flex min-h-11 flex-1 flex-col items-center justify-center rounded-[8px] border-2 transition-colors cursor-pointer ${
+                          isSelected
+                            ? "border-border-ink bg-primary text-primary-foreground shadow-brutal-sm"
+                            : "border-transparent text-text-primary hover:border-border-ink"
+                        }`}
+                      >
+                        {/* The number; the word is the tooltip and accessible name (no emoji faces). */}
+                        <span className="font-display text-lg font-bold leading-none">{r.value}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Message Area */}
             <div>
@@ -384,7 +385,7 @@ export default function FeedbackModal() {
             {/* Contact Info (Optional) */}
             <div>
               <label className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">
-                Personal Email <span className="font-normal opacity-70">(Optional, for developer replies)</span>
+                Email for a reply <span className="font-normal normal-case opacity-70">(optional)</span>
               </label>
               <input
                 type="email"

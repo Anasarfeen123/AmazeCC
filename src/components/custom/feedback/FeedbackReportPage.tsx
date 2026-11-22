@@ -36,7 +36,7 @@ import {
   X,
 } from "lucide-react";
 import { AnimatePresence, m } from "framer-motion";
-import { PageShell, ToneBadge, Switch, SectionHeader, ListShell, ListRowText, StatTile } from "../shared/primitives";
+import { PageShell, ToneBadge, Switch, SectionHeader, ListShell, ListRowText } from "../shared/primitives";
 import { TILE_CARD, SEARCH_FIELD, LIST_ROW, TONE_ICON_TILE } from "@/lib/uiTokens";
 import { useOverlayBack } from "@/lib/overlayStack";
 import { acquireBodyScrollLock } from "@/lib/bodyScrollLock";
@@ -622,31 +622,7 @@ export default function FeedbackReportPage({
         }
       >
         <div className="space-y-6">
-          {/* Stat Tiles mirroring CourseDetailSubpage overview */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <StatTile
-              label="Support Channel"
-              value="Developers"
-              sub="Your reports go straight to them"
-              tone="indigo"
-              icon={<ShieldCheck className="w-4 h-4 text-primary" />}
-            />
-            <StatTile
-              label="My Support Tickets"
-              value={tickets.length > 0 ? String(tickets.length) : "0"}
-              sub={tickets.length > 0 ? "Active ticket discussions" : "No open tickets"}
-              tone="amber"
-              icon={<MessageSquare className="w-4 h-4 text-warning-foreground" />}
-            />
-            <StatTile
-              label="Telemetry & Replay"
-              value={isRecordingLive ? "Recording" : "Ready"}
-              sub={isIdentityVerified ? "Verified account" : userReg ? `Reg ${userReg}` : "Guest account"}
-              tone="emerald"
-              icon={<CheckCircle2 className="w-4 h-4 text-success-foreground" />}
-            />
-          </div>
-
+          {/* Stat tiles removed (owner: they carried no meaning). */}
           {/* ── COURSE SUBPAGE GUIDELINE MENU (Joined Grouped List) ── */}
           <div className="space-y-3">
             <SectionHeader icon={Layers} title="Support Sections" count={3} />
@@ -837,7 +813,7 @@ export default function FeedbackReportPage({
                 <CheckCircle2 className="w-10 h-10 animate-in zoom-in-75 duration-200" />
               </div>
               <div className="space-y-1.5 max-w-md mx-auto">
-                <h3 className="text-xl sm:text-2xl font-bold text-white font-outfit">Report sent</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-text-heading font-outfit">Report sent</h3>
                 <p className="text-xs text-text-muted leading-relaxed">
                   Thanks. The AmazeCC team has it, and replies show up under My tickets.
                   {submittedTicketId && (
@@ -895,7 +871,7 @@ export default function FeedbackReportPage({
                       <Sparkle className="w-3.5 h-3.5" />
                       Guided Hero · Step 1
                     </div>
-                    <h1 className="text-2xl sm:text-3xl font-bold text-white font-outfit tracking-tight">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-text-heading font-outfit tracking-tight">
                       What would you like to share?
                     </h1>
                     <p className="text-xs sm:text-sm text-text-muted font-medium max-w-sm mx-auto">
@@ -930,7 +906,9 @@ export default function FeedbackReportPage({
                             </span>
                           </div>
                           <div>
-                            <h3 className="text-sm sm:text-base font-bold text-white font-outfit">{cat.label}</h3>
+                            <h3 className="text-sm sm:text-base font-bold text-text-heading font-outfit">
+                              {cat.label}
+                            </h3>
                             <p className="text-xs text-text-muted font-medium leading-relaxed mt-1">{cat.desc}</p>
                           </div>
                         </button>
@@ -956,7 +934,7 @@ export default function FeedbackReportPage({
                     >
                       <ActiveCatIcon className="w-6 h-6" />
                     </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-white font-outfit tracking-tight">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-text-heading font-outfit tracking-tight">
                       {activeCatMeta.promptTitle}
                     </h2>
                     <p className="text-xs sm:text-sm text-text-muted font-medium max-w-sm mx-auto">
@@ -974,7 +952,7 @@ export default function FeedbackReportPage({
                         value={subject}
                         onChange={(e) => setSubject(e.target.value)}
                         placeholder={activeCatMeta.headlinePlaceholder}
-                        className="w-full px-4 py-3 rounded-2xl bg-surface border border-border-ink text-white placeholder:text-text-muted focus:outline-none focus:border-border-ink focus:ring-1 focus:ring-border-ink transition-all text-sm font-medium"
+                        className="w-full px-4 py-3 rounded-2xl bg-surface border border-border-ink text-text-heading placeholder:text-text-muted focus:outline-none focus:border-border-ink focus:ring-1 focus:ring-border-ink transition-all text-sm font-medium"
                       />
                     </div>
 
@@ -988,7 +966,7 @@ export default function FeedbackReportPage({
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder={activeCatMeta.concernPlaceholder}
-                        className="w-full px-4 py-3.5 rounded-2xl bg-surface border border-border-ink text-sm font-medium text-white placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-border-ink focus:border-border-ink transition-all leading-relaxed"
+                        className="w-full px-4 py-3.5 rounded-2xl bg-surface border border-border-ink text-sm font-medium text-text-heading placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-border-ink focus:border-border-ink transition-all leading-relaxed"
                       />
                     </div>
 
@@ -1076,7 +1054,7 @@ export default function FeedbackReportPage({
                     <div className="w-12 h-12 mx-auto rounded-2xl bg-secondary border border-border-ink text-secondary-foreground flex items-center justify-center shadow-lg">
                       <Mail className="w-6 h-6" />
                     </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-white font-outfit tracking-tight">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-text-heading font-outfit tracking-tight">
                       Where Should We Reach You?
                     </h2>
                     <p className="text-xs sm:text-sm text-text-muted font-medium max-w-sm mx-auto">
@@ -1096,7 +1074,7 @@ export default function FeedbackReportPage({
                           value={contactEmail}
                           onChange={(e) => handleEmailChange(e.target.value)}
                           placeholder="your.personal.email@gmail.com"
-                          className="w-full pl-10 pr-4 py-3 rounded-2xl bg-surface border border-border-ink text-sm font-medium text-white placeholder:text-text-muted focus:outline-none focus:border-border-ink focus:ring-1 focus:ring-border-ink transition-all"
+                          className="w-full pl-10 pr-4 py-3 rounded-2xl bg-surface border border-border-ink text-sm font-medium text-text-heading placeholder:text-text-muted focus:outline-none focus:border-border-ink focus:ring-1 focus:ring-border-ink transition-all"
                         />
                       </div>
                       <p className="text-xs text-text-muted mt-1 leading-relaxed">
@@ -1109,7 +1087,7 @@ export default function FeedbackReportPage({
                       <div className="px-4 py-3 rounded-2xl bg-surface border border-border-ink text-xs font-mono text-text-muted flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <ShieldCheck className="w-4 h-4 text-primary" />
-                          <span className="font-bold text-white">{distinctId}</span>
+                          <span className="font-bold text-text-heading">{distinctId}</span>
                         </div>
                         <ToneBadge tone={isIdentityVerified ? "emerald" : "indigo"}>
                           {isIdentityVerified ? "Verified account" : userReg ? "Registration number" : "Guest"}
@@ -1156,7 +1134,7 @@ export default function FeedbackReportPage({
                     <div className="w-12 h-12 mx-auto rounded-2xl bg-success-surface border border-border-ink text-success-foreground flex items-center justify-center shadow-lg">
                       <FileText className="w-6 h-6" />
                     </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-white font-outfit tracking-tight">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-text-heading font-outfit tracking-tight">
                       Review Your Submission
                     </h2>
                     <p className="text-xs sm:text-sm text-text-muted font-medium max-w-sm mx-auto">
@@ -1168,12 +1146,12 @@ export default function FeedbackReportPage({
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full">
                     <div className="p-3 rounded-2xl bg-surface border border-border-ink text-center shadow-xs">
                       <div className="text-xs font-bold uppercase text-text-muted font-outfit">Category</div>
-                      <div className="text-xs font-bold text-white mt-0.5 truncate">{activeCatMeta.label}</div>
+                      <div className="text-xs font-bold text-text-heading mt-0.5 truncate">{activeCatMeta.label}</div>
                     </div>
                     <div className="p-3 rounded-2xl bg-surface border border-border-ink text-center shadow-xs">
                       <div className="text-xs font-bold uppercase text-text-muted font-outfit">Severity</div>
                       <div
-                        className={`text-xs font-bold mt-0.5 ${category === "bug" ? "text-danger-foreground" : "text-white"}`}
+                        className={`text-xs font-bold mt-0.5 ${category === "bug" ? "text-danger-foreground" : "text-text-heading"}`}
                       >
                         {category === "bug" ? severity.toUpperCase() : "STANDARD"}
                       </div>
@@ -1204,7 +1182,9 @@ export default function FeedbackReportPage({
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="text-sm font-bold text-white font-outfit">{activeCatMeta.label}</span>
+                            <span className="text-sm font-bold text-text-heading font-outfit">
+                              {activeCatMeta.label}
+                            </span>
                             <span className="text-xs font-bold uppercase px-2 py-0.5 rounded-[6px] bg-surface-secondary text-text-muted border border-border-ink font-outfit">
                               {activeCatMeta.tag}
                             </span>
@@ -1242,7 +1222,7 @@ export default function FeedbackReportPage({
                           <span>Edit</span>
                         </button>
                       </div>
-                      {subject.trim() && <div className="text-sm font-bold text-white">{subject.trim()}</div>}
+                      {subject.trim() && <div className="text-sm font-bold text-text-heading">{subject.trim()}</div>}
                       <div className="p-3.5 rounded-xl bg-background border border-border-ink text-xs sm:text-sm text-text-primary font-medium leading-relaxed whitespace-pre-wrap">
                         {description}
                       </div>
@@ -1270,7 +1250,9 @@ export default function FeedbackReportPage({
                               <Video className="w-4 h-4 animate-pulse" />
                             </div>
                             <div>
-                              <div className="text-xs font-bold text-white">Reactive DOM Session Replay Attached</div>
+                              <div className="text-xs font-bold text-text-heading">
+                                Reactive DOM Session Replay Attached
+                              </div>
                               <div className="text-xs text-text-muted">
                                 Safe in-DOM interaction replay will be sent with ticket
                               </div>
@@ -1315,7 +1297,7 @@ export default function FeedbackReportPage({
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                         <div className="p-2.5 rounded-xl bg-background border border-border-ink">
                           <span className="text-text-muted block text-xs uppercase font-bold">Email</span>
-                          <span className="font-bold text-white truncate block mt-0.5">
+                          <span className="font-bold text-text-heading truncate block mt-0.5">
                             {contactEmail.trim() || "In-app ticket updates only"}
                           </span>
                         </div>
@@ -1413,16 +1395,8 @@ export default function FeedbackReportPage({
   if (activeSubpage === "report") {
     return (
       <PageShell
-        eyebrow={
-          <button
-            type="button"
-            onClick={() => setActiveSubpage("overview")}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-text-muted hover:text-text-primary transition-colors cursor-pointer"
-          >
-            <ChevronLeft className="w-3.5 h-3.5" />
-            <span>Support Sections</span>
-          </button>
-        }
+        // One back control (owner: Back plus a "Support Sections" link was two).
+        eyebrow="Feedback"
         title="New Report"
         subtitle="Submit a bug report, feature request, or UI polish directly to developers."
         onBack={() => setActiveSubpage("overview")}
@@ -1697,7 +1671,7 @@ export default function FeedbackReportPage({
                       <button
                         type="button"
                         onClick={finishReproductionRecording}
-                        className="px-3 py-1 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all cursor-pointer shadow-xs"
+                        className="px-3 py-1 rounded-xl bg-coral hover:brightness-105 text-obsidian border-2 border-border-ink text-xs font-bold transition-all cursor-pointer shadow-xs"
                       >
                         Finish & Attach Clip
                       </button>

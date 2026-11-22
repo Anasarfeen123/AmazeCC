@@ -87,8 +87,9 @@ describe("FeedbackReportPage", () => {
     expect(screen.getByText("New Report")).toBeDefined();
     expect(screen.getByText("My Tickets & Support")).toBeDefined();
     expect(screen.getByText("Diagnostics", { selector: "h3, p, span, div" })).toBeDefined();
-    expect(screen.getByText("Support Channel")).toBeDefined();
-    expect(screen.getByText("Telemetry & Replay")).toBeDefined();
+    // The stat tiles were removed (owner: no meaning).
+    expect(screen.queryByText("Support Channel")).toBeNull();
+    expect(screen.queryByText("Telemetry & Replay")).toBeNull();
   });
 
   it("renders categories in guided hero mode and PostHog badge when entering New Report subpage", () => {

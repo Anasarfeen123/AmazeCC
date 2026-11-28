@@ -1296,3 +1296,18 @@
     transition: none;
   }
 }
+
+/* Nested outlines (owner, 2026-11-28: "darken the border for the mini cards
+   inside the card or the outer one"). A card keeps its ink edge; any outlined
+   box inside it (stat cells, chips, key-value boxes, sub-cards) gets a softer
+   edge, so a card reads as one object with quiet contents instead of a grid of
+   equally loud boxes. */
+:root {
+  --border-inner: color-mix(in oklab, var(--border-ink) 38%, var(--surface));
+}
+.dark {
+  --border-inner: color-mix(in oklab, var(--border-ink) 55%, var(--surface));
+}
+.border-border-ink .border-border-ink {
+  border-color: var(--border-inner);
+}

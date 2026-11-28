@@ -83,6 +83,8 @@ export type Settings = {
   pushNotificationsEnabled?: boolean;
   notifyLowAttendance?: boolean;
   notifyClassReminders?: boolean;
+  /** Local alert when a sync drops a course below the target (ReminderScheduler). */
+  notifyAttendanceDrop?: boolean;
   notifyExamAlerts?: boolean;
   notifyMessServing?: boolean;
   notifyAssignments?: boolean;

@@ -344,6 +344,13 @@ export default function PushNotificationManager() {
                   color: "text-primary",
                 },
                 {
+                  key: "notifyAttendanceDrop",
+                  label: "Below-target attendance alert",
+                  desc: "When a sync drops a course under your attendance goal",
+                  icon: Calendar,
+                  color: "text-danger-foreground",
+                },
+                {
                   key: "notifyExamAlerts",
                   label: "Exam Schedule & Timetable Alerts",
                   desc: "Alerts for upcoming CAT/FAT exam dates & venues",
@@ -352,6 +359,7 @@ export default function PushNotificationManager() {
                 },
                 {
                   key: "notifyMarksRelease",
+                  soon: true,
                   label: "Marks & Grade Release Alerts",
                   desc: "Push notification when new CAT/FAT/Lab marks are published",
                   icon: Award,
@@ -359,6 +367,7 @@ export default function PushNotificationManager() {
                 },
                 {
                   key: "notifyMessServing",
+                  soon: true,
                   label: "Hostel Mess Serving Alerts",
                   desc: "Notifications when Breakfast, Lunch, Snacks or Dinner serving starts",
                   icon: Utensils,
@@ -366,6 +375,7 @@ export default function PushNotificationManager() {
                 },
                 {
                   key: "notifyHostelLeave",
+                  soon: true,
                   label: "Hostel Leave & Outpass Approvals",
                   desc: "Instant alert when warden approves or updates leave status",
                   icon: Plane,
@@ -373,6 +383,7 @@ export default function PushNotificationManager() {
                 },
                 {
                   key: "notifyBusUpdates",
+                  soon: true,
                   label: "Day Scholar Bus Schedule Alerts",
                   desc: "Updates on bus routes, timings and delay alerts",
                   icon: Bus,
@@ -380,6 +391,7 @@ export default function PushNotificationManager() {
                 },
                 {
                   key: "notifyLibraryBooks",
+                  soon: true,
                   label: "Library Due Date Reminders",
                   desc: "Reminders before Koha library book return deadlines",
                   icon: BookMarked,
@@ -387,6 +399,7 @@ export default function PushNotificationManager() {
                 },
                 {
                   key: "notifyAssignments",
+                  soon: true,
                   label: "LMS & Assignment Reminders",
                   desc: "Remind about pending VITOL / Moodle assignment deadlines",
                   icon: BookOpen,
@@ -394,6 +407,7 @@ export default function PushNotificationManager() {
                 },
                 {
                   key: "notifyCirculars",
+                  soon: true,
                   label: "Academic Circulars & Notices",
                   desc: "Instant alert on new university circulars and announcements",
                   icon: Bell,
@@ -410,7 +424,14 @@ export default function PushNotificationManager() {
                     <div className="flex items-center gap-2.5">
                       <ItemIcon size={15} className={item.color} />
                       <div>
-                        <p className="text-xs font-semibold text-text-primary">{item.label}</p>
+                        <p className="text-xs font-semibold text-text-primary">
+                          {item.label}
+                          {(item as { soon?: boolean }).soon ? (
+                            <span className="ml-1.5 rounded-[6px] border-2 border-border-ink bg-highlight px-1 font-mono text-xs font-bold uppercase text-highlight-foreground">
+                              Soon
+                            </span>
+                          ) : null}
+                        </p>
                         <p className="text-xs text-text-muted">{item.desc}</p>
                       </div>
                     </div>

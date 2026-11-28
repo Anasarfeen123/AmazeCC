@@ -727,7 +727,7 @@ export default function AmazeOnboardingFlow({
         // Reminders are not live yet (they need a server change); say so
         // instead of promising them (owner review, 2026-11-28).
         { title: "Class reminders", desc: "Before each class, with the room", icon: Clock, soon: true },
-        { title: "Below-target alerts", desc: "When a course drops under your goal", icon: AlertTriangle, soon: true },
+        { title: "Below-target alerts", desc: "When a course drops under your goal", icon: AlertTriangle, soon: false },
         { title: "Exam seat and venue", desc: "The day before each exam", icon: MapPin, soon: true },
       ].map((perk, i) => (
         <div

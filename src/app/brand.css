@@ -1315,23 +1315,49 @@
 }
 
 /* Modules sheet groups (AppLibraryPortal). --g is the group colour.
-   Light: tinted paper panel with the ink edge. Dark / night: the tint mixed
-   into the surface went muddy and every panel had the same teal edge (owner:
-   "not looking good in dark"), so the edge and a header underline take the
-   group colour and the fill is a clean, slightly stronger wash. */
+   Kept quiet (owner: the framed panels were too cluttered): a soft wash and a
+   thin edge in the group colour, no shadow, no underline. */
 .modules-group {
-  border-color: var(--border-ink);
-  background-color: color-mix(in oklab, var(--g) 16%, var(--surface));
-}
-.modules-group-title {
-  border-bottom: 2px solid color-mix(in oklab, var(--g) 55%, transparent);
+  border-color: color-mix(in oklab, var(--g) 45%, var(--border-muted));
+  /* Slightly see-through, so the sheet's colour wash runs behind the panels. */
+  background-color: color-mix(in oklab, color-mix(in oklab, var(--g) 14%, var(--surface)) 72%, transparent);
 }
 .dark .modules-group {
-  border-color: color-mix(in oklab, var(--g) 75%, var(--surface));
-  background-color: color-mix(in oklab, var(--g) 11%, var(--surface));
-  box-shadow: 4px 4px 0 0 color-mix(in oklab, var(--g) 30%, #000);
+  border-color: color-mix(in oklab, var(--g) 40%, transparent);
+  background-color: color-mix(in oklab, color-mix(in oklab, var(--g) 9%, var(--surface)) 62%, transparent);
 }
 .dark .modules-group-title {
-  color: color-mix(in oklab, var(--g) 70%, var(--text-heading));
-  border-bottom-color: color-mix(in oklab, var(--g) 45%, transparent);
+  color: color-mix(in oklab, var(--g) 65%, var(--text-heading));
+}
+
+/* Modules sheet background (owner: "I want the background to look good,
+   with good colors"). The brand atmosphere from onboarding: soft ochre,
+   sage and teal washes in the corners over the dot grid, toned per theme. */
+.modules-sheet {
+  background-image:
+    radial-gradient(70% 45% at 100% 0%, color-mix(in oklab, #f9bc60 30%, transparent), transparent 70%),
+    radial-gradient(60% 40% at 0% 35%, color-mix(in oklab, #abd1c6 45%, transparent), transparent 70%),
+    radial-gradient(80% 45% at 100% 100%, color-mix(in oklab, #004643 14%, transparent), transparent 70%),
+    radial-gradient(var(--page-dot) 1.1px, transparent 1.5px);
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    22px 22px;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  background-attachment: local, local, local, local;
+}
+.dark .modules-sheet {
+  background-image:
+    radial-gradient(70% 45% at 100% 0%, color-mix(in oklab, #f9bc60 16%, transparent), transparent 70%),
+    radial-gradient(60% 40% at 0% 35%, color-mix(in oklab, #2f9e8f 22%, transparent), transparent 70%),
+    radial-gradient(80% 45% at 100% 100%, color-mix(in oklab, #e16162 10%, transparent), transparent 70%),
+    radial-gradient(var(--page-dot) 1.1px, transparent 1.5px);
+}
+.dark.night .modules-sheet {
+  background-image:
+    radial-gradient(70% 45% at 100% 0%, color-mix(in oklab, #f9bc60 17%, transparent), transparent 70%),
+    radial-gradient(60% 40% at 0% 35%, color-mix(in oklab, #3a8f84 30%, transparent), transparent 70%),
+    radial-gradient(80% 45% at 100% 100%, color-mix(in oklab, #7ec8c0 15%, transparent), transparent 70%),
+    radial-gradient(var(--page-dot) 1.1px, transparent 1.5px);
 }

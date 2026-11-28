@@ -274,7 +274,7 @@ function LastSyncedLabel() {
         : mins < 60 * 24
           ? `${Math.floor(mins / 60)} h ago`
           : `${Math.floor(mins / (60 * 24))} d ago`;
-  return <p className="mt-1 font-mono text-xs text-text-muted">Synced {text}</p>;
+  return <p className="font-mono text-xs text-text-muted">Synced {text}</p>;
 }
 
 function LiveClassBadge({ time, detailed = false }: { time: string; detailed?: boolean }) {
@@ -1639,20 +1639,23 @@ export default function SimplifiedMobileHome({
                 >
                   {profileName}
                 </h1>
-                {!isDemoMode ? <LastSyncedLabel /> : null}
-                {/* Semester switch on phones (teammate: "how do I see next
-                    sem?"). Wide screens have it in the sidebar. */}
-                <div className="mt-2 md:hidden" role="group" aria-label="Semester">
-                  <OptionPicker
-                    value={settings?.currSemesterID || config.semesterIDs[config.semesterIDs.length - 2]}
-                    onChange={(val) => void handleReloadRequest(val)}
-                    options={config.semesterIDs.map((semId: string) => ({
-                      value: semId,
-                      label: formatSemesterName(semId),
-                    }))}
-                    searchable={false}
-                    className="w-auto [&>button:first-child]:h-8 [&>button:first-child]:gap-1 [&>button:first-child]:rounded-full [&>button:first-child]:px-3 [&>button:first-child]:bg-surface [&>button:first-child_span]:text-xs [&>button:first-child_span]:font-semibold"
-                  />
+                {/* Sync time and the semester switch share one line (owner:
+                    compress the header). The switch is phones only; wide
+                    screens have it in the sidebar. */}
+                <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+                  {!isDemoMode ? <LastSyncedLabel /> : null}
+                  <div className="md:hidden" role="group" aria-label="Semester">
+                    <OptionPicker
+                      value={settings?.currSemesterID || config.semesterIDs[config.semesterIDs.length - 2]}
+                      onChange={(val) => void handleReloadRequest(val)}
+                      options={config.semesterIDs.map((semId: string) => ({
+                        value: semId,
+                        label: formatSemesterName(semId),
+                      }))}
+                      searchable={false}
+                      className="w-auto [&>button:first-child]:h-7 [&>button:first-child]:min-h-0 [&>button:first-child]:gap-1 [&>button:first-child]:rounded-full [&>button:first-child]:border [&>button:first-child]:px-2.5 [&>button:first-child]:bg-surface [&>button:first-child]:shadow-none [&>button:first-child_span]:text-xs [&>button:first-child_span]:font-semibold"
+                    />
+                  </div>
                 </div>
               </div>
 

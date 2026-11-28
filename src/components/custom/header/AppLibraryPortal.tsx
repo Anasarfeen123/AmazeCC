@@ -167,7 +167,7 @@ const AppLibraryPortal = memo(
           aria-label={external ? `${label} (opens in a new tab)` : label}
         >
           <span
-            className={`relative flex h-14 w-14 items-center justify-center rounded-[16px] border-[2.5px] !border-border-ink shadow-brutal-sm transition-transform duration-150 group-hover/tile:-translate-y-0.5 group-active/tile:translate-y-0.5 ${tone}`}
+            className={`relative flex h-14 w-14 items-center justify-center rounded-[16px] border-2 !border-border-ink shadow-brutal-sm transition-transform duration-150 group-hover/tile:-translate-y-0.5 group-active/tile:translate-y-0.5 ${tone}`}
           >
             <Icon className="h-6 w-6 stroke-[2.2]" aria-hidden />
             {external ? (
@@ -186,6 +186,7 @@ const AppLibraryPortal = memo(
       <AppLibrary
         open={open}
         onClose={onClose}
+        className="modules-sheet"
         title="Modules"
         subtitle="Open any part of AmazeCC"
         showBack={false}
@@ -226,8 +227,9 @@ const AppLibraryPortal = memo(
         {!librarySearchQuery && (
           // Full-width field with its label above (user: the selector was "too
           // short", a size="auto" text pill squeezed into the row).
-          <div className="mb-4">
-            <span className="mb-1.5 block font-label text-xs font-bold text-text-muted">Semester</span>
+          // No separate "Semester" label: the field shows the semester itself
+          // (owner: the sheet was too cluttered).
+          <div className="mb-3">
             <SelectField
               value={settings.currSemesterID || config.semesterIDs[config.semesterIDs.length - 2]}
               // Switching reloads everything, so ask first (critique #26).
@@ -241,7 +243,7 @@ const AppLibraryPortal = memo(
               searchable={false}
               role="group"
               aria-label="Current semester"
-              size="lg"
+              size="md"
               className="w-full sm:w-full [&>button:first-child]:w-full [&>button:first-child_span]:font-bold [&>button:first-child_span]:text-text-heading"
             />
             {pendingSemester ? (
@@ -361,19 +363,16 @@ const AppLibraryPortal = memo(
                 // (owner: "more different, better visibility, more diverse").
                 <div
                   key={group.name}
-                  className="modules-group space-y-3 rounded-[18px] border-[2.5px] p-3.5 shadow-brutal-sm"
+                  className="modules-group space-y-2.5 rounded-[16px] border-[1.5px] p-3"
                   style={{ "--g": GROUP_TINT[group.name] ?? "var(--secondary)" } as React.CSSProperties}
                 >
-                  <h3 className="modules-group-title flex items-center gap-2 px-0.5 pb-2 font-title text-base font-extrabold text-text-heading">
+                  <h3 className="modules-group-title flex items-center gap-2 px-0.5 font-title text-[15px] font-extrabold text-text-heading">
                     <span
                       aria-hidden
                       className="h-3.5 w-3.5 rounded-full border-2 border-border-ink"
                       style={{ backgroundColor: GROUP_TINT[group.name] ?? "var(--surface-secondary)" }}
                     />
                     {group.name}
-                    <span className="ml-auto font-label text-xs font-semibold text-text-muted">
-                      {group.items.length}
-                    </span>
                   </h3>
                   <div className="space-y-3">
                     {segments.map((seg, idx) => {

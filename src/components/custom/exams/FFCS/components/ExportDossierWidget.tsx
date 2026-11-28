@@ -63,7 +63,7 @@ export default function ExportDossierWidget({
             <p className="mt-0.5 text-xs text-muted-foreground">A standalone, copyable course report.</p>
           </div>
           <div role="group" aria-label="HTML dossier theme" className="space-y-2">
-            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Theme</span>
+            <span className="font-label text-xs font-semibold text-muted-foreground">Theme</span>
             <SegmentedControl
               value={themeChoice}
               onChange={setThemeChoice}
@@ -95,7 +95,7 @@ export default function ExportDossierWidget({
           </div>
           <div className="grid grid-cols-1 gap-2 @sm:grid-cols-[minmax(0,1fr)_auto] @sm:items-center">
             <div role="group" aria-label="Image layout" className="min-w-0 space-y-1">
-              <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Layout</span>
+              <span className="font-label text-xs font-semibold text-muted-foreground">Layout</span>
               <SegmentedControl
                 value={imageLayout}
                 onChange={setImageLayout}
@@ -109,7 +109,7 @@ export default function ExportDossierWidget({
               />
             </div>
             <div role="group" aria-label="Image format" className="space-y-1 @sm:w-36">
-              <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Format</span>
+              <span className="font-label text-xs font-semibold text-muted-foreground">Format</span>
               <SegmentedControl
                 value={imageFormat}
                 onChange={setImageFormat}

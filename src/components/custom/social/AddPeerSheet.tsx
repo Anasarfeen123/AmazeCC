@@ -203,10 +203,7 @@ export default function AddPeerSheet({
     >
       <div className="text-left space-y-5">
         <div className="space-y-2">
-          <label
-            htmlFor="social-peer-handle"
-            className="text-xs sm:text-xs font-bold uppercase tracking-wider text-text-muted font-outfit block"
-          >
+          <label htmlFor="social-peer-handle" className="font-label text-xs sm:text-xs font-bold text-text-muted block">
             Their handle
           </label>
           <input
@@ -307,7 +304,7 @@ export default function AddPeerSheet({
 
         {/* The mutuality disclosure. This is the one irreversible part. */}
         <div className="p-3 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-1.5">
-          <p className="text-xs font-bold text-text-primary uppercase tracking-wider">Before you pair</p>
+          <p className="font-label text-xs font-bold text-text-primary">Before you pair</p>
           <p className="text-xs text-text-muted font-medium leading-relaxed">
             Pairing is <strong className="text-text-primary">mutual and immediate</strong>. They are not asked to
             accept, and they will be able to read your timetable for this term straight away. Either of you can end it
@@ -316,7 +313,7 @@ export default function AddPeerSheet({
         </div>
 
         <div className="p-3 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-1.5">
-          <p className="flex items-center gap-1.5 text-xs font-bold text-text-primary uppercase tracking-wider">
+          <p className="font-label flex items-center gap-1.5 text-xs font-bold text-text-primary">
             <ShieldCheck className="w-3.5 h-3.5 text-primary" />
             Full timetable detail
           </p>

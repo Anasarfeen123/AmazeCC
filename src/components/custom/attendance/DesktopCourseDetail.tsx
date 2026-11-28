@@ -175,7 +175,7 @@ export default function DesktopCourseDetail({
         {/* Header: title, metadata line, facts in words (no icon tiles). */}
         <div className="space-y-3">
           <div className="space-y-1 pr-12">
-            <h2 className="font-display text-xl font-bold uppercase leading-tight text-text-heading">
+            <h2 className="font-title text-2xl font-extrabold leading-tight text-text-heading">
               {norm.title || item.courseTitle || item.title}
             </h2>
             <p className="font-mono text-xs text-text-muted">
@@ -236,7 +236,7 @@ export default function DesktopCourseDetail({
               {/* Status & Buffer metrics */}
               <div className="mt-3 pt-3 border-t-2 border-border-muted flex flex-col gap-2 text-sm">
                 <div className="flex justify-between items-center">
-                  <span className="text-text-muted font-bold uppercase tracking-wider text-xs">Status</span>
+                  <span className="font-label text-text-muted font-bold text-xs">Status</span>
                   <span
                     className={`rounded-[6px] border-2 px-1.5 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] ${
                       isSafe ? TONE_BADGE.emerald : TONE_BADGE.red
@@ -246,7 +246,7 @@ export default function DesktopCourseDetail({
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-text-muted font-bold uppercase tracking-wider text-xs">
+                  <span className="font-label text-text-muted font-bold text-xs">
                     {isSafe ? "Safe Buffer" : "Shortage"}
                   </span>
                   <span className={`font-bold ${isSafe ? "text-success-foreground" : "text-danger-foreground"}`}>
@@ -345,7 +345,7 @@ export default function DesktopCourseDetail({
         {/* Quick History Log */}
         <div className="rounded-[14px] border-2 border-border-ink overflow-hidden">
           <div className="px-4 py-3 bg-surface-secondary border-b-2 border-border-ink flex justify-between items-center">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-text-muted">Recent Attendance History</h3>
+            <h3 className="font-label text-xs font-bold text-text-muted">Recent Attendance History</h3>
             <span className="text-xs text-text-muted font-medium">{historyList.length} total records</span>
           </div>
           {recentHistory.length === 0 ? (

@@ -769,7 +769,7 @@ export default function SlotFacultySwapSheet({
           {filteredOtherOfferings.length > 0 && (
             <div className="flex flex-col gap-1.5 pt-2 border-t border-border-strong/40">
               <div className="flex items-center justify-between gap-2 px-2 flex-wrap">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                <div className="font-label flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
                   <Users className="w-3.5 h-3.5 text-muted-foreground" />
                   <span>
                     {isEmbedded

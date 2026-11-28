@@ -26,7 +26,7 @@ import SelectField from "../../shared/primitives/SelectField";
 import { ListSkeleton } from "../../shared/primitives";
 import { FIELD_INPUT, TILE_CARD, TONE_ICON_TILE } from "@/lib/uiTokens";
 
-const FIELD_LABEL = "block text-xs font-bold uppercase tracking-wider text-text-muted";
+const FIELD_LABEL = "font-label block text-xs font-bold text-text-muted";
 
 /** Label + icon-led control, the one wrapper the date/time/seats/tolerance share. */
 // Descendant (not `> child`) selectors: `SelectField` renders its own wrapper

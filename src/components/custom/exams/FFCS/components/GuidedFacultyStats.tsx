@@ -272,7 +272,7 @@ export function FacultySingleReviewStat({
 
       <div className="flex items-center justify-between gap-2 pt-1 border-t border-border-ink flex-wrap">
         <div className="flex items-center gap-1.5 flex-wrap flex-1 min-w-0">
-          <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Top Lore:</span>
+          <span className="font-label text-xs font-bold text-text-muted">Top Lore:</span>
           {review.lore?.green && review.lore.green.length > 0 ? (
             review.lore.green.slice(0, 3).map((item, idx) => (
               <span

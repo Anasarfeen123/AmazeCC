@@ -65,7 +65,7 @@ export default function AddAssessmentSheet({
         {/* Fields */}
         <div className="space-y-3">
           <div className="space-y-1.5">
-            <label htmlFor="add-title" className="text-xs font-bold uppercase tracking-wider text-text-muted">
+            <label htmlFor="add-title" className="font-label text-xs font-bold text-text-muted">
               Name
             </label>
             <input
@@ -79,7 +79,7 @@ export default function AddAssessmentSheet({
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="add-max" className="text-xs font-bold uppercase tracking-wider text-text-muted">
+            <label htmlFor="add-max" className="font-label text-xs font-bold text-text-muted">
               Maximum marks
             </label>
             <input
@@ -95,7 +95,7 @@ export default function AddAssessmentSheet({
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="add-weight" className="text-xs font-bold uppercase tracking-wider text-text-muted">
+            <label htmlFor="add-weight" className="font-label text-xs font-bold text-text-muted">
               Weightage (% of component)
             </label>
             <input

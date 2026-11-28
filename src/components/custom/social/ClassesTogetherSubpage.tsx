@@ -106,7 +106,7 @@ export default function ClassesTogetherSubpage({
 
               {row.sameClass.length > 0 && (
                 <div className="space-y-1.5">
-                  <p className="text-xs font-bold uppercase tracking-wider text-success-foreground">
+                  <p className="font-label text-xs font-bold text-success-foreground">
                     In your class · {row.sameClass.length}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
@@ -119,7 +119,7 @@ export default function ClassesTogetherSubpage({
 
               {row.otherSection.length > 0 && (
                 <div className="space-y-1.5">
-                  <p className="text-xs font-bold uppercase tracking-wider text-text-muted">
+                  <p className="font-label text-xs font-bold text-text-muted">
                     Other sections · {row.otherSection.length}
                   </p>
                   <div className="flex flex-wrap gap-1.5">

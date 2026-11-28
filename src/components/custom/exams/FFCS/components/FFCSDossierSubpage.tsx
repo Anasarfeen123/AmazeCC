@@ -528,7 +528,7 @@ export default function FFCSDossierSubpage({
                     : "bg-secondary border-border-ink text-secondary-foreground"
                 }`}
               >
-                <div className="text-xs font-bold uppercase tracking-wider text-primary">Total Credits</div>
+                <div className="font-label text-xs font-bold text-primary">Total Credits</div>
                 <div className="text-xl md:text-2xl font-bold">{totalCredits}</div>
               </div>
               <div
@@ -538,7 +538,7 @@ export default function FFCSDossierSubpage({
                     : "bg-secondary border-border-ink text-primary"
                 }`}
               >
-                <div className="text-xs font-bold uppercase tracking-wider text-primary">Courses</div>
+                <div className="font-label text-xs font-bold text-primary">Courses</div>
                 <div className="text-xl md:text-2xl font-bold">{groupedCourses.length}</div>
               </div>
             </div>

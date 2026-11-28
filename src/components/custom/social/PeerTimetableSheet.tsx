@@ -114,7 +114,7 @@ export default function PeerTimetableSheet({
                     <p className={`text-lg font-bold font-outfit leading-none ${TONE_TEXT[s.tone] ?? TONE_TEXT.zinc}`}>
                       {s.value}
                     </p>
-                    <p className="text-xs font-bold uppercase tracking-wider text-text-muted mt-1">{s.label}</p>
+                    <p className="font-label text-xs font-bold text-text-muted mt-1">{s.label}</p>
                   </div>
                 ))}
               </div>
@@ -122,7 +122,7 @@ export default function PeerTimetableSheet({
 
             {peer.visibility === "coarse" ? (
               <div className="p-4 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-2">
-                <p className="flex items-center gap-1.5 text-xs font-bold text-text-primary uppercase tracking-wider">
+                <p className="font-label flex items-center gap-1.5 text-xs font-bold text-text-primary">
                   <EyeOff className="w-3.5 h-3.5 text-text-muted" />
                   Free / busy only
                 </p>
@@ -135,7 +135,7 @@ export default function PeerTimetableSheet({
               <>
                 {(shared.sameClass.length > 0 || shared.sameCourse.length > 0) && (
                   <div className="space-y-2">
-                    <p className="flex items-center gap-1.5 text-xs font-bold text-text-primary uppercase tracking-wider">
+                    <p className="font-label flex items-center gap-1.5 text-xs font-bold text-text-primary">
                       <BookOpen className="w-3.5 h-3.5 text-success-foreground" />
                       Classes together
                     </p>
@@ -170,7 +170,7 @@ export default function PeerTimetableSheet({
                   </div>
                 )}
                 <div className="space-y-2">
-                  <p className="flex items-center gap-1.5 text-xs font-bold text-text-primary uppercase tracking-wider">
+                  <p className="font-label flex items-center gap-1.5 text-xs font-bold text-text-primary">
                     <Clock className="w-3.5 h-3.5 text-primary" />
                     Courses
                   </p>
@@ -191,7 +191,7 @@ export default function PeerTimetableSheet({
             ) : null}
 
             <div className="space-y-2">
-              <p className="text-xs font-bold text-text-primary uppercase tracking-wider">Their week</p>
+              <p className="font-label text-xs font-bold text-text-primary">Their week</p>
               <div className="flex flex-wrap gap-1.5">
                 {byDay.length === 0 ? (
                   <p className="text-xs text-text-muted font-medium">Nothing published for this term.</p>
@@ -207,7 +207,7 @@ export default function PeerTimetableSheet({
 
             {clashSlots.length > 0 && (
               <div className="space-y-2">
-                <p className="text-xs font-bold text-text-primary uppercase tracking-wider">You both have class in</p>
+                <p className="font-label text-xs font-bold text-text-primary">You both have class in</p>
                 <div className="flex flex-wrap gap-1.5">
                   {clashSlots.slice(0, 12).map((k) => {
                     const parsed = parseSlotKey(k);

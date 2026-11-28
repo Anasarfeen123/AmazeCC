@@ -90,9 +90,7 @@ export default function AutoBlockingCard({
       <div className="shrink-0 space-y-2">
         <div className="flex items-center justify-between gap-2">
           <div>
-            <h3 className="text-sm font-bold text-text-heading uppercase tracking-wider font-outfit">
-              4. Slot &amp; Day Blocking
-            </h3>
+            <h3 className="font-label text-sm font-bold text-text-heading">4. Slot &amp; Day Blocking</h3>
             <p className="text-xs text-text-muted">
               Rule out whole days or specific periods. Tap any slot in the vertical timetable below to block theory or
               lab independently.

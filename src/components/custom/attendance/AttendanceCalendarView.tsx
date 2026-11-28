@@ -226,7 +226,7 @@ export default function AttendanceCalendarView({
                     >
                       <div>
                         <p className="text-sm font-bold text-text-heading">{c.courseTitle}</p>
-                        <p className="text-xs text-text-muted uppercase tracking-wider">
+                        <p className="font-label text-xs text-text-muted">
                           {c.courseCode} • {c.status}
                         </p>
                       </div>
@@ -437,7 +437,7 @@ export default function AttendanceCalendarView({
                   >
                     <div>
                       <p className="text-sm font-bold text-text-heading">{c.courseTitle}</p>
-                      <p className="text-xs text-text-muted uppercase tracking-wider">
+                      <p className="font-label text-xs text-text-muted">
                         {c.courseCode} • {c.status}
                       </p>
                     </div>

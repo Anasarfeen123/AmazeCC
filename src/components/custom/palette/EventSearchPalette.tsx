@@ -583,7 +583,7 @@ export default function EventSearchPalette() {
 
             {(previewData?.description || selectedEvent.description) && (
               <div className="px-4 py-3 rounded-xl bg-surface-secondary border border-border-ink">
-                <p className="text-xs font-semibold text-text-muted mb-1.5 uppercase tracking-wider">Description</p>
+                <p className="font-label text-xs font-semibold text-text-muted mb-1.5">Description</p>
                 <p className="text-xs font-medium text-text-heading leading-relaxed">
                   {previewData?.description || selectedEvent.description}
                 </p>

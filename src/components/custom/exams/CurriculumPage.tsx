@@ -1392,7 +1392,7 @@ export default function CurriculumPage({
       {/* 4 · Verdict. Solid, because this is the one block on the page that has
           to be read before anything else — the tiles can be scanned, this cannot. */}
       <div className={`p-5 rounded-[14px] ${verdict.surface} text-white relative overflow-hidden`}>
-        <p className="text-xs font-bold uppercase tracking-widest text-white/70">
+        <p className="font-label text-xs font-bold text-white/70">
           {targetReachable
             ? sgpaGap >= 0
               ? "You clear the target this term"
@@ -1521,9 +1521,7 @@ export default function CurriculumPage({
           className={`${TILE} h-32 sm:h-36 transition-all cursor-pointer`}
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-xs sm:text-xs font-bold uppercase tracking-wider text-text-muted font-outfit truncate">
-              Credits
-            </span>
+            <span className="font-label text-xs sm:text-xs font-bold text-text-muted truncate">Credits</span>
             <span
               className={`text-xs sm:text-xs font-bold uppercase px-2 py-0.5 rounded-md shrink-0 border ${
                 earnedPct >= 100

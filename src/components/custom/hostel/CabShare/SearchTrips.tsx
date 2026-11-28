@@ -30,7 +30,7 @@ import SelectField from "../../shared/primitives/SelectField";
 import { EmptyPanel, ListRowText, ListSkeleton, SectionHeader, ToneBadge } from "../../shared/primitives";
 import { FIELD_INPUT, TILE_CARD, TONE_ICON_TILE } from "@/lib/uiTokens";
 
-const FIELD_LABEL = "block text-xs font-bold uppercase tracking-wider text-text-muted mb-1";
+const FIELD_LABEL = "font-label block text-xs font-bold text-text-muted mb-1";
 
 export default function SearchTrips({ cabShareUser }: { cabShareUser: CabShareUser }) {
   const [hubs, setHubs] = useState<CabShareHub[]>([]);

@@ -366,9 +366,7 @@ export default function ODTrackerSubpage({
       {/* ── HERO STATS ── */}
       <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
         <div className={cn(TILE, "min-h-32 sm:min-h-36")}>
-          <span className="text-xs sm:text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
-            Total OD
-          </span>
+          <span className="font-label text-xs sm:text-xs font-bold text-text-muted">Total OD</span>
           <div className="my-auto">
             <span className="text-3xl sm:text-4xl font-bold font-outfit tracking-tight leading-none block text-success-foreground">
               {totalODHours}
@@ -531,7 +529,7 @@ export default function ODTrackerSubpage({
                                           </span>
                                         )}
                                       </div>
-                                      <span className="text-xs text-text-muted font-bold uppercase tracking-wider shrink-0">
+                                      <span className="font-label text-xs text-text-muted font-bold shrink-0">
                                         {c.type} · {c.hours}h
                                       </span>
                                       {c.isWasted && (

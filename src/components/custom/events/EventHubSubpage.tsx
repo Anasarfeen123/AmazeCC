@@ -551,7 +551,7 @@ export default function EventHubSubpage({
               {metaCells.map(({ key, value, Icon, club }) =>
                 club ? (
                   <div key={key} className="p-3 rounded-2xl bg-surface-secondary border-2 border-border-ink">
-                    <span className="text-xs font-bold uppercase tracking-wider text-text-muted flex items-center gap-1 mb-1.5">
+                    <span className="font-label text-xs font-bold text-text-muted flex items-center gap-1 mb-1.5">
                       <Icon className="w-3 h-3" />
                       Organized by
                     </span>

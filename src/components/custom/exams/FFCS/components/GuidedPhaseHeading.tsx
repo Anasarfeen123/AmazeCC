@@ -45,9 +45,7 @@ export function GuidedPhaseHeading({
     <>
       <div className={iconClasses}>{icon}</div>
       <div>
-        <span className={`text-xs font-bold uppercase tracking-wider font-outfit ${toneClasses[tone].text}`}>
-          {eyebrow}
-        </span>
+        <span className={`font-label text-xs font-bold ${toneClasses[tone].text}`}>{eyebrow}</span>
         <h1 className="font-title text-2xl lg:text-3xl font-extrabold leading-tight text-text-heading">{title}</h1>
       </div>
       <p className="text-xs text-text-muted font-medium leading-relaxed">{description}</p>

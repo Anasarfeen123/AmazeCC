@@ -208,9 +208,7 @@ export default function LeaveDisplay({ leaveData, handleHostelDetailsFetch }: Le
         <div className="space-y-6">
           {/* Outing Guidelines */}
           <div className="bg-surface border-2 border-border-ink rounded-2xl p-5 shadow-2xs space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary block">
-              Outing Rules & Deadlines
-            </span>
+            <span className="font-label text-xs font-bold text-primary block">Outing Rules & Deadlines</span>
             <div className="space-y-2 text-xs text-text-muted">
               <div className="flex gap-2">
                 <Clock size={14} className="text-primary shrink-0 mt-0.5" />

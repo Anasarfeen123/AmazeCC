@@ -298,7 +298,7 @@ export default function FeedbackModal() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Category selection */}
             <div>
-              <label className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-2">
+              <label className="font-label block text-xs font-semibold text-text-muted mb-2">
                 What are you sharing?
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -331,7 +331,7 @@ export default function FeedbackModal() {
             {/* Rating: only for experience feedback (a bug report has no score). */}
             {category === "experience" && (
               <div>
-                <label className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-2">
+                <label className="font-label block text-xs font-semibold text-text-muted mb-2">
                   How is your experience?
                 </label>
                 <div className="flex items-center justify-between gap-1.5 p-1.5 rounded-xl bg-surface-secondary/70 border border-border-muted">
@@ -362,9 +362,7 @@ export default function FeedbackModal() {
 
             {/* Message Area */}
             <div>
-              <label className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">
-                Your message
-              </label>
+              <label className="font-label block text-xs font-semibold text-text-muted mb-1.5">Your message</label>
               <textarea
                 required
                 rows={4}
@@ -383,7 +381,7 @@ export default function FeedbackModal() {
 
             {/* Contact Info (Optional) */}
             <div>
-              <label className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">
+              <label className="font-label block text-xs font-semibold text-text-muted mb-1.5">
                 Email for a reply <span className="font-normal normal-case opacity-70">(optional)</span>
               </label>
               <input

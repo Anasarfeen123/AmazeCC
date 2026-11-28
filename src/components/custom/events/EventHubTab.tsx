@@ -163,9 +163,7 @@ function EventCard({ event, onOpen }: { event: any; onOpen: (e: any) => void }) 
         </div>
 
         <div className="mt-auto pt-3 border-t border-border-ink flex items-center justify-between gap-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-text-muted truncate">
-            {priceLabel(event)}
-          </span>
+          <span className="font-label text-xs font-bold text-text-muted truncate">{priceLabel(event)}</span>
           <span className="inline-flex items-center gap-0.5 text-xs font-bold text-primary shrink-0">
             Details
             <ChevronRight className="w-3.5 h-3.5" />

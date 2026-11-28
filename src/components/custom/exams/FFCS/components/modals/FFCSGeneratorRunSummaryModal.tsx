@@ -125,7 +125,7 @@ export default function FFCSGeneratorRunSummaryModal({
       <section aria-label="Selected courses" className="space-y-2">
         <div className="flex items-center gap-1.5 px-1">
           <Target className="w-3.5 h-3.5 text-muted-foreground" />
-          <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Selected courses</h3>
+          <h3 className="font-label text-xs font-bold text-muted-foreground">Selected courses</h3>
           <span className="text-xs font-bold text-muted-foreground/70">({courses.length})</span>
         </div>
         {courses.length > 0 ? (
@@ -157,7 +157,7 @@ export default function FFCSGeneratorRunSummaryModal({
       <section aria-label="Search profile" className="space-y-2">
         <div className="flex items-center gap-1.5 px-1">
           <SlidersHorizontal className="w-3.5 h-3.5 text-muted-foreground" />
-          <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Search profile</h3>
+          <h3 className="font-label text-xs font-bold text-muted-foreground">Search profile</h3>
         </div>
         <ListShell>
           {profileRows.map((row) => (

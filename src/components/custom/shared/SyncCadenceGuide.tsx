@@ -73,7 +73,7 @@ export default function SyncCadenceGuide() {
               resetCadenceOverrides();
               setOverrides({});
             }}
-            className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-text-muted hover:text-text-primary transition-colors cursor-pointer shrink-0"
+            className="font-label inline-flex items-center gap-1 text-xs font-bold text-text-muted hover:text-text-primary transition-colors cursor-pointer shrink-0"
             title="Re-enable every preset op"
           >
             <RotateCcw className="w-3 h-3" />

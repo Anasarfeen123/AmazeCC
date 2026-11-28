@@ -172,7 +172,7 @@ export default function ClassDetailsModal({
                     <DoorOpen className="w-4 h-4" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs uppercase tracking-wider font-bold text-text-muted">Classroom Venue</p>
+                    <p className="font-label text-xs font-bold text-text-muted">Classroom Venue</p>
                     <p className="text-sm font-bold text-text-heading truncate">{venue}</p>
                     <p className="text-xs text-text-muted font-medium">{block}</p>
                   </div>
@@ -198,7 +198,7 @@ export default function ClassDetailsModal({
                     <User className="w-4 h-4" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs uppercase tracking-wider font-bold text-text-muted">Faculty / Teacher</p>
+                    <p className="font-label text-xs font-bold text-text-muted">Faculty / Teacher</p>
                     <p className="text-sm font-bold text-text-heading truncate">{displayFaculty}</p>
                     {displayErp && (
                       <span className="inline-flex items-center gap-1 font-mono font-bold text-xs text-primary">
@@ -228,7 +228,7 @@ export default function ClassDetailsModal({
                   <Clock className="w-4 h-4" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs uppercase tracking-wider font-bold text-text-muted">Time & Schedule</p>
+                  <p className="font-label text-xs font-bold text-text-muted">Time & Schedule</p>
                   <p className="text-sm font-bold text-text-heading truncate">{periodLabel || "Period"}</p>
                   {dayLabel && <p className="text-xs text-text-muted font-medium">{dayLabel}</p>}
                 </div>
@@ -240,7 +240,7 @@ export default function ClassDetailsModal({
                   <Layers className="w-4 h-4" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs uppercase tracking-wider font-bold text-text-muted">VTOP Slot</p>
+                  <p className="font-label text-xs font-bold text-text-muted">VTOP Slot</p>
                   <p className="text-sm font-bold text-text-heading truncate">{active.slot || "N/A"}</p>
                   <p className="text-xs text-text-muted font-medium">
                     Source: {active.source === "live" ? "Live Contribution" : "FFCS Allocation"}

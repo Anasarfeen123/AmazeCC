@@ -251,7 +251,7 @@ export function useAppCommands(input: AppCommandInputs) {
           {assessments.length > 0 && (
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">Assessments</span>
+                <span className="font-label text-xs font-semibold text-text-muted">Assessments</span>
                 <span className="text-xs font-medium text-text-muted bg-surface-secondary px-1.5 py-0.5 rounded-[6px]">
                   {assessments.length}
                 </span>
@@ -317,11 +317,11 @@ export function useAppCommands(input: AppCommandInputs) {
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div className="px-3 py-2 rounded-xl bg-surface border border-border-ink">
-              <p className="text-xs font-medium text-text-muted uppercase tracking-wide">Grade</p>
+              <p className="font-label text-xs font-medium text-text-muted">Grade</p>
               <p className={`text-lg font-bold mt-0.5 ${gc.split(" ")[0]}`}>{g.grade || "N/A"}</p>
             </div>
             <div className="px-3 py-2 rounded-xl bg-surface border border-border-ink">
-              <p className="text-xs font-medium text-text-muted uppercase tracking-wide">Total</p>
+              <p className="font-label text-xs font-medium text-text-muted">Total</p>
               <p className="text-lg font-bold mt-0.5 text-text-heading">{g.grandTotal || "—"}</p>
             </div>
           </div>

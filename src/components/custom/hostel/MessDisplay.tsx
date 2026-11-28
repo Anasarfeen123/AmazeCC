@@ -374,7 +374,7 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
       {todayMenu ? (
         <div className="space-y-4">
           <div className="flex items-center justify-between px-1">
-            <span className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
+            <span className="font-label text-xs font-bold text-text-muted">
               {activeDay} Menu ({gender} • {type})
             </span>
             {activeDay === today && currentActiveMealName && (

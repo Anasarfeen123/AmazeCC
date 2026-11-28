@@ -138,9 +138,7 @@ function StorageRowBlock({ row, onDelete }: { row: StorageRow; onDelete: (key: s
           <div className="rounded-xl border-2 border-border-ink bg-surface-secondary overflow-hidden">
             {row.sensitive && (
               <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-border-ink">
-                <span className="text-xs font-bold uppercase tracking-wider text-warning-foreground">
-                  Sensitive value
-                </span>
+                <span className="font-label text-xs font-bold text-warning-foreground">Sensitive value</span>
                 <button
                   type="button"
                   onClick={() => setRevealed((v) => !v)}
@@ -285,11 +283,11 @@ export default function LocalStorageSubpage() {
       {rows.length > 0 && (
         <div className="grid grid-cols-2 gap-3">
           <div className="p-3 rounded-2xl bg-surface-secondary border-2 border-border-ink">
-            <p className="text-xs font-bold uppercase tracking-wider text-text-muted">Total size</p>
+            <p className="font-label text-xs font-bold text-text-muted">Total size</p>
             <p className="font-bold text-text-heading mt-0.5 tabular-nums">{formatBytes(totalBytes)}</p>
           </div>
           <div className="p-3 rounded-2xl bg-surface-secondary border-2 border-border-ink">
-            <p className="text-xs font-bold uppercase tracking-wider text-text-muted">Sensitive</p>
+            <p className="font-label text-xs font-bold text-text-muted">Sensitive</p>
             <p
               className={`font-bold mt-0.5 tabular-nums ${
                 sensitiveCount > 0 ? "text-warning-foreground" : "text-text-heading"

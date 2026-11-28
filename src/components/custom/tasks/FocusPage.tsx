@@ -44,9 +44,7 @@ export default function FocusPage({ tasks, onCycleStatus, onEditTask }: FocusPag
       <div className="rounded-[14px] card-surface border-2 border-border-ink p-5 sm:p-6 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
           <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-primary font-outfit">
-              Distraction-Free Focus
-            </span>
+            <span className="font-label text-xs font-bold text-primary">Distraction-Free Focus</span>
             <h3 className="text-lg font-bold text-text-heading font-outfit">
               {selectedTask ? selectedTask.title : "Standalone Focus Mode"}
             </h3>
@@ -103,7 +101,7 @@ export default function FocusPage({ tasks, onCycleStatus, onEditTask }: FocusPag
       {todayUpcomingChunks.length > 0 && (
         <div className="rounded-2xl bg-surface border-2 border-border-ink p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-text-primary flex items-center gap-1.5">
+            <span className="font-label text-xs font-bold text-text-primary flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-primary" />
               Up Next Today ({today})
             </span>
@@ -137,7 +135,7 @@ export default function FocusPage({ tasks, onCycleStatus, onEditTask }: FocusPag
       {/* Recent Sessions */}
       {sessions && sessions.length > 0 && (
         <div className="rounded-2xl bg-surface border-2 border-border-ink p-4 space-y-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-text-primary flex items-center gap-1.5 mb-2">
+          <span className="font-label text-xs font-bold text-text-primary flex items-center gap-1.5 mb-2">
             <History className="w-3.5 h-3.5 text-text-muted" />
             Recent Focus Sessions
           </span>

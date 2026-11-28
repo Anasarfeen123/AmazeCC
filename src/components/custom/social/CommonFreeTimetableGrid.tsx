@@ -311,7 +311,7 @@ export default function CommonFreeTimetableGrid({
             <div className="text-left space-y-4">
               {activeCell.who.length > 0 && (
                 <div className="space-y-2">
-                  <p className="text-xs font-bold text-text-primary uppercase tracking-wider">Busy</p>
+                  <p className="font-label text-xs font-bold text-text-primary">Busy</p>
                   {activeCell.who.map((w) => {
                     const parsed = parseSlotKey(w.key);
                     return (
@@ -342,7 +342,7 @@ export default function CommonFreeTimetableGrid({
 
               {activeCell.freeNames.length > 0 && (
                 <div className="space-y-2">
-                  <p className="text-xs font-bold text-text-primary uppercase tracking-wider">Free</p>
+                  <p className="font-label text-xs font-bold text-text-primary">Free</p>
                   <div className="flex flex-wrap gap-1.5">
                     {activeCell.freeNames.map((n) =>
                       n.handle && onOpenPeer ? (

@@ -119,9 +119,7 @@ export default function CabShareTab({ onBack }: { onBack?: () => void }) {
               className={cn(TILE_INTERACTIVE_ROW, "flex-col items-start justify-end gap-2 p-4 sm:p-5")}
             >
               <span className="flex w-full items-center justify-between gap-2">
-                <span className="text-xs sm:text-xs font-bold uppercase tracking-wider text-text-muted font-outfit truncate">
-                  Post a ride
-                </span>
+                <span className="font-label text-xs sm:text-xs font-bold text-text-muted truncate">Post a ride</span>
                 <ChevronRight className="h-4 w-4 shrink-0 text-success-foreground" />
               </span>
               <span className="my-auto flex w-full items-center gap-3">

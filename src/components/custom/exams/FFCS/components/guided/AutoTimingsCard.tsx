@@ -56,9 +56,7 @@ export default function AutoTimingsCard({
     >
       <div className="space-y-4">
         <div>
-          <h3 className="text-sm font-bold text-text-heading uppercase tracking-wider font-outfit">
-            3. Day Start &amp; End Timings
-          </h3>
+          <h3 className="font-label text-sm font-bold text-text-heading">3. Day Start &amp; End Timings</h3>
           <p className="text-xs text-text-muted">
             Set earliest permitted class starts and latest wrap times. Slot-based edge chips align with VIT periods.
           </p>
@@ -66,7 +64,7 @@ export default function AutoTimingsCard({
 
         {/* Quick Schedule Presets */}
         <div className="space-y-1.5">
-          <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Quick Timing Presets</span>
+          <span className="font-label text-xs font-bold text-text-muted">Quick Timing Presets</span>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {quickDaySchedules.map((sched) => {
               const isActive = autoMinStartTime === sched.start && autoMaxEndTime === sched.end;
@@ -113,7 +111,7 @@ export default function AutoTimingsCard({
         <div className="p-3.5 rounded-2xl bg-surface-secondary border border-border-ink space-y-2.5">
           <div className="flex items-center justify-between">
             <div>
-              <span className="text-xs font-bold text-text-heading uppercase tracking-wider font-outfit block">
+              <span className="font-label text-xs font-bold text-text-heading block">
                 Earliest Start Time (No classes before)
               </span>
               <span className="text-xs text-text-muted">Classes starting earlier than this time will be excluded.</span>
@@ -160,7 +158,7 @@ export default function AutoTimingsCard({
         <div className="p-3.5 rounded-2xl bg-surface-secondary border border-border-ink space-y-2.5">
           <div className="flex items-center justify-between">
             <div>
-              <span className="text-xs font-bold text-text-heading uppercase tracking-wider font-outfit block">
+              <span className="font-label text-xs font-bold text-text-heading block">
                 Latest Wrap Time (No classes after)
               </span>
               <span className="text-xs text-text-muted">Classes ending later than this time will be excluded.</span>

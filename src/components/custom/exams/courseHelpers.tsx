@@ -266,7 +266,7 @@ export function AssessmentRow({
               )}
 
               <div>
-                <p className="text-text-muted text-xs uppercase font-bold tracking-wider mb-2">
+                <p className="font-label text-text-muted text-xs font-bold mb-2">
                   {isRelative ? "Grade placement preview" : "Absolute grade range preview"}
                 </p>
                 <div className="flex gap-2">

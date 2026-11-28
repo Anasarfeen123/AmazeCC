@@ -14,9 +14,7 @@ export default function MobilePreflightCard({}: MobilePreflightCardProps) {
       {/* Top category label */}
       <div className="space-y-1.5 text-center sm:text-left">
         <div className="mb-1">
-          <span className="text-xs font-bold uppercase tracking-wider text-primary font-outfit">
-            Mobile First · Timetable Studio
-          </span>
+          <span className="font-label text-xs font-bold text-primary">Mobile First · Timetable Studio</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold text-text-heading tracking-tight font-outfit">
           Mobile-First Timetable Builder

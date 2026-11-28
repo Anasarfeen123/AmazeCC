@@ -163,7 +163,7 @@ export function PlacementZones({ placements }: { placements: BusPlacement[] }) {
             <span className="block text-base font-bold font-outfit text-text-heading leading-none">
               {p.dispersalTime}
             </span>
-            <span className="text-xs font-bold uppercase tracking-wider text-text-muted">
+            <span className="font-label text-xs font-bold text-text-muted">
               dispersal
             </span>
           </span>

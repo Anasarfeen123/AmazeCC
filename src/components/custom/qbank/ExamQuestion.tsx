@@ -115,7 +115,7 @@ export default function ExamQuestion({ question, index }: { question: QBankQuest
             </button>
           ) : (
             <div className="p-4 bg-success-surface border border-border-ink rounded-lg">
-              <h4 className="text-xs font-bold text-success-foreground uppercase tracking-wider mb-2">Answer:</h4>
+              <h4 className="font-label text-xs font-bold text-success-foreground mb-2">Answer:</h4>
               <div className="text-sm text-text-primary font-medium">
                 <Latex>{question.correct_answer}</Latex>
               </div>

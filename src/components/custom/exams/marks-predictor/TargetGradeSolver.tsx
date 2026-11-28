@@ -208,7 +208,7 @@ export default function TargetGradeSolver({
           <Flame className="h-5 w-5" />
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block text-xs font-bold text-text-heading font-outfit uppercase tracking-wider truncate">
+          <span className="font-label block text-xs font-bold text-text-heading truncate">
             {fatExamName} · {fatWeight} wt · /{fatMax}
           </span>
           <span className="block text-xs font-semibold mt-0.5 text-text-muted">
@@ -246,7 +246,7 @@ export default function TargetGradeSolver({
         <div className="space-y-3">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-xs font-bold uppercase tracking-widest text-text-muted">Required in {fatExamName}</p>
+              <p className="font-label text-xs font-bold text-text-muted">Required in {fatExamName}</p>
               <p className="mt-1 flex items-baseline gap-2 flex-wrap min-w-0">
                 <span className="text-2xl font-bold text-text-heading font-outfit tracking-tight">
                   {solverResult.isAlreadyAchieved ? "0" : solverResult.requiredFATRawScore.toFixed(1)}
@@ -268,9 +268,7 @@ export default function TargetGradeSolver({
           <p className="text-xs text-text-muted font-medium leading-relaxed">{solverResult.feasibilityMessage}</p>
           {fatNeeds.length > 0 && (
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-text-muted mb-1.5">
-                {fatExamName} needed per grade
-              </p>
+              <p className="font-label text-xs font-bold text-text-muted mb-1.5">{fatExamName} needed per grade</p>
               <div className="flex flex-wrap gap-1.5">
                 {fatNeeds.map((need) => (
                   <button

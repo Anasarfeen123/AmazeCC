@@ -750,7 +750,7 @@ export default function SyncNotification({
                   )}
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-text-muted flex items-center gap-1.5">
+                    <label className="font-label text-xs font-bold text-text-muted flex items-center gap-1.5">
                       <User className="w-3.5 h-3.5 text-primary" />
                       <span>VTOP Username / Reg No</span>
                     </label>
@@ -768,7 +768,7 @@ export default function SyncNotification({
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-text-muted flex items-center gap-1.5">
+                    <label className="font-label text-xs font-bold text-text-muted flex items-center gap-1.5">
                       <Lock className="w-3.5 h-3.5 text-primary" />
                       <span>VTOP Password</span>
                     </label>
@@ -1450,9 +1450,7 @@ export default function SyncNotification({
                     <ServerOff className="w-4 h-4 text-danger-foreground shrink-0 mt-0.5" />
                     <div className="space-y-0.5 min-w-0 flex-1">
                       <div className="flex items-center justify-between">
-                        <p className="text-xs font-bold uppercase tracking-wider text-danger-foreground">
-                          VTOP is Down
-                        </p>
+                        <p className="font-label text-xs font-bold text-danger-foreground">VTOP is Down</p>
                         <span className="text-xs font-bold text-danger-foreground">Offline</span>
                       </div>
                       <p className="text-xs font-medium text-text-primary leading-relaxed">

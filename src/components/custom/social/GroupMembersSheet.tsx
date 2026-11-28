@@ -90,7 +90,7 @@ export default function GroupMembersSheet({
     >
       <div className="space-y-5">
         <div className="space-y-1.5">
-          <label htmlFor="group-name" className="text-xs font-bold uppercase tracking-wider text-text-muted">
+          <label htmlFor="group-name" className="font-label text-xs font-bold text-text-muted">
             Name
           </label>
           <input

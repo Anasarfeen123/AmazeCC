@@ -283,7 +283,7 @@ export const TargetCourseLocker: React.FC<TargetCourseLockerProps> = ({
         {offeringGroupBy === "faculty" && (
           <>
             {catalogReady && rankedFacs.some((r) => r.rank.wPct >= 0) && (
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-warning-foreground uppercase tracking-wider">
+              <div className="font-label flex items-center gap-1.5 text-xs font-semibold text-warning-foreground">
                 <Award className="w-3 h-3 shrink-0" />
                 Ranked by vitfac reviews
               </div>
@@ -336,7 +336,7 @@ export const TargetCourseLocker: React.FC<TargetCourseLockerProps> = ({
         {offeringGroupBy === "slot" && (
           <>
             {catalogReady && rankedFacs.some((r) => r.rank.wPct >= 0) && (
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-warning-foreground uppercase tracking-wider">
+              <div className="font-label flex items-center gap-1.5 text-xs font-semibold text-warning-foreground">
                 <Award className="w-3 h-3 shrink-0" />
                 Faculties ranked by vitfac reviews within each slot
               </div>

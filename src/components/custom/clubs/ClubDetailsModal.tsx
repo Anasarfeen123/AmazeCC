@@ -264,7 +264,7 @@ export default function ClubDetailsModal({ club, isOpen, onClose }: ClubDetailsM
                     <User className="w-4.5 h-4.5" />
                   </span>
                   <div className="min-w-0">
-                    <p className="text-xs font-bold uppercase tracking-wider text-text-muted">Point of Contact</p>
+                    <p className="font-label text-xs font-bold text-text-muted">Point of Contact</p>
                     <p className="text-sm font-bold text-text-heading font-outfit truncate">
                       {pocName}
                       {club.poc_designation && (

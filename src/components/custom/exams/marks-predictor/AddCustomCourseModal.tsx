@@ -55,7 +55,7 @@ export default function AddCustomCourseModal({ isOpen, onClose, onAddCourse }: A
       <div className="space-y-5">
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="text-xs font-bold uppercase tracking-wider text-text-muted">Course Code</label>
+            <label className="font-label text-xs font-bold text-text-muted">Course Code</label>
             <input
               type="text"
               required
@@ -67,7 +67,7 @@ export default function AddCustomCourseModal({ isOpen, onClose, onAddCourse }: A
           </div>
 
           <div>
-            <label className="text-xs font-bold uppercase tracking-wider text-text-muted">Course Title</label>
+            <label className="font-label text-xs font-bold text-text-muted">Course Title</label>
             <input
               type="text"
               placeholder="e.g. Database Systems"
@@ -78,7 +78,7 @@ export default function AddCustomCourseModal({ isOpen, onClose, onAddCourse }: A
           </div>
 
           <div>
-            <label className="text-xs font-bold uppercase tracking-wider text-text-muted">Course Structure</label>
+            <label className="font-label text-xs font-bold text-text-muted">Course Structure</label>
             <SelectField
               value={courseType as string}
               onChange={(val) => setCourseType(val as any)}

@@ -31,9 +31,7 @@ export default function AutoSocialCard({
     >
       <div className="space-y-4">
         <div>
-          <h3 className="text-sm font-bold text-text-heading uppercase tracking-wider font-outfit">
-            3. Friends &amp; Peer Sync
-          </h3>
+          <h3 className="font-label text-sm font-bold text-text-heading">3. Friends &amp; Peer Sync</h3>
           <p className="text-xs text-text-muted">Align your generated timetable with peer schedules.</p>
         </div>
 

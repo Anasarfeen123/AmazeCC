@@ -602,9 +602,7 @@ export default function LibrariesTab({ loginToVTOP, onBack }: LibrariesTabProps)
           className={`${TILE} h-32 sm:h-36 transition-all cursor-pointer`}
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-xs sm:text-xs font-bold uppercase tracking-wider text-text-muted font-outfit truncate">
-              Dues
-            </span>
+            <span className="font-label text-xs sm:text-xs font-bold text-text-muted truncate">Dues</span>
             <span
               className={`text-xs sm:text-xs font-bold uppercase px-2 py-0.5 rounded-md shrink-0 border ${TONE_BADGE[duesTone]}`}
             >

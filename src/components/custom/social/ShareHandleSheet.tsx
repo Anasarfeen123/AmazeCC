@@ -152,7 +152,7 @@ export default function ShareHandleSheet({ onClose }: { onClose: () => void }) {
 
             {inviteLink && (
               <div className="p-3 rounded-2xl border-2 border-border-ink space-y-2.5">
-                <p className="flex items-center gap-1.5 text-xs font-bold text-text-primary uppercase tracking-wider">
+                <p className="font-label flex items-center gap-1.5 text-xs font-bold text-text-primary">
                   <Link2 className="w-3.5 h-3.5 text-primary" />
                   Invite link
                 </p>
@@ -208,7 +208,7 @@ export default function ShareHandleSheet({ onClose }: { onClose: () => void }) {
             </div>
 
             <div className="p-3 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-1.5">
-              <p className="flex items-center gap-1.5 text-xs font-bold text-text-primary uppercase tracking-wider">
+              <p className="font-label flex items-center gap-1.5 text-xs font-bold text-text-primary">
                 <ShieldCheck className="w-3.5 h-3.5 text-primary" />
                 What your handle gives away
               </p>

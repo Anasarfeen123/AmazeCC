@@ -614,7 +614,7 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
                   {openTables.map((table, idx) => (
                     <div key={idx} className="space-y-2.5">
                       {table.caption && (
-                        <h4 data-private="fees" className="text-xs font-bold text-text-muted uppercase tracking-wider">
+                        <h4 data-private="fees" className="font-label text-xs font-bold text-text-muted">
                           {table.caption}
                         </h4>
                       )}

@@ -194,7 +194,7 @@ function DayPicker({
           >
             <span
               className={cn(
-                "font-bold uppercase tracking-wide",
+                "font-label font-bold",
                 compact ? "text-xs" : "text-xs",
                 selected ? "text-primary" : isToday ? "text-success-foreground" : "text-text-muted",
               )}

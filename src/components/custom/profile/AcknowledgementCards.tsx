@@ -69,7 +69,7 @@ export default function AcknowledgementCards({ creds, refreshKey }: { creds: any
       <div className="p-5 border-b border-border-ink">
         <div className="flex items-center gap-2">
           <FileText className="w-4 h-4 text-text-muted" />
-          <h4 className="text-sm font-semibold text-text-muted uppercase tracking-wider">
+          <h4 className="font-label text-sm font-semibold text-text-muted">
             {ack?.title || "Document Acknowledgement"}
           </h4>
         </div>

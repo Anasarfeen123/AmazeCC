@@ -263,11 +263,9 @@ export default function VerticalTimetableGrid({
         {!compact && cell.kind === "course" && cell.course && (
           <span className="w-full truncate text-center text-xs font-semibold leading-tight">{cell.course.code}</span>
         )}
-        {!compact && cell.blocked && (
-          <span className="text-xs font-bold uppercase leading-tight tracking-wider">Blocked</span>
-        )}
+        {!compact && cell.blocked && <span className="font-label text-xs font-bold leading-tight">Blocked</span>}
         {!compact && !cell.blocked && cell.partiallyBlocked && (
-          <span className="text-xs font-bold uppercase leading-tight tracking-wider opacity-80">Partly blocked</span>
+          <span className="font-label text-xs font-bold leading-tight opacity-80">Partly blocked</span>
         )}
       </>
     );

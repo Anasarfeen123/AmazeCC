@@ -1,7 +1,7 @@
 "use client";
 
 import { getAssetPath } from "@/lib/utils";
-import { rebaseDemoDates } from "@/lib/demoDates";
+import { demoTasks, rebaseDemoDates } from "@/lib/demoDates";
 import AppLoading from "@/components/custom/shared/AppLoading";
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
@@ -29,6 +29,7 @@ import {
   authorizedIDAtom,
   defaultSettings,
   activeTabAtom,
+  tasksAtom,
 } from "@/store";
 import { activeRegNumberAtom, pendingInviteHandleAtom } from "@/store/socialAtoms";
 import { activeToolsSubTabAtom } from "@/store/uiAtoms";
@@ -91,6 +92,7 @@ function MainRuntime({ initialIntent, onSignedOut }: MainProps) {
   const setMessage = useSetAtom(messageAtom);
   const setAttendanceData = useSetAtom(attendanceDataAtom);
   const setMarksData = useSetAtom(marksDataAtom);
+  const setTasks = useSetAtom(tasksAtom);
   const setGradesData = useSetAtom(gradesDataAtom);
   const setAllGradesData = useSetAtom(allGradesDataAtom);
   const setScheduleData = useSetAtom(scheduleDataAtom);
@@ -366,6 +368,12 @@ function MainRuntime({ initialIntent, onSignedOut }: MainProps) {
     if ((demoData as any).profile) {
       setTypedStorageItem("profile", (demoData as any).profile);
     }
+    // Sample tasks, unless this browser already has some.
+    if (!storage.tasks.get()?.length) {
+      const sample = demoTasks();
+      storage.tasks.set(sample);
+      setTasks(sample);
+    }
     setIsLoggedIn(true);
   };
 
@@ -607,7 +615,7 @@ function GlobalShortcutsModal({ onClose }: { onClose: () => void }) {
         <div className="space-y-5">
           {categories.map((cat, idx) => (
             <div key={idx} className="space-y-2">
-              <h4 className="text-xs font-bold text-text-muted uppercase tracking-wider">{cat.title}</h4>
+              <h4 className="font-label text-xs font-bold text-text-muted">{cat.title}</h4>
               <div className="divide-y divide-border-muted dark:divide-border-muted border border-border-muted rounded-xl overflow-hidden bg-surface">
                 {cat.items.map((item, iIdx) => (
                   <div key={iIdx} className="flex items-center justify-between px-3.5 py-2.5 text-xs">

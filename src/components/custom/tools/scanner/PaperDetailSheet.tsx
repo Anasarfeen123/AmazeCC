@@ -268,7 +268,7 @@ export default function PaperDetailSheet({ record, store, onClose, onChanged, on
           <SectionHeader title="Details" />
           <div className="space-y-2">
             <label className="block">
-              <span className="mb-1 block text-xs font-bold uppercase tracking-wider text-text-muted">Title</span>
+              <span className="font-label mb-1 block text-xs font-bold text-text-muted">Title</span>
               <input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -278,9 +278,7 @@ export default function PaperDetailSheet({ record, store, onClose, onChanged, on
               />
             </label>
             <label className="block">
-              <span className="mb-1 block text-xs font-bold uppercase tracking-wider text-text-muted">
-                Subject code
-              </span>
+              <span className="font-label mb-1 block text-xs font-bold text-text-muted">Subject code</span>
               <input
                 value={subjectCode}
                 onChange={(e) => setSubjectCode(e.target.value.toUpperCase())}
@@ -293,9 +291,7 @@ export default function PaperDetailSheet({ record, store, onClose, onChanged, on
 
             {/* Examination & Assessment categorization */}
             <div className="pt-2 border-t border-border-muted dark:border-border space-y-2">
-              <span className="block text-xs font-bold uppercase tracking-wider text-text-muted">
-                Examination &amp; Assessment
-              </span>
+              <span className="font-label block text-xs font-bold text-text-muted">Examination &amp; Assessment</span>
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <span className="mb-1 block text-xs font-medium text-text-secondary dark:text-text-muted">

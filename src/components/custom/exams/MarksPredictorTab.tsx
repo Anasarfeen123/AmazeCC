@@ -387,9 +387,7 @@ export default function MarksPredictorTab({
                               <span className="block text-sm font-bold font-outfit text-text-heading">
                                 {deficit > 0 ? `-${deficit.toFixed(1)}` : "0.0"}
                               </span>
-                              <span className="block text-xs font-bold uppercase tracking-wider text-text-muted">
-                                pts lost
-                              </span>
+                              <span className="font-label block text-xs font-bold text-text-muted">pts lost</span>
                             </span>
                             {isIgnored ? (
                               // The pair no longer counts this course, so the

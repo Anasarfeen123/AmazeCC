@@ -394,9 +394,7 @@ export function WeeklyRhythmDetails({ courses, onClose }: { courses: AddedCourse
       <div className="space-y-4">
         {vitfacEnabled && (
           <section className="space-y-2">
-            <h3 className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
-              Faculty ratings in this timetable
-            </h3>
+            <h3 className="font-label text-xs font-bold text-muted-foreground">Faculty ratings in this timetable</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {[
                 { label: "Best faculty", entry: bestFaculty, tone: "emerald" },
@@ -406,7 +404,7 @@ export function WeeklyRhythmDetails({ courses, onClose }: { courses: AddedCourse
                   key={label}
                   className={`rounded-xl border p-3 ${tone === "emerald" ? "border-border-ink bg-success-surface" : "border-border-ink bg-warning-surface"}`}
                 >
-                  <p className="text-xs uppercase font-bold tracking-wide text-muted-foreground">{label}</p>
+                  <p className="font-label text-xs font-bold text-muted-foreground">{label}</p>
                   {entry ? (
                     <>
                       <div className="mt-1 flex items-center gap-2">
@@ -439,7 +437,7 @@ export function WeeklyRhythmDetails({ courses, onClose }: { courses: AddedCourse
         )}
 
         <section className="space-y-2">
-          <h3 className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Day-by-day schedule</h3>
+          <h3 className="font-label text-xs font-bold text-muted-foreground">Day-by-day schedule</h3>
           <div className="space-y-2">
             {days.map((day) => (
               <div key={day.id} className="rounded-xl border border-border-strong bg-surface p-3">
@@ -470,7 +468,7 @@ export function WeeklyRhythmDetails({ courses, onClose }: { courses: AddedCourse
           </div>
         </section>
         <section className="space-y-2">
-          <h3 className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Free half-days</h3>
+          <h3 className="font-label text-xs font-bold text-muted-foreground">Free half-days</h3>
           {freeLabels.length ? (
             <div className="flex flex-wrap gap-1.5">
               {freeLabels.map((label) => (
@@ -488,7 +486,7 @@ export function WeeklyRhythmDetails({ courses, onClose }: { courses: AddedCourse
         </section>
         {metrics.gapDetails.length > 0 && (
           <section className="space-y-2">
-            <h3 className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Largest class gaps</h3>
+            <h3 className="font-label text-xs font-bold text-muted-foreground">Largest class gaps</h3>
             {[...metrics.gapDetails]
               .sort((a, b) => b.durationMins - a.durationMins)
               .slice(0, 5)
@@ -508,7 +506,7 @@ export function WeeklyRhythmDetails({ courses, onClose }: { courses: AddedCourse
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {stats.map((stat) => (
             <div key={stat.label} className="rounded-xl border border-border-strong bg-surface p-3">
-              <p className="text-xs uppercase font-bold tracking-wide text-muted-foreground">{stat.label}</p>
+              <p className="font-label text-xs font-bold text-muted-foreground">{stat.label}</p>
               <p className="text-sm font-bold text-text-heading mt-1">{stat.value}</p>
             </div>
           ))}

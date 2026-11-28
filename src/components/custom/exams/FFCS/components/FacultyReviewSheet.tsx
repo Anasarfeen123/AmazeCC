@@ -189,7 +189,7 @@ export default function FacultyReviewSheet({
           {/* Subject Filter Bar (matching vitfac subject toggle) */}
           {availableCourses.length > 0 && (
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-xs font-bold text-muted-foreground uppercase tracking-wider">
+              <div className="font-label flex items-center justify-between text-xs font-bold text-muted-foreground">
                 <span>Filter by Course</span>
                 {selectedCourseStat && (
                   <span className="text-warning-foreground font-semibold lowercase">
@@ -230,7 +230,7 @@ export default function FacultyReviewSheet({
           {/* Win / Loss Rating Hero */}
           <div className="bg-surface rounded-2xl border border-border-strong p-4 shadow-xs space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Community Rating</span>
+              <span className="font-label text-xs font-bold text-muted-foreground">Community Rating</span>
               <span className="text-xs font-medium text-muted-foreground">
                 {reviewsCount} {reviewsCount === 1 ? "student review" : "student reviews"}
               </span>
@@ -300,7 +300,7 @@ export default function FacultyReviewSheet({
           {/* Green Flags */}
           {greenLore.length > 0 && (
             <div className="space-y-1.5">
-              <div className="text-xs font-bold uppercase tracking-wider text-success-foreground flex items-center gap-1.5">
+              <div className="font-label text-xs font-bold text-success-foreground flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5" /> Green Flags
               </div>
               <div className="flex flex-wrap gap-1.5">
@@ -322,7 +322,7 @@ export default function FacultyReviewSheet({
           {/* Red Flags */}
           {redLore.length > 0 && (
             <div className="space-y-1.5">
-              <div className="text-xs font-bold uppercase tracking-wider text-danger-foreground flex items-center gap-1.5">
+              <div className="font-label text-xs font-bold text-danger-foreground flex items-center gap-1.5">
                 <AlertTriangle className="w-3.5 h-3.5" /> Red Flags
               </div>
               <div className="flex flex-wrap gap-1.5">
@@ -344,7 +344,7 @@ export default function FacultyReviewSheet({
           {/* Courses Taught */}
           {prof.courses && prof.courses.length > 0 && (
             <div className="space-y-1.5 pt-2 border-t border-border-strong/40">
-              <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Known Courses</div>
+              <div className="font-label text-xs font-bold text-muted-foreground">Known Courses</div>
               <div className="flex flex-wrap gap-1">
                 {prof.courses.map((c) => (
                   <span

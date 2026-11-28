@@ -143,13 +143,13 @@ export function CourseCatalogFilters({
             <>
               {chips.theory.length > 0 && (
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Theory</span>
+                  <span className="font-label text-xs font-bold text-muted-foreground">Theory</span>
                   <div className="flex flex-wrap gap-1.5">{chips.theory.map(slotChip)}</div>
                 </div>
               )}
               {chips.lab.length > 0 && (
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Lab</span>
+                  <span className="font-label text-xs font-bold text-muted-foreground">Lab</span>
                   <div className="flex flex-wrap gap-1.5">{chips.lab.map(slotChip)}</div>
                 </div>
               )}
@@ -162,7 +162,7 @@ export function CourseCatalogFilters({
 
       {curriculum && curriculumOnly && curriculum.categories.length > 0 && (
         <div className="rounded-xl border border-border-ink bg-emerald-500/[0.06] p-2.5 flex flex-wrap items-center gap-1.5">
-          <span className="text-xs font-bold uppercase tracking-wider text-success-foreground mr-1">Category</span>
+          <span className="font-label text-xs font-bold text-success-foreground mr-1">Category</span>
           <button
             type="button"
             aria-pressed={categories.length === 0}

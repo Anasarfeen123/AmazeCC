@@ -304,9 +304,7 @@ export default function PushNotificationManager() {
           {/* Trigger Categories */}
           <div className="p-4 rounded-2xl bg-surface border-2 border-border-ink space-y-3">
             <div className="flex items-center justify-between">
-              <h5 className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
-                Notification Triggers
-              </h5>
+              <h5 className="font-label text-xs font-bold text-text-muted">Notification Triggers</h5>
 
               {/* Class Reminder Lead Time Selector */}
               <div className="flex items-center gap-1.5 bg-surface-secondary px-2.5 py-1 rounded-xl border-2 border-border-ink">
@@ -425,9 +423,7 @@ export default function PushNotificationManager() {
 
           {/* Sound & Quiet Hours */}
           <div className="p-4 rounded-2xl bg-surface border-2 border-border-ink space-y-3">
-            <h5 className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
-              Sound & Quiet Hours
-            </h5>
+            <h5 className="font-label text-xs font-bold text-text-muted">Sound & Quiet Hours</h5>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="flex items-center justify-between p-3 rounded-xl bg-surface-secondary border-2 border-border-ink">
@@ -484,7 +480,7 @@ export default function PushNotificationManager() {
           {/* Optional VAPID Key Customization */}
           <div className="p-4 rounded-2xl bg-surface border-2 border-border-ink space-y-2">
             <div className="flex items-center justify-between">
-              <h5 className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit flex items-center gap-1.5">
+              <h5 className="font-label text-xs font-bold text-text-muted flex items-center gap-1.5">
                 <Key size={13} className="text-warning-foreground" /> Custom notification key
               </h5>
               {settings?.customVapidKey && (

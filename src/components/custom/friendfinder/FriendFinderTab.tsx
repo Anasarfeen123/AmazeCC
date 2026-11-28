@@ -593,7 +593,7 @@ function SectionCard({
               <UserRound className="w-3 h-3 shrink-0" />
               <span className="truncate">{displayName(entry.faculty)}</span>
             </span>
-            <span className="uppercase tracking-wide text-xs font-bold">{entry.type}</span>
+            <span className="font-label text-xs font-bold">{entry.type}</span>
           </p>
         </div>
         <div className="flex items-center gap-1.5 shrink-0 self-center pl-1">

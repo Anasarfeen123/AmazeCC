@@ -249,3 +249,76 @@ export function isDemoSession(ids?: { VtopUsername?: string } | null): boolean {
     return false;
   }
 }
+
+/**
+ * Sample tasks for the demo (owner: "make sure the demo is full proper
+ * data"; Tasks showed "Nothing scheduled"). Dates are relative to `now`.
+ */
+export function demoTasks(now: Date = new Date()): import("@/types/tasks").Task[] {
+  const at = (days: number, h: number, m = 0) => {
+    const d = new Date(now);
+    d.setDate(d.getDate() + days);
+    d.setHours(h, m, 0, 0);
+    return d.toISOString();
+  };
+  const made = at(-3, 18);
+  const base = { reminders: [] as string[], schedule: [], createdAt: made, updatedAt: made };
+  return [
+    {
+      ...base,
+      id: "demo-task-1",
+      title: "Submit DA-2: normalisation exercise",
+      kind: "digital-assignment",
+      status: "in_progress",
+      courseCode: "BCSE302L",
+      component: "theory",
+      courseTitleSnapshot: "Database Systems",
+      dueDate: at(1, 23, 59),
+    },
+    {
+      ...base,
+      id: "demo-task-2",
+      title: "Finish lab record: subnetting",
+      kind: "homework",
+      status: "pending",
+      courseCode: "BCSE308P",
+      component: "lab",
+      courseTitleSnapshot: "Computer Networks Lab",
+      dueDate: at(0, 20, 0),
+    },
+    {
+      ...base,
+      id: "demo-task-3",
+      title: "Revise modules 3-4 for CAT-II",
+      kind: "study",
+      status: "pending",
+      courseCode: "BCSE205L",
+      component: "theory",
+      courseTitleSnapshot: "Computer Architecture and Organization",
+      dueDate: at(4, 9, 0),
+    },
+    {
+      ...base,
+      id: "demo-task-4",
+      title: "Quiz 2 on regression",
+      kind: "test",
+      status: "pending",
+      courseCode: "BCSE206L",
+      component: "theory",
+      courseTitleSnapshot: "Foundations of Data Science",
+      dueDate: at(2, 11, 0),
+    },
+    {
+      ...base,
+      id: "demo-task-5",
+      title: "Read chapter 5: HTTP and REST",
+      kind: "reminder",
+      status: "done",
+      courseCode: "BCSE203E",
+      component: "theory",
+      courseTitleSnapshot: "Web Programming",
+      dueDate: at(-1, 17, 0),
+      completedAt: at(-1, 16, 30),
+    },
+  ];
+}

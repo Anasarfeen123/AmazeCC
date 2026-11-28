@@ -1037,9 +1037,7 @@ export default function FFCSDashboardHeader({
                         <PlusCircle className="w-4 h-4" />
                       </span>
                       <div className="min-w-0">
-                        <p className="text-xs font-bold uppercase tracking-wider text-primary">
-                          Configure Selected Course
-                        </p>
+                        <p className="font-label text-xs font-bold text-primary">Configure Selected Course</p>
                         <h3 className="text-sm font-bold text-text-heading truncate">
                           {selectedCourseCode} · {selectedCourse?.title}
                         </h3>
@@ -1098,7 +1096,7 @@ export default function FFCSDashboardHeader({
                     </div>
 
                     <div className="space-y-1.5">
-                      <span className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                      <span className="font-label block text-xs font-bold text-muted-foreground">
                         Slot & Faculty Choice
                       </span>
                       <button
@@ -1145,7 +1143,7 @@ export default function FFCSDashboardHeader({
                     {availableSlots.length > 0 && (
                       <div className="space-y-2">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                          <span className="font-label text-xs font-bold text-muted-foreground">
                             Recommended faculty, slots & timetable fit
                           </span>
                           <span className="text-xs text-muted-foreground">{availableSlots.length} offerings</span>

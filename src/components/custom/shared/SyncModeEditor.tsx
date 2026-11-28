@@ -339,7 +339,7 @@ export function SyncModeEditorContent({ onChanged, onRun, defaultId, onSetDefaul
           <div className="max-h-[220px] overflow-y-auto space-y-3 pr-0.5">
             {grouped.map(([cat, list]) => (
               <div key={cat}>
-                <p className="text-xs font-bold uppercase tracking-wider text-text-muted mb-1">{CATEGORY_LABEL[cat]}</p>
+                <p className="font-label text-xs font-bold text-text-muted mb-1">{CATEGORY_LABEL[cat]}</p>
                 <div className="space-y-1">
                   {list.map((o) => {
                     const checked = stepSet.has(o.name);
@@ -387,7 +387,7 @@ export function SyncModeEditorContent({ onChanged, onRun, defaultId, onSetDefaul
             {visibleEndpoints.length > 0 && (
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <p className="text-xs font-bold uppercase tracking-wider text-text-muted">
+                  <p className="font-label text-xs font-bold text-text-muted">
                     Additional records · bulk endpoints ({bulkSet.size}/{BULK_ENDPOINT_META.length})
                   </p>
                   <div className="flex gap-1">
@@ -444,7 +444,7 @@ export function SyncModeEditorContent({ onChanged, onRun, defaultId, onSetDefaul
 
           {ordered.length > 0 && (
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-text-muted mb-1">
+              <p className="font-label text-xs font-bold text-text-muted mb-1">
                 Order & background ({ordered.length} steps ·{" "}
                 {
                   estimateModeCost({
@@ -552,7 +552,7 @@ export function SyncModeEditorContent({ onChanged, onRun, defaultId, onSetDefaul
         <div className="flex flex-col gap-3 max-h-[50vh] overflow-y-auto">
           {customs.length > 0 && (
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-text-muted mb-1">Custom</p>
+              <p className="font-label text-xs font-bold text-text-muted mb-1">Custom</p>
               <div className="space-y-1.5">
                 {customs.map((m) => (
                   <div
@@ -599,7 +599,7 @@ export function SyncModeEditorContent({ onChanged, onRun, defaultId, onSetDefaul
           )}
 
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-text-muted mb-1">Built-in</p>
+            <p className="font-label text-xs font-bold text-text-muted mb-1">Built-in</p>
             <div className="space-y-1.5">
               {BUILT_IN_MODES.map((m) => (
                 <div

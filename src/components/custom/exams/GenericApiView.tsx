@@ -10,7 +10,7 @@ import SelectField from "../shared/primitives/SelectField";
 import { getTypedStorageItem, setTypedStorageItem, removeTypedStorageItem } from "@/lib/storage";
 const Field = ({ label, value }: { label: string; value: string }) => (
   <div className="min-w-0">
-    <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">{label}</p>
+    <p className="font-label text-xs font-semibold text-text-muted">{label}</p>
     <p className="text-sm font-medium text-text-primary break-words">{value || "—"}</p>
   </div>
 );
@@ -278,7 +278,7 @@ export default function GenericApiView({
         <div key={idx} className="solid-card mb-5">
           <div className="p-5">
             {table.caption && (
-              <h4 className="text-sm font-semibold text-text-muted uppercase tracking-wider mb-4">{table.caption}</h4>
+              <h4 className="font-label text-sm font-semibold text-text-muted mb-4">{table.caption}</h4>
             )}
             {hasRows ? (
               (() => {
@@ -348,7 +348,7 @@ export default function GenericApiView({
     return (
       <div className="solid-card mb-5">
         <div className="p-5">
-          <h4 className="text-sm font-semibold text-text-muted uppercase tracking-wider mb-4">Details</h4>
+          <h4 className="font-label text-sm font-semibold text-text-muted mb-4">Details</h4>
           <div className="grid grid-cols-2 gap-x-4 gap-y-3">
             {entries.map(([key, val]) => (
               <Field key={key} label={key} value={String(val)} />
@@ -381,7 +381,7 @@ export default function GenericApiView({
     return (
       <div className="solid-card mb-5" key={semName}>
         <div className="p-5">
-          <h4 className="text-sm font-semibold text-text-muted uppercase tracking-wider mb-4">{semName}</h4>
+          <h4 className="font-label text-sm font-semibold text-text-muted mb-4">{semName}</h4>
           {renderMessages(semData.messages)}
           {hasContent ? (
             <>
@@ -400,7 +400,7 @@ export default function GenericApiView({
           )}
           {semSelectOptions.length > 0 && (
             <div className="space-y-3 mt-4">
-              <h5 className="text-xs font-semibold text-text-muted uppercase tracking-wider">Available Options</h5>
+              <h5 className="font-label text-xs font-semibold text-text-muted">Available Options</h5>
               {semSelectOptions.map(([key, options]: any) => (
                 <div key={key}>
                   <p className="text-xs font-medium text-text-muted mb-1.5 capitalize">{key.replace(/-/g, " ")}</p>
@@ -420,7 +420,7 @@ export default function GenericApiView({
           )}
           {semData?.cascadingOptions && Object.keys(semData.cascadingOptions).length > 0 && (
             <div className="space-y-4 mt-5 pt-4 border-t border-border-ink">
-              <h5 className="text-xs font-semibold text-text-muted uppercase tracking-wider">
+              <h5 className="font-label text-xs font-semibold text-text-muted">
                 Available Minor / Honour Combinations
               </h5>
               {Object.entries(semData.cascadingOptions).map(([fieldName, fieldData]: [string, any]) => (
@@ -434,7 +434,7 @@ export default function GenericApiView({
                           Object.entries(fieldData.children[opt.text].selectOptions).map(
                             ([childField, childOpts]: [string, any]) => (
                               <div key={childField} className="mt-2 ml-2">
-                                <p className="text-xs font-medium text-text-muted uppercase tracking-wider mb-1">
+                                <p className="font-label text-xs font-medium text-text-muted mb-1">
                                   {childField.replace(/-/g, " ")}
                                 </p>
                                 <div className="flex flex-wrap gap-1.5">
@@ -512,7 +512,7 @@ export default function GenericApiView({
                 return (
                   <div className="solid-card mb-5" key={semName}>
                     <div className="p-5">
-                      <h4 className="text-sm font-semibold text-text-muted uppercase tracking-wider mb-4">{semName}</h4>
+                      <h4 className="font-label text-sm font-semibold text-text-muted mb-4">{semName}</h4>
                       <p className="error-banner">{semData.error}</p>
                     </div>
                   </div>
@@ -532,9 +532,7 @@ export default function GenericApiView({
           {semesterOptions && (
             <div className="solid-card mb-5">
               <div className="p-4">
-                <label className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2 block">
-                  Select Semester
-                </label>
+                <label className="font-label text-xs font-semibold text-text-muted mb-2 block">Select Semester</label>
                 <div className="relative">
                   <SelectField
                     value={selectedSemester}
@@ -565,9 +563,7 @@ export default function GenericApiView({
               {allSelectOptions.length > 0 && (
                 <div className="solid-card mb-5">
                   <div className="p-5">
-                    <h4 className="text-sm font-semibold text-text-muted uppercase tracking-wider mb-4">
-                      Available Options
-                    </h4>
+                    <h4 className="font-label text-sm font-semibold text-text-muted mb-4">Available Options</h4>
                     <div className="space-y-3">
                       {allSelectOptions.map(([key, options]: any) => (
                         <div key={key}>
@@ -595,9 +591,7 @@ export default function GenericApiView({
                 (writable ? (
                   <div className="solid-card mb-5">
                     <form onSubmit={handleSubmit} className="p-5 space-y-4">
-                      <h4 className="text-sm font-semibold text-text-muted uppercase tracking-wider mb-4">
-                        Submit Form
-                      </h4>
+                      <h4 className="font-label text-sm font-semibold text-text-muted mb-4">Submit Form</h4>
                       {submitResult?.messages?.success && (
                         <div className="success-banner">{submitResult.messages.success}</div>
                       )}
@@ -607,7 +601,7 @@ export default function GenericApiView({
                       {submitResult?.error && <div className="error-banner">{submitResult.error}</div>}
                       {Object.entries(data.formFields).map(([key, val]: any) => (
                         <div key={key}>
-                          <label className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5 block">
+                          <label className="font-label text-xs font-semibold text-text-muted mb-1.5 block">
                             {key.replace(/-/g, " ")}
                           </label>
                           <input
@@ -631,7 +625,7 @@ export default function GenericApiView({
                 ) : (
                   <div className="solid-card mb-5">
                     <div className="p-5">
-                      <h4 className="text-sm font-semibold text-text-muted uppercase tracking-wider mb-4">Details</h4>
+                      <h4 className="font-label text-sm font-semibold text-text-muted mb-4">Details</h4>
                       <div className="grid grid-cols-2 gap-x-4 gap-y-3">
                         {Object.entries(data.formFields).map(([key, field]: any) => (
                           <Field key={key} label={field.label || key} value={field.value || ""} />

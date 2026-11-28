@@ -36,9 +36,7 @@ function renderTable(table: PatronTable, idx: number) {
                   </span>
                 ) : (
                   <>
-                    <span className="text-xs font-bold uppercase tracking-wider text-text-muted block">
-                      {headers[ci] || ""}
-                    </span>
+                    <span className="font-label text-xs font-bold text-text-muted block">{headers[ci] || ""}</span>
                     <span className="text-xs font-semibold text-text-primary truncate block">
                       {String(cell ?? "—")}
                     </span>

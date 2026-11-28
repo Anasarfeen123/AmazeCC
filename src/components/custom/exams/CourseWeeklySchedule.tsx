@@ -235,9 +235,7 @@ export default function CourseWeeklySchedule({
               <div key={dayKey} className="space-y-2">
                 <div className="flex items-center justify-between px-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
-                      {full}
-                    </span>
+                    <span className="font-label text-xs font-bold text-text-muted">{full}</span>
                     {isToday && (
                       <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-xs font-bold uppercase bg-success-surface text-success-foreground border border-border-ink">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />

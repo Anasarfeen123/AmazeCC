@@ -406,7 +406,7 @@ export default function TabHelpFooter({ tabId }: { tabId: string }) {
                     {/* Step-by-Step Breakdown */}
                     {Array.isArray(item.steps) && item.steps.length > 0 && (
                       <div className="p-3 rounded-xl bg-surface border-2 border-border-ink space-y-2 text-xs font-medium text-text-primary">
-                        <span className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1">
+                        <span className="font-label text-xs font-bold text-primary flex items-center gap-1">
                           <ListOrdered className="w-3 h-3" /> Step-by-Step Instructions:
                         </span>
                         {item.steps.map((step, sIdx) => (

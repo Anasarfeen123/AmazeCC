@@ -239,10 +239,7 @@ export default function TaskEditSheet({
 
           {/* Title */}
           <div>
-            <label
-              htmlFor="task-title"
-              className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5"
-            >
+            <label htmlFor="task-title" className="font-label block text-xs font-bold text-text-muted mb-1.5">
               Task Title <span className="text-danger-foreground">*</span>
             </label>
             <input
@@ -257,9 +254,7 @@ export default function TaskEditSheet({
 
           {/* Kind Selector */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5">
-              Type / Category
-            </label>
+            <label className="font-label block text-xs font-bold text-text-muted mb-1.5">Type / Category</label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {TASK_KINDS.map((k) => {
                 const isSelected = kind === k;
@@ -286,7 +281,7 @@ export default function TaskEditSheet({
 
           {/* Status */}
           <div>
-            <span className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5">Status</span>
+            <span className="font-label block text-xs font-bold text-text-muted mb-1.5">Status</span>
             <div role="group" aria-label="Status" className="flex gap-2">
               {(["pending", "in_progress", "done"] as TaskStatus[]).map((s) => (
                 <button
@@ -311,9 +306,7 @@ export default function TaskEditSheet({
           {/* Course Linking */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5">
-                Course Link
-              </label>
+              <label className="font-label block text-xs font-bold text-text-muted mb-1.5">Course Link</label>
               <div className="relative">
                 <SelectField
                   value={courseCode}
@@ -334,9 +327,7 @@ export default function TaskEditSheet({
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5">
-                Component
-              </label>
+              <label className="font-label block text-xs font-bold text-text-muted mb-1.5">Component</label>
               <div className="flex rounded-xl bg-surface-secondary p-1 border-2 border-border-ink">
                 {(["theory", "lab", "both"] as TaskComponent[]).map((comp) => (
                   <button
@@ -356,10 +347,7 @@ export default function TaskEditSheet({
 
           {/* Due Date */}
           <div>
-            <label
-              htmlFor="task-due"
-              className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5"
-            >
+            <label htmlFor="task-due" className="font-label block text-xs font-bold text-text-muted mb-1.5">
               Due Date & Time
             </label>
             <input
@@ -374,7 +362,7 @@ export default function TaskEditSheet({
           {/* Reminders section */}
           <div className="p-3.5 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-2.5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-text-primary flex items-center gap-1.5">
+              <span className="font-label text-xs font-bold text-text-primary flex items-center gap-1.5">
                 <Bell className="w-3.5 h-3.5 text-primary" />
                 In-App Reminders
               </span>
@@ -459,7 +447,7 @@ export default function TaskEditSheet({
           <div className="p-3.5 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-2.5">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-text-primary flex items-center gap-1.5">
+                <span className="font-label text-xs font-bold text-text-primary flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5 text-primary" />
                   Weekly Time Slots
                 </span>
@@ -516,7 +504,7 @@ export default function TaskEditSheet({
           {/* Pomodoro Settings */}
           <div className="p-3.5 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-2.5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-text-primary flex items-center gap-1.5">
+              <span className="font-label text-xs font-bold text-text-primary flex items-center gap-1.5">
                 <Timer className="w-3.5 h-3.5 text-warning-foreground" />
                 Pomodoro Focus Plan
               </span>
@@ -580,10 +568,7 @@ export default function TaskEditSheet({
 
           {/* Notes */}
           <div>
-            <label
-              htmlFor="task-notes"
-              className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1.5"
-            >
+            <label htmlFor="task-notes" className="font-label block text-xs font-bold text-text-muted mb-1.5">
               Notes / Instructions
             </label>
             <textarea

@@ -404,9 +404,7 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
                                 { label: "Slot", value: subj.slot === "-" ? "TBA" : subj.slot || "TBA" },
                               ].map((field) => (
                                 <div key={field.label} className="min-w-0">
-                                  <p className="text-xs font-bold uppercase tracking-wider text-text-muted">
-                                    {field.label}
-                                  </p>
+                                  <p className="font-label text-xs font-bold text-text-muted">{field.label}</p>
                                   <p className="text-[12.5px] font-bold text-text-primary truncate mt-0.5">
                                     {field.value}
                                   </p>
@@ -414,9 +412,7 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
                               ))}
                             </div>
                             <div className="flex items-center justify-between gap-3 min-w-0 pt-1.5">
-                              <p className="text-xs font-bold uppercase tracking-wider text-text-muted shrink-0">
-                                Seat
-                              </p>
+                              <p className="font-label text-xs font-bold text-text-muted shrink-0">Seat</p>
                               <p className="text-[12.5px] font-bold text-text-primary truncate">
                                 Loc: {seatLabel(subj) || "TBA"} · No: {subj.seatNo || "TBA"}
                               </p>
@@ -514,9 +510,7 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
         >
           <div className="p-4 space-y-4">
             <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-text-muted block mb-2">
-                Exam Series
-              </label>
+              <label className="font-label text-xs font-bold text-text-muted block mb-2">Exam Series</label>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
@@ -527,7 +521,7 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
                       : "border-border-ink hover:bg-surface-hover text-text-primary"
                   }`}
                 >
-                  <div className="text-xs text-text-muted font-bold uppercase tracking-wider">All Series</div>
+                  <div className="font-label text-xs text-text-muted font-bold">All Series</div>
                   <div className="text-sm font-bold mt-0.5">All Exams ({allRows.length})</div>
                 </button>
                 {examTypes.map((t) => {
@@ -544,7 +538,7 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
                           : "border-border-ink hover:bg-surface-hover text-text-primary"
                       }`}
                     >
-                      <div className="text-xs text-text-muted font-bold uppercase tracking-wider">Series</div>
+                      <div className="font-label text-xs text-text-muted font-bold">Series</div>
                       <div className="text-sm font-bold mt-0.5">
                         {t} ({count})
                       </div>
@@ -555,9 +549,7 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
             </div>
 
             <div className="pt-2 border-t border-border-ink">
-              <label className="text-xs font-bold uppercase tracking-wider text-text-muted block mb-2">
-                Download Format
-              </label>
+              <label className="font-label text-xs font-bold text-text-muted block mb-2">Download Format</label>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"

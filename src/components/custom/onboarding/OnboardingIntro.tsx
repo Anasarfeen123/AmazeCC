@@ -451,7 +451,7 @@ function SignInRejection({
       <div className="flex items-start gap-2">
         <KeyRound size={14} className="mt-0.5 shrink-0 text-warning-foreground" />
         <div className="min-w-0 space-y-1">
-          <p className="text-xs font-bold uppercase tracking-wider text-warning-foreground">
+          <p className="font-label text-xs font-bold text-warning-foreground">
             {badCredentials ? "Check your password" : "Sign-in rejected"}
           </p>
           <p className="text-xs font-semibold leading-relaxed text-text-secondary">

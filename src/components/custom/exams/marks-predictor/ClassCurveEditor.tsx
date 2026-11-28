@@ -73,7 +73,7 @@ export default function ClassCurveEditor({
           }}
         >
           <label className="flex flex-col gap-1">
-            <span className="text-xs font-bold uppercase tracking-widest text-text-muted">Mean μ</span>
+            <span className="font-label text-xs font-bold text-text-muted">Mean μ</span>
             <input
               type="number"
               inputMode="decimal"
@@ -87,7 +87,7 @@ export default function ClassCurveEditor({
             />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-xs font-bold uppercase tracking-widest text-text-muted">Std dev σ</span>
+            <span className="font-label text-xs font-bold text-text-muted">Std dev σ</span>
             <input
               type="number"
               inputMode="decimal"

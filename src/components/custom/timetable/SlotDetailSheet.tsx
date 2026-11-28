@@ -53,7 +53,7 @@ const CLS_TONE: Record<AttendanceTone["cls"], string> = {
 function Section({ icon: Icon, label, children }: { icon: typeof User; label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-2">
-      <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-text-primary">
+      <p className="font-label flex items-center gap-1.5 text-xs font-bold text-text-primary">
         <Icon className="h-3.5 w-3.5 text-text-muted" />
         {label}
       </p>

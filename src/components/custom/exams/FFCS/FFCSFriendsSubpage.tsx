@@ -346,7 +346,7 @@ export default function FFCSFriendsSubpage({
 
             <div className="flex items-center gap-3">
               <span className="h-px flex-1 bg-border-muted dark:bg-border/70" />
-              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">or</span>
+              <span className="font-label text-xs font-bold text-muted-foreground">or</span>
               <span className="h-px flex-1 bg-border-muted dark:bg-border/70" />
             </div>
 

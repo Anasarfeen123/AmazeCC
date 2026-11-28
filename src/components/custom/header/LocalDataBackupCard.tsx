@@ -155,9 +155,7 @@ export default function LocalDataBackupCard() {
           className="space-y-3 rounded-[10px] border-2 border-border-ink bg-surface-secondary p-3"
           aria-live="polite"
         >
-          <h4 className="font-display text-xs font-bold uppercase tracking-wide text-text-heading">
-            Review before restoring
-          </h4>
+          <h4 className="font-label font-display text-xs font-bold text-text-heading">Review before restoring</h4>
           <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
             <div>
               <dt className="text-text-muted">Saved local items</dt>

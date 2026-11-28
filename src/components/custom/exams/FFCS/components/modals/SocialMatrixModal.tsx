@@ -52,7 +52,7 @@ export function SocialMatrixModal({
           closeLabel="Close social breakdown"
         >
           <div>
-            <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2">How it works</h4>
+            <h4 className="font-label text-sm font-bold text-muted-foreground mb-2">How it works</h4>
             <p className="text-sm text-text-heading/80 leading-relaxed max-w-3xl">
               The Social Score is a percentage indicating how well your timetable aligns with your friends' timetables.
               It awards points for <strong className="text-text-heading">Shared Classes</strong> (+3 per slot),

@@ -68,7 +68,7 @@ export default function AutoTimetableViewCard({
             <span className="font-bold text-xs sm:text-sm text-text-heading font-outfit block">
               Timetable {selectedVariantIndex + 1} of {autoResultsList.length}
             </span>
-            <span className="text-xs text-primary font-bold uppercase tracking-wider block">
+            <span className="font-label text-xs text-primary font-bold block">
               {selectedVariantIndex === 0 ? "★ Top Recommended" : "Generated Variant"}
             </span>
           </div>

@@ -189,9 +189,7 @@ export function TargetCourseLockCard({
 
       {isSelected && uniqueSlots.length > 1 && selection && (
         <div className="mt-2 space-y-2 pl-8">
-          <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            Filter Slots (Optional)
-          </div>
+          <div className="font-label text-xs font-bold text-muted-foreground">Filter Slots (Optional)</div>
           {clusters.length > 0 && (
             <div className="space-y-1">
               <div className="text-xs font-bold uppercase text-text-heading/70">Quick Select Slot Bundles</div>

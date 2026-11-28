@@ -2070,7 +2070,7 @@ export default function CourseDetailSubpage({
               {blocks.map(({ key, label, data }) => (
                 <div key={key} className={TILE_CARD}>
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <h3 className="text-xs font-bold uppercase tracking-widest text-text-heading flex items-center gap-2">
+                    <h3 className="font-label text-xs font-bold text-text-heading flex items-center gap-2">
                       <CalendarIcon size={16} className="text-primary" />
                       <span>{label}</span>
                     </h3>
@@ -2937,7 +2937,7 @@ export default function CourseDetailSubpage({
                               <div className="p-4 bg-surface-secondary/40 border-t border-border-muted dark:border-border/70 space-y-3">
                                 {suggestions && (
                                   <div className="p-3 rounded-xl bg-surface border border-border-muted space-y-1">
-                                    <span className="text-xs font-bold uppercase tracking-wider text-text-muted block">
+                                    <span className="font-label text-xs font-bold text-text-muted block">
                                       Student Suggestions & Committee Feedback
                                     </span>
                                     <p className="text-xs sm:text-sm font-medium text-text-heading leading-relaxed">
@@ -2948,7 +2948,7 @@ export default function CourseDetailSubpage({
 
                                 {facultyReply && (
                                   <div className="p-3 rounded-xl bg-success-surface border border-border-ink text-emerald-950 dark:text-emerald-200 space-y-1">
-                                    <span className="text-xs font-bold uppercase tracking-wider text-success-foreground block">
+                                    <span className="font-label text-xs font-bold text-success-foreground block">
                                       Faculty Response / Action Taken
                                     </span>
                                     <p className="text-xs sm:text-sm font-medium leading-relaxed">{facultyReply}</p>
@@ -2957,9 +2957,7 @@ export default function CourseDetailSubpage({
 
                                 {hodComments && (
                                   <div className="p-3 rounded-xl bg-secondary border border-border-ink text-primary space-y-1">
-                                    <span className="text-xs font-bold uppercase tracking-wider text-primary block">
-                                      HOD Remarks
-                                    </span>
+                                    <span className="font-label text-xs font-bold text-primary block">HOD Remarks</span>
                                     <p className="text-xs sm:text-sm font-medium leading-relaxed">{hodComments}</p>
                                   </div>
                                 )}

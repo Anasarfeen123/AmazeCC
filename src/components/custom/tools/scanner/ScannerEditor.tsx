@@ -251,7 +251,7 @@ export default function ScannerEditor({
         </button>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-white/90">
+          <span className="font-label text-xs font-bold text-white/90">
             {pageCount > 1 ? `Crop · Page ${pageCount}` : "Crop & Align"}
           </span>
           {detecting && (

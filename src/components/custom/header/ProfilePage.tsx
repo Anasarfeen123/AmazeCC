@@ -869,9 +869,7 @@ export default function ProfilePage({
                       </div>
                     )}
                     <div className="min-w-0 flex-1">
-                      <span className="text-xs font-bold uppercase tracking-wider text-primary block mb-0.5">
-                        {person.role}
-                      </span>
+                      <span className="font-label text-xs font-bold text-primary block mb-0.5">{person.role}</span>
                       <p className="font-bold text-sm text-text-heading truncate font-outfit">
                         {person.details.name || "N/A"}
                       </p>
@@ -948,7 +946,7 @@ export default function ProfilePage({
                     key={String(label)}
                     className="p-3.5 rounded-2xl bg-surface-secondary border-2 border-border-ink space-y-1"
                   >
-                    <p className="text-xs font-bold text-text-muted uppercase tracking-wider">{String(label)}</p>
+                    <p className="font-label text-xs font-bold text-text-muted">{String(label)}</p>
                     <p
                       data-private="identity"
                       className="font-bold text-xs sm:text-sm text-text-primary break-words font-outfit"
@@ -970,7 +968,7 @@ export default function ProfilePage({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {profileData.currentAddress && (
                 <div className="bg-surface-secondary p-4 sm:p-5 rounded-2xl border-2 border-border-ink space-y-3">
-                  <p className="text-xs font-bold text-primary uppercase tracking-widest">Current Address</p>
+                  <p className="font-label text-xs font-bold text-primary">Current Address</p>
                   <div className="grid grid-cols-2 gap-3 text-xs">
                     {Object.entries(profileData.currentAddress)
                       .filter(([, v]) => v)
@@ -985,7 +983,7 @@ export default function ProfilePage({
               )}
               {profileData.permanentAddress && (
                 <div className="bg-surface-secondary p-4 sm:p-5 rounded-2xl border-2 border-border-ink space-y-3">
-                  <p className="text-xs font-bold text-primary uppercase tracking-widest">Permanent Address</p>
+                  <p className="font-label text-xs font-bold text-primary">Permanent Address</p>
                   <div className="grid grid-cols-2 gap-3 text-xs">
                     {Object.entries(profileData.permanentAddress)
                       .filter(([, v]) => v)
@@ -1041,9 +1039,7 @@ export default function ProfilePage({
           <p className="text-sm font-bold text-text-heading font-outfit tracking-tight mb-3">VTOP portal</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <label className="block space-y-1.5">
-              <span className="text-xs font-bold uppercase tracking-wider text-text-muted block">
-                VTOP registration / username
-              </span>
+              <span className="font-label text-xs font-bold text-text-muted block">VTOP registration / username</span>
               <input
                 type="text"
                 value={changedUsername}
@@ -1053,7 +1049,7 @@ export default function ProfilePage({
             </label>
 
             <label className="block space-y-1.5">
-              <span className="text-xs font-bold uppercase tracking-wider text-text-muted block">VTOP password</span>
+              <span className="font-label text-xs font-bold text-text-muted block">VTOP password</span>
               <span className="relative block">
                 <input
                   type={showAppPassword ? "text" : "password"}
@@ -1092,7 +1088,7 @@ export default function ProfilePage({
           <p className="text-sm font-bold text-text-heading font-outfit tracking-tight mb-3">LMS (Moodle)</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <label className="block space-y-1.5">
-              <span className="text-xs font-bold uppercase tracking-wider text-text-muted block">LMS username</span>
+              <span className="font-label text-xs font-bold text-text-muted block">LMS username</span>
               <input
                 type="text"
                 value={lmsUsername}
@@ -1103,7 +1099,7 @@ export default function ProfilePage({
             </label>
 
             <label className="block space-y-1.5">
-              <span className="text-xs font-bold uppercase tracking-wider text-text-muted block">LMS password</span>
+              <span className="font-label text-xs font-bold text-text-muted block">LMS password</span>
               <span className="relative block">
                 <input
                   type={showLmsPassword ? "text" : "password"}
@@ -1138,7 +1134,7 @@ export default function ProfilePage({
           <p className="text-sm font-bold text-text-heading font-outfit tracking-tight mb-3">Koha library</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <label className="block space-y-1.5">
-              <span className="text-xs font-bold uppercase tracking-wider text-text-muted block">Card number</span>
+              <span className="font-label text-xs font-bold text-text-muted block">Card number</span>
               <input
                 type="text"
                 value={kohaCard}
@@ -1148,7 +1144,7 @@ export default function ProfilePage({
               />
             </label>
             <label className="block space-y-1.5">
-              <span className="text-xs font-bold uppercase tracking-wider text-text-muted block">Library password</span>
+              <span className="font-label text-xs font-bold text-text-muted block">Library password</span>
               <input
                 type="password"
                 value={kohaPassword}

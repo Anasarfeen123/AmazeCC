@@ -1651,7 +1651,7 @@ export default function FFCSGuidedSelector({
                   {/* Slot Bundles and Granular Constraints */}
                   {isSelected && sel && courseOpts.length > 0 && (
                     <div className="pl-7 mt-2 pt-2 border-t border-border-ink space-y-2">
-                      <div className="text-xs font-bold text-text-muted uppercase tracking-wider">
+                      <div className="font-label text-xs font-bold text-text-muted">
                         Slot Bundles (Optional Constraints)
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -1712,7 +1712,7 @@ export default function FFCSGuidedSelector({
 
                           return (
                             <div className="space-y-1 pt-1 border-t border-border-ink">
-                              <div className="text-xs font-bold text-text-muted uppercase tracking-wider">
+                              <div className="font-label text-xs font-bold text-text-muted">
                                 Preferred Faculty (Optional)
                               </div>
                               <div className="flex flex-wrap gap-1.5">
@@ -1784,9 +1784,7 @@ export default function FFCSGuidedSelector({
       >
         <div className="flex items-center justify-between gap-2 shrink-0">
           <div>
-            <h3 className="text-sm font-bold text-text-heading uppercase tracking-wider font-outfit">
-              1. Select Target Courses
-            </h3>
+            <h3 className="font-label text-sm font-bold text-text-heading">1. Select Target Courses</h3>
             <p className="text-xs text-text-muted">
               Choose all courses you want the solver to build into your schedule.
             </p>
@@ -1987,9 +1985,7 @@ export default function FFCSGuidedSelector({
                         className="mt-2 pt-2.5 border-t border-border-ink space-y-2.5 cursor-default text-left"
                       >
                         <div className="flex items-center justify-between text-xs">
-                          <span className="font-bold text-text-heading text-xs font-outfit uppercase tracking-wider">
-                            Options for {c.code}
-                          </span>
+                          <span className="font-label font-bold text-text-heading text-xs">Options for {c.code}</span>
                           <div className="flex items-center gap-2">
                             <button
                               type="button"
@@ -2014,9 +2010,7 @@ export default function FFCSGuidedSelector({
                         {/* Quick Slot Bundles */}
                         {availableClusters.length > 0 && (
                           <div className="space-y-1">
-                            <span className="text-xs font-bold text-text-muted uppercase tracking-wider block">
-                              Slot Bundles
-                            </span>
+                            <span className="font-label text-xs font-bold text-text-muted block">Slot Bundles</span>
                             <div className="flex flex-wrap gap-1">
                               {availableClusters.map((clusterKey) => {
                                 const clusterSlots = clusterMap.get(clusterKey)?.slots || [];
@@ -2046,9 +2040,7 @@ export default function FFCSGuidedSelector({
                         {/* Individual Slots */}
                         {uniqueSlots.length > 0 && (
                           <div className="space-y-1">
-                            <span className="text-xs font-bold text-text-muted uppercase tracking-wider block">
-                              Individual Slots
-                            </span>
+                            <span className="font-label text-xs font-bold text-text-muted block">Individual Slots</span>
                             <div className="flex flex-wrap gap-1">
                               {uniqueSlots.map((slot) => {
                                 const checked = sel.allowedSlots.includes(slot);
@@ -2075,7 +2067,7 @@ export default function FFCSGuidedSelector({
                         {/* Preferred Faculty */}
                         {faculties.length > 0 && (
                           <div className="space-y-1">
-                            <span className="text-xs font-bold text-text-muted uppercase tracking-wider block">
+                            <span className="font-label text-xs font-bold text-text-muted block">
                               Preferred Faculty
                             </span>
                             <div className="flex flex-wrap gap-1">
@@ -2186,9 +2178,7 @@ export default function FFCSGuidedSelector({
         <div className="shrink-0 space-y-2 pb-2 border-b border-border-ink">
           <div className="flex items-center justify-between gap-2">
             <div>
-              <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
-                Select Course to Configure:
-              </span>
+              <span className="font-label text-xs font-bold text-text-muted">Select Course to Configure:</span>
             </div>
             <button
               type="button"
@@ -2265,9 +2255,7 @@ export default function FFCSGuidedSelector({
           <div className="space-y-2.5">
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="text-xs font-bold text-text-heading uppercase tracking-wider font-outfit">
-                  1. Allowed Slots
-                </h4>
+                <h4 className="font-label text-xs font-bold text-text-heading">1. Allowed Slots</h4>
                 <p className="text-xs text-text-muted">
                   Select specific slot bundles or individual slots. Leave empty to allow any slot.
                 </p>
@@ -2290,7 +2278,7 @@ export default function FFCSGuidedSelector({
             {/* Slot Bundles */}
             {availableClusters.length > 0 && (
               <div className="space-y-1.5">
-                <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Quick Select Bundles</span>
+                <span className="font-label text-xs font-bold text-text-muted">Quick Select Bundles</span>
                 <div className="flex flex-wrap gap-1.5">
                   {availableClusters.map((clusterKey) => {
                     const clusterSlots = clusterMap.get(clusterKey)?.slots || [];
@@ -2351,7 +2339,7 @@ export default function FFCSGuidedSelector({
             {/* Individual Slot Chips */}
             {uniqueSlots.length > 0 && (
               <div className="space-y-1.5 pt-1">
-                <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Individual Slots</span>
+                <span className="font-label text-xs font-bold text-text-muted">Individual Slots</span>
                 <div className="flex flex-wrap gap-1.5">
                   {uniqueSlots.map((slot) => {
                     const checked = isSlotChecked(slot);
@@ -2391,9 +2379,7 @@ export default function FFCSGuidedSelector({
           <div className="space-y-2.5 pt-2 border-t border-border-ink">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5">
               <div>
-                <h4 className="text-xs font-bold text-text-heading uppercase tracking-wider font-outfit">
-                  2. Preferred Faculty
-                </h4>
+                <h4 className="font-label text-xs font-bold text-text-heading">2. Preferred Faculty</h4>
                 <p className="text-xs text-text-muted">
                   Select preferred professors. If none are selected, all faculty will be considered.
                 </p>
@@ -2551,9 +2537,7 @@ export default function FFCSGuidedSelector({
       >
         <div className="space-y-4">
           <div>
-            <h3 className="text-sm font-bold text-text-heading uppercase tracking-wider font-outfit">
-              5. Free Half-Days &amp; Limits
-            </h3>
+            <h3 className="font-label text-sm font-bold text-text-heading">5. Free Half-Days &amp; Limits</h3>
             <p className="text-xs text-text-muted">
               Set target free mornings/afternoons, daily pacing rules, and the maximum timetables to generate.
             </p>
@@ -2563,9 +2547,7 @@ export default function FFCSGuidedSelector({
           <div className="p-3.5 rounded-2xl bg-surface-secondary border border-border-ink space-y-2">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-xs font-bold text-text-heading uppercase tracking-wider font-outfit block">
-                  Minimum Free Half-Days
-                </span>
+                <span className="font-label text-xs font-bold text-text-heading block">Minimum Free Half-Days</span>
                 <span className="text-xs text-text-muted">Mornings or afternoons with 0 scheduled classes.</span>
               </div>
               <span className="text-sm font-bold text-success-foreground font-outfit">
@@ -2598,7 +2580,7 @@ export default function FFCSGuidedSelector({
           <div className="p-3.5 rounded-2xl bg-surface-secondary border border-border-ink space-y-2.5">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-xs font-bold text-text-heading uppercase tracking-wider font-outfit block">
+                <span className="font-label text-xs font-bold text-text-heading block">
                   Maximum Timetables to Generate
                 </span>
                 <span className="text-xs text-text-muted">Caps search depth to balance solve speed with variety.</span>
@@ -2654,9 +2636,7 @@ export default function FFCSGuidedSelector({
 
           <div className="space-y-2 rounded-2xl border border-border-ink bg-surface-secondary p-3.5 text-left">
             <div>
-              <span className="block text-xs font-bold text-text-heading uppercase tracking-wider font-outfit">
-                Lab Scheduling
-              </span>
+              <span className="font-label block text-xs font-bold text-text-heading">Lab Scheduling</span>
               <span className="text-xs text-text-muted">
                 These rules only apply to different lab classes; slots within one lab class stay together.
               </span>
@@ -2709,7 +2689,7 @@ export default function FFCSGuidedSelector({
 
           {/* Section 3: Pacing Style */}
           <div className="space-y-1.5">
-            <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Daily Class Pacing Style</span>
+            <span className="font-label text-xs font-bold text-text-muted">Daily Class Pacing Style</span>
             <div className="grid grid-cols-2 gap-2">
               {[
                 { id: "compact", label: "Compact & Packed", desc: "Minimizes idle gaps between classes" },
@@ -2785,19 +2765,19 @@ export default function FFCSGuidedSelector({
           {/* Live Metrics Dashboard */}
           <div className="grid grid-cols-3 gap-2.5 w-full max-w-md">
             <div className="p-3 rounded-2xl bg-background border border-border-ink">
-              <span className="text-xs font-bold text-text-muted uppercase tracking-wider block">Nodes Explored</span>
+              <span className="font-label text-xs font-bold text-text-muted block">Nodes Explored</span>
               <span className="text-base sm:text-lg font-bold text-text-heading font-mono">
                 {generation.progress?.nodes?.toLocaleString() ?? 0}
               </span>
             </div>
             <div className="p-3 rounded-2xl bg-background border border-border-ink bg-secondary">
-              <span className="text-xs font-bold text-primary uppercase tracking-wider block">Found</span>
+              <span className="font-label text-xs font-bold text-primary block">Found</span>
               <span className="text-base sm:text-lg font-bold text-primary font-mono">
                 {generation.progress?.found?.toLocaleString() ?? 0}
               </span>
             </div>
             <div className="p-3 rounded-2xl bg-background border border-border-ink bg-emerald-950/20">
-              <span className="text-xs font-bold text-success-foreground uppercase tracking-wider block">Accepted</span>
+              <span className="font-label text-xs font-bold text-success-foreground block">Accepted</span>
               <span className="text-base sm:text-lg font-bold text-success-foreground font-mono">
                 {generation.progress?.accepted?.toLocaleString() ?? 0}
               </span>
@@ -2824,9 +2804,7 @@ export default function FFCSGuidedSelector({
       >
         <div className="space-y-4">
           <div>
-            <h3 className="text-sm font-bold text-text-heading uppercase tracking-wider font-outfit">
-              6. Generation Blueprint
-            </h3>
+            <h3 className="font-label text-sm font-bold text-text-heading">6. Generation Blueprint</h3>
             <p className="text-xs text-text-muted">Review your parameters before launching the solver.</p>
           </div>
 
@@ -2881,16 +2859,14 @@ export default function FFCSGuidedSelector({
 
           <section className="p-4 rounded-2xl bg-background border border-border-ink space-y-4">
             <div>
-              <h4 className="text-xs font-bold text-text-heading uppercase tracking-wider">
-                Ranking &amp; Faculty Reviews
-              </h4>
+              <h4 className="font-label text-xs font-bold text-text-heading">Ranking &amp; Faculty Reviews</h4>
               <p className="text-xs text-text-muted mt-1">
                 Customize this run without changing your saved Planner Settings.
               </p>
             </div>
 
             <div className="space-y-2">
-              <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Ranking Profile</span>
+              <span className="font-label text-xs font-bold text-text-muted">Ranking Profile</span>
               <div className="flex flex-wrap gap-1.5">
                 {[
                   { value: null, label: "No profile" },
@@ -2917,7 +2893,7 @@ export default function FFCSGuidedSelector({
             </div>
 
             <div className="space-y-2">
-              <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Sort Order</span>
+              <span className="font-label text-xs font-bold text-text-muted">Sort Order</span>
               <div className="flex flex-wrap gap-1.5">
                 {AUTO_SORT_OPTIONS.map((option) => (
                   <button
@@ -2939,9 +2915,7 @@ export default function FFCSGuidedSelector({
 
             <div className="space-y-2">
               <div>
-                <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
-                  Combined Ranking Priority
-                </span>
+                <span className="font-label text-xs font-bold text-text-muted">Combined Ranking Priority</span>
                 <p className="text-xs text-text-muted">Move the most important factor to the top.</p>
               </div>
               <div className="space-y-1.5">
@@ -2981,9 +2955,7 @@ export default function FFCSGuidedSelector({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <div>
-                  <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
-                    Faculty Score Priorities
-                  </span>
+                  <span className="font-label text-xs font-bold text-text-muted">Faculty Score Priorities</span>
                   <p className="text-xs text-text-muted">0 ignores a score; maximum weight is 5.</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -3014,9 +2986,7 @@ export default function FFCSGuidedSelector({
 
               <div className="space-y-2">
                 <div>
-                  <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
-                    Minimum Faculty Scores
-                  </span>
+                  <span className="font-label text-xs font-bold text-text-muted">Minimum Faculty Scores</span>
                   <p className="text-xs text-text-muted">0 disables a filter; unrated faculty are not rejected.</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -3049,7 +3019,7 @@ export default function FFCSGuidedSelector({
 
           {effectiveCourseLocks.length > 0 && (
             <div className="space-y-1.5">
-              <span className="text-xs font-bold text-text-muted uppercase tracking-wider">Courses:</span>
+              <span className="font-label text-xs font-bold text-text-muted">Courses:</span>
               <div className="flex flex-wrap gap-1.5">
                 {effectiveCourseLocks.map((l) => (
                   <span
@@ -3115,7 +3085,7 @@ export default function FFCSGuidedSelector({
             <span className="font-bold text-xs sm:text-sm text-text-heading font-outfit truncate block">
               Recommendation {selectedVariantIndex + 1} of {autoResultsList.length}
             </span>
-            <span className="text-xs text-primary font-bold uppercase tracking-wider">
+            <span className="font-label text-xs text-primary font-bold">
               {selectedVariantIndex === 0 ? "★ Top Recommended" : "Alternative Option"}
             </span>
           </div>
@@ -3194,7 +3164,7 @@ export default function FFCSGuidedSelector({
           <section className="rounded-2xl border border-border-ink bg-secondary p-3.5 space-y-2 shrink-0">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-primary">Combined ranking</span>
+                <span className="font-label text-xs font-bold text-primary">Combined ranking</span>
                 <p className="text-xs text-text-muted">
                   {currentVariant.rankingScore.toFixed(1)}/100 · unrated faculty lower review coverage
                 </p>
@@ -3225,9 +3195,7 @@ export default function FFCSGuidedSelector({
 
         {/* Course Roster with Faculty Review, Schedule & Replacement */}
         <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar">
-          <span className="text-xs font-bold text-text-muted uppercase tracking-wider block">
-            Scheduled Courses &amp; Faculties:
-          </span>
+          <span className="font-label text-xs font-bold text-text-muted block">Scheduled Courses &amp; Faculties:</span>
           {currentVariant.courses.map((course) => (
             <div
               key={course.id || course.code}
@@ -3366,14 +3334,14 @@ export default function FFCSGuidedSelector({
                 </span>
               </div>
               {isCurrentActive ? (
-                <span className="text-xs text-success-foreground font-bold uppercase tracking-wider block">
+                <span className="font-label text-xs text-success-foreground font-bold block">
                   ● Mounted Active Timetable
                 </span>
               ) : (
                 <button
                   type="button"
                   onClick={() => onSelectTimetable && onSelectTimetable(currentTt.id)}
-                  className="text-xs text-primary hover:text-primary font-bold uppercase tracking-wider block cursor-pointer underline"
+                  className="font-label text-xs text-primary hover:text-primary font-bold block cursor-pointer underline"
                 >
                   Set as Active Schedule
                 </button>
@@ -3882,7 +3850,7 @@ export default function FFCSGuidedSelector({
       {selectedOffering && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           <div className="p-3.5 rounded-2xl bg-background border border-border-ink space-y-2">
-            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-text-muted">
+            <div className="font-label flex items-center gap-1.5 text-xs font-bold text-text-muted">
               <Users className="w-3 h-3 text-text-muted" />
               <span>Instructor &amp; Venue</span>
             </div>
@@ -3925,7 +3893,7 @@ export default function FFCSGuidedSelector({
           </div>
 
           <div className="p-3.5 rounded-2xl bg-background border border-border-ink space-y-2">
-            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-text-muted">
+            <div className="font-label flex items-center gap-1.5 text-xs font-bold text-text-muted">
               <Clock className="w-3 h-3 text-text-muted" />
               <span>Allocated Slots</span>
             </div>
@@ -3946,7 +3914,7 @@ export default function FFCSGuidedSelector({
       {vitfacEnabled && selectedOffering && selectedCourseMeta && (
         <div className="space-y-2 pt-1">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-text-muted flex items-center gap-1.5">
+            <span className="font-label text-xs font-bold text-text-muted flex items-center gap-1.5">
               <Star className="w-3 h-3 text-warning-foreground" />
               <span>Faculty Reputation &amp; Vitfac Lore</span>
             </span>
@@ -5368,7 +5336,7 @@ export default function FFCSGuidedSelector({
                       <div className="w-12 h-12 rounded-2xl bg-secondary border border-border-ink flex items-center justify-center text-secondary-foreground shadow-lg">
                         <LayoutGrid className="w-6 h-6" />
                       </div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-primary font-outfit">
+                      <span className="font-label text-xs font-bold text-primary">
                         Phase {getPillsList().indexOf("manual_timetable_view") + 1} of {getPillsList().length} ·
                         Timetable Browser
                       </span>

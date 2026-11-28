@@ -573,7 +573,7 @@ export default function OverallAttendancePredictor({
           {/* Calendar Header & Month Switcher */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-border-muted dark:border-border">
             <div>
-              <h3 className="text-sm font-bold text-text-heading uppercase tracking-wider flex items-center gap-2">
+              <h3 className="font-label text-sm font-bold text-text-heading flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-primary" />
                 <span>Interactive day simulator{currentMonth ? ` (${currentMonth})` : ""}</span>
               </h3>
@@ -642,7 +642,7 @@ export default function OverallAttendancePredictor({
                             : "bg-surface text-text-primary border-border-ink hover:border-border-ink dark:hover:border-border-ink shadow-2xs"
                     }`}
                   >
-                    <span className="text-xs font-bold uppercase tracking-wider opacity-80">{shortWeekday}</span>
+                    <span className="font-label text-xs font-bold opacity-80">{shortWeekday}</span>
                     <span className="text-base sm:text-lg font-bold my-0.5">{dateNumber}</span>
                     <div className="flex items-center gap-1">
                       <span
@@ -921,7 +921,7 @@ export default function OverallAttendancePredictor({
       <div className={`${TILE_CARD} p-5 space-y-3 border-border-ink`}>
         <div className="flex items-center gap-2">
           <Zap className="w-4 h-4 text-primary" />
-          <h4 className="text-xs font-bold uppercase tracking-wider text-primary dark:text-primary font-outfit">
+          <h4 className="font-label text-xs font-bold text-primary dark:text-primary">
             Smart Attendance Insights & Exam Guidelines
           </h4>
         </div>

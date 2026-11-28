@@ -223,7 +223,7 @@ export default function FresherWelcomePage({
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
                 {Object.entries(eptData.keyValuePairs).map(([key, val]) => (
                   <div key={key} className="p-3 rounded-xl bg-surface-secondary border-2 border-border-ink">
-                    <p className="text-xs font-bold text-text-muted uppercase tracking-wider mb-0.5">
+                    <p className="font-label text-xs font-bold text-text-muted mb-0.5">
                       {key.replace(/([A-Z])/g, " $1")}
                     </p>
                     <p className="text-xs font-bold text-text-heading truncate">{String(val)}</p>

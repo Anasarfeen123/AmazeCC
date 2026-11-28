@@ -396,7 +396,7 @@ export default function CatalogSearch({ variant, isDemo, onSearched, autoFocus, 
 
       {detail?.subjects && detail.subjects.length > 0 && (
         <div className="space-y-1.5">
-          <p className="text-xs font-bold uppercase tracking-wider text-text-muted">Subjects</p>
+          <p className="font-label text-xs font-bold text-text-muted">Subjects</p>
           <div className="flex flex-wrap gap-1.5">
             {detail.subjects.map((s) => (
               <span key={s} className={CHIP}>
@@ -409,7 +409,7 @@ export default function CatalogSearch({ variant, isDemo, onSearched, autoFocus, 
 
       {detail?.summary && (
         <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-text-muted mb-1">Summary</p>
+          <p className="font-label text-xs font-bold text-text-muted mb-1">Summary</p>
           <p className="text-xs text-text-primary leading-relaxed">{detail.summary}</p>
         </div>
       )}
@@ -450,7 +450,7 @@ export default function CatalogSearch({ variant, isDemo, onSearched, autoFocus, 
                     }`}
                   >
                     {g.available}/{g.total}
-                    <span className="ml-1 text-xs font-bold uppercase tracking-wider text-text-muted">free</span>
+                    <span className="font-label ml-1 text-xs font-bold text-text-muted">free</span>
                   </p>
                 </div>
 

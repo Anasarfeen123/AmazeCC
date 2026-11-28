@@ -1,6 +1,7 @@
 "use client";
 
 import { totalCreditsEarned } from "@/lib/credits";
+import HomeShortcuts from "./HomeShortcuts";
 import PullToRefresh from "../shared/PullToRefresh";
 import MessToday from "./MessToday";
 import HomeNudge from "./HomeNudge";
@@ -28,6 +29,14 @@ import {
   WifiOff,
   X,
   ChevronDown,
+  CalendarDays,
+  PenLine,
+  Gauge,
+  BadgeCheck,
+  ArrowLeft,
+  BarChart3,
+  Utensils,
+  ListTodo,
 } from "lucide-react";
 
 import { AnimatePresence, m } from "framer-motion";
@@ -44,7 +53,7 @@ import { buildExamRows, classifyExamState } from "@/lib/examSchedule";
 import { dateKey } from "@/lib/calendarDay";
 import { isLabFatMarked, labFatPapersByDate, labSlotTokens, type LabFatPaper } from "@/lib/labFatWeek";
 import { cn } from "@amazecontinuityprojects/amazeui";
-import { ICON_BUTTON, TILE_INTERACTIVE, TONE_BADGE } from "@/lib/uiTokens";
+import { ICON_BUTTON, TONE_BADGE, TONE_ICON_TILE } from "@/lib/uiTokens";
 import { facultyDisplayName, greetingName, shortCourseName } from "@/lib/displayNames";
 import { privacyCategories, type PrivacyCategory } from "@/lib/privacyMode";
 import BrandLogo from "../shared/BrandLogo";
@@ -58,7 +67,6 @@ import {
   InsightCarousel,
   StatTile,
   ListShell,
-  SectionHeader,
   useCarousel,
   useHorizontalSwipe,
   type InsightSlide,
@@ -1407,6 +1415,104 @@ export default function SimplifiedMobileHome({
   );
   // The answer first (Home critique P2): today's live or next class as a card
   // above the stat tiles — course, time, room and how long until it starts.
+  // ── Top shortcuts (owner: "add some important buttons to the top"). One
+  // row under the greeting on every screen size; it replaces the four big
+  // quick-action tiles that sat at the bottom of the page.
+  const homeShortcuts = [
+    { key: "timetable", label: "Timetable", Icon: CalendarDays, onClick: () => setShowTimetableModal(true) },
+    {
+      key: "exams",
+      label: "Exams",
+      Icon: PenLine,
+      onClick: () => {
+        setActiveTab("academics");
+        setActiveSubTab("schedule");
+      },
+    },
+    {
+      key: "predictor",
+      label: "Skip predictor",
+      Icon: Gauge,
+      onClick: () => {
+        setActiveTab("tools");
+        setActiveToolsSubTab?.("attendance-predictor");
+      },
+    },
+    { key: "rooms", label: "Free rooms", Icon: DoorOpen, onClick: handleOpenFreeClassrooms },
+    {
+      key: "od",
+      label: "On-duty",
+      Icon: BadgeCheck,
+      onClick: () => {
+        setActiveTab("attendance");
+        setActiveAttendanceSubTab("od");
+      },
+    },
+    { key: "faculty", label: "Faculty", Icon: UserSearch, onClick: () => handleOpenFacultySchedule() },
+    {
+      key: "marks",
+      label: "Marks",
+      Icon: BarChart3,
+      onClick: () => {
+        setActiveTab("academics");
+        setActiveSubTab("courses-simplified");
+      },
+    },
+    {
+      key: "calendar",
+      label: "Calendar",
+      Icon: CalendarIcon,
+      onClick: () => {
+        setActiveTab("attendance");
+        setActiveAttendanceSubTab("calendar");
+      },
+    },
+    {
+      key: "mess",
+      label: "Mess menu",
+      Icon: Utensils,
+      onClick: () => {
+        setActiveTab("hostel");
+        setHostelActiveSubTab?.("mess");
+      },
+    },
+    {
+      key: "tasks",
+      label: "Tasks",
+      Icon: ListTodo,
+      onClick: () => {
+        setActiveTab("tools");
+        setActiveToolsSubTab?.("tasks");
+      },
+    },
+    {
+      key: "classmates",
+      label: "Classmates",
+      Icon: UsersRound,
+      onClick: () => {
+        try {
+          setTypedStorageItem("friend_finder_source", "home");
+        } catch {}
+        setActiveTab("friend-finder");
+      },
+    },
+  ];
+
+  // ── "Your day" panel data (wide screens): today's class span and what is left.
+  const todayClassList: any[] = timetableMap[todayDayCode] || [];
+  const daySummary = (() => {
+    if (!todayClassList.length) return null;
+    const first = String(todayClassList[0]?.time || "")
+      .split("-")[0]
+      ?.trim();
+    const last = String(todayClassList[todayClassList.length - 1]?.time || "")
+      .split("-")[1]
+      ?.trim();
+    const nowMin = minuteNow.getHours() * 60 + minuteNow.getMinutes();
+    const left = todayClassList.filter((c) => parseClassTimeMinutes(c.time).endMinutes > nowMin).length;
+    return { count: todayClassList.length, first, last, left };
+  })();
+
   const nowNextCard = (() => {
     if (!isTodayView) return null;
     const liveIdx = rowStatuses.indexOf("live");
@@ -1462,7 +1568,7 @@ export default function SimplifiedMobileHome({
             panel runs down the right from the top, like a calendar app's side
             panel (owner: the first two-column try felt bolted on). Grid
             placement only, so the phone order is unchanged. */}
-        <div className="w-full lg:flex-1 lg:min-w-0 space-y-6 text-left xl:grid xl:grid-cols-[minmax(0,1fr)_340px] xl:gap-x-8 xl:gap-y-6 xl:space-y-0 2xl:grid-cols-[minmax(0,1fr)_380px]">
+        <div className="w-full lg:flex-1 lg:min-w-0 space-y-6 text-left xl:grid xl:grid-rows-[auto_1fr] xl:content-start xl:grid-cols-[minmax(0,1fr)_340px] xl:gap-x-8 xl:gap-y-6 xl:space-y-0 2xl:grid-cols-[minmax(0,1fr)_380px]">
           <div className="space-y-6 xl:col-start-1 xl:row-start-1">
             {/* Pull down at the top to sync (touch screens). */}
             <PullToRefresh onRefresh={handleSyncClick} disabled={isOffline} />
@@ -1531,6 +1637,31 @@ export default function SimplifiedMobileHome({
                 >
                   <Search className="w-4 h-4" />
                 </button>
+
+                {/* Wide screens: the space beside the greeting gets the two
+                    things used most (owner: "add here something"). */}
+                <button
+                  type="button"
+                  onClick={onOpenCommandPalette}
+                  className="hidden min-h-10 cursor-pointer items-center gap-2 rounded-[10px] border-2 border-border-ink bg-surface px-3 text-sm text-text-muted shadow-brutal-sm brutal-press md:inline-flex lg:min-w-[240px]"
+                  aria-label="Search"
+                >
+                  <Search className="h-4 w-4 shrink-0" aria-hidden />
+                  <span className="flex-1 text-left">Search anything</span>
+                  <kbd className="rounded-[6px] border-2 border-border-ink bg-surface-secondary px-1.5 font-mono text-xs font-bold text-text-heading">
+                    ⌘K
+                  </kbd>
+                </button>
+                {!isOffline ? (
+                  <button
+                    type="button"
+                    onClick={handleSyncClick}
+                    className="hidden min-h-10 cursor-pointer items-center gap-2 rounded-[10px] border-2 border-border-ink bg-primary px-3.5 text-sm font-semibold text-primary-foreground shadow-brutal-sm brutal-press md:inline-flex"
+                  >
+                    <RefreshCcw className={`h-4 w-4 ${isSpinning ? "animate-spin" : ""}`} aria-hidden />
+                    Sync
+                  </button>
+                ) : null}
 
                 {/* Bug Report Top-Right Button */}
                 <button
@@ -2361,154 +2492,197 @@ export default function SimplifiedMobileHome({
             aria-label="Your day"
             className="space-y-4 text-left xl:col-start-2 xl:row-span-2 xl:row-start-1 xl:sticky xl:top-6 xl:self-start xl:rounded-[18px] xl:border-2 xl:border-border-ink xl:bg-surface-secondary xl:p-5 xl:shadow-brutal-sm"
           >
-            {/* Panel heading, wide screens only (phones read it as part of the page). */}
-            <div className="hidden xl:block">
-              <p className="font-hand text-xl font-bold leading-none text-primary">
-                {new Date().toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "short" })}
-              </p>
-              <h2 className="mt-1 font-title text-2xl font-extrabold text-text-heading">Your day</h2>
-            </div>
-            {/* ── TODAY'S TASKS SECTION (WHEN TASKSINLINEONHOME IS FALSE) ── */}
-            {settings?.tasksInlineOnHome === false && todayTasks.length > 0 && (
-              <div className="pt-2 space-y-2.5">
-                <div className="flex items-center justify-between px-1">
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-primary" />
-                    <h3 className="text-sm font-bold text-text-heading font-outfit">
-                      Today&apos;s Tasks &amp; Schedule
-                    </h3>
-                    <span className="text-xs font-bold px-2 py-0.5 rounded-[6px] bg-surface-secondary text-text-muted">
-                      {todayTasks.length}
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setActiveTab("tools");
-                      setActiveToolsSubTab?.("tasks");
-                    }}
-                    className="text-xs font-bold text-primary hover:underline cursor-pointer"
-                  >
-                    View All Tasks
-                  </button>
-                </div>
+            {/* Wide screens: a course opened from the timetable shows here, in
+                the panel, instead of as a third column (owner screenshot). */}
+            {selectedCourseObj ? (
+              <div className="hidden space-y-3 xl:block">
+                <button
+                  type="button"
+                  onClick={() => setSelectedCourseCode(null)}
+                  className="inline-flex min-h-9 cursor-pointer items-center gap-1.5 rounded-[10px] border-2 border-border-ink bg-surface px-3 text-sm font-semibold text-text-heading shadow-brutal-sm brutal-press"
+                >
+                  <ArrowLeft className="h-4 w-4" aria-hidden />
+                  Your day
+                </button>
+                <DesktopCourseDetail
+                  course={selectedCourseObj}
+                  isDayscholarWithBus={settings?.isDayscholarWithBus || false}
+                  decimalValues={settings?.decimalValues || false}
+                  dayCardsMap={timetableMap}
+                  results={analyzedCalendarResults}
+                  onViewFullPage={() => {
+                    if (!selectedCourseObj?.courseCode) return;
+                    const cleanCode = String(selectedCourseObj.courseCode)
+                      .replace(/\([LPT]\)$/i, "")
+                      .trim();
+                    try {
+                      setTypedStorageItem("course_dashboard_target", cleanCode);
+                      setTypedStorageItem("course_dashboard_tab", "overview");
+                    } catch {}
+                    setActiveTab("academics");
+                    setActiveSubTab("course-dashboard");
+                  }}
+                  className="w-full text-left"
+                />
+              </div>
+            ) : null}
 
-                <ListShell>
-                  {todayTasks.map((t) => (
-                    <div
-                      key={t.id}
-                      {...clickable(() => {
+            <div className={`space-y-4 ${selectedCourseObj ? "xl:hidden" : ""}`}>
+              {/* Panel heading, wide screens only (phones read it as part of the page). */}
+              <div className="hidden xl:block">
+                <p className="font-hand text-xl font-bold leading-none text-primary">
+                  {new Date().toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "short" })}
+                </p>
+                <h2 className="mt-1 font-title text-2xl font-extrabold text-text-heading">Your day</h2>
+              </div>
+
+              {/* Today at a glance (wide screens; phones see the timetable right above). */}
+              <div className="hidden grid-cols-3 gap-2 xl:grid">
+                {[
+                  ["Classes", daySummary ? String(daySummary.count) : "0"],
+                  ["Left today", daySummary ? String(daySummary.left) : "0"],
+                  ["Ends", daySummary?.last || "Free"],
+                ].map(([k, v]) => (
+                  <div key={k} className="rounded-[12px] border-2 border-border-ink bg-surface px-3 py-2">
+                    <p className="font-label text-xs font-semibold text-text-muted">{k}</p>
+                    <p className="font-display text-lg font-bold leading-tight text-text-heading">{v}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Next exam with where to sit. */}
+              {nextUpcomingExam ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveTab("academics");
+                    setActiveSubTab("schedule");
+                  }}
+                  className="hidden w-full cursor-pointer items-center gap-3 rounded-[12px] border-2 border-border-ink bg-surface p-3 text-left shadow-brutal-sm brutal-press xl:flex"
+                >
+                  <span
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border ${TONE_ICON_TILE.red}`}
+                  >
+                    <PenLine className="h-4.5 w-4.5" aria-hidden />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-label text-xs font-semibold text-text-muted">
+                      Next exam · {nextUpcomingExam.examType}
+                    </span>
+                    <span className="block truncate font-title text-base font-extrabold leading-tight text-text-heading">
+                      {nextUpcomingExam.raw.courseTitle || nextUpcomingExam.raw.courseCode}
+                    </span>
+                    <span className="block truncate text-xs text-text-muted">
+                      {[
+                        String(nextUpcomingExam.raw.examDate || "").replace(
+                          /^0?(\d{1,2})-([A-Za-z]{3})-\d{4}$/,
+                          "$1 $2",
+                        ),
+                        nextUpcomingExam.raw.venue && nextUpcomingExam.raw.venue !== "-"
+                          ? nextUpcomingExam.raw.venue
+                          : null,
+                        nextUpcomingExam.raw.seatNo ? `Seat ${nextUpcomingExam.raw.seatNo}` : null,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </span>
+                  </span>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-text-muted" aria-hidden />
+                </button>
+              ) : null}
+              {/* ── TODAY'S TASKS SECTION (WHEN TASKSINLINEONHOME IS FALSE) ── */}
+              {settings?.tasksInlineOnHome === false && todayTasks.length > 0 && (
+                <div className="pt-2 space-y-2.5">
+                  <div className="flex items-center justify-between px-1">
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-primary" />
+                      <h3 className="text-sm font-bold text-text-heading font-outfit">
+                        Today&apos;s Tasks &amp; Schedule
+                      </h3>
+                      <span className="text-xs font-bold px-2 py-0.5 rounded-[6px] bg-surface-secondary text-text-muted">
+                        {todayTasks.length}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
                         setActiveTab("tools");
                         setActiveToolsSubTab?.("tasks");
-                      })}
-                      className="p-3.5 flex items-center justify-between gap-3 text-left hover:bg-surface-hover cursor-pointer transition-colors"
+                      }}
+                      className="text-xs font-bold text-primary hover:underline cursor-pointer"
                     >
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <span
-                            className={`text-xs font-bold uppercase px-1.5 py-0.2 rounded border ${
-                              (KIND_CONFIG[t.kind] || KIND_CONFIG.homework).badgeClass
-                            }`}
-                          >
-                            {(KIND_CONFIG[t.kind] || KIND_CONFIG.homework).label}
-                          </span>
-                          {t.courseCode && <span className="text-xs font-bold text-text-muted">{t.courseCode}</span>}
+                      View All Tasks
+                    </button>
+                  </div>
+
+                  <ListShell>
+                    {todayTasks.map((t) => (
+                      <div
+                        key={t.id}
+                        {...clickable(() => {
+                          setActiveTab("tools");
+                          setActiveToolsSubTab?.("tasks");
+                        })}
+                        className="p-3.5 flex items-center justify-between gap-3 text-left hover:bg-surface-hover cursor-pointer transition-colors"
+                      >
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5 mb-1">
+                            <span
+                              className={`text-xs font-bold uppercase px-1.5 py-0.2 rounded border ${
+                                (KIND_CONFIG[t.kind] || KIND_CONFIG.homework).badgeClass
+                              }`}
+                            >
+                              {(KIND_CONFIG[t.kind] || KIND_CONFIG.homework).label}
+                            </span>
+                            {t.courseCode && <span className="text-xs font-bold text-text-muted">{t.courseCode}</span>}
+                          </div>
+                          <h4 className="text-xs font-bold text-text-heading truncate font-outfit">{t.title}</h4>
                         </div>
-                        <h4 className="text-xs font-bold text-text-heading truncate font-outfit">{t.title}</h4>
+                        <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
                       </div>
-                      <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
-                    </div>
-                  ))}
-                </ListShell>
-              </div>
-            )}
+                    ))}
+                  </ListShell>
+                </div>
+              )}
 
-            {/* Install offer, phones only (it lived only in Settings, where
+              {/* Install offer, phones only (it lived only in Settings, where
                 few found it). Hides itself once installed or dismissed. */}
-            {!isDemoMode && (
-              <div className="md:hidden">
-                <PwaInstallCard />
-              </div>
-            )}
+              {!isDemoMode && (
+                <div className="md:hidden">
+                  <PwaInstallCard />
+                </div>
+              )}
 
-            {/* ── QUICK ACTIONS ──
+              {/* ── QUICK ACTIONS ──
                 One uniform grid instead of five full-width buttons in five
                 colours (the main source of clutter on the old home). Bug
                 reports already have a button in the header. */}
-            {/* Hostellers only (user): the next meal, one tap to the menu. */}
-            {(hostelData as any)?.hostelInfo?.isHosteller && settings?.residentialStatus !== "dayscholar" ? (
-              <MessToday
-                hostelInfo={(hostelData as any).hostelInfo}
-                onOpen={() => {
-                  setActiveTab("hostel");
-                  setHostelActiveSubTab?.("mess");
-                }}
-              />
-            ) : null}
+              {/* Hostellers only (user): the next meal, one tap to the menu. */}
+              {(hostelData as any)?.hostelInfo?.isHosteller && settings?.residentialStatus !== "dayscholar" ? (
+                <MessToday
+                  hostelInfo={(hostelData as any).hostelInfo}
+                  onOpen={() => {
+                    setActiveTab("hostel");
+                    setHostelActiveSubTab?.("mess");
+                  }}
+                />
+              ) : null}
 
-            <section aria-label="Quick actions" className="space-y-3 pt-2">
-              <SectionHeader title="Quick actions" />
-              <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-1 gap-3 xl:gap-2 pr-1 pb-1">
-                {[
-                  {
-                    key: "timetable",
-                    label: "Weekly timetable",
-                    help: "Every class, Mon to Sun",
-                    Icon: CalendarIcon,
-                    onClick: () => setShowTimetableModal(true),
-                  },
-                  {
-                    key: "rooms",
-                    label: "Free classrooms",
-                    help: "Empty rooms right now",
-                    Icon: DoorOpen,
-                    onClick: handleOpenFreeClassrooms,
-                  },
-                  {
-                    key: "faculty",
-                    label: "Faculty schedule",
-                    help: "Where a teacher is",
-                    Icon: UserSearch,
-                    onClick: () => handleOpenFacultySchedule(),
-                  },
-                  {
-                    key: "classmates",
-                    label: "Find classmates",
-                    help: "Who shares your slots",
-                    Icon: UsersRound,
-                    onClick: () => {
-                      try {
-                        setTypedStorageItem("friend_finder_source", "home");
-                      } catch {}
-                      setActiveTab("friend-finder");
-                    },
-                  },
-                ].map(({ key, label, help, Icon, onClick }) => (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={onClick}
-                    className={`${TILE_INTERACTIVE} !p-3 sm:!p-4 min-h-[104px] gap-3 !justify-start xl:!min-h-0 xl:!flex-row xl:items-center xl:!py-2.5`}
-                  >
-                    <span className="flex h-10 w-10 items-center justify-center rounded-[10px] border-2 border-border-ink bg-secondary text-secondary-foreground">
-                      <Icon className="h-5 w-5" aria-hidden />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block font-title text-base font-extrabold leading-tight text-text-heading">
-                        {label}
-                      </span>
-                      <span className="mt-0.5 block text-xs text-text-muted">{help}</span>
-                    </span>
-                  </button>
-                ))}
+              {/* Shortcuts: pills at the bottom of the page on phones (where the
+                  quick actions were), a grid in the panel on wide screens. */}
+              <div className="pt-2 xl:hidden">
+                <HomeShortcuts all={homeShortcuts} variant="row" />
               </div>
-            </section>
+              <div className="hidden xl:block">
+                <HomeShortcuts all={homeShortcuts} variant="panel" />
+              </div>
+            </div>
           </aside>
         </div>
 
         {/* ── RIGHT COLUMN: DESKTOP COURSE SIDE VIEW PANE (SHOWN ON CLASS CLICK) ── */}
         {selectedCourseObj && (
-          <aside className="hidden lg:block w-80 xl:w-96 shrink-0 sticky top-6 self-start animate-in fade-in duration-200">
+          <aside className="hidden lg:block xl:hidden w-80 shrink-0 sticky top-6 self-start animate-in fade-in duration-200">
             <div className="relative">
               <button
                 type="button"

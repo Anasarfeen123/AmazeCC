@@ -485,7 +485,7 @@ function CoursePredictorPageInner({ course, marksStats, actionsSlotRef }: Course
         <div className="flex items-center justify-between gap-2 min-w-0 px-1">
           <div className="flex items-center gap-2 min-w-0">
             <span className={`w-2.5 h-2.5 rounded-full ${dotClass} shrink-0`} />
-            <h4 className="text-xs font-bold text-text-heading font-outfit uppercase tracking-wider truncate">
+            <h4 className="font-label text-xs font-bold text-text-heading truncate">
               {label} ({rows.length})
             </h4>
           </div>
@@ -611,14 +611,8 @@ function CoursePredictorPageInner({ course, marksStats, actionsSlotRef }: Course
           ]}
         />
         <div className="h-3 w-full rounded-xl bg-surface-tertiary dark:bg-surface-secondary overflow-hidden flex">
-          <div
-            style={{ width: `${scoredPercent}%` }}
-            className="h-full bg-primary transition-all duration-300"
-          />
-          <div
-            style={{ width: `${pendingPercent}%` }}
-            className="h-full bg-sage transition-all duration-300"
-          />
+          <div style={{ width: `${scoredPercent}%` }} className="h-full bg-primary transition-all duration-300" />
+          <div style={{ width: `${pendingPercent}%` }} className="h-full bg-sage transition-all duration-300" />
           <div
             style={{ width: `${lostPercent}%` }}
             className="h-full bg-red-500 dark:bg-red-600 transition-all duration-300"

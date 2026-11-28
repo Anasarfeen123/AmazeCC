@@ -243,9 +243,7 @@ export function FacultyScheduleModal({
 
                 {selected.names.length > 1 && (
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                      Also listed as
-                    </span>
+                    <span className="font-label text-xs font-bold text-muted-foreground">Also listed as</span>
                     {selected.names.map((name) => (
                       <span
                         key={name}

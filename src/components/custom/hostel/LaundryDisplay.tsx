@@ -225,7 +225,7 @@ export default function LaundrySchedule({ hostelData, handleHostelDetailsFetch }
         {/* Slot Quick Finder panel */}
         <div className="bg-surface border-2 border-border-ink rounded-2xl p-5 shadow-2xs space-y-4">
           <div className="space-y-1">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary block">Personal Slot Finder</span>
+            <span className="font-label text-xs font-bold text-primary block">Personal Slot Finder</span>
             <h3 className="text-sm font-bold text-text-heading">Find slots by Room</h3>
           </div>
 
@@ -271,7 +271,7 @@ export default function LaundrySchedule({ hostelData, handleHostelDetailsFetch }
         {/* Dynamic slots preview */}
         <div className="lg:col-span-2 bg-surface border-2 border-border-ink rounded-2xl p-5 shadow-2xs flex flex-col justify-between">
           <div className="space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary block">Your Scheduled Dates</span>
+            <span className="font-label text-xs font-bold text-primary block">Your Scheduled Dates</span>
             <h3 className="text-sm font-bold text-text-heading">All matching dates for Room {searchRoom || "—"}</h3>
 
             {matchingSlots.length > 0 ? (
@@ -290,9 +290,7 @@ export default function LaundrySchedule({ hostelData, handleHostelDetailsFetch }
                       <span className="block text-xs text-text-muted font-semibold mb-0.5">Date</span>
                       <span className="text-sm">{slot.Date}</span>
                       {isCurrentDay && (
-                        <span className="block text-xs uppercase tracking-wider text-success-foreground mt-0.5">
-                          Today
-                        </span>
+                        <span className="font-label block text-xs text-success-foreground mt-0.5">Today</span>
                       )}
                     </div>
                   );
@@ -319,7 +317,7 @@ export default function LaundrySchedule({ hostelData, handleHostelDetailsFetch }
         {/* Left: Compact Monthly Grid */}
         <div className="bg-surface border-2 border-border-ink rounded-2xl p-4 shadow-2xs space-y-3">
           <div className="flex items-center justify-between border-b border-border-muted pb-2">
-            <h3 className="text-xs font-bold uppercase tracking-widest text-text-muted flex items-center gap-1.5">
+            <h3 className="font-label text-xs font-bold text-text-muted flex items-center gap-1.5">
               <CalendarDays size={13} className="text-primary" /> Slot Calendar
             </h3>
             <div className="flex items-center gap-2 text-xs font-semibold">
@@ -395,7 +393,7 @@ export default function LaundrySchedule({ hostelData, handleHostelDetailsFetch }
         {/* Right: Selected Day details card */}
         <div className="bg-surface border-2 border-border-ink rounded-2xl p-5 shadow-2xs flex flex-col justify-between">
           <div className="space-y-4">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary block">Selected Slot Details</span>
+            <span className="font-label text-xs font-bold text-primary block">Selected Slot Details</span>
 
             {selectedDay ? (
               <div className="space-y-3">
@@ -412,7 +410,7 @@ export default function LaundrySchedule({ hostelData, handleHostelDetailsFetch }
                   <div className="space-y-3">
                     <div className="bg-surface-secondary border border-border-muted rounded-xl p-3.5 space-y-2 text-xs">
                       <div>
-                        <span className="text-xs font-bold uppercase tracking-wider text-text-muted block mb-0.5">
+                        <span className="font-label text-xs font-bold text-text-muted block mb-0.5">
                           Room Slot Range
                         </span>
                         <span className="font-bold text-text-primary text-sm">{selectedSlot.RoomNumber}</span>

@@ -1778,7 +1778,7 @@ export function FFCSGeneratorSubpage({
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                         {Object.entries(generatorPreviewTimetable.rankingBreakdown ?? {}).map(([key, points]) => (
                           <div key={key} className="rounded-xl bg-surface/80 border border-border-strong/60 px-3 py-2">
-                            <span className="block text-xs uppercase tracking-wide text-muted-foreground">
+                            <span className="font-label block text-xs text-muted-foreground">
                               {key in RANKING_FACTOR_META ? RANKING_FACTOR_META[key as RankingFactor].label : key}
                             </span>
                             <span className="font-bold text-text-heading">{points.toFixed(1)} pts</span>
@@ -2100,7 +2100,7 @@ export function FFCSGeneratorSubpage({
                                 </div>
                                 <div className="flex items-center gap-3">
                                   <div className="flex-1 flex flex-col overflow-hidden">
-                                    <span className="text-xs text-danger-foreground font-bold uppercase tracking-wider">
+                                    <span className="font-label text-xs text-danger-foreground font-bold">
                                       From {dash.fromBlock}
                                     </span>
                                     <span
@@ -2112,7 +2112,7 @@ export function FFCSGeneratorSubpage({
                                   </div>
                                   <div className="text-danger-foreground"></div>
                                   <div className="flex-1 flex flex-col text-right overflow-hidden">
-                                    <span className="text-xs text-danger-foreground font-bold uppercase tracking-wider">
+                                    <span className="font-label text-xs text-danger-foreground font-bold">
                                       To {dash.toBlock}
                                     </span>
                                     <span
@@ -2689,7 +2689,7 @@ export function FFCSGeneratorSubpage({
 
                         {generatorTargets.length > 0 && (
                           <div className="mb-4 space-y-2">
-                            <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                            <div className="font-label text-xs font-bold text-muted-foreground">
                               Locked target courses
                             </div>
                             <div className="flex flex-col gap-2">
@@ -2738,9 +2738,7 @@ export function FFCSGeneratorSubpage({
                         />
 
                         <div className="flex flex-wrap items-center gap-1.5 mb-3">
-                          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground mr-1">
-                            Group by
-                          </span>
+                          <span className="font-label text-xs font-bold text-muted-foreground mr-1">Group by</span>
                           {(
                             [
                               { id: "none", label: "None" },
@@ -2758,9 +2756,7 @@ export function FFCSGeneratorSubpage({
                               {opt.label}
                             </button>
                           ))}
-                          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-2 mr-1">
-                            Sort
-                          </span>
+                          <span className="font-label text-xs font-bold text-muted-foreground ml-2 mr-1">Sort</span>
                           {(
                             [
                               { id: "code", label: "Code" },
@@ -3072,7 +3068,7 @@ export function FFCSGeneratorSubpage({
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
                           <div>
-                            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-1.5">
+                            <p className="font-label text-xs font-semibold text-muted-foreground mb-1.5">
                               Ranking factors
                             </p>
                             <ListShell>
@@ -3131,7 +3127,7 @@ export function FFCSGeneratorSubpage({
                           </div>
 
                           <div className={enabledFactors.includes("faculty") ? "" : "opacity-60"}>
-                            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                            <p className="font-label text-xs font-semibold text-muted-foreground">
                               Faculty score priorities
                             </p>
                             <p className="mt-0.5 mb-1.5 text-xs text-muted-foreground">

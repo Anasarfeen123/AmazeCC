@@ -1179,9 +1179,7 @@ export default function FeedbackReportPage({
                     {/* Section 2: Concern Details */}
                     <div className="pt-3 space-y-1.5">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
-                          Report Concern
-                        </span>
+                        <span className="font-label text-xs font-bold text-text-muted">Report Concern</span>
                         <button
                           type="button"
                           onClick={() => setGuidedStep(2)}
@@ -1200,7 +1198,7 @@ export default function FeedbackReportPage({
                     {/* Section 3: Telemetry & Recording */}
                     <div className="pt-3 space-y-1.5">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
+                        <span className="font-label text-xs font-bold text-text-muted">
                           Session Reproduction Telemetry
                         </span>
                         <button
@@ -1249,9 +1247,7 @@ export default function FeedbackReportPage({
                     {/* Section 4: Contact & Route */}
                     <div className="pt-3 space-y-1.5">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">
-                          Contact & Destination
-                        </span>
+                        <span className="font-label text-xs font-bold text-text-muted">Contact & Destination</span>
                         <button
                           type="button"
                           onClick={() => setGuidedStep(3)}

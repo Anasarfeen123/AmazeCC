@@ -3613,7 +3613,7 @@ export default function FFCSTimetableTab({
                 ]}
               />
               <div className="grid grid-cols-2 gap-2">
-                <label className="min-w-0 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                <label className="font-label min-w-0 text-xs font-bold text-muted-foreground">
                   Theory slot
                   <select
                     aria-label="Filter by theory slot"
@@ -3632,7 +3632,7 @@ export default function FFCSTimetableTab({
                     ))}
                   </select>
                 </label>
-                <label className="min-w-0 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                <label className="font-label min-w-0 text-xs font-bold text-muted-foreground">
                   Lab slot
                   <select
                     aria-label="Filter by lab slot"

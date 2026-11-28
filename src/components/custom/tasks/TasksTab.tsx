@@ -295,9 +295,7 @@ export default function TasksTab({ initialView = "kanban", initialCourseCode, on
         {/* CARD 1: OPEN TASKS */}
         <div className={CARD_BASE}>
           <div className="flex items-center justify-between gap-1">
-            <span className="text-xs sm:text-xs font-bold uppercase tracking-wider text-text-muted font-outfit truncate">
-              Open tasks
-            </span>
+            <span className="font-label text-xs sm:text-xs font-bold text-text-muted truncate">Open tasks</span>
             <span
               className={`text-xs font-bold uppercase px-1 py-0 sm:px-2 sm:py-0.5 rounded-md shrink-0 border ${
                 TONE_BADGE[overdueTasks.length > 0 ? "red" : "emerald"]

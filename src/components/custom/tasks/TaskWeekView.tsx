@@ -75,7 +75,7 @@ export default function TaskWeekView({ tasks, onEdit, onNewTask }: TaskWeekViewP
             >
               {/* Day Column Header */}
               <div className="flex items-center justify-between pb-2 border-b border-border-ink mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-text-primary font-outfit">{day}</span>
+                <span className="font-label text-xs font-bold text-text-primary">{day}</span>
                 <span className="text-xs font-bold px-1.5 py-0.2 rounded-[10px] bg-surface text-text-muted border-2 border-border-ink min-h-9">
                   {items.length}
                 </span>

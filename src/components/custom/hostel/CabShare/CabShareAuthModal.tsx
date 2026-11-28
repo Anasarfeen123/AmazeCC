@@ -9,7 +9,7 @@ import { AlertCircle, ArrowRight, Car, ExternalLink, Loader2, Phone, Shield } fr
 import { ListRowText, ListShell, SectionHeader } from "../../shared/primitives";
 import { FIELD_INPUT, LIST_ROW, TILE_CARD, TONE_ICON_TILE } from "@/lib/uiTokens";
 
-const FIELD_LABEL = "block text-xs font-bold uppercase tracking-wider text-text-muted";
+const FIELD_LABEL = "font-label block text-xs font-bold text-text-muted";
 const AUTH_BASE = process.env.NEXT_PUBLIC_AUTH_URL ?? "https://auth.amazecc.com";
 
 const STEPS = [
@@ -152,7 +152,7 @@ export default function CabShareAuthModal({
             <Car className="h-5 w-5" />
           </span>
           <div className="min-w-0">
-            <p className="text-xs font-bold uppercase tracking-wider text-text-muted">One-time setup</p>
+            <p className="font-label text-xs font-bold text-text-muted">One-time setup</p>
             <h2 className="mt-1 text-lg font-bold font-outfit tracking-tight text-text-heading">
               Start using Cab Share
             </h2>

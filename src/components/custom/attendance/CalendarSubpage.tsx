@@ -730,9 +730,7 @@ export default function CalendarSubpage({
                                 disappearing: the dot carries it at a glance, the
                                 word makes it unambiguous. On an exam day this is the
                                 series name, so the title can be the subjects. */}
-                            <span className="text-xs font-bold uppercase tracking-wider text-text-muted">
-                              {item.kindText}
-                            </span>
+                            <span className="font-label text-xs font-bold text-text-muted">{item.kindText}</span>
                             <ToneBadge tone={item.tone}>{relativeDayLabel(item.when)}</ToneBadge>
                           </span>
                         }
@@ -880,7 +878,7 @@ function LogRow({ row, onClick }: { row: AttendanceLogRow; onClick: () => void }
             // Same treatment as the Upcoming rows: the dot carries the status in
             // colour and the word confirms it, so the date — the thing you are
             // scanning for — keeps the width.
-            <span className="text-xs font-bold uppercase tracking-wider text-text-muted">{row.label}</span>
+            <span className="font-label text-xs font-bold text-text-muted">{row.label}</span>
           }
         />
       </div>

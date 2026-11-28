@@ -279,14 +279,14 @@ export default function CourseQBankTab({ courseCode, username }: { courseCode: s
                     <h4 className="font-bold text-sm text-text-heading truncate group-hover:text-primary transition-colors">
                       {p.title}
                     </h4>
-                    <p className="text-xs font-bold uppercase tracking-widest text-text-muted mt-1">{p.source_type}</p>
+                    <p className="font-label text-xs font-bold text-text-muted mt-1">{p.source_type}</p>
                   </div>
                 </div>
                 <div className="mt-auto flex items-center justify-between border-t border-border-ink pt-4 relative z-10">
-                  <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
+                  <span className="font-label text-xs font-bold text-text-muted">
                     {p.exam_semester} {p.exam_year}
                   </span>
-                  <span className="text-xs font-bold uppercase tracking-widest text-primary group-hover:translate-x-1 transition-transform">
+                  <span className="font-label text-xs font-bold text-primary group-hover:translate-x-1 transition-transform">
                     View PDF →
                   </span>
                 </div>

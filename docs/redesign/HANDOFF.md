@@ -383,3 +383,8 @@ NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next dev --webpack -p 3017   # backg
   - Phone-app feel: page fade, iOS edge swipe back, haptics in the
     predictor. Perf: `experimental.inlineCss`, accent fonts not preloaded.
   - Tests green (see §6.2); `npm run check:demo` added.
+  - **Mergeable version**: branch `redesign-merged` (fork only) = latest
+    `origin/main` + these features in upstream's UI; fast-forward onto
+    `origin/main`, tests and `check:demo` (19/19) green. `redesign` keeps the
+    brutalist UI.
+

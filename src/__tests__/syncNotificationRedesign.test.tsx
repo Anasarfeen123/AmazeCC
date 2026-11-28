@@ -32,7 +32,7 @@ describe("SyncNotification Redesign", () => {
   // The minimized bar is the default now — expand before asserting on the
   // sheet's contents.
   const expand = () => {
-    fireEvent.click(screen.getByTitle(/expand sync view/i));
+    fireEvent.click(screen.getByTitle(/show sync details/i));
   };
 
   it("renders active session with hero progress and milestones", () => {
@@ -52,7 +52,8 @@ describe("SyncNotification Redesign", () => {
 
     // Headline derived from latest log line
     expect(screen.getAllByText(/Fetching attendance records/i).length).toBeGreaterThan(0);
-    expect(screen.getByText("45%")).toBeDefined();
+    // The percentage shows in the hero and in the minimized bar behind it.
+    expect(screen.getAllByText("45%").length).toBeGreaterThan(0);
 
     // Mode Chip (the exiting minimized pill can linger in the DOM)
     expect(screen.getAllByText("Quick Sync").length).toBeGreaterThan(0);
@@ -63,12 +64,10 @@ describe("SyncNotification Redesign", () => {
     expect(screen.getByText("Marks & Grades")).toBeDefined();
     expect(screen.getByText("Local Storage & Finalize")).toBeDefined();
 
-    // Bottom Red Neon Cancel Button (pill + sheet both carry one)
+    // Cancel (the pill and the sheet both carry one; the sheet's is last).
+    // Colour classes changed with the brand redesign, so assert behaviour.
     const cancelBtns = screen.getAllByRole("button", { name: /cancel sync/i });
-    const cancelBtn = cancelBtns.find((b) => b.className.includes("border-rose-500"))!;
-    expect(cancelBtn).toBeDefined();
-    expect(cancelBtn.className).toContain("border-rose-500");
-    expect(cancelBtn.className).toContain("shadow-");
+    const cancelBtn = cancelBtns.at(-1)!;
     fireEvent.click(cancelBtn);
     expect(onDismiss).toHaveBeenCalledTimes(1);
   });
@@ -147,7 +146,7 @@ describe("SyncNotification Redesign", () => {
     fireEvent.click(minimizeBtn);
 
     // Minimized pill expand button appears
-    const expandBtn = screen.getByTitle(/expand sync view/i);
+    const expandBtn = screen.getByTitle(/show sync details/i);
     expect(expandBtn).toBeDefined();
 
     // Click expand — the exiting pill may linger in the DOM during its exit

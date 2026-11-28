@@ -13,6 +13,17 @@ const fetchMock = vi.fn();
 vi.mock("@/lib/sync-engine/request-layer", () => ({
   apiRequest: (path: string, opts: { method?: string; body?: unknown }) =>
     fetchMock(path, { method: opts?.method, body: opts?.body }),
+  // Imported at module load by the credential manager.
+  setAuthProvider: () => {},
+}));
+
+// Social routes need an Amaze ID token and a VTOP session; stub both so the
+// request reaches the mocked transport.
+vi.mock("@/lib/oauth2", () => ({ getValidAccessToken: async () => "test-token" }));
+vi.mock("@/lib/sync-engine/credential-manager", () => ({
+  credentialManager: {
+    ensureVtopSession: async () => ({ cookies: ["JSESSIONID=x"], authorizedID: "25BCE1234", csrf: "c" }),
+  },
 }));
 
 import { upgradeGrantsToFull } from "../lib/social/visibility";
@@ -46,7 +57,8 @@ describe("upgradeGrantsToFull", () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock).toHaveBeenCalledWith("social/grant/visibility", {
       method: "POST",
-      body: { grantId: "g1", visibility: "full" },
+      // The VTOP session fields ride along for the route's identity check.
+      body: expect.objectContaining({ grantId: "g1", visibility: "full" }),
     });
   });
 

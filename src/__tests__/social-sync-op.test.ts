@@ -1,4 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
+
+// The op calls the social client (Amaze ID token + VTOP session) rather than
+// the engine's generic request; mock that boundary.
+const syncIdentity = vi.fn();
+vi.mock("../lib/social/client", () => ({ syncIdentity: (...a: unknown[]) => syncIdentity(...a) }));
+
 import { getOp } from "../lib/sync-engine/operation-registry";
 import "../lib/sync-engine/operations";
 import {
@@ -40,8 +46,26 @@ const OK_RESPONSE = {
   version: 4,
   busyMap: { "MON:A1": { c: "BACSE101", t: "Course", v: "AB1-607" } },
   courses: [],
-  peers: [{ handle: "AMZ-AAAA-BBBB", name: "Peer", visibility: "coarse", shared: true, lastPublishedAt: null, semesterId: null, isSelf: false }],
-  grantSecrets: [{ grantId: "gr_1", secret: "s".repeat(43), peerHandle: "AMZ-AAAA-BBBB", visibility: "coarse", createdAt: "2026-01-01T00:00:00.000Z" }],
+  peers: [
+    {
+      handle: "AMZ-AAAA-BBBB",
+      name: "Peer",
+      visibility: "coarse",
+      shared: true,
+      lastPublishedAt: null,
+      semesterId: null,
+      isSelf: false,
+    },
+  ],
+  grantSecrets: [
+    {
+      grantId: "gr_1",
+      secret: "s".repeat(43),
+      peerHandle: "AMZ-AAAA-BBBB",
+      visibility: "coarse",
+      createdAt: "2026-01-01T00:00:00.000Z",
+    },
+  ],
 };
 
 describe("social op registration", () => {
@@ -74,66 +98,60 @@ describe("social op demo guard", () => {
 });
 
 describe("social op request", () => {
-  it("posts the proposed semester and merges vtop auth", async () => {
-    const request = vi.fn().mockResolvedValue(OK_RESPONSE);
-    const ctx = makeCtx({ request });
-    await getOp("social")!.run(ctx, { proposedSemesterId: "CH20262701" });
-    expect(request).toHaveBeenCalledWith(
-      "social/identity/sync",
-      { proposedSemesterId: "CH20262701" },
-      expect.objectContaining({ auth: "vtop" })
-    );
+  it("sends the proposed semester", async () => {
+    syncIdentity.mockResolvedValue(OK_RESPONSE);
+    await getOp("social")!.run(makeCtx(), { proposedSemesterId: "CH20262701" });
+    expect(syncIdentity).toHaveBeenLastCalledWith("CH20262701");
   });
 
   it("accepts semesterId as an alias, since the chains disagree on the name", async () => {
-    const request = vi.fn().mockResolvedValue(OK_RESPONSE);
-    await getOp("social")!.run(makeCtx({ request }), { semesterId: "CH20262701" });
-    expect(request.mock.calls[0][1]).toEqual({ proposedSemesterId: "CH20262701" });
+    syncIdentity.mockResolvedValue(OK_RESPONSE);
+    await getOp("social")!.run(makeCtx(), { semesterId: "CH20262701" });
+    expect(syncIdentity).toHaveBeenLastCalledWith("CH20262701");
   });
 
-  it("sends an empty body rather than a malformed one when no term is known", async () => {
-    const request = vi.fn().mockResolvedValue(OK_RESPONSE);
-    await getOp("social")!.run(makeCtx({ request }), {});
-    expect(request.mock.calls[0][1]).toEqual({});
+  it("sends no term rather than a malformed one when none is known", async () => {
+    syncIdentity.mockResolvedValue(OK_RESPONSE);
+    await getOp("social")!.run(makeCtx(), {});
+    expect(syncIdentity).toHaveBeenLastCalledWith(undefined);
   });
 });
 
 describe("social op never throws", () => {
   it("returns null on a network failure instead of rejecting", async () => {
-    const request = vi.fn().mockRejectedValue(new Error("ECONNRESET"));
-    await expect(getOp("social")!.run(makeCtx({ request }), {})).resolves.toBeNull();
+    syncIdentity.mockImplementation(async () => {
+      throw new Error("ECONNRESET");
+    });
+    await expect(getOp("social")!.run(makeCtx(), {})).resolves.toBeNull();
   });
 
   it("returns null on a 401 and keeps the cached copy", async () => {
-    const request = vi.fn().mockRejectedValue(new Error("vtop_session_expired"));
+    syncIdentity.mockImplementation(async () => {
+      throw new Error("vtop_session_expired");
+    });
     const setAtom = vi.fn();
-    await expect(
-      getOp("social")!.run(makeCtx({ request, bridge: { setAtom, getAtom: vi.fn() } }), {})
-    ).resolves.toBeNull();
+    await expect(getOp("social")!.run(makeCtx({ bridge: { setAtom, getAtom: vi.fn() } }), {})).resolves.toBeNull();
     // A failed push must not read as "you have no friends": the error is
     // recorded, but no atom is blanked.
-    expect(setAtom).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.objectContaining({ lastError: expect.any(String) })
-    );
+    expect(setAtom).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ lastError: expect.any(String) }));
   });
 
   it("returns null when the server reports failure", async () => {
-    const request = vi.fn().mockResolvedValue({ success: false, error: "vtop_identity_unresolved" });
-    await expect(getOp("social")!.run(makeCtx({ request }), {})).resolves.toBeNull();
+    syncIdentity.mockResolvedValue({ success: false, error: "vtop_identity_unresolved" });
+    await expect(getOp("social")!.run(makeCtx(), {})).resolves.toBeNull();
   });
 
   it("returns null when the payload has no identity", async () => {
-    const request = vi.fn().mockResolvedValue({ success: true });
-    await expect(getOp("social")!.run(makeCtx({ request }), {})).resolves.toBeNull();
+    syncIdentity.mockResolvedValue({ success: true });
+    await expect(getOp("social")!.run(makeCtx(), {})).resolves.toBeNull();
   });
 });
 
 describe("social op writes", () => {
   it("pushes identity, peers and grants into atoms", async () => {
     const setAtom = vi.fn();
-    const request = vi.fn().mockResolvedValue(OK_RESPONSE);
-    await getOp("social")!.run(makeCtx({ request, bridge: { setAtom, getAtom: vi.fn() } }), {});
+    syncIdentity.mockResolvedValue(OK_RESPONSE);
+    await getOp("social")!.run(makeCtx({ bridge: { setAtom, getAtom: vi.fn() } }), {});
     const values = setAtom.mock.calls.map((c) => c[1]);
     expect(values).toContainEqual(OK_RESPONSE.identity);
     expect(values).toContainEqual(OK_RESPONSE.peers);
@@ -143,9 +161,12 @@ describe("social op writes", () => {
 
   it("records the version and a clean error state on success", async () => {
     const setAtom = vi.fn();
-    const request = vi.fn().mockResolvedValue(OK_RESPONSE);
-    await getOp("social")!.run(makeCtx({ request, bridge: { setAtom, getAtom: vi.fn() } }), {});
-    const state = setAtom.mock.calls.map((c) => c[1]).filter((v) => v && "version" in v).at(-1);
+    syncIdentity.mockResolvedValue(OK_RESPONSE);
+    await getOp("social")!.run(makeCtx({ bridge: { setAtom, getAtom: vi.fn() } }), {});
+    const state = setAtom.mock.calls
+      .map((c) => c[1])
+      .filter((v) => v && "version" in v)
+      .at(-1);
     expect(state.version).toBe(4);
     expect(state.lastError).toBeNull();
     expect(state.lastSyncedAt).toEqual(expect.any(String));

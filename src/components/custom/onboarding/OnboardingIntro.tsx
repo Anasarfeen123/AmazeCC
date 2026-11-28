@@ -586,7 +586,7 @@ function WelcomeFace({ onDone }: { onDone: () => void }) {
         <Brand />
 
         <div className="space-y-2">
-          <p className="font-label text-xs font-semibold text-text-muted">Signed in // synced</p>
+          <p className="font-hand text-2xl font-bold leading-none text-primary">Nice, you&apos;re in.</p>
           <h1 className="font-title text-[28px] sm:text-[36px] font-extrabold leading-[1.05] text-text-heading">
             You&apos;re all set
           </h1>

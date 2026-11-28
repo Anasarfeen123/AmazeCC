@@ -159,6 +159,28 @@ function busiestTeachingDay(months: CalendarMonth[]): number | null {
   return best;
 }
 
+/** Day numbers of the calendar's first CAT-I day, first CAT-II day, and FAT start. */
+function examAnchors(months: CalendarMonth[]): { cat1: number | null; cat2: number | null; fat: number | null } {
+  let cat1: number | null = null;
+  let cat2: number | null = null;
+  let lastTeaching: number | null = null;
+  for (const mo of months) {
+    const [name, year] = mo.month.trim().split(/\s+/);
+    const mi = MONTHS_LONG.indexOf((name ?? "").toUpperCase());
+    if (mi < 0 || !year) continue;
+    for (const day of mo.days ?? []) {
+      const n = dayNumber(+year, mi, day.date);
+      for (const e of day.events as any[]) {
+        const label = `${e?.category ?? ""} ${e?.text ?? ""}`;
+        if (/CAT\s*-?\s*(II|2)\b/i.test(label)) cat2 = cat2 === null ? n : Math.min(cat2, n);
+        else if (/CAT\s*-?\s*(I|1)\b/i.test(label)) cat1 = cat1 === null ? n : Math.min(cat1, n);
+        if (e?.type === "Instructional Day" || /LID/.test(label)) lastTeaching = Math.max(lastTeaching ?? n, n);
+      }
+    }
+  }
+  return { cat1, cat2, fat: lastTeaching === null ? null : lastTeaching + 3 };
+}
+
 export function rebaseDemoDates<T extends Record<string, any>>(data: T, now: Date = new Date()): T {
   const t = today(now);
   const out: Record<string, any> = { ...data };
@@ -176,11 +198,35 @@ export function rebaseDemoDates<T extends Record<string, any>>(data: T, now: Dat
     if (data.hostel) out.hostel = shiftTree(data.hostel, shift);
   }
 
-  // Exams: FAT starts 7-13 days from today; CAT1/CAT2 move with it.
+  // Exams follow the calendar, so the two pages agree (owner review: the
+  // calendar's CAT days did not match the exam schedule): CAT-I papers start
+  // on the calendar's first CAT-I day, CAT-II on its first CAT-II day, FAT
+  // three days after the last instructional day. Without a calendar, FAT
+  // starts 7-13 days from today and the CATs move with it.
   const sched = data.schedule?.Schedule;
-  const fat = datesIn(sched?.FAT?.map((e: any) => e.examDate));
-  if (sched && fat.length) {
-    out.schedule = { ...data.schedule, Schedule: shiftTree(sched, weeksFrom(Math.min(...fat), t + 7)) };
+  if (sched) {
+    const cal = out.calender?.calendars as CalendarMonth[] | undefined;
+    const anchors = cal ? examAnchors(cal) : null;
+    const moved: Record<string, unknown> = {};
+    for (const [series, list] of Object.entries(sched as Record<string, any[]>)) {
+      const dates = datesIn((list ?? []).map((e: any) => e.examDate));
+      if (!dates.length) {
+        moved[series] = list;
+        continue;
+      }
+      const first = Math.min(...dates);
+      const key = /FAT/i.test(series) ? "fat" : /II|2/.test(series) ? "cat2" : "cat1";
+      const target = anchors?.[key];
+      moved[series] = shiftTree(list, target != null ? target - first : 0);
+    }
+    if (anchors && (anchors.cat1 != null || anchors.cat2 != null || anchors.fat != null)) {
+      out.schedule = { ...data.schedule, Schedule: moved };
+    } else {
+      const fat = datesIn(sched.FAT?.map((e: any) => e.examDate));
+      if (fat.length) {
+        out.schedule = { ...data.schedule, Schedule: shiftTree(sched, weeksFrom(Math.min(...fat), t + 7)) };
+      }
+    }
   }
 
   // Events: the first registered event 5-11 days ahead.

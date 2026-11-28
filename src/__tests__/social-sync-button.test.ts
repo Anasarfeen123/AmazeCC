@@ -43,6 +43,13 @@ vi.mock("../lib/sync-engine/request-layer", async (importOriginal) => {
   return { ...actual, request: (...args: unknown[]) => requestMock(...args) };
 });
 
+// The op talks to Social through the social client (Amaze ID token + VTOP
+// session); route that call through the same request mock so the tests can
+// still assert it happens after the VTOP login.
+vi.mock("../lib/social/client", () => ({
+  syncIdentity: (sem?: string) => requestMock("social/identity/sync", sem ? { proposedSemesterId: sem } : {}),
+}));
+
 const { syncEngine } = await import("../lib/sync-engine");
 const { credentialManager } = await import("../lib/sync-engine/credential-manager");
 
@@ -136,7 +143,7 @@ describe("syncSocial", () => {
   });
 
   it("returns the sync payload on success", async () => {
-    const res = await syncEngine.syncSocial({}) as { identity?: { handle?: string } };
+    const res = (await syncEngine.syncSocial({})) as { identity?: { handle?: string } };
     expect(res?.identity?.handle).toBe("AMZ-4KD2-7RP1");
   });
 });

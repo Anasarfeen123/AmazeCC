@@ -216,7 +216,7 @@ export function EmptyPanel({
     return (
       <div className={`${EMPTY_STATE} ${className}`.trim()}>
         {icon}
-        <p className="text-sm font-bold text-text-heading mt-2">{title}</p>
+        <p className="font-title text-lg font-extrabold text-text-heading mt-2">{title}</p>
         {description ? <p className="text-sm text-text-muted mt-1">{description}</p> : null}
         {action ? <div className="mt-3 flex justify-center">{action}</div> : null}
       </div>

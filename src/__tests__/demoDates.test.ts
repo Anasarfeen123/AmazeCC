@@ -17,14 +17,43 @@ describe("shiftDemoDate", () => {
 
 describe("rebaseDemoDates", () => {
   const out = rebaseDemoDates(structuredClone(demo) as any, NOW);
+  const out_ = out;
 
-  it("puts FAT one to two weeks ahead and CATs in the past", () => {
-    const fat = out.schedule.Schedule.FAT.map((e: any) => parseDemoDate(e.examDate)!);
-    expect(Math.min(...fat) - today).toBeGreaterThanOrEqual(7);
-    expect(Math.min(...fat) - today).toBeLessThan(14);
-    for (const k of ["CAT1", "CAT2"]) {
-      for (const e of out.schedule.Schedule[k]) expect(parseDemoDate(e.examDate)!).toBeLessThan(today);
-    }
+  it("puts each exam series on the calendar's own exam days", () => {
+    const calDays = (re: RegExp) => {
+      const out: number[] = [];
+      const names = [
+        "JANUARY",
+        "FEBRUARY",
+        "MARCH",
+        "APRIL",
+        "MAY",
+        "JUNE",
+        "JULY",
+        "AUGUST",
+        "SEPTEMBER",
+        "OCTOBER",
+        "NOVEMBER",
+        "DECEMBER",
+      ];
+      for (const m of out_.calender.calendars) {
+        const [name, year] = m.month.split(" ");
+        for (const d of m.days)
+          if (d.events.some((e: any) => re.test(`${e.category} ${e.text}`)))
+            out.push(
+              parseDemoDate(
+                `${String(d.date).padStart(2, "0")}-${String(names.indexOf(name) + 1).padStart(2, "0")}-${year}`,
+              )!,
+            );
+      }
+      return out;
+    };
+    const first = (k: string) => Math.min(...out_.schedule.Schedule[k].map((e: any) => parseDemoDate(e.examDate)!));
+    expect(first("CAT1")).toBe(Math.min(...calDays(/CAT\s*-?\s*I\b(?!I)/)));
+    expect(first("CAT2")).toBe(Math.min(...calDays(/CAT\s*-?\s*II/)));
+    // FAT comes after every CAT and is still ahead of today.
+    expect(first("FAT")).toBeGreaterThan(first("CAT2"));
+    expect(first("FAT")).toBeGreaterThan(today);
   });
 
   it("ends attendance within the past week and keeps weekdays", () => {

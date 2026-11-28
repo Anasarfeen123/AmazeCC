@@ -185,9 +185,7 @@ export default function AppLoading({ label = "Opening your workspace" }: { label
         aria-label="Show another tip"
       >
         <span className="flex items-center justify-between gap-2">
-          <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
-            Tip
-          </span>
+          <span className="font-hand text-xl font-bold leading-none text-primary">Did you know?</span>
           <span className="font-mono text-xs text-text-muted">tap for another</span>
         </span>
         {/* key: re-mounts so the fade runs when the tip changes */}

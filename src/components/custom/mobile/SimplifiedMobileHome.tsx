@@ -1484,7 +1484,8 @@ export default function SimplifiedMobileHome({
                 </div>
 
                 {/* Multiline Greeting & Name Below */}
-                <p className="font-label text-xs font-semibold text-text-muted leading-none mb-1.5">
+                {/* Handwritten greeting: a human touch above the bold name. */}
+                <p className="font-hand text-[22px] font-bold text-primary leading-none mb-0.5">
                   <TimeBasedGreeting />,
                 </p>
                 <h1

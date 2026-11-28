@@ -96,7 +96,7 @@ describe("initials", () => {
   it("takes at most two letters, uppercased", () => {
     expect(initials("Neha Patel")).toBe("NP");
     expect(initials("Aarav Sharma")).toBe("AS");
-    expect(initials("Aarav Kumar Sharma")).toBe("AK");
+    expect(initials("Aarav Kumar Sharma")).toBe("AS"); // first + last name (getInitials)
     expect(initials("a")).toBe("A");
   });
 

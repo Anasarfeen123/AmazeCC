@@ -50,6 +50,12 @@ export function SectionHeader({
  * something that navigates belongs in a section header as an action, not here.
  * The calendar page tried all three in one row and none of them read.
  */
+/** A value that is a name, not a measurement ("Complex Variables…", "All done"):
+ *  set in the title face, which is narrower than mono and reads as words. */
+function isWordValue(value: ReactNode): boolean {
+  return typeof value === "string" && /^[A-Za-z]/.test(value.trim());
+}
+
 export function StatTile({
   label,
   value,
@@ -131,7 +137,7 @@ export function StatTile({
       <div className="my-auto min-w-0">
         <p
           data-private={privacyCategory ?? "all"}
-          className={`font-display font-bold tracking-tight block truncate ${valueFitClass(value)} ${valueTone}`}
+          className={`${isWordValue(value) ? "font-title font-extrabold" : "font-display font-bold"} tracking-tight block truncate ${valueFitClass(value)} ${valueTone}`}
         >
           {value}
         </p>

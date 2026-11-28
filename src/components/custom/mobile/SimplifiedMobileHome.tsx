@@ -817,10 +817,12 @@ export default function SimplifiedMobileHome({
         id: "exam",
         title: "Next Exam",
         // The course name, not the code (user): codes mean little at a glance.
-        headline: shortCourseName(nextUpcomingExam.raw.courseTitle) || nextUpcomingExam.raw.courseCode,
+        headline: shortCourseName(nextUpcomingExam.raw.courseTitle, 14) || nextUpcomingExam.raw.courseCode,
         subline: [
           nextUpcomingExam.raw.courseTitle ? nextUpcomingExam.raw.courseCode : "",
-          nextUpcomingExam.raw.examDate,
+          // "09-Dec-2026" -> "9 Dec": the year and leading zero made the line
+          // wrap out of the tile (owner screenshot).
+          String(nextUpcomingExam.raw.examDate || "").replace(/^0?(\d{1,2})-([A-Za-z]{3})-\d{4}$/, "$1 $2"),
           nextUpcomingExam.raw.examTime?.split("-")[0]?.trim(),
         ]
           .filter(Boolean)

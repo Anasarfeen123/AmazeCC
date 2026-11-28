@@ -18,6 +18,7 @@ import { getAssetPath } from "@/lib/utils";
 
 import { useEffect, useRef, useState } from "react";
 import BrandLogo from "../shared/BrandLogo";
+import OnboardingBackdrop from "./OnboardingBackdrop";
 import { useAtomValue } from "jotai";
 import {
   AlertCircle,
@@ -71,20 +72,8 @@ function Shell({ children }: { children: React.ReactNode }) {
   return (
     // Brand page background (dot grid + glows, brand.css) and the campus art
     // along the bottom edge, faded (user: "no background in sign in?").
-    <div className="page-dots fixed inset-0 z-50 flex flex-col overflow-hidden bg-background px-4 text-text-primary select-none animate-in fade-in duration-200 sm:px-8">
-      <img
-        src={getAssetPath("/landing/campus-day.webp")}
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-auto w-full opacity-35 dark:hidden"
-      />
-      <img
-        src={getAssetPath("/landing/campus-night.webp")}
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-auto w-full opacity-40 dark:block"
-      />
-      <div aria-hidden="true" />
+    <div className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-background px-4 text-text-primary select-none animate-in fade-in duration-200 sm:px-8">
+      <OnboardingBackdrop />
       <div className="relative z-10 flex min-h-0 flex-1 flex-col overflow-y-auto pt-[calc(env(safe-area-inset-top,0px)+1.25rem)] pb-[calc(env(safe-area-inset-bottom,0px)+1.25rem)] sm:pt-[calc(env(safe-area-inset-top,0px)+1.75rem)] sm:pb-[calc(env(safe-area-inset-bottom,0px)+1.75rem)]">
         {children}
       </div>
@@ -97,7 +86,7 @@ function Brand() {
 }
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
-  return <label className="text-xs font-bold uppercase tracking-wider text-text-muted font-outfit">{children}</label>;
+  return <label className="font-label text-sm font-semibold text-text-muted">{children}</label>;
 }
 
 const inputClass =
@@ -284,9 +273,9 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
             {/* Pitch (design language of the hero pages) */}
             <div className="space-y-3 text-left sm:space-y-4">
               <Brand />
-              <p className="w-fit rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
-                {"Step 1 of 4 // Sign in"}
-              </p>
+              {/* No step number: the setup steps after sign-in count from 1
+                  again, so "Step 1 of 4" here contradicted "Step 1 of 5". */}
+              <p className="font-hand text-2xl font-bold leading-none text-primary">{"Hey there!"}</p>
               <h1 className="font-title text-[28px] font-extrabold leading-[1.05] text-text-heading sm:text-[40px]">
                 Bring your VIT life
                 <span className="block text-hero">into one place.</span>
@@ -315,7 +304,7 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
             <div className="rounded-[14px] border-[3px] border-border-ink bg-surface p-4 shadow-brutal-lg sm:p-6">
               <form onSubmit={submit} className="space-y-4 text-left">
                 <div className="space-y-1 border-b-2 border-border-ink pb-3">
-                  <h2 className="font-display text-lg font-bold uppercase text-text-heading">Sign in to VTOP</h2>
+                  <h2 className="font-title text-xl font-extrabold text-text-heading">Sign in to VTOP</h2>
                   <p className="text-xs text-text-muted">Just your user ID and password.</p>
                 </div>
 

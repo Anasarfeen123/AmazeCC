@@ -28,7 +28,7 @@ describe("AmazeOnboardingFlow interface selection", () => {
     render(<AmazeOnboardingFlow initialStep={1} settings={{}} setSettings={vi.fn()} onComplete={vi.fn()} />);
 
     expect(screen.queryByText("Choose your interface")).toBeNull();
-    expect(screen.getByText("Display & Goals")).toBeDefined();
+    expect(screen.getByText("Your goals")).toBeDefined();
     expect(screen.getByText("Step 2 of 5")).toBeDefined();
   });
 
@@ -38,7 +38,7 @@ describe("AmazeOnboardingFlow interface selection", () => {
     fireEvent.click(screen.getByRole("button", { name: /^Continue$/i }));
 
     expect(screen.queryByText("Choose your interface")).toBeNull();
-    expect(screen.getByText("Display & Goals")).toBeDefined();
+    expect(screen.getByText("Your goals")).toBeDefined();
   });
 
   it("skips the standalone picker and applies the only available interface", async () => {

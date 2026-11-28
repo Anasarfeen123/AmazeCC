@@ -1243,3 +1243,54 @@
     animation: none;
   }
 }
+
+/* Onboarding backdrop (OnboardingBackdrop). The step shift uses `transform`
+   (inline, transitioned); the idle drift uses the separate `translate`
+   property so the two never fight. */
+.onb-shape {
+  transition: transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: onb-drift 9s ease-in-out infinite alternate;
+}
+.onb-shape-slow {
+  animation-duration: 13s;
+}
+@keyframes onb-drift {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 0 -10px;
+  }
+}
+.onb-twinkle {
+  animation: onb-twinkle 3.2s ease-in-out infinite;
+}
+@keyframes onb-twinkle {
+  0%,
+  100% {
+    scale: 1;
+    opacity: 1;
+  }
+  50% {
+    scale: 0.7;
+    opacity: 0.6;
+  }
+}
+/* Campus art fades in from the bottom so it never sits hard behind cards. */
+.onb-campus {
+  max-height: 42vh;
+  object-fit: cover;
+  object-position: bottom;
+  mask-image: linear-gradient(to top, #000 35%, transparent);
+  -webkit-mask-image: linear-gradient(to top, #000 35%, transparent);
+}
+.dark .onb-backdrop .onb-shape {
+  opacity: 0.55;
+}
+@media (prefers-reduced-motion: reduce) {
+  .onb-shape,
+  .onb-twinkle {
+    animation: none;
+    transition: none;
+  }
+}

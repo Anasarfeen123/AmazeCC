@@ -131,15 +131,18 @@ export function StatTile({
       <div className="my-auto min-w-0">
         <p
           data-private={privacyCategory ?? "all"}
-          className={`font-display font-bold tracking-tight block ${valueFitClass(value)} ${valueTone}`}
+          className={`font-display font-bold tracking-tight block truncate ${valueFitClass(value)} ${valueTone}`}
         >
           {value}
         </p>
       </div>
 
       {sub ? (
-        <div className="flex items-center justify-between gap-2 min-w-0">
-          <div className={`font-mono text-xs ${subTone} line-clamp-2`}>{sub}</div>
+        <div
+          className="flex items-center justify-between gap-2 min-w-0"
+          title={typeof sub === "string" ? sub : undefined}
+        >
+          <div className={`font-mono text-xs ${subTone} min-w-0 truncate`}>{sub}</div>
         </div>
       ) : null}
     </div>

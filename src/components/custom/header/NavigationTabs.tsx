@@ -1719,11 +1719,11 @@ export default function NavigationTabs({
                           className={`group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} ${
                             item.isActive
                               ? sidebarActiveStyles
-                              : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                              : "border-2 border-transparent text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
                           }`}
                         >
                           <item.icon
-                            className={`h-4 w-4 shrink-0 ${item.isActive ? "text-info" : "text-sidebar-foreground"}`}
+                            className={`h-4 w-4 shrink-0 ${item.isActive ? "text-current" : "text-sidebar-foreground"}`}
                           />
                           <span className="truncate">{item.label}</span>
                         </button>
@@ -1806,14 +1806,14 @@ export default function NavigationTabs({
                               item.onSelect();
                               setActiveRailGroup(null);
                             }}
-                            className={`group relative flex w-full items-center rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} ${
+                            className={`group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} ${
                               item.isActive
                                 ? sidebarActiveStyles
-                                : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                                : "border-2 border-transparent text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
                             }`}
                           >
                             <item.icon
-                              className={`h-4 w-4 shrink-0 ${item.isActive ? "text-info" : "text-sidebar-foreground/70"}`}
+                              className={`h-4 w-4 shrink-0 ${item.isActive ? "text-current" : "text-sidebar-foreground/70"}`}
                             />
                             <span className="truncate">{item.label}</span>
                           </button>
@@ -1839,14 +1839,14 @@ export default function NavigationTabs({
                           item.onSelect();
                           setActiveRailGroup(null);
                         }}
-                        className={`group relative flex w-full items-center rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} ${
+                        className={`group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} ${
                           item.isActive
                             ? sidebarActiveStyles
-                            : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                            : "border-2 border-transparent text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
                         }`}
                       >
                         <item.icon
-                          className={`h-4 w-4 shrink-0 ${item.isActive ? "text-info" : "text-sidebar-foreground/70"}`}
+                          className={`h-4 w-4 shrink-0 ${item.isActive ? "text-current" : "text-sidebar-foreground/70"}`}
                         />
                         <span className="truncate">{item.label}</span>
                       </button>
@@ -1870,10 +1870,10 @@ export default function NavigationTabs({
                           item.onSelect();
                           setActiveRailGroup(null);
                         }}
-                        className={`group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} ${item.isActive ? sidebarActiveStyles : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"}`}
+                        className={`group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-[color,background-color] duration-150 ${navButtonBase} ${item.isActive ? sidebarActiveStyles : "border-2 border-transparent text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"}`}
                       >
                         <item.icon
-                          className={`h-4 w-4 shrink-0 ${item.isActive ? "text-info" : "text-sidebar-foreground/70"}`}
+                          className={`h-4 w-4 shrink-0 ${item.isActive ? "text-current" : "text-sidebar-foreground/70"}`}
                         />
                         <span className="truncate">{item.label}</span>
                       </button>

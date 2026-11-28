@@ -455,6 +455,9 @@ describe("FFCSTimetableTab", () => {
     expect(widgetPanel.className).toContain("break-inside-avoid");
     expect(JSON.parse(storage.getItem("ffcs_dashboard_widgets") || "[]")).toEqual(["add-courses", "timetables"]);
 
+    // An empty plan folds the widget switches behind "Planner tools".
+    const toolsToggle = screen.queryByRole("button", { name: /Planner tools/ });
+    if (toolsToggle?.getAttribute("aria-expanded") === "false") fireEvent.click(toolsToggle);
     const socialToggle = screen.getByRole("button", { name: /Social & Friends/ });
     fireEvent.click(socialToggle);
     expect(socialToggle.getAttribute("aria-pressed")).toBe("true");

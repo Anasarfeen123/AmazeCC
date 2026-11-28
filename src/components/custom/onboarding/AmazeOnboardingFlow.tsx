@@ -19,6 +19,15 @@ import {
   Download,
   Share,
   Plus,
+  Clock,
+  AlertTriangle,
+  MapPin,
+  Smartphone,
+  WifiOff,
+  BellDot,
+  Sun,
+  Moon,
+  MoonStar,
 } from "lucide-react";
 import { AnimatePresence, m } from "framer-motion";
 import { getAssetPath } from "@/lib/utils";
@@ -30,6 +39,9 @@ import SimplifiedMobileHome from "../mobile/SimplifiedMobileHome";
 import SelectField from "../shared/primitives/SelectField";
 import Switch from "../shared/primitives/Switch";
 import OnboardingIntro, { type IntroPhase } from "./OnboardingIntro";
+import OnboardingBackdrop from "./OnboardingBackdrop";
+import { useTheme } from "next-themes";
+import { animateThemeCircularExpansion } from "../ThemeToggle";
 import {
   dismissSyncSession,
   isSyncSessionOpen,
@@ -145,6 +157,7 @@ export default function AmazeOnboardingFlow({
   eptData,
   acknowledgementData,
 }: AmazeOnboardingFlowProps) {
+  const { theme, setTheme } = useTheme();
   const hasMultipleInterfaces = INTERFACES.length > 1;
   const [step, setStep] = useState(() =>
     initialStep === 1 && !isStandaloneInterfacePicker && !hasMultipleInterfaces ? 2 : initialStep,
@@ -573,6 +586,38 @@ export default function AmazeOnboardingFlow({
         </div>
       </div>
 
+      {/* Theme (first-run setup, owner review item 11): applies at once. */}
+      <div className="space-y-1.5">
+        <label className="font-label text-xs font-bold text-text-muted">Theme</label>
+        <div className="grid grid-cols-3 gap-2">
+          {(
+            [
+              ["light", "Light", Sun],
+              ["dark", "Dark", Moon],
+              ["night", "Night", MoonStar],
+            ] as const
+          ).map(([id, label, Icon]) => {
+            const on = theme === id;
+            return (
+              <button
+                key={id}
+                type="button"
+                aria-pressed={on}
+                onClick={(e) => animateThemeCircularExpansion(e, id, setTheme)}
+                className={`flex min-h-11 items-center justify-center gap-1.5 rounded-[10px] border-2 border-border-ink text-sm font-semibold transition-all cursor-pointer ${
+                  on
+                    ? "bg-secondary text-secondary-foreground shadow-brutal-sm"
+                    : "bg-surface text-text-primary hover:bg-surface-secondary"
+                }`}
+              >
+                <Icon className="h-4 w-4" aria-hidden />
+                {label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Target Attendance Goal */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
@@ -679,18 +724,28 @@ export default function AmazeOnboardingFlow({
   const renderNotificationsCard = () => (
     <div className="p-5 sm:p-6 rounded-[16px] border-[3px] border-border-ink bg-surface shadow-brutal-md space-y-3 text-left">
       {[
-        { title: "Timetable Reminders", desc: "15 minutes before your class" },
-        { title: "Attendance Safeguard", desc: "Alert if attendance drops below 75%" },
-        { title: "Exam Seat & Venue Alerts", desc: "Live seating and room schedules" },
+        // Reminders are not live yet (they need a server change); say so
+        // instead of promising them (owner review, 2026-11-28).
+        { title: "Class reminders", desc: "Before each class, with the room", icon: Clock, soon: true },
+        { title: "Below-target alerts", desc: "When a course drops under your goal", icon: AlertTriangle, soon: true },
+        { title: "Exam seat and venue", desc: "The day before each exam", icon: MapPin, soon: true },
       ].map((perk, i) => (
         <div
           key={i}
           className="flex items-center gap-3 p-2.5 rounded-[12px] bg-surface-secondary border-2 border-border-ink"
         >
-          <div>
-            <p className="text-xs font-bold text-text-heading">{perk.title}</p>
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border-2 border-border-ink bg-surface text-primary">
+            <perk.icon className="h-4 w-4" aria-hidden />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-bold text-text-heading">{perk.title}</p>
             <p className="text-xs text-text-muted">{perk.desc}</p>
           </div>
+          {perk.soon ? (
+            <span className="shrink-0 rounded-[6px] border-2 border-border-ink bg-highlight px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-highlight-foreground">
+              Soon
+            </span>
+          ) : null}
         </div>
       ))}
 
@@ -707,12 +762,12 @@ export default function AmazeOnboardingFlow({
         {notifEnabled ? (
           <>
             <Check className="w-4 h-4" />
-            <span>Instant Alerts Enabled</span>
+            <span>Notifications on</span>
           </>
         ) : notifLoading ? (
-          <span>Enabling Alerts...</span>
+          <span>Turning on…</span>
         ) : (
-          <span>Enable Class Alerts</span>
+          <span>Turn on notifications</span>
         )}
       </button>
 
@@ -735,18 +790,36 @@ export default function AmazeOnboardingFlow({
     return (
       <div className="p-5 sm:p-6 rounded-[16px] border-[3px] border-border-ink bg-surface shadow-brutal-md space-y-3 text-left">
         {[
-          { title: "Full-Screen App", desc: "Opens like a native app, no browser chrome" },
-          { title: "Works Offline", desc: "Your dashboard loads even on patchy campus wifi" },
-          { title: "Push Notifications", desc: "Class alerts keep flowing outside the tab" },
+          { title: "Full screen", desc: "Opens like an app, no browser bars", icon: Smartphone, soon: false },
+          {
+            title: "Works offline",
+            desc: "Your timetable and marks load on patchy campus wifi",
+            icon: WifiOff,
+            soon: false,
+          },
+          {
+            title: "Icon badge",
+            desc: "A number on the icon for courses below target and exams tomorrow",
+            icon: BellDot,
+            soon: false,
+          },
         ].map((perk, i) => (
           <div
             key={i}
             className="flex items-center gap-3 p-2.5 rounded-[12px] bg-surface-secondary border-2 border-border-ink"
           >
-            <div>
-              <p className="text-xs font-bold text-text-heading">{perk.title}</p>
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border-2 border-border-ink bg-surface text-primary">
+              <perk.icon className="h-4 w-4" aria-hidden />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-bold text-text-heading">{perk.title}</p>
               <p className="text-xs text-text-muted">{perk.desc}</p>
             </div>
+            {perk.soon ? (
+              <span className="shrink-0 rounded-[6px] border-2 border-border-ink bg-highlight px-1.5 py-0.5 font-mono text-xs font-bold uppercase text-highlight-foreground">
+                Soon
+              </span>
+            ) : null}
           </div>
         ))}
 
@@ -807,8 +880,8 @@ export default function AmazeOnboardingFlow({
 
   return (
     <div className="fixed inset-0 z-50 bg-background text-text-primary flex flex-col justify-between overflow-hidden select-none px-5 sm:px-8 pt-[calc(env(safe-area-inset-top,0px)+1rem)] pb-[calc(env(safe-area-inset-bottom,0px)+1rem)] sm:pt-[calc(env(safe-area-inset-top,0px)+1.5rem)] sm:pb-[calc(env(safe-area-inset-bottom,0px)+1.5rem)] animate-in fade-in duration-300">
-      {/* Background ambient lighting */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden"></div>
+      {/* Brand backdrop: dot grid, flat shapes that shift per step, campus art. */}
+      <OnboardingBackdrop step={visibleStep + 1} campus={!isHorizontal} />
 
       {/* First-login sync still sweeping? Keep the percentage visible in the
           hero instead of opening the sheet it was deliberately suppressed for. */}
@@ -876,16 +949,14 @@ export default function AmazeOnboardingFlow({
                 <>
                   <div className="flex items-center gap-3">
                     <div>
-                      <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
-                        Workspace Layout
-                      </span>
+                      <span className="font-label text-[13px] font-semibold text-text-muted">Workspace Layout</span>
                       <h2 className="mt-2 font-title text-[28px] font-extrabold leading-[1.05] text-text-heading lg:text-[36px]">
                         Choose your interface
                       </h2>
                     </div>
                   </div>
                   <p className="text-base leading-relaxed text-text-muted">
-                    Pick how you want AmazeCC to look and feel. Switch between simplified or attendance anytime.
+                    A preview of your home screen with your own data.
                   </p>
 
                   {/* Icon-Only Option Bar */}
@@ -930,73 +1001,63 @@ export default function AmazeOnboardingFlow({
                 <>
                   <div className="flex items-center gap-3">
                     <div>
-                      <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
-                        Getting Started
-                      </span>
+                      <span className="font-label text-[13px] font-semibold text-text-muted">Getting Started</span>
                       <h1 className="mt-2 font-title text-[28px] font-extrabold leading-[1.05] text-text-heading lg:text-[36px]">
                         Welcome to AmazeCC
                       </h1>
                     </div>
                   </div>
                   <p className="text-base leading-relaxed text-text-muted">
-                    Set up your personalized college companion in seconds.
+                    Three quick choices and your home screen is ready.
                   </p>
                 </>
               ) : step === 2 ? (
                 <>
                   <div className="flex items-center gap-3">
                     <div>
-                      <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
-                        Personalization
-                      </span>
+                      <span className="font-label text-[13px] font-semibold text-text-muted">Personalization</span>
                       <h2 className="mt-2 font-title text-[28px] font-extrabold leading-[1.05] text-text-heading lg:text-[36px]">
-                        Display & Goals
+                        Your goals
                       </h2>
                     </div>
                   </div>
                   <p className="text-base leading-relaxed text-text-muted">
-                    Set your avatar, colors, and attendance safe goals.
+                    Your attendance target, the look, and what Home shows.
                   </p>
                 </>
               ) : step === 3 ? (
                 <>
                   <div className="flex items-center gap-3">
                     <div>
-                      <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
-                        Navigation
-                      </span>
+                      <span className="font-label text-[13px] font-semibold text-text-muted">Navigation</span>
                       <h2 className="mt-2 font-title text-[28px] font-extrabold leading-[1.05] text-text-heading lg:text-[36px]">
-                        Bottom Navigation
+                        Your bottom bar
                       </h2>
                     </div>
                   </div>
                   <p className="text-base leading-relaxed text-text-muted">
-                    Pin up to 4 quick-access tabs for your mobile dock.
+                    Pin the pages you open most. You can change this later.
                   </p>
                 </>
               ) : step === 4 ? (
                 <>
                   <div className="flex items-center gap-3">
                     <div>
-                      <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
-                        Smart Alerts
-                      </span>
+                      <span className="font-label text-[13px] font-semibold text-text-muted">Smart Alerts</span>
                       <h2 className="mt-2 font-title text-[28px] font-extrabold leading-[1.05] text-text-heading lg:text-[36px]">
-                        Stay Ahead of Classes
+                        Notifications
                       </h2>
                     </div>
                   </div>
                   <p className="text-base leading-relaxed text-text-muted">
-                    Instant class alerts and low attendance safeguards.
+                    Turn them on now and reminders reach you as soon as they launch.
                   </p>
                 </>
               ) : (
                 <>
                   <div className="flex items-center gap-3">
                     <div>
-                      <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
-                        Install
-                      </span>
+                      <span className="font-label text-[13px] font-semibold text-text-muted">Install</span>
                       <h2 className="mt-2 font-title text-[28px] font-extrabold leading-[1.05] text-text-heading lg:text-[36px]">
                         AmazeCC on Your Device
                       </h2>
@@ -1162,7 +1223,7 @@ export default function AmazeOnboardingFlow({
                       Welcome to AmazeCC
                     </h1>
                     <p className="text-sm text-text-muted max-w-xs">
-                      Set up your personalized college companion in seconds.
+                      Three quick choices and your home screen is ready.
                     </p>
                   </div>
 
@@ -1228,9 +1289,9 @@ export default function AmazeOnboardingFlow({
                 >
                   <div className="flex flex-col items-center gap-2">
                     <h2 className="font-title text-[24px] font-extrabold leading-[1.05] text-text-heading sm:text-[30px]">
-                      Display & Goals
+                      Your goals
                     </h2>
-                    <p className="text-sm text-text-muted">Set your avatar, colors, and attendance safe goals.</p>
+                    <p className="text-sm text-text-muted">Your attendance target, the look, and what Home shows.</p>
                   </div>
 
                   {/* Preferences Card */}
@@ -1250,9 +1311,9 @@ export default function AmazeOnboardingFlow({
                 >
                   <div className="flex flex-col items-center gap-2">
                     <h2 className="font-title text-[24px] font-extrabold leading-[1.05] text-text-heading sm:text-[30px]">
-                      Bottom Navigation
+                      Your bottom bar
                     </h2>
-                    <p className="text-sm text-text-muted">Pin up to 4 quick-access tabs for your mobile dock.</p>
+                    <p className="text-sm text-text-muted">Pin the pages you open most. You can change this later.</p>
                   </div>
 
                   {/* Bottom Nav Customizer Card */}
@@ -1272,9 +1333,11 @@ export default function AmazeOnboardingFlow({
                 >
                   <div className="flex flex-col items-center gap-2">
                     <h2 className="font-title text-[24px] font-extrabold leading-[1.05] text-text-heading sm:text-[30px]">
-                      Stay Ahead of Classes
+                      Notifications
                     </h2>
-                    <p className="text-sm text-text-muted">Instant class alerts and low attendance safeguards.</p>
+                    <p className="text-sm text-text-muted">
+                      Turn them on now and reminders reach you as soon as they launch.
+                    </p>
                   </div>
 
                   {/* Notification & Launch Card */}
@@ -1297,7 +1360,7 @@ export default function AmazeOnboardingFlow({
                       Install AmazeCC
                     </h2>
                     <p className="text-sm text-text-muted max-w-xs">
-                      Add it as a web app for a full-screen, offline-ready experience.
+                      Add it to your home screen. Opens full screen and works offline.
                     </p>
                   </div>
 

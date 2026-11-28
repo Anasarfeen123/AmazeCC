@@ -192,7 +192,7 @@
   --shadow-ink: #001e1d;
   /* Lines inside a card (dividers, nested rows) are softer than the outer
      ink edge, so a card reads as one object, not a grid of boxes. */
-  --border-muted: color-mix(in oklab, #001e1d 22%, transparent);
+  --border-muted: color-mix(in oklab, #001e1d 30%, transparent);
   --border-strong: #001e1d;
 
   --primary: #004643;
@@ -265,12 +265,13 @@
   --text-muted: #8fb5aa;
   --text-disabled: #5a8279;
 
-  --border-ink: #3f8f84;
+  /* Darker outline (owner, 2026-11-28: borders too bright, busy): #3f8f84 -> #2f7369. */
+  --border-ink: #2f7369;
   /* Same colour as the border, like light mode (ink border + ink shadow), so
      cards read as solid cut-outs. The old near-black (#000807) vanished on
      the dark page and made dark look flat next to light (user, 2026-11-20). */
   --shadow-ink: #0e4a44; /* deep teal: visible offset, not glowing (user: too bright) */
-  --border-muted: color-mix(in oklab, #3f8f84 45%, transparent);
+  --border-muted: color-mix(in oklab, #2f7369 55%, transparent);
   --border-strong: #3f8f84;
 
   --primary: #f9bc60;
@@ -335,9 +336,10 @@
   --surface-hover: #141a1a;
 
   --text-muted: #9cbdb4;
-  --border-ink: #4fb3a5;
+  /* Darker outline on black (owner, 2026-11-28): #4fb3a5 -> #3a8f84. */
+  --border-ink: #3a8f84;
   --border-strong: #4fb3a5;
-  --border-muted: color-mix(in oklab, #4fb3a5 40%, transparent);
+  --border-muted: color-mix(in oklab, #3a8f84 50%, transparent);
   --shadow-ink: #174f49; /* deep teal on black (user: too bright) */
 
   --success-surface: color-mix(in oklab, #7fd6a5 16%, #0f1615);

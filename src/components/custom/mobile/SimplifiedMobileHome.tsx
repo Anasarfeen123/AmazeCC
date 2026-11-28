@@ -60,7 +60,7 @@ import { dateKey } from "@/lib/calendarDay";
 import { isLabFatMarked, labFatPapersByDate, labSlotTokens, type LabFatPaper } from "@/lib/labFatWeek";
 import { cn } from "@amazecontinuityprojects/amazeui";
 import { ICON_BUTTON, TONE_BADGE, TONE_ICON_TILE } from "@/lib/uiTokens";
-import { facultyDisplayName, greetingName, shortCourseName } from "@/lib/displayNames";
+import { facultyDisplayName, facultyTitleCase, greetingName, shortCourseName } from "@/lib/displayNames";
 import { privacyCategories, type PrivacyCategory } from "@/lib/privacyMode";
 import BrandLogo from "../shared/BrandLogo";
 import TimetableGrid from "../attendance/TimetableGrid";
@@ -2271,11 +2271,11 @@ export default function SimplifiedMobileHome({
                           <div className="min-w-0 flex-1">
                             {/* Line 1: Slot + Title + Status */}
                             <div className="flex items-center gap-2 min-w-0">
-                              <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-secondary text-secondary-foreground shrink-0 border-2 border-border-ink">
+                              <span className="shrink-0 rounded-md border-2 border-border-ink bg-secondary px-1.5 py-px font-mono text-xs font-bold text-secondary-foreground">
                                 {cls.slotName}
                               </span>
                               <h3
-                                className="min-w-0 font-sans font-bold text-sm text-text-heading line-clamp-2 leading-tight"
+                                className="min-w-0 truncate font-sans font-bold text-sm text-text-heading leading-tight"
                                 title={cls.courseTitle}
                               >
                                 {cls.courseTitle}
@@ -2312,36 +2312,45 @@ export default function SimplifiedMobileHome({
                                     className="inline-flex items-center gap-1 font-semibold text-text-muted hover:text-primary transition-colors cursor-pointer truncate max-w-[120px]"
                                     title="View faculty timetable schedule"
                                   >
-                                    <span className="truncate">{facultyDisplayName(cls.faculty)}</span>
+                                    <span className="truncate">{facultyTitleCase(cls.faculty)}</span>
                                   </button>
                                 </>
                               )}
+                            </div>
+
+                            {/* Line 3: one quiet status line, coloured text instead of
+                                stacked bordered pills (owner: the card was too cluttered). */}
+                            <div className="mt-1 flex min-w-0 items-center gap-x-2 gap-y-0.5 flex-wrap text-xs">
                               <span
                                 data-private="attendance"
-                                className={`inline-flex items-center gap-1 rounded-[6px] border-2 px-1.5 py-px text-xs font-bold leading-tight ${
-                                  TONE_BADGE[
-                                    bunkStatus === "safe" ? "emerald" : bunkStatus === "warning" ? "amber" : "red"
-                                  ]
+                                className={`inline-flex items-center gap-1 font-semibold ${
+                                  bunkStatus === "safe"
+                                    ? "text-success-foreground"
+                                    : bunkStatus === "warning"
+                                      ? "text-warning-foreground"
+                                      : "text-danger-foreground"
                                 }`}
                               >
-                                <span className="w-1.5 h-1.5 rounded-full bg-current" aria-hidden />
+                                <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden />
                                 <span title={bunkSubtext || undefined}>{bunkText}</span>
                                 {bunkSubtext ? <span className="sr-only">: {bunkSubtext}</span> : null}
                               </span>
+                              {showTaskBadgeInline && taskSummary.total > 0 ? (
+                                <>
+                                  <span className="text-text-muted" aria-hidden>
+                                    ·
+                                  </span>
+                                  <TaskBadge
+                                    quiet
+                                    summary={taskSummary}
+                                    onClick={() => {
+                                      setActiveTab("tools");
+                                      setActiveToolsSubTab?.("tasks");
+                                    }}
+                                  />
+                                </>
+                              ) : null}
                             </div>
-
-                            {/* Line 3: Task Badge if pending */}
-                            {showTaskBadgeInline && taskSummary.total > 0 && (
-                              <div className="mt-1.5 flex items-center gap-1.5">
-                                <TaskBadge
-                                  summary={taskSummary}
-                                  onClick={() => {
-                                    setActiveTab("tools");
-                                    setActiveToolsSubTab?.("tasks");
-                                  }}
-                                />
-                              </div>
-                            )}
                           </div>
 
                           {/* Right: Attendance Percentage & Ratio */}

@@ -13,6 +13,16 @@ export function facultyDisplayName(raw: string | null | undefined): string {
   return stripped || s;
 }
 
+/**
+ * "PRIYA MENON" -> "Priya Menon": VTOP's all-caps faculty names, read as
+ * names on Home class cards. Names already in mixed case are left alone.
+ */
+export function facultyTitleCase(raw: string | null | undefined): string {
+  const s = facultyDisplayName(raw);
+  if (s !== s.toUpperCase()) return s;
+  return s.toLowerCase().replace(/(^|[\s.(\-])([a-z])/g, (_, p: string, c: string) => p + c.toUpperCase());
+}
+
 /** "ANAS SHAMSIL ARFEEN" -> "Anas". A reg number or empty input is returned unchanged. */
 export function greetingName(raw: string | null | undefined): string {
   const s = String(raw ?? "").trim();

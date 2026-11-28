@@ -12,6 +12,8 @@ interface TaskBadgeProps {
   className?: string;
   /** Shorten labels ("DA today") for cramped cards */
   compact?: boolean;
+  /** Plain coloured text with an icon, no box: for a card's status line. */
+  quiet?: boolean;
 }
 
 /**
@@ -22,7 +24,13 @@ interface TaskBadgeProps {
  * `summary.today` is zeroed for non-current days, so browsing another weekday
  * can never show a "today" claim.
  */
-export default function TaskBadge({ summary, onClick, className = "", compact = false }: TaskBadgeProps) {
+export default function TaskBadge({
+  summary,
+  onClick,
+  className = "",
+  compact = false,
+  quiet = false,
+}: TaskBadgeProps) {
   if (!summary || summary.total === 0) return null;
 
   const today = summary.today;
@@ -44,11 +52,27 @@ export default function TaskBadge({ summary, onClick, className = "", compact = 
   } else {
     text = "Task pending";
     count = summary.total;
-    colorClass = "text-warning-foreground bg-amber-50/70 border-border-ink";
+    colorClass = "text-warning-foreground bg-warning-surface border-border-ink";
     Icon = Layers;
   }
 
   const label = count > 1 ? `${text} · ${count}` : text;
+
+  if (quiet) {
+    const tone = text === "Test today" ? "text-danger-foreground" : "text-warning-foreground";
+    return (
+      <span
+        {...clickable((e) => {
+          e.stopPropagation();
+          onClick?.(e);
+        })}
+        className={`inline-flex min-w-0 items-center gap-1 text-xs font-semibold underline-offset-2 hover:underline ${tone} ${className}`}
+      >
+        <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden />
+        <span className="truncate">{count > 1 ? `${count} tasks` : text === "Task pending" ? "1 task" : text}</span>
+      </span>
+    );
+  }
 
   return (
     <span

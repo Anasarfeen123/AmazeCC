@@ -32,6 +32,10 @@ const basePath = (process.env.PAGES_BASE_PATH || "").replace(/\/+$/, "");
 const nextConfig = {
   experimental: {
     agentUpgrade: "security",
+    // Styles arrive with the HTML instead of as a render-blocking <link>
+    // (Lighthouse flagged the stylesheet). The service worker caches pages,
+    // so returning visitors do not re-download it on every visit either.
+    inlineCss: true,
   },
   output: "export",
   basePath: basePath,

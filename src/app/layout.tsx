@@ -17,6 +17,8 @@ const geistMono = Geist_Mono({
   weight: "variable",
   subsets: ["latin"],
   display: "swap",
+  // Fallback only (Space Mono covers mono text): no preload.
+  preload: false,
   variable: "--font-geist-mono",
 });
 // Display face for titles and hero numbers (brand spec). Wired to
@@ -53,7 +55,14 @@ const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
 });
 // Handwritten accent for tips, notes and stickers, used sparingly (`font-hand`).
-const caveat = Caveat({ weight: ["600", "700"], subsets: ["latin"], display: "swap", variable: "--font-caveat" });
+// Not preloaded: a small accent, swapped in when it arrives.
+const caveat = Caveat({
+  weight: ["600", "700"],
+  subsets: ["latin"],
+  display: "swap",
+  preload: false,
+  variable: "--font-caveat",
+});
 
 export const viewport: Viewport = {
   themeColor: [

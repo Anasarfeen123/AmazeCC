@@ -42,7 +42,8 @@ const TINT: Record<CalendarDayModel["dayType"], string> = {
   // No-class and outside-calendar days get a quiet neutral cell too (owner:
   // with no fill they merged into the card).
   nonInstructional: "cal-day-quiet",
-  holiday: "bg-danger-surface dark:bg-coral",
+  // Green: no college is good news (team review: a red holiday read as danger).
+  holiday: "bg-success-surface dark:bg-mint",
   other: "cal-day-quiet",
 };
 

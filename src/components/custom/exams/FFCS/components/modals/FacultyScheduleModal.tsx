@@ -16,7 +16,8 @@ import {
 } from "../../logic/facultyGroups";
 import { sameSlotFacultyAlternatives, splitSlots } from "@/lib/ffcsGenerate";
 import type { ParsedCourse } from "@/lib/ffcsTypes";
-import { EmptyPanel, IconButton, ListSkeleton } from "../../../../shared/primitives";
+import { EmptyPanel, IconButton, ListSkeleton, SegmentedControl } from "../../../../shared/primitives";
+import FacultyDayView from "./FacultyDayView";
 import { VitfacReviewPill, FacultyAvatar } from "../FacultyAvatar";
 import FacultyReviewSheetHost from "../FacultyReviewSheetHost";
 import { ENABLE_VITFAC_INTEGRATION, useVitfacDirectoryProfile } from "@/lib/vitfacService";
@@ -114,6 +115,9 @@ export function FacultyScheduleModal({
   }, [open, initialFaculty, initialErpId, groups, selectedKey]);
 
   const periods = useMemo(() => facultySchedulePeriods(), []);
+  const [scheduleView, setScheduleView] = useState<"day" | "week">(() =>
+    typeof window !== "undefined" && window.innerWidth < 640 ? "day" : "week",
+  );
   const selected = groups.find((group) => group.key === selectedKey) ?? null;
   const selectedEmpId = selected?.erpId || selected?.offerings.find((o) => o.ERP_ID)?.ERP_ID;
   const { profile: directoryProfile } = useVitfacDirectoryProfile(selectedEmpId);
@@ -261,16 +265,30 @@ export function FacultyScheduleModal({
               portals to <body> at its own z-55/60, which would sit behind this
               modal's z-300, so the z-index pair is raised to 400.
             */}
-                <VerticalTimetableGrid
-                  courses={courses}
-                  theoryPeriods={periods.theory}
-                  labPeriods={periods.lab}
-                  days={DAYS}
-                  blockedSlots={new Set()}
-                  selectedGapDetails={null}
-                  backdropZIndex={400}
-                  panelZIndex={400}
+                {/* Day list by default on phones (no sideways scroll); the week
+                    grid is one tap away (teammate review 2026-11-28). */}
+                <SegmentedControl
+                  options={[
+                    { value: "day", label: "Day" },
+                    { value: "week", label: "Week" },
+                  ]}
+                  value={scheduleView}
+                  onChange={(v) => setScheduleView(v as "day" | "week")}
                 />
+                {scheduleView === "day" ? (
+                  <FacultyDayView courses={courses} periods={periods} />
+                ) : (
+                  <VerticalTimetableGrid
+                    courses={courses}
+                    theoryPeriods={periods.theory}
+                    labPeriods={periods.lab}
+                    days={DAYS}
+                    blockedSlots={new Set()}
+                    selectedGapDetails={null}
+                    backdropZIndex={400}
+                    panelZIndex={400}
+                  />
+                )}
 
                 <div className="overflow-x-auto rounded-xl border border-border-strong custom-scrollbar">
                   <table className="w-full text-left text-sm min-w-[520px]">

@@ -140,6 +140,13 @@ const AppLibraryPortal = memo(
     // Colours come from MODULE_TONE so a module looks the same everywhere.
     // Pinning lives in the "Bottom bar shortcuts" section below, not on
     // every tile (it used to be a pin button per card).
+    // Panel tint per group (Modules sheet redesign, 2026-11-28).
+    const GROUP_TINT: Record<string, string> = {
+      Study: "#f9bc60",
+      Campus: "#f4a259",
+      Tools: "#7ec8c0",
+      Account: "#abd1c6",
+    };
     const GROUP_FALLBACK: Record<string, ToneName> = {
       Study: "ochre",
       Campus: "apricot",
@@ -160,7 +167,7 @@ const AppLibraryPortal = memo(
           aria-label={external ? `${label} (opens in a new tab)` : label}
         >
           <span
-            className={`relative flex h-14 w-14 items-center justify-center rounded-[16px] border-2 shadow-brutal-sm transition-transform duration-150 group-hover/tile:-translate-y-0.5 group-active/tile:translate-y-0.5 ${tone}`}
+            className={`relative flex h-14 w-14 items-center justify-center rounded-[16px] border-[2.5px] !border-border-ink shadow-brutal-sm transition-transform duration-150 group-hover/tile:-translate-y-0.5 group-active/tile:translate-y-0.5 ${tone}`}
           >
             <Icon className="h-6 w-6 stroke-[2.2]" aria-hidden />
             {external ? (
@@ -316,7 +323,7 @@ const AppLibraryPortal = memo(
             </div>
           ) : (
             <div className="space-y-2">
-              <h3 className="px-1 font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-muted">Results</h3>
+              <h3 className="px-1 font-title text-base font-extrabold text-text-heading">Results</h3>
               <div className="grid grid-cols-4 gap-x-1 gap-y-4 sm:grid-cols-6">
                 {filteredSearchItems.map((item) => renderItemCard(item))}
               </div>
@@ -349,19 +356,31 @@ const AppLibraryPortal = memo(
               flush();
 
               return (
-                <div key={group.name} className="space-y-3 pb-2">
-                  <h3 className="flex items-center gap-2 px-1 font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-muted">
+                // Each group is its own tinted panel with a strong edge, so the
+                // Modules sheet reads differently from ordinary list pages
+                // (owner: "more different, better visibility, more diverse").
+                <div
+                  key={group.name}
+                  className="modules-group space-y-3 rounded-[18px] border-[2.5px] p-3.5 shadow-brutal-sm"
+                  style={{ "--g": GROUP_TINT[group.name] ?? "var(--secondary)" } as React.CSSProperties}
+                >
+                  <h3 className="modules-group-title flex items-center gap-2 px-0.5 pb-2 font-title text-base font-extrabold text-text-heading">
+                    <span
+                      aria-hidden
+                      className="h-3.5 w-3.5 rounded-full border-2 border-border-ink"
+                      style={{ backgroundColor: GROUP_TINT[group.name] ?? "var(--surface-secondary)" }}
+                    />
                     {group.name}
-                    <span className="h-0.5 flex-1 rounded-full bg-border-muted" aria-hidden />
+                    <span className="ml-auto font-label text-xs font-semibold text-text-muted">
+                      {group.items.length}
+                    </span>
                   </h3>
                   <div className="space-y-3">
                     {segments.map((seg, idx) => {
                       if (seg.type === "academics") {
                         return (
                           <div key={`${group.name}-academics-${idx}`} className="space-y-2">
-                            <h4 className="px-1 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
-                              Academics
-                            </h4>
+                            <h4 className="px-1 font-label text-xs font-semibold text-text-muted">Academics</h4>
                             <div className="grid grid-cols-4 gap-x-1 gap-y-4 sm:grid-cols-6">
                               {academicsItems.map((sub) =>
                                 renderItemCard(sub, {
@@ -376,9 +395,7 @@ const AppLibraryPortal = memo(
                       if (seg.type === "hostel") {
                         return (
                           <div key={`${group.name}-hostel-${idx}`} className="space-y-2">
-                            <h4 className="px-1 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
-                              Hostel
-                            </h4>
+                            <h4 className="px-1 font-label text-xs font-semibold text-text-muted">Hostel</h4>
                             <div className="grid grid-cols-4 gap-x-1 gap-y-4 sm:grid-cols-6">
                               {hostelItems.map((sub) =>
                                 renderItemCard(sub, {

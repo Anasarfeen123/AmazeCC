@@ -13,6 +13,8 @@ import {
   FileText,
   RefreshCcw,
   Sparkles,
+  Gauge,
+  BadgeCheck,
 } from "lucide-react";
 import {
   AvatarDot,
@@ -575,6 +577,32 @@ export default function CalendarSubpage({
 
   return (
     <PageShell {...shellProps}>
+      {/* Skip predictor and On-duty at the top, where they are noticed
+          (teammate review 2026-11-28); a compact pair, not two full rows. */}
+      <div className="grid grid-cols-2 gap-2.5">
+        <button
+          type="button"
+          onClick={openPredictor}
+          className="flex min-h-14 cursor-pointer items-center gap-2.5 rounded-[12px] border-2 border-border-ink bg-mint px-3 text-left text-obsidian shadow-brutal-sm brutal-press"
+        >
+          <Gauge className="h-5 w-5 shrink-0" aria-hidden />
+          <span className="min-w-0">
+            <span className="block font-title text-sm font-extrabold leading-tight">Skip predictor</span>
+            <span className="block truncate text-xs opacity-80">Classes you can skip</span>
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveAttendanceSubTab("od")}
+          className="flex min-h-14 cursor-pointer items-center gap-2.5 rounded-[12px] border-2 border-border-ink bg-surface px-3 text-left text-text-heading shadow-brutal-sm brutal-press"
+        >
+          <BadgeCheck className="h-5 w-5 shrink-0 text-primary" aria-hidden />
+          <span className="min-w-0">
+            <span className="block font-title text-sm font-extrabold leading-tight">On-duty</span>
+            <span className="block truncate text-xs text-text-muted">Hours and records</span>
+          </span>
+        </button>
+      </div>
       {/* ── Month grid, first on the page (owner: the calendar is the most
           important part and the page felt cluttered). One header row:
           ‹ month › and Today; the programme picker sits under the grid. ── */}
@@ -637,39 +665,6 @@ export default function CalendarSubpage({
         </div>
       </div>
 
-      {/*
-       * Two stat cards, side by side, and both are carousels.
-       *
-       * Left: the semester at a glance — the percentage, then the two day
-       * counts the old full-screen timeline existed to show. Right: the same
-       * measure one course at a time, worst first.
-       *
-       * Every card says what its number is *of*. A bare "87%" beside another
-       * "87%" is not information, and this is the page people screenshot.
-       */}
-      <button
-        type="button"
-        onClick={openPredictor}
-        className="mb-3 flex min-h-12 w-full items-center justify-between gap-3 rounded-[12px] border-2 border-border-ink bg-mint px-4 text-left text-obsidian shadow-brutal-sm brutal-press cursor-pointer"
-      >
-        <span className="min-w-0">
-          <span className="block font-display text-sm font-bold uppercase">Skip predictor</span>
-          <span className="block text-xs">How many classes you can skip, course by course</span>
-        </span>
-        <ChevronRight className="h-4 w-4 shrink-0" aria-hidden />
-      </button>
-      {/* On-duty was unreachable from here (owner). */}
-      <button
-        type="button"
-        onClick={() => setActiveAttendanceSubTab("od")}
-        className="mb-3 flex min-h-12 w-full items-center justify-between gap-3 rounded-[12px] border-2 border-border-ink bg-surface px-4 text-left text-text-heading shadow-brutal-sm brutal-press cursor-pointer"
-      >
-        <span className="min-w-0">
-          <span className="block font-display text-sm font-bold uppercase">On-duty</span>
-          <span className="block text-xs text-text-muted">OD hours, history and official records</span>
-        </span>
-        <ChevronRight className="h-4 w-4 shrink-0" aria-hidden />
-      </button>
       {/* Stat carousels removed (owner): the calendar and the Skip predictor
           carry these numbers. */}
 
@@ -907,8 +902,8 @@ function countClasses(dayCardsMap: AttendanceDayCardsMap, day: CalendarDayModel)
  * whether today is a teaching day.
  */
 function todayTone(day: CalendarDayModel): string {
-  if (day.dayType === "holiday") return "red";
-  if (isExamDay(day)) return "amber";
+  if (day.dayType === "holiday") return "emerald";
+  if (isExamDay(day)) return "red";
   if (!hasClasses(day)) return "sky";
   return day.attendance.absent > 0 ? "red" : "emerald";
 }

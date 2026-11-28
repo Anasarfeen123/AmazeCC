@@ -16,13 +16,10 @@
  * one encoding. A fill makes all five states the same shape, so the eye
  * compares colours instead of strings.
  *
- * The colours are deliberately *not* the obvious ones. Exam is amber and
- * holiday is red, which reads backwards from "exams are the scary thing" — and
- * that is the point. In this app red is reserved for a genuine loss of a
- * teaching day (`MonthGrid` uses the identical red for `holiday`), and an exam
- * is a normal working day that happens to be graded. Amber is already the
- * shortened-day colour in the same grid, so the two tints mean the same thing
- * on the strip as they do on the month grid it links to.
+ * Traffic-light colours (team review, 2026-11-28: a red holiday read as
+ * danger and made people panic): exam is red (urgent), holiday is green (no
+ * college, good news), classes are the calm default. `MonthGrid` uses the
+ * same colours, so the strip and the month grid it links to agree.
  *
  * Nothing is lost in the swap. The word moves to `title` and `aria-label`, and
  * the sub-header under the strip already narrates the selected day in full
@@ -103,14 +100,14 @@ export const WEEK_STRIP_TINT: Record<WeekStripFlavour, WeekStripTint> = {
   // Brand: status fills, ink text, and a status-coloured edge so the kind is
   // readable before the title is (the title still carries the word).
   exam: {
-    fill: "bg-warning-surface",
-    ink: "text-warning-foreground",
-    edge: "border-warning",
-  },
-  holiday: {
     fill: "bg-danger-surface",
     ink: "text-danger-foreground",
     edge: "border-danger",
+  },
+  holiday: {
+    fill: "bg-success-surface",
+    ink: "text-success-foreground",
+    edge: "border-success",
   },
   reordered: {
     fill: "bg-secondary",

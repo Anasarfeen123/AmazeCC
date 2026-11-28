@@ -847,7 +847,9 @@
     0 0,
     11px 11px;
   background-repeat: no-repeat, no-repeat, repeat;
-  background-attachment: fixed, fixed, scroll;
+  /* Dots stay put while the page scrolls, so cards look like they float
+     above them (teammate suggestion, 2026-11-28). */
+  background-attachment: fixed, fixed, fixed;
 }
 .dashboard-content::before,
 .page-dots::before {
@@ -1310,4 +1312,26 @@
 }
 .border-border-ink .border-border-ink {
   border-color: var(--border-inner);
+}
+
+/* Modules sheet groups (AppLibraryPortal). --g is the group colour.
+   Light: tinted paper panel with the ink edge. Dark / night: the tint mixed
+   into the surface went muddy and every panel had the same teal edge (owner:
+   "not looking good in dark"), so the edge and a header underline take the
+   group colour and the fill is a clean, slightly stronger wash. */
+.modules-group {
+  border-color: var(--border-ink);
+  background-color: color-mix(in oklab, var(--g) 16%, var(--surface));
+}
+.modules-group-title {
+  border-bottom: 2px solid color-mix(in oklab, var(--g) 55%, transparent);
+}
+.dark .modules-group {
+  border-color: color-mix(in oklab, var(--g) 75%, var(--surface));
+  background-color: color-mix(in oklab, var(--g) 11%, var(--surface));
+  box-shadow: 4px 4px 0 0 color-mix(in oklab, var(--g) 30%, #000);
+}
+.dark .modules-group-title {
+  color: color-mix(in oklab, var(--g) 70%, var(--text-heading));
+  border-bottom-color: color-mix(in oklab, var(--g) 45%, transparent);
 }

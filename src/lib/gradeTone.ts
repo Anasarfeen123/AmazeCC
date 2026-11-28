@@ -4,16 +4,17 @@
  * reads the same in light and dark.
  */
 export function gradeTone(grade?: string): string {
+  // Blue -> green -> yellow -> red, best to worst (team review 2026-11-28).
   switch ((grade || "").toUpperCase()) {
     case "S":
-      return "bg-mint text-obsidian";
+      return "bg-[#9cc8ec] text-obsidian";
     case "A":
-      return "bg-sage text-obsidian";
+      return "bg-mint text-obsidian";
     case "B":
-      return "bg-ochre text-obsidian";
+      return "bg-sage text-obsidian";
     case "C":
-      return "bg-[#F4A259] text-obsidian";
     case "D":
+      return "bg-ochre text-obsidian";
     case "E":
     case "F":
       return "bg-coral text-obsidian";

@@ -580,7 +580,10 @@ export default function SimplifiedAcademicsPage({
       <div
         key={course.courseCode}
         {...clickable(() => handleCourseClick(course.courseCode))}
-        className={`${LIST_ROW} relative group cursor-pointer select-none`}
+        className={`${LIST_ROW} relative group cursor-pointer select-none border-b-2 last:border-b-0`}
+        // Divider in the course's own colour, muted (owner: use the side
+        // stripe's colour for the bottom border instead of one grey line).
+        style={{ borderBottomColor: `color-mix(in oklab, ${courseAccent(course.courseCode)} 55%, transparent)` }}
       >
         {/* Course colour stripe, same colour as on Home (courseAccent). */}
         <span
@@ -640,10 +643,18 @@ export default function SimplifiedAcademicsPage({
             </div>
           </div>
           {!course.grade && grandWeightage.hasAssessments && grandWeightage.percentage !== null ? (
-            <div className="mt-2.5 h-1.5 w-full overflow-hidden rounded-full bg-surface-secondary" aria-hidden>
+            // Thicker bar with a visible track, filled in the course colour
+            // (teammate review: the track was barely visible).
+            <div
+              className="mt-2.5 h-2.5 w-full overflow-hidden rounded-full border border-border-muted bg-surface-tertiary"
+              aria-hidden
+            >
               <div
-                className="h-full rounded-full bg-primary"
-                style={{ width: `${Math.max(0, Math.min(100, grandWeightage.percentage))}%` }}
+                className="h-full rounded-full"
+                style={{
+                  width: `${Math.max(0, Math.min(100, grandWeightage.percentage))}%`,
+                  backgroundColor: courseAccent(course.courseCode),
+                }}
               />
             </div>
           ) : null}
@@ -710,7 +721,7 @@ export default function SimplifiedAcademicsPage({
                   </div>
 
                   {/* Course Pills */}
-                  <div className={LIST_SHELL}>{filteredSemCourses.map(renderCoursePill)}</div>
+                  <div className={`${LIST_SHELL} divide-y-0`}>{filteredSemCourses.map(renderCoursePill)}</div>
                 </div>
               );
             })
@@ -780,7 +791,7 @@ export default function SimplifiedAcademicsPage({
       {/* ── CURRENT SEMESTER COURSES PILLS LIST ── */}
       <div className="space-y-2">
         {filteredCurrentCourses.length > 0 ? (
-          <div className={LIST_SHELL}>{filteredCurrentCourses.map(renderCoursePill)}</div>
+          <div className={`${LIST_SHELL} divide-y-0`}>{filteredCurrentCourses.map(renderCoursePill)}</div>
         ) : (
           <EmptyPanel
             variant="dashed"

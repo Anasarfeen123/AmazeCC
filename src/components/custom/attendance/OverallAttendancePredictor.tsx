@@ -1,5 +1,6 @@
 "use client";
 import SelectField from "../shared/primitives/SelectField";
+import { courseAccent } from "@/lib/courseColors";
 import { haptic } from "@/lib/haptics";
 
 import { useState, useMemo, useCallback } from "react";
@@ -726,7 +727,9 @@ export default function OverallAttendancePredictor({
             variant="dashed"
           />
         ) : (
-          <ListShell>
+          // One card per course, outlined and tinted in the course colour
+          // (teammate review: a list of identical cards looked cluttered).
+          <div className="space-y-2.5">
             {/* Theory and lab of one course share a block (owner). */}
             {Object.values(
               filteredCourses.reduce<Record<string, typeof filteredCourses>>((acc, c) => {
@@ -901,10 +904,19 @@ export default function OverallAttendancePredictor({
                   </div>
                 );
               };
+              const accent = courseAccent(base);
               return (
-                <div key={base} className="px-2 py-2">
+                <div
+                  key={base}
+                  className="relative overflow-hidden rounded-[14px] border-[1.5px] py-2 pl-3.5 pr-2"
+                  style={{
+                    borderColor: `color-mix(in oklab, ${accent} 65%, transparent)`,
+                    backgroundColor: `color-mix(in oklab, ${accent} 9%, var(--surface))`,
+                  }}
+                >
+                  <span aria-hidden className="absolute inset-y-0 left-0 w-1.5" style={{ backgroundColor: accent }} />
                   <div className="flex items-baseline justify-between gap-2 px-2">
-                    <h3 className="min-w-0 truncate font-display text-sm font-bold text-text-heading">
+                    <h3 className="min-w-0 truncate font-title text-[15px] font-extrabold text-text-heading">
                       {parts[0].courseTitle || base}
                     </h3>
                     <span className="shrink-0 font-mono text-xs text-text-muted">{base}</span>
@@ -913,7 +925,7 @@ export default function OverallAttendancePredictor({
                 </div>
               );
             })}
-          </ListShell>
+          </div>
         )}
       </div>
 

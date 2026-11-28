@@ -76,6 +76,7 @@ import {
   useCarousel,
   useHorizontalSwipe,
   type InsightSlide,
+  OptionPicker,
 } from "../shared/primitives";
 import { useAtom, useSetAtom, useAtomValue } from "jotai";
 import PwaInstallCard from "@/components/custom/shared/PwaInstallCard";
@@ -314,13 +315,17 @@ function LiveClassProgress({
 
   // The fill had no colour (a bulk restyle removed its classes), so a live
   // class showed no progress (user report). Mint wash + a solid edge at "now".
+  // A wash behind the text clashed with it (owner screenshot: the fill's edge
+  // cut through the title and badge). Now a 4px progress line along the card's
+  // bottom edge, so text always sits on the plain card.
   if (variant === "compact-background" || variant === "detailed-background") {
     return (
-      <div
-        aria-hidden
-        className="live-progress-fill absolute inset-y-0 left-0 pointer-events-none transition-[width] duration-700 ease-linear"
-        style={{ width: `${progressPct}%` }}
-      />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-1 bg-mint/25">
+        <div
+          className="h-full bg-mint transition-[width] duration-700 ease-linear"
+          style={{ width: `${progressPct}%` }}
+        />
+      </div>
     );
   }
 
@@ -727,6 +732,12 @@ export default function SimplifiedMobileHome({
     () => scheduleRows.map((r) => ({ ...r.raw, examCategory: r.examType, date: r.date })),
     [scheduleRows],
   );
+
+  // Every FAT paper is behind us: the semester is over (HomeNudge offers the next one).
+  const allFatsDone = useMemo(() => {
+    const fats = scheduleRows.filter((r) => /FAT/i.test(String(r.examType)));
+    return fats.length > 0 && fats.every((r) => classifyExamState(r.date, r.endAt, minuteNow) === "past");
+  }, [scheduleRows, minuteNow]);
 
   // Keep the schedule list stable while reclassifying the next exam once per minute.
   const nextUpcomingExam = useMemo(
@@ -1234,10 +1245,26 @@ export default function SimplifiedMobileHome({
     return [...chunked, ...dueOnly];
   }, [effectiveTimetableDay, tasks, isTodayView, viewedDayDate]);
 
+  // The semester's last instructional day (the calendar's LID). After it the
+  // timetable is over: FATs run and no regular classes are held (owner: "how
+  // will there be sem classes after FAT, don't show any").
+  const semesterLastDay = useMemo(() => lastInstructionalDay((calendarData as any)?.calendars), [calendarData]);
+  const isAfterTeaching = useCallback(
+    (d?: Date | null) => {
+      if (!semesterLastDay || !d) return false;
+      const end = new Date(semesterLastDay);
+      end.setHours(23, 59, 59, 999);
+      return d.getTime() > end.getTime();
+    },
+    [semesterLastDay],
+  );
+  const classesOver = isAfterTeaching(viewedDayDate);
+
   // Classes for the selected day (or day order override)
   const selectedDayClasses = useMemo(() => {
+    if (classesOver) return [];
     return timetableMap[effectiveTimetableDay] || [];
-  }, [timetableMap, effectiveTimetableDay]);
+  }, [timetableMap, effectiveTimetableDay, classesOver]);
 
   // The day's Lab FAT papers (calendar mark + schedule join).
   const selectedDayLabFat: LabFatPaper[] = selectedDayMeta?.labFatPapers ?? [];
@@ -1522,7 +1549,9 @@ export default function SimplifiedMobileHome({
   })();
 
   const nowNextCard = (() => {
-    if (!isTodayView) return null;
+    // On an exam day the timetable is suspended: no "class in 10 min" above
+    // the exam card (teammate bug report).
+    if (!isTodayView || isExamDay || classesOver) return null;
     const liveIdx = rowStatuses.indexOf("live");
     const nextIdx = rowStatuses.indexOf("upcoming");
     const pick = liveIdx !== -1 ? liveIdx : nextIdx;
@@ -1611,6 +1640,20 @@ export default function SimplifiedMobileHome({
                   {profileName}
                 </h1>
                 {!isDemoMode ? <LastSyncedLabel /> : null}
+                {/* Semester switch on phones (teammate: "how do I see next
+                    sem?"). Wide screens have it in the sidebar. */}
+                <div className="mt-2 md:hidden" role="group" aria-label="Semester">
+                  <OptionPicker
+                    value={settings?.currSemesterID || config.semesterIDs[config.semesterIDs.length - 2]}
+                    onChange={(val) => void handleReloadRequest(val)}
+                    options={config.semesterIDs.map((semId: string) => ({
+                      value: semId,
+                      label: formatSemesterName(semId),
+                    }))}
+                    searchable={false}
+                    className="w-auto [&>button:first-child]:h-8 [&>button:first-child]:gap-1 [&>button:first-child]:rounded-full [&>button:first-child]:px-3 [&>button:first-child]:bg-surface [&>button:first-child_span]:text-xs [&>button:first-child_span]:font-semibold"
+                  />
+                </div>
               </div>
 
               {/* Action Controls */}
@@ -1693,6 +1736,8 @@ export default function SimplifiedMobileHome({
                 currentSemesterId={config.semesterIDs[config.semesterIDs.length - 2] ?? null}
                 viewingSemesterId={settings?.currSemesterID ?? null}
                 onSwitchSemester={(id) => void handleReloadRequest(id)}
+                examsDone={allFatsDone}
+                nextSemesterId={config.semesterIDs[config.semesterIDs.length - 1] ?? null}
               />
             ) : null}
 
@@ -1912,7 +1957,9 @@ export default function SimplifiedMobileHome({
                 >
                   {weekDays.map((item) => {
                     const isSelected = selectedDay === item.dayCode;
-                    const count = timetableMap[item.detectedDayOrder || item.dayCode]?.length || 0;
+                    const count = isAfterTeaching(item.fullDate)
+                      ? 0
+                      : timetableMap[item.detectedDayOrder || item.dayCode]?.length || 0;
                     const flavour = weekStripFlavour(item);
                     const tint = WEEK_STRIP_TINT[flavour];
                     // Today keeps its green number only when nothing more
@@ -1981,6 +2028,8 @@ export default function SimplifiedMobileHome({
                     </span>
                   ) : isExamDay ? (
                     `${selectedDayMeta.exams.length} ${selectedDayMeta.exams.length === 1 ? "exam" : "exams"} scheduled`
+                  ) : classesOver ? (
+                    "Classes have ended"
                   ) : isHolidayOrOff ? (
                     "Academic Holiday / Non-Instructional"
                   ) : (
@@ -2099,6 +2148,28 @@ export default function SimplifiedMobileHome({
                   </div>
                 ))}
               </div>
+            ) : classesOver ? (
+              <EmptyPanel
+                tone="emerald"
+                icon={<CheckCircle2 className="w-7 h-7" />}
+                title="Classes have ended"
+                description={`The last teaching day was ${semesterLastDay?.toLocaleDateString("en-IN", {
+                  day: "numeric",
+                  month: "short",
+                })}. Exams are on the exam schedule.`}
+                action={
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveTab("academics");
+                      setActiveSubTab("schedule");
+                    }}
+                    className="inline-flex items-center gap-1.5 rounded-xl border-2 border-border-ink bg-secondary px-4 py-2 text-xs font-bold text-secondary-foreground cursor-pointer"
+                  >
+                    <PenLine className="h-3.5 w-3.5" aria-hidden /> Exam schedule
+                  </button>
+                }
+              />
             ) : isHolidayOrOff ? (
               /* ── VIEWPORT STATE 2: HOLIDAY / NON-INSTRUCTIONAL DAY (SPACIOUS & MINIMAL) ── */
               <EmptyPanel

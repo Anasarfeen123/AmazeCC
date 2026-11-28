@@ -226,12 +226,15 @@ export function gradePoints(grade: string | undefined | null): number | null {
  * were never distinguishable at list size anyway. `Cyan` and `violet` carry the
  * middle of the ladder instead of inventing hues for it.
  */
+// Calm-to-alarm ladder (team review 2026-11-28): blue for the top grade,
+// green for good, yellow for the middle, red for failing, so warmth tracks
+// how much a grade should worry you. (S used to be yellow, above green.)
 export const GRADE_TONE: Record<string, string> = {
-  S: "amber",
+  S: "blue",
   A: "emerald",
-  B: "blue",
-  C: "cyan",
-  D: "violet",
+  B: "emerald",
+  C: "amber",
+  D: "amber",
   E: "red",
   F: "red",
   N: "zinc",

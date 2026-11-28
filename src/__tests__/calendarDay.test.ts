@@ -1379,7 +1379,7 @@ describe("dayHeadline", () => {
     // Folding the club event into the holiday must not erase it from the cell
     // either, or the grid would lose the only signal that something was on.
     const markers = dayMarkers(holidayWithClub());
-    expect(markers).toContain("red");
+    expect(markers).toContain("emerald"); // holidays are green now (traffic-light order)
   });
 
   it("leaves a holiday's own day type alone when a task falls on it", () => {

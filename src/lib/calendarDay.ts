@@ -222,12 +222,13 @@ export type CalendarMonthModel = {
 const GENERIC_TITLE = "Untitled event";
 
 const KIND_TONE: Record<EventKind, string> = {
-  exam: "amber",
+  // Traffic-light order (team review 2026-11-28): exam red, class yellow, holiday green.
+  exam: "red",
   milestone: "indigo",
   assignment: "violet",
   od: "sky",
-  class: "emerald",
-  holiday: "red",
+  class: "amber",
+  holiday: "emerald",
   working: "zinc",
   event: "zinc",
 };
@@ -250,8 +251,8 @@ export const LEGEND_ITEMS = [
   { tone: KIND_TONE.assignment, label: "Assignment" },
   { tone: KIND_TONE.milestone, label: "Milestone" },
   { tone: KIND_TONE.od, label: "OD" },
-  // Holidays are drawn as red-filled days, not dots; say so (critique #20).
-  { tone: KIND_TONE.holiday, label: "Holiday (red days)" },
+  // Holidays are drawn as green-filled days, not dots; say so (critique #20).
+  { tone: KIND_TONE.holiday, label: "Holiday (green days)" },
 ] as const;
 
 /**

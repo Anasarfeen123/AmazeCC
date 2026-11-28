@@ -1,7 +1,17 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Download, RotateCw, ShieldCheck, FileText, FileJson2, Code2, FileArchive, ChevronRight } from "lucide-react";
+import {
+  Download,
+  RotateCw,
+  ShieldCheck,
+  FileText,
+  FileJson2,
+  Code2,
+  FileArchive,
+  ChevronRight,
+  Info,
+} from "lucide-react";
 import PageShell from "@/components/custom/shared/primitives/PageShell";
 import { ListShell, SectionHeader } from "@/components/custom/shared/primitives/Surfaces";
 import SettingRow from "@/components/custom/shared/primitives/SettingRow";
@@ -786,6 +796,30 @@ export default function StudentReportPage() {
         subtitle="Choose an export format, then tailor the report sections to include. Your report data stays on this device."
         selectable
       >
+        {/* About (teammate review: the page needed an "about" part). */}
+        <section
+          aria-labelledby="report-about"
+          className="rounded-[14px] border-2 border-border-ink bg-surface p-4 shadow-brutal-sm space-y-2"
+        >
+          <h2 id="report-about" className="flex items-center gap-2 font-title text-[15px] font-bold text-text-heading">
+            <Info className="h-4 w-4 text-primary" aria-hidden />
+            About this report
+          </h2>
+          <p className="text-sm text-text-primary">
+            One document with your academic record: profile, attendance per course, marks, grades, CGPA and curriculum
+            progress. Useful for scholarship and internship forms, for parents, or to keep your own copy.
+          </p>
+          <ul className="space-y-1 text-sm text-text-muted">
+            <li>• Built on this device from your last sync; nothing is uploaded.</li>
+            <li>• Pick the sections and the look below, then download as PDF, HTML or JSON.</li>
+            <li>
+              • It is a summary made by AmazeCC,{" "}
+              <span className="font-semibold text-text-primary">not an official VIT transcript</span>. For official
+              documents use VTOP.
+            </li>
+          </ul>
+        </section>
+
         <section className="space-y-3">
           <SectionHeader icon={Download} title="Download report" />
           <ListShell className="divide-y divide-border-muted">

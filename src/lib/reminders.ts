@@ -57,6 +57,8 @@ export interface PlanInput {
   >;
   /** Dates with no classes (holidays) as "Y-M-D" keys from `ymd`. */
   noClassDays?: Set<string>;
+  /** The semester's last instructional day: no class reminders after it. */
+  lastClassDay?: Date | null;
   now?: Date;
   leadMinutes?: number;
   days?: number;
@@ -74,6 +76,7 @@ export function planReminders(input: PlanInput): PlannedReminder[] {
     day.setHours(0, 0, 0, 0);
     day.setDate(day.getDate() + i);
     if (input.noClassDays?.has(ymd(day))) continue;
+    if (input.lastClassDay && day.getTime() > new Date(input.lastClassDay).setHours(23, 59, 59, 999)) break;
     const key = Object.keys(DAY_INDEX).find((k) => DAY_INDEX[k] === day.getDay())!;
     for (const cls of input.timetable[key] ?? []) {
       const { start } = getAttendanceTimeRange(cls.time);
@@ -89,6 +92,19 @@ export function planReminders(input: PlanInput): PlannedReminder[] {
         tag: `class-${ymd(day)}-${cls.time}`,
       });
     }
+  }
+
+  // Exam days suspend the timetable: drop class reminders on them (teammate:
+  // "why is there a class notification during exam").
+  const examDays = new Set<string>();
+  for (const papers of Object.values(input.exams ?? {})) {
+    for (const p of papers ?? []) {
+      const dm = /^(\d{1,2})-([A-Za-z]{3})-(\d{4})$/.exec(String(p.examDate ?? "").trim());
+      if (dm) examDays.add(ymd(new Date(+dm[3], MONTHS.indexOf(dm[2].toUpperCase()), +dm[1])));
+    }
+  }
+  for (let i = out.length - 1; i >= 0; i--) {
+    if (out[i].tag.startsWith("class-") && examDays.has(ymd(out[i].at))) out.splice(i, 1);
   }
 
   for (const [type, papers] of Object.entries(input.exams ?? {})) {

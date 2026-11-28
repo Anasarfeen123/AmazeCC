@@ -68,14 +68,13 @@ describe("WEEK_STRIP_TINT", () => {
     expect(Object.keys(WEEK_STRIP_TINT).sort()).toEqual(["exam", "holiday", "reordered", "teaching"]);
   });
 
-  it("paints an exam amber and a holiday red", () => {
-    // Not a typo. Red means "you lost a teaching day" everywhere else in the
-    // app (`MonthGrid`'s holiday tint, the attendance shortfalls), and an exam
-    // day is a normal working day that happens to be graded.
-    expect(WEEK_STRIP_TINT.exam.fill).toContain("warning");
-    expect(WEEK_STRIP_TINT.holiday.fill).toContain("danger");
-    expect(WEEK_STRIP_TINT.exam.fill).not.toContain("danger");
-    expect(WEEK_STRIP_TINT.holiday.fill).not.toContain("warning");
+  it("paints an exam red and a holiday green", () => {
+    // Traffic-light order (team review 2026-11-28): an exam is the urgent
+    // day, a holiday is good news. MonthGrid uses the same colours.
+    expect(WEEK_STRIP_TINT.exam.fill).toContain("danger");
+    expect(WEEK_STRIP_TINT.holiday.fill).toContain("success");
+    expect(WEEK_STRIP_TINT.exam.fill).not.toContain("warning");
+    expect(WEEK_STRIP_TINT.holiday.fill).not.toContain("danger");
   });
 
   it("gives each kind its own fill, ink and edge", () => {
@@ -97,8 +96,8 @@ describe("WEEK_STRIP_TINT", () => {
   });
 
   it("tints each edge to match its fill, so a circle reads as one object", () => {
-    expect(WEEK_STRIP_TINT.exam.edge).toContain("warning");
-    expect(WEEK_STRIP_TINT.holiday.edge).toContain("danger");
+    expect(WEEK_STRIP_TINT.exam.edge).toContain("danger");
+    expect(WEEK_STRIP_TINT.holiday.edge).toContain("success");
     expect(WEEK_STRIP_TINT.reordered.edge).toContain("primary");
   });
 });

@@ -13,11 +13,15 @@ import { formatSemesterName } from "@/lib/formatSemesterName";
  * - install: the browser offers "add to home screen" (or iPhone Safari,
  *   which never offers it) -> Install / how-to.
  *
+ * - next-semester: every FAT is done -> Switch to the next term / Not now
+ *   (owner: "if all FATs are done, show something to switch to the newer
+ *   semester").
+ *
  * At most one shows, in that order. Dismissing hides that notice for its
  * number of days (localStorage, this device only).
  */
-type NudgeId = "semester" | "install";
-const SNOOZE_DAYS: Record<NudgeId, number> = { semester: 3, install: 14 };
+type NudgeId = "next-semester" | "semester" | "install";
+const SNOOZE_DAYS: Record<NudgeId, number> = { "next-semester": 3, semester: 3, install: 14 };
 const key = (id: NudgeId) => `amazecc.nudge.${id}`;
 
 function snoozed(id: NudgeId): boolean {
@@ -58,19 +62,33 @@ export default function HomeNudge({
   currentSemesterId,
   viewingSemesterId,
   onSwitchSemester,
+  examsDone = false,
+  nextSemesterId = null,
 }: {
   currentSemesterId: string | null;
   viewingSemesterId: string | null;
   onSwitchSemester: (id: string) => void;
+  /** Every FAT in the exam schedule is in the past. */
+  examsDone?: boolean;
+  /** The term after the current one (config's upcoming entry). */
+  nextSemesterId?: string | null;
 }) {
   const { canInstall, promptInstall } = usePwaInstall();
   // Client-only checks; decided after mount so the server HTML matches.
   const [ready, setReady] = useState(false);
-  const [hidden, setHidden] = useState<Record<NudgeId, boolean>>({ semester: true, install: true });
+  const [hidden, setHidden] = useState<Record<NudgeId, boolean>>({
+    "next-semester": true,
+    semester: true,
+    install: true,
+  });
   const [ios, setIos] = useState(false);
   const [firefox, setFirefox] = useState(false);
   useEffect(() => {
-    setHidden({ semester: snoozed("semester"), install: snoozed("install") || isStandalone() });
+    setHidden({
+      "next-semester": snoozed("next-semester"),
+      semester: snoozed("semester"),
+      install: snoozed("install") || isStandalone(),
+    });
     setIos(isIosSafari());
     setFirefox(isAndroidFirefox());
     setReady(true);
@@ -83,21 +101,45 @@ export default function HomeNudge({
   };
 
   let id: NudgeId | null = null;
-  if (!hidden.semester && currentSemesterId && viewingSemesterId && viewingSemesterId !== currentSemesterId)
+  if (!hidden["next-semester"] && examsDone && nextSemesterId && viewingSemesterId !== nextSemesterId)
+    id = "next-semester";
+  else if (!hidden.semester && currentSemesterId && viewingSemesterId && viewingSemesterId !== currentSemesterId)
     id = "semester";
   else if (!hidden.install && (canInstall || ios || firefox)) id = "install";
   if (!id) return null;
 
   const text =
-    id === "semester"
-      ? `You're viewing ${formatSemesterName(viewingSemesterId!)}.`
-      : canInstall
-        ? "Add AmazeCC to your home screen."
-        : firefox
-          ? "Install AmazeCC: tap ⋮ in Firefox, then Install."
-          : "Add to Home Screen: tap Share, then Add to Home Screen.";
+    id === "next-semester"
+      ? "All your FATs are done. Move to the new semester?"
+      : id === "semester"
+        ? `You're viewing ${formatSemesterName(viewingSemesterId!)}.`
+        : canInstall
+          ? "Add AmazeCC to your home screen."
+          : firefox
+            ? "Install AmazeCC: tap ⋮ in Firefox, then Install."
+            : "Add to Home Screen: tap Share, then Add to Home Screen.";
   const action =
-    id === "semester" ? (
+    id === "next-semester" ? (
+      <>
+        <button
+          type="button"
+          onClick={() => {
+            dismiss("next-semester");
+            onSwitchSemester(nextSemesterId!);
+          }}
+          className="shrink-0 rounded-[8px] border-2 border-border-ink bg-primary px-2.5 py-1 text-xs font-bold text-primary-foreground cursor-pointer"
+        >
+          Switch to {formatSemesterName(nextSemesterId!)}
+        </button>
+        <button
+          type="button"
+          onClick={() => dismiss("next-semester")}
+          className="shrink-0 rounded-[8px] px-2 py-1 text-xs font-semibold text-text-muted hover:bg-surface-secondary cursor-pointer"
+        >
+          Not now
+        </button>
+      </>
+    ) : id === "semester" ? (
       <button
         type="button"
         onClick={() => {

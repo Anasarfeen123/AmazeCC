@@ -7,6 +7,7 @@ import { settingsAtom } from "@/store/settingsAtoms";
 import { demoModeAtom } from "@/store";
 import { buildAttendanceDayCardsMap } from "@/lib/attendanceTimetable";
 import { holidaysFromCalendar, planReminders, uploadReminders } from "@/lib/reminders";
+import { lastInstructionalDay } from "@/lib/ics";
 
 const BELOW_KEY = "amazecc_below_target_seen";
 
@@ -45,6 +46,7 @@ export default function ReminderScheduler() {
         timetable: classes ? (timetable as any) : {},
         exams: exams ? schedule?.Schedule || schedule?.schedule : undefined,
         noClassDays: holidaysFromCalendar(calendar?.calendars),
+        lastClassDay: lastInstructionalDay(calendar?.calendars),
       });
       void uploadReminders(plan).then((r) => {
         if (r === "sent" || r === "no-subscription") last.current = { sig, at: Date.now() };

@@ -114,20 +114,20 @@ describe("week strip", () => {
     expect(strip().className).not.toMatch(/bg-|border|rounded|shadow/);
   });
 
-  it("tints an exam day amber and keeps the word in the title", () => {
+  it("tints an exam day red and keeps the word in the title", () => {
     renderHome();
     const exam = within(strip()).getByTitle("Tue 29 Sept · Exam day");
-    expect(exam.className).toContain("bg-warning-surface");
+    expect(exam.className).toContain("bg-danger-surface");
     // The word is not on the face of the circle, but it is not gone either —
     // and the exam count rides in the accessible name, not the title.
     expect(exam.textContent).toBe("TUE29Exam");
     expect(exam.getAttribute("aria-label")).toBe("Tue 29 Sept · Exam day, 1 exam");
   });
 
-  it("tints a holiday red", () => {
+  it("tints a holiday green", () => {
     renderHome();
     for (const title of ["Thu 1 Oct · Academic holiday", "Sat 3 Oct · Academic holiday"]) {
-      expect(within(strip()).getByTitle(title).className).toContain("bg-danger-surface");
+      expect(within(strip()).getByTitle(title).className).toContain("bg-success-surface");
     }
   });
 

@@ -29,7 +29,7 @@ import { isDueOnDay } from "@/lib/taskMatch";
 import { getTodayAttendanceDay } from "@/lib/attendanceTimetable";
 import type { Task } from "@/types/tasks";
 import { isTaskOverdue } from "@/types/tasks";
-import posthog from "posthog-js";
+import posthog from "@/lib/posthogClient";
 import { InsightCarousel, PageShell, useCarousel, type InsightSlide } from "../shared/primitives";
 import {
   BADGE_MD,

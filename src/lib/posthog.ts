@@ -1,6 +1,6 @@
 "use client";
 
-import posthog from "posthog-js";
+import posthog from "./posthogClient";
 import { getActiveDisplayName, getActiveRegNumber } from "./social/identity";
 import { getCachedRegisterNumber } from "./introSong/gate";
 

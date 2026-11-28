@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import { useSetAtom } from "jotai";
-import posthog from "posthog-js";
+import posthog from "@/lib/posthogClient";
 import { syncEngine } from "@/lib/sync-engine";
 import { forgetStoredCredentials, SIGNED_OUT_EVENT } from "@/lib/forgetDevice";
 import { authorizedIDAtom, credentialsAtom, defaultCredentials, demoModeAtom, isLoggedInAtom } from "@/store/authAtoms";

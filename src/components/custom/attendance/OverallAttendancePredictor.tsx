@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
+import { haptic } from "@/lib/haptics";
 import { useSetAtom, useAtomValue } from "jotai";
 import { unifiedAcademicsAtom } from "@/store";
 import type { NormalizedCourse } from "@/types/course";
@@ -286,6 +287,7 @@ export default function OverallAttendancePredictor({
 
   /** Whole-day toggle: present -> absent -> off. */
   const toggleDayState = useCallback((date: Date) => {
+    haptic();
     const time = date.getTime();
     setDateStates((prev) => {
       const nextState = ((prev[time] ?? 0) + 1) % 3;
@@ -295,6 +297,7 @@ export default function OverallAttendancePredictor({
 
   /** Skip or un-skip one date for one subject. */
   const toggleSubjectSkip = useCallback((courseCode: string, date: Date) => {
+    haptic();
     const time = date.getTime();
     setCourseSkips((prev) => toggleCourseSkip(prev, courseCode, time));
   }, []);
@@ -622,7 +625,14 @@ export default function OverallAttendancePredictor({
         {/* Quick Batch Simulation Actions */}
         <div className="flex items-center gap-2">
           <ToneBadge tone="emerald" size="lg" icon={<CheckCircle2 className="w-3.5 h-3.5" />}>
-            <button type="button" onClick={handleAttendAll} className="cursor-pointer">
+            <button
+              type="button"
+              onClick={() => {
+                haptic();
+                handleAttendAll();
+              }}
+              className="cursor-pointer"
+            >
               Attend All
             </button>
           </ToneBadge>

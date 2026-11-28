@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { buildTimetableIcs, isAndroid, lastInstructionalDay, saveIcs } from "@/lib/ics";
+import { drawTimetablePng, shareTimetablePng } from "@/lib/timetableImage";
+import CalendarExportNote from "../shared/CalendarExportNote";
 import {
   Clock,
   MapPin,
@@ -24,6 +27,8 @@ import {
   WifiOff,
   X,
   ChevronDown,
+  CalendarPlus,
+  Share2,
 } from "lucide-react";
 
 import { AnimatePresence, m } from "framer-motion";
@@ -498,6 +503,10 @@ export default function SimplifiedMobileHome({
   const todayDayCode: AttendanceDay = dayNames[todayDayIndex];
 
   const [selectedDay, setSelectedDay] = useState<AttendanceDay>(todayDayCode);
+
+  const [sharingImage, setSharingImage] = useState(false);
+
+  const [icsNote, setIcsNote] = useState(false);
 
   /**
    * The only way the visible week changes.
@@ -2334,8 +2343,50 @@ export default function SimplifiedMobileHome({
                   <X className="w-4 h-4" />
                 </IconButton>
               </div>
+              {/* Take the week elsewhere: the phone's calendar (weekly repeating
+                  events) or a clean picture for WhatsApp. */}
+              <div className="flex flex-wrap gap-2 px-4 pt-4 sm:px-5">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const r = await saveIcs(
+                      "AmazeCC-timetable.ics",
+                      buildTimetableIcs(timetableMap, {
+                        until: lastInstructionalDay((calendarData as any)?.calendars),
+                      }),
+                    );
+                    setIcsNote(r === "downloaded" && isAndroid());
+                  }}
+                  className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-xl bg-sky-600 px-3.5 text-sm font-semibold text-white transition-colors hover:bg-sky-700"
+                >
+                  <CalendarPlus className="h-4 w-4" aria-hidden />
+                  Add to calendar
+                </button>
+                <button
+                  type="button"
+                  disabled={sharingImage}
+                  onClick={async () => {
+                    setSharingImage(true);
+                    try {
+                      const blob = await drawTimetablePng(timetableMap, { title: "My timetable" });
+                      await shareTimetablePng(blob);
+                    } finally {
+                      setSharingImage(false);
+                    }
+                  }}
+                  className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3.5 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50 disabled:opacity-60 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
+                >
+                  <Share2 className="h-4 w-4" aria-hidden />
+                  {sharingImage ? "Preparing…" : "Share as image"}
+                </button>
+              </div>
+              {icsNote ? (
+                <div className="px-4 pt-3 sm:px-5">
+                  <CalendarExportNote file="AmazeCC-timetable.ics" onClose={() => setIcsNote(false)} />
+                </div>
+              ) : null}
               <div className="p-4 sm:p-5">
-                <TimetableGrid attendance={attendanceList} />
+                <TimetableGrid attendance={attendanceList} embedded />
               </div>
             </div>
           </BottomSheet>

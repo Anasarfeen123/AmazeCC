@@ -31,6 +31,9 @@ const basePath = "";
 const nextConfig = {
   experimental: {
     agentUpgrade: "security",
+    // Styles arrive with the HTML instead of as a render-blocking <link>;
+    // the service worker caches pages, so returning visitors are fine too.
+    inlineCss: true,
   },
   output: "export",
   basePath: basePath,

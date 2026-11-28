@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { demoTasks, rebaseDemoDates } from "@/lib/demoDates";
 import dynamic from "next/dynamic";
 import { useAtom, useSetAtom, useAtomValue } from "jotai";
 import {
@@ -25,6 +26,7 @@ import {
   authorizedIDAtom,
   defaultSettings,
   activeTabAtom,
+  tasksAtom,
 } from "@/store";
 import { activeRegNumberAtom, pendingInviteHandleAtom } from "@/store/socialAtoms";
 import { activeToolsSubTabAtom } from "@/store/uiAtoms";
@@ -56,7 +58,7 @@ import { useAppNetworkStatus } from "./app/useAppNetworkStatus";
 import AuthenticatedWorkspace from "./app/AuthenticatedWorkspace";
 import SyncSessionHost from "./app/SyncSessionHost";
 import { useSyncSessionBridge } from "./app/useSyncSessionBridge";
-import posthog from "posthog-js";
+import posthog from "@/lib/posthogClient";
 import { trackScreenView, getPostHogUserIdentifiers, aliasPostHogUser } from "@/lib/posthog";
 import buildInfo from "@/data/buildInfo.json";
 import { useRouter } from "next/navigation";
@@ -86,6 +88,7 @@ function MainRuntime({ initialIntent, onSignedOut }: MainProps) {
   const setMessage = useSetAtom(messageAtom);
   const setAttendanceData = useSetAtom(attendanceDataAtom);
   const setMarksData = useSetAtom(marksDataAtom);
+  const setTasks = useSetAtom(tasksAtom);
   const setGradesData = useSetAtom(gradesDataAtom);
   const setAllGradesData = useSetAtom(allGradesDataAtom);
   const setScheduleData = useSetAtom(scheduleDataAtom);
@@ -362,7 +365,8 @@ function MainRuntime({ initialIntent, onSignedOut }: MainProps) {
   }, [handleLogin, setIsReloading]);
 
   const handleDemoClick = async () => {
-    const demoData = await (await fetch("/data/demoData.json")).json();
+    // Dates move to the current week so exams, calendar and events are upcoming.
+    const demoData = rebaseDemoDates(await (await fetch("/data/demoData.json")).json());
     setDemoMode(true);
     setTypedStorageItem("demoMode", "true");
     setIDs({
@@ -386,6 +390,12 @@ function MainRuntime({ initialIntent, onSignedOut }: MainProps) {
     }
     if ((demoData as any).profile) {
       setTypedStorageItem("profile", (demoData as any).profile);
+    }
+    // Sample tasks, unless this browser already has some.
+    if (!storage.tasks.get()?.length) {
+      const sample = demoTasks();
+      storage.tasks.set(sample);
+      setTasks(sample);
     }
     setIsLoggedIn(true);
   };

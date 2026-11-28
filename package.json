@@ -24,7 +24,8 @@
     "scanner:train": "node scripts/train-scanner-nn.mjs",
     "prepare": "husky",
     "pretypecheck": "node scripts/generate-build-info.js && node scripts/generate-timetable.mjs --check",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check:demo": "node scripts/demo-check.mjs"
   },
   "lint-staged": {
     "*.{js,jsx,mjs,cjs,ts,tsx,css,md,json}": "prettier --write"

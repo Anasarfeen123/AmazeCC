@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { useAtomValue } from "jotai";
 import { demoModeAtom, isLoggedInAtom, showIntroAtom } from "@/store";
 import AppIntroExperience from "./AppIntroExperience";
+import AppIconBadge from "./AppIconBadge";
+import ReminderScheduler from "./ReminderScheduler";
 import { useDashboardScreenHistory } from "../dashboard/useDashboardScreenHistory";
 import type { IntroLogin } from "../onboarding/OnboardingIntro";
 
@@ -68,6 +70,10 @@ export default function AuthenticatedWorkspace(props: AuthenticatedWorkspaceProp
           ℹ️ You are in Demo Mode. Data shown is for demonstration purposes only.
         </div>
       )}
+      {/* Icon badge (courses below target, exams tomorrow) and the encrypted
+          reminder upload; both render nothing. */}
+      <AppIconBadge />
+      <ReminderScheduler />
       <DashboardContent
         demoMode={demoMode}
         handleLogOutRequest={props.handleLogOutRequest}

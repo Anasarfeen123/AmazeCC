@@ -1,5 +1,6 @@
 "use client";
 import NavigationTabs from "./header/NavigationTabs";
+import { useEdgeSwipeBack } from "@/lib/useEdgeSwipeBack";
 import { useState, useEffect, useCallback, memo } from "react";
 import { useAtom } from "jotai";
 import {
@@ -206,6 +207,9 @@ function DashboardContent({
   // feedback/registration modals). The feedback badge reads whatever those
   // runs cached into `cache_ffcs_feedback` — fetching on mount costs a VTOP
   // round trip (or a captcha login) per app start just to paint a stat.
+
+  // Installed iPhone app: swipe from the left edge to go back.
+  useEdgeSwipeBack();
 
   if (showFresherWelcome) {
     return (

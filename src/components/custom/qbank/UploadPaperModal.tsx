@@ -4,7 +4,7 @@ import { uploadQBankPaper } from "@/lib/qbankApi";
 import BottomSheet from "../shared/BottomSheet";
 import { Input, Select, Button } from "@amazecontinuityprojects/amazeui";
 import { QBankCourse } from "@/types/qbank.types";
-import posthog from "posthog-js";
+import posthog from "@/lib/posthogClient";
 
 const posthogConfigured = Boolean(
   process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN && process.env.NEXT_PUBLIC_POSTHOG_HOST,

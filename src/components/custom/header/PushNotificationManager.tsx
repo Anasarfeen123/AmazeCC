@@ -358,6 +358,8 @@ export default function PushNotificationManager() {
                 },
                 {
                   key: "notifyMarksRelease",
+                  // Not built yet: say so instead of showing a switch that does nothing.
+                  soon: true,
                   label: "Marks & Grade Release Alerts",
                   desc: "Push notification when new CAT/FAT/Lab marks are published",
                   icon: Award,
@@ -365,6 +367,7 @@ export default function PushNotificationManager() {
                 },
                 {
                   key: "notifyMessServing",
+                  soon: true,
                   label: "Hostel Mess Serving Alerts",
                   desc: "Notifications when Breakfast, Lunch, Snacks or Dinner serving starts",
                   icon: Utensils,
@@ -372,6 +375,7 @@ export default function PushNotificationManager() {
                 },
                 {
                   key: "notifyHostelLeave",
+                  soon: true,
                   label: "Hostel Leave & Outpass Approvals",
                   desc: "Instant alert when warden approves or updates leave status",
                   icon: Plane,
@@ -379,6 +383,7 @@ export default function PushNotificationManager() {
                 },
                 {
                   key: "notifyBusUpdates",
+                  soon: true,
                   label: "Day Scholar Bus Schedule Alerts",
                   desc: "Updates on bus routes, timings and delay alerts",
                   icon: Bus,
@@ -386,6 +391,7 @@ export default function PushNotificationManager() {
                 },
                 {
                   key: "notifyLibraryBooks",
+                  soon: true,
                   label: "Library Due Date Reminders",
                   desc: "Reminders before Koha library book return deadlines",
                   icon: BookMarked,
@@ -393,6 +399,7 @@ export default function PushNotificationManager() {
                 },
                 {
                   key: "notifyAssignments",
+                  soon: true,
                   label: "LMS & Assignment Reminders",
                   desc: "Remind about pending VITOL / Moodle assignment deadlines",
                   icon: BookOpen,
@@ -400,6 +407,7 @@ export default function PushNotificationManager() {
                 },
                 {
                   key: "notifyCirculars",
+                  soon: true,
                   label: "Academic Circulars & Notices",
                   desc: "Instant alert on new university circulars and announcements",
                   icon: Bell,
@@ -416,7 +424,14 @@ export default function PushNotificationManager() {
                     <div className="flex items-center gap-2.5">
                       <ItemIcon size={15} className={item.color} />
                       <div>
-                        <p className="text-xs font-semibold text-gray-800 dark:text-gray-200">{item.label}</p>
+                        <p className="text-xs font-semibold text-gray-800 dark:text-gray-200">
+                          {item.label}
+                          {(item as { soon?: boolean }).soon ? (
+                            <span className="ml-1.5 rounded-md bg-amber-100 px-1.5 py-0.5 text-xs font-bold text-amber-800 dark:bg-amber-500/20 dark:text-amber-300">
+                              Soon
+                            </span>
+                          ) : null}
+                        </p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">{item.desc}</p>
                       </div>
                     </div>

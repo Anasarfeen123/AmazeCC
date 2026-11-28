@@ -1,4 +1,5 @@
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
+import { decryptReminder, readReminderKey } from "@/lib/reminderCrypto";
 import { Serwist, CacheFirst, NetworkFirst, StaleWhileRevalidate, ExpirationPlugin } from "serwist";
 import { defaultCache, PAGES_CACHE_NAME } from "@serwist/next/worker";
 
@@ -147,6 +148,26 @@ self.addEventListener("push", function (event: any) {
   if (event.data) {
     try {
       const data = event.data.json();
+      // Encrypted reminder (lib/reminders.ts): only this device's key can
+      // read it. Without the key (site data cleared) show nothing rather
+      // than an unreadable notification.
+      if (data?.type === "amazecc-enc" && typeof data.c === "string") {
+        event.waitUntil(
+          (async () => {
+            const key = await readReminderKey();
+            if (!key) return;
+            const r = await decryptReminder(key, data.c);
+            await self.registration.showNotification(r.title, {
+              body: r.body,
+              icon: `${basePath}/logo.png`,
+              badge: `${basePath}/logo.png`,
+              tag: r.tag,
+              data: { url: `${basePath}${r.url}`, dateOfArrival: Date.now() },
+            } as NotificationOptions);
+          })().catch((e) => console.error("Reminder decrypt failed:", e)),
+        );
+        return;
+      }
       const options = {
         body: data.body,
         icon: data.icon || `${basePath}/logo.png`,

@@ -73,13 +73,20 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
       const typeLetter = rawType.includes("NON") ? "N" : rawType.includes("SPECIAL") ? "S" : "V";
 
       const fileName = `VITC-${genderLetter}-${typeLetter}.json`;
-      const cached = getTypedStorageItem(fileName) as { list?: any[] } | null;
-      if (cached?.list) {
+      const pick = (list: any[]) => {
         const weekday = new Date().toLocaleDateString("en-US", { weekday: "long" });
-        const todayMenu = cached.list.find((day: any) => day.Day === weekday);
-        if (todayMenu) {
-          setMenuItems(todayMenu[meal.name] || "");
-        }
+        const todayMenu = list.find((day: any) => day.Day === weekday);
+        if (todayMenu) setMenuItems(todayMenu[meal.name] || "");
+      };
+      const cached = getTypedStorageItem(fileName) as { list?: any[] } | null;
+      if (cached?.list?.length) {
+        pick(cached.list);
+      } else {
+        // Nothing cached yet (first visit, demo): use the bundled copy.
+        fetch(`/data/mess/${fileName}`)
+          .then((r) => r.json())
+          .then((d) => pick(d?.list ?? []))
+          .catch(() => {});
       }
     } catch (e) {
       console.warn("Failed to load cached mess data:", e);

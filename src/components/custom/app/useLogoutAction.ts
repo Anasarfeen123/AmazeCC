@@ -5,7 +5,7 @@ import { clearEventHubSession } from "@/lib/sync-engine";
 import { defaultCredentials } from "@/store/authAtoms";
 import { defaultSettings } from "@/store/settingsAtoms";
 import { getTypedStorageItem, setTypedStorageItem } from "@/lib/storage";
-import posthog from "posthog-js";
+import posthog from "@/lib/posthogClient";
 
 interface LogoutActionOptions {
   theme: string | undefined;

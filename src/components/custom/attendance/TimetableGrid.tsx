@@ -101,7 +101,14 @@ function convertToAddedCourses(data: (NormalizedCourse | any)[]): AddedCourse[] 
   });
 }
 
-export default function TimetableVtop({ attendance }: { attendance?: (NormalizedCourse | any)[] }) {
+export default function TimetableVtop({
+  attendance,
+  embedded = false,
+}: {
+  attendance?: (NormalizedCourse | any)[];
+  /** Inside a sheet that has its own title and export buttons: hide this header. */
+  embedded?: boolean;
+}) {
   const captureRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const unifiedAcademics = useAtomValue(unifiedAcademicsAtom);
@@ -220,7 +227,9 @@ export default function TimetableVtop({ attendance }: { attendance?: (Normalized
   return (
     <div className="flex w-full flex-col gap-4">
       {/* Top Header */}
-      <div className="flex flex-col justify-between gap-3 border-b border-gray-100 pb-3 sm:flex-row sm:items-center dark:border-gray-800">
+      <div
+        className={`flex flex-col justify-between gap-3 border-b border-gray-100 pb-3 sm:flex-row sm:items-center dark:border-gray-800 ${embedded ? "hidden" : ""}`}
+      >
         <div>
           <h2 className="font-outfit text-xl font-black text-gray-900 dark:text-gray-100 leading-[1.3] text-balance">
             Class Schedule

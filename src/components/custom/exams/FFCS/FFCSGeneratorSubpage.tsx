@@ -31,7 +31,7 @@ import { type GeneratorErrorCode } from "./logic/generator";
 import { useGenerationRun } from "./hooks/useGenerationRun";
 import { RANKING_FACTORS, type RankingFactor } from "@/lib/ffcsRanking";
 import { track } from "@/lib/analytics";
-import posthog from "posthog-js";
+import posthog from "@/lib/posthogClient";
 import type { FFCSSettings } from "@/lib/ffcsSettings";
 import { storage } from "@/lib/storage";
 import {

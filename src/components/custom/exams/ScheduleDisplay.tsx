@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import { useMemo, useRef, useState, useCallback } from "react";
+import { buildExamIcs, isAndroid, saveIcs, type ExamPaper } from "@/lib/ics";
+import CalendarExportNote from "../shared/CalendarExportNote";
 import { AnimatePresence, m } from "framer-motion";
 import {
   CalendarX,
@@ -42,71 +44,9 @@ import {
   EmptyPanel,
 } from "../shared/primitives";
 
-const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
-
 const ALL_TYPES = "__all__";
 /** Sentinel: every row expanded — used for PNG/print capture. */
 const EXPAND_ALL = "__all_rows__";
-
-/** Reporting time + the exam series' duration -> UTC bounds for the VEVENT. */
-function computeExamTimes(reportingTimeStr: string, examDateStr: string, examType: string) {
-  if (!reportingTimeStr || !examDateStr) return {};
-
-  const [day, monthStr, year] = examDateStr.split(/[-/]/);
-  const month = MONTHS.findIndex((m) => monthStr.toLowerCase().startsWith(m));
-
-  const match = reportingTimeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
-  if (!match) return {};
-  const [, hours, minutes, meridian] = match;
-  let h = parseInt(hours, 10);
-  const m = parseInt(minutes, 10);
-  if (meridian.toUpperCase() === "PM" && h !== 12) h += 12;
-  if (meridian.toUpperCase() === "AM" && h === 12) h = 0;
-
-  const start = new Date(parseInt(year, 10), month, parseInt(day, 10), h, m);
-
-  const upper = String(examType).toUpperCase();
-  const duration = upper.includes("CAT") ? 1 * 60 + 45 : upper.includes("FAT") ? 3 * 60 + 30 : 0;
-
-  const end = new Date(start.getTime() + duration * 60000);
-
-  const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
-
-  return { startUTC: fmt(start), endUTC: fmt(end) };
-}
-
-function generateICSFile(subjects: any[], examType: string) {
-  const events = subjects
-    .filter((s) => s.reportingTime && s.examSession)
-    .map((subj) => {
-      const { startUTC, endUTC } = computeExamTimes(subj.reportingTime, subj.examDate, examType);
-      const uid = crypto.randomUUID();
-      const dtstamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
-
-      return [
-        "BEGIN:VEVENT",
-        `SUMMARY:${subj.courseTitle} (${examType})`,
-        `DESCRIPTION:${subj.courseCode} — ${subj.reportingTime} @ ${subj.venue === "-" ? "TBA" : subj.venue}`,
-        `LOCATION:${subj.venue === "-" ? "TBA" : subj.venue}`,
-        `UID:${uid}`,
-        `DTSTAMP:${dtstamp}`,
-        `DTSTART:${startUTC}`,
-        `DTEND:${endUTC}`,
-        "END:VEVENT",
-      ].join("\n");
-    })
-    .join("\n\n");
-
-  const ics = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//AmazeCC//Schedule Export//EN",
-    events,
-    "END:VCALENDAR",
-  ].join("\n");
-
-  return URL.createObjectURL(new Blob([ics], { type: "text/calendar;charset=utf-8" }));
-}
 
 export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any) {
   const scheduleObj = data?.Schedule || data?.schedule;
@@ -116,18 +56,14 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
   const [isDownloading, setIsDownloading] = useState(false);
   const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
+  const [icsFile, setIcsFile] = useState<string | null>(null);
   const [typeFilter, setTypeFilter] = useState(ALL_TYPES);
   const [showDownloadModal, setShowDownloadModal] = useState(false);
   const [selectedModalSeries, setSelectedModalSeries] = useState<string>(ALL_TYPES);
   const [, setCopied] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
 
   const { theme, resolvedTheme } = useTheme();
   const currentTheme = resolvedTheme || theme || "light";
-
-  useEffect(() => {
-    setIsIOS(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream);
-  }, []);
 
   const examTypes = useMemo(
     () => (scheduleObj && typeof scheduleObj === "object" ? Object.keys(scheduleObj) : []),
@@ -216,6 +152,24 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
     <>
       <IconButton onClick={handleScheduleFetch} title="Reload exam schedule">
         <RefreshCcw className="w-4 h-4" />
+      </IconButton>
+      {/* Every device, not only iPhone: the shown series as an .ics with
+          reminders the evening before and an hour before. */}
+      <IconButton
+        onClick={() => {
+          const series =
+            typeFilter === ALL_TYPES
+              ? (scheduleObj as Record<string, ExamPaper[]>)
+              : { [typeFilter]: (scheduleObj as Record<string, ExamPaper[]>)[typeFilter] ?? [] };
+          const file = `AmazeCC-${typeFilter === ALL_TYPES ? "exams" : typeFilter}.ics`;
+          void saveIcs(file, buildExamIcs(series, { name: "AmazeCC exams" })).then((r) =>
+            setIcsFile(r === "downloaded" && isAndroid() ? file : null),
+          );
+        }}
+        title="Add exams to your calendar"
+        disabled={!scheduleObj}
+      >
+        <CalendarPlus className="w-4 h-4" />
       </IconButton>
       <IconButton onClick={handleCopyCodes} title="Copy all course codes" disabled={allCourseCodes.length === 0}>
         <ClipboardList className="w-4 h-4" />
@@ -312,6 +266,7 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
 
           1rem rather than the list's 1.5rem: the filter is a control strip
           governing the list underneath it, not another section of it. */}
+      {icsFile ? <CalendarExportNote file={icsFile} onClose={() => setIcsFile(null)} /> : null}
       <div ref={captureRef} className="space-y-4">
         {/* ── EXAM SERIES ── */}
         {examTypes.length > 1 && (
@@ -332,7 +287,6 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
               const subjects = (scheduleObj as Record<string, any>)[examType];
               if (!Array.isArray(subjects)) return null;
               const rows = allRows.filter((r) => r.examType === examType);
-              const hasCalendarData = subjects.some((s: any) => s.examSession && s.reportingTime);
               const tone = seriesTone(examType);
 
               return (
@@ -363,18 +317,6 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
                           <Download className="w-3.5 h-3.5 text-emerald-400" />
                           <span className="text-xs font-bold">{examType} PNG</span>
                         </button>
-                        {isIOS && hasCalendarData ? (
-                          <a
-                            href={generateICSFile(subjects, examType)}
-                            download={`${examType}_Schedule_iOS.ics`}
-                            title="Add to Calendar"
-                            aria-label={`Add ${examType} schedule to Calendar`}
-                            className={GHOST_BUTTON}
-                          >
-                            <CalendarPlus className="w-3.5 h-3.5" />
-                            <span className="hidden sm:inline text-xs font-bold">Add to Calendar</span>
-                          </a>
-                        ) : null}
                       </div>
                     }
                   />

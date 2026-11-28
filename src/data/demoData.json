@@ -590,6 +590,403 @@
                         "weightageMark": "25.6"
                     }
                 ]
+            },
+            {
+                "slNo": "7",
+                "classNbr": "CH2025260502297",
+                "courseCode": "BCSE205L",
+                "courseTitle": "Computer Architecture and Organization",
+                "courseType": "Theory Only",
+                "courseSystem": "CBCS",
+                "faculty": "ANITA SHARMA",
+                "slot": "E2+TE2",
+                "courseMode": "CBL01",
+                "assessments": [
+                    {
+                        "slNo": "1",
+                        "title": "CAT - I",
+                        "maxMark": "50",
+                        "weightagePercent": "15",
+                        "status": "Present",
+                        "scoredMark": "31.0",
+                        "weightageMark": "9.3"
+                    },
+                    {
+                        "slNo": "2",
+                        "title": "CAT - II",
+                        "maxMark": "50",
+                        "weightagePercent": "15",
+                        "status": "Present",
+                        "scoredMark": "27.0",
+                        "weightageMark": "8.1"
+                    },
+                    {
+                        "slNo": "3",
+                        "title": "Digital Assignment",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "8.0",
+                        "weightageMark": "8"
+                    },
+                    {
+                        "slNo": "4",
+                        "title": "Quiz - I",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "6.0",
+                        "weightageMark": "6"
+                    },
+                    {
+                        "slNo": "5",
+                        "title": "Quiz - II",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "7.0",
+                        "weightageMark": "7"
+                    }
+                ]
+            },
+            {
+                "slNo": "8",
+                "classNbr": "CH2025260502906",
+                "courseCode": "BCSE206L",
+                "courseTitle": "Foundations of Data Science",
+                "courseType": "Theory Only",
+                "courseSystem": "CBCS",
+                "faculty": "NEHA AGRAWAL",
+                "slot": "B2+TB2",
+                "courseMode": "CBL01",
+                "assessments": [
+                    {
+                        "slNo": "1",
+                        "title": "CAT - I",
+                        "maxMark": "50",
+                        "weightagePercent": "15",
+                        "status": "Present",
+                        "scoredMark": "42.0",
+                        "weightageMark": "12.6"
+                    },
+                    {
+                        "slNo": "2",
+                        "title": "CAT - II",
+                        "maxMark": "50",
+                        "weightagePercent": "15",
+                        "status": "Present",
+                        "scoredMark": "45.0",
+                        "weightageMark": "13.5"
+                    },
+                    {
+                        "slNo": "3",
+                        "title": "Digital Assignment",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "10.0",
+                        "weightageMark": "10"
+                    },
+                    {
+                        "slNo": "4",
+                        "title": "Quiz - I",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "9.0",
+                        "weightageMark": "9"
+                    },
+                    {
+                        "slNo": "5",
+                        "title": "Quiz - II",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "9.5",
+                        "weightageMark": "9.5"
+                    }
+                ]
+            },
+            {
+                "slNo": "9",
+                "classNbr": "CH2025260503227",
+                "courseCode": "BCSE302L",
+                "courseTitle": "Database Systems",
+                "courseType": "Theory Only",
+                "courseSystem": "CBCS",
+                "faculty": "PRIYA MENON",
+                "slot": "A2+TA2",
+                "courseMode": "CBL01",
+                "assessments": [
+                    {
+                        "slNo": "1",
+                        "title": "CAT - I",
+                        "maxMark": "50",
+                        "weightagePercent": "15",
+                        "status": "Present",
+                        "scoredMark": "38.0",
+                        "weightageMark": "11.4"
+                    },
+                    {
+                        "slNo": "2",
+                        "title": "CAT - II",
+                        "maxMark": "50",
+                        "weightagePercent": "15",
+                        "status": "Present",
+                        "scoredMark": "41.0",
+                        "weightageMark": "12.3"
+                    },
+                    {
+                        "slNo": "3",
+                        "title": "Digital Assignment",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "9.0",
+                        "weightageMark": "9"
+                    },
+                    {
+                        "slNo": "4",
+                        "title": "Quiz - I",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "8.5",
+                        "weightageMark": "8.5"
+                    },
+                    {
+                        "slNo": "5",
+                        "title": "Quiz - II",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "8.0",
+                        "weightageMark": "8"
+                    }
+                ]
+            },
+            {
+                "slNo": "10",
+                "classNbr": "CH2025260503257",
+                "courseCode": "BCSE302P",
+                "courseTitle": "Database Systems Lab",
+                "courseType": "Lab Only",
+                "courseSystem": "CBCS",
+                "faculty": "PRIYA MENON",
+                "slot": "L19+L20",
+                "courseMode": "LBC",
+                "assessments": [
+                    {
+                        "slNo": "1",
+                        "title": "Assessment - 1",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "9.0",
+                        "weightageMark": "9"
+                    },
+                    {
+                        "slNo": "2",
+                        "title": "Assessment - 2",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "9.5",
+                        "weightageMark": "9.5"
+                    },
+                    {
+                        "slNo": "3",
+                        "title": "Assessment - 3",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "8.5",
+                        "weightageMark": "8.5"
+                    },
+                    {
+                        "slNo": "4",
+                        "title": "Assessment - 4",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "10.0",
+                        "weightageMark": "10"
+                    },
+                    {
+                        "slNo": "5",
+                        "title": "Assessment - 5",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "9.0",
+                        "weightageMark": "9"
+                    }
+                ]
+            },
+            {
+                "slNo": "11",
+                "classNbr": "CH2025260503340",
+                "courseCode": "BCSE308L",
+                "courseTitle": "Computer Networks",
+                "courseType": "Theory Only",
+                "courseSystem": "CBCS",
+                "faculty": "ARJUN PATEL",
+                "slot": "F2+TF2",
+                "courseMode": "CBL01",
+                "assessments": [
+                    {
+                        "slNo": "1",
+                        "title": "CAT - I",
+                        "maxMark": "50",
+                        "weightagePercent": "15",
+                        "status": "Present",
+                        "scoredMark": "29.0",
+                        "weightageMark": "8.7"
+                    },
+                    {
+                        "slNo": "2",
+                        "title": "CAT - II",
+                        "maxMark": "50",
+                        "weightagePercent": "15",
+                        "status": "Present",
+                        "scoredMark": "34.0",
+                        "weightageMark": "10.2"
+                    },
+                    {
+                        "slNo": "3",
+                        "title": "Digital Assignment",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "7.5",
+                        "weightageMark": "7.5"
+                    },
+                    {
+                        "slNo": "4",
+                        "title": "Quiz - I",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "7.0",
+                        "weightageMark": "7"
+                    },
+                    {
+                        "slNo": "5",
+                        "title": "Quiz - II",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "6.5",
+                        "weightageMark": "6.5"
+                    }
+                ]
+            },
+            {
+                "slNo": "12",
+                "classNbr": "CH2025260503390",
+                "courseCode": "BCSE308P",
+                "courseTitle": "Computer Networks Lab",
+                "courseType": "Lab Only",
+                "courseSystem": "CBCS",
+                "faculty": "ARJUN PATEL",
+                "slot": "L1+L2",
+                "courseMode": "LBC",
+                "assessments": [
+                    {
+                        "slNo": "1",
+                        "title": "Assessment - 1",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "8.0",
+                        "weightageMark": "8"
+                    },
+                    {
+                        "slNo": "2",
+                        "title": "Assessment - 2",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "7.5",
+                        "weightageMark": "7.5"
+                    },
+                    {
+                        "slNo": "3",
+                        "title": "Assessment - 3",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "9.0",
+                        "weightageMark": "9"
+                    },
+                    {
+                        "slNo": "4",
+                        "title": "Assessment - 4",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "8.5",
+                        "weightageMark": "8.5"
+                    }
+                ]
+            },
+            {
+                "slNo": "13",
+                "classNbr": "CH2025260503517",
+                "courseCode": "BHUM107L",
+                "courseTitle": "Sustainability and Society",
+                "courseType": "Theory Only",
+                "courseSystem": "CBCS",
+                "faculty": "MEERA IYER",
+                "slot": "G1+TG1",
+                "courseMode": "CBL01",
+                "assessments": [
+                    {
+                        "slNo": "1",
+                        "title": "CAT - I",
+                        "maxMark": "50",
+                        "weightagePercent": "15",
+                        "status": "Present",
+                        "scoredMark": "40.0",
+                        "weightageMark": "12"
+                    },
+                    {
+                        "slNo": "2",
+                        "title": "CAT - II",
+                        "maxMark": "50",
+                        "weightagePercent": "15",
+                        "status": "Present",
+                        "scoredMark": "43.0",
+                        "weightageMark": "12.9"
+                    },
+                    {
+                        "slNo": "3",
+                        "title": "Digital Assignment",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "9.0",
+                        "weightageMark": "9"
+                    },
+                    {
+                        "slNo": "4",
+                        "title": "Quiz - I",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "9.0",
+                        "weightageMark": "9"
+                    },
+                    {
+                        "slNo": "5",
+                        "title": "Quiz - II",
+                        "maxMark": "10",
+                        "weightagePercent": "10",
+                        "status": "Present",
+                        "scoredMark": "8.5",
+                        "weightageMark": "8.5"
+                    }
+                ]
             }
         ],
         "cgpa": {
@@ -1147,7 +1544,7 @@
     "allGrades": {
         "grades": {
             "CH20242501": {
-                "gpa": "9.03",
+                "gpa": "9.06",
                 "grades": [
                     {
                         "slNo": "1",
@@ -1311,7 +1708,7 @@
                 ]
             },
             "CH20242505": {
-                "gpa": "8.97",
+                "gpa": "9.21",
                 "grades": [
                     {
                         "slNo": "1",
@@ -1390,7 +1787,7 @@
                 ]
             },
             "CH20252601": {
-                "gpa": "9.08",
+                "gpa": "9.27",
                 "grades": [
                     {
                         "slNo": "1",

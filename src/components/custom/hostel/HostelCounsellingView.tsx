@@ -39,7 +39,7 @@ export default function HostelCounsellingView({ loginToVTOP, refreshKey }: Couns
         <p className="inline-flex items-center rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 mb-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-secondary-foreground leading-none">
           Hostel · Rooms
         </p>
-        <h1 className="font-display text-[28px] sm:text-[36px] font-bold uppercase text-text-heading tracking-tight leading-[1.05] break-words">
+        <h1 className="font-title text-[28px] sm:text-[36px] font-extrabold text-text-heading tracking-tight leading-[1.05] break-words">
           Room counselling
         </h1>
         <p className="text-xs text-text-muted mt-1">Your room selection status, group requests and leader OTPs.</p>

@@ -10,8 +10,8 @@ import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
  * object. A caller that treated "did not throw" as "it worked" therefore showed
  * a green "handle found" for a handle nobody has.
  *
- * `fetch` is mocked so the real transport is bypassed and the exact body the
- * server sends is what gets tested.
+ * The API boundary is mocked so the real transport is bypassed and the exact
+ * body the server sends is what gets tested.
  */
 const fetchMock = vi.fn();
 
@@ -19,8 +19,21 @@ const fetchMock = vi.fn();
 // barrel is not imported there — that would re-create an import cycle), so the
 // mock targets the module actually used.
 vi.mock("@/lib/sync-engine/request-layer", () => ({
+  setAuthProvider: vi.fn(),
   apiRequest: (path: string, opts: { method?: string; body?: unknown }) =>
     fetchMock(path, { method: opts?.method, body: opts?.body }),
+}));
+vi.mock("@/lib/sync-engine/credential-manager", () => ({
+  credentialManager: {
+    ensureVtopSession: vi.fn().mockResolvedValue({
+      cookies: "vtop-session",
+      authorizedID: "authorized",
+      csrf: "csrf-token",
+    }),
+  },
+}));
+vi.mock("@/lib/oauth2", () => ({
+  getValidAccessToken: vi.fn().mockResolvedValue("access-token"),
 }));
 
 import { SocialApiError, claimPair, lookupPerson, readPeerTimetable } from "../lib/social/client";
@@ -126,7 +139,13 @@ describe("genuine successes still resolve", () => {
     await claimPair("AMZ-7K2P-9RTW");
     expect(fetchMock).toHaveBeenCalledWith("social/pair/claim", {
       method: "POST",
-      body: { handle: "AMZ-7K2P-9RTW", visibility: "full" },
+      body: {
+        handle: "AMZ-7K2P-9RTW",
+        visibility: "full",
+        cookies: "vtop-session",
+        authorizedID: "authorized",
+        csrf: "csrf-token",
+      },
     });
   });
 

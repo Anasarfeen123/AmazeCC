@@ -146,7 +146,7 @@ export interface FeedbackReportPageProps {
 /* Shared by the guided and classic report (owner: the page looked bad). */
 const FIELD =
   "w-full rounded-[12px] border-2 border-border-ink bg-surface px-3.5 py-3 text-sm text-text-heading placeholder:text-text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
-const FIELD_LABEL = "mb-1.5 block font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted";
+const FIELD_LABEL = "mb-1.5 block font-label text-xs font-semibold text-text-muted";
 
 /** The four report kinds as a compact 2x2 grid: icon, name, one line. */
 function CategoryPicker({ value, onPick }: { value: ReportCategory; onPick: (id: ReportCategory) => void }) {
@@ -786,9 +786,7 @@ export default function FeedbackReportPage({
               <ChevronLeft className="w-4 h-4" />
               <span className="hidden sm:inline">Back</span>
             </button>
-            <span className="hidden font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted md:inline">
-              New report
-            </span>
+            <span className="hidden font-label text-xs font-bold text-text-muted md:inline">New report</span>
           </div>
 
           {/* Step Indicator Pills (matching AmazeOnboardingFlow) */}
@@ -888,10 +886,8 @@ export default function FeedbackReportPage({
                   className="my-auto w-full space-y-5 text-center"
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <p className="font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-muted">
-                      Step 1 of 4
-                    </p>
-                    <h1 className="font-display text-2xl font-bold uppercase leading-tight text-text-heading sm:text-3xl">
+                    <p className="font-label text-xs font-bold text-text-muted">Step 1 of 4</p>
+                    <h1 className="font-title text-2xl font-extrabold leading-tight text-text-heading sm:text-3xl">
                       What would you like to share?
                     </h1>
                   </div>
@@ -921,7 +917,7 @@ export default function FeedbackReportPage({
                     >
                       <ActiveCatIcon className="w-6 h-6" />
                     </div>
-                    <h2 className="font-display text-2xl font-bold uppercase leading-tight text-text-heading sm:text-3xl">
+                    <h2 className="font-title text-2xl font-extrabold leading-tight text-text-heading sm:text-3xl">
                       {activeCatMeta.promptTitle}
                     </h2>
                     <p className="text-xs sm:text-sm text-text-muted font-medium max-w-sm mx-auto">
@@ -1027,7 +1023,7 @@ export default function FeedbackReportPage({
                     <div className="w-12 h-12 mx-auto rounded-2xl bg-secondary border border-border-ink text-secondary-foreground flex items-center justify-center shadow-lg">
                       <Mail className="w-6 h-6" />
                     </div>
-                    <h2 className="font-display text-2xl font-bold uppercase leading-tight text-text-heading sm:text-3xl">
+                    <h2 className="font-title text-2xl font-extrabold leading-tight text-text-heading sm:text-3xl">
                       Where Should We Reach You?
                     </h2>
                     <p className="text-xs sm:text-sm text-text-muted font-medium max-w-sm mx-auto">
@@ -1107,7 +1103,7 @@ export default function FeedbackReportPage({
                     <div className="w-12 h-12 mx-auto rounded-2xl bg-success-surface border border-border-ink text-success-foreground flex items-center justify-center shadow-lg">
                       <FileText className="w-6 h-6" />
                     </div>
-                    <h2 className="font-display text-2xl font-bold uppercase leading-tight text-text-heading sm:text-3xl">
+                    <h2 className="font-title text-2xl font-extrabold leading-tight text-text-heading sm:text-3xl">
                       Review Your Submission
                     </h2>
                     <p className="text-xs sm:text-sm text-text-muted font-medium max-w-sm mx-auto">

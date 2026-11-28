@@ -116,6 +116,7 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
   const [isDownloading, setIsDownloading] = useState(false);
   const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
+  const [openPast, setOpenPast] = useState<Set<string>>(() => new Set());
   const [typeFilter, setTypeFilter] = useState(ALL_TYPES);
   const [showDownloadModal, setShowDownloadModal] = useState(false);
   const [selectedModalSeries, setSelectedModalSeries] = useState<string>(ALL_TYPES);
@@ -334,6 +335,99 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
               const rows = allRows.filter((r) => r.examType === examType);
               const hasCalendarData = subjects.some((s: any) => s.examSession && s.reportingTime);
               const tone = seriesTone(examType);
+              // Upcoming papers first; finished ones fold into a "3 done" row
+              // (owner review: the struck-through list buried what is next).
+              const upcomingRows = rows.filter((r) => r.state !== "past");
+              const pastRows = rows.filter((r) => r.state === "past");
+              const pastOpen = openPast.has(examType);
+              const renderRow = (row: (typeof rows)[number]) => {
+                const subj = row.raw;
+                const isOpen = expandedKey === EXPAND_ALL || expandedKey === row.key;
+
+                return (
+                  <div key={row.key}>
+                    <button
+                      type="button"
+                      onClick={() => setExpandedKey(isOpen && expandedKey !== EXPAND_ALL ? null : row.key)}
+                      className="w-full relative py-3.5 px-4 flex items-center justify-between gap-3 text-left cursor-pointer active:scale-[0.99] transition-transform"
+                    >
+                      {row.state === "past" ? (
+                        /* A tick reads faster than a faint dot for finished papers. */
+                        <Check className="w-4 h-4 text-text-muted shrink-0" strokeWidth={2.5} />
+                      ) : (
+                        <ToneDot tone={row.state === "today" ? "amber" : "emerald"} />
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <p
+                          className={`text-sm font-bold truncate font-outfit leading-tight ${
+                            row.state === "past" ? "text-text-muted line-through" : "text-text-heading"
+                          }`}
+                        >
+                          {subj.courseTitle || subj.courseCode}
+                        </p>
+                        <p className="text-xs text-text-muted font-medium mt-1 truncate">
+                          {subj.courseCode} · {shortDate(row.date)} · {subj.examSession || "TBA"} ·{" "}
+                          {subj.venue === "-" ? "TBA" : subj.venue}
+                        </p>
+                      </div>
+                      {/* Only "today" needs calling out — the tick and the
+                                strikethrough already carry past/upcoming. */}
+                      {row.state === "today" && (
+                        <ToneBadge tone="amber" size="sm">
+                          Today
+                        </ToneBadge>
+                      )}
+                      <ChevronDown
+                        className={`w-4 h-4 text-text-muted transition-transform duration-200 shrink-0 ${
+                          isOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <m.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.22, ease: "easeInOut" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-4 pb-4 pt-2 space-y-2.5 border-t border-border-ink mt-1.5">
+                            <div className="grid grid-cols-2 gap-3.5">
+                              {[
+                                { label: "Date", value: subj.examDate || "TBA" },
+                                { label: "Exam Time", value: subj.examTime || "TBA" },
+                                { label: "Session", value: subj.examSession || "TBA" },
+                                { label: "Reporting", value: subj.reportingTime || "TBA" },
+                                { label: "Venue", value: subj.venue === "-" ? "TBA" : subj.venue || "TBA" },
+                                { label: "Slot", value: subj.slot === "-" ? "TBA" : subj.slot || "TBA" },
+                              ].map((field) => (
+                                <div key={field.label} className="min-w-0">
+                                  <p className="text-xs font-bold uppercase tracking-wider text-text-muted">
+                                    {field.label}
+                                  </p>
+                                  <p className="text-[12.5px] font-bold text-text-primary truncate mt-0.5">
+                                    {field.value}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="flex items-center justify-between gap-3 min-w-0 pt-1.5">
+                              <p className="text-xs font-bold uppercase tracking-wider text-text-muted shrink-0">
+                                Seat
+                              </p>
+                              <p className="text-[12.5px] font-bold text-text-primary truncate">
+                                Loc: {seatLabel(subj) || "TBA"} · No: {subj.seatNo || "TBA"}
+                              </p>
+                            </div>
+                          </div>
+                        </m.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              };
 
               return (
                 <div key={examType} className="space-y-2.5">
@@ -363,94 +457,37 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
                   />
 
                   <ListShell>
-                    {rows.map((row) => {
-                      const subj = row.raw;
-                      const isOpen = expandedKey === EXPAND_ALL || expandedKey === row.key;
-
-                      return (
-                        <div key={row.key}>
-                          <button
-                            type="button"
-                            onClick={() => setExpandedKey(isOpen && expandedKey !== EXPAND_ALL ? null : row.key)}
-                            className="w-full relative py-3.5 px-4 flex items-center justify-between gap-3 text-left cursor-pointer active:scale-[0.99] transition-transform"
-                          >
-                            {row.state === "past" ? (
-                              /* A tick reads faster than a faint dot for finished papers. */
-                              <Check className="w-4 h-4 text-text-muted shrink-0" strokeWidth={2.5} />
-                            ) : (
-                              <ToneDot tone={row.state === "today" ? "amber" : "emerald"} />
-                            )}
-                            <div className="min-w-0 flex-1">
-                              <p
-                                className={`text-sm font-bold truncate font-outfit leading-tight ${
-                                  row.state === "past" ? "text-text-muted line-through" : "text-text-heading"
-                                }`}
-                              >
-                                {subj.courseTitle || subj.courseCode}
-                              </p>
-                              <p className="text-xs text-text-muted font-medium mt-1 truncate">
-                                {subj.courseCode} · {shortDate(row.date)} · {subj.examSession || "TBA"} ·{" "}
-                                {subj.venue === "-" ? "TBA" : subj.venue}
-                              </p>
-                            </div>
-                            {/* Only "today" needs calling out — the tick and the
-                                strikethrough already carry past/upcoming. */}
-                            {row.state === "today" && (
-                              <ToneBadge tone="amber" size="sm">
-                                Today
-                              </ToneBadge>
-                            )}
-                            <ChevronDown
-                              className={`w-4 h-4 text-text-muted transition-transform duration-200 shrink-0 ${
-                                isOpen ? "rotate-180" : ""
-                              }`}
-                            />
-                          </button>
-
-                          <AnimatePresence initial={false}>
-                            {isOpen && (
-                              <m.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{ duration: 0.22, ease: "easeInOut" }}
-                                className="overflow-hidden"
-                              >
-                                <div className="px-4 pb-4 pt-2 space-y-2.5 border-t border-border-ink mt-1.5">
-                                  <div className="grid grid-cols-2 gap-3.5">
-                                    {[
-                                      { label: "Date", value: subj.examDate || "TBA" },
-                                      { label: "Exam Time", value: subj.examTime || "TBA" },
-                                      { label: "Session", value: subj.examSession || "TBA" },
-                                      { label: "Reporting", value: subj.reportingTime || "TBA" },
-                                      { label: "Venue", value: subj.venue === "-" ? "TBA" : subj.venue || "TBA" },
-                                      { label: "Slot", value: subj.slot === "-" ? "TBA" : subj.slot || "TBA" },
-                                    ].map((field) => (
-                                      <div key={field.label} className="min-w-0">
-                                        <p className="text-xs font-bold uppercase tracking-wider text-text-muted">
-                                          {field.label}
-                                        </p>
-                                        <p className="text-[12.5px] font-bold text-text-primary truncate mt-0.5">
-                                          {field.value}
-                                        </p>
-                                      </div>
-                                    ))}
-                                  </div>
-                                  <div className="flex items-center justify-between gap-3 min-w-0 pt-1.5">
-                                    <p className="text-xs font-bold uppercase tracking-wider text-text-muted shrink-0">
-                                      Seat
-                                    </p>
-                                    <p className="text-[12.5px] font-bold text-text-primary truncate">
-                                      Loc: {seatLabel(subj) || "TBA"} · No: {subj.seatNo || "TBA"}
-                                    </p>
-                                  </div>
-                                </div>
-                              </m.div>
-                            )}
-                          </AnimatePresence>
-                        </div>
-                      );
-                    })}
+                    {upcomingRows.map(renderRow)}
+                    {pastRows.length > 0 ? (
+                      <>
+                        {pastOpen ? pastRows.map(renderRow) : null}
+                        <button
+                          type="button"
+                          aria-expanded={pastOpen}
+                          onClick={() =>
+                            setOpenPast((prev) => {
+                              const next = new Set(prev);
+                              if (next.has(examType)) next.delete(examType);
+                              else next.add(examType);
+                              return next;
+                            })
+                          }
+                          className="flex w-full min-h-11 cursor-pointer items-center gap-3 px-4 py-3 text-left text-sm text-text-muted transition-colors hover:bg-surface-secondary"
+                        >
+                          <Check className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden />
+                          <span className="min-w-0 flex-1 font-semibold">
+                            {upcomingRows.length === 0 ? `All ${pastRows.length} done` : `${pastRows.length} done`}
+                          </span>
+                          <span className="font-label text-sm font-semibold text-primary">
+                            {pastOpen ? "Hide" : "Show"}
+                          </span>
+                          <ChevronDown
+                            className={`h-4 w-4 shrink-0 transition-transform duration-200 ${pastOpen ? "rotate-180" : ""}`}
+                            aria-hidden
+                          />
+                        </button>
+                      </>
+                    ) : null}
                   </ListShell>
                 </div>
               );

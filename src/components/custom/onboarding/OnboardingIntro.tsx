@@ -232,7 +232,7 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex min-w-0 items-center gap-3">
                   <div className="min-w-0">
-                    <p className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-ochre">Amaze ID</p>
+                    <p className="font-label text-xs font-bold text-ochre">Amaze ID</p>
                     <p className="font-display text-base font-bold text-cream">One account for every AmazeCC app</p>
                     <p className="text-sm text-text-muted">
                       Club Hub, Admin Portal, GoRoBo and more, with VTOP as an optional link.
@@ -272,7 +272,7 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
                     <button
                       type="button"
                       onClick={signInInteractive}
-                      className="min-h-11 text-center font-mono text-xs font-bold uppercase tracking-[0.06em] text-cream underline underline-offset-4 hover:text-ochre"
+                      className="min-h-11 text-center font-label text-xs font-bold text-cream underline underline-offset-4 hover:text-ochre"
                     >
                       New here? Create an Amaze ID
                     </button>
@@ -287,7 +287,7 @@ export default function OnboardingIntro({ initialPhase, login, onDone }: Onboard
               <p className="w-fit rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
                 {"Step 1 of 4 // Sign in"}
               </p>
-              <h1 className="font-display text-[28px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[40px]">
+              <h1 className="font-title text-[28px] font-extrabold leading-[1.05] text-text-heading sm:text-[40px]">
                 Bring your VIT life
                 <span className="block text-hero">into one place.</span>
               </h1>
@@ -543,11 +543,11 @@ function SyncFace({ progress, lines, title }: { progress: number; lines: SyncLog
         <Brand />
 
         <div className="space-y-2">
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+          <p className="font-label text-xs font-semibold text-text-muted">
             {title || "First sync"}
             {" // one time"}
           </p>
-          <h1 className="font-display text-[28px] sm:text-[36px] font-bold uppercase leading-[1.05] text-text-heading">
+          <h1 className="font-title text-[28px] sm:text-[36px] font-extrabold leading-[1.05] text-text-heading">
             Getting your records
           </h1>
           <p className="text-sm text-text-muted">
@@ -597,10 +597,8 @@ function WelcomeFace({ onDone }: { onDone: () => void }) {
         <Brand />
 
         <div className="space-y-2">
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
-            Signed in // synced
-          </p>
-          <h1 className="font-display text-[28px] sm:text-[36px] font-bold uppercase leading-[1.05] text-text-heading">
+          <p className="font-label text-xs font-semibold text-text-muted">Signed in // synced</p>
+          <h1 className="font-title text-[28px] sm:text-[36px] font-extrabold leading-[1.05] text-text-heading">
             You&apos;re all set
           </h1>
           <p className="text-sm text-text-muted">

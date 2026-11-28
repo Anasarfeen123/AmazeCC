@@ -17,9 +17,9 @@ import type { ReactNode } from "react";
 
 // Plain text, not a bordered badge (owner: a badge stacked under the Back
 // button was "diabolical"; two boxy pills on top of each other).
-const EYEBROW = "mb-1.5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-text-muted leading-none";
+const EYEBROW = "mb-1.5 font-label text-xs font-semibold text-text-muted leading-none";
 const TITLE =
-  "font-display text-[28px] sm:text-[36px] font-bold uppercase text-text-heading tracking-tight leading-[1.05] break-words";
+  "font-title text-[28px] sm:text-[36px] font-extrabold text-text-heading tracking-tight leading-[1.05] break-words";
 const SUBTITLE = "font-mono text-xs text-text-muted mt-2";
 const GROUP = "flex flex-col items-start min-w-0 text-left";
 

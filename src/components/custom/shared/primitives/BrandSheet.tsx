@@ -117,7 +117,7 @@ export function BrandSheet({
                       </button>
                     )}
                     <div className="min-w-0">
-                      <h2 className="truncate font-display text-2xl font-bold uppercase leading-none text-text-heading">
+                      <h2 className="truncate font-title text-2xl font-extrabold leading-none text-text-heading">
                         {title}
                       </h2>
                       {subtitle && <p className="mt-1 font-mono text-xs text-text-muted">{subtitle}</p>}

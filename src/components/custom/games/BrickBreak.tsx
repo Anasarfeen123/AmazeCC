@@ -363,7 +363,7 @@ export default function BrickBreak({ onClose }: { onClose?: () => void }) {
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-heading">
+      <div className="flex items-center justify-between font-label text-xs font-bold text-text-heading">
         <span>{"♥".repeat(Math.max(0, hud.lives)) || "×"}</span>
         <span aria-live="polite">
           {hud.score} pts · lvl {hud.level}
@@ -383,9 +383,7 @@ export default function BrickBreak({ onClose }: { onClose?: () => void }) {
         className="block w-full touch-none select-none rounded-[12px] outline-none focus-visible:ring-2 focus-visible:ring-ochre border-2 border-border-ink shadow-brutal-sm"
         style={{ aspectRatio: `${W} / ${H}` }}
       />
-      <p className="min-h-4 text-center font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
-        {hud.line}
-      </p>
+      <p className="min-h-4 text-center font-label text-xs font-bold text-text-muted">{hud.line}</p>
     </div>
   );
 }

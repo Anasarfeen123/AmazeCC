@@ -628,7 +628,7 @@ export default function SyncNotification({
 
             <div className="min-w-0 flex-1">
               <div className="flex items-baseline justify-between gap-2">
-                <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-heading leading-none truncate">
+                <h4 className="font-label text-xs font-semibold text-text-heading leading-none truncate">
                   {activeModeTitle}
                 </h4>
                 <span className="font-mono text-xs font-semibold text-text-muted tabular-nums shrink-0">

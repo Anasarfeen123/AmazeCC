@@ -120,7 +120,7 @@ export function ToneLegend({
   if (!items.length) return null;
   return (
     <div
-      className={`flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted ${className}`.trim()}
+      className={`flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-label text-xs font-semibold text-text-muted ${className}`.trim()}
     >
       {items.map((item) => (
         <span key={item.label as string} className="inline-flex items-center gap-1.5">

@@ -40,7 +40,7 @@ export default function SetupModeCard({ isLandscape = false, setPlanMode, planMo
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">Automatic</span>
+              <span className="font-label text-xs font-bold text-text-muted">Automatic</span>
               {planMode === "auto" && (
                 <span className="text-xs font-bold text-secondary-foreground bg-secondary px-2 py-0.5 rounded-md flex items-center gap-1">
                   <Check className="w-3 h-3" /> Selected
@@ -75,7 +75,7 @@ export default function SetupModeCard({ isLandscape = false, setPlanMode, planMo
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">Manual</span>
+              <span className="font-label text-xs font-bold text-text-muted">Manual</span>
               {planMode === "custom" && (
                 <span className="text-xs font-bold text-secondary-foreground bg-secondary px-2 py-0.5 rounded-md flex items-center gap-1">
                   <Check className="w-3 h-3" /> Selected

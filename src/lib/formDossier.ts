@@ -29,7 +29,7 @@ import { expandCourseHalves, sameSlotFacultyAlternatives } from "@/lib/ffcsGener
 import { ensureLunchPeriod, type CampusSchema } from "@/lib/slots";
 import { getTimetableSchema } from "@/lib/campusSchema";
 import { courseClashPairCount } from "./ffcsClashPairs";
-import { getFacultyReview, isVitfacIntegrationEnabled } from "@/lib/vitfacService";
+import type { VitfacFaculty } from "@/lib/vitfacService";
 import type { ModernPrintableReportParams } from "./exportTimetable";
 
 const PAGE_W = 210;
@@ -85,6 +85,25 @@ export interface PrintDossierParams extends ModernPrintableReportParams {
   generatedAt?: Date;
   /** Overrides the campus schema used for the clash field; defaults to pinned. */
   schema?: CampusSchema;
+  /** Main-thread Vitfac data snapshot; workers cannot read the browser-backed service. */
+  facultyReviews?: PrintDossierFacultyReview[];
+  vitfacEnabled?: boolean;
+}
+
+export interface PrintDossierFacultyReview extends Pick<VitfacFaculty, "reviews" | "wPct" | "metrics"> {
+  employeeId?: string;
+  name: string;
+}
+
+function facultyReviewKey(faculty: { employeeId?: string | null; name?: string | null }): string {
+  return `${faculty.name?.trim().toLowerCase() ?? ""}|${faculty.employeeId?.trim() ?? ""}`;
+}
+
+function getPrintDossierFacultyReview(
+  reviews: PrintDossierFacultyReview[],
+  faculty: { employeeId?: string | null; name?: string | null },
+): PrintDossierFacultyReview | undefined {
+  return reviews.find((review) => facultyReviewKey(review) === facultyReviewKey(faculty));
 }
 
 /**
@@ -502,7 +521,7 @@ function drawScheduleGrid(pdf: jsPDF, params: PrintDossierParams, y: number): nu
 }
 
 /** Faculty rows: name, courses, Vitfac win rate, metric averages — all text. */
-function buildFacultyRows(courses: AddedCourse[]): string[][] {
+function buildFacultyRows(courses: AddedCourse[], facultyReviews: PrintDossierFacultyReview[]): string[][] {
   interface Entry {
     name: string;
     employeeId?: string;
@@ -529,7 +548,7 @@ function buildFacultyRows(courses: AddedCourse[]): string[][] {
   }
 
   return [...byKey.values()].map((entry) => {
-    const review = getFacultyReview({ employeeId: entry.employeeId, name: entry.name });
+    const review = getPrintDossierFacultyReview(facultyReviews, entry);
     const rated = review && review.reviews > 0;
     const winRate = rated ? `${review.wPct}% (${review.reviews} reviews)` : "Unreviewed";
     const metrics =
@@ -551,7 +570,10 @@ function buildDropInRows(params: PrintDossierParams): string[][] {
       params.masterCourses ?? [],
     );
     const described = alternatives.slice(0, 6).map((alt) => {
-      const review = getFacultyReview({ employeeId: alt.ERP_ID, name: alt.FACULTY });
+      const review = getPrintDossierFacultyReview(params.facultyReviews ?? [], {
+        employeeId: alt.ERP_ID,
+        name: alt.FACULTY,
+      });
       const rate = review && review.reviews > 0 ? `, ${review.wPct}% W` : "";
       return `${alt.FACULTY || "TBA"} (${alt.ROOM || "TBA"}${rate})`;
     });
@@ -574,7 +596,7 @@ export async function renderFormDossierPdf(params: PrintDossierParams): Promise<
   const groups = groupCourses(params.courses);
   const credits = params.totalCredits ?? groups.reduce((sum, item) => sum + (parseFloat(item.credits || "0") || 0), 0);
   const clashPairs = courseClashPairCount(params.courses, schema);
-  const showVitfac = isVitfacIntegrationEnabled();
+  const showVitfac = params.vitfacEnabled ?? false;
 
   const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4", compress: true });
   pdf.setProperties({
@@ -640,7 +662,7 @@ export async function renderFormDossierPdf(params: PrintDossierParams): Promise<
 
   // 3. Faculty assessment — only when Vitfac can actually answer for it.
   if (showVitfac) {
-    const facultyRows = buildFacultyRows(params.courses);
+    const facultyRows = buildFacultyRows(params.courses, params.facultyReviews ?? []);
     if (facultyRows.length > 0) {
       if (y + 32 > CONTENT_BOTTOM) newPage();
       y = drawSectionTitle(
@@ -732,14 +754,60 @@ export async function renderFormDossierPdf(params: PrintDossierParams): Promise<
  * Offloads generation to a Web Worker when available, falling back to inline main-thread rendering.
  */
 export async function createPrintDossierPdf(params: PrintDossierParams): Promise<ArrayBuffer> {
+  let preparedParams = params;
   try {
+    if (typeof window !== "undefined") {
+      const vitfac = await import("@/lib/vitfacService");
+      const vitfacEnabled = vitfac.isVitfacIntegrationEnabled();
+      const faculty = new Map<string, { employeeId?: string; name: string }>();
+      const addFaculty = (entry: { employeeId?: string | null; name?: string | null }) => {
+        const name = entry.name?.trim();
+        if (!name) return;
+        const normalized = { employeeId: entry.employeeId?.trim() || undefined, name };
+        faculty.set(facultyReviewKey(normalized), normalized);
+      };
+
+      for (const course of params.courses) {
+        const names = (course.faculty || "").split(/\s*\/\s*/);
+        const ids = (course.employeeId || "").split(/\s*\/\s*/);
+        names.forEach((name, index) => {
+          addFaculty({ name, employeeId: ids[index] || (ids.length === 1 ? ids[0] : undefined) });
+        });
+      }
+
+      for (const half of expandCourseHalves(params.courses)) {
+        const alternatives = sameSlotFacultyAlternatives(
+          half.code,
+          half.slots,
+          { faculty: half.faculty, employeeId: half.employeeId },
+          params.masterCourses ?? [],
+        );
+        for (const alternative of alternatives) {
+          addFaculty({ employeeId: alternative.ERP_ID, name: alternative.FACULTY });
+        }
+      }
+
+      preparedParams = {
+        ...params,
+        vitfacEnabled,
+        facultyReviews: vitfacEnabled
+          ? [...faculty.values()].flatMap((entry) => {
+              const review = vitfac.getFacultyReview(entry);
+              return review ? [{ ...entry, reviews: review.reviews, wPct: review.wPct, metrics: review.metrics }] : [];
+            })
+          : [],
+      };
+    }
+
     const { buildFormDossierPdfInWorker } = await import("./pdfWorkerBridge");
-    const workerBuffer = await buildFormDossierPdfInWorker(params);
+    const workerBuffer = await buildFormDossierPdfInWorker(preparedParams);
     if (workerBuffer) {
       return workerBuffer;
     }
-  } catch {}
-  return renderFormDossierPdf(params);
+  } catch (error) {
+    console.warn("[FormDossier] Worker setup failed; falling back to inline PDF generation:", error);
+  }
+  return renderFormDossierPdf(preparedParams);
 }
 
 /**

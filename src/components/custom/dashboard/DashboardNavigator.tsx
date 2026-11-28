@@ -180,5 +180,12 @@ export function DashboardRoute({
   children: ReactNode;
 }) {
   const { activeTab } = useDashboardNavigator();
-  return enabled && activeTab === route ? <>{children}</> : null;
+  // A short fade-and-rise when a page opens, like a native app's screen
+  // change (owner review: switching pages felt abrupt). Keyed by route so it
+  // replays per page; off for reduced motion.
+  return enabled && activeTab === route ? (
+    <div key={route} className="page-enter">
+      {children}
+    </div>
+  ) : null;
 }

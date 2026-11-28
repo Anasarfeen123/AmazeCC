@@ -107,9 +107,7 @@ export default function ThemeToggle({ className = "", showLabel = false }: Theme
           <Icon className="h-4.5 w-4.5 stroke-[2.2] text-current" aria-hidden />
         </motion.div>
 
-        {showLabel && (
-          <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] pr-1">{targetLabel} Mode</span>
-        )}
+        {showLabel && <span className="font-label text-xs font-semibold pr-1">{targetLabel} Mode</span>}
       </div>
     </motion.button>
   );

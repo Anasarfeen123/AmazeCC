@@ -311,9 +311,7 @@ const OptionPicker = forwardRef<HTMLDivElement, OptionPickerProps>(function Opti
               style={{ height: mobilePopupHeight, maxHeight: "85dvh" }}
             >
               <div className="flex shrink-0 items-center justify-between gap-2 border-b-2 border-border-ink px-4 py-2">
-                <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
-                  Choose one
-                </span>
+                <span className="font-label text-xs font-semibold text-text-muted">Choose one</span>
                 <button
                   type="button"
                   onClick={() => setOpen(false)}

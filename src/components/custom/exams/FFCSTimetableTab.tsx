@@ -2137,7 +2137,7 @@ export default function FFCSTimetableTab({
                   <p className="text-xs font-semibold text-text-muted leading-none mb-1">
                     {layoutMode === "modern" ? null : "Academics · Registration"}
                   </p>
-                  <h1 className="flex items-center gap-2 truncate font-display text-[26px] font-bold uppercase leading-tight text-text-heading sm:text-[32px]">
+                  <h1 className="flex items-center gap-2 truncate font-title text-[26px] font-extrabold leading-tight text-text-heading sm:text-[32px]">
                     {layoutMode !== "modern" && <MapIcon className="text-primary w-5 h-5 sm:w-6 sm:h-6 shrink-0" />}
                     <span>FFCS Planner</span>
                   </h1>
@@ -3098,7 +3098,7 @@ export default function FFCSTimetableTab({
                           onClick={() => downloadDossierHtml("light")}
                           className="w-full text-left px-4 py-2 text-text-heading hover:bg-surface-secondary transition-colors border-t border-border-strong/50"
                         >
-                          ☀️ Download HTML (Ink-Saver Light)
+                          Download HTML (Ink-Saver Light)
                         </button>
                         <button
                           onClick={() => downloadDossierHtml("dark")}

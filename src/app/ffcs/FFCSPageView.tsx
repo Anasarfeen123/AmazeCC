@@ -10,15 +10,25 @@ import { prepareSignIn, SIGN_IN_PARAM } from "@/lib/signInReturn";
 import ThemeToggle from "@/components/custom/ThemeToggle";
 import BrandLogo from "@/components/custom/shared/BrandLogo";
 import { useOverlayBackBoundary } from "@/lib/overlayStack";
+import { PageSkeleton } from "@/components/custom/shared/primitives/PageSkeleton";
+import { Skeleton } from "@amazecontinuityprojects/amazeui";
 
 // The planner is ~440KB of async chunks; the shell (nav + footer) is a few
 // KB. Deferring the tab keeps the share-link landing paintable without the
 // whole graph, matching how the dashboard already lazy-loads its tabs.
 const FFCSTimetableTab = dynamic(() => import("@/components/custom/exams/FFCSTimetableTab"), {
   ssr: false,
+  // Shaped like the planner (header, controls, a timetable grid) so the page
+  // keeps its layout while the chunk loads (owner review: a lone "Loading
+  // planner…" on a blank page felt slow).
   loading: () => (
-    <div className="flex min-h-[50vh] items-center justify-center" aria-busy="true">
-      <span className="animate-pulse text-sm text-text-muted">Loading planner…</span>
+    <div className="w-full px-4 sm:px-6">
+      <PageSkeleton label="Loading planner" tiles={0} rows={0} />
+      <div className="mx-auto mt-2 grid max-w-4xl grid-cols-6 gap-1.5" aria-hidden>
+        {Array.from({ length: 36 }).map((_, i) => (
+          <Skeleton key={i} className="h-10 rounded-md" />
+        ))}
+      </div>
     </div>
   ),
 });

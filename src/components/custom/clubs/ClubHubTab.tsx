@@ -8,7 +8,6 @@ import { api } from "@/lib/sync-engine";
 import { Skeleton, cn } from "@amazecontinuityprojects/amazeui";
 import { Search, X, LayoutGrid, Users, Layers, RefreshCcw, ChevronRight, SearchX, Rss, WifiOff } from "lucide-react";
 import { LIST_ROW, SEARCH_FIELD, TONE_BADGE, TONE_ICON_TILE, CHIP } from "@/lib/uiTokens";
-import { getSimilarity } from "@/lib/string-similarity";
 import ClubDetailsModal from "./ClubDetailsModal";
 import {
   EmptyPanel,
@@ -19,7 +18,6 @@ import {
   ListShell,
   ListSkeleton,
   PageShell,
-  ChipTabs,
   SectionHeader,
   StatTile,
   useCarousel,
@@ -29,18 +27,13 @@ import {
 /**
  * The club directory.
  *
- * Two sources, and they fail independently:
+ * The public directory is the supported source:
  *
- *  - `club-enrollment` is VTOP's own list. It is the only source of the
- *    CLUB/CHAPTER type, but it needs live VTOP cookies, so an expired session
- *    or a captcha solve can take it down.
  *  - `clubs/details` is a public table. It carries the part a reader actually
  *    wants — logo, mission, contacts, recruitment — and needs no credentials.
  *
- * So a VTOP failure must not blank the page: the public directory stands in and
- * the UI says so. The one thing that is genuinely lost is the type, and with it
- * the type filter, because `club_details` has no type column. Showing a guessed
- * one would be worse than showing none.
+ * The removed `club-enrollment` API is not called. The public route still needs
+ * to be deployed for this directory to load in production.
  */
 
 interface ClubEntry {
@@ -64,7 +57,7 @@ const DEMO_CLUBS = [
   "IEEE STUDENT CHAPTER",
 ];
 
-/** Compare on letters and digits only, so "Fine Arts Club (TFAC)" == "fine arts club". */
+/** Compare on letters and digits only, so a display name can be distinguished from its identifier. */
 const normalise = (value: string): string =>
   String(value ?? "")
     .toLowerCase()
@@ -74,91 +67,16 @@ const isChapter = (type: string): boolean => /chapter/i.test(String(type ?? ""))
 const toneFor = (type: string): string => (isChapter(type) ? "violet" : type ? "indigo" : "sky");
 const IconFor = (type: string) => (isChapter(type) ? Layers : Users);
 
-/**
- * Find a club's public profile.
- *
- * `syncClubs` seeds `club_id` with the club's *name* ("Temporary ID based on
- * name"), so an exact normalised comparison resolves almost every row and costs
- * a string compare. Similarity stays as the fallback for profiles an admin
- * renamed, which is what it was doing before — but it is no longer the only
- * thing standing between a club and its own logo.
- */
-function matchDetail(name: string, id: string, details: any[]): any | null {
-  if (details.length === 0) return null;
-  const n = normalise(name);
-  const i = normalise(id);
-  const exact = details.find((d) => (n && normalise(d.club_name) === n) || (i && normalise(d.club_id) === i));
-  if (exact) return exact;
-  return details.find((d) => getSimilarity(name, d.club_name) > 0.8) ?? null;
-}
-
-const withDetails = (list: Omit<ClubEntry, "detail">[], details: any[]): ClubEntry[] =>
-  list.map((entry) => ({ ...entry, detail: matchDetail(entry.name, entry.id, details) }));
-
-export default function ClubHubTab({
-  IDs,
-  loginToVTOP,
-  onBack,
-}: {
-  IDs: any;
-  loginToVTOP?: () => Promise<{ cookies: string[]; authorizedID: string; csrf: string }>;
-  onBack?: () => void;
-}) {
+export default function ClubHubTab({ IDs, onBack }: { IDs: any; onBack?: () => void }) {
   const [clubs, setClubs] = useState<ClubEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  /** True when we are showing the public directory because VTOP's list failed. */
-  const [vtopUnavailable, setVtopUnavailable] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedType, setSelectedType] = useState("All");
   const [showAll, setShowAll] = useState(false);
   const [selectedClub, setSelectedClub] = useState<any | null>(null);
 
   const setActiveTab = useSetAtom(activeTabAtom);
-
-  /**
-   * VTOP's association list. Throws on anything that means "we do not have the
-   * type" — the caller decides whether that is fatal or merely a downgrade.
-   */
-  const fetchEnrollment = async (): Promise<Omit<ClubEntry, "detail">[]> => {
-    let cookies = IDs.cookies || [];
-    let authorizedID = IDs.authorizedID;
-    let csrf = IDs.csrf;
-
-    if (!cookies.length || !authorizedID || !csrf) {
-      if (!loginToVTOP) throw new Error("Missing VTOP credentials.");
-      const creds = await loginToVTOP();
-      cookies = creds.cookies;
-      authorizedID = creds.authorizedID;
-      csrf = creds.csrf;
-    }
-
-    const res = (await api("club-enrollment", {
-      method: "POST",
-      body: { cookies, authorizedID, csrf },
-      parse: "raw",
-    })) as Response;
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Failed to fetch clubs");
-    if (!data.success) throw new Error("Failed to load club data from VTOP");
-
-    const parsed: Omit<ClubEntry, "detail">[] = [];
-    if (data.tables && data.tables.length > 0) {
-      data.tables[0].rows.forEach((row: any) => {
-        const rawName = row["Association Name (Type)"] || "";
-        if (!rawName) return;
-        // Usually "CLUB NAME (TYPE)"
-        const typeMatch = rawName.match(/\(([^)]+)\)$/);
-        parsed.push({
-          id: row["#"] || "",
-          name: rawName.replace(/\([^)]+\)$/, "").trim(),
-          type: typeMatch ? typeMatch[1].trim() : "CLUB",
-        });
-      });
-    }
-    return parsed;
-  };
 
   const load = async () => {
     setLoading(true);
@@ -168,43 +86,49 @@ export default function ClubHubTab({
     if (isDemoSession(IDs)) {
       await new Promise((resolve) => setTimeout(resolve, 400));
       setClubs(
-        withDetails(
-          DEMO_CLUBS.map((name, i) => ({ id: String(i + 1), name, type: i >= 5 ? "CHAPTER" : "CLUB" })),
-          [],
-        ),
+        DEMO_CLUBS.map((name, i) => ({
+          id: String(i + 1),
+          name,
+          type: i >= 5 ? "CHAPTER" : "CLUB",
+          detail: null,
+        })),
       );
-      setVtopUnavailable(false);
       setLoading(false);
       return;
     }
 
-    const [enrolled, detailsResult] = await Promise.allSettled([
-      fetchEnrollment(),
-      api("clubs/details").then((data: any) => (Array.isArray(data?.clubs) ? data.clubs : [])),
-    ]);
-
-    const details = detailsResult.status === "fulfilled" ? detailsResult.value : [];
-    const enrolledList = enrolled.status === "fulfilled" ? enrolled.value : [];
-
-    if (enrolledList.length > 0) {
-      setClubs(withDetails(enrolledList, details));
-      setVtopUnavailable(false);
-    } else if (details.length > 0) {
-      // The public directory stands in. Each row is its own profile, so the
-      // match is already done.
-      setClubs(details.map((d: any) => ({ id: d.club_id || "", name: d.club_name || "", type: "", detail: d })));
-      setVtopUnavailable(true);
-    } else {
+    try {
+      const data = await api("clubs/details");
+      if (!data || data.success === false) {
+        throw new Error(typeof data?.error === "string" ? data.error : "The club directory returned an error.");
+      }
+      if (!Array.isArray(data.clubs)) {
+        throw new Error("The club directory returned an invalid response.");
+      }
+      const directory: ClubEntry[] = data.clubs.map((club: unknown) => {
+        if (
+          !club ||
+          typeof club !== "object" ||
+          !("club_name" in club) ||
+          typeof club.club_name !== "string" ||
+          !club.club_name.trim()
+        ) {
+          throw new Error("The club directory contains an invalid entry.");
+        }
+        return {
+          id: "club_id" in club && typeof club.club_id === "string" ? club.club_id : "",
+          name: club.club_name.trim(),
+          type: "",
+          detail: club,
+        };
+      });
+      setClubs(directory);
+    } catch (cause) {
       setClubs([]);
-      setVtopUnavailable(enrolled.status === "rejected");
-      setError(
-        enrolled.status === "rejected"
-          ? enrolled.reason?.message || "Couldn't reach VTOP or the club database."
-          : "No clubs are published yet.",
-      );
+      setError(cause instanceof Error ? cause.message : "Couldn't reach the club database.");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -212,11 +136,8 @@ export default function ClubHubTab({
   }, []);
 
   const summary = useMemo(() => {
-    const chapters = clubs.filter((c) => isChapter(c.type)).length;
     return {
       total: clubs.length,
-      chapters,
-      clubs: clubs.filter((c) => c.type && !isChapter(c.type)).length,
       withLogo: clubs.filter((c) => c.detail?.logo_url).length,
       recruiting: clubs.filter((c) => c.detail?.recruitment_link || c.detail?.hiring_process).length,
       reachable: clubs.filter((c) => c.detail?.poc || c.detail?.whatsapp || c.detail?.instagram).length,
@@ -229,26 +150,6 @@ export default function ClubHubTab({
    */
   const insightSlides = useMemo<InsightSlide[]>(() => {
     const slides: InsightSlide[] = [];
-    if (summary.chapters > 0) {
-      slides.push({
-        id: "chapters",
-        label: "Chapters",
-        value: summary.chapters,
-        sub: "Professional chapters",
-        badge: "Chapter",
-        tone: "violet",
-      });
-    }
-    if (summary.clubs > 0) {
-      slides.push({
-        id: "clubs",
-        label: "Clubs",
-        value: summary.clubs,
-        sub: "Student-run organisations",
-        badge: "Club",
-        tone: "indigo",
-      });
-    }
     if (summary.withLogo > 0) {
       slides.push({
         id: "logos",
@@ -284,20 +185,10 @@ export default function ClubHubTab({
 
   const carousel = useCarousel(insightSlides.length);
 
-  // No type column in the fallback, so there is nothing honest to filter on.
-  const types = useMemo(() => {
-    if (vtopUnavailable) return [];
-    return ["All", ...Array.from(new Set(clubs.map((c) => c.type).filter(Boolean)))];
-  }, [clubs, vtopUnavailable]);
-
   const filtered = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
-    return clubs.filter((club) => {
-      const matchesSearch = !query || club.name.toLowerCase().includes(query);
-      const matchesType = selectedType === "All" || club.type === selectedType;
-      return matchesSearch && matchesType;
-    });
-  }, [clubs, searchQuery, selectedType]);
+    return clubs.filter((club) => !query || club.name.toLowerCase().includes(query));
+  }, [clubs, searchQuery]);
 
   const visible = showAll ? filtered : filtered.slice(0, ROW_CAP);
   const hiddenCount = filtered.length - visible.length;
@@ -307,7 +198,7 @@ export default function ClubHubTab({
       onBack={onBack}
       eyebrow="Club Hub"
       title="Clubs & Chapters"
-      subtitle="Every student organisation at VIT, and how to join each one."
+      subtitle="Browse published student organisation profiles at VIT."
       actions={
         <IconButton title="Reload clubs" onClick={load} disabled={loading}>
           <RefreshCcw className={loading ? "animate-spin" : ""} />
@@ -325,19 +216,18 @@ export default function ClubHubTab({
         <>
           <div className="summary-row grid grid-cols-2 gap-3 sm:gap-4">
             <StatTile
-              label={vtopUnavailable ? "Public directory" : "Clubs"}
+              label="Public directory"
               value={summary.total}
               sub={`${summary.withLogo} with a published profile`}
-              badge={vtopUnavailable ? "Public" : `${summary.chapters} chapters`}
-              tone={vtopUnavailable ? "sky" : "indigo"}
+              badge="Published"
+              tone="sky"
             />
             <InsightCarousel slides={insightSlides} carousel={carousel} height="h-36" ariaLabel="Club insights" />
           </div>
 
           <p className="px-1 -mt-3 text-xs leading-relaxed text-text-muted font-medium">
-            {vtopUnavailable
-              ? "VTOP's club list is unavailable, so this is the club database's own directory — every club, without the CLUB/CHAPTER split. Tap one for its mission, contacts and recruitment."
-              : "Profiles are published by each club's representatives. A club with no profile here is still listed — it just hasn't written one."}
+            Profiles are published by each club&apos;s representatives. The directory does not yet include VTOP&apos;s
+            membership list or a CLUB/CHAPTER split. Tap one for its mission, contacts and recruitment.
           </p>
         </>
       )}
@@ -352,7 +242,7 @@ export default function ClubHubTab({
               ? "Club directory isn't available yet"
               : "Couldn't load the club directory"
           }
-          // The club routes were removed from / never deployed to the live API.
+          // The public club route is not deployed to the live API.
           // See docs/redesign/BACKEND_GAPS.md.
           description={
             /\b404\b|not found|isn't available/i.test(error)
@@ -371,8 +261,12 @@ export default function ClubHubTab({
       ) : filtered.length === 0 ? (
         <EmptyPanel
           icon={<SearchX className="w-7 h-7" />}
-          title="No clubs match your filters"
-          description="Try a different search term, or clear the category filter to see every club."
+          title={clubs.length === 0 ? "No clubs are published yet" : "No clubs match your search"}
+          description={
+            clubs.length === 0
+              ? "Check back after clubs publish their profiles."
+              : "Try a different search term to see more profiles."
+          }
         />
       ) : (
         <div className="space-y-4">
@@ -409,15 +303,6 @@ export default function ClubHubTab({
                 </button>
               )}
             </div>
-
-            {types.length > 2 && (
-              <ChipTabs
-                options={types.map((type) => ({ value: type, label: type }))}
-                value={selectedType}
-                onChange={setSelectedType}
-                size="sm"
-              />
-            )}
           </div>
 
           <ListShell>

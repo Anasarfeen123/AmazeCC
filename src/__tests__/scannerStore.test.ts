@@ -78,6 +78,21 @@ for (const [label, make] of adapters) {
       expect(read!.pdf.type).toBe("application/pdf");
     });
 
+    it("snapshots and restores records with merge and replace semantics", async () => {
+      const current = makeRecord({ id: "current" });
+      const incoming = makeRecord({ id: "incoming" });
+      await store.put(current);
+
+      expect((await store.snapshot()).map((record) => record.meta.id)).toContain("current");
+      await store.restore([incoming], "merge");
+      expect(await store.get("current")).toBeDefined();
+      expect(await store.get("incoming")).toBeDefined();
+
+      await store.restore([incoming], "replace");
+      expect(await store.get("current")).toBeUndefined();
+      expect(await store.get("incoming")).toBeDefined();
+    });
+
     it("lists newest first", async () => {
       const older = makeRecord({ createdAt: 1_700_000_000_000 });
       const middle = makeRecord({ createdAt: 1_700_000_100_000 });

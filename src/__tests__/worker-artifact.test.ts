@@ -61,21 +61,27 @@ function findWorkerChunk(): string | null {
 }
 
 /**
- * The PDF dossier worker among the emitted chunks.
- *
- * Identified the same way as the solver — by what it says, not what it is
- * called: `"Invalid worker request type"` is a literal only `pdf.worker.ts`
- * writes, so this cannot match the *sender* in the main bundle, which also
- * mentions `build_dossier_pdf`. Unlike the solver, the word-`document`
- * exclusion above does not apply: the bundled jsPDF names `document` inside
- * guarded branches, and the vm test below is what actually proves the worker
- * never executes them at load.
+ * Find the emitted PDF worker entrypoint, not the async chunk that contains its
+ * handler. Webpack puts the worker module in a normal chunk and emits a second
+ * worker bootstrap that installs the runtime, imports dependencies, then runs
+ * that module. Executing the implementation chunk alone never installs a
+ * handler and does not model what the browser loads.
  */
 function findPdfWorkerChunk(): string | null {
-  for (const file of listChunkFiles()) {
-    if (readFileSync(file, "utf8").includes("Invalid worker request type")) return file;
-  }
-  return null;
+  const moduleChunk = listChunkFiles().find((file) =>
+    readFileSync(file, "utf8").includes("Invalid worker request type"),
+  );
+  if (!moduleChunk) return null;
+  const moduleHeader = readFileSync(moduleChunk, "utf8").match(/push\(\[\[(\d+)\],\{\s*(\d+):/);
+  const moduleId = moduleHeader?.[2];
+  if (!moduleId) return null;
+
+  return (
+    listChunkFiles().find((file) => {
+      const source = readFileSync(file, "utf8");
+      return source.includes("importScripts") && source.includes("self.location") && source.includes(`l(${moduleId})`);
+    }) ?? null
+  );
 }
 
 const workerFile = findWorkerChunk();
@@ -158,6 +164,7 @@ function runWorker(payload: unknown, timeoutMs = 5000, chunkFile: string = worke
   const replies: Reply[] = [];
 
   const self = {
+    location: "http://localhost/_next/static/chunks/worker-entry.js",
     onmessage: null as ((event: { data: unknown }) => void) | null,
     postMessage: (msg: Reply) => replies.push(msg),
   };
@@ -204,7 +211,15 @@ describe.runIf(workerFile)("the emitted worker", () => {
 
   it("installs a message handler", () => {
     const source = readFileSync(workerFile!, "utf8");
-    const context = vm.createContext({ self: { onmessage: null, postMessage: () => {} }, console, crypto });
+    const context = vm.createContext({
+      self: {
+        location: "http://localhost/_next/static/chunks/worker-entry.js",
+        onmessage: null,
+        postMessage: () => {},
+      },
+      console,
+      crypto,
+    });
     new vm.Script(source, { filename: workerFile! }).runInContext(context);
     expect(typeof (context as { self: { onmessage: unknown } }).self.onmessage).toBe("function");
   });

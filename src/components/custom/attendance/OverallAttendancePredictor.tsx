@@ -1,5 +1,6 @@
 "use client";
 import SelectField from "../shared/primitives/SelectField";
+import { haptic } from "@/lib/haptics";
 
 import { useState, useMemo, useCallback } from "react";
 import { useSetAtom, useAtomValue } from "jotai";
@@ -255,6 +256,7 @@ export default function OverallAttendancePredictor({
 
   /** Whole-day toggle: present -> absent -> off. */
   const toggleDayState = useCallback((date: Date) => {
+    haptic();
     const time = date.getTime();
     setDateStates((prev) => {
       const nextState = ((prev[time] ?? 0) + 1) % 3;
@@ -264,6 +266,7 @@ export default function OverallAttendancePredictor({
 
   /** Skip or un-skip one date for one subject. */
   const toggleSubjectSkip = useCallback((courseCode: string, date: Date) => {
+    haptic();
     const time = date.getTime();
     setCourseSkips((prev) => toggleCourseSkip(prev, courseCode, time));
   }, []);
@@ -467,7 +470,7 @@ export default function OverallAttendancePredictor({
           },
         ].map((f) => (
           <div key={f.label} className="min-w-0 px-3 py-3">
-            <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">{f.label}</p>
+            <p className="font-label text-xs font-semibold text-text-muted">{f.label}</p>
             <p data-private="attendance" className={`mt-1 font-display text-2xl font-bold leading-none ${f.tone}`}>
               {f.value}
             </p>
@@ -540,17 +543,23 @@ export default function OverallAttendancePredictor({
         </label>
       </div>
       <div className="-mt-1 flex flex-wrap items-center gap-2 px-1">
-        <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">What if</span>
+        <span className="font-label text-xs font-semibold text-text-muted">What if</span>
         <button
           type="button"
-          onClick={handleAttendAll}
+          onClick={() => {
+            haptic();
+            handleAttendAll();
+          }}
           className="min-h-9 rounded-[8px] border-2 border-border-ink bg-surface px-2.5 text-xs font-semibold text-text-heading brutal-press cursor-pointer"
         >
           I attend all
         </button>
         <button
           type="button"
-          onClick={handleBunkFridays}
+          onClick={() => {
+            haptic();
+            handleBunkFridays();
+          }}
           className="min-h-9 rounded-[8px] border-2 border-border-ink bg-surface px-2.5 text-xs font-semibold text-text-heading brutal-press cursor-pointer"
         >
           I skip Fridays
@@ -755,7 +764,7 @@ export default function OverallAttendancePredictor({
                       className="w-full cursor-pointer rounded-[10px] px-2 py-2 text-left transition-colors hover:bg-surface-hover"
                     >
                       <div className="flex items-center gap-2">
-                        <span className="w-14 shrink-0 font-mono text-xs font-bold uppercase text-text-heading">
+                        <span className="w-14 shrink-0 font-label text-xs font-bold text-text-heading">
                           {course.isLab ? "Lab" : "Theory"}
                         </span>
                         <span className="min-w-0 flex-1 truncate text-xs text-text-muted">

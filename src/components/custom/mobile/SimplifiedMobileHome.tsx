@@ -1,6 +1,7 @@
 "use client";
 
 import { totalCreditsEarned } from "@/lib/credits";
+import PullToRefresh from "../shared/PullToRefresh";
 import MessToday from "./MessToday";
 import HomeNudge from "./HomeNudge";
 import config from "../../../../config.json";
@@ -675,8 +676,7 @@ export default function SimplifiedMobileHome({
       if (slot.includes("NULL") || slot === "NIL" || total === 0) continue;
       const pct = parseFloat(c.attendancePercentage);
       if (isNaN(pct) || pct >= targetAttendancePct) continue;
-      if (!worst || pct < worst.pct)
-        worst = { title: shortCourseName(c.courseTitle) || String(c.courseCode || ""), pct };
+      if (!worst || pct < worst.pct) worst = { title: String(c.courseTitle || c.courseCode || ""), pct };
     }
     return worst;
   }, [attendanceList, targetAttendancePct]);
@@ -782,9 +782,10 @@ export default function SimplifiedMobileHome({
         id: "alerts",
         title: `Below ${targetAttendancePct}%`,
         headline: `${criticalCount} ${criticalCount === 1 ? "course" : "courses"}`,
-        // Percentage first: the course name truncates on phones, the number must not.
+        // Short enough for a 150px phone card (owner review: "Worst 58.0% ·
+        // W..." was cut off): whole percent, and the name trimmed to fit.
         subline: worstCourse
-          ? `Worst ${worstCourse.pct.toFixed(1)}% · ${worstCourse.title}`
+          ? `Lowest ${Math.floor(worstCourse.pct)}% · ${shortCourseName(worstCourse.title, 10)}`
           : "Attend the next classes",
         badge: "Warning",
         badgeColor: "bg-danger-surface text-danger-foreground border-border-ink",
@@ -1454,158 +1455,165 @@ export default function SimplifiedMobileHome({
       <div className="flex flex-col lg:flex-row items-start gap-6 xl:gap-8 w-full">
         {/* Left Column: Feed, Stats, Timetable, Shortcuts. Fills the page
             width (an 860px cap left a big empty right side; user). */}
-        <div className="w-full lg:flex-1 lg:min-w-0 space-y-6 text-left">
-          {/* ── TOP APP BAR: AVATAR / ICON ABOVE GREETING & CONTROLS ── */}
-          <div className="flex items-start justify-between px-1">
-            <div className="flex flex-col items-start min-w-0 text-left">
-              {/* Avatar or AmazeCC Icon Above */}
-              <div className="mb-3" data-private={shouldDisplayProfilePhoto && profileImage ? "identity" : undefined}>
-                {shouldDisplayProfilePhoto && profileImage ? (
-                  <img
-                    loading="lazy"
-                    src={profileImage}
-                    alt=""
-                    decoding="async"
-                    className="h-11 w-11 rounded-[10px] border-2 border-border-ink object-cover shadow-brutal-sm"
-                  />
-                ) : (
-                  // Phones only: on tablet/desktop the sidebar already carries the logo.
-                  <BrandLogo variant="mark" size="md" className="md:hidden" syncing={isSpinning} />
-                )}
+        {/* Wide screens (xl): greeting and stats across the top, the
+            timetable on the left, tasks / mess / shortcuts in a sticky right
+            column (owner review: one long column left half the screen empty). */}
+        <div className="w-full lg:flex-1 lg:min-w-0 space-y-6 text-left xl:grid xl:grid-cols-[minmax(0,1.55fr)_minmax(300px,1fr)] xl:gap-x-8 xl:gap-y-6 xl:space-y-0">
+          <div className="space-y-6 xl:col-span-2">
+            {/* Pull down at the top to sync (touch screens). */}
+            <PullToRefresh onRefresh={handleSyncClick} disabled={isOffline} />
+            {/* ── TOP APP BAR: AVATAR / ICON ABOVE GREETING & CONTROLS ── */}
+            <div className="flex items-start justify-between px-1">
+              <div className="flex flex-col items-start min-w-0 text-left">
+                {/* Avatar or AmazeCC Icon Above */}
+                <div className="mb-3" data-private={shouldDisplayProfilePhoto && profileImage ? "identity" : undefined}>
+                  {shouldDisplayProfilePhoto && profileImage ? (
+                    <img
+                      loading="lazy"
+                      src={profileImage}
+                      alt=""
+                      decoding="async"
+                      className="h-11 w-11 rounded-[10px] border-2 border-border-ink object-cover shadow-brutal-sm"
+                    />
+                  ) : (
+                    // Phones only: on tablet/desktop the sidebar already carries the logo.
+                    <BrandLogo variant="mark" size="md" className="md:hidden" syncing={isSpinning} />
+                  )}
+                </div>
+
+                {/* Multiline Greeting & Name Below */}
+                <p className="font-label text-xs font-semibold text-text-muted leading-none mb-1.5">
+                  <TimeBasedGreeting />,
+                </p>
+                <h1
+                  data-private="identity"
+                  className="font-title text-[30px] sm:text-[38px] font-extrabold text-text-heading tracking-tight leading-tight break-words max-w-full"
+                >
+                  {profileName}
+                </h1>
+                {!isDemoMode ? <LastSyncedLabel /> : null}
               </div>
 
-              {/* Multiline Greeting & Name Below */}
-              <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted leading-none mb-1.5">
-                <TimeBasedGreeting />,
-              </p>
-              <h1
-                data-private="identity"
-                className="font-display text-[28px] sm:text-[36px] font-bold text-text-heading tracking-tight leading-tight break-words max-w-full"
-              >
-                {profileName}
-              </h1>
-              {!isDemoMode ? <LastSyncedLabel /> : null}
-            </div>
-
-            {/* Action Controls */}
-            <div className="flex items-center gap-2 pt-0.5">
-              {/* Sync Button. From md up the sidebar has Sync and Search, so
+              {/* Action Controls */}
+              <div className="flex items-center gap-2 pt-0.5">
+                {/* Sync Button. From md up the sidebar has Sync and Search, so
                   these two hide there (Home critique: duplicated); offline
                   keeps Sync, it doubles as the offline indicator. */}
-              <button
-                onClick={handleSyncClick}
-                className={`${ICON_BUTTON} gap-1.5 font-mono text-xs font-semibold uppercase ${
-                  isOffline ? "!bg-highlight !text-highlight-foreground px-3" : "md:hidden"
-                }`}
-                title={isOffline ? "You're offline — tap for details" : "Sync Data from VTOP"}
-                aria-label={isOffline ? "Offline — tap for details" : "Sync Data from VTOP"}
-              >
-                {isOffline ? (
-                  <>
-                    <WifiOff className="w-4 h-4 shrink-0" />
-                    <span>Offline</span>
-                  </>
-                ) : (
-                  <RefreshCcw className={`w-4 h-4 ${isSpinning ? "animate-spin" : ""}`} />
-                )}
-              </button>
-
-              {/* Spotlight Search */}
-              <button
-                onClick={onOpenCommandPalette}
-                className={`${ICON_BUTTON} md:hidden`}
-                title="Search (Cmd+K)"
-                aria-label="Search"
-              >
-                <Search className="w-4 h-4" />
-              </button>
-
-              {/* Bug Report Top-Right Button */}
-              <button
-                onClick={() => {
-                  setFeedbackCategory("bug");
-                  setIsFeedbackOpen(true);
-                }}
-                className={ICON_BUTTON}
-                title="Report a Bug / Glitch"
-                aria-label="Report a Bug / Glitch"
-              >
-                <Bug className="w-4 h-4" aria-hidden />
-              </button>
-            </div>
-          </div>
-
-          {/* Small dismissible notice: switch to the current semester, or add
-              to the home screen (one at a time; snoozed for days). */}
-          {!isDemoMode ? (
-            <HomeNudge
-              currentSemesterId={config.semesterIDs[config.semesterIDs.length - 2] ?? null}
-              viewingSemesterId={settings?.currSemesterID ?? null}
-              onSwitchSemester={(id) => void handleReloadRequest(id)}
-            />
-          ) : null}
-
-          {nowNextCard ? (
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab("attendance");
-                setActiveAttendanceSubTab("calendar");
-              }}
-              className={`flex w-full items-center gap-3 rounded-[14px] border-2 border-border-ink px-4 py-3 text-left shadow-brutal-sm brutal-press cursor-pointer ${
-                nowNextCard.live ? "bg-mint text-obsidian" : "bg-surface text-text-primary"
-              }`}
-            >
-              <span className="min-w-0 flex-1">
-                <span
-                  className={`block font-mono text-xs font-bold uppercase tracking-[0.08em] ${nowNextCard.live ? "" : "text-text-muted"}`}
+                <button
+                  onClick={handleSyncClick}
+                  className={`${ICON_BUTTON} gap-1.5 font-mono text-xs font-semibold uppercase ${
+                    isOffline ? "!bg-highlight !text-highlight-foreground px-3" : "md:hidden"
+                  }`}
+                  title={isOffline ? "You're offline — tap for details" : "Sync Data from VTOP"}
+                  aria-label={isOffline ? "Offline — tap for details" : "Sync Data from VTOP"}
                 >
-                  {nowNextCard.live ? "Now" : "Next"}
-                  {nowNextCard.rel ? ` · ${nowNextCard.rel}` : ""}
-                </span>
-                <span className="mt-0.5 block truncate font-display text-base font-bold leading-tight sm:text-lg">
-                  {nowNextCard.title}
-                </span>
-                {nowNextCard.detail ? (
-                  <span className={`block truncate text-sm ${nowNextCard.live ? "" : "text-text-muted"}`}>
-                    {nowNextCard.detail}
-                  </span>
-                ) : null}
-              </span>
-              <ChevronRight className="h-4 w-4 shrink-0 opacity-60" aria-hidden />
-            </button>
-          ) : null}
+                  {isOffline ? (
+                    <>
+                      <WifiOff className="w-4 h-4 shrink-0" />
+                      <span>Offline</span>
+                    </>
+                  ) : (
+                    <RefreshCcw className={`w-4 h-4 ${isSpinning ? "animate-spin" : ""}`} />
+                  )}
+                </button>
 
-          {/* ── STATS: DYNAMIC MULTI-TILE & CAROUSEL GRID ── */}
-          <div
-            ref={statsContainerRef}
-            className="grid gap-3 sm:gap-4 text-left"
-            style={{
-              gridTemplateColumns: `repeat(${statColumnCount}, minmax(0, 1fr))`,
-            }}
-          >
-            {directTiles.map((tile) => (
-              <div
-                key={tile.id}
-                {...clickable(tile.onClick)}
-                className={cn("min-w-0", tile.onClick && "cursor-pointer")}
-              >
-                <StatTile
-                  label={tile.label}
-                  // The hide goes on the number only; on the card it scribbled
-                  // over the whole tile.
-                  value={tile.blur ? <span className={tile.blur}>{tile.value}</span> : tile.value}
-                  sub={tile.sub}
-                  badge={tile.badge}
-                  tone={tile.tone}
-                  variant={tile.id === "attendance" ? "highlight" : "default"}
-                  privacyCategory={tile.privacyCategory}
-                  className={cn(tile.onClick && "brutal-press group")}
-                />
+                {/* Spotlight Search */}
+                <button
+                  onClick={onOpenCommandPalette}
+                  className={`${ICON_BUTTON} md:hidden`}
+                  title="Search (Cmd+K)"
+                  aria-label="Search"
+                >
+                  <Search className="w-4 h-4" />
+                </button>
+
+                {/* Bug Report Top-Right Button */}
+                <button
+                  onClick={() => {
+                    setFeedbackCategory("bug");
+                    setIsFeedbackOpen(true);
+                  }}
+                  className={ICON_BUTTON}
+                  title="Report a Bug / Glitch"
+                  aria-label="Report a Bug / Glitch"
+                >
+                  <Bug className="w-4 h-4" aria-hidden />
+                </button>
               </div>
-            ))}
+            </div>
 
-            {overflowSlides.length > 0 && <HomeInsightCarousel slides={overflowSlides} />}
+            {/* Small dismissible notice: switch to the current semester, or add
+              to the home screen (one at a time; snoozed for days). */}
+            {!isDemoMode ? (
+              <HomeNudge
+                currentSemesterId={config.semesterIDs[config.semesterIDs.length - 2] ?? null}
+                viewingSemesterId={settings?.currSemesterID ?? null}
+                onSwitchSemester={(id) => void handleReloadRequest(id)}
+              />
+            ) : null}
+
+            {nowNextCard ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab("attendance");
+                  setActiveAttendanceSubTab("calendar");
+                }}
+                className={`flex w-full items-center gap-3 rounded-[14px] border-2 border-border-ink px-4 py-3 text-left shadow-brutal-sm brutal-press cursor-pointer ${
+                  nowNextCard.live ? "bg-mint text-obsidian" : "bg-surface text-text-primary"
+                }`}
+              >
+                <span className="min-w-0 flex-1">
+                  <span
+                    className={`block font-mono text-xs font-bold uppercase tracking-[0.08em] ${nowNextCard.live ? "" : "text-text-muted"}`}
+                  >
+                    {nowNextCard.live ? "Now" : "Next"}
+                    {nowNextCard.rel ? ` · ${nowNextCard.rel}` : ""}
+                  </span>
+                  <span className="mt-0.5 block truncate font-display text-base font-bold leading-tight sm:text-lg">
+                    {nowNextCard.title}
+                  </span>
+                  {nowNextCard.detail ? (
+                    <span className={`block truncate text-sm ${nowNextCard.live ? "" : "text-text-muted"}`}>
+                      {nowNextCard.detail}
+                    </span>
+                  ) : null}
+                </span>
+                <ChevronRight className="h-4 w-4 shrink-0 opacity-60" aria-hidden />
+              </button>
+            ) : null}
+
+            {/* ── STATS: DYNAMIC MULTI-TILE & CAROUSEL GRID ── */}
+            <div
+              ref={statsContainerRef}
+              className="grid gap-3 sm:gap-4 text-left"
+              style={{
+                gridTemplateColumns: `repeat(${statColumnCount}, minmax(0, 1fr))`,
+              }}
+            >
+              {directTiles.map((tile) => (
+                <div
+                  key={tile.id}
+                  {...clickable(tile.onClick)}
+                  className={cn("min-w-0", tile.onClick && "cursor-pointer")}
+                >
+                  <StatTile
+                    label={tile.label}
+                    // The hide goes on the number only; on the card it scribbled
+                    // over the whole tile.
+                    value={tile.blur ? <span className={tile.blur}>{tile.value}</span> : tile.value}
+                    sub={tile.sub}
+                    badge={tile.badge}
+                    tone={tile.tone}
+                    variant={tile.id === "attendance" ? "highlight" : "default"}
+                    privacyCategory={tile.privacyCategory}
+                    className={cn(tile.onClick && "brutal-press group")}
+                  />
+                </div>
+              ))}
+
+              {overflowSlides.length > 0 && <HomeInsightCarousel slides={overflowSlides} />}
+            </div>
           </div>
 
           {/* ── TIMETABLE & INTEGRATED ACADEMIC CALENDAR SECTION ── */}
@@ -1788,7 +1796,7 @@ export default function SimplifiedMobileHome({
                           isSelected ? SELECTED_RING : item.isToday ? TODAY_RING : "hover:bg-surface-hover",
                         )}
                       >
-                        <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] leading-none text-text-muted">
+                        <span className="font-label text-xs font-semibold leading-none text-text-muted">
                           {item.dayCode}
                         </span>
                         <span className={cn("text-base sm:text-xl font-bold font-display leading-none", ink)}>
@@ -1914,9 +1922,7 @@ export default function SimplifiedMobileHome({
                             key={label as string}
                             className="rounded-[10px] border-2 border-border-ink bg-surface-secondary p-2.5"
                           >
-                            <dt className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
-                              {label}
-                            </dt>
+                            <dt className="font-label text-xs font-semibold text-text-muted">{label}</dt>
                             <dd className="mt-0.5 text-sm font-bold text-text-heading">{value}</dd>
                           </div>
                         ))}
@@ -2344,7 +2350,9 @@ export default function SimplifiedMobileHome({
                 })}
               </div>
             )}
+          </div>
 
+          <div className="space-y-4 text-left xl:sticky xl:top-6 xl:self-start">
             {/* ── TODAY'S TASKS SECTION (WHEN TASKSINLINEONHOME IS FALSE) ── */}
             {settings?.tasksInlineOnHome === false && todayTasks.length > 0 && (
               <div className="pt-2 space-y-2.5">
@@ -2425,7 +2433,7 @@ export default function SimplifiedMobileHome({
 
             <section aria-label="Quick actions" className="space-y-3 pt-2">
               <SectionHeader title="Quick actions" />
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 pr-1 pb-1">
+              <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-2 gap-3 pr-1 pb-1">
                 {[
                   {
                     key: "timetable",

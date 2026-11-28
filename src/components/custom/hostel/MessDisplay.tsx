@@ -289,7 +289,7 @@ export default function MessDisplay({ hostelData, handleHostelDetailsFetch }: an
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[10px] text-xs font-bold uppercase tracking-wider bg-secondary text-secondary-foreground border border-border-ink mb-2 min-h-9">
             <Utensils size={11} /> Hostel · Mess
           </div>
-          <h1 className="font-display text-[28px] sm:text-[36px] font-bold uppercase text-text-heading tracking-tight leading-[1.05] break-words">
+          <h1 className="font-title text-[28px] sm:text-[36px] font-extrabold text-text-heading tracking-tight leading-[1.05] break-words">
             Mess menu
           </h1>
           <p className="text-xs text-text-muted mt-0.5 font-medium flex items-center gap-1.5">

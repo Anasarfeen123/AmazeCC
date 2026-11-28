@@ -196,7 +196,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
               </ul>
 
               <div className="mt-3 flex items-center justify-between gap-3 rounded-[12px] border-2 border-border-muted px-3 py-2">
-                <span className="font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-muted">Theme</span>
+                <span className="font-label text-xs font-bold text-text-muted">Theme</span>
                 <div
                   role="group"
                   aria-label="Theme"
@@ -308,7 +308,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
                 <BrandLogo size="md" tagline />
               </div>
             </div>
-            <h1 className="font-display text-[34px] font-bold uppercase leading-[1.02] sm:text-[44px] lg:text-[52px]">
+            <h1 className="font-title text-[34px] font-extrabold leading-[1.02] sm:text-[44px] lg:text-[52px]">
               Your VIT life,
               <span className="block text-hero">all in one place.</span>
             </h1>
@@ -522,7 +522,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
         {/* The text keeps clear of the glyph (owner: the headline ran under it
             at ~1000px): room reserved from md, where the glyph moves up. */}
         <div className="relative mx-auto max-w-7xl md:pr-[280px] lg:pr-[400px]">
-          <h2 className="max-w-3xl font-display text-[32px] font-bold uppercase leading-[1.05] sm:text-[48px]">
+          <h2 className="max-w-3xl font-title text-[32px] font-extrabold leading-[1.05] sm:text-[48px]">
             Stop opening five portals.
           </h2>
           <p className="mt-4 max-w-xl text-lg">See your real attendance, marks and timetable in under a minute.</p>
@@ -549,10 +549,7 @@ export default function GuestExperience({ onGetStarted, onTryDemo }: GuestExperi
       <footer className="brand-sidebar border-t-2 border-border-ink px-4 py-10 sm:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <BrandLogo size="lg" tagline wordClassName="text-cream" />
-          <nav
-            aria-label="Footer"
-            className="flex flex-wrap gap-x-5 gap-y-2 font-mono text-xs font-semibold uppercase tracking-[0.06em]"
-          >
+          <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2 font-label text-xs font-semibold">
             {[
               ["FFCS planner", "/ffcs/"],
               ["Privacy", "/privacy/"],

@@ -82,9 +82,7 @@ export default function MessToday({ hostelInfo, onOpen }: { hostelInfo: any; onO
         <Utensils className="h-4 w-4" aria-hidden />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
-          Mess · {line.meal}
-        </span>
+        <span className="block font-label text-xs font-bold text-text-muted">Mess · {line.meal}</span>
         <span className="block truncate text-sm font-semibold text-text-heading">{line.items}</span>
       </span>
       <ChevronRight className="h-4 w-4 shrink-0 text-text-muted" aria-hidden />

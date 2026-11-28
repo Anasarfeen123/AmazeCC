@@ -30,9 +30,7 @@ export function SectionHeader({
     <div className={`flex items-center justify-between gap-2 px-1 ${className}`.trim()}>
       <div className="flex items-center gap-2 min-w-0">
         {leading ?? (Icon ? <Icon className="w-4 h-4 text-primary shrink-0" aria-hidden /> : null)}
-        <h2 className="font-mono text-[13px] font-semibold uppercase tracking-[0.06em] text-text-heading truncate">
-          {title}
-        </h2>
+        <h2 className="font-label text-[13px] font-semibold text-text-heading truncate">{title}</h2>
         {typeof count === "number" ? <span className={`${SECTION_CHIP} shrink-0`}>{count}</span> : null}
       </div>
       {right ? <div className="flex items-center gap-2 shrink-0">{right}</div> : null}
@@ -114,11 +112,7 @@ export function StatTile({
   return (
     <div className={`${TILE} ${surface} ${height} ${className}`.trim()}>
       <div className="flex flex-wrap items-center justify-between gap-x-1 gap-y-1.5">
-        <span
-          className={`font-mono text-xs font-semibold uppercase tracking-[0.06em] ${labelTone} min-w-0 break-words`}
-        >
-          {label}
-        </span>
+        <span className={`font-label text-xs font-semibold ${labelTone} min-w-0 break-words`}>{label}</span>
         {badge ? (
           <span
             // Shown on phones too, tighter (critique: hiding it left "79%"
@@ -257,9 +251,7 @@ export function KeyValue({
 }) {
   return (
     <div className={`p-3 rounded-[10px] bg-surface-secondary border-2 border-border-ink ${className}`.trim()}>
-      <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted block mb-0.5">
-        {label}
-      </span>
+      <span className="font-label text-xs font-semibold text-text-muted block mb-0.5">{label}</span>
       <span className={`font-bold text-text-heading ${valueClassName}`.trim()}>{value}</span>
     </div>
   );

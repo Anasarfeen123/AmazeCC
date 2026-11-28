@@ -169,7 +169,7 @@ const MobileBottomNav = memo(function MobileBottomNav({
           </span>
           {/* Under 430px (most phones; 390 cut "ACADEMI…") four labels do not fit at 12px with
               tracking ("ACADEMICS" overflowed its tab): 11px, no tracking. */}
-          <span className="font-mono text-xs max-[429px]:text-[11px] font-bold uppercase tracking-[0.04em] max-[429px]:tracking-normal leading-none truncate max-w-full">
+          <span className="font-label text-xs max-[429px]:text-[11px] font-bold max-[429px]:tracking-normal leading-none truncate max-w-full">
             {item.label}
           </span>
         </button>
@@ -1178,9 +1178,7 @@ export default function NavigationTabs({
                 {/* Left-aligned clean Semester Summary Card */}
                 <div className="mt-3 rounded-[10px] border-2 border-border-ink bg-surface p-2.5 space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <div className="font-mono font-semibold text-text-muted tracking-[0.06em] text-xs uppercase">
-                      Semester
-                    </div>
+                    <div className="font-label font-semibold text-text-muted text-xs">Semester</div>
                     <div role="group" aria-label="Current semester" className="flex max-w-[9rem] shrink-0">
                       <OptionPicker
                         value={settings.currSemesterID || config.semesterIDs[config.semesterIDs.length - 2]}
@@ -1215,9 +1213,7 @@ export default function NavigationTabs({
                         className="flex min-w-0 flex-col items-start gap-0.5 overflow-hidden rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
                         title="Click to show/hide CGPA"
                       >
-                        <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
-                          CGPA
-                        </span>
+                        <span className="font-label text-xs font-semibold text-text-muted">CGPA</span>
                         <span
                           data-private="cgpa"
                           className="font-display text-base font-bold leading-none text-text-heading transition-all duration-300"
@@ -1235,9 +1231,7 @@ export default function NavigationTabs({
                       className="flex min-w-0 flex-col items-start gap-0.5 overflow-hidden rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
                       title="Open attendance predictor"
                     >
-                      <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
-                        Attend
-                      </span>
+                      <span className="font-label text-xs font-semibold text-text-muted">Attend</span>
                       {(() => {
                         // Colour alone does not say "below target" to everyone,
                         // so a warning icon and a spoken label carry it too.
@@ -1251,7 +1245,7 @@ export default function NavigationTabs({
                           >
                             {attendanceValue}
                             {below ? (
-                              <span aria-hidden="true" className="font-mono text-xs font-semibold uppercase">
+                              <span aria-hidden="true" className="font-label text-xs font-semibold">
                                 Low
                               </span>
                             ) : null}
@@ -1266,9 +1260,7 @@ export default function NavigationTabs({
                       className="flex min-w-0 flex-col items-start gap-0.5 overflow-hidden rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
                       title="Click to view credits & grades details"
                     >
-                      <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
-                        Credits
-                      </span>
+                      <span className="font-label text-xs font-semibold text-text-muted">Credits</span>
                       <span
                         data-private="credits"
                         className="font-display text-base font-bold leading-none text-text-heading"
@@ -1285,9 +1277,7 @@ export default function NavigationTabs({
                       className="flex min-w-0 flex-col items-start gap-0.5 overflow-hidden rounded-[8px] bg-surface-secondary px-2 py-1.5 text-left cursor-pointer transition-colors hover:bg-surface-hover"
                       title="Click to view OD tracker details"
                     >
-                      <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
-                        OD hrs
-                      </span>
+                      <span className="font-label text-xs font-semibold text-text-muted">OD hrs</span>
                       <span className="font-display text-base font-bold leading-none text-text-heading">
                         {totalODHours}
                         <span className="font-mono text-xs font-semibold text-text-muted">/40</span>

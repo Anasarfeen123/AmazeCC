@@ -168,7 +168,7 @@ export default function OfficialOdSection({ currSemesterID, allGradesData }: Pro
                     #{r.slNo}
                   </span>
                 </div>
-                <p className="mt-2.5 font-mono text-xs uppercase text-text-muted">
+                <p className="mt-2.5 font-label text-xs text-text-muted">
                   {[r.date, r.time, r.basis].filter(Boolean).join(" // ")}
                 </p>
               </div>

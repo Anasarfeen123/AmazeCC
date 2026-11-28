@@ -8,7 +8,7 @@ import IconUpdater from "../components/custom/IconUpdater";
 import ServiceWorkerRegistrar from "../components/custom/ServiceWorkerRegistrar";
 import BackgroundPrefetch from "../components/custom/BackgroundPrefetch";
 import type { Viewport, Metadata } from "next";
-import { Geist, Geist_Mono, DM_Sans, Space_Grotesk, Space_Mono } from "next/font/google";
+import { Geist, Geist_Mono, DM_Sans, Space_Grotesk, Space_Mono, Bricolage_Grotesque, Caveat } from "next/font/google";
 import "./globals.css";
 import { buildContentSecurityPolicy } from "@/lib/csp";
 
@@ -42,6 +42,18 @@ const dmSans = DM_Sans({
   display: "swap",
   variable: "--font-dm-sans",
 });
+
+// Page titles and the Home greeting (owner: more font variety, less
+// monotonous; Courage/Homeland are not licensed for web use, so this free
+// OFL face takes that role). Wired to `font-title` in brand.css.
+const bricolage = Bricolage_Grotesque({
+  weight: ["600", "800"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-bricolage",
+});
+// Handwritten accent for tips, notes and stickers, used sparingly (`font-hand`).
+const caveat = Caveat({ weight: ["600", "700"], subsets: ["latin"], display: "swap", variable: "--font-caveat" });
 
 export const viewport: Viewport = {
   themeColor: [
@@ -121,7 +133,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geist.className} ${geistMono.className} ${dmSans.className} ${spaceGrotesk.variable} ${spaceMono.variable}`}
+      className={`${geist.className} ${geistMono.className} ${dmSans.className} ${spaceGrotesk.variable} ${spaceMono.variable} ${bricolage.variable} ${caveat.variable}`}
     >
       <head>
         {/* AmazeCC has its own light/dark/Night themes. This tells the Dark Reader

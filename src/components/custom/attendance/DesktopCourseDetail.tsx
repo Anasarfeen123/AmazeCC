@@ -193,7 +193,7 @@ export default function DesktopCourseDetail({
                 key={label}
                 className={`min-w-0 rounded-[10px] border-2 border-border-ink bg-surface-secondary px-2.5 py-2 ${i === 2 ? "col-span-2" : ""}`}
               >
-                <dt className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">{label}</dt>
+                <dt className="font-label text-xs font-semibold text-text-muted">{label}</dt>
                 <dd className="mt-0.5 truncate text-sm font-bold text-text-heading">{value}</dd>
               </div>
             ))}
@@ -205,9 +205,7 @@ export default function DesktopCourseDetail({
           {/* Attendance Status Card */}
           <div className="rounded-[14px] border-2 border-border-ink bg-surface-secondary p-4 flex flex-col gap-3">
             <div className="flex-1 min-w-0">
-              <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted mb-1">
-                Attendance
-              </h4>
+              <h4 className="font-label text-xs font-semibold text-text-muted mb-1">Attendance</h4>
               <div className="flex items-baseline gap-2">
                 <p className="font-display text-[40px] font-bold leading-none text-hero">{simulatedPercentage}%</p>
                 {simulatedSkips > 0 && (
@@ -264,9 +262,7 @@ export default function DesktopCourseDetail({
 
             {/* Inline Skip Predictor Widget for Desktop */}
             <div className="flex items-center justify-between gap-2 rounded-[10px] border-2 border-border-ink bg-surface p-1.5 pl-3">
-              <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
-                What if I skip
-              </span>
+              <span className="font-label text-xs font-semibold text-text-muted">What if I skip</span>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => handleSimulateSkipsChange(simulatedSkips - 1)}
@@ -305,9 +301,7 @@ export default function DesktopCourseDetail({
 
           {/* Info Card */}
           <div className="rounded-[14px] border-2 border-border-ink bg-surface-secondary p-4 flex flex-col justify-between">
-            <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted mb-3">
-              Next Class Impact
-            </h4>
+            <h4 className="font-label text-xs font-semibold text-text-muted mb-3">Next Class Impact</h4>
             <div className="flex flex-col h-full justify-between gap-4">
               <p className="text-sm text-text-muted">
                 Simulate the outcome of your next scheduled class. Attending will improve your average, while skipping
@@ -317,9 +311,7 @@ export default function DesktopCourseDetail({
                 {/* Attend Card */}
                 <div className="rounded-[10px] border-2 border-border-ink bg-success-surface p-3 flex flex-col justify-between">
                   <div className="flex items-center gap-1.5">
-                    <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-success-foreground">
-                      If Attend
-                    </span>
+                    <span className="font-label text-xs font-semibold text-success-foreground">If Attend</span>
                   </div>
                   <div className="flex flex-col gap-1 mt-2">
                     <span className="font-display text-[28px] font-bold leading-none text-success-foreground">
@@ -335,9 +327,7 @@ export default function DesktopCourseDetail({
                 {/* Skip Card */}
                 <div className="rounded-[10px] border-2 border-border-ink bg-danger-surface p-3 flex flex-col justify-between">
                   <div className="flex items-center gap-1.5">
-                    <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-danger-foreground">
-                      If Skip
-                    </span>
+                    <span className="font-label text-xs font-semibold text-danger-foreground">If Skip</span>
                   </div>
                   <div className="flex flex-col gap-1 mt-2">
                     <span className="font-display text-[28px] font-bold leading-none text-danger-foreground">

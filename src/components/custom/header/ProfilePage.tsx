@@ -12,7 +12,6 @@ import {
   EyeOff,
   User,
   Link2,
-  ExternalLink,
   Database,
   Shield,
   ChevronRight,
@@ -63,6 +62,7 @@ import TeamModal from "./TeamModal";
 import AboutBody from "./AboutBody";
 import ProfileStatusCards from "../profile/ProfileStatusCards";
 import AcknowledgementCards from "../profile/AcknowledgementCards";
+import LocalDataBackupCard from "./LocalDataBackupCard";
 import { useIsMobile } from "../shared";
 import BottomSheet from "../shared/BottomSheet";
 import { effectiveCellDensity } from "../timetable/useTimetableViewMode";
@@ -321,45 +321,6 @@ export default function ProfilePage({
       localStorage.clear();
       window.location.reload();
     }
-  };
-
-  const handleExportSettings = () => {
-    const data = {
-      settings: localStorage.getItem("settings"),
-      appIcon: localStorage.getItem("app-icon"),
-      friendlyName: localStorage.getItem("friendlyName"),
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "amazecc-settings-backup.json";
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const handleImportSettings = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".json";
-    input.onchange = (e: any) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (event: any) => {
-        try {
-          const parsed = JSON.parse(event.target.result);
-          if (parsed.settings) localStorage.setItem("settings", parsed.settings);
-          if (parsed.appIcon) localStorage.setItem("app-icon", parsed.appIcon);
-          if (parsed.friendlyName) localStorage.setItem("friendlyName", parsed.friendlyName);
-          window.location.reload();
-        } catch (err) {
-          alert("Invalid settings backup file.");
-        }
-      };
-      reader.readAsText(file);
-    };
-    input.click();
   };
 
   useEffect(() => {
@@ -1925,7 +1886,7 @@ export default function ProfilePage({
               What a sync pulls: daily, weekly, monthly, quarterly or your own mode.
             </span>
           </span>
-          <span className="flex shrink-0 items-center gap-2 font-mono text-xs font-bold uppercase text-text-primary">
+          <span className="flex shrink-0 items-center gap-2 font-label text-xs font-bold text-text-primary">
             {resolveMode(settings?.defaultSyncMode || "quarterly", customSyncModes)?.label ?? "Quarterly Sync"}
             <ChevronRight className="h-4 w-4" aria-hidden />
           </span>
@@ -2190,55 +2151,7 @@ export default function ProfilePage({
           </p>
         </div>
 
-        {/* Backup Settings */}
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={handleExportSettings}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              handleExportSettings();
-            }
-          }}
-          className="flex items-center justify-between p-4 hover:bg-surface-hover transition-colors cursor-pointer"
-        >
-          <div className="flex items-center gap-3.5 min-w-0 pr-4">
-            <div className="p-2.5 rounded-xl bg-success-surface text-success-foreground shrink-0">
-              <Save size={18} />
-            </div>
-            <div className="min-w-0">
-              <span className="font-bold text-xs text-text-heading block">Back up settings</span>
-              <span className="text-xs text-text-muted block truncate mt-0.5">Save your settings to a file</span>
-            </div>
-          </div>
-          <ChevronRight size={16} className="text-text-muted shrink-0" />
-        </div>
-
-        {/* Restore Settings */}
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={handleImportSettings}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              handleImportSettings();
-            }
-          }}
-          className="flex items-center justify-between p-4 hover:bg-surface-hover transition-colors cursor-pointer"
-        >
-          <div className="flex items-center gap-3.5 min-w-0 pr-4">
-            <div className="p-2.5 rounded-xl bg-warning-surface text-warning-foreground shrink-0">
-              <ExternalLink size={18} />
-            </div>
-            <div className="min-w-0">
-              <span className="font-bold text-xs text-text-heading block">Restore settings</span>
-              <span className="text-xs text-text-muted block truncate mt-0.5">Load settings from a backup file</span>
-            </div>
-          </div>
-          <ChevronRight size={16} className="text-text-muted shrink-0" />
-        </div>
+        <LocalDataBackupCard />
 
         {/* Reset Cache */}
         <div

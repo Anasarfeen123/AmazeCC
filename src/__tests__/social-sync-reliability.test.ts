@@ -1,8 +1,13 @@
 import { installLocalStorage } from "./helpers/localStorage";
 installLocalStorage();
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const syncIdentity = vi.hoisted(() => vi.fn());
+vi.mock("@/lib/social/client", () => ({ syncIdentity }));
+
 import { getOp } from "../lib/sync-engine/operation-registry";
 import "../lib/sync-engine/operations";
+import { syncIdentity as syncIdentityMock } from "@/lib/social/client";
 import { PEER_CACHE_MAX_AGE_MS, peerNeedsFetch } from "../lib/social/usePeerTimetables";
 
 const NOW = Date.parse("2026-11-10T12:00:00.000Z");
@@ -57,15 +62,17 @@ describe("peerNeedsFetch", () => {
 });
 
 describe("social op sync state", () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    localStorage.clear();
+    vi.mocked(syncIdentityMock).mockReset();
+  });
 
-  function ctxWith(request: ReturnType<typeof vi.fn>, prev: unknown) {
+  function ctxWith(prev: unknown) {
     const setAtom = vi.fn();
     const ctx = {
       ids: { VtopUsername: "realuser", VtopPassword: "x" },
       emit: vi.fn(),
       bridge: { setAtom, getAtom: vi.fn(() => prev) },
-      request,
     } as never;
     return { ctx, setAtom };
   }
@@ -74,17 +81,17 @@ describe("social op sync state", () => {
     setAtom.mock.calls.map((c) => c[1]).filter((v) => v && typeof v === "object" && "syncing" in v);
 
   it("flags syncing while the request runs", async () => {
-    const request = vi.fn().mockResolvedValue({ success: false, message: "nope" });
-    const { ctx, setAtom } = ctxWith(request, { version: 3, lastSyncedAt: null, lastError: null, syncing: false });
+    vi.mocked(syncIdentityMock).mockResolvedValue({ success: false, message: "nope" } as never);
+    const { ctx, setAtom } = ctxWith({ version: 3, lastSyncedAt: null, lastError: null, syncing: false });
     await getOp("social")!.run(ctx, {});
     expect(states(setAtom)[0].syncing).toBe(true);
     expect(states(setAtom).at(-1).syncing).toBe(false);
   });
 
   it("keeps the last good sync time and version when a sync fails", async () => {
-    const request = vi.fn().mockRejectedValue(new Error("VTOP down"));
+    vi.mocked(syncIdentityMock).mockRejectedValue(new Error("VTOP down"));
     const prev = { version: 7, lastSyncedAt: "2026-11-10T11:55:00.000Z", lastError: null, syncing: false };
-    const { ctx, setAtom } = ctxWith(request, prev);
+    const { ctx, setAtom } = ctxWith(prev);
     await getOp("social")!.run(ctx, {});
     const last = states(setAtom).at(-1);
     expect(last.lastSyncedAt).toBe(prev.lastSyncedAt);

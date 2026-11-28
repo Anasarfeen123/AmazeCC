@@ -414,7 +414,7 @@ export function CommandPalette({ isOpen, onClose, commands, demoMode = false }: 
                   className="w-full min-h-10 bg-transparent text-base font-medium text-text-primary placeholder:text-text-muted outline-none focus-visible:outline-none"
                 />
                 {kohaLoading && (
-                  <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-warning-foreground shrink-0">
+                  <span className="font-label text-xs font-semibold text-warning-foreground shrink-0">
                     Searching Koha...
                   </span>
                 )}
@@ -505,9 +505,7 @@ export function CommandPalette({ isOpen, onClose, commands, demoMode = false }: 
                 {/* Right Detail Preview Pane */}
                 {selectedCommand?.detail && (
                   <div className="hidden md:block w-72 p-4 bg-surface-secondary overflow-y-auto shrink-0">
-                    <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted mb-3">
-                      Details
-                    </p>
+                    <p className="font-label text-xs font-semibold text-text-muted mb-3">Details</p>
                     {selectedCommand.detail}
                   </div>
                 )}

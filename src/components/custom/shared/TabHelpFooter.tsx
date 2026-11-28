@@ -209,7 +209,7 @@ export const TAB_GUIDES: Record<string, TabGuideData> = {
         name: "Live Campus Radar (Who is Free Right Now?)",
         description: "Scans schedule slots to alert you when friends currently have no active class.",
         steps: [
-          "Step 1: Open Social -> '⚡ Free Right Now' sub-tab.",
+          "Step 1: Open Social -> 'Free Right Now' sub-tab.",
           "Step 2: View friends with active free hours during the current campus time.",
           "Step 3: Tap any friend card to send a quick WhatsApp message for coffee or lunch.",
         ],
@@ -220,7 +220,7 @@ export const TAB_GUIDES: Record<string, TabGuideData> = {
         description: "Generate 5-min or 15-min temporary expiring links or QR passes to share your schedule.",
         steps: [
           "Step 1: Tap the Share button at the top right of Social.",
-          "Step 2: Choose link expiry duration (⚡ 5 Min, ⏱️ 15 Min, ⏳ 1 Hour, or ♾️ Permanent).",
+          "Step 2: Choose link expiry duration (5 min, 15 min, 1 hour or permanent).",
           "Step 3: Tap 'Copy Link' (generates a short `#s=` URL) or 'Download Pass Image' to share.",
         ],
       },
@@ -229,7 +229,7 @@ export const TAB_GUIDES: Record<string, TabGuideData> = {
         name: "Group Common Free Timetable",
         description: "Your week drawn as a timetable, showing who is free in every band across the team.",
         steps: [
-          "Step 1: Tap Social -> '📊 Common Free Grid Matrix' sub-tab.",
+          "Step 1: Tap Social -> 'Common Free Grid' sub-tab.",
           "Step 2: Select a project group or select all friends.",
           "Step 3: Read each cell for how many people are free, and tap one for the detail.",
         ],

@@ -84,7 +84,11 @@ export default function PeerTimetableSheet({
             </p>
           </div>
         ) : !peer.loaded ? (
-          <p className="text-xs font-bold text-text-muted">Loading…</p>
+          <div className="space-y-2" role="status" aria-label="Loading timetable">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-10 animate-pulse rounded-[10px] bg-surface-secondary" />
+            ))}
+          </div>
         ) : (
           <>
             {metrics && (

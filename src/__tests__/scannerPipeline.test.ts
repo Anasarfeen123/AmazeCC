@@ -105,6 +105,8 @@ function recordingStore(inner: ScanStore): { store: ScanStore; statuses: UploadS
   const statuses: UploadStatus[] = [];
   const store: ScanStore = {
     list: () => inner.list(),
+    snapshot: () => inner.snapshot(),
+    restore: (records, mode) => inner.restore(records, mode),
     get: (id) => inner.get(id),
     put: (record) => inner.put(record),
     patch: async (id, patch) => {

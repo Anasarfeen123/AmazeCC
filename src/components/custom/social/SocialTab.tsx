@@ -274,9 +274,7 @@ export default function SocialTab({ attendanceData, isDemo }: { attendanceData: 
           <div className="flex items-center justify-between gap-1">
             {/* The label keeps its width; a long badge ("Not synced") truncates
                 instead (at 360px the label was cut to "P…"). */}
-            <span className="shrink-0 font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
-              People
-            </span>
+            <span className="shrink-0 font-label text-xs font-bold text-text-muted">People</span>
             <span
               className={`min-w-0 truncate text-xs font-bold uppercase px-2 py-0.5 rounded-md border ${TONE_BADGE[syncBadge.tone]}`}
             >

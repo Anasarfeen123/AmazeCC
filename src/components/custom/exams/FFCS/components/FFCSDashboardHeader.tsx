@@ -287,6 +287,10 @@ export default function FFCSDashboardHeader({
   // Phones: the 13-row tool menu sits behind one row, closed by default, so
   // the timetable is near the top (owner: work on FFCS for mobile).
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
+  // An empty plan folds the tool panel behind one button on every screen
+  // size (it already did on phones) and shows the "Start your plan" card.
+  const isEmptyPlan = courses.length === 0;
+  const collapseTools = isMobileViewport || isEmptyPlan;
   const [mobileWidget, setMobileWidget] = useState<MobileWidget | null>(null);
   const [isWeeklyDetailsOpen, setIsWeeklyDetailsOpen] = useState(false);
   const [isClashDetailsOpen, setIsClashDetailsOpen] = useState(false);
@@ -728,18 +732,66 @@ export default function FFCSDashboardHeader({
         )}
       </div>
 
+      {/* ── FIRST STEP (empty plan) ── One clear way in instead of a dozen
+          tools (owner review: the planner opened on 12 buttons and an empty
+          grid). The full tool panel stays one tap away below. */}
+      {isEmptyPlan ? (
+        <section
+          aria-labelledby="ffcs-first-step"
+          className="rounded-[14px] border-2 border-border-ink bg-surface p-4 shadow-brutal-sm sm:p-5"
+        >
+          <p className="font-label text-xs font-semibold text-text-muted">Step 1</p>
+          <h2 id="ffcs-first-step" className="font-title text-2xl font-extrabold text-text-heading">
+            Start your plan
+          </h2>
+          <p className="mt-1 text-sm text-text-muted">
+            Add the courses you want next semester. Clashes show up the moment they happen.
+          </p>
+          <div className="mt-4 grid gap-2 sm:grid-cols-3">
+            {(
+              [
+                ["manual-add", "Search and add a course", "Pick a course and a slot"],
+                ["paste-vtop", "Paste from VTOP", "Copy your registration page"],
+                ["target-courses", "Choose targets", "Then auto-generate timetables"],
+              ] as const
+            ).map(([action, title, sub], i) => {
+              const meta = COURSE_MENU_ACTIONS.find((m) => m.value === action)!;
+              const Icon = meta.Icon;
+              return (
+                <button
+                  key={action}
+                  type="button"
+                  onClick={courseMenuActions[action]}
+                  className={`flex min-h-14 items-center gap-3 rounded-[12px] border-2 border-border-ink px-3 py-2.5 text-left brutal-press cursor-pointer ${
+                    i === 0
+                      ? "bg-primary text-primary-foreground shadow-brutal-sm"
+                      : "bg-surface-secondary text-text-heading"
+                  }`}
+                >
+                  <Icon className="h-5 w-5 shrink-0" aria-hidden />
+                  <span className="min-w-0">
+                    <span className="block text-sm font-bold leading-tight">{title}</span>
+                    <span className={`block text-xs ${i === 0 ? "opacity-85" : "text-text-muted"}`}>{sub}</span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      ) : null}
+
       {/* ── ZONE 3: SELECTABLE DASHBOARD WIDGETS ── */}
       <div className="space-y-2 pt-1">
         {/* h2: it follows the page h1 (audit: h1 then h3 skipped a level). */}
         <h2
           id="ffcs-widgets-heading"
           className={
-            isMobileViewport ? "sr-only" : "px-1 text-xs font-bold uppercase tracking-wider text-muted-foreground"
+            collapseTools ? "sr-only" : "px-1 text-xs font-bold uppercase tracking-wider text-muted-foreground"
           }
         >
           Show on this page
         </h2>
-        {isMobileViewport && (
+        {collapseTools && (
           <button
             type="button"
             onClick={() => setMobileToolsOpen((o) => !o)}
@@ -764,7 +816,7 @@ export default function FFCSDashboardHeader({
             id="ffcs-planner-menu"
             aria-label="Planner menu"
             className="space-y-3"
-            hidden={isMobileViewport && !mobileToolsOpen}
+            hidden={collapseTools && !mobileToolsOpen}
           >
             {isMobileViewport ? (
               <section aria-labelledby="ffcs-add-course-heading" className="space-y-2">

@@ -164,7 +164,7 @@ export default function AppLoading({ label = "Opening your workspace" }: { label
       </div>
 
       <div className="w-full max-w-[260px] space-y-3">
-        <p className="font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-heading">{label}</p>
+        <p className="font-label text-xs font-bold text-text-heading">{label}</p>
         <div className="h-4 overflow-hidden rounded-full border-2 border-border-ink bg-surface" aria-hidden>
           <div className="app-loading-bar h-full w-1/3 rounded-full bg-ochre" />
         </div>

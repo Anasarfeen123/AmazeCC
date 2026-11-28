@@ -220,9 +220,7 @@ const AppLibraryPortal = memo(
           // Full-width field with its label above (user: the selector was "too
           // short", a size="auto" text pill squeezed into the row).
           <div className="mb-4">
-            <span className="mb-1.5 block font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-muted">
-              Semester
-            </span>
+            <span className="mb-1.5 block font-label text-xs font-bold text-text-muted">Semester</span>
             <SelectField
               value={settings.currSemesterID || config.semesterIDs[config.semesterIDs.length - 2]}
               // Switching reloads everything, so ask first (critique #26).
@@ -277,10 +275,8 @@ const AppLibraryPortal = memo(
         {!librarySearchQuery && (
           <details className="group/pins mb-4 rounded-[12px] border-2 border-border-muted bg-surface-secondary px-4 py-1">
             <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.08em] text-text-heading">
-                Bottom bar shortcuts
-              </span>
-              <span className="flex items-center gap-2 font-mono text-xs font-bold uppercase text-text-muted">
+              <span className="font-label text-xs font-bold text-text-heading">Bottom bar shortcuts</span>
+              <span className="flex items-center gap-2 font-label text-xs font-bold text-text-muted">
                 {(settings?.pinnedNavTabs ?? []).length}/4
                 <ChevronRight className="h-4 w-4 transition-transform group-open/pins:rotate-90" aria-hidden />
               </span>

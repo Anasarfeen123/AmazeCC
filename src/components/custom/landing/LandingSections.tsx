@@ -107,9 +107,7 @@ function Heading({ label, title, sub, tone = "" }: { label: string; title: React
   return (
     <Reveal className={`max-w-2xl space-y-3 ${tone}`}>
       <span className={`${BADGE} bg-surface text-text-primary`}>{label}</span>
-      <h2 className="font-display text-[26px] font-bold uppercase leading-[1.05] text-balance sm:text-[38px]">
-        {title}
-      </h2>
+      <h2 className="font-title text-[26px] font-extrabold leading-[1.05] text-balance sm:text-[38px]">{title}</h2>
       {/* Full ink: at 80% it was 4.1:1 on coral (audit); size keeps it secondary. */}
       {sub ? <p className="text-sm sm:text-base">{sub}</p> : null}
     </Reveal>
@@ -185,7 +183,7 @@ function MarksMini() {
         <span className="font-display text-[44px] font-bold leading-none">
           <CountUp to={8.42} decimals={2} />
         </span>
-        <span className="pb-2 font-mono text-xs font-bold uppercase">CGPA // target 8.6</span>
+        <span className="pb-2 font-label text-xs font-bold">CGPA // target 8.6</span>
       </div>
       {[
         ["CAT 1", 41, 33],
@@ -195,7 +193,7 @@ function MarksMini() {
         const max = name === "FAT" ? 100 : 50;
         return (
           <div key={name as string} className="grid grid-cols-[3.5rem_1fr_auto] items-center gap-2">
-            <span className="font-mono text-xs font-bold uppercase">{name}</span>
+            <span className="font-label text-xs font-bold">{name}</span>
             <div className="relative h-4 overflow-hidden rounded-[5px] border-2 border-obsidian bg-cream">
               <div className="h-full bg-teal" style={{ width: `${((you as number) / max) * 100}%` }} />
               <div
@@ -210,7 +208,7 @@ function MarksMini() {
           </div>
         );
       })}
-      <p className="font-mono text-xs font-bold uppercase">
+      <p className="font-label text-xs font-bold">
         <span className="mr-1 inline-block h-2.5 w-2.5 bg-coral align-middle" /> class average
       </p>
     </div>
@@ -392,7 +390,7 @@ export default function LandingSections() {
               >
                 <div>
                   <span className={`${BADGE} ${card.badge}`}>{card.label}</span>
-                  <h3 className="mt-4 font-display text-[26px] font-bold uppercase leading-[1.05] sm:text-[34px] lg:text-[40px]">
+                  <h3 className="mt-4 font-title text-[26px] font-extrabold leading-[1.05] sm:text-[34px] lg:text-[40px]">
                     {card.title}
                   </h3>
                   <p className="mt-3 max-w-md text-base opacity-90">{card.desc}</p>
@@ -438,9 +436,7 @@ export default function LandingSections() {
           />
           <Reveal className={`${CARD} space-y-5 bg-cream p-6 mr-2`}>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.06em]">
-                {"BCSE302L // Database Systems"}
-              </span>
+              <span className="font-label text-xs font-bold">{"BCSE302L // Database Systems"}</span>
               <span className={`${BADGE} ${below ? "bg-coral" : "bg-mint"} ${INK}`}>
                 {below ? "Below 75%" : "Safe"}
               </span>
@@ -503,7 +499,7 @@ export default function LandingSections() {
           ].map(([n, label], i) => (
             <Reveal as="li" key={i} delay={i * 80} className="border-l-[3px] border-ochre pl-4">
               <p className="font-display text-[40px] font-bold leading-none text-ochre sm:text-[48px]">{n}</p>
-              <p className="mt-2 font-mono text-xs font-bold uppercase tracking-[0.06em]">{label}</p>
+              <p className="mt-2 font-label text-xs font-bold">{label}</p>
             </Reveal>
           ))}
         </ul>

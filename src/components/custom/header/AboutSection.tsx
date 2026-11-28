@@ -43,7 +43,7 @@ export function AboutSection() {
           </div>
         ))}
       </dl>
-      <p className="mt-5 flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+      <p className="mt-5 flex items-center gap-1.5 font-label text-xs font-semibold text-text-muted">
         Made with <Heart className="h-3.5 w-3.5 fill-coral text-coral" aria-label="love" /> by students at VIT Chennai
       </p>
     </section>

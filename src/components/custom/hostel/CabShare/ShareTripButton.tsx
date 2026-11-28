@@ -9,7 +9,7 @@ export default function ShareTripButton({ trip }: { trip: CabShareTrip }) {
   const [copied, setCopied] = useState(false);
 
   const handleShare = async () => {
-    const text = `🚕 Cab Share: ${trip.hub_name} on ${new Date(trip.travel_date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })} @ ${trip.preferred_time}\nHost: ${trip.name || "AmazeCC User"}\nJoin me on AmazeCC!`;
+    const text = `Cab share: ${trip.hub_name} on ${new Date(trip.travel_date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })} @ ${trip.preferred_time}\nHost: ${trip.name || "AmazeCC User"}\nJoin me on AmazeCC!`;
 
     if (navigator.share) {
       try {

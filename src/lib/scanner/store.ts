@@ -34,6 +34,10 @@ const STORE = "scans";
 export interface ScanStore {
   /** All metas, newest first. Never carries PDFs — `list()` must stay cheap. */
   list(): Promise<ScanMeta[]>;
+  /** Full local records, including PDFs, for an explicit user-requested backup. */
+  snapshot(): Promise<ScanRecord[]>;
+  /** Restore records atomically within the store; merge keeps existing IDs. */
+  restore(records: readonly ScanRecord[], mode: "merge" | "replace"): Promise<void>;
   /** The full record, or `undefined` when it is gone. */
   get(id: string): Promise<ScanRecord | undefined>;
   /** Insert or replace by `meta.id`. Rejects records without an id. */
@@ -72,6 +76,18 @@ export function memoryScanStore(): ScanStore {
         .map((record) => record.meta)
         .sort(byNewestFirst)
         .map(cloneMeta);
+    },
+    async snapshot() {
+      return [...rows.values()].map((record) => ({ ...record, meta: cloneMeta(record.meta) }));
+    },
+    async restore(records, mode) {
+      records.forEach(assertScanRecord);
+      if (mode === "replace") rows.clear();
+      for (const record of records) {
+        if (mode === "replace" || !rows.has(record.meta.id)) {
+          rows.set(record.meta.id, { ...record, meta: cloneMeta(record.meta) });
+        }
+      }
     },
     async get(id) {
       const record = rows.get(id);
@@ -112,6 +128,12 @@ function transactionDone(tx: IDBTransaction): Promise<void> {
 }
 
 let dbPromise: Promise<IDBDatabase> | undefined;
+let memoryFallback: ScanStore | undefined;
+
+function getMemoryFallback(): ScanStore {
+  memoryFallback ??= memoryScanStore();
+  return memoryFallback;
+}
 
 /**
  * The one open connection, memoised.
@@ -162,6 +184,33 @@ function idbScanStore(): ScanStore {
         .map((record) => record.meta)
         .sort(byNewestFirst)
         .map(cloneMeta);
+    },
+    async snapshot() {
+      const db = await openDb();
+      const records = (await requestAsPromise(
+        db.transaction(STORE, "readonly").objectStore(STORE).getAll(),
+      )) as ScanRecord[];
+      return records.map((record) => ({ ...record, meta: cloneMeta(record.meta) }));
+    },
+    async restore(records, mode) {
+      records.forEach(assertScanRecord);
+      const db = await openDb();
+      const tx = db.transaction(STORE, "readwrite");
+      const store = tx.objectStore(STORE);
+      if (mode === "replace") {
+        store.clear();
+        records.forEach((record) => store.put(record));
+      } else {
+        const request = store.getAll();
+        request.onsuccess = () => {
+          const existingIds = new Set((request.result as ScanRecord[]).map((record) => record.meta.id));
+          for (const record of records) {
+            if (!existingIds.has(record.meta.id)) store.add(record);
+          }
+        };
+        request.onerror = () => tx.abort();
+      }
+      await transactionDone(tx);
     },
     async get(id) {
       const db = await openDb();
@@ -214,17 +263,18 @@ export function isIndexedDbAvailable(): boolean {
  * keeps the session's work in RAM and says so.
  */
 export async function createScanStore(): Promise<ScanStore> {
-  if (!isIndexedDbAvailable()) return memoryScanStore();
+  if (!isIndexedDbAvailable()) return getMemoryFallback();
   try {
     await openDb();
     return idbScanStore();
   } catch (err) {
     console.warn("paper scanner: IndexedDB unavailable, keeping scans in memory for this session", err);
-    return memoryScanStore();
+    return getMemoryFallback();
   }
 }
 
 /** Test seam: forget the memoised connection so failure paths can be exercised. */
 export function resetScanStoreConnection(): void {
   dbPromise = undefined;
+  memoryFallback = undefined;
 }

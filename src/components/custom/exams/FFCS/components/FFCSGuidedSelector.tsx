@@ -1388,7 +1388,7 @@ export default function FFCSGuidedSelector({
     >
       <div className="flex items-center justify-between pb-2 border-b border-border-ink shrink-0">
         {/* The page heading already says "Select target timetable" (owner: no repeats). */}
-        <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">Your timetables</p>
+        <p className="font-label text-xs font-semibold text-text-muted">Your timetables</p>
         {onCreateNewTimetable && (
           <button
             type="button"

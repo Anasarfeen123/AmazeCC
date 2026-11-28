@@ -26,7 +26,7 @@ export default function UpcomingClassesList({
   const CLASS_WEIGHT = isLab ? 2 : 1;
 
   if (!classes || classes.length === 0) {
-    return <p className="text-text-muted text-xs text-center py-4">No upcoming classes 🎉</p>;
+    return <p className="text-text-muted text-xs text-center py-4">No upcoming classes</p>;
   }
 
   const lockDates = useMemo(() => {

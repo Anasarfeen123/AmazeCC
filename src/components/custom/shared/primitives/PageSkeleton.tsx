@@ -43,7 +43,7 @@ export function PageSkeleton({
           ))}
         </div>
       ) : null}
-      <ListSkeleton rows={rows} leading="dot" trailing />
+      {rows > 0 ? <ListSkeleton rows={rows} leading="dot" trailing /> : null}
       <span className="sr-only">{label}…</span>
     </div>
   );

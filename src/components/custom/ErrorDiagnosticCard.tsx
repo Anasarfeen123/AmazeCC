@@ -155,7 +155,7 @@ export default function ErrorDiagnosticCard(props: ErrorDiagnosticCardProps) {
               The technical details below are attached automatically. A line about what you were doing helps a lot.
             </p>
             <label className="block">
-              <span className="mb-1 block font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+              <span className="mb-1 block font-label text-xs font-semibold text-text-muted">
                 What were you doing? (optional)
               </span>
               <textarea
@@ -167,7 +167,7 @@ export default function ErrorDiagnosticCard(props: ErrorDiagnosticCardProps) {
               />
             </label>
             <label className="block">
-              <span className="mb-1 block font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
+              <span className="mb-1 block font-label text-xs font-semibold text-text-muted">
                 Email for a reply (optional)
               </span>
               <input
@@ -204,7 +204,7 @@ export default function ErrorDiagnosticCard(props: ErrorDiagnosticCardProps) {
         )}
 
         <details className="group mt-5">
-          <summary className="cursor-pointer list-none font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted hover:text-text-primary">
+          <summary className="cursor-pointer list-none font-label text-xs font-bold text-text-muted hover:text-text-primary">
             <span className="group-open:hidden">Show technical details</span>
             <span className="hidden group-open:inline">Hide technical details</span>
           </summary>

@@ -112,7 +112,7 @@ export default function DashboardUtilityRoutes({
         />
       </DashboardRoute>
       <DashboardRoute route="clubs">
-        <ClubHubTab IDs={resolvedIDs} loginToVTOP={loginToVTOP} onBack={onSystemBack} />
+        <ClubHubTab IDs={resolvedIDs} onBack={onSystemBack} />
       </DashboardRoute>
       <DashboardRoute route="community">
         <CommunityFeed IDs={resolvedIDs} loginToVTOP={loginToVTOP} onBack={onSystemBack} />

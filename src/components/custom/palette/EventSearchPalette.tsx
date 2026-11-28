@@ -1,6 +1,6 @@
 "use client";
 import { useState, useMemo, useRef, useCallback, useEffect } from "react";
-import { Search, CalendarDays, MapPin, DollarSign, X, Sparkles, ArrowLeft, Loader2 } from "lucide-react";
+import { Search, CalendarDays, CheckCircle2, MapPin, DollarSign, X, Sparkles, ArrowLeft, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/sync-engine";
 import { eventhubImageUrl } from "@/lib/eventhub";
@@ -648,9 +648,9 @@ export default function EventSearchPalette() {
                   )}
                 >
                   {ev._source === "registered" ? (
-                    <span className="text-sm">✅</span>
+                    <CheckCircle2 className="h-4 w-4 text-success-foreground" aria-hidden />
                   ) : (
-                    <span className="text-sm">🎪</span>
+                    <CalendarDays className="h-4 w-4 text-primary" aria-hidden />
                   )}
                 </span>
               )}

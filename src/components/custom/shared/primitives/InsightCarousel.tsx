@@ -30,7 +30,7 @@ import type { PrivacyCategory } from "@/lib/privacyMode";
  * tile is the one surface here with autoplay. Hence `onActiveChange`.
  */
 
-const LABEL = "font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted min-w-0 break-words";
+const LABEL = "font-label text-xs font-semibold text-text-muted min-w-0 break-words";
 const BADGE =
   "font-mono text-xs font-semibold uppercase tracking-[0.06em] px-1 py-0 sm:px-1.5 sm:py-0.5 rounded-[6px] border-2 shrink-0";
 const SUBLINE = "font-mono text-xs text-text-muted truncate";

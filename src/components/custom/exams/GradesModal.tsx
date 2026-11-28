@@ -240,7 +240,7 @@ function GradesDisplay({ allGradesData, data, handleFetchGrades, marksData, atte
               <div className="space-y-4 border-b-2 border-border-ink pb-6">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <p className="font-display text-xl font-bold uppercase text-text-heading">Total credits</p>
-                  <span className="flex flex-wrap gap-3 font-mono text-xs font-semibold uppercase text-text-muted">
+                  <span className="flex flex-wrap gap-3 font-label text-xs font-semibold text-text-muted">
                     <span className="inline-flex items-center gap-1.5">
                       <i className="h-3 w-3 rounded-[3px] border-2 border-border-ink bg-primary" />
                       Earned
@@ -389,9 +389,7 @@ function GradesDisplay({ allGradesData, data, handleFetchGrades, marksData, atte
                         >
                           <div className="flex min-w-0 flex-col text-left">
                             <span className="truncate text-sm font-semibold">{basketTitle || "Unknown"}</span>
-                            <span className="font-mono text-xs uppercase text-text-muted">
-                              {distributionType || "—"}
-                            </span>
+                            <span className="font-label text-xs text-text-muted">{distributionType || "—"}</span>
                           </div>
                           <div className="flex shrink-0 items-center gap-2">
                             <span className="font-mono text-xs text-text-muted">

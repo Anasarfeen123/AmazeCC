@@ -46,7 +46,7 @@ export default function SetupStrategyCard({
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.06em] opacity-80">Locked first</span>
+              <span className="font-label text-xs font-bold opacity-80">Locked first</span>
               {courseStrategy === "lock_advance" && (
                 <span className="text-xs font-bold flex items-center gap-1">
                   <Check className="w-3 h-3" /> Selected
@@ -83,7 +83,7 @@ export default function SetupStrategyCard({
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.06em] opacity-80">
+              <span className="font-label text-xs font-bold opacity-80">
                 {planMode === "auto" ? "Open list" : "One by one"}
               </span>
               {courseStrategy === "one_by_one" && (

@@ -138,9 +138,7 @@ export function BrandLogo({
           <span className="ml-0.5 rounded-[5px] border-2 border-border-ink bg-ochre px-1 text-obsidian">CC</span>
         </span>
         {tagline ? (
-          <span className={`mt-1.5 block font-mono uppercase tracking-[0.06em] text-text-muted ${TAG[size]}`}>
-            Your campus companion
-          </span>
+          <span className={`mt-1.5 block font-label text-text-muted ${TAG[size]}`}>Your campus companion</span>
         ) : null}
       </span>
     </span>

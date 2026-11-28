@@ -228,9 +228,9 @@ export default function PushNotificationManager() {
 
       if ("serviceWorker" in navigator) {
         const reg = await navigator.serviceWorker.ready;
-        await reg.showNotification("✨ AmazeCC Push Test Passed!", options);
+        await reg.showNotification("AmazeCC push test passed", options);
       } else {
-        new Notification("✨ AmazeCC Push Test Passed!", options);
+        new Notification("AmazeCC push test passed", options);
       }
 
       setFetchStatus("Test notification sent successfully!");

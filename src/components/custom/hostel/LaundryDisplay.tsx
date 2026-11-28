@@ -170,7 +170,7 @@ export default function LaundrySchedule({ hostelData, handleHostelDetailsFetch }
           <p className="inline-flex items-center rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 mb-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-secondary-foreground leading-none">
             Hostel · Laundry
           </p>
-          <h1 className="font-display text-[28px] sm:text-[36px] font-bold uppercase text-text-heading tracking-tight leading-[1.05] break-words">
+          <h1 className="font-title text-[28px] sm:text-[36px] font-extrabold text-text-heading tracking-tight leading-[1.05] break-words">
             Laundry
           </h1>
           <div className="flex flex-wrap items-center gap-2 mt-1">

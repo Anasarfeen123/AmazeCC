@@ -90,10 +90,10 @@ export default function LegalLayout({
         <p className="w-fit rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
           {eyebrow}
         </p>
-        <h1 className="mt-3 font-display text-[30px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[44px]">
+        <h1 className="mt-3 font-title text-[30px] font-extrabold leading-[1.05] text-text-heading sm:text-[44px]">
           {title}
         </h1>
-        <p className="mt-2 font-mono text-xs uppercase text-text-muted">Last updated {updated}</p>
+        <p className="mt-2 font-label text-xs text-text-muted">Last updated {updated}</p>
 
         {summary && summary.length > 0 && (
           <section
@@ -120,9 +120,7 @@ export default function LegalLayout({
           <div className="mt-10 grid gap-10 lg:grid-cols-[220px_1fr]">
             <nav aria-label="Contents" className="hidden lg:block">
               <div className="sticky top-24 space-y-1">
-                <p className="mb-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
-                  Contents
-                </p>
+                <p className="mb-2 font-label text-xs font-semibold text-text-muted">Contents</p>
                 {sections.map((s, i) => (
                   <a
                     key={s.id}

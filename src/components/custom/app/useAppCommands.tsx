@@ -743,7 +743,7 @@ export function useAppCommands(input: AppCommandInputs) {
             category: `What-If · Attendance`,
             rightSlot: (
               <span className="inline-flex items-center justify-center min-w-[3.25rem] h-9 rounded-xl text-xs font-bold text-success-foreground bg-success-surface">
-                🎯 75%
+                75%
               </span>
             ),
             onSelect: () => {

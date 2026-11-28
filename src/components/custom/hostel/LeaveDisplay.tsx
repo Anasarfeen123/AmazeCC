@@ -92,7 +92,7 @@ export default function LeaveDisplay({ leaveData, handleHostelDetailsFetch }: Le
           <p className="inline-flex items-center rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 mb-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-secondary-foreground leading-none">
             Hostel · Leave
           </p>
-          <h1 className="font-display text-[28px] sm:text-[36px] font-bold uppercase text-text-heading tracking-tight leading-[1.05] break-words">
+          <h1 className="font-title text-[28px] sm:text-[36px] font-extrabold text-text-heading tracking-tight leading-[1.05] break-words">
             Leave & outings
           </h1>
           <p className="text-xs text-text-muted mt-1">Apply for outings and leave, and see what is approved.</p>
@@ -234,26 +234,9 @@ export default function LeaveDisplay({ leaveData, handleHostelDetailsFetch }: Le
             </div>
           </div>
 
-          {/* Emergency contacts */}
-          <div className="bg-surface border-2 border-border-ink rounded-2xl p-5 shadow-2xs space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary block">
-              Outing Emergency Contacts
-            </span>
-            <div className="space-y-2 text-xs text-text-primary">
-              <div className="flex items-center justify-between">
-                <span>Gate Outing Desk:</span>
-                <a href="tel:+914439931555" className="font-semibold text-primary hover:underline">
-                  +91 44 3993 1555
-                </a>
-              </div>
-              <div className="flex items-center justify-between">
-                <span>Warden Outing Cell:</span>
-                <a href="tel:+914439931666" className="font-semibold text-primary hover:underline">
-                  +91 44 3993 1666
-                </a>
-              </div>
-            </div>
-          </div>
+          {/* The "emergency contacts" block listed phone numbers that came from
+              no source (owner review, 2026-11-28); removed until the hostel
+              office publishes real ones. */}
         </div>
       </div>
 

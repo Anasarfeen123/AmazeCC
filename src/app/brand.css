@@ -34,6 +34,17 @@
      labels, buttons and nav (font-mono). */
   --font-outfit: var(--font-space-grotesk), var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-space-mono), var(--font-geist-mono), ui-monospace, monospace;
+  /* Font roles (owner, 2026-11-28: "add more text fonts to keep it from
+     being too monotonous"). Space Mono had every job; now each face has one:
+     - font-title: page titles and the Home greeting (Bricolage Grotesque);
+     - font-display: hero numbers (Space Mono, the brand signature);
+     - font-outfit: card and course titles (Space Grotesk);
+     - font-label: small section and stat labels, sentence case (DM Sans);
+     - font-mono: badges, chips, codes, metadata (Space Mono);
+     - font-hand: handwritten accents, sparingly (Caveat). */
+  --font-title: var(--font-bricolage), var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-label: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-hand: var(--font-caveat), "Comic Sans MS", cursive;
 
   /* Label floor. Phones use a 13-14px root (Display size), so the stock
      0.75rem text-xs rendered labels at 10.5px, under the 12px label rule in
@@ -1209,4 +1220,26 @@
 [data-sidebar-root] .text-\[10px\] {
   font-size: 12px;
   line-height: 1.3;
+}
+
+/* Page change: a quick fade and 6px rise (DashboardRoute). */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.page-enter {
+  /* backwards, not both: once done no transform stays on the wrapper, which
+     would otherwise become the containing block for fixed sheets inside. */
+  animation: page-enter 180ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: none;
+  }
 }

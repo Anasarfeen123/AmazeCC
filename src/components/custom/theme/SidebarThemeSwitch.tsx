@@ -48,7 +48,7 @@ export default function SidebarThemeSwitch({
   }
   return (
     <div role="radiogroup" aria-label="Theme" className={`flex items-center gap-1 ${className}`.trim()}>
-      <span className="mr-auto font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">Theme</span>
+      <span className="mr-auto font-label text-xs font-semibold text-text-muted">Theme</span>
       {OPTIONS.map(([value, label]) => {
         const on = (theme ?? "dark") === value;
         return (

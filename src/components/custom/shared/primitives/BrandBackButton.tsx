@@ -32,9 +32,7 @@ export function BrandBackButton({
       className={`inline-flex min-h-11 items-center gap-2 rounded-[10px] border-2 border-border-ink bg-highlight px-3 text-highlight-foreground shadow-brutal-sm brutal-press cursor-pointer ${className}`.trim()}
     >
       <ArrowLeft className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden />
-      <span className="max-[359px]:sr-only max-w-[40vw] truncate font-mono text-[13px] font-semibold uppercase tracking-[0.06em]">
-        {label}
-      </span>
+      <span className="max-[359px]:sr-only max-w-[40vw] truncate font-label text-[13px] font-semibold">{label}</span>
     </button>
   );
 }

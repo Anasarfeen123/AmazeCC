@@ -417,7 +417,7 @@ export default function PaymentsTab({ loginToVTOP, onBack }: PaymentsTabProps) {
             <p className="my-auto py-1 text-xs font-bold text-danger-foreground line-clamp-3">{error.dues}</p>
           ) : (
             <div className="my-auto py-1 min-w-0">
-              <span className="block font-display text-[26px] font-bold uppercase leading-tight sm:text-[40px]">
+              <span className="block font-title text-[26px] font-extrabold leading-tight sm:text-[40px]">
                 {hasPendingDues ? "Dues pending" : "All clear"}
               </span>
             </div>

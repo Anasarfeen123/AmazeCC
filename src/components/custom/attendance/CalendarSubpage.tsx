@@ -630,9 +630,7 @@ export default function CalendarSubpage({
         </div>
 
         <div className="mt-3 flex items-center gap-2 border-t-2 border-border-muted pt-3">
-          <span className="shrink-0 font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
-            Programme
-          </span>
+          <span className="shrink-0 font-label text-xs font-bold text-text-muted">Programme</span>
           <div className="min-w-0 flex-1">
             <SelectField value={type} onChange={handleTypeChange} options={CALENDAR_OPTIONS} size="md" />
           </div>

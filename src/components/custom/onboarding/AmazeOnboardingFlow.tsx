@@ -372,9 +372,7 @@ export default function AmazeOnboardingFlow({
     <div className="p-5 sm:p-6 rounded-[16px] border-[3px] border-border-ink bg-surface shadow-brutal-md space-y-4 text-left">
       {/* Friendly Name */}
       <div className="space-y-1.5">
-        <label className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
-          What should we call you?
-        </label>
+        <label className="font-label text-xs font-bold text-text-muted">What should we call you?</label>
         <input
           type="text"
           value={temp.friendlyName || ""}
@@ -386,9 +384,7 @@ export default function AmazeOnboardingFlow({
 
       {/* Current Semester Selector */}
       <div className="space-y-1.5">
-        <label className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
-          Current Semester
-        </label>
+        <label className="font-label text-xs font-bold text-text-muted">Current Semester</label>
         <div>
           <SelectField
             value={temp.currSemesterID || config.semesterIDs[config.semesterIDs.length - 2]}
@@ -408,9 +404,7 @@ export default function AmazeOnboardingFlow({
 
       {/* Campus Residency & Bus Mode */}
       <div className="space-y-2">
-        <label className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
-          Campus Residency & Commute
-        </label>
+        <label className="font-label text-xs font-bold text-text-muted">Campus Residency & Commute</label>
         {vtopIsHosteller !== null ? (
           <p className="text-xs text-text-muted">
             Detected from VTOP: {vtopIsHosteller ? "hosteller" : "day scholar"}. Change it if that is wrong.
@@ -535,9 +529,7 @@ export default function AmazeOnboardingFlow({
     <div className="p-5 sm:p-6 rounded-[16px] border-[3px] border-border-ink bg-surface shadow-brutal-md space-y-4 text-left">
       {/* Dashboard Avatar Option */}
       <div className="space-y-1.5">
-        <label className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
-          Dashboard Greeting Avatar
-        </label>
+        <label className="font-label text-xs font-bold text-text-muted">Dashboard Greeting Avatar</label>
         <div className="grid grid-cols-2 gap-2.5">
           <button
             type="button"
@@ -584,9 +576,7 @@ export default function AmazeOnboardingFlow({
       {/* Target Attendance Goal */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <label className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
-            Target Attendance Goal
-          </label>
+          <label className="font-label text-xs font-bold text-text-muted">Target Attendance Goal</label>
           <span className="text-xs font-bold text-primary">{temp.targetAttendance || 75}%</span>
         </div>
         <div className="grid grid-cols-3 gap-2">
@@ -650,11 +640,7 @@ export default function AmazeOnboardingFlow({
           and sit lower, smaller (user: keep rarely used things deeper). */}
       {[AVAILABLE_NAV_TABS.slice(0, 2), AVAILABLE_NAV_TABS.slice(2)].map((list, li) => (
         <div key={li} className={li === 0 ? "grid grid-cols-2 gap-2" : "space-y-2 pt-1"}>
-          {li === 1 && (
-            <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
-              Other shortcuts (optional)
-            </p>
-          )}
+          {li === 1 && <p className="font-label text-xs font-semibold text-text-muted">Other shortcuts (optional)</p>}
           <div className={li === 1 ? "grid grid-cols-2 gap-2 opacity-90" : "contents"}>
             {list.map((tab) => {
               const isPinned = (temp.pinnedNavTabs || []).includes(tab.id);
@@ -871,7 +857,7 @@ export default function AmazeOnboardingFlow({
               )}
 
               {!isStandaloneInterfacePicker ? (
-                <span className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
+                <span className="font-label text-xs font-bold text-text-muted">
                   Step {visibleStep + 1} of {totalSteps}
                 </span>
               ) : (
@@ -893,7 +879,7 @@ export default function AmazeOnboardingFlow({
                       <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
                         Workspace Layout
                       </span>
-                      <h2 className="mt-2 font-display text-[28px] font-bold uppercase leading-[1.05] text-text-heading lg:text-[36px]">
+                      <h2 className="mt-2 font-title text-[28px] font-extrabold leading-[1.05] text-text-heading lg:text-[36px]">
                         Choose your interface
                       </h2>
                     </div>
@@ -904,9 +890,7 @@ export default function AmazeOnboardingFlow({
 
                   {/* Icon-Only Option Bar */}
                   <div className="space-y-2 pt-1 w-full">
-                    <label className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
-                      Select Mode
-                    </label>
+                    <label className="font-label text-xs font-bold text-text-muted">Select Mode</label>
                     <div className="inline-flex items-center gap-2 p-1.5 rounded-full bg-surface border border-border-ink shadow-lg">
                       {interfaces.map((item, idx) => {
                         const isCurrent = activeInterfaceIdx === idx;
@@ -949,7 +933,7 @@ export default function AmazeOnboardingFlow({
                       <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
                         Getting Started
                       </span>
-                      <h1 className="mt-2 font-display text-[28px] font-bold uppercase leading-[1.05] text-text-heading lg:text-[36px]">
+                      <h1 className="mt-2 font-title text-[28px] font-extrabold leading-[1.05] text-text-heading lg:text-[36px]">
                         Welcome to AmazeCC
                       </h1>
                     </div>
@@ -965,7 +949,7 @@ export default function AmazeOnboardingFlow({
                       <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
                         Personalization
                       </span>
-                      <h2 className="mt-2 font-display text-[28px] font-bold uppercase leading-[1.05] text-text-heading lg:text-[36px]">
+                      <h2 className="mt-2 font-title text-[28px] font-extrabold leading-[1.05] text-text-heading lg:text-[36px]">
                         Display & Goals
                       </h2>
                     </div>
@@ -981,7 +965,7 @@ export default function AmazeOnboardingFlow({
                       <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
                         Navigation
                       </span>
-                      <h2 className="mt-2 font-display text-[28px] font-bold uppercase leading-[1.05] text-text-heading lg:text-[36px]">
+                      <h2 className="mt-2 font-title text-[28px] font-extrabold leading-[1.05] text-text-heading lg:text-[36px]">
                         Bottom Navigation
                       </h2>
                     </div>
@@ -997,7 +981,7 @@ export default function AmazeOnboardingFlow({
                       <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
                         Smart Alerts
                       </span>
-                      <h2 className="mt-2 font-display text-[28px] font-bold uppercase leading-[1.05] text-text-heading lg:text-[36px]">
+                      <h2 className="mt-2 font-title text-[28px] font-extrabold leading-[1.05] text-text-heading lg:text-[36px]">
                         Stay Ahead of Classes
                       </h2>
                     </div>
@@ -1013,7 +997,7 @@ export default function AmazeOnboardingFlow({
                       <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-[0.06em] text-secondary-foreground">
                         Install
                       </span>
-                      <h2 className="mt-2 font-display text-[28px] font-bold uppercase leading-[1.05] text-text-heading lg:text-[36px]">
+                      <h2 className="mt-2 font-title text-[28px] font-extrabold leading-[1.05] text-text-heading lg:text-[36px]">
                         AmazeCC on Your Device
                       </h2>
                     </div>
@@ -1145,7 +1129,7 @@ export default function AmazeOnboardingFlow({
             )}
 
             {!isStandaloneInterfacePicker ? (
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-text-muted">
+              <span className="font-label text-xs font-bold text-text-muted">
                 Step {visibleStep + 1} of {totalSteps}
               </span>
             ) : (
@@ -1174,7 +1158,7 @@ export default function AmazeOnboardingFlow({
                   className="my-auto w-full space-y-4 sm:space-y-5 text-center"
                 >
                   <div className="flex flex-col items-center gap-2.5">
-                    <h1 className="font-display text-[24px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[30px]">
+                    <h1 className="font-title text-[24px] font-extrabold leading-[1.05] text-text-heading sm:text-[30px]">
                       Welcome to AmazeCC
                     </h1>
                     <p className="text-sm text-text-muted max-w-xs">
@@ -1199,7 +1183,7 @@ export default function AmazeOnboardingFlow({
                 >
                   {/* Header inside interface picker */}
                   <div className="flex flex-col items-center text-center space-y-2 shrink-0">
-                    <h2 className="font-display text-[24px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[30px]">
+                    <h2 className="font-title text-[24px] font-extrabold leading-[1.05] text-text-heading sm:text-[30px]">
                       Choose your interface
                     </h2>
 
@@ -1243,7 +1227,7 @@ export default function AmazeOnboardingFlow({
                   className="my-auto w-full space-y-4 sm:space-y-5 text-center"
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <h2 className="font-display text-[24px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[30px]">
+                    <h2 className="font-title text-[24px] font-extrabold leading-[1.05] text-text-heading sm:text-[30px]">
                       Display & Goals
                     </h2>
                     <p className="text-sm text-text-muted">Set your avatar, colors, and attendance safe goals.</p>
@@ -1265,7 +1249,7 @@ export default function AmazeOnboardingFlow({
                   className="my-auto w-full space-y-4 sm:space-y-5 text-center"
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <h2 className="font-display text-[24px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[30px]">
+                    <h2 className="font-title text-[24px] font-extrabold leading-[1.05] text-text-heading sm:text-[30px]">
                       Bottom Navigation
                     </h2>
                     <p className="text-sm text-text-muted">Pin up to 4 quick-access tabs for your mobile dock.</p>
@@ -1287,7 +1271,7 @@ export default function AmazeOnboardingFlow({
                   className="my-auto w-full space-y-4 sm:space-y-5 text-center"
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <h2 className="font-display text-[24px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[30px]">
+                    <h2 className="font-title text-[24px] font-extrabold leading-[1.05] text-text-heading sm:text-[30px]">
                       Stay Ahead of Classes
                     </h2>
                     <p className="text-sm text-text-muted">Instant class alerts and low attendance safeguards.</p>
@@ -1309,7 +1293,7 @@ export default function AmazeOnboardingFlow({
                   className="my-auto w-full space-y-4 sm:space-y-5 text-center"
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <h2 className="font-display text-[24px] font-bold uppercase leading-[1.05] text-text-heading sm:text-[30px]">
+                    <h2 className="font-title text-[24px] font-extrabold leading-[1.05] text-text-heading sm:text-[30px]">
                       Install AmazeCC
                     </h2>
                     <p className="text-sm text-text-muted max-w-xs">

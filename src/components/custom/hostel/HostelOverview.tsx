@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import { getTypedStorageItem } from "@/lib/storage";
 import { getAssetPath } from "@/lib/utils";
 import { getCurrentWeekOfMonth, getSmartMenuText } from "./MessDisplay";
-import { ArrowRight, Info, ExternalLink, ChevronRight, CheckCircle2 } from "lucide-react";
-import { Button } from "@amazecontinuityprojects/amazeui";
+import { BedDouble, CalendarDays, ChevronRight, DoorOpen, ExternalLink, Layers, Shirt, Utensils } from "lucide-react";
+import { KeyValue, ListRowText, ListShell, SectionHeader, TitleBlock } from "../shared/primitives";
+import { LIST_ROW, TONE_ICON_TILE } from "@/lib/uiTokens";
 import TabHelpFooter from "../shared/TabHelpFooter";
+import LastSynced from "../shared/LastSynced";
 
 interface HostelOverviewProps {
   hostelData: any;
@@ -14,7 +16,7 @@ interface HostelOverviewProps {
 }
 
 export default function HostelOverview({ hostelData, setHostelActiveSubTab }: HostelOverviewProps) {
-  const [activeMeal, setActiveMeal] = useState({ name: "Breakfast", icon: "🍳", time: "7:30 AM - 9:00 AM" });
+  const [activeMeal, setActiveMeal] = useState({ name: "Breakfast", time: "7:30 AM - 9:00 AM" });
   const [menuItems, setMenuItems] = useState<string>("");
   const [nextMealCountdown, setNextMealCountdown] = useState<string>("");
 
@@ -32,22 +34,22 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
     if (totalMinutes < 540) {
       const diff = 540 - totalMinutes;
       setNextMealCountdown(`Breakfast ends in ${Math.floor(diff / 60)}h ${diff % 60}m`);
-      return { name: "Breakfast", icon: "🍳", time: "7:30 AM - 9:00 AM" };
+      return { name: "Breakfast", time: "7:30 AM - 9:00 AM" };
     } else if (totalMinutes < 840) {
       const diff = 840 - totalMinutes;
       setNextMealCountdown(`Lunch ends in ${Math.floor(diff / 60)}h ${diff % 60}m`);
-      return { name: "Lunch", icon: "🍲", time: "12:30 PM - 2:00 PM" };
+      return { name: "Lunch", time: "12:30 PM - 2:00 PM" };
     } else if (totalMinutes < 1050) {
       const diff = 1050 - totalMinutes;
       setNextMealCountdown(`Snacks ends in ${Math.floor(diff / 60)}h ${diff % 60}m`);
-      return { name: "Snacks", icon: "☕", time: "4:30 PM - 5:30 PM" };
+      return { name: "Snacks", time: "4:30 PM - 5:30 PM" };
     } else if (totalMinutes < 1260) {
       const diff = 1260 - totalMinutes;
       setNextMealCountdown(`Dinner ends in ${Math.floor(diff / 60)}h ${diff % 60}m`);
-      return { name: "Dinner", icon: "🍽️", time: "7:30 PM - 9:00 PM" };
+      return { name: "Dinner", time: "7:30 PM - 9:00 PM" };
     } else {
       setNextMealCountdown("Kitchen is closed. Reopens at 7:30 AM");
-      return { name: "Breakfast", icon: "🍳", time: "Tomorrow 7:30 AM" };
+      return { name: "Breakfast", time: "Tomorrow 7:30 AM" };
     }
   };
 
@@ -109,248 +111,147 @@ export default function HostelOverview({ hostelData, setHostelActiveSubTab }: Ho
   });
   const activeLeave = activeLeaves[0];
 
+  const menuLines = menuItems
+    .split("\n")
+    .map((l) => l.replace(/^\d+\.\s*/, "").trim())
+    .filter(Boolean);
+
+  const sections = [
+    {
+      id: "mess",
+      title: "Mess menu",
+      desc: "The whole week, every meal",
+      icon: Utensils,
+      tone: "amber",
+    },
+    {
+      id: "laundry",
+      title: "Laundry",
+      desc: "Your block's washing days",
+      icon: Shirt,
+      tone: "sky",
+    },
+    {
+      id: "leave",
+      title: "Leaves & outings",
+      desc: activeLeave
+        ? `${activeLeave.leaveType || "Leave"} · ${String(activeLeave.status || "Requested").toLowerCase()}`
+        : "No active leave",
+      icon: CalendarDays,
+      tone: activeLeave ? "emerald" : "zinc",
+    },
+    {
+      id: "counselling",
+      title: "Room counselling",
+      desc: "Group requests and allocation status",
+      icon: BedDouble,
+      tone: "violet",
+    },
+  ] as const;
+
   return (
     <div className="space-y-6">
-      {/* Title Header */}
       <div>
-        <p className="inline-flex items-center rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 mb-2 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-secondary-foreground leading-none">
-          Hostel
-        </p>
-        <h1 className="font-display text-[28px] sm:text-[36px] font-bold uppercase text-text-heading tracking-tight leading-[1.05] break-words">
-          Hostel Hub
-        </h1>
-        <p className="text-xs text-text-muted mt-1">Mess menu, laundry slots, leave and room counselling.</p>
+        <TitleBlock eyebrow="Hostel" title="Hostel Hub" subtitle="Mess menu, laundry, leave and room counselling" />
+        <LastSynced ops={["hostel"]} />
       </div>
 
-      {/* Grid Dashboard layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Card: Today's Mess */}
-        <div className="bg-surface border-2 border-border-ink rounded-2xl p-5 flex flex-col justify-between shadow-2xs hover:border-border-ink transition-all">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-primary">Mess Dining</span>
-              <span className="text-xs text-text-muted font-semibold">{activeMeal.time}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div>
-                <h3 className="text-sm font-bold text-text-heading">Current Meal: {activeMeal.name}</h3>
-                <p className="text-xs text-text-muted mt-0.5">{nextMealCountdown}</p>
-              </div>
-            </div>
-            <div className="bg-surface-secondary border border-border-muted rounded-xl p-3 text-xs max-h-24 overflow-y-auto">
-              {menuItems ? (
-                <p className="whitespace-pre-line text-text-primary font-medium leading-relaxed">{menuItems}</p>
-              ) : (
-                <p className="text-text-muted italic">No menu saved yet. Open the full menu to load it.</p>
-              )}
-            </div>
-          </div>
-          <Button
-            onClick={() => setHostelActiveSubTab("mess")}
-            className="w-full bg-primary hover:brightness-110 text-primary-foreground text-xs mt-4 rounded-xl flex items-center justify-center gap-1.5 h-9"
-          >
-            <span>View Full Menu</span>
-            <ArrowRight size={14} />
-          </Button>
-        </div>
-
-        {/* Card: Laundry */}
-        <div className="bg-surface border-2 border-border-ink rounded-2xl p-5 flex flex-col justify-between shadow-2xs hover:border-border-ink transition-all">
-          <div className="space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary block">Laundry Schedule</span>
-            <div className="flex items-center gap-3">
-              <div>
-                <h3 className="text-sm font-bold text-text-heading">Weekly Slots</h3>
-                <p className="text-xs text-text-muted mt-0.5">Check when laundry is available for your room range</p>
-              </div>
-            </div>
-
-            <div className="bg-surface-secondary border border-border-muted rounded-xl p-3 text-xs space-y-2">
-              <div className="flex justify-between items-center text-text-muted">
-                <span>Active Slot today:</span>
-                <span className="font-semibold text-primary">Available</span>
-              </div>
-              <div className="text-xs text-text-muted leading-relaxed">
-                Matches current calendar dates. Standard slots allocate up to two washings per week.
-              </div>
-            </div>
-          </div>
-          <Button
-            onClick={() => setHostelActiveSubTab("laundry")}
-            className="w-full bg-primary hover:brightness-110 text-primary-foreground text-xs mt-4 rounded-xl flex items-center justify-center gap-1.5 h-9"
-          >
-            <span>Check Schedule</span>
-            <ArrowRight size={14} />
-          </Button>
-        </div>
-
-        {/* Card: Leave Management */}
-        <div className="bg-surface border-2 border-border-ink rounded-2xl p-5 flex flex-col justify-between shadow-2xs hover:border-border-ink transition-all">
-          <div className="space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary block">Leaves & Outings</span>
-
-            {activeLeave ? (
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 size={16} className="text-success-foreground shrink-0" />
-                  <span className="text-xs font-semibold text-text-primary truncate">Leave Request Found</span>
-                </div>
-                <div className="bg-surface-secondary border border-border-muted rounded-xl p-3 text-xs text-text-muted space-y-1">
-                  <div className="truncate">
-                    <strong>From:</strong> {activeLeave.from}
-                  </div>
-                  <div className="truncate">
-                    <strong>To:</strong> {activeLeave.to}
-                  </div>
-                  <div className="truncate">
-                    <strong>Place:</strong> {activeLeave.visitPlace}
-                  </div>
-                  <div className="mt-1 pt-1.5 border-t border-border-muted flex items-center justify-between text-xs">
-                    <span>Status:</span>
-                    <span className="font-semibold text-success-foreground uppercase">
-                      {activeLeave.status || "Approved"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <Info size={16} className="text-text-muted shrink-0" />
-                  <span className="text-xs font-semibold text-text-primary">No Active Leave</span>
-                </div>
-                <p className="text-xs text-text-muted leading-relaxed">
-                  You do not currently have any active outings or leaves. Ensure to file on time via VTOP.
-                </p>
-              </div>
-            )}
-          </div>
-          <Button
-            onClick={() => setHostelActiveSubTab("leave")}
-            className="w-full bg-primary hover:brightness-110 text-primary-foreground text-xs mt-4 rounded-xl flex items-center justify-center gap-1.5 h-9"
-          >
-            <span>Manage Leaves</span>
-            <ArrowRight size={14} />
-          </Button>
-        </div>
-
-        {/* Card: Room Selection & Counselling */}
-        <div className="bg-surface border-2 border-border-ink rounded-2xl p-5 flex flex-col justify-between shadow-2xs hover:border-border-ink transition-all">
-          <div className="space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary block">
-              Room selection & counselling
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+        {/* Today's meal: the one thing most people open this page for. */}
+        <button
+          type="button"
+          onClick={() => setHostelActiveSubTab("mess")}
+          className="flex w-full flex-col gap-3 rounded-[14px] border-2 border-border-ink bg-surface p-4 text-left shadow-brutal-sm brutal-press cursor-pointer"
+        >
+          <div className="flex items-center gap-3">
+            <span
+              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border ${TONE_ICON_TILE.amber}`}
+            >
+              <Utensils className="h-4.5 w-4.5" aria-hidden />
             </span>
-            <div className="flex items-center gap-3">
-              <div>
-                <h3 className="text-sm font-bold text-text-heading">Booking Status</h3>
-                <p className="text-xs text-text-muted mt-0.5">Check group requests and allocation status</p>
-              </div>
+            <div className="min-w-0 flex-1">
+              <p className="font-label text-xs font-semibold text-text-muted">
+                {activeMeal.name === "Breakfast" && activeMeal.time.startsWith("Tomorrow")
+                  ? "Next meal"
+                  : "Now serving"}
+              </p>
+              <p className="font-outfit text-lg font-bold leading-tight text-text-heading">{activeMeal.name}</p>
             </div>
+            <span className="shrink-0 font-mono text-xs font-semibold text-text-muted">{activeMeal.time}</span>
+          </div>
+          {menuLines.length ? (
+            <ul className="grid gap-1 rounded-[10px] border-2 border-border-ink bg-surface-secondary p-3 text-sm text-text-primary">
+              {menuLines.slice(0, 5).map((line) => (
+                <li key={line} className="flex gap-2">
+                  <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-highlight" />
+                  <span className="min-w-0">{line}</span>
+                </li>
+              ))}
+              {menuLines.length > 5 ? (
+                <li className="pl-3.5 text-xs text-text-muted">+{menuLines.length - 5} more</li>
+              ) : null}
+            </ul>
+          ) : (
+            <p className="rounded-[10px] border-2 border-dashed border-border-ink p-3 text-sm text-text-muted">
+              Open the full menu to load this week&apos;s menu.
+            </p>
+          )}
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs text-text-muted">{nextMealCountdown}</p>
+            <span className="inline-flex items-center gap-1 font-label text-sm font-semibold text-primary">
+              Full menu <ChevronRight className="h-4 w-4" aria-hidden />
+            </span>
+          </div>
+        </button>
 
-            <div className="bg-surface-secondary border border-border-muted rounded-xl p-3 text-xs space-y-1.5">
-              <p className="text-text-primary font-semibold text-xs">Room Allocation:</p>
-              <p className="text-xs text-text-muted italic">Verify your Leader OTP in the counselling status portal.</p>
+        <div className="space-y-6">
+          {/* Room facts from VTOP. */}
+          <div className="space-y-3">
+            <SectionHeader icon={DoorOpen} title="Your room" />
+            <div className="grid grid-cols-3 gap-2">
+              <KeyValue label="Block" value={block} />
+              <KeyValue label="Room" value={room} />
+              <KeyValue label="Mess" value={<span className="capitalize">{String(messType).toLowerCase()}</span>} />
             </div>
           </div>
-          <Button
-            onClick={() => setHostelActiveSubTab("counselling")}
-            className="w-full bg-primary hover:brightness-110 text-primary-foreground text-xs mt-4 rounded-xl flex items-center justify-center gap-1.5 h-9"
-          >
-            <span>View Booking Status</span>
-            <ArrowRight size={14} />
-          </Button>
-        </div>
 
-        {/* Card: Hostel Information */}
-        <div className="bg-surface border-2 border-border-ink rounded-2xl p-5 flex flex-col justify-between shadow-2xs hover:border-border-ink transition-all md:col-span-2">
-          <div className="space-y-4">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary block">
-              Hostel Room Information
-            </span>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
-              <div>
-                <span className="text-text-muted block mb-0.5 text-xs">Hostel Block</span>
-                <span className="font-bold text-text-primary">{block}</span>
-              </div>
-              <div>
-                <span className="text-text-muted block mb-0.5 text-xs">Room Number</span>
-                <span className="font-bold text-text-primary">{room}</span>
-              </div>
-              <div>
-                <span className="text-text-muted block mb-0.5 text-xs">Mess Selection</span>
-                <span className="font-bold text-text-primary capitalize">{messType} Mess</span>
-              </div>
-              <div>
-                <span className="text-text-muted block mb-0.5 text-xs">Chief Warden</span>
-                <span className="font-bold text-text-primary">Dr. K. Srinivasan</span>
-              </div>
-            </div>
-
-            <div className="h-px bg-surface-secondary" />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <p className="text-xs font-bold text-text-muted uppercase mb-2">Emergency Contacts</p>
-                <div className="space-y-1.5 text-xs text-text-primary">
-                  <div className="flex items-center justify-between">
-                    <span>Hostel Office:</span>
-                    <a href="tel:+914439931555" className="font-semibold text-primary hover:underline">
-                      +91 44 3993 1555
-                    </a>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Warden Office:</span>
-                    <a href="tel:+914439931666" className="font-semibold text-primary hover:underline">
-                      +91 44 3993 1666
-                    </a>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Medical / Ambulance:</span>
-                    <a
-                      href="tel:+914439931108"
-                      className="font-semibold text-danger-foreground hover:underline font-bold"
+          <div className="space-y-3">
+            <SectionHeader icon={Layers} title="Sections" count={sections.length} />
+            <ListShell>
+              {sections.map((s) => {
+                const Icon = s.icon;
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => setHostelActiveSubTab(s.id)}
+                    className={`${LIST_ROW} cursor-pointer`}
+                  >
+                    <span
+                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border ${TONE_ICON_TILE[s.tone]}`}
                     >
-                      +91 44 3993 1108
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <p className="text-xs font-bold text-text-muted uppercase mb-2">Useful Links</p>
-                <div className="space-y-1 text-xs text-text-primary">
-                  <a
-                    href="https://vtopcc.vit.ac.in/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-between text-primary dark:hover:text-primary transition-colors"
-                  >
-                    <span>VTOP Portal</span>
-                    <ExternalLink size={11} className="text-text-muted" />
-                  </a>
-                  <a
-                    href="#"
-                    className="flex items-center justify-between text-primary dark:hover:text-primary transition-colors"
-                  >
-                    <span>Mess Change Request Form</span>
-                    <ChevronRight size={11} className="text-text-muted" />
-                  </a>
-                  <a
-                    href="#"
-                    className="flex items-center justify-between text-primary dark:hover:text-primary transition-colors"
-                  >
-                    <span>Hostel Grievance Register</span>
-                    <ChevronRight size={11} className="text-text-muted" />
-                  </a>
-                </div>
-              </div>
-            </div>
+                      <Icon className="h-4.5 w-4.5" aria-hidden />
+                    </span>
+                    <ListRowText title={s.title} subtitle={s.desc} />
+                    <ChevronRight className="h-4 w-4 shrink-0 text-text-muted" aria-hidden />
+                  </button>
+                );
+              })}
+            </ListShell>
           </div>
         </div>
       </div>
 
-      {/* Tab Help Footer */}
+      <a
+        href="https://vtopcc.vit.ac.in/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 px-1 text-xs font-semibold text-primary hover:underline"
+      >
+        Leave, outing and mess change requests are filed on VTOP
+        <ExternalLink className="h-3 w-3" aria-hidden />
+      </a>
+
       <TabHelpFooter tabId="hostel" />
     </div>
   );

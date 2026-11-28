@@ -806,6 +806,7 @@ export default function LibrariesTab({ loginToVTOP, onBack }: LibrariesTabProps)
 
   return (
     <PageShell
+      syncedOps={["bulk"]}
       eyebrow="Campus"
       title="Libraries"
       onBack={() => (screen === "landing" ? onBack?.() : setScreen("landing"))}

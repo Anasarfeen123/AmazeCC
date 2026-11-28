@@ -131,7 +131,7 @@ export default function FresherWelcomePage({
               <span className="inline-flex rounded-[6px] border-2 border-border-ink bg-secondary px-2 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.06em] text-secondary-foreground">
                 First year
               </span>
-              <h1 className="font-display text-[28px] sm:text-[36px] font-bold uppercase leading-[1.05] text-text-heading">
+              <h1 className="font-title text-[28px] sm:text-[36px] font-extrabold leading-[1.05] text-text-heading">
                 Welcome, {displayName}
               </h1>
               <p className="text-sm text-text-muted max-w-xl">
@@ -142,7 +142,7 @@ export default function FresherWelcomePage({
             <div className="grid grid-cols-2 gap-3 shrink-0 w-full sm:w-auto sm:min-w-[320px] pr-1 pb-1">
               {totalAckDocs > 0 && (
                 <div className="rounded-[14px] border-2 border-border-ink bg-highlight p-3 text-highlight-foreground shadow-brutal-md">
-                  <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] opacity-80">Documents</p>
+                  <p className="font-label text-xs font-semibold opacity-80">Documents</p>
                   <p className="font-display text-[32px] font-bold leading-none mt-1">
                     {submittedAckDocs}
                     <span className="text-base">/{totalAckDocs}</span>
@@ -152,9 +152,7 @@ export default function FresherWelcomePage({
               )}
               {eptData && (
                 <div className="rounded-[14px] border-2 border-border-ink bg-surface p-3 shadow-brutal-md">
-                  <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-text-muted">
-                    English test
-                  </p>
+                  <p className="font-label text-xs font-semibold text-text-muted">English test</p>
                   <p className="font-display text-2xl font-bold leading-none mt-1 text-hero">
                     {upcomingEpt ? "Upcoming" : eptRows.length > 0 ? "Booked" : "Not yet"}
                   </p>
@@ -170,7 +168,7 @@ export default function FresherWelcomePage({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div>
-                  <h2 className="font-mono text-[13px] font-semibold uppercase tracking-[0.06em] text-text-heading">
+                  <h2 className="font-label text-[13px] font-semibold text-text-heading">
                     {eptData.title || "English Proficiency Test (EPT) Schedule"}
                   </h2>
                   <p className="text-xs text-text-muted">Official venue and timing for your EPT exam</p>
@@ -241,7 +239,7 @@ export default function FresherWelcomePage({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div>
-                  <h2 className="font-mono text-[13px] font-semibold uppercase tracking-[0.06em] text-text-heading">
+                  <h2 className="font-label text-[13px] font-semibold text-text-heading">
                     {acknowledgementData?.title || "Onboarding Documents Checklist"}
                   </h2>
                   <p className="text-xs text-text-muted">Track required document submissions</p>
@@ -292,7 +290,7 @@ export default function FresherWelcomePage({
         <section className="brutal-card p-4 sm:p-5 space-y-4 mr-1 mb-1">
           <div className="flex items-center gap-2.5">
             <div>
-              <h2 className="font-mono text-[13px] font-semibold uppercase tracking-[0.06em] text-text-heading">
+              <h2 className="font-label text-[13px] font-semibold text-text-heading">
                 University Portals & Quick Links
               </h2>
               <p className="text-xs text-text-muted">Direct shortcuts to official VIT portals</p>
@@ -309,9 +307,7 @@ export default function FresherWelcomePage({
                 <p className="text-sm font-bold text-text-heading">VTOP Student Portal</p>
                 <p className="font-mono text-xs text-text-muted">vtopcc.vit.ac.in</p>
               </div>
-              <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-primary">
-                Open portal
-              </span>
+              <span className="font-label text-xs font-semibold text-primary">Open portal</span>
             </a>
             {resources.map((r) => {
               const resourceType = r.type || "link";
@@ -352,7 +348,7 @@ export default function FresherWelcomePage({
                     <p className="text-sm font-bold text-text-heading line-clamp-1">{r.title}</p>
                     {r.description && <p className="text-xs text-text-muted line-clamp-1 mt-0.5">{r.description}</p>}
                   </div>
-                  <span className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-primary">Open</span>
+                  <span className="font-label text-xs font-semibold text-primary">Open</span>
                 </a>
               );
             })}

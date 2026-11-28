@@ -226,7 +226,7 @@ export default function AddPeerSheet({
             placeholder="AMZ-7K2P-9RTW"
             autoComplete="off"
             spellCheck={false}
-            className={`${FIELD_INPUT} font-mono tracking-widest uppercase`}
+            className={`${FIELD_INPUT} font-label tracking-widest`}
           />
           <p className="text-xs text-text-muted font-medium leading-relaxed">
             Their handle is on their Social → Share screen. It identifies the person, not their schedule.

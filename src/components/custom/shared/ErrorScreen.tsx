@@ -81,7 +81,7 @@ export default function ErrorScreen({
         </div>
 
         <section className="brutal-card brutal-card-hero rounded-[18px] p-6 sm:p-8 lg:order-1">
-          <h1 className="font-display text-[28px] font-bold uppercase leading-[1.05] text-text-heading [text-wrap:balance] sm:text-[36px]">
+          <h1 className="font-title text-[28px] font-extrabold leading-[1.05] text-text-heading [text-wrap:balance] sm:text-[36px]">
             {title}
           </h1>
           <div className="mt-3 max-w-[60ch] text-base leading-relaxed text-text-muted">{description}</div>

@@ -267,3 +267,24 @@ argument accepts `night`. `fullpage.mjs FIND_OVERFLOW=1`.
 Done: `navLabel` now prefers `[data-sidebar-nav]` and bottom-nav buttons
 (use `PRE_W=1440` so the sidebar shows labels when clicking). Left: a
 `--route` option and saving console errors to a file (`console.mjs` prints them).
+
+## Owner review 2026-11-28 (done)
+
+All on `redesign`, pushed to `fork/redesign` and `fork/main`:
+
+- [x] Font roles (Bricolage titles, Caveat accents, DM Sans sentence-case labels)
+- [x] Hostel Hub rebuilt; fabricated contacts removed; no emojis in UI
+- [x] Exam Schedule folds finished papers; Home "Lowest …" fits
+- [x] Desktop Home: page + "Your day" panel; course opens in the panel
+- [x] Editable shortcuts; "Week" button; Search + Sync beside the greeting
+- [x] "Updated …" on Libraries and Hostel; skeletons for FFCS and peer timetable
+- [x] FFCS empty plan "Start your plan"
+- [x] Pull to sync, iOS edge swipe back, haptics, page fade
+- [x] Onboarding backdrop, honest "Soon" labels, theme choice
+- [x] Calendar export (.ics) and timetable image sharing
+- [x] Encrypted reminders client + API (API deploy pending, see HANDOFF §7)
+- [x] Test suite green; `npm run check:demo`
+- [x] Demo: current dates, full marks, exams match calendar, sample tasks
+
+Still open: per-page code splitting (Lighthouse), real-device check of pull
+to sync / haptics / swipe back / share target, API deploy for reminders.

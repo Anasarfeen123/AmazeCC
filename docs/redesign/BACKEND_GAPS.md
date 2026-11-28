@@ -3,18 +3,23 @@
 Checked against the live API `https://hono.amazecc.com` (status codes only,
 no user data) and the `api/` worktree.
 
-| Feature                    | Frontend calls                            | Live API     | api/ repo                                                                                       | Effect                                                                                         |
-| -------------------------- | ----------------------------------------- | ------------ | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| Club Hub                   | `club-enrollment` (POST), `clubs/details` | 404 both     | `club-enrollment` **removed** in `6d9e70c` ("unused endpoints"); `clubs/details` exists in code | Club Hub shows "isn't available yet"                                                           |
-| Event Hub                  | `events/preview`, `events/profile`, …     | 404          | routes exist under `src/app/api/events/*`                                                       | Event Hub shows "isn't available yet"                                                          |
-| Social / timetable sharing | `social/*`                                | 401 (exists) | exists                                                                                          | Works when signed in (Amaze ID); 6 frontend tests fail on a teammate's in-progress auth change |
+| Feature                    | Frontend calls              | Live API     | api/ repo                                               | Effect                                                                                      |
+| -------------------------- | --------------------------- | ------------ | ------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Club Hub                   | `clubs/details`             | 404          | public route exists under `src/app/api/clubs/details`   | Club Hub shows "isn't available yet"                                                        |
+| Event Hub                  | `events/*`                  | 404          | routes exist under `src/app/api/events/*`              | Event Hub shows "isn't available yet"                                                        |
+| Social / timetable sharing | `social/*`                  | 401 (exists) | exists                                                  | Requires Amaze ID sign-in and VTOP credentials; focused frontend auth and error tests pass |
 
-To make the hubs work (needs the backend owner and a deploy, not done here):
+The frontend no longer calls the removed `club-enrollment` endpoint. Club Hub
+uses the public directory only; the VTOP membership list and CLUB/CHAPTER
+classification remain unavailable until an API endpoint for them is restored.
+
+To make the hubs work in production (needs the backend owner and a deploy, not
+done here):
 
 1. Deploy the `events/*` and `clubs/details` routes to the hono server.
-2. Either restore `club-enrollment` or remove the frontend's call to it
-   (`ClubHubTab.fetchEnrollment`); the directory already works without it.
-3. The frontend now says "isn't available yet" on 404 instead of "HTTP 404".
+2. Verify the deployed paths and upstream credentials in a production smoke test.
+3. The frontend reports unavailable routes clearly instead of presenting a
+   404 response as an empty directory.
 
 ## Find Classmates: semester choice (user request, 2026-11-19)
 

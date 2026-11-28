@@ -88,3 +88,18 @@ fill; focus shows the ochre ring plus a small shadow.
 | First sync / welcome / sign-in         | `components/custom/onboarding/OnboardingIntro.tsx`                                     |
 | Theme switch                           | `components/custom/ThemeToggle.tsx`                                                    |
 | Demo banner                            | `components/custom/app/AuthenticatedWorkspace.tsx`                                     |
+| Home shortcuts (editable)              | `components/custom/mobile/HomeShortcuts.tsx` (`row` = phone pills, `panel` = xl grid)  |
+| Onboarding background                  | `components/custom/onboarding/OnboardingBackdrop.tsx` (`step` shifts the shapes)       |
+| Pull down to sync                      | `components/custom/shared/PullToRefresh.tsx` (touch only, Home)                        |
+| Calendar export help (Android)         | `components/custom/shared/CalendarExportNote.tsx`                                      |
+| Reminder upload + below-target alerts  | `components/custom/app/ReminderScheduler.tsx` (renders nothing)                        |
+
+## Feature libraries (no UI)
+
+- `lib/ics.ts` — timetable / exam `.ics` files and `saveIcs()` (iPhone opens
+  Apple Calendar, elsewhere downloads).
+- `lib/timetableImage.ts` — the week drawn on a canvas for sharing.
+- `lib/reminders.ts`, `lib/reminderCrypto.ts` — reminder planning and
+  device-only AES-GCM encryption (also used by `app/sw.ts`).
+- `lib/demoDates.ts` — keeps demo dates current; `demoTasks()`, `isDemoSession()`.
+- `lib/haptics.ts`, `lib/useEdgeSwipeBack.ts` — phone-app feel.

@@ -166,11 +166,18 @@ python3 scripts/redesign/brandify.py <files> [--status] [--forced-dark] [--dry]
 
 ### 6.2 Test baseline
 
-15 failures in 11 files, all pre-existing on `main`: `oauth2`,
-`ffcsClassmates` ×2, `social-*` ×6,
-`syncNotificationRedesign`. When a redesign change breaks a test that pins an
-old class name, update the test to the new class and keep its intent (see
-`weekStrip.test.ts`, `optionPicker.test.tsx` for examples).
+**0 failures** since 2026-11-28 (the old 15 were outdated tests: social ops
+now go through the social client, the sync sheet was renamed, getInitials
+uses first + last name). Two `worker-artifact` tests fail only when a stale
+`out/` folder exists; delete `out/` before running. Any other failure is
+new: fix it. When a redesign change breaks a test that pins an old class
+name, update the test to the new class and keep its intent.
+
+Demo smoke test: `npm run check:demo` (`scripts/demo-check.mjs`) signs into
+the demo in headless Chromium, opens 19 pages and fails on an empty/error
+state, a script error or a missing title. Run it against a production
+build (`BASE=http://localhost:PORT`) or the deployed demo; against `next dev`
+first-compile delays make it flaky.
 
 ### 6.3 Seeing the app
 
@@ -336,3 +343,43 @@ NEXT_TELEMETRY_DISABLED=1 node_modules/.bin/next dev --webpack -p 3017   # backg
   titles/values wrap instead of truncating. shot.mjs: `PRE_JS`, `ONLY_W`.
 
 - **2026-11-22 (follow-up)** — Faculty Schedule follows the global semester without a local selector; faculty avatars show a placeholder while photos load. Find Classmates removes the single-option radio control; Free Classrooms labels selected-slot counts accurately. The mobile Modules swipe can be disabled in Settings → Home. Capture script includes these three pages. See the current session for capture and deployment verification.
+
+- **2026-11-22** — Readable text floors (text-xs 13px, text-sm 14px,
+  text-base 16px; Fontfabric readability guide). Demo kept current:
+  `lib/demoDates.ts` moves every demo date by whole weeks on entry (calendar's
+  busiest teaching weeks start this week, exams anchored to the calendar's own
+  CAT days, events a few days out); demo marks for every timetable course;
+  bundled mess menu on Hostel Hub; Events/Clubs demo branch fixed
+  (`isDemoSession`). Marketing kit in `amaze-workspace/marketing-kit/`.
+- **2026-11-28** — Owner review items, in order:
+  - **Font roles** (`brand.css`): `font-title` Bricolage Grotesque (page
+    titles, greeting, section headers, card / landing titles, word-valued stat
+    tiles), `font-hand` Caveat (greeting line, loading tip, welcome, landing
+    sticky notes, "Your day" date), `font-label` DM Sans (all small labels,
+    sentence case: ~345 all-caps labels converted), `font-display` Space Mono
+    for numbers, `font-mono` for badges / chips / codes. Courage and Homeland
+    were asked for but are paid / personal-use only.
+  - **Home**: shortcuts the student edits (`HomeShortcuts`: pills at the
+    bottom on phones, grid in the panel on wide screens); xl layout is the
+    page on the left and a framed "Your day" panel on the right (today at a
+    glance, next exam with venue and seat, meal, shortcuts); a course opened
+    on xl shows inside the panel; Search + Sync beside the greeting; "Week"
+    button opens the full timetable; pull down to sync.
+  - **Hostel Hub** rebuilt; fabricated warden name and phone numbers removed
+    (also from the Leave page). Exam Schedule folds finished papers. FFCS
+    empty plan shows "Start your plan". Onboarding: brand backdrop
+    (`OnboardingBackdrop`), honest "Soon" labels, theme choice. Sidebar
+    sub-menu icon spacing fixed.
+  - **Export**: `lib/ics.ts` (timetable as weekly events, exams with alarms;
+    iPhone opens Apple Calendar, Android downloads + `CalendarExportNote`),
+    `lib/timetableImage.ts` (canvas PNG, share sheet).
+  - **Reminders (option B)**: `lib/reminders.ts` + `lib/reminderCrypto.ts`
+    plan and encrypt reminders on the device; `ReminderScheduler` uploads
+    them; `sw.ts` decrypts `amazecc-enc` pushes. Server side is amazecc-api
+    commit `440caa8` on fork branch `encrypted-reminders` (route
+    `/api/notifications/reminders`, `push_reminders` table, cron step).
+    **Needs the API owner to deploy it and run `/api/admin/migrate`**; until
+    then uploads 404 quietly. Below-target alerts are local and work now.
+  - Phone-app feel: page fade, iOS edge swipe back, haptics in the
+    predictor. Perf: `experimental.inlineCss`, accent fonts not preloaded.
+  - Tests green (see §6.2); `npm run check:demo` added.

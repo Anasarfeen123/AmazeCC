@@ -1993,6 +1993,17 @@ export default function SimplifiedMobileHome({
               </div>
 
               <div className="flex items-center gap-2">
+                {/* The full week (export to calendar / share as image live
+                    there). Right beside today's classes, where people look
+                    for it (owner: could not find it on the phone). */}
+                <button
+                  type="button"
+                  onClick={() => setShowTimetableModal(true)}
+                  className="inline-flex min-h-9 cursor-pointer items-center gap-1.5 rounded-[10px] border-2 border-border-ink bg-surface px-2.5 py-1 text-sm font-semibold text-text-heading shadow-brutal-sm brutal-press"
+                >
+                  <CalendarDays className="h-4 w-4 text-primary" aria-hidden />
+                  Week
+                </button>
                 <button
                   onClick={() => {
                     setActiveTab("attendance");
@@ -2496,7 +2507,7 @@ export default function SimplifiedMobileHome({
             )}
           </div>
 
-          <aside
+          <section
             aria-label="Your day"
             className="space-y-4 text-left xl:col-start-2 xl:row-span-2 xl:row-start-1 xl:sticky xl:top-6 xl:self-start xl:rounded-[18px] xl:border-2 xl:border-border-ink xl:bg-surface-secondary xl:p-5 xl:shadow-brutal-sm"
           >
@@ -2685,7 +2696,7 @@ export default function SimplifiedMobileHome({
                 <HomeShortcuts all={homeShortcuts} variant="panel" />
               </div>
             </div>
-          </aside>
+          </section>
         </div>
 
         {/* ── RIGHT COLUMN: DESKTOP COURSE SIDE VIEW PANE (SHOWN ON CLASS CLICK) ── */}

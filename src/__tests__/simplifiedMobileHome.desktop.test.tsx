@@ -190,7 +190,8 @@ describe("SimplifiedMobileHome Desktop Layout & Course Pane", () => {
     const setActiveTab = vi.fn();
     render(<SimplifiedMobileHome {...defaultProps({ setActiveTab })} />);
 
-    const btn = screen.getByRole("button", { name: /find classmates/i });
+    // Shortcut pills (phones) and the panel grid (wide screens) both render in jsdom.
+    const btn = screen.getAllByRole("button", { name: /classmates/i })[0];
     expect(btn).toBeTruthy();
     fireEvent.click(btn);
 

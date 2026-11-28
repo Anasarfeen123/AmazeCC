@@ -235,22 +235,28 @@ export function buildExamIcs(series: Record<string, ExamPaper[]>, opts: { now?: 
   return wrap(events, opts.name ?? "AmazeCC exams");
 }
 
+export type IcsSaveResult = "opened" | "downloaded";
+
+/** True on Android, where a downloaded .ics needs a short "how to open" note. */
+export function isAndroid(): boolean {
+  return typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
+}
+
 /**
- * Hand the file to the phone (share sheet, so it can go straight into a
- * calendar app), falling back to a download.
+ * Hand the file to the phone's calendar.
+ *
+ * - iPhone / iPad: open the file itself; Safari shows Apple Calendar's
+ *   "Add all" screen. (A download link only saves it to Files.)
+ * - Everywhere else: download it. Android's share sheet does not accept
+ *   calendar files, so the caller shows how to open it (owner: "I can't open
+ *   this on mobile").
  */
-export async function saveIcs(filename: string, ics: string): Promise<void> {
-  const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
-  const file = typeof File !== "undefined" ? new File([blob], filename, { type: "text/calendar" }) : null;
-  const nav = navigator as Navigator & { canShare?: (d: unknown) => boolean };
-  if (file && nav.canShare?.({ files: [file] }) && /Android|iPhone|iPad/i.test(navigator.userAgent)) {
-    try {
-      await nav.share({ files: [file], title: filename });
-      return;
-    } catch (e) {
-      if ((e as Error)?.name === "AbortError") return;
-    }
+export async function saveIcs(filename: string, ics: string): Promise<IcsSaveResult> {
+  if (typeof navigator !== "undefined" && /iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    window.location.href = `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
+    return "opened";
   }
+  const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -259,4 +265,5 @@ export async function saveIcs(filename: string, ics: string): Promise<void> {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 5000);
+  return "downloaded";
 }

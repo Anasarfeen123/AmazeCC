@@ -2,7 +2,8 @@
 
 import { totalCreditsEarned } from "@/lib/credits";
 import { formatSemesterName } from "@/lib/formatSemesterName";
-import { buildTimetableIcs, lastInstructionalDay, saveIcs } from "@/lib/ics";
+import { buildTimetableIcs, isAndroid, lastInstructionalDay, saveIcs } from "@/lib/ics";
+import CalendarExportNote from "../shared/CalendarExportNote";
 import { drawTimetablePng, shareTimetablePng } from "@/lib/timetableImage";
 import HomeShortcuts from "./HomeShortcuts";
 import PullToRefresh from "../shared/PullToRefresh";
@@ -545,6 +546,7 @@ export default function SimplifiedMobileHome({
 
   const [selectedDay, setSelectedDay] = useState<AttendanceDay>(todayDayCode);
   const [sharingImage, setSharingImage] = useState(false);
+  const [icsNote, setIcsNote] = useState(false);
 
   /**
    * The only way the visible week changes.
@@ -2762,12 +2764,13 @@ export default function SimplifiedMobileHome({
               <div className="flex flex-wrap gap-2 px-4 pt-4 sm:px-5">
                 <button
                   type="button"
-                  onClick={() =>
-                    void saveIcs(
+                  onClick={async () => {
+                    const r = await saveIcs(
                       "AmazeCC-timetable.ics",
                       buildTimetableIcs(timetableMap, { until: lastInstructionalDay(calendarData?.calendars) }),
-                    )
-                  }
+                    );
+                    setIcsNote(r === "downloaded" && isAndroid());
+                  }}
                   className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-[10px] border-2 border-border-ink bg-primary px-3.5 text-sm font-semibold text-primary-foreground shadow-brutal-sm brutal-press"
                 >
                   <CalendarPlus className="h-4 w-4" aria-hidden />
@@ -2794,8 +2797,13 @@ export default function SimplifiedMobileHome({
                   {sharingImage ? "Preparing…" : "Share as image"}
                 </button>
               </div>
+              {icsNote ? (
+                <div className="px-4 pt-3 sm:px-5">
+                  <CalendarExportNote file="AmazeCC-timetable.ics" onClose={() => setIcsNote(false)} />
+                </div>
+              ) : null}
               <div className="p-4 sm:p-5">
-                <TimetableGrid attendance={attendanceList} />
+                <TimetableGrid attendance={attendanceList} embedded />
               </div>
             </div>
           </BottomSheet>

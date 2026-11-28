@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useRef, useState, useCallback } from "react";
-import { buildExamIcs, saveIcs, type ExamPaper } from "@/lib/ics";
+import { buildExamIcs, isAndroid, saveIcs, type ExamPaper } from "@/lib/ics";
+import CalendarExportNote from "../shared/CalendarExportNote";
 import { AnimatePresence, m } from "framer-motion";
 import {
   CalendarX,
@@ -55,6 +56,7 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
   const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
   const [openPast, setOpenPast] = useState<Set<string>>(() => new Set());
+  const [icsFile, setIcsFile] = useState<string | null>(null);
   const [typeFilter, setTypeFilter] = useState(ALL_TYPES);
   const [showDownloadModal, setShowDownloadModal] = useState(false);
   const [selectedModalSeries, setSelectedModalSeries] = useState<string>(ALL_TYPES);
@@ -159,9 +161,9 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
             typeFilter === ALL_TYPES
               ? (scheduleObj as Record<string, ExamPaper[]>)
               : { [typeFilter]: (scheduleObj as Record<string, ExamPaper[]>)[typeFilter] ?? [] };
-          void saveIcs(
-            `AmazeCC-${typeFilter === ALL_TYPES ? "exams" : typeFilter}.ics`,
-            buildExamIcs(series, { name: "AmazeCC exams" }),
+          const file = `AmazeCC-${typeFilter === ALL_TYPES ? "exams" : typeFilter}.ics`;
+          void saveIcs(file, buildExamIcs(series, { name: "AmazeCC exams" })).then((r) =>
+            setIcsFile(r === "downloaded" && isAndroid() ? file : null),
           );
         }}
         title="Add exams to your calendar"
@@ -262,6 +264,7 @@ export default function ExamSchedule({ data, handleScheduleFetch, onBack }: any)
 
           1rem rather than the list's 1.5rem: the filter is a control strip
           governing the list underneath it, not another section of it. */}
+      {icsFile ? <CalendarExportNote file={icsFile} onClose={() => setIcsFile(null)} /> : null}
       <div ref={captureRef} className="space-y-4">
         {/* ── EXAM SERIES ── */}
         {examTypes.length > 1 && (

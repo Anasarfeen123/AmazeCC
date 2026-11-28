@@ -100,7 +100,14 @@ function convertToAddedCourses(data: (NormalizedCourse | any)[]): AddedCourse[] 
   });
 }
 
-export default function TimetableVtop({ attendance }: { attendance?: (NormalizedCourse | any)[] }) {
+export default function TimetableVtop({
+  attendance,
+  embedded = false,
+}: {
+  attendance?: (NormalizedCourse | any)[];
+  /** Inside a sheet that has its own title and export buttons: hide this header. */
+  embedded?: boolean;
+}) {
   const captureRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const unifiedAcademics = useAtomValue(unifiedAcademicsAtom);
@@ -215,7 +222,9 @@ export default function TimetableVtop({ attendance }: { attendance?: (Normalized
   return (
     <div className="flex w-full flex-col gap-4">
       {/* Top Header */}
-      <div className="flex flex-col justify-between gap-3 border-b border-border-muted pb-3 sm:flex-row sm:items-center">
+      <div
+        className={`flex flex-col justify-between gap-3 border-b border-border-muted pb-3 sm:flex-row sm:items-center ${embedded ? "hidden" : ""}`}
+      >
         <div>
           <h2 className="font-outfit text-lg font-bold text-text-heading">Class Schedule</h2>
           <p className="text-xs text-text-muted">View course slots, venues, and export the full grid.</p>

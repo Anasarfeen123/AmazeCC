@@ -30,7 +30,7 @@ export function SectionHeader({
     <div className={`flex items-center justify-between gap-2 px-1 ${className}`.trim()}>
       <div className="flex items-center gap-2 min-w-0">
         {leading ?? (Icon ? <Icon className="w-4 h-4 text-primary shrink-0" aria-hidden /> : null)}
-        <h2 className="font-label text-[13px] font-semibold text-text-heading truncate">{title}</h2>
+        <h2 className="font-title text-[15px] font-bold text-text-heading truncate">{title}</h2>
         {typeof count === "number" ? <span className={`${SECTION_CHIP} shrink-0`}>{count}</span> : null}
       </div>
       {right ? <div className="flex items-center gap-2 shrink-0">{right}</div> : null}

@@ -1457,11 +1457,13 @@ export default function SimplifiedMobileHome({
       <div className="flex flex-col lg:flex-row items-start gap-6 xl:gap-8 w-full">
         {/* Left Column: Feed, Stats, Timetable, Shortcuts. Fills the page
             width (an 860px cap left a big empty right side; user). */}
-        {/* Wide screens (xl): greeting and stats across the top, the
-            timetable on the left, tasks / mess / shortcuts in a sticky right
-            column (owner review: one long column left half the screen empty). */}
-        <div className="w-full lg:flex-1 lg:min-w-0 space-y-6 text-left xl:grid xl:grid-cols-[minmax(0,1.55fr)_minmax(300px,1fr)] xl:gap-x-8 xl:gap-y-6 xl:space-y-0">
-          <div className="space-y-6 xl:col-span-2">
+        {/* Wide screens (xl): the page reads top to bottom on the left
+            (greeting, now/next, stats, timetable) and a framed "Your day"
+            panel runs down the right from the top, like a calendar app's side
+            panel (owner: the first two-column try felt bolted on). Grid
+            placement only, so the phone order is unchanged. */}
+        <div className="w-full lg:flex-1 lg:min-w-0 space-y-6 text-left xl:grid xl:grid-cols-[minmax(0,1fr)_340px] xl:gap-x-8 xl:gap-y-6 xl:space-y-0 2xl:grid-cols-[minmax(0,1fr)_380px]">
+          <div className="space-y-6 xl:col-start-1 xl:row-start-1">
             {/* Pull down at the top to sync (touch screens). */}
             <PullToRefresh onRefresh={handleSyncClick} disabled={isOffline} />
             {/* ── TOP APP BAR: AVATAR / ICON ABOVE GREETING & CONTROLS ── */}
@@ -1573,7 +1575,7 @@ export default function SimplifiedMobileHome({
                     {nowNextCard.live ? "Now" : "Next"}
                     {nowNextCard.rel ? ` · ${nowNextCard.rel}` : ""}
                   </span>
-                  <span className="mt-0.5 block truncate font-display text-base font-bold leading-tight sm:text-lg">
+                  <span className="mt-0.5 block truncate font-title text-lg font-extrabold leading-tight sm:text-xl">
                     {nowNextCard.title}
                   </span>
                   {nowNextCard.detail ? (
@@ -1620,7 +1622,7 @@ export default function SimplifiedMobileHome({
           </div>
 
           {/* ── TIMETABLE & INTEGRATED ACADEMIC CALENDAR SECTION ── */}
-          <div className="space-y-4 text-left">
+          <div className="space-y-4 text-left xl:col-start-1 xl:row-start-2">
             {/* Calendar Header: Week Navigation (left) & Display Controls (right)
 
             `gap-2` and `flex-wrap` are load-bearing on this row, not polish. It
@@ -2355,7 +2357,17 @@ export default function SimplifiedMobileHome({
             )}
           </div>
 
-          <div className="space-y-4 text-left xl:sticky xl:top-6 xl:self-start">
+          <aside
+            aria-label="Your day"
+            className="space-y-4 text-left xl:col-start-2 xl:row-span-2 xl:row-start-1 xl:sticky xl:top-6 xl:self-start xl:rounded-[18px] xl:border-2 xl:border-border-ink xl:bg-surface-secondary xl:p-5 xl:shadow-brutal-sm"
+          >
+            {/* Panel heading, wide screens only (phones read it as part of the page). */}
+            <div className="hidden xl:block">
+              <p className="font-hand text-xl font-bold leading-none text-primary">
+                {new Date().toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "short" })}
+              </p>
+              <h2 className="mt-1 font-title text-2xl font-extrabold text-text-heading">Your day</h2>
+            </div>
             {/* ── TODAY'S TASKS SECTION (WHEN TASKSINLINEONHOME IS FALSE) ── */}
             {settings?.tasksInlineOnHome === false && todayTasks.length > 0 && (
               <div className="pt-2 space-y-2.5">
@@ -2436,7 +2448,7 @@ export default function SimplifiedMobileHome({
 
             <section aria-label="Quick actions" className="space-y-3 pt-2">
               <SectionHeader title="Quick actions" />
-              <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-2 gap-3 pr-1 pb-1">
+              <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-1 gap-3 xl:gap-2 pr-1 pb-1">
                 {[
                   {
                     key: "timetable",
@@ -2476,13 +2488,13 @@ export default function SimplifiedMobileHome({
                     key={key}
                     type="button"
                     onClick={onClick}
-                    className={`${TILE_INTERACTIVE} !p-3 sm:!p-4 min-h-[104px] gap-3 !justify-start`}
+                    className={`${TILE_INTERACTIVE} !p-3 sm:!p-4 min-h-[104px] gap-3 !justify-start xl:!min-h-0 xl:!flex-row xl:items-center xl:!py-2.5`}
                   >
                     <span className="flex h-10 w-10 items-center justify-center rounded-[10px] border-2 border-border-ink bg-secondary text-secondary-foreground">
                       <Icon className="h-5 w-5" aria-hidden />
                     </span>
                     <span className="min-w-0">
-                      <span className="block font-display text-base font-bold leading-tight text-text-heading">
+                      <span className="block font-title text-base font-extrabold leading-tight text-text-heading">
                         {label}
                       </span>
                       <span className="mt-0.5 block text-xs text-text-muted">{help}</span>
@@ -2491,7 +2503,7 @@ export default function SimplifiedMobileHome({
                 ))}
               </div>
             </section>
-          </div>
+          </aside>
         </div>
 
         {/* ── RIGHT COLUMN: DESKTOP COURSE SIDE VIEW PANE (SHOWN ON CLASS CLICK) ── */}

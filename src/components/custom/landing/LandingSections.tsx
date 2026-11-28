@@ -355,7 +355,7 @@ export default function LandingSections() {
               <Reveal as="li" key={where} delay={i * 90}>
                 <div className={`${CARD} ${bg} ${rot} p-5 transition-transform duration-200 hover:rotate-0`}>
                   <span className={`${BADGE} bg-obsidian text-cream`}>{where}</span>
-                  <p className="mt-3 font-display text-lg font-bold leading-tight">{pain}</p>
+                  <p className="mt-3 font-hand text-2xl font-bold leading-tight">{pain}</p>
                 </div>
               </Reveal>
             ))}
@@ -418,7 +418,7 @@ export default function LandingSections() {
                 delay={(idx % 3) * 70}
                 className="rounded-[12px] border-[3px] border-border-ink bg-surface p-4 shadow-brutal-sm"
               >
-                <h4 className="font-display text-base font-bold uppercase leading-tight text-text-heading">{t}</h4>
+                <h4 className="font-title text-lg font-extrabold leading-tight text-text-heading">{t}</h4>
                 <p className="mt-1 text-sm text-text-muted">{d}</p>
               </Reveal>
             ))}
@@ -516,7 +516,7 @@ export default function LandingSections() {
               delay={i * 80}
               className={`${CARD} p-6 ${["bg-mint text-obsidian", "bg-teal text-cream", "bg-ochre text-obsidian", "bg-surface text-text-primary"][i % 4]}`}
             >
-              <h3 className="font-display text-lg font-bold uppercase leading-tight">{b.title}</h3>
+              <h3 className="font-title text-xl font-extrabold leading-tight">{b.title}</h3>
               <p className="mt-2 text-sm opacity-85">{b.desc}</p>
             </Reveal>
           ))}
@@ -544,7 +544,7 @@ export default function LandingSections() {
                     {t.time}
                   </span>
                   <div>
-                    <p className="font-display text-base font-bold uppercase text-text-heading">{t.title}</p>
+                    <p className="font-title text-lg font-extrabold text-text-heading">{t.title}</p>
                     <p className="text-sm text-text-muted">{t.desc}</p>
                   </div>
                 </div>
@@ -571,9 +571,7 @@ export default function LandingSections() {
               >
                 {r.status}
               </span>
-              <h3 className="mt-3 font-display text-lg font-bold uppercase leading-tight text-text-heading">
-                {r.title}
-              </h3>
+              <h3 className="mt-3 font-title text-xl font-extrabold leading-tight text-text-heading">{r.title}</h3>
               <p className="mt-2 text-sm text-text-muted">{r.desc}</p>
             </Reveal>
           ))}
